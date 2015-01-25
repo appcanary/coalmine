@@ -7,43 +7,51 @@
   <p class="lead">When your company gets hacked, it'll probably be because you forgot to patch your software. In 2015, we'll make your vulnerability updating go from sisyphean to done.</p>
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      <form action="//state.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;id=97c3b392c9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-      <div class="input-group input-group-md">
-        <input type="email" name="EMAIL" class="form-control input-md" placeholder="jane@example.com">
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-default">Let me know</button>
-        </span>
-      </div>
-    </form>
+      <%= form_tag "/beta/list", :method => :post, :name => :user do %>
+        <div class="input-group input-group-md">
+          <input type="email" name="email" class="form-control input-md" placeholder="jane@example.com">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-default">Let me know</button>
+          </span>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
 
-<!-- <div class="row marketing"> -->
-<!--   <div class="col&#45;lg&#45;6"> -->
-<!--     <h4>Subheading</h4> -->
-<!--     <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p> -->
-<!--  -->
-<!--     <h4>Subheading</h4> -->
-<!--     <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p> -->
-<!--  -->
-<!--     <h4>Subheading</h4> -->
-<!--     <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p> -->
-<!--   </div> -->
-<!--  -->
-<!--   <div class="col&#45;lg&#45;6"> -->
-<!--     <h4>Subheading</h4> -->
-<!--     <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p> -->
-<!--  -->
-<!--     <h4>Subheading</h4> -->
-<!--     <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p> -->
-<!--  -->
-<!--     <h4>Subheading</h4> -->
-<!--     <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p> -->
-<!--   </div> -->
-<!-- </div> -->
+  <!-- <div class="row marketing"> -->
+    <!--   <div class="col&#45;lg&#45;6"> -->
+      <!--     <h4>Subheading</h4> -->
+      <!--     <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p> -->
+      <!--  -->
+      <!--     <h4>Subheading</h4> -->
+      <!--     <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p> -->
+      <!--  -->
+      <!--     <h4>Subheading</h4> -->
+      <!--     <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p> -->
+      <!--   </div> -->
+    <!--  -->
+    <!--   <div class="col&#45;lg&#45;6"> -->
+      <!--     <h4>Subheading</h4> -->
+      <!--     <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p> -->
+      <!--  -->
+      <!--     <h4>Subheading</h4> -->
+      <!--     <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p> -->
+      <!--  -->
+      <!--     <h4>Subheading</h4> -->
+      <!--     <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p> -->
+      <!--   </div> -->
+    <!-- </div> -->
 
-<footer class="footer">
-  <p>© Manufactured by <a href="http://state.io">State Machinery</a>, 2015</p>
-</footer>
+  <% if flash[:subscribed] %>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <%= flash[:subscribed] %>
+    </div>
+  <% end %>
+
+
+  <footer class="footer">
+    <p>© Manufactured by <a href="http://state.io">State Machinery</a>, 2015</p>
+  </footer>
 
