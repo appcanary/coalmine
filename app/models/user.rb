@@ -21,6 +21,15 @@
 #  failed_logins_count             :integer          default("0")
 #  lock_expires_at                 :datetime
 #  unlock_token                    :string
+#  token                           :string
+#
+# Indexes
+#
+#  index_users_on_activation_token                     (activation_token)
+#  index_users_on_email                                (email) UNIQUE
+#  index_users_on_last_logout_at_and_last_activity_at  (last_logout_at,last_activity_at)
+#  index_users_on_reset_password_token                 (reset_password_token)
+#  index_users_on_unlock_token                         (unlock_token)
 #
 
 class User < ActiveRecord::Base
