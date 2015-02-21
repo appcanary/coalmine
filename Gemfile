@@ -54,6 +54,8 @@ group :development, :test do
   gem 'spring'
 
   gem 'minitest-spec-rails'
+  gem 'minitest-reporters'
+  gem 'm'
   gem 'factory_girl_rails'
   gem 'faker'
 end

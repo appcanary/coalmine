@@ -36,7 +36,7 @@ FactoryGirl.define do
   factory :user do
     email Faker::Internet.email
     after(:build) do |u|
-      u.password = "somevaluehere"
+      u.password = TestValues::PASSWORD
       u.password_confirmation = u.password
     end
 
