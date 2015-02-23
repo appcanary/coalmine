@@ -1,5 +1,16 @@
-<h1>New User</h1>
+<section>
+  <div class="logo">
+    <%= image_tag "oval-canary.png" %>
+  </div>
+</section>
 
-<%= render 'form' %>
+<section>
+  <div class="user-login">
 
-<%= link_to 'Back', users_path %>
+    <% content_for :user_form_title do %>
+      <h3>Before we get started, tell us:</h3>
+    <% end %>
+
+    <%= render :partial => 'form', :locals => { :sign_up => true } %>
+  </div>
+</section>
