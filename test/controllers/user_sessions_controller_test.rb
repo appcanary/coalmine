@@ -1,19 +1,24 @@
 require 'test_helper'
 
 class UserSessionsControllerTest < ActionController::TestCase
-  test "should get new" do
-    get :new
-    assert_response :success
+  describe "login page" do
+    let(:user) { FactoryGirl.create(:user) }
+    it "should display the login page" do
+      get :new
+      assert_template("new")
+      assert_response :success
+    end
+
+    it "should login users" do
+      post :create, :email => user.email, :password => TestValues::PASSWORD 
+      assert_redirected_to users_path
+    end
+
+    it "should fail bad logins" do
+      post :create, :email => user.email, :password => "gibberish"
+      assert_template :new
+    end
   end
 
-  test "should get create" do
-    get :create
-    assert_response :success
-  end
-
-  test "should get destroy" do
-    get :destroy
-    assert_response :success
-  end
-
+  # test logout?
 end
