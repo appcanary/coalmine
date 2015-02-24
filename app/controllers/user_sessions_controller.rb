@@ -1,5 +1,6 @@
 class UserSessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
+  before_filter :skip_if_logged_in, :except => :destroy
   
   def new
     @user = User.new
@@ -8,7 +9,7 @@ class UserSessionsController < ApplicationController
   def create
     user_params = params[:user] || {}
     if @user = login(user_params[:email], user_params[:password])
-      redirect_back_or_to(:users, notice: 'Login successful')
+      redirect_back_or_to(dashboard_path, notice: 'Login successful')
     else
       @user = User.new
       flash.now[:alert] = 'Login failed'
