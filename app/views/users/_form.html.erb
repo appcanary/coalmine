@@ -1,7 +1,10 @@
-<%= form_for(@user) do |f| %>
+<% opts = { :html => { :'data-toggle' => 'validator'} } %>
+<% opts.merge!(:url => user_sessions_path, :method => :post) unless sign_up %>
+
+<%= form_for(@user, opts) do |f| %>
   <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+    <div class="error_explanation" role="alert">
+      <h4>Oops. We encountered an error:</h4>
 
       <ul>
         <% @user.errors.full_messages.each do |message| %>
@@ -11,23 +14,34 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email %>
+  <%= yield :user_form_title %>
+
+  <div class="form-group">
+    <%= f.email_field :email, :class => "form-control", :placeholder => "Your email address" %>
   </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password %>
+  <div class="form-group">
+    <%= f.password_field :password, :class => "form-control", :placeholder => "A password, or a secret between us", :'data-minlength' => "6", :'data-error' => 'At least 6 characters' %>
+    <% if sign_up %>
+      <span class="help-block with-errors"></span>
+    <% end %>
+
   </div>
 
+  <% if sign_up %>
+    <div class="form-group">
+      <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "The same password again, just to confirm", :'data-match' => "#user_password", :'data-error' => "Passwords must match" %>
+      <span class="help-block with-errors"></span>
+    </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation %>
-  </div>
+    <div class="form-group">
+      <%= f.submit "Sign Up", :class => "btn btn-black" %>
+    </div>
+  <% else %>
+    <div class="form-group">
+      <%= f.submit "Log in", :class => "btn btn-black" %>
+    </div>
+  <% end %>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>
+

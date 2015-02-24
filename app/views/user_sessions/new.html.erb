@@ -1,5 +1,11 @@
-<h1>Login</h1>
+<%= render 'shared/logo' %>
 
-<%= render 'form' %>
+<section>
+  <div class="user-login">
+    <% content_for :user_form_title do %>
+      <h3>Nice to see you again.</h3>
+    <% end %>
 
-<%= link_to 'Back', user_sessions_path %>
+    <%= render :partial => 'users/form', :locals => { :sign_up => false } %>
+  </div>
+</section>
