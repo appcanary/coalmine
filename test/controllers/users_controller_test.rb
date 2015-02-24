@@ -19,6 +19,7 @@ class UsersControllerTest < ActionController::TestCase
         end
       end
 
+      assert assigns(:current_user)
       assert_redirected_to user_path(assigns(:user))
     end
   end
