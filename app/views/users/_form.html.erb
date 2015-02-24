@@ -1,4 +1,4 @@
-<%= form_for(@user) do |f| %>
+<%= form_for(@user, :html => { :'data-toggle' => 'validator'}) do |f| %>
   <% if @user.errors.any? %>
     <div class="error_explanation" role="alert">
       <h4>Oops. We encountered an error:</h4>
@@ -18,19 +18,27 @@
   </div>
 
   <div class="form-group">
-    <%= f.password_field :password, :class => "form-control", :placeholder => "A password, or a secret between us" %>
-  </div>
+    <%= f.password_field :password, :class => "form-control", :placeholder => "A password, or a secret between us", :'data-minlength' => "6", :'data-error' => 'At least 6 characters' %>
+    <% if sign_up %>
+      <span class="help-block with-errors"></span>
+    <% end %>
 
-  <div class="form-group">
-    <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "The same password again, just to confirm" %>
   </div>
 
   <% if sign_up %>
     <div class="form-group">
-      <%= f.submit "Sign Up", :class => "btn btn-black" %>
-      <%= link_to "Wait, nevermind", root_path, :class => "btn btn-default" %>
-    <% end %>
+      <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "The same password again, just to confirm", :'data-match' => "#user_password", :'data-error' => "Passwords must match" %>
+      <span class="help-block with-errors"></span>
+    </div>
 
-  </div>
+    <div class="form-group">
+      <%= f.submit "Sign Up", :class => "btn btn-black" %>
+    </div>
+  <% else %>
+    <div class="form-group">
+      <%= f.submit "Log in", :class => "btn btn-black" %>
+    </div>
+  <% end %>
+
 <% end %>
 
