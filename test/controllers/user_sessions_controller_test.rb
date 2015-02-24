@@ -10,12 +10,12 @@ class UserSessionsControllerTest < ActionController::TestCase
     end
 
     it "should login users" do
-      post :create, :email => user.email, :password => TestValues::PASSWORD 
+      post :create, :user => {:email => user.email, :password => TestValues::PASSWORD}
       assert_redirected_to users_path
     end
 
     it "should fail bad logins" do
-      post :create, :email => user.email, :password => "gibberish"
+      post :create, user => {:email => user.email, :password => "gibberish"}
       assert_template :new
     end
   end

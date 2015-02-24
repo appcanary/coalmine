@@ -1,4 +1,7 @@
-<%= form_for(@user, :html => { :'data-toggle' => 'validator'}) do |f| %>
+<% opts = { :html => { :'data-toggle' => 'validator'} } %>
+<% opts.merge!(:url => user_sessions_path, :method => :post) unless sign_up %>
+
+<%= form_for(@user, opts) do |f| %>
   <% if @user.errors.any? %>
     <div class="error_explanation" role="alert">
       <h4>Oops. We encountered an error:</h4>
