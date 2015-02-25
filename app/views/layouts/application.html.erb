@@ -15,29 +15,12 @@
       <%= render 'layouts/navbar' %>
     <% end %>
 
-    <div class="container">
-      <!-- <div class="row"> -->
-      <!--   <div class="col&#45;sm&#45;8 col&#45;sm&#45;offset&#45;2"> -->
-      <!--     <div class="header"> -->
-      <!--       <nav> -->
-      <!--         <ul class="nav nav&#45;pills pull&#45;right"> -->
-      <!--           <% if current_user %> -->
-      <!--             <li role="presentation"><%= link_to "Log out", logout_path, :method => :post %></li> -->
-      <!--           <% else %> -->
-      <!--             <li role="presentation"><%= link_to "Sign Up", sign_up_path %></li> -->
-      <!--             <li role="presentation"><%= link_to "Beta Login", login_path %></li> -->
-      <!--           <% end %> -->
-      <!--         </ul> -->
-      <!--       </nav> -->
-      <!--       <h3><%= link_to 'Canary', root_path %></h3> -->
-      <!--     </div> -->
-      <!--   </div> -->
-      <!-- </div> -->
+    <div class="main-drawer">
+      <div class="container">
+        <%= flash_messages %>
 
-
-      <%= flash_messages %>
-
-      <%= yield %>
+        <%= yield %>
+      </div>
     </div>
 
   </body>

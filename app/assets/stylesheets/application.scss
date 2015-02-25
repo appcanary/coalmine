@@ -49,19 +49,21 @@ section {
   @extend .alert-danger;
 }
 
-.side-navbar {
+.main-drawer {
+  @media (min-width: $grid-float-breakpoint) {
+    position:fixed;
+    left: 75px;
+  }
+}
+
+.navbar-left-side {
   @extend .navbar;
   @extend .navbar-fixed-side;
   @extend .navbar-fixed-side-left;
   @extend .navbar-inverse;
 
-  .collapsed-menu {
+  .container .collapsed-menu {
     @extend .navbar-header;
-  }
-
-  .collapsible {
-    @extend .navbar-collapse;
-    @extend .collapse;
   }
 
   .menu {
@@ -103,8 +105,8 @@ section {
       width: 50px;
     }
   }
-}
 
+}
 //* Custom page header */
 .header {
   border-bottom: 1px solid #e5e5e5;
