@@ -11,6 +11,10 @@
   </head>
   <body>
 
+    <% if current_user %>
+      <%= render 'layouts/navbar' %>
+    <% end %>
+
     <div class="container">
       <!-- <div class="row"> -->
       <!--   <div class="col&#45;sm&#45;8 col&#45;sm&#45;offset&#45;2"> -->
