@@ -36,6 +36,20 @@ body {
   }
 }
 
+.intro-logo {
+  @extend .col-sm-6;
+  margin-top: 20px;
+  margin-bottom: 10px;
+
+  img {
+    max-width: 175px;
+    display:block;
+    margin:auto;
+  }
+
+  
+}
+
 section {
   @include make-row();
 }
@@ -50,8 +64,12 @@ section {
 }
 
 .main-drawer {
+  .container { 
+    padding-bottom: 20px;
+  }
+
   @media (min-width: $grid-float-breakpoint) {
-    position:fixed;
+    position: absolute;
     left: 75px;
   }
 }
