@@ -17,7 +17,7 @@
 @import "users";
 @import "bootstrap/fixed-side";
 @import "font-awesome";
-@import 'navbar';
+@import 'left-navbar';
 
 /* Space out content a bit */
 body {
@@ -71,7 +71,8 @@ section {
 
   @media (min-width: $grid-float-breakpoint) {
     position: absolute;
-    left: 75px;
+    left: $left-navbar-width;
+    margin-top: 10px;
   }
 }
 
