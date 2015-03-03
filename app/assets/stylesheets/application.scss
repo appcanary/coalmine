@@ -18,6 +18,7 @@
 @import "bootstrap/fixed-side";
 @import "font-awesome";
 @import 'left-navbar';
+@import 'dashboard';
 
 /* Space out content a bit */
 body {
@@ -78,27 +79,6 @@ section {
 }
 
 
-.timeline-box {
-  @extend .col-sm-6;
-  .vuln {
-    background-color: white;
-    @include border-top-radius(5px);
-    @include border-bottom-radius(5px);
-    border: #f3d8d1 solid 2px;
-
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 10px;
-  }
-
-  .icon img {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-}
 
 //* Custom page header */
 .header {
@@ -130,5 +110,4 @@ section {
     border-bottom: 0;
   }
 }
-
 

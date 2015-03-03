@@ -1,3 +1,95 @@
-// Place all the styles related to the dashboard controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.timeline-box {
+  @extend .col-sm-8;
+  padding-bottom: 20px;
+
+  .timeline-wrapper {
+    @include border-top-radius(5px);
+    @include border-bottom-radius(5px);
+    background-color: white;
+    border: #ccc solid 1px;
+
+    &.vuln {
+      border: #f3d8d1 solid 2px;
+    }
+
+    &.resolved {
+      border: #c1e59b solid 2px;
+    }
+
+    .title, .affected, .resolution {
+      border-bottom: 2px #eee solid;
+      section {
+        padding-top: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+      }
+
+      &:last-child {
+        border: none;
+      }
+    }
+
+    .title {
+      img.icon {
+        width: 18px;
+        display: inline;
+      }
+
+      .name {
+        @extend .col-sm-4;
+        padding-left: 5px;
+      }
+      .version {
+        @extend .col-sm-3;
+      }
+      .risk {
+        @extend .col-sm-3;
+      }
+      .timestamp {
+        @extend .col-sm-2;
+        color: #787878;
+      }
+    }
+
+    .affected {
+      h3 {
+        margin-top: 0px;
+        text-transform: uppercase;
+        font-size: 13px;
+        color: blue;
+      }
+
+      ul {
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+      }
+
+      .apps { 
+        @extend .col-sm-4;
+      }
+      .servers {
+        @extend .col-sm-8;
+        ul {
+          columns: 3;
+          -webkit-columns: 3;
+          -moz-columns: 3;
+        }
+      }
+    }
+
+    .resolution {
+      .description {
+        @extend .col-sm-12;
+
+        .highlight {
+          @extend .alert;
+          @extend .alert-warning;
+        }
+      }
+    }
+
+  }
+}
+
