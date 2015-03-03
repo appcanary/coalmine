@@ -6,6 +6,9 @@ $left-navbar-width: $left-navbar-inner-width + 3;
   @extend .navbar-fixed-side-left;
   @extend .navbar-inverse;
 
+  border-radius: 0px;
+  border-right: #eac64b solid 1px;
+
   background-color: #fadc58;
   color: black;
   .container .collapsed-menu {
@@ -16,6 +19,7 @@ $left-navbar-width: $left-navbar-inner-width + 3;
     @extend .nav;
     @extend .navbar-nav;
   }
+
 
   .menu > li {
     margin-left: auto;
@@ -52,6 +56,7 @@ $left-navbar-width: $left-navbar-inner-width + 3;
     border-top: #e9c74c solid 1px;
     border-bottom: #ffe599 solid 1px;
     width: $left-navbar-inner-width;
+    padding-right: 2px;
     margin-bottom: 10px;
   }
 
