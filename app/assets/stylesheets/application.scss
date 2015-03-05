@@ -12,18 +12,38 @@
  *
  */
 
+$app-panel-width: 300px;
+$body-margin-top: 10px;
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import "users";
-@import "bootstrap/fixed-side";
 @import "font-awesome";
 @import 'left-navbar';
 @import 'dashboard';
+@import 'apps';
 
-/* Space out content a bit */
 body {
   padding-bottom: 20px;
   background-color: #f7f7f7;
+}
+
+.navigation {
+  position: absolute;
+  height: 100%;
+}
+
+
+.main-drawer {
+  position: fixed;
+  .container { 
+    padding-bottom: 20px;
+  }
+
+  @media (min-width: $grid-float-breakpoint) {
+    position: absolute;
+    left: $left-navbar-width;
+    margin-top: $body-margin-top;
+  }
 }
 
 .logo {
@@ -66,17 +86,6 @@ section {
   @extend .alert-danger;
 }
 
-.main-drawer {
-  .container { 
-    padding-bottom: 20px;
-  }
-
-  @media (min-width: $grid-float-breakpoint) {
-    position: absolute;
-    left: $left-navbar-width;
-    margin-top: 10px;
-  }
-}
 
 
 

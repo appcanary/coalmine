@@ -1,2 +1,30 @@
-<h1>Apps#show</h1>
-<p>Find me in app/views/apps/show.html.erb</p>
+<div class="app-sidepanel">
+  <section>
+    <div class="col-md-offset-4 col-md-8">
+      <p><a>&lt; Dashboard</a></p>
+      <p><strong>Bounjour</strong></p>
+    </div>
+  </section>
+  <section>
+    <div class="col-md-12">
+
+      <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#">Production</a></li>
+        <li role="presentation"><a href="#">Staging</a></li>
+        <li role="presentation"><a href="#">Dev</a></li>
+      </ul>
+
+      <section>
+        <div class="col-md-6">
+        </div>
+
+        <div class="col-md-6">
+        </div>
+
+      </section>
+    </div>
+  </section>
+</div>
+<div id="app-timeline">
+  <%= render :partial => "shared/box" %>
+</div>

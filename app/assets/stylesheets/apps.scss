@@ -1,3 +1,24 @@
-// Place all the styles related to the apps controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.app-sidepanel {
+  position: fixed;
+  height: 100%;
+  background-color: white;
+  margin-left: -15px;
+  margin-top: -$body-margin-top;
+
+  @media (min-width: $screen-sm-min) {
+    width: $container-sm * 0.25;
+  }
+
+  @media (min-width: $screen-md-min) {
+    width: $container-md * 0.25;
+  }
+  @media (min-width: $screen-lg-min) {
+    width: $container-lg * 0.25;
+  }
+}
+
+#app-timeline {
+  .timeline-box {
+    @extend .col-sm-offset-3;
+  }
+}

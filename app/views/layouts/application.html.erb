@@ -12,14 +12,14 @@
   <body>
 
     <% if current_user %>
-      <%= render 'layouts/navbar' %>
+      <div class="navigation">
+        <%= render 'layouts/navbar' %>
+      </div>
 
-      <div class="main-drawer">
-        <div class="container">
-          <%= flash_messages %>
+      <div class="main-drawer container">
+        <%= flash_messages %>
 
-          <%= yield %>
-        </div>
+        <%= yield %>
       </div>
     <% else %>
 
