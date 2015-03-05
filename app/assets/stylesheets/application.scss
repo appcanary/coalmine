@@ -12,24 +12,45 @@
  *
  */
 
+$app-panel-width: 300px;
+$body-margin-top: 10px;
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import 'vendor/emberui.scss';
 @import "users";
+@import "font-awesome";
+@import 'left-navbar';
+@import 'dashboard';
+@import 'apps';
 
-
-/* Space out content a bit */
 body {
-  padding-top: 20px;
   padding-bottom: 20px;
+  background-color: #f7f7f7;
 }
 
-.logo-header {
-  @extend .row;
+.navigation {
+  position: fixed;
+  height: 100%;
+}
+
+
+.main-drawer {
+  position: fixed;
+  .container { 
+    padding-bottom: 20px;
+  }
+
+  @media (min-width: $grid-float-breakpoint) {
+    position: absolute;
+    left: $left-navbar-width;
+    margin-top: $body-margin-top;
+  }
 }
 
 .logo {
   @extend .col-sm-6;
   @extend .col-sm-offset-3;
+  margin-top: 20px;
   margin-bottom: 10px;
 
   img {
@@ -37,6 +58,20 @@ body {
     display:block;
     margin:auto;
   }
+}
+
+.intro-logo {
+  @extend .col-sm-6;
+  margin-top: 20px;
+  margin-bottom: 10px;
+
+  img {
+    max-width: 175px;
+    display:block;
+    margin:auto;
+  }
+
+  
 }
 
 section {
@@ -51,6 +86,9 @@ section {
   @extend .alert;
   @extend .alert-danger;
 }
+
+
+
 
 //* Custom page header */
 .header {

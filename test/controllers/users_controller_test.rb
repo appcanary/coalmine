@@ -8,7 +8,7 @@ class UsersControllerTest < ActionController::TestCase
       assert_not_nil assigns(:user)
     end
 
-    it "should register new users" do
+    it "should register new users and log them in" do
       # surely there exists a better way to do this?
       Canary.stub :create_user, "a token" do
 
@@ -19,8 +19,42 @@ class UsersControllerTest < ActionController::TestCase
         end
       end
 
-      assert_redirected_to user_path(assigns(:user))
+      assert assigns(:current_user)
+      assert_redirected_to dashboard_path
     end
+  end
+
+  describe "existing user" do
+    let(:user) { FactoryGirl.create(:user) }
+    it "should redirect if logged in" do
+      login_user(user)
+      get :new
+      assert_redirected_to dashboard_path
+    end
+
+    it "should fail if email is taken" do
+
+      post :create, :user => { :email => user.email, 
+                               :password => TestValues::PASSWORD,
+                               :password_confirmation => TestValues::PASSWORD }
+
+      assert_template :new
+      assert_nil assigns(:current_user)
+      assert assigns(:user).errors.present?
+    end
+
+    it "should not have any user deletion implemented atm" do
+      login_user(user)
+      assert_no_difference 'User.count' do
+        post :destroy, :id => user.id
+        assert_redirected_to dashboard_path
+      end
+
+      # TODO: test who can update what,
+      # test not being able to see stuff while logged out.
+    end
+
+
   end
   # 
   #   test "should get index" do
