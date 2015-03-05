@@ -21,4 +21,22 @@ module ApplicationHelper
     ident = Digest::MD5.hexdigest(email.to_s.downcase)
     "https://gravatar.com/avatar/#{ident}?d=identicon"
   end
+
+  def eui_button(value, opt = {})
+    btn_type = "eui-button-medium-default"
+    content_tag("eui-button", :class => "ember-view #{btn_type}") do
+      content_tag("button", :type => "button", :'aria-label' => value) +
+        content_tag("div", :class => "eui-component") do
+
+        content_tag("div", :class => "eui-component-wrapper") do
+          content_tag("div", :class => "eui-label") do
+            content_tag("div", :class => "eui-label-value") do
+              value
+            end
+          end
+        end
+
+      end
+    end
+  end
 end

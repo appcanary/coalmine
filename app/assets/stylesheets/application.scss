@@ -16,6 +16,7 @@ $app-panel-width: 300px;
 $body-margin-top: 10px;
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import 'vendor/emberui.scss';
 @import "users";
 @import "font-awesome";
 @import 'left-navbar';
