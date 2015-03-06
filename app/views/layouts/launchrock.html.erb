@@ -17,7 +17,7 @@
             <% if current_user %>
               <li role="presentation"><%= link_to "Log out", logout_path, :method => :post %></li>
             <% else %>
-              <li role="presentation"><%= link_to "Sign Up", sign_up_path %></li>
+              <!-- <li role="presentation"><%#= link_to "Sign Up", sign_up_path %></li> -->
               <li role="presentation"><%= link_to "Beta Login", login_path %></li>
             <% end %>
           </ul>
