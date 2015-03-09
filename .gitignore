@@ -17,3 +17,4 @@ config/database.yml
 !/log/.keep
 /tmp
 config/settings/secrets
+public/assets
