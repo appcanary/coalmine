@@ -3,5 +3,6 @@ class AppsController < ApplicationController
   end
 
   def show
+    @app = App.new
   end
 end

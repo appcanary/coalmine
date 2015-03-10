@@ -28,6 +28,6 @@ class Event
       obj = server
     end
 
-    obj.avatar64
+    obj.avatar
   end
 end

@@ -13,7 +13,7 @@ class App
     end 
   }
 
-  def avatar64
+  def avatar
     RubyIdenticon.create_base64(self.name, :border_size => 10)
   end
 

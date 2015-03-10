@@ -1,8 +1,10 @@
 <div class="app-sidepanel">
   <section>
     <div class="nav-identity">
-      <p><a>&lt; Dashboard</a></p>
-      <h3>Bounjour</h3>
+      <p>
+        <%= link_to "<b class='eui-trailing-icon fa fa-angle-double-left'></b> Dashboard".html_safe, dashboard_path, :class => "dashboard" %>
+      </p>
+      <h3><%= avatar(@app) %> <%= @app.name %></h3>
     </div>
   </section>
   <section>
@@ -17,16 +19,16 @@
       <table class="table unstyled info">
         <tr>
           <td>
-            Platforms
+            <strong>Platforms</strong>
           </td>
-          <td>
-            Ruby, Node
+          <td class="platforms">
+            <%= @app.platforms.join(", ") %>
           </td>
         </tr>
 
         <tr>
           <td>
-            Rubygems
+            <strong>Rubygems</strong>
           </td>
           <td>
             35-40
@@ -35,10 +37,10 @@
 
         <tr>
           <td>
-            Last Updated
+            <strong>Last Updated</strong>
           </td>
           <td>
-            2 hours ago
+            <span class="timestamp" title='<%= @app.last_synced_at.iso8601 %>'><%= @app.last_synced_at %></span>
           </td>
         </tr>
       </table>
@@ -52,7 +54,7 @@
             Active
           </td>
           <td>
-            2 &gt;
+            2 <i class="fa fa-angle-right" />
           </td>
         </tr>
 
@@ -61,7 +63,7 @@
             Resolved
           </td>
           <td>
-            56 &gt;
+            56 <i class="fa fa-angle-right" />
           </td>
         </tr>
 
@@ -70,7 +72,7 @@
             Ignored
           </td>
           <td>
-            3 &gt;
+            3 <i class="fa fa-angle-right" />
           </td>
         </tr>
       </table>

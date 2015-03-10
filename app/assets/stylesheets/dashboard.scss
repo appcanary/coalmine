@@ -122,6 +122,13 @@
     .name {
       @extend .col-sm-4;
     }
+
+    .app-name {
+      @extend .col-sm-3;
+    }
+    .message {
+      @extend .col-sm-7;
+    }
     .version {
       @extend .col-sm-3;
     }
