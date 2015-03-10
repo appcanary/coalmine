@@ -1,73 +1,53 @@
-<!-- <section style="margin&#45;bottom: 20px"> -->
-  <!--   <div class="col&#45;sm&#45;6" style=""> -->
-    <!--     <ul class="nav nav&#45;pills" style="top: 25%; position: relative"> -->
-      <!--       <li role="presentation" class=""><a href="#" class="btn btn&#45;default btn&#45;lg">Dashboard</a></li> -->
-      <!--       <li role="presentation"><a href="#"class="btn btn&#45;default btn&#45;lg">Apps</a></li> -->
-      <!--       <li role="presentation"><a href="#"class="btn btn&#45;default btn&#45;lg">Servers</a></li> -->
-      <!--     </ul> -->
-    <!--   </div> -->
-  <!-- </section> -->
+<% if current_user.onboarded? %>
 
-<%= render :partial => "shared/box" %>
-<section>
-  <div class="timeline-box">
-    <div class="timeline-wrapper resolved">
-      <div class="title">
-        <section>
-          <div class="name">
-            <p>
-              <%= image_tag("icon-ruby.png", :class=> "icon") %>
-              <strong>Ruby Gem:</strong> actionpack
-            </p>
-          </div>
-          <div class="version">
-            <p><strong>Version:</strong> 0.3.7</p>
-          </div>
-          <div class="risk">
-            <p><strong>Risk:</strong> High!</p>
-          </div>
-          <div class="timestamp">
-            <p>2 hours ago</p>
-          </div>
-        </section>
-      </div>
+  <% @events.each do |event| %>
+    <% if event.app? %>
+      <section>
+        <div class="event-box">
+          <div class="event-wrapper">
+            <div class="event-header">
+              <section>
+                <div class="col-sm-12">
+                  <p>🎉 You added a new app!</p>
+                </div>
+              </section>
+            </div>
+            <div class="event-description">
+              <section>
+                <div class="name">
+                <p>
+                  <%= image_tag("data:image.png;base64,#{event.avatar}", :class => "icon") %>
+                  <strong><%= link_to event.app.name, apps_path(1) %></strong>
+                </p>
+              </div>
 
-      <div class="affected">
-        <section>
-          <div class="apps">
-            <h3>2 apps affected</h3>
-            <ul>
-              <li><%= link_to "Bonjour", app_path(1) %></li>
-              <li>Guestlist</li>
-            </ul>
-          </div>
-          <div class="servers">
-            <h3>12 servers affected</h3>
-            <ul>
-              <li>Bonjour</li>
-              <li>Guestlist</li>
-              <li>Guestlist</li>
-              <li>Guestlist</li>
-              <li>Guestlist</li>
-              <li>Guestlist</li>
-              <li>Guestlist</li>
-              <li>Guestlist</li>
-              <li>Guestlist</li>
-              <li>Guestlist</li>
-            </ul>
-          </div>
-        </section>
-      </div>
+              <div class="platforms">
+                <p>
+                  <strong>
+                    Platforms:
+                  </strong>
+                  <%= event.app.platforms.first %>
+                </p>
+              </div>
 
-      <div class="resolution">
-        <section>
-          <div class="description">
-            <p class="highlight">Upgrade gem to <strong>0.4.1</strong> to resolve this issue.</p>
-            <p>lorem impsum foo bar etc whatever more typing at random to fill out this box thank you very much.</p>
+              <div class="last-deploy">
+                <p>
+                  <strong>
+                    Deployed:
+                  </strong>
+                  <span class="last_synched_at timestamp" title="<%= event.app.last_synced_at.iso8601 %>"><%= event.app.last_synced_at %></span>
+                </div>
+              </section>
+            </div>
           </div>
-        </section>
-      </div>
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
+    <% end %>
+  <% end %>
+
+
+  <%= render :partial => "shared/box" %>
+<% else %>
+  <%= render :partial => "onboard" %>
+<% end %>
 

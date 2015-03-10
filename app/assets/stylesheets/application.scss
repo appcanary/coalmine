@@ -62,6 +62,7 @@ body {
 
 .intro-logo {
   @extend .col-sm-6;
+  @extend .col-sm-offset-3;
   margin-top: 20px;
   margin-bottom: 10px;
 
@@ -85,39 +86,5 @@ section {
 .error_explanation {
   @extend .alert;
   @extend .alert-danger;
-}
-
-
-
-
-//* Custom page header */
-.header {
-  border-bottom: 1px solid #e5e5e5;
-}
-/* Make the masthead heading the same height as the navigation */
-.header h3 {
-  padding-bottom: 19px;
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
-}
-
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-right: 0;
-    padding-left: 0;
-  }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
 }
 
