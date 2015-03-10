@@ -15,4 +15,9 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require vendor/validator
+//= require vendor/jquery.timeago
 //= require_tree .
+
+jQuery(document).ready(function() {
+  jQuery(".timestamp").timeago();
+});

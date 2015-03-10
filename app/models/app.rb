@@ -2,7 +2,7 @@ class App
   include Mocker
   mock_attr(:name) { Faker::App.name }
   mock_attr(:platforms) { ["Ruby"] }
-  mock_attr(:last_synced_at) { 2.hours.ago }
+  mock_attr(:last_synced_at) { rand(1..74).hours.ago }
   mock_attr(:active_issues) { [] }
   mock_attr(:resolved_issues) { [] }
   mock_attr(:ignored_issues) { [] }
@@ -12,5 +12,10 @@ class App
       Server.new(:app => obj ) 
     end 
   }
+
+  def avatar64
+    RubyIdenticon.create_base64(self.name, :border_size => 10)
+  end
+
 
 end
