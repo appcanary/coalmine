@@ -37,7 +37,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'bcrypt', '~> 3.1.7'
 
 # deployment
-gem 'unicorn'
+gem 'unicorn-rails'
 gem 'capistrano', '~> 3.2.0'
 gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-bundler', '~> 1.1.2'
