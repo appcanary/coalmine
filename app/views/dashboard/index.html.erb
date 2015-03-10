@@ -1,4 +1,4 @@
-<% if current_user.onboarded? %>
+<% if @onboarded %>
 
   <% @events.each do |event| %>
     <% if event.app? %>
@@ -7,7 +7,8 @@
           <div class="event-wrapper">
             <div class="event-header">
               <section>
-                <div class="col-sm-12">
+                <div class="note">
+                  <span class="last_synched_at timestamp" title="<%= event.app.last_synced_at.iso8601 %>"><%= event.app.last_synced_at %></span>
                   <p>🎉 You added a new app!</p>
                 </div>
               </section>
@@ -17,7 +18,7 @@
                 <div class="name">
                 <p>
                   <%= image_tag("data:image.png;base64,#{event.avatar}", :class => "icon") %>
-                  <strong><%= link_to event.app.name, apps_path(1) %></strong>
+                  <strong><%= link_to event.app.name, app_path(1) %></strong>
                 </p>
               </div>
 
@@ -30,12 +31,10 @@
                 </p>
               </div>
 
-              <div class="last-deploy">
-                <p>
-                  <strong>
-                    Deployed:
-                  </strong>
-                  <span class="last_synched_at timestamp" title="<%= event.app.last_synced_at.iso8601 %>"><%= event.app.last_synced_at %></span>
+              <div class="edit-action">
+
+                <%# <%= link_to "Edit details", "",  :class => "btn btn-sm btn-primary" %>
+                  <%= eui_button("Edit details", :href => app_path(1)) %>
                 </div>
               </section>
             </div>
@@ -46,7 +45,7 @@
   <% end %>
 
 
-  <%= render :partial => "shared/box" %>
+  <%# <%= render :partial => "shared/box" %>
 <% else %>
   <%= render :partial => "onboard" %>
 <% end %>

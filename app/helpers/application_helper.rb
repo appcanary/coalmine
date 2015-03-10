@@ -24,13 +24,19 @@ module ApplicationHelper
 
   def eui_button(value, opt = {})
     btn_type = "eui-button-medium-default"
-    content_tag("eui-button", :class => "ember-view #{btn_type}") do
-      content_tag("button", :type => "button", :'aria-label' => value) +
+    disabled = opt[:disabled] ? "eui-disabled" : nil
+    content_tag("eui-button", :class => "ember-view #{btn_type} #{disabled}") do
+      if disabled
+      btn = content_tag("button", :disabled => true, :'aria-label' => value) {} 
+      else
+        btn = content_tag("button", :'aria-label' => value) {} 
+      end
+      btn +
         content_tag("div", :class => "eui-component") do
 
         content_tag("div", :class => "eui-component-wrapper") do
           content_tag("div", :class => "eui-label") do
-            content_tag("div", :class => "eui-label-value") do
+            content_tag("a", :href => opt[:href], :class => "eui-label-value") do
               value
             end
           end

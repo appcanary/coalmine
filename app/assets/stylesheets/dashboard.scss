@@ -37,12 +37,20 @@
   .platforms {
     @extend .col-sm-4;
   }
-  .last-deploy {
+  .edit-action {
     @extend .col-sm-4;
+    eui-button {
+      @extend .pull-right;
+      margin-top: -5px;
+    }
   }
   .timestamp {
-    // @extend .col-sm-2;
+    @extend .pull-right;
     color: #787878;
+  }
+
+  .action-bar {
+    @extend .col-sm-12;
   }
   .last-synch {
 

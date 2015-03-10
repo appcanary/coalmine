@@ -1,5 +1,9 @@
 class DashboardController < ApplicationController
   def index
-    @events = 5.times.map { Event.new }
+    @events = []
+    @onboarded = params[:new_app]
+    if params[:new_app]
+      @events << Event.new(:kind => :new_app)
+    end
   end
 end

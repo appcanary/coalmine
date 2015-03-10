@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true
 
   def onboarded?
-    true
-    # false
+    # true
+    false
   end
 end
