@@ -22,6 +22,13 @@
 jQuery(document).ready(function() {
   jQuery(".timestamp").timeago();
 
-  $(".app-sidepanel").velocity("transition.slideLeftBigIn").delay(500).velocity({'z-index': 1});
-  $(".timeline-box, .event-box").velocity("transition.slideDownIn").delay(750);
+  if($(".app-sidepanel").length > 0) {
+    $(".app-sidepanel").velocity("transition.slideLeftBigIn", 400, function() {
+      $(".timeline-box, .event-box").velocity("transition.slideDownIn", { stagger: 250 });
+    }).delay(250).velocity({'z-index': 1});
+
+  }
+  else {
+    $(".timeline-box, .event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
+  }
 });
