@@ -23,6 +23,15 @@
       }
     }
   }
+
+  img.icon {
+    width: 18px;
+    display: inline;
+    &.tiny {
+      width: 9px;
+    }
+  }
+
 }
 
 .event-box {
@@ -56,13 +65,6 @@
   .last-synch {
 
   }
-
-
-  img.icon {
-    width: 18px;
-    display: inline;
-  }
-
 
 }
 
@@ -115,11 +117,7 @@
   }
 
   .title {
-    img.icon {
-      width: 18px;
-      display: inline;
-    }
-
+   
     .name {
       @extend .col-sm-4;
     }
@@ -128,18 +126,19 @@
       @extend .col-sm-3;
     }
     .message {
-      @extend .col-sm-7;
+      @extend .col-sm-6;
     }
     .version {
       @extend .col-sm-3;
     }
     .risk {
-      @extend .col-sm-3;
+      @extend .col-sm-2;
     }
     .timeago {
-      @extend .col-sm-2;
+      @extend .col-sm-3;
       color: #787878;
     }
+
   }
 
   .affected {
@@ -178,7 +177,15 @@
         @extend .alert-warning;
       }
     }
+
+    .actions {
+      @extend .col-sm-12;
+      eui-button {
+        margin-top: -5px;
+      }
+    }
   }
+
 
 }
 

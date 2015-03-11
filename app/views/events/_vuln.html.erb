@@ -1,0 +1,71 @@
+<section>
+  <div class="timeline-box">
+    <div class="timeline-wrapper vuln">
+      <div class="title">
+        <section>
+
+          <div class="name">
+            <p>
+              <% if vuln.ruby? %>
+                <%= image_tag("icon-ruby.png", :class=> "icon") %>
+                <strong>RubyGem:</strong> <%= vuln.artifact %>
+            <% end %>
+          </p>
+        </div>
+
+        <div class="version">
+          <p><strong>Version:</strong> 0.3.7</p>
+        </div>
+
+        <div class="risk">
+          <p><strong>Risk:</strong> <%= vuln.criticality %></p>
+        </div>
+
+        <div class="timeago">
+          <span class="timestamp pull-right" title="<%= vuln.disclosed_at.iso8601 %>"><%= vuln.disclosed_at.iso8601 %></span>
+        </div>
+      </section>
+    </div>
+
+    <div class="affected">
+      <section>
+        <div class="apps">
+          <h3>Apps affected:</h3>
+          <ul>
+            <% vuln.apps.each do |app| %>
+              <li><%= link_to "#{avatar(app, :tiny)}  #{h app.name}".html_safe, app_path(1) %></li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="servers">
+          <h3>Servers affected</h3>
+          <ul>
+            <% vuln.servers.each do |srv| %>
+              <li><%= srv.name %></li>
+            <% end %>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="resolution">
+      <section>
+        <div class="description">
+          <p class="highlight"><%= vuln.remediation %></p>
+          <p><%= vuln.description %></p>
+        </div>
+      </section>
+    </div>
+
+    <div class="resolution">
+      <section>
+        <div class="actions">
+          <%= eui_button("Working on it!") %>
+          <%= eui_button("Details") %>
+          <%= eui_button("Ignore") %>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+

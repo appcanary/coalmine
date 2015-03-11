@@ -2,75 +2,10 @@
 
   <% @events.each do |event| %>
     <% if event.app? %>
-      <section id="foo">
-        <div class="timeline-box">
-          <div class="timeline-wrapper resolved">
-            <div class="title">
-              <section>
-                <div class="app-name">
-                  <p>
-                    <%= avatar(event) %>
-                    <strong><%= link_to event.app.name, app_path(1) %></strong>
+      <%= render :partial => "events/notvuln", :locals => { :app => event.app } %>
 
-                  </p>
-                </div>
-
-                <div class="message">
-                  <p>Congrats! Your app doesn't have vulnerable dependencies.</p>
-                </div>
-
-                <div class="col-sm-2">
-                  <span class="pull-right timestamp">Just now</span>
-                </div>
-              </section>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      </section>
-      <section>
-        <div class="event-box">
-          <div class="event-wrapper">
-            <div class="event-header">
-              <section>
-                <div class="note">
-                  <span class="last_synched_at timestamp" title="<%= event.app.last_synced_at.iso8601 %>"><%= event.app.last_synced_at %></span>
-                  <p>🎉 You added a new app!</p>
-                </div>
-              </section>
-            </div>
-            <div class="event-description">
-              <section>
-                <div class="name">
-                  <p>
-                    <%= avatar(event) %>
-                    <strong><%= link_to event.app.name, app_path(1) %></strong>
-                  </p>
-                </div>
-
-                <div class="platforms">
-                  <p>
-                    <strong>
-                      Platforms:
-                    </strong>
-                    <%= event.app.platforms.first %>
-                  </p>
-                </div>
-
-                <div class="edit-action">
-
-                  <%= eui_button("Edit details", :href => app_path(1)) %>
-                </div>
-
-
-
-              </section>
-            </div>
-          
-          </div>
-        </div>
-      </section>
+      <%= render :partial => "events/vuln", :locals => { :vuln => event.app.active_issues.first } %>
+      <%= render :partial => "events/newapp", :locals => { :event => event } %>
     <% end %>
   <% end %>
 

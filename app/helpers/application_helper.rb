@@ -45,7 +45,13 @@ module ApplicationHelper
     end
   end
 
-  def avatar(obj)
-    image_tag("data:image.png;base64,#{obj.avatar}", :class => "icon")
+  def avatar(obj, size = :normal)
+    case size
+    when :normal
+      klass = "icon"
+    when :tiny
+      klass = "icon tiny"
+    end
+    image_tag("data:image.png;base64,#{obj.avatar}", :class => klass)
   end
 end

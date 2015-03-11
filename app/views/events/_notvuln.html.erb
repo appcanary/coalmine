@@ -1,0 +1,27 @@
+<section>
+  <div class="timeline-box">
+    <div class="timeline-wrapper resolved">
+      <div class="title">
+        <section>
+          <div class="app-name">
+            <p>
+              <%= avatar(app) %>
+              <strong><%= link_to app.name, app_path(1) %></strong>
+
+            </p>
+          </div>
+
+          <div class="message">
+            <p>Congrats! Your app doesn't have vulnerable dependencies.</p>
+          </div>
+
+          <div class="timeago">
+            <span class="pull-right timestamp" title="<%= app.last_synced_at.iso8601 %>"><%= app.last_synced_at %></span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
+
+

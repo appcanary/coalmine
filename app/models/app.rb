@@ -3,7 +3,7 @@ class App
   mock_attr(:name) { Faker::App.name }
   mock_attr(:platforms) { ["Ruby"] }
   mock_attr(:last_synced_at) { rand(1..74).hours.ago }
-  mock_attr(:active_issues) { [] }
+  mock_attr(:active_issues) { |app| [Vuln.new(:apps => [app])] }
   mock_attr(:resolved_issues) { [] }
   mock_attr(:ignored_issues) { [] }
 
@@ -17,5 +17,8 @@ class App
     RubyIdenticon.create_base64(self.name, :border_size => 10)
   end
 
+  def vulnerable?
+    active_issues.present?
+  end
 
 end
