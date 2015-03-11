@@ -13,10 +13,15 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap-sprockets
+//= require vendor/velocity
+//= require vendor/velocity.ui
 //= require vendor/validator
 //= require vendor/jquery.timeago
 //= require_tree .
 
 jQuery(document).ready(function() {
   jQuery(".timestamp").timeago();
+
+  $(".app-sidepanel").velocity("transition.slideLeftBigIn").delay(500).velocity({'z-index': 1});
+  $(".timeline-box, .event-box").velocity("transition.slideDownIn").delay(750);
 });

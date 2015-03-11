@@ -2,7 +2,7 @@
 
   <% @events.each do |event| %>
     <% if event.app? %>
-      <section>
+      <section id="foo">
         <div class="timeline-box">
           <div class="timeline-wrapper resolved">
             <div class="title">
@@ -19,8 +19,8 @@
                   <p>Congrats! Your app doesn't have vulnerable dependencies.</p>
                 </div>
 
-                <div class="timestamp">
-                  <p>Just now</p>
+                <div class="col-sm-2">
+                  <span class="pull-right timestamp">Just now</span>
                 </div>
               </section>
             </div>

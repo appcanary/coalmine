@@ -1,5 +1,6 @@
 @mixin dashboard-box($width, $wrapper, $sections){
   @extend #{$width};
+  opacity: 0;
   padding-bottom: 20px;
 
   #{$wrapper} {
@@ -135,7 +136,7 @@
     .risk {
       @extend .col-sm-3;
     }
-    .timestamp {
+    .timeago {
       @extend .col-sm-2;
       color: #787878;
     }
