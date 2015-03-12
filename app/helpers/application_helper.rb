@@ -25,7 +25,8 @@ module ApplicationHelper
   def eui_button(value, opt = {})
     btn_type = "eui-button-medium-default"
     disabled = opt[:disabled] ? "eui-disabled" : nil
-    content_tag("eui-button", :class => "ember-view #{btn_type} #{disabled}") do
+    klass = opt[:class] ? opt[:class] : nil
+    content_tag("eui-button", :class => "ember-view #{btn_type} #{disabled} #{klass}") do
       if disabled
       btn = content_tag("button", :disabled => true, :'aria-label' => value) {} 
       else

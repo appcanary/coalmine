@@ -1,4 +1,4 @@
-@mixin dashboard-box($width, $wrapper, $sections){
+@mixin dashboard-box($width, $wrapper){
   @extend #{$width};
   opacity: 0;
   padding-bottom: 20px;
@@ -9,7 +9,7 @@
     background-color: white;
     border: #ccc solid 1px;
 
-    #{$sections} {
+    & > * {
       border-bottom: 2px #eee solid;
       section {
         padding-top: 20px;
@@ -35,7 +35,7 @@
 }
 
 .event-box {
-  @include dashboard-box(".col-sm-8", ".event-wrapper", (".event-header", ".event-description"));
+  @include dashboard-box(".col-sm-8", ".event-wrapper");
 
   .note {
     @extend .col-sm-12;
@@ -103,7 +103,7 @@
 }
 
 .timeline-box {
-  @include dashboard-box(".col-sm-8", ".timeline-wrapper", (".title", ".affected", ".resolution"));
+  @include dashboard-box(".col-sm-8", ".timeline-wrapper");
 
   .timeline-wrapper {
     &.vuln {
