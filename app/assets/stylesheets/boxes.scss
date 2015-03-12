@@ -72,11 +72,13 @@
   @extend .col-sm-6;
   @extend .col-sm-offset-3;
 
+  margin-top: 20px;
+
   .onboard-wrapper {
     @include border-top-radius(5px);
     @include border-bottom-radius(5px);
     background-color: white;
-    border: #ccc solid 1px;
+    border: white solid 1px;
     padding: 30px;
   }
 

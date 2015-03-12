@@ -14,7 +14,7 @@
   </head>
   <body>
 
-    <% if current_user %>
+    <% if current_user && @skipnav.blank? %>
       <div class="navigation">
         <%= render 'layouts/navbar' %>
       </div>
