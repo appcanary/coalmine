@@ -1,12 +1,13 @@
+$left-navbar-inner-width: 60px;
+$left-navbar-width: $left-navbar-inner-width + 4;
 @import "bootstrap/fixed-side";
-
-$left-navbar-inner-width: 72px;
-$left-navbar-width: $left-navbar-inner-width + 3;
 .navbar-left-side {
   @extend .navbar;
   @extend .navbar-fixed-side;
   @extend .navbar-fixed-side-left;
   @extend .navbar-inverse;
+
+  position: fixed;
 
   border-radius: 0px;
   border-right: #eac64b solid 1px;
@@ -40,11 +41,12 @@ $left-navbar-width: $left-navbar-inner-width + 3;
     margin-left: auto;
     margin-right: auto;
 
-    width: 50px;
+    width: $left-navbar-width - 20px;
+    padding-left: 2px;
   }
 
   .fa {
-    font-size: 40px;
+    font-size: 30px;
     margin: 5px;
     margin-left: 3px;
   }
@@ -57,8 +59,8 @@ $left-navbar-width: $left-navbar-inner-width + 3;
   .menu > li.divider {
     border-top: #e9c74c solid 1px;
     border-bottom: #ffe599 solid 1px;
-    width: $left-navbar-inner-width;
-    padding-right: 2px;
+    width: $left-navbar-width;
+    // padding-right: 2px;
     margin-bottom: 10px;
   }
 

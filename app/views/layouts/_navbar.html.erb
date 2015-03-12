@@ -20,12 +20,8 @@
       </ul>
       <ul class="menu">
         <li class="divider"></li>
-        <li class="avatar">
-          <%= image_tag gravatar_img(current_user.email) %>
-        </li>
-        <li>
-          <a href="#"><i class="fa fa-code"></i></a>
-        </li>
+        <li> <a href="#"><i class="fa fa-plus"></i></a> </li>
+        <li> <a href="#"><i class="fa fa-cog"></i></a> </li>
         <li>
           <%= link_to '<i class="fa fa-sign-out"></i>'.html_safe, logout_path, :method => :post %>
         </li>

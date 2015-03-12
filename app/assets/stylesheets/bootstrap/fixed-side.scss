@@ -12,7 +12,7 @@
   min-height: 5px;
 
   min-width: 5px;
-  max-width: 75px;
+  max-width: $left-navbar-width;
   margin-bottom: 0;
   border: 0px solid transparent;
   border-top-left-radius: 0px;
@@ -59,7 +59,7 @@
   margin: 0;
 }
 .navbar-fixed-side .navbar-collapse {
-  padding: 0 2px;
+  padding: 0 0px;
 }
 .navbar-fixed-side .container .navbar-collapse {
   margin: 0;
