@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'events' => "events#index"
+
   resources :user_sessions
   resources :apps, :only => [:index, :show] do
     resources :servers, :only => [:index, :show]

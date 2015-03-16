@@ -2,12 +2,11 @@
 
   <% @events.each do |event| %>
     <% if event.app? %>
-      <%= render :partial => "events/notvuln", :locals => { :app => event.app } %>
+      <%# <%= render :partial => "events/notvuln", :locals => { :app => event.app } %>
 
-      <%= render :partial => "events/vuln", :locals => { :vuln => event.app.active_issues.first } %>
-      
-      <%= render :partial => "events/ignored_vuln", :locals => { :vuln => event.app.active_issues.first } %>
-      <%= render :partial => "events/newapp", :locals => { :event => event } %>
+      <%# <%= render :partial => "events/vuln", :locals => { :vuln => event.app.active_issues.first } %>
+      <%# <%= render :partial => "events/ignored_vuln", :locals => { :vuln => event.app.active_issues.first } %>
+      <%# <%= render :partial => "events/newapp", :locals => { :event => event } %>
     <% end %>
   <% end %>
 

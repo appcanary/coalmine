@@ -2,8 +2,13 @@ module Mocker
   extend ActiveSupport::Concern
 
   def initialize(opt = {})
+    attrs = self.class.instance_eval("@mock_attrs")
 
-    self.class.instance_eval("@mock_attrs").each do |attr, block|
+    define_singleton_method(:attributes) do
+      attrs.keys
+    end
+
+    attrs.each_pair do |attr, block|
       self.send("#{attr}=", block.call(self))
     end
 
@@ -20,10 +25,14 @@ module Mocker
     end
   end
 
+  def to_json
+    Hash[attributes.map { |a| [a, self.send(a).to_json] }]
+  end
+
   module ClassMethods
     def mock_attr(attr, &block)
-      @mock_attrs ||= []
-      @mock_attrs << [attr, block]
+      @mock_attrs ||= {}
+      @mock_attrs[attr] = block
       define_method(attr) do
         instance_variable_get("@#{attr}")
       end

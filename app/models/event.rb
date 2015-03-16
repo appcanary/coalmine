@@ -30,4 +30,8 @@ class Event
 
     obj.avatar
   end
+
+  def message
+    "yolo"
+  end
 end

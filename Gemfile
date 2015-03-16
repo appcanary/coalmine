@@ -25,8 +25,7 @@ gem 'sorcery'
 gem 'annotate'
 gem 'httparty'
 
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'react-rails', '~> 0.13.0.0'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'

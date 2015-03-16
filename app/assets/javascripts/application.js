@@ -13,22 +13,27 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap-sprockets
+//= require react
+//= require vendor/underscore
+//= require vendor/backbone
 //= require vendor/velocity
 //= require vendor/velocity.ui
 //= require vendor/validator
 //= require vendor/jquery.timeago
 //= require_tree .
+//= require_tree ./components/
 
 jQuery(document).ready(function() {
   jQuery(".timestamp").timeago();
-
-  if($(".app-sidepanel").length > 0) {
-    $(".app-sidepanel").velocity({'z-index': -1 }).velocity("transition.slideLeftBigIn", 400, function() {
-      $(".timeline-box, .event-box").velocity("transition.slideDownIn", { stagger: 250 });
-    }).delay(250).velocity({'z-index': 1});
-
-  }
-  else {
-    $(".timeline-box, .event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
-  }
 });
+// 
+//   if($(".app-sidepanel").length > 0) {
+//     $(".app-sidepanel").velocity({'z-index': -1 }).velocity("transition.slideLeftBigIn", 400, function() {
+//       $(".timeline-box, .event-box").velocity("transition.slideDownIn", { stagger: 250 });
+//     }).delay(250).velocity({'z-index': 1});
+// 
+//   }
+//   else {
+//     $(".timeline-box, .event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
+//   }
+// });
