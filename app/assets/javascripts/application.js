@@ -12,20 +12,23 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require csrf
 //= require bootstrap-sprockets
-//= require react
 //= require vendor/underscore
 //= require vendor/backbone
+//= require react
+//= require vendor/Flux
 //= require vendor/velocity
 //= require vendor/velocity.ui
 //= require vendor/validator
 //= require vendor/jquery.timeago
-//= require_tree .
+//= require app
 //= require_tree ./components/
+//= require router
 
-jQuery(document).ready(function() {
-  jQuery(".timestamp").timeago();
-});
+// jQuery(document).ready(function() {
+//   jQuery(".timestamp").timeago();
+// });
 // 
 //   if($(".app-sidepanel").length > 0) {
 //     $(".app-sidepanel").velocity({'z-index': -1 }).velocity("transition.slideLeftBigIn", 400, function() {

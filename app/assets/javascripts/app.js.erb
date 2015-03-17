@@ -1,0 +1,47 @@
+// sets up stuff required for the rest of the app to load.
+
+window.Canary = {}
+Canary.components = {};
+Canary.controllers = {};
+Canary.models = {};
+
+Canary.mixins = {};
+
+Canary.mixins.RefNodeMixin = {
+  refnode: function(ref) {
+    return React.findDOMNode(this.refs[ref]);
+  }
+}
+
+Backbone.RailsModel = Backbone.Model.extend({
+  toJSON: function() {
+    json = {};
+    json[this.rootKey] = Backbone.Model.prototype.toJSON.call(this);
+    return json;
+  },
+
+  parse: function(json) {
+    if(this.rootKey === undefined) {
+      throw "root_key not defined on model";
+    }
+
+    if(json !== undefined) {
+      return json[this.rootKey];
+    }
+  },
+
+  fromForm: function(form) {
+    var data = $(form).serializeArray();
+    var formData = _.object(_.pluck(data, 'name'), _.pluck(data, 'value'));
+
+    return this.set(formData);
+  }
+})
+
+Flux.Dispatcher.prototype.register_action = function(callback, action) {
+  return this.register(function(payload) {
+    if(payload.actionType === action) {
+      callback(payload);
+    }
+  });
+}

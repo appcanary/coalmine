@@ -86,13 +86,13 @@ $(document).ready(function() {
       );
     }
   });
-
-  all_events.fetch({
-    success: function(collection, resp, opt) {
-      React.render(
-        <Timeline initialEvents={collection} items={[1,1,1]} />,
-          document.getElementById("main")
-      );
-    }
-  });
+// 
+//   all_events.fetch({
+//     success: function(collection, resp, opt) {
+//       React.render(
+//         <Timeline initialEvents={collection} items={[1,1,1]} />,
+//           document.getElementById("main")
+//       );
+//     }
+//   });
 });
