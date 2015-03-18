@@ -4,41 +4,88 @@ var SignUp = React.createClass({
     return (
       <div>
         <Logo />
-        <SignUpForm handler={this.props.handler} />
+        <SignUpForm user={this.props.user} />
       </div>
     );
-  }
+  },
+
 });
 
 var SignUpForm = React.createClass({
   mixins: [Canary.mixins.RefNodeMixin],
 
+  getInitialState: function() {
+    return {
+      email: "",
+      password: "",
+      password_confirmation: ""
+    }
+  },
+
+  componentDidMount: function() {
+    this.props.user.on("error", function() {
+      this.setState(this.getInitialState());
+    }, this);
+  },
+
+  componentWillUnmount: function() {
+    this.props.user.off(null, null, this);
+  },
+
+  handleChange: function() {
+    this.setState({
+      email: this.refs.email.getDOMNode().value,
+      password: this.refs.password.getDOMNode().value,
+      password_confirmation: this.refs.password_confirmation.getDOMNode().value,
+    })
+  },
+
   createUser: function(e) {
     e.preventDefault();
 
+    this.refs.email.getDOMNode().focus();
     Canary.Herald.dispatch({
       actionType: 'user-sign-up',
-      form: this.refnode("form")
+      form: this.state,
+      user: this.props.user
     });
   },
 
   render: function() {
+    var error_alert = undefined;
+    if(this.props.user.errors !== undefined){
+      var error_msgs = this.props.user.errors.full_messages.map(function(msg, i) {
+        return <li>{msg}</li>;
+      });
+
+      error_alert = (
+        <div className="error_explanation" role="alert">
+          <h4>Oops. We encountered an error:</h4>
+          <ul>
+            {error_msgs}
+          </ul>
+        </div>
+      )
+
+    }
+      
     return (
       <section>
         <div className="user-login">
-          <form data-toggle="validator" className="new_user" action="/users" method="post"ole="form" ref="form" onSubmit={this.createUser} >
+          <form data-toggle="validator" className="new_user" action="/users" method="post" role="form" ref="form" onSubmit={this.createUser} >
+            {error_alert}
             <h3>Before we get started, tell us:</h3>
             <div className="form-group">
-              <input className="form-control" placeholder="Your email address" type="email" name="email" id="user_email" ref="email" required/>
+              <input className="form-control" placeholder="Your email address" type="email" name="email" id="user_email" ref="email" required onChange={this.handleChange} value={this.state.email}/>
             </div>
 
             <div className="form-group">
-              <input className="form-control" placeholder="A password, or a secret between us" data-minlength="6" data-error="At least 6 characters" type="password" name="password" id="user_password" ref="password" required/>
+              <input className="form-control" placeholder="A password, or a secret between us" data-minlength="6" data-error="At least 6 characters" type="password" name="password" id="user_password" ref="password" required onChange={this.handleChange}value={this.state.password} />
               <span className="help-block with-errors"></span>
             </div>
 
             <div className="form-group">
-              <input className="form-control" placeholder="The same password again, just to confirm" data-match="#user_password" data-error="Passwords must match" type="password" name="password_confirmation" id="user_password_confirmation" ref="password_confirmation" required />
+              <input className="form-control" placeholder="The same password again, just to confirm" data-match="#user_password" data-error="Passwords must match" type="password" name="password_confirmation" id="user_password_confirmation" ref="password_confirmation" required onChange={this.handleChange} value={this.state.password_confirmation} />
               <span className="help-block with-errors"></span>
             </div>
 
