@@ -24,6 +24,8 @@
 //= require vendor/jquery.timeago
 //= require app
 //= require_tree ./components/
+//= require_tree ./stores/
+//= require_tree ./controllers/
 //= require router
 
 // jQuery(document).ready(function() {
