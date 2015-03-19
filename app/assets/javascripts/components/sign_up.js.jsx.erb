@@ -4,22 +4,41 @@ var SignUp = React.createClass({
     return (
       <div>
         <Logo />
-        <SignUpForm user={this.props.user} />
+        <UserForm user={this.props.user} sign_up_page={true} title={"Before we get started, tell us:"} actionType={"user-sign-up"} />
       </div>
     );
   },
 
 });
 
-var SignUpForm = React.createClass({
+var Login = React.createClass({
+  
+  render: function() {
+    return (
+      <div>
+        <Logo />
+        <UserForm user={this.props.user} title={"Nice to see you again."}  actionType={"user-login"} />
+      </div>
+    );
+  },
+
+});
+
+
+var UserForm = React.createClass({
   mixins: [Canary.mixins.RefNodeMixin],
 
   getInitialState: function() {
-    return {
+    var attr = {
       email: "",
       password: "",
-      password_confirmation: ""
     }
+
+    if (this.props.sign_up_page !== undefined) {
+      attr["password_confirmation"] = "";
+    }
+    return attr;
+
   },
 
   componentDidMount: function() {
@@ -33,19 +52,25 @@ var SignUpForm = React.createClass({
   },
 
   handleChange: function() {
-    this.setState({
+
+    var attr = {
       email: this.refs.email.getDOMNode().value,
       password: this.refs.password.getDOMNode().value,
-      password_confirmation: this.refs.password_confirmation.getDOMNode().value,
-    })
+    }
+
+    if (this.props.sign_up_page !== undefined) {
+      attr["password_confirmation"] = this.refs.password_confirmation.getDOMNode().value ;
+    }
+
+    return this.setState(attr);
   },
 
-  createUser: function(e) {
+  submitForm: function(e) {
     e.preventDefault();
 
     this.refs.email.getDOMNode().focus();
     Canary.Herald.dispatch({
-      actionType: 'user-sign-up',
+      actionType: this.props.actionType,
       form: this.state,
       user: this.props.user
     });
@@ -54,7 +79,7 @@ var SignUpForm = React.createClass({
   render: function() {
     var error_alert = undefined;
     if(this.props.user.errors !== undefined){
-      var error_msgs = this.props.user.errors.full_messages.map(function(msg, i) {
+      var error_msgs = _.map(this.props.user.errors.full_messages, function(msg, i) {
         return <li>{msg}</li>;
       });
 
@@ -68,13 +93,24 @@ var SignUpForm = React.createClass({
       )
 
     }
+
+
+    password_confirmation_view =  (
+      <div className="form-group">
+        <input className="form-control" placeholder="The same password again, just to confirm" data-match="#user_password" data-error="Passwords must match" type="password" name="password_confirmation" id="user_password_confirmation" ref="password_confirmation" required onChange={this.handleChange} value={this.state.password_confirmation} />
+        <span className="help-block with-errors"></span>
+      </div>
+    )
+
       
     return (
       <section>
         <div className="user-login">
-          <form data-toggle="validator" className="new_user" action="/users" method="post" role="form" ref="form" onSubmit={this.createUser} >
+          <form data-toggle="validator" className="new_user" action="/users" method="post" role="form" ref="form" onSubmit={this.submitForm} >
+
             {error_alert}
-            <h3>Before we get started, tell us:</h3>
+
+            <h3>{this.props.title}</h3>
             <div className="form-group">
               <input className="form-control" placeholder="Your email address" type="email" name="email" id="user_email" ref="email" required onChange={this.handleChange} value={this.state.email}/>
             </div>
@@ -84,11 +120,9 @@ var SignUpForm = React.createClass({
               <span className="help-block with-errors"></span>
             </div>
 
-            <div className="form-group">
-              <input className="form-control" placeholder="The same password again, just to confirm" data-match="#user_password" data-error="Passwords must match" type="password" name="password_confirmation" id="user_password_confirmation" ref="password_confirmation" required onChange={this.handleChange} value={this.state.password_confirmation} />
-              <span className="help-block with-errors"></span>
-            </div>
+            { this.props.sign_up_page ? password_confirmation_view : null }
 
+           
             <div className="form-group">
               <input type="submit" name="commit" value="Sign Up" className="btn btn-black" />
             </div>

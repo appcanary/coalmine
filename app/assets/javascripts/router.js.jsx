@@ -4,6 +4,7 @@
 
     routes: {
       "sign_up":        "sign_up",    
+      "login":          "login",    
       "dashboard":      "dashboard", 
     },
 
@@ -11,11 +12,12 @@
       Canary.UsersController.new();
     },
 
+    login: function() {
+      Canary.UsersController.login();
+    },
+
     dashboard: function() {
-      React.render(
-        <h1>Hello World</h1>,
-        document.getElementById("main")
-      )
+      Canary.DashboardController.index();
     }
 
   });

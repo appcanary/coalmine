@@ -1,19 +1,27 @@
 class UserSessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
   before_filter :skip_if_logged_in, :except => :destroy
-  
+
   def new
     @user = User.new
   end
 
   def create
     user_params = params[:user] || {}
-    if @user = login(user_params[:email], user_params[:password])
-      redirect_back_or_to(dashboard_path, notice: 'Login successful')
-    else
-      @user = User.new
-      flash.now[:alert] = 'Login failed'
-      render action: 'new'
+    respond_to do |format|
+      if @user = login(user_params[:email], user_params[:password])
+
+        format.html { redirect_back_or_to(dashboard_path, notice: 'Login successful') }
+        format.json { render json: {}, status: :created, location: dashboard_path }
+      else
+        format.html { 
+          @user = User.new
+          flash.now[:alert] = 'Login failed'
+          render action: 'new'
+        }
+
+        format.json { render json: { errors: [], full_messages: ["Invalid email or password."] }, status: :unauthorized }
+      end
     end
   end
 

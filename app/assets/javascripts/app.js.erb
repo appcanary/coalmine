@@ -38,9 +38,11 @@ Backbone.RailsModel = Backbone.Model.extend({
   },
 
   setErrors: function(attr) {
+    // there's a bug in here where .full_messages might not get set.
+    // aka what to do on bad responses with no errors?
     this.errors = attr || {};
     if(this.errors.full_messages === undefined) {
-      this.errors.full_messages = {};
+      this.errors.full_messages = [];
     }
 
     this.trigger('error');
@@ -48,12 +50,34 @@ Backbone.RailsModel = Backbone.Model.extend({
   }
 })
 
-Flux.Dispatcher.prototype.register_action = function(callback, action) {
+Flux.Dispatcher.prototype.register_action = function(actions) {
+
   return this.register(function(payload) {
-    if(payload.actionType === action) {
+    var callback = actions[payload.actionType];
+
+    if (callback !== undefined) {
       callback(payload);
     }
   });
 }
 
 Canary.Herald = new Flux.Dispatcher();
+
+// Our own controller object, copying stuff from how Backbone.Model is setup.
+
+Canary.Controller = function() {
+    this.initialize.apply(this, arguments);
+};
+
+_.extend(Canary.Controller.prototype, Backbone.Events, {
+  redirect_to: function(path) {
+    $("#main").velocity("transition.fadeOut", function() {
+      React.unmountComponentAtNode(document.getElementById("main"));
+      $("#main").velocity({opacity: 1})
+      Canary.Navigator.navigate(path, {trigger: true});
+    });
+  },
+})
+
+Canary.Controller.extend = Backbone.Model.extend;
+

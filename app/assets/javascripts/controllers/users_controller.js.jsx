@@ -1,16 +1,32 @@
 (function() {
-  var UsersController = function() {
+  var UsersController = Canary.Controller.extend({
 
-    var controller = {}
-    controller.new =  function() {
+    initialize: function() {
+      this.dispatchToken = 
+        Canary.Herald.register_action({
+        "user-sign-up":  this.create.bind(this),
+        "user-login":    this.create.bind(this)
+      });
+
+    },
+
+    new: function() {
       var user = new Canary.User();
       React.render(
         <SignUp user={user} />,
           document.getElementById("main")
       );
-    };
+    },
 
-    controller.create = function(payload) {
+    login: function() {
+      var session = new Canary.UserSession();
+      React.render(
+        <Login user={session} />,
+          document.getElementById("main")
+      );
+    },
+
+    create: function(payload) {
       var user = payload.user;
       var controller = this;
 
@@ -23,24 +39,11 @@
         }
       });
 
-      controller.redirect_to = function(path) {
-        // awful but maybe GoodEnough
-        $("#main").velocity("transition.fadeOut", function() {
-          React.unmountComponentAtNode(document.getElementById("main"));
-          $("#main").velocity({opacity: 1})
-          Canary.Navigator.navigate(path, {trigger: true});
-        });
-
-      }
-    };
+    },
 
 
-    controller.dispatchToken = Canary.Herald.register_action(controller.create.bind(controller), "user-sign-up")
-    _.extend(controller, Backbone.Events);
 
-    return controller;
-
-  };
+  });
 
 
   Canary.UsersController = new UsersController();
