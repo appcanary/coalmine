@@ -8,8 +8,8 @@
 
     index: function() {
       React.render(
-        <h1>Hello World</h1>,
-        document.getElementById("main")
+        <Dashboard />,
+        document.body
       )
     },
 

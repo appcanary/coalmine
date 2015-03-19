@@ -14,24 +14,11 @@
   </head>
   <body>
 
-    <% if current_user && @skipnav.blank? %>
-      <div class="navigation">
-        <%= render 'layouts/navbar' %>
-      </div>
+    <div id="main" class="container">
+      <%= flash_messages %>
+      <%= yield %>
+    </div>
 
-      <div id="main" class="main-drawer container">
-        <%= flash_messages %>
-
-        <%= yield %>
-      </div>
-    <% else %>
-
-      <div id="main" class="container">
-        <%= flash_messages %>
-        <%= yield %>
-      </div>
-
-    <% end %>
 
   </body>
 </html>

@@ -2,7 +2,7 @@ var SignUp = React.createClass({
   
   render: function() {
     return (
-      <div>
+      <div id="main" className="container">
         <Logo />
         <UserForm user={this.props.user} sign_up_page={true} title={"Before we get started, tell us:"} actionType={"user-sign-up"} />
       </div>
@@ -15,7 +15,7 @@ var Login = React.createClass({
   
   render: function() {
     return (
-      <div>
+      <div id="main" className="container">
         <Logo />
         <UserForm user={this.props.user} title={"Nice to see you again."}  actionType={"user-login"} />
       </div>

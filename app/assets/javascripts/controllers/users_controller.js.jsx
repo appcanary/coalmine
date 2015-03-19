@@ -14,7 +14,7 @@
       var user = new Canary.User();
       React.render(
         <SignUp user={user} />,
-          document.getElementById("main")
+          document.body
       );
     },
 
@@ -22,7 +22,7 @@
       var session = new Canary.UserSession();
       React.render(
         <Login user={session} />,
-          document.getElementById("main")
+          document.body
       );
     },
 

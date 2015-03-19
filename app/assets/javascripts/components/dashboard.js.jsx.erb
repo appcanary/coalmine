@@ -1,0 +1,112 @@
+var Dashboard = React.createClass({
+  render: function(){
+    return (
+      <div>
+        <div className="navigation">
+          <Navbar />
+        </div>
+        <div id="main" className="main-drawer container">
+          <Onboard />
+        </div>
+      </div>
+    )
+  }
+});
+
+
+var Navbar = React.createClass({
+  render: function() {
+    return (
+      <div className="navbar-left-side" role="navigation">
+        <div className="container">
+          <div className="collapsed-menu">
+            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+          </div>
+
+
+          <div className="navbar-collapse collapse">
+            <ul className="menu">
+              <li>
+                <a className="navbar-brand" href="/">
+                  <img src={'<%= image_path("oval-canary.png") %>'} />
+                </a>
+              </li>
+            </ul>
+            <ul className="menu">
+              <li className="divider"></li>
+              <li> <a href="#"><i className="fa fa-plus"></i></a> </li>
+              <li> <a href="#"><i className="fa fa-cog"></i></a> </li>
+              <li>
+                <a data-method="post" href="/logout"><i className="fa fa-sign-out"></i></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    )
+  }
+});
+
+var Onboard = React.createClass({
+  render: function() {
+    return (
+      <section>
+        <div className="onboard-box">
+          <div className="onboard-wrapper">
+            <section>
+              <div className="onboard-logo">
+                <%= image_tag("oval-chicks.png") %>
+              </div>
+            </section>
+
+            <div className="onboard-desc">
+              <section>
+                <div className="col-sm-12">
+                  <h3>Welcome to Canary. Let's get you setup!</h3>
+                  <p>We talk to your servers through our agent.</p>
+                  <p>Open a shell on a computer you like. Type:</p>
+                  <pre>
+                    curl https://LOL-URL-HERE.com/foo.whatever &gt; foo.whatever
+                    tar xvzf foo.whatever
+                    cd foo.whatever
+                    md5sum --check &lt;&lt;&lt; 'stringhere Filehere'</pre>
+
+                  <p>{"(In the future, you'll be able to do this over <code>apt-get</code> or <code>yum</code> or <code>brew</code>.)"}</p>
+
+                  <p>Next, run:</p>
+                  <pre>./canary --api <code> API_TOKEN_HERE</code></pre>
+                  <p>It will prompt you for the location of any ruby apps you have installed. Once you're done, check back here. We'll wait.</p>
+                </div>
+              </section>
+            </div>
+            <div className="action-bar">
+              <section>
+                <div className="col-sm-12">
+                  <div className="pull-right">
+                    <eui_button title="Done!" href = "?new_app=1" />
+                  </div>
+                </div>
+
+              </section>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    )
+  }
+})
+
+
+var eui_button = React.createClass({
+  render: function() {
+    return (
+      <a href={this.props.href} className="btn btn-primary">{this.props.title}</a>
+    )
+  }
+});
