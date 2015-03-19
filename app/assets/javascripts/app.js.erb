@@ -73,7 +73,7 @@ _.extend(Canary.Controller.prototype, Backbone.Events, {
   redirect_to: function(path) {
     $("#main").velocity("transition.fadeOut", function() {
       React.unmountComponentAtNode(document.getElementById("main"));
-      $("#main").velocity({opacity: 1})
+      $("#main").velocity({opacity: 1}, { display: 'inherit'})
       Canary.Navigator.navigate(path, {trigger: true});
     });
   },

@@ -20,7 +20,7 @@ class UserSessionsController < ApplicationController
           render action: 'new'
         }
 
-        format.json { render json: { errors: [], full_messages: ["Invalid email or password."] }, status: :unauthorized }
+        format.json { render json: { errors: {full_messages: ["Invalid email or password."], attributes: {}} }, status: :unauthorized }
       end
     end
   end

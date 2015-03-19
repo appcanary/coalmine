@@ -15,6 +15,22 @@ class UserSessionsControllerTest < ActionController::TestCase
       assert_redirected_to dashboard_path
     end
 
+    it "should login via json" do
+      assert_nil assigns(:current_user)
+      @request.headers["Accept"] = "application/json" 
+      post :create, {:user => {:email => user.email, :password => TestValues::PASSWORD}}, :type => :json
+      assert assigns(:current_user)
+      assert_equal "{}", response.body
+    end
+
+    it "should fail bad login via json" do
+      assert_nil assigns(:current_user)
+      @request.headers["Accept"] = "application/json" 
+      post :create, {:user => {:email => user.email, :password => "gibberish"}}.to_json
+      hsh = JSON.parse(response.body)
+      assert_equal hsh["errors"]["full_messages"], ["Invalid email or password."]
+    end
+
     it "should fail bad logins" do
       post :create, user => {:email => user.email, :password => "gibberish"}
       assert_template :new
