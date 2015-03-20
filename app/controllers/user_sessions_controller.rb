@@ -12,7 +12,7 @@ class UserSessionsController < ApplicationController
       if @user = login(user_params[:email], user_params[:password])
 
         format.html { redirect_back_or_to(dashboard_path, notice: 'Login successful') }
-        format.json { render json: {}, status: :created, location: dashboard_path }
+        format.json { render json: @user, status: :created, location: dashboard_path }
       else
         format.html { 
           @user = User.new
@@ -20,7 +20,7 @@ class UserSessionsController < ApplicationController
           render action: 'new'
         }
 
-        format.json { render json: { errors: {full_messages: ["Invalid email or password."], attributes: {}} }, status: :unauthorized }
+        format.json { render json: {full_messages: ["Invalid email or password."], attributes: {} }, status: :unauthorized }
       end
     end
   end

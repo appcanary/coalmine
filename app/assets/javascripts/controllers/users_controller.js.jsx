@@ -35,7 +35,7 @@
           return controller.redirect_to("dashboard")
         },
         error: function(model, response, opt) {
-          return model.setErrors(response.responseJSON.errors);
+          return model.setErrors(response.responseJSON);
         }
       });
 

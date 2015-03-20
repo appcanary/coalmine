@@ -40,6 +40,7 @@ Backbone.RailsModel = Backbone.Model.extend({
   setErrors: function(attr) {
     // there's a bug in here where .full_messages might not get set.
     // aka what to do on bad responses with no errors?
+    // needs to handle 'attributes' obj
     this.errors = attr || {};
     if(this.errors.full_messages === undefined) {
       this.errors.full_messages = [];
