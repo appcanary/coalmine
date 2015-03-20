@@ -1,0 +1,15 @@
+$(function(){
+
+
+  // let's bootstrap the current_user object, if we're already
+  // logged in!
+  var current_user_div = document.getElementById('canary-current-user');
+  if(current_user_div !== null) {
+    var userJSON = JSON.parse(current_user_div.textContent);
+    Canary.current_user = new Canary.User(userJSON["user"]);
+  }
+
+  Backbone.history.start({pushState: true});
+
+});
+
