@@ -20,7 +20,11 @@ class UserSessionsControllerTest < ActionController::TestCase
       @request.headers["Accept"] = "application/json" 
       post :create, {:user => {:email => user.email, :password => TestValues::PASSWORD}}, :type => :json
       assert assigns(:current_user)
-      assert_equal "{}", response.body
+      json_hsh = JSON.parse(response.body)
+      assert json_hsh["user"]
+      assert json_hsh["user"]["email"]
+      assert_nil json_hsh["crypted_password"]
+      assert_nil json_hsh["user"]["crypted_password"]
     end
 
     it "should fail bad login via json" do
@@ -28,7 +32,7 @@ class UserSessionsControllerTest < ActionController::TestCase
       @request.headers["Accept"] = "application/json" 
       post :create, {:user => {:email => user.email, :password => "gibberish"}}.to_json
       hsh = JSON.parse(response.body)
-      assert_equal hsh["errors"]["full_messages"], ["Invalid email or password."]
+      assert_equal hsh["full_messages"], ["Invalid email or password."]
     end
 
     it "should fail bad logins" do

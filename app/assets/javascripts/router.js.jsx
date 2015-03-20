@@ -16,15 +16,12 @@
       Canary.UsersController.login();
     },
 
-    dashboard: function() {
-      Canary.DashboardController.index();
+    dashboard: function(onboard) {
+      Canary.DashboardController.index(onboard);
     }
 
   });
+  
+  Canary.Navigator = new Navigator();
 
-
-  $(function(){
-    Canary.Navigator = new Navigator();
-    Backbone.history.start({pushState: true});
-  });
 })();

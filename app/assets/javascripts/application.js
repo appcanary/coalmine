@@ -27,6 +27,7 @@
 //= require_tree ./stores/
 //= require_tree ./controllers/
 //= require router
+//= require init
 
 // jQuery(document).ready(function() {
 //   jQuery(".timestamp").timeago();

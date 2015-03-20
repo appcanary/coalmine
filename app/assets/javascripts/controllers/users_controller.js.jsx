@@ -32,6 +32,7 @@
 
       user.save(payload.form, {
         success: function(model, response, opt) {
+          Canary.current_user = new Canary.User(response["user"]);
           return controller.redirect_to("dashboard")
         },
         error: function(model, response, opt) {

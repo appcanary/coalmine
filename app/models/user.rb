@@ -43,4 +43,8 @@ class User < ActiveRecord::Base
     # true
     false
   end
+
+  def onboard_state
+    false
+  end
 end

@@ -24,6 +24,7 @@ gem 'sorcery'
 # model stuff
 gem 'annotate'
 gem 'httparty'
+gem 'active_model_serializers'
 
 gem 'react-rails', '~> 0.13.0.0'
 
