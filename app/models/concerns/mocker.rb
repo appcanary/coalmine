@@ -25,10 +25,11 @@ module Mocker
     end
   end
 
-  def to_json
-    Hash[attributes.map { |a| [a, self.send(a).to_json] }]
+  def as_json(opt = {})
+    Hash[attributes.map { |a| [a, self.send(a)] }]
   end
 
+ 
   module ClassMethods
     def mock_attr(attr, &block)
       @mock_attrs ||= {}

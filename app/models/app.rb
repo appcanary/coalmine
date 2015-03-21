@@ -13,9 +13,9 @@ class App
     end 
   }
 
-  def avatar
-    RubyIdenticon.create_base64(self.name, :border_size => 10)
-  end
+  mock_attr(:avatar) {
+    RubyIdenticon.create_base64(Faker::App.name, :border_size => 10)
+  }
 
   def vulnerable?
     active_issues.present?
