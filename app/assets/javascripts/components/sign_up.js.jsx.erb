@@ -43,6 +43,9 @@ var UserForm = React.createClass({
 
   componentDidMount: function() {
     this.props.user.on("error", function() {
+      // if there was an error, we want to clear out the
+      // sign-up form, and we achieve this by resetting the
+      // state.
       this.setState(this.getInitialState());
     }, this);
   },
