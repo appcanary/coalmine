@@ -22,7 +22,7 @@ Backbone.RailsModel = Backbone.Model.extend({
 
   parse: function(json) {
     if(this.rootKey === undefined) {
-      throw "root_key not defined on model";
+      return json
     }
 
     if(json !== undefined) {
