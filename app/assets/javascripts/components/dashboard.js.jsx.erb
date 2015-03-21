@@ -1,12 +1,28 @@
 var Dashboard = React.createClass({
+
+  componentDidMount: function() {
+    this.props.current_user.on("change", function() {
+      this.forceUpdate();
+    }, this);
+  },
+
+
   render: function(){
+
+    var drawer = null
+    if (this.props.current_user.has_onboarded()) {
+      drawer = <h1>Hello</h1>
+    } 
+    else {
+      drawer = <Onboard />
+    }
     return (
       <div>
         <div className="navigation">
           <Navbar />
         </div>
         <div id="main" className="main-drawer container">
-          <Onboard />
+          {drawer}
         </div>
       </div>
     )
@@ -53,6 +69,15 @@ var Navbar = React.createClass({
 });
 
 var Onboard = React.createClass({
+
+  handleOnboard: function(e) {
+    e.preventDefault();
+    return Canary.Herald.dispatch({
+      actionType: "dashboard-add-first-app",
+    });
+
+  },
+
   render: function() {
     return (
       <section>
@@ -71,12 +96,12 @@ var Onboard = React.createClass({
                   <p>We talk to your servers through our agent.</p>
                   <p>Open a shell on a computer you like. Type:</p>
                   <pre>
-                    curl https://LOL-URL-HERE.com/foo.whatever &gt; foo.whatever
-                    tar xvzf foo.whatever
-                    cd foo.whatever
+                    curl https://LOL-URL-HERE.com/foo.whatever &gt; foo.whatever<br/>
+                    tar xvzf foo.whatever<br/>
+                    cd foo.whatever<br/>
                     md5sum --check &lt;&lt;&lt; 'stringhere Filehere'</pre>
 
-                  <p>{"(In the future, you'll be able to do this over <code>apt-get</code> or <code>yum</code> or <code>brew</code>.)"}</p>
+                  <p>{"(In the future, you'll be able to do this over"} <code>apt-get</code> or <code>yum</code> or <code>brew</code>{")"}</p>
 
                   <p>Next, run:</p>
                   <pre>./canary --api <code> API_TOKEN_HERE</code></pre>
@@ -88,7 +113,7 @@ var Onboard = React.createClass({
               <section>
                 <div className="col-sm-12">
                   <div className="pull-right">
-                    <eui_button title="Done!" href = "?new_app=1" />
+                    <Eui_button title="Done!" actionHandler={this.handleOnboard} />
                   </div>
                 </div>
 
@@ -103,10 +128,10 @@ var Onboard = React.createClass({
 })
 
 
-var eui_button = React.createClass({
+var Eui_button = React.createClass({
   render: function() {
     return (
-      <a href={this.props.href} className="btn btn-primary">{this.props.title}</a>
+      <a href={this.props.href} className="btn btn-primary" onClick={this.props.actionHandler}>{this.props.title} </a>
     )
   }
 });

@@ -3,12 +3,17 @@
   var User = Backbone.RailsModel.extend({
     url: '/users',
     rootKey: "user",
+    has_onboarded: function() {
+      return this.get("onboard_state") === true
+    }
+
   });
 
   
   var UserSession = Backbone.RailsModel.extend({
     url: '/user_sessions',
     rootKey: "user",
+
   });
 
   var UserStore = Backbone.Collection.extend({
