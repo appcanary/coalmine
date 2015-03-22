@@ -33,7 +33,12 @@
       user.save(payload.form, {
         success: function(model, response, opt) {
           Canary.current_user = new Canary.User(response["user"]);
-          return controller.redirect_to("dashboard")
+          if(Canary.current_user.has_onboarded()) {
+            return controller.redirect_to("dashboard") 
+          } else {
+            return controller.redirect_to("welcome") 
+          }
+            
         },
         error: function(model, response, opt) {
           return model.setErrors(response.responseJSON);

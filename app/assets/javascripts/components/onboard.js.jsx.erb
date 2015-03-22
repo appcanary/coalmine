@@ -1,0 +1,53 @@
+var Onboard = React.createClass({
+
+  handleOnboard: function(e) {
+    e.preventDefault();
+    return Canary.Herald.dispatch({
+      actionType: "welcome-add-app",
+    });
+
+  },
+
+  render: function() {
+    return (
+      <div id="main" className="container">
+      <section>
+        <div className="onboard-box">
+          <div className="onboard-wrapper">
+            <section>
+              <div className="onboard-logo">
+                <%= image_tag("oval-chicks.png") %>
+              </div>
+            </section>
+
+            <section>
+              <div className="onboard-desc">
+                <h3>Welcome!</h3>
+                <h4>Before we begin, a quick chat.</h4>
+                <ol>
+                  <li>Canary works by monitoring your infrastructure.</li>
+                  <li>{"If one of your apps depends on software that needs to be updated, we'll let you or your ops team know."}</li>
+                  <li>To do this, you will have to install our agent on your servers.</li>
+                  <li> We work very hard to remain discreet and conscientious.<br/>{"We've posted "}<a href='#'>the source on github</a>, so you can see for yourself.</li>
+                </ol>
+              </div>
+            </section>
+
+
+            <section>
+              <div className="action-bar">
+                <div className="pull-right">
+                  <Eui_button value="Great. Add an app!" href={this.handleOnboard} />
+                </div>
+
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </section>
+    </div>
+    )
+  }
+})
+

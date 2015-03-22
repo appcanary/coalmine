@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get 'timeline' => "timeline#index"
 
   resources :user_sessions, :only => [:create, :destroy]
-  resources :apps, :only => [:index, :show] do
+  resources :apps, :only => [:index, :new, :show] do
     resources :servers, :only => [:index, :show]
   end
   
@@ -19,4 +19,5 @@ Rails.application.routes.draw do
 
   post 'beta/list' => "welcome#beta_list"
   get 'dashboard' => "dashboard#index", :as => :dashboard
+  get 'welcome' => "dashboard#index", :as => :welcome
 end

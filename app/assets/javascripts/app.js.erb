@@ -38,9 +38,6 @@ Backbone.RailsModel = Backbone.Model.extend({
   },
 
   setErrors: function(attr) {
-    // there's a bug in here where .full_messages might not get set.
-    // aka what to do on bad responses with no errors?
-    // needs to handle 'attributes' obj
     this.errors = attr || {};
     if(this.errors.full_messages === undefined) {
       this.errors.full_messages = [];
@@ -72,6 +69,9 @@ Canary.Controller = function() {
 
 _.extend(Canary.Controller.prototype, Backbone.Events, {
   redirect_to: function(path) {
+    if($("#main").length < 1) {
+      console.log("missing main");
+    }
     $("#main").velocity("transition.fadeOut", function() {
       React.unmountComponentAtNode(document.getElementById("main"));
       $("#main").velocity({opacity: 1}, { display: 'inherit'})

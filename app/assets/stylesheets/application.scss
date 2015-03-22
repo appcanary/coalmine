@@ -26,8 +26,13 @@ $body-margin-top: 10px;
 body {
   padding-bottom: 20px;
   background-color: #f7f7f7;
+  font-family: 'proxima-nova',sans-serif;
 }
 
+// trigger semibold;
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-weight: 600;
+}
 
 .main-drawer {
   position: fixed;

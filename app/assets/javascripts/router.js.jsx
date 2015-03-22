@@ -6,6 +6,8 @@
       "sign_up":        "sign_up",    
       "login":          "login",    
       "dashboard":      "dashboard", 
+      "welcome":        "welcome", 
+      "apps/new":   "apps_new", 
     },
 
     sign_up: function() {
@@ -18,6 +20,14 @@
 
     dashboard: function(onboard) {
       Canary.DashboardController.index(onboard);
+    },
+
+    welcome: function() {
+      Canary.OnboardController.index();
+    },
+    
+    apps_new: function(action) {
+      Canary.AppsController.new();
     }
 
   });

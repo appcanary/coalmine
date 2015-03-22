@@ -1,7 +1,8 @@
 var Dashboard = React.createClass({
 
   componentDidMount: function() {
-    this.props.current_user.on("change", function() {
+    // TODO unbind
+    this.props.timeline.on("sync", function() {
       this.forceUpdate();
     }, this);
   },
@@ -9,25 +10,19 @@ var Dashboard = React.createClass({
 
   render: function(){
 
-    var drawer = null
-    if (this.props.current_user.has_onboarded()) {
-      drawer = <h1>Hello</h1>
-    } 
-    else {
-      drawer = <Onboard />
-    }
     return (
       <div>
         <div className="navigation">
           <Navbar />
         </div>
         <div id="main" className="main-drawer container">
-          {drawer}
+          <TimelineView collection={this.props.timeline} />
         </div>
       </div>
     )
   }
 });
+
 
 
 var Navbar = React.createClass({
@@ -68,70 +63,23 @@ var Navbar = React.createClass({
   }
 });
 
-var Onboard = React.createClass({
-
-  handleOnboard: function(e) {
-    e.preventDefault();
-    return Canary.Herald.dispatch({
-      actionType: "dashboard-add-first-app",
-    });
-
-  },
-
-  render: function() {
-    return (
-      <section>
-        <div className="onboard-box">
-          <div className="onboard-wrapper">
-            <section>
-              <div className="onboard-logo">
-                <%= image_tag("oval-chicks.png") %>
-              </div>
-            </section>
-
-            <div className="onboard-desc">
-              <section>
-                <div className="col-sm-12">
-                  <h3>Welcome to Canary. Let's get you setup!</h3>
-                  <p>We talk to your servers through our agent.</p>
-                  <p>Open a shell on a computer you like. Type:</p>
-                  <pre>
-                    curl https://LOL-URL-HERE.com/foo.whatever &gt; foo.whatever<br/>
-                    tar xvzf foo.whatever<br/>
-                    cd foo.whatever<br/>
-                    md5sum --check &lt;&lt;&lt; 'stringhere Filehere'</pre>
-
-                  <p>{"(In the future, you'll be able to do this over"} <code>apt-get</code> or <code>yum</code> or <code>brew</code>{")"}</p>
-
-                  <p>Next, run:</p>
-                  <pre>./canary --api <code> API_TOKEN_HERE</code></pre>
-                  <p>It will prompt you for the location of any ruby apps you have installed. Once you're done, check back here. We'll wait.</p>
-                </div>
-              </section>
-            </div>
-            <div className="action-bar">
-              <section>
-                <div className="col-sm-12">
-                  <div className="pull-right">
-                    <Eui_button title="Done!" actionHandler={this.handleOnboard} />
-                  </div>
-                </div>
-
-              </section>
-            </div>
-
-          </div>
-        </div>
-      </section>
-    )
-  }
-})
 
 
 var Eui_button = React.createClass({
   render: function() {
     return (
-      <a href={this.props.href} className="btn btn-primary" onClick={this.props.actionHandler}>{this.props.title} </a>
+      <eui-button className="ember-view eui-button-medium-default">
+        <button aria-label={this.props.value}></button>
+        <div className="eui-component">
+          <div className="eui-component-wrapper">
+            <div className="eui-label">
+              <a href="" className="eui-label-value" onClick={this.props.href}>
+                {this.props.value}
+              </a>
+            </div>
+          </div>
+        </div>
+      </eui-button>
     )
   }
 });

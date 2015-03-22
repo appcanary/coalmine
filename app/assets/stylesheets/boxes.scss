@@ -68,23 +68,69 @@
 
 }
 
+.user-form-box {
+  @include dashboard-box(".col-sm-6", ".user-form-wrapper");
+  @extend .col-sm-offset-3;
+  opacity: 1;
+  img {
+    max-width: 175px;
+    display:block;
+    margin:auto;
+  }
+
+  .logo {
+
+    border-bottom: none;
+  }
+
+  .user-login {
+    @extend .col-sm-8;
+    @extend .col-sm-offset-2;
+  }
+
+
+
+
+}
+
 .onboard-box {
   @extend .col-sm-6;
   @extend .col-sm-offset-3;
 
   margin-top: 20px;
+  font-size: 16px;
+  line-height: 20px;
 
   .onboard-wrapper {
     @include border-top-radius(5px);
     @include border-bottom-radius(5px);
     background-color: white;
-    border: white solid 1px;
+    border: #ccc solid 1px;
     padding: 30px;
+
+    h3 {
+    }
+
+    & > * {
+      border-bottom: 2px #eee solid;
+      section {
+        padding-top: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+      }
+
+      &:last-child {
+        border: none;
+      }
+    }
+
   }
 
   .onboard-logo {
     @extend .col-sm-12;
     margin-top: -10px;
+    padding-bottom: 20px;
     img {
       max-width: 150px;
       margin: auto;
@@ -93,14 +139,15 @@
   }
 
   .onboard-desc {
-    border-bottom: 2px #eee solid;
+    @extend .col-sm-12;
+    li {
+      padding-bottom: 15px;
+    }
   }
 
   .action-bar {
-    section {
-      padding-top: 10px;
-    }
-
+    padding-top: 10px;
+    @extend .col-sm-12;
   }
 }
 
