@@ -11,10 +11,6 @@
     },
 
     new: function(onboarded) {
-      React.render(
-        <NewApp />,
-        document.body
-      )
     },
 
     create: function(app) {

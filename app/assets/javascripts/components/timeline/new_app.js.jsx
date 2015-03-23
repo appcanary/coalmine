@@ -13,7 +13,7 @@ var NewAppEvent = React.createClass({
               <section>
                 <div className="note">
                   <span className="last_synched_at timestamp" title={this.props.model.get("created_at")}>{this.props.model.get("created_at")}</span>
-                  <p>🎉 You added a new app!</p>
+                  <p>🎉&nbsp;You added a new app!</p>
                 </div>
               </section>
             </div>

@@ -13,7 +13,7 @@ var NewServerEvent = React.createClass({
               <section>
                 <div className="note">
                   <span className="last_synched_at timestamp" title={this.props.model.get("created_at")}>{this.props.model.get("created_at")}</span>
-                  <p>🎉 You added a new server!</p>
+                  <p>🎉&nbsp;You added a new server!</p>
                 </div>
               </section>
             </div>

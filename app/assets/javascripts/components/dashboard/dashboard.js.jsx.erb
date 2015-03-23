@@ -11,14 +11,9 @@ var Dashboard = React.createClass({
 
   render: function(){
     return (
-      <div>
-        <div className="navigation">
-          <Navbar />
-        </div>
-        <div id="main" className="main-drawer container">
-          <TimelineView collection={this.props.timeline} />
-        </div>
-      </div>
+      <AppLayout>
+        <TimelineView collection={this.props.timeline} />
+      </AppLayout>
     )
   }
 });
