@@ -26,8 +26,8 @@
       Canary.OnboardController.index();
     },
     
-    apps_new: function(action) {
-      Canary.AppsController.new();
+    servers_new: function(action) {
+      Canary.ServersController.new();
     }
 
   });

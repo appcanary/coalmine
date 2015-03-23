@@ -37,6 +37,12 @@
 .event-box {
   @include dashboard-box(".col-sm-8", ".event-wrapper");
 
+  .event-header {
+    h3 {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+  }
   .note {
     @extend .col-sm-12;
   }
