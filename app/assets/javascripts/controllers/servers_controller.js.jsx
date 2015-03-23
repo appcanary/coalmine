@@ -18,7 +18,7 @@
     },
 
     create: function(app) {
-      debugger
+     this.redirect_to("dashboard");
     }
 
   });
