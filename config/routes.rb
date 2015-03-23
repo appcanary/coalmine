@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   resources :events, :only => [:index]
   
-  root 'welcome#index'
+  root 'user_sessions#new'
 
   post 'beta/list' => "welcome#beta_list"
   get 'dashboard' => "dashboard#index", :as => :dashboard

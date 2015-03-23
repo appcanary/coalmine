@@ -1,8 +1,9 @@
 (function() {
 
   var Navigator = Backbone.Router.extend({
-
+    
     routes: {
+      "": "login",
       "sign_up":        "sign_up",    
       "login":          "login",    
       "dashboard":      "dashboard", 

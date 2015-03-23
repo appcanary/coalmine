@@ -10,6 +10,7 @@ class UserSessionsController < ApplicationController
     user_params = params[:user] || {}
     respond_to do |format|
       if @user = login(user_params[:email], user_params[:password])
+        @user.update_attribute(:onboarded, false)
 
         format.html { redirect_back_or_to(dashboard_path, notice: 'Login successful') }
         format.json { render json: @user, status: :created, location: dashboard_path }
