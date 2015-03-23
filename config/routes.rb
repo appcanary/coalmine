@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get 'sign_up' => "users#new", :as => :sign_up
   post 'sign_up' => "users#create"
 
+  resources :events, :only => [:index]
+  
   root 'welcome#index'
 
   post 'beta/list' => "welcome#beta_list"
