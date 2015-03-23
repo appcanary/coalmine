@@ -8,10 +8,6 @@ module Mocker
       attrs.keys
     end
 
-    attrs.each_pair do |attr, block|
-      self.send("#{attr}=", block.call(self))
-    end
-
     opt.each_pair do |attr, val|
       instance_variable_set("@#{attr}", val)
       define_singleton_method(attr) do
@@ -22,6 +18,12 @@ module Mocker
         instance_variable_set("@#{attr}", value)
       end
 
+    end
+
+    attrs.each_pair do |attr, block|
+      unless self.send(attr) 
+        self.send("#{attr}=", block.call(self))
+      end
     end
   end
 
