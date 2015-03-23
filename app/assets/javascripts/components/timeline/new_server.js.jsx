@@ -28,13 +28,13 @@ var NewServerEvent = React.createClass({
                 <div className="os">
                   <p>
                     <strong>
-                      Operating System:
+                     Operating System:
                     </strong>
                     &nbsp;
                     Ubuntu 14.04
                   </p>
                 </div>
-                  <div className="platforms">
+                  <div className="server-platforms">
                   <p>
                     <strong>
                       Platforms:
