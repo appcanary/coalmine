@@ -50,8 +50,15 @@
   .name {
     @extend .col-sm-4;
   }
+  .os {
+    @extend .col-sm-4;
+  }
+
   .platforms {
     @extend .col-sm-4;
+    & > * {
+      @extend .pull-right;
+    }
   }
   .edit-action {
     @extend .col-sm-4;

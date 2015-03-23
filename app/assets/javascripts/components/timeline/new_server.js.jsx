@@ -21,27 +21,30 @@ var NewServerEvent = React.createClass({
               <section>
                 <div className="name">
                   <p>
-                    <img src={"data:image.png;base64," + this.props.model.get("app")["avatar"]} className="icon" />
-                    <strong>&nbsp;<a href="#">{this.props.model.get("app")["name"]}</a></strong>
+                    <img src={"data:image.png;base64," + this.props.model.get("server")["avatar"]} className="icon" />
+                    <strong>&nbsp;<a href="#">{this.props.model.get("server")["name"]}</a></strong>
                   </p>
                 </div>
-
-                <div className="platforms">
+                <div className="os">
+                  <p>
+                    <strong>
+                      Operating System:
+                    </strong>
+                    &nbsp;
+                    Ubuntu 14.04
+                  </p>
+                </div>
+                  <div className="platforms">
                   <p>
                     <strong>
                       Platforms:
                     </strong>
                     &nbsp;
-                    event.app.platforms
+                    Ruby, Node
                   </p>
-                </div>
-
-                <div className="edit-action">
-                  <Eui_button value="Edit details" />
-                </div>
+                  </div>
               </section>
             </div>
-
           </div>
         </div>
       </section>
