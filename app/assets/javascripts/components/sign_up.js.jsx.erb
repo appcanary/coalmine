@@ -17,7 +17,7 @@ var Login = React.createClass({
     return (
       <div id="main" className="container">
         <Logo />
-        <UserForm user={this.props.user} title={"Nice to see you again."}  actionType={"user-login"} />
+        <UserForm user={this.props.user} title={"Hello YC, We've created a little demo for you! Click Login to start."}  actionType={"user-login"} />
       </div>
     );
   },
@@ -30,8 +30,8 @@ var UserForm = React.createClass({
 
   getInitialState: function() {
     var attr = {
-      email: "",
-      password: "",
+      email: "sama@ycombinator.com",
+      password: "500 startups",
     }
 
     if (this.props.sign_up_page !== undefined) {
