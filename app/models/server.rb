@@ -7,4 +7,8 @@ class Server
   def avatar
     RubyIdenticon.create_base64(self.name, :border_size => 10)
   end
+
+  mock_attr(:avatar) { |obj|
+    RubyIdenticon.create_base64(obj.name, :border_size => 10)
+  }
 end
