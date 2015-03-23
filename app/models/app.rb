@@ -7,10 +7,8 @@ class App
   mock_attr(:resolved_issues) { [] }
   mock_attr(:ignored_issues) { [] }
 
-  mock_attr(:servers) { |obj| 
-    rand(1..10).times.map do 
+  mock_attr(:server) { |obj| 
       Server.new(:app => obj ) 
-    end 
   }
 
   mock_attr(:avatar) {
