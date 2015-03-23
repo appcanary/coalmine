@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :servers, :only => [:index, :show]
   end
   
-  resources :servers, :only => [:index, :show]
+  resources :servers, :only => [:index, :new, :show]
 
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout

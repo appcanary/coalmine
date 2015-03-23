@@ -1,10 +1,10 @@
 (function() {
 
   var User = Backbone.RailsModel.extend({
-    url: '/users',
     rootKey: "user",
+    urlRoot: "/users",
     has_onboarded: function() {
-      return this.get("onboard_state") === true
+      return this.get("onboarded") === true
     }
 
   });

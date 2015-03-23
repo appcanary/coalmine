@@ -22,6 +22,7 @@
 #  lock_expires_at                 :datetime
 #  unlock_token                    :string
 #  token                           :string
+#  onboarded                       :boolean          default("false")
 #
 # Indexes
 #
@@ -34,17 +35,8 @@
 
 class User < ActiveRecord::Base
   authenticates_with_sorcery!
-  validates :password, length: { minimum: 6 }
-  validates :password, confirmation: true
-  validates :password_confirmation, presence: true
+  validates_confirmation_of :password
+  validates :password, length: { minimum: 6 }, :if => :password
+  validates_confirmation_of :password, :if => :password
   validates :email, uniqueness: true
-
-  def onboarded?
-    # true
-    false
-  end
-
-  def onboard_state
-    false
-  end
 end

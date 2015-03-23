@@ -1,3 +1,3 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :email, :onboard_state
+  attributes :id, :email, :onboarded
 end

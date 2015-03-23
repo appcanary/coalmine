@@ -18,7 +18,8 @@
     },
 
     add_app: function() {
-      this.redirect_to("apps/new");
+      Canary.current_user.save({"onboarded": true})
+      this.redirect_to("servers/new");
     }
 
   });

@@ -22,6 +22,7 @@
 #  lock_expires_at                 :datetime
 #  unlock_token                    :string
 #  token                           :string
+#  onboarded                       :boolean          default("false")
 #
 # Indexes
 #

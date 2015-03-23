@@ -7,7 +7,7 @@
       "login":          "login",    
       "dashboard":      "dashboard", 
       "welcome":        "welcome", 
-      "apps/new":   "apps_new", 
+      "servers/new":    "servers_new", 
     },
 
     sign_up: function() {

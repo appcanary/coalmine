@@ -28,18 +28,3 @@
 //= require_tree ./controllers/
 //= require router
 //= require init
-
-// jQuery(document).ready(function() {
-//   jQuery(".timestamp").timeago();
-// });
-// 
-//   if($(".app-sidepanel").length > 0) {
-//     $(".app-sidepanel").velocity({'z-index': -1 }).velocity("transition.slideLeftBigIn", 400, function() {
-//       $(".timeline-box, .event-box").velocity("transition.slideDownIn", { stagger: 250 });
-//     }).delay(250).velocity({'z-index': 1});
-// 
-//   }
-//   else {
-//     $(".timeline-box, .event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
-//   }
-// });

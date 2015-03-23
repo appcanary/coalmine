@@ -64,7 +64,7 @@ Canary.Herald = new Flux.Dispatcher();
 // Our own controller object, copying stuff from how Backbone.Model is setup.
 
 Canary.Controller = function() {
-    this.initialize.apply(this, arguments);
+  this.initialize.apply(this, arguments);
 };
 
 _.extend(Canary.Controller.prototype, Backbone.Events, {
