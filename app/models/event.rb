@@ -7,6 +7,7 @@ class Event
 
   mock_attr(:app) { App.new }
   mock_attr(:vuln) { Vuln.new }
+  mock_attr(:server) { Server.new }
 
   mock_attr(:message) { "You added a new app!" }
 
