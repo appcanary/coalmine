@@ -37,7 +37,7 @@ var NewAppEvent = React.createClass({
                 </div>
 
                 <div className="edit-action">
-                  <Eui_button title="Edit details" />
+                  <Eui_button value="Edit details" />
                 </div>
               </section>
             </div>
