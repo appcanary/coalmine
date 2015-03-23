@@ -35,7 +35,10 @@ var UserForm = React.createClass({
     }
 
     if (this.props.sign_up_page !== undefined) {
-      attr["password_confirmation"] = "";
+        attr["password_confirmation"] = "";
+        attr["button_value"] = "Sign Up";
+    } else {
+        attr["button_value"] = "Login";
     }
     return attr;
 
@@ -127,7 +130,7 @@ var UserForm = React.createClass({
 
            
             <div className="form-group">
-              <input type="submit" name="commit" value="Sign Up" className="btn btn-black" />
+              <input type="submit" name="commit" value={this.state.button_value} className="btn btn-black" />
             </div>
 
           </form>
