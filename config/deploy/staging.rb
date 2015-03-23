@@ -9,7 +9,9 @@ role :web, %w{deploy@192.168.33.10}
 role :db,  %w{deploy@192.168.33.10}
 
 
-config.eager_load = true
+eager_load = true
+
+set :rails_env, "staging"
 
 # Extended Server Syntax
 # ======================

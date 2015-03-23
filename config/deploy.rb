@@ -4,7 +4,7 @@ lock '3.2.1'
 set :application, 'canary-web'
 set :repo_url, 'git@github.com:stateio/canary-web.git'
 
-set :rails_env, (fetch(:rails_env) || fetch(:stage))
+set :rails_env, (fetch(:stage) || fetch(:rails_env))
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
