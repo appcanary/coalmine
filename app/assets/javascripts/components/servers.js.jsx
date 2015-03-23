@@ -71,9 +71,8 @@ var NewServer = React.createClass({
                             </div>
                         </div>
                     </section>
-
                 </div>
             </div>
         )
-            }
-         });
+    }
+});
