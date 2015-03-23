@@ -7,6 +7,8 @@ var TimelineView = React.createClass({
           return <NewAppEvent model={m} />;
         case "new_server":
           return <NewServerEvent model={m} />;
+        case "vuln":
+          return <VulnEvent model={m} />;
       }});
 
     return (

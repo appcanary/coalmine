@@ -1,6 +1,7 @@
 class Vuln
   include Mocker
   mock_attr(:title) { "Action Mailer Gem for Ruby contains a possible DoS Vulnerability" }
+  mock_attr(:notified_at) { Time.now }
   mock_attr(:disclosed_at) { rand(1..36).days.ago }
   mock_attr(:description) { "Action Mailer Gem for Ruby contains a format string flaw in
   the Log Subscriber component. The issue is triggered as format string

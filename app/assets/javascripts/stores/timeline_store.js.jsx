@@ -1,6 +1,17 @@
 (function() {
 
   var TimelineEvent = Backbone.RailsModel.extend({
+    vuln: function() {
+      return this.get("vuln");
+    },
+
+    app: function() {
+      return this.get("app");
+    },
+
+    server: function() {
+      return this.get("server");
+    }
   });
 
   var TimelineStore = Backbone.Collection.extend({

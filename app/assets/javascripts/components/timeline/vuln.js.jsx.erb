@@ -1,0 +1,109 @@
+var VulnEvent = React.createClass({
+  componentDidMount: function() {
+    $(React.findDOMNode(this)).find(".timestamp").timeago();
+    $(React.findDOMNode(this)).find(".timeline-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
+  },
+
+  vuln: function() {
+    return this.props.model.vuln();
+  },
+
+  getInitialState: function() {
+    return {
+      view_details: false
+    }
+  },
+
+  render: function() {
+
+    var app_affected = <AvatarWidget name={this.props.model.app().name} image={this.props.model.app().avatar} size="tiny" />
+
+    var server_affected = <AvatarWidget name={this.props.model.server().name} image={this.props.model.server().avatar} size="tiny" />
+
+    var details = undefined;
+    details = (
+      <div className="resolution">
+        <section>
+          <div className="description">
+            <p className="highlight">{this.vuln()["remediation"]}</p>
+            <p>{this.vuln()["description"]}</p>
+          </div>
+        </section>
+      </div>
+    )
+
+
+
+    return (
+      <section>
+        <div className="timeline-box">
+          <div className="timeline-wrapper vuln">
+            <div className="title">
+              <section>
+
+                <div className="name">
+                  <p>
+                    <%= image_tag("icon-ruby.png", :className=> "icon") %>
+                    &nbsp;
+                    <strong>RubyGem:</strong> {this.vuln()["artifact"]}
+
+                  </p>
+                </div>
+
+                <div className="version">
+                  <p><strong>Version:</strong> 0.3.7</p>
+                </div>
+
+                <div className="risk">
+                  <p><strong>Risk:</strong> { this.vuln()["criticality"] }</p>
+                </div>
+
+                <div className="timeago">
+                  <span className="timestamp pull-right" title={this.vuln()["notified_at"]}>{this.vuln()["disclosed_at"]}</span>
+                </div>
+              </section>
+            </div>
+
+            <div className="affected">
+              <section>
+                <div className="apps">
+                  <h3>Apps affected</h3>
+                  <ul>
+                    <li>{app_affected}</li>
+                  </ul>
+                </div>
+
+                <div className="servers">
+                  <h3>Servers affected</h3>
+                  <ul>
+                    <li>{server_affected}</li>
+                  </ul>
+                </div>
+              </section>
+            </div>
+
+            {details}
+
+            <div className="resolution">
+              <section>
+                <div className="actions">
+                  <div className="pull-left">
+                    <Eui_button value="Ignore for now" />
+                  </div>
+                  <div className="pull-right">
+                    <Eui_button value="Create ticket" style="primary" />
+                  </div>
+
+                </div>
+              </section>
+            </div>
+
+
+
+          </div>
+        </div>
+      </section>
+    );
+  }
+});
+
