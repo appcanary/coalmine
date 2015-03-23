@@ -1,9 +1,12 @@
 var Dashboard = React.createClass({
   componentDidMount: function() {
-    // TODO unbind
     this.props.timeline.on("sync", function() {
       this.forceUpdate();
     }, this);
+  },
+
+  componentWillUnmount: function() {
+    this.props.timeline.off(null, null, this);
   },
 
   render: function(){
