@@ -1,42 +1,43 @@
-var Ev = Backbone.Model.extend({
-});
+(function () {
+  var Ev = Backbone.Model.extend({
+  });
 
-var EvCol = Backbone.Collection.extend({
-  model: Ev,
-  url: "/events"
-});
+  var EvCol = Backbone.Collection.extend({
+    model: Ev,
+    url: "/events"
+  });
 
-var all_events = new EvCol();
+  var all_events = new EvCol();
 
-$(document).ready(function() {
-  var NotVulnEvent = React.createClass({
+  $(document).ready(function() {
+    var NotVulnEvent = React.createClass({
 
-    propTypes: {
-      name: React.PropTypes.string.isRequired,
-      last_synced_at: React.PropTypes.string.isRequired,
-    },
+      propTypes: {
+        name: React.PropTypes.string.isRequired,
+        last_synced_at: React.PropTypes.string.isRequired,
+      },
 
-    componentDidMount: function() {
-      $(React.findDOMNode(this)).find(".timestamp").timeago();
-      $(React.findDOMNode(this)).find(".timeline-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
-    },
+      componentDidMount: function() {
+        $(React.findDOMNode(this)).find(".timestamp").timeago();
+        $(React.findDOMNode(this)).find(".timeline-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
+      },
 
-    render: function() {
-      return (
-        <section>
-          <div className="timeline-box">
-            <div className="timeline-wrapper resolved">
-              <div className="title">
-                <section>
-                  <div className="app-name">
-                    <p>
-                      <strong><a href="/apps/1">{ this.props.name }</a></strong>
+      render: function() {
+        return (
+          <section>
+            <div className="timeline-box">
+              <div className="timeline-wrapper resolved">
+                <div className="title">
+                  <section>
+                    <div className="app-name">
+                      <p>
+                        <strong><a href="/apps/1">{ this.props.name }</a></strong>
 
-                    </p>
-                  </div>
+                      </p>
+                    </div>
 
-                  <div className="message">
-                    <p>Congrats! Your app doesn't have vulnerable dependencies.</p>
+                    <div className="message">
+                      <p>Congrats! Your app doesn't have vulnerable dependencies.</p>
                     </div>
 
                     <div className="timeago">
@@ -48,51 +49,52 @@ $(document).ready(function() {
             </div>
           </section>
 
-      );
-    }
+        );
+      }
+    });
+
+    var Timeline = React.createClass({
+      getInitialState: function() {
+        return {events: this.props.initialEvents};
+      },
+
+      tick: function() {
+        var that = this
+        this.state.events.fetch({
+          update: true,
+          success: function(col, rep, opt) {
+            that.setState({events: col});
+          }
+        })
+      },
+
+      componentDidMount: function () {
+        this.interval = setInterval(this.tick, 2000);
+      },
+
+      componentDidUpdate: function() {
+
+      },
+
+      render: function() {
+        var timeline_events = []
+        this.state.events.each(function(ev, i) {
+          timeline_events.push(<NotVulnEvent event={ev} name="Foo" last_synced_at="2015-03-13T15:30:13-04:00" key={ev.cid} />)
+        });
+
+        return (
+          <div id="timeline">{timeline_events}</div>
+        );
+      }
+    });
+    // 
+    //   all_events.fetch({
+    //     success: function(collection, resp, opt) {
+    //       React.render(
+    //         <Timeline initialEvents={collection} items={[1,1,1]} />,
+    //           document.getElementById("main")
+    //       );
+    //     }
+    //   });
   });
-
-  var Timeline = React.createClass({
-    getInitialState: function() {
-      return {events: this.props.initialEvents};
-    },
-
-    tick: function() {
-      var that = this
-      this.state.events.fetch({
-        update: true,
-        success: function(col, rep, opt) {
-          that.setState({events: col});
-        }
-      })
-    },
-
-    componentDidMount: function () {
-      this.interval = setInterval(this.tick, 2000);
-    },
-
-    componentDidUpdate: function() {
-
-    },
-
-    render: function() {
-      var timeline_events = []
-      this.state.events.each(function(ev, i) {
-        timeline_events.push(<NotVulnEvent event={ev} name="Foo" last_synced_at="2015-03-13T15:30:13-04:00" key={ev.cid} />)
-      });
-
-      return (
-        <div id="timeline">{timeline_events}</div>
-      );
-    }
-  });
-// 
-//   all_events.fetch({
-//     success: function(collection, resp, opt) {
-//       React.render(
-//         <Timeline initialEvents={collection} items={[1,1,1]} />,
-//           document.getElementById("main")
-//       );
-//     }
-//   });
 });
