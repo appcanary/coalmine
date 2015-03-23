@@ -1,9 +1,14 @@
 class Event
   include Mocker
 
-  mock_attr(:kind) { [:new_server, :new_app].shuffle.first }
+  mock_attr(:kind) { [:new_server, :new_app, :new_vuln].shuffle.first }
 
   mock_attr(:created_at) { rand(1..10).hours.ago }
+
+  mock_attr(:app) { App.new }
+  mock_attr(:vuln) { Vuln.new }
+
+  mock_attr(:message) { "You added a new app!" }
 
   def server
     @server ||= Server.new
@@ -31,7 +36,5 @@ class Event
     obj.avatar
   end
 
-  def message
-    "yolo"
-  end
 end
+

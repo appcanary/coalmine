@@ -1,6 +1,6 @@
 class Timeline
   def self.for(user)
-    arr = [Item.new(:kind => :first_app)]
-    arr.concat 5.times.map { Item.new }
+    arr = [Event.new(:kind => :new_app)]
+    arr.concat 5.times.map { Event.new }
   end
 end

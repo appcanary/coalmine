@@ -1,18 +1,18 @@
 (function() {
 
-  var Item = Backbone.RailsModel.extend({
+  var TimelineEvent = Backbone.RailsModel.extend({
   });
 
   var TimelineStore = Backbone.Collection.extend({
     url: "/timeline",
-    model: Item,
+    model: TimelineEvent,
 
     parse: function(response) {
       return response.timeline;
     }
   });
 
-  Canary.Item = Item;
+  Canary.TimelineEvent = TimelineEvent;
   Canary.Timeline = new TimelineStore();
 
 })();
