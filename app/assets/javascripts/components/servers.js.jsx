@@ -15,7 +15,7 @@ var NewServer = React.createClass({
     return (
       <div>
         <div className="navigation">
-          <Navbar />
+          <Navbar activeTab="add"/>
         </div>
         <div id="main" className="main-drawer container">
           <section>

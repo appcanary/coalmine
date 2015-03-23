@@ -37,6 +37,10 @@ $left-navbar-width: $left-navbar-inner-width + 4;
     color: #64572b;
   }
 
+  .menu > li > a.active {
+    color: #fff !important;
+  }
+
   .navbar-brand img {
     margin-left: auto;
     margin-right: auto;
