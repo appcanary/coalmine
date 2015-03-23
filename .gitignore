@@ -18,3 +18,7 @@ config/database.yml
 /tmp
 config/settings/secrets
 public/assets
+
+#emacs junk
+\#*\#
+*~
