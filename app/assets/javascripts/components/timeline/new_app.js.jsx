@@ -32,12 +32,19 @@ var NewAppEvent = React.createClass({
                       Platforms:
                     </strong>
                     &nbsp;
-                    event.app.platforms
+                    {this.props.model.get("app")["platforms"]}
                   </p>
                 </div>
 
-                <div className="edit-action">
-                  <Eui_button value="Edit details" />
+                <div className="app-server">
+                  <p>
+                    <strong>
+                      Server:
+                    </strong>
+                    &nbsp;
+                    <img src={"data:image.png;base64," + this.props.model.get("app")["server"]["avatar"]} className="icon tiny" />
+                    <strong>&nbsp;<a href="#">{this.props.model.get("app")["server"]["name"]}</a></strong>
+                  </p>
                 </div>
               </section>
             </div>
