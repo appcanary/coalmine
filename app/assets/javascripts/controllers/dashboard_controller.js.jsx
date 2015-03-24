@@ -3,7 +3,10 @@
   var DashboardController = Canary.Controller.extend({
 
     initialize: function() {
-
+      this.dispatchToken =
+      Canary.Herald.register_action({
+        "dashboard-index": function() { this.redirect_to("dashboard") }.bind(this)
+      });
     },
 
     index: function(onboarded) {
