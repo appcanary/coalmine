@@ -4,9 +4,9 @@
 
     initialize: function() {
       this.dispatchToken = 
-        Canary.Herald.register_action({
-          "apps-create":  this.create.bind(this),
-          "apps-show": function(app) {this.redirect_to("apps/" + app.id)}.bind(this)
+      Canary.Herald.register_action({
+        "apps-create":  this.create.bind(this),
+        "apps-show": function(app) {this.redirect_to("apps/" + app.id)}.bind(this)
       });
 
     },
@@ -20,22 +20,22 @@
 
     show: function(id) {
       Canary.AppCollection.fetch().done(function() {
-      var app = Canary.AppCollection.get(id)
-      React.render(
-        <AppLayout>
+        var app = Canary.AppCollection.get(id);
+        React.render(
+          <AppLayout>
             <Sidepanel model={app} isApp={true}/>
             <div id="app-timeline">
               <TimelineView collection={Canary.Timeline.filterCollection(function(m) {return m.get("app").id.toString() === id})}/>
             </div>
           </AppLayout>,
-        document.body
-      );
-    });
+          document.body
+        );
+      });
     }
     
   });
-
-
+  
+  
   Canary.AppsController = new AppsController();
 })();
 
