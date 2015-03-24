@@ -9,7 +9,8 @@
       "dashboard":      "dashboard", 
       "welcome":        "welcome", 
       "servers/new":    "servers_new", 
-      "servers/:id":    "servers_show", 
+      "servers/:id":    "servers_show",
+      "apps/:id":       "apps_show",
     },
 
     sign_up: function() {
@@ -34,7 +35,11 @@
 
     servers_show: function(id) {
       Canary.ServersController.show(id);
-    }
+    },
+
+    apps_show: function(id) {
+      Canary.AppsController.show(id)
+    },
 
   });
   
