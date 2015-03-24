@@ -41,6 +41,12 @@ namespace :deploy do
   task :restart do
     invoke 'unicorn:reload'
   end
+
+  task :seed do
+    on roles(:app) do
+      execute "cd #{deploy_path}/current && bundle exec rake db:seed RAILS_ENV=#{fetch(:rails_env)}"
+    end
+  end
 end
 
 namespace :debug do
