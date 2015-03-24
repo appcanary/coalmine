@@ -45,7 +45,7 @@ var NewAppEvent = React.createClass({
                       Server:
                     </strong>
                     &nbsp;
-                    <AvatarWidget model={this.props.model.app().server} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.app().server.id})}/>
+                    <AvatarWidget model={this.props.model.app().server} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.app().server.id})} size="tiny"/>
                   </p>
                 </div>
               </section>
