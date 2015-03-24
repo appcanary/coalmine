@@ -1,8 +1,9 @@
 var Sidepanel = React.createClass({
+  mixins: [TimeagoMixin],
   componentDidMount: function() {
     $(".app-sidepanel").velocity({'z-index': -1 }).velocity("transition.slideLeftBigIn", 400).velocity({'z-index': 1});
-    $(React.findDOMNode(this)).find(".timestamp").timeago();
   },
+
   render: function() {
     //TODO: these should all be compoonenets
     var navTabs = "";

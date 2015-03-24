@@ -1,4 +1,4 @@
-var NewServerEvent = React.createClass({
+var EventNewServer = React.createClass({
   componentDidMount: function() {
     $(React.findDOMNode(this)).find(".timestamp").timeago();
     $(React.findDOMNode(this)).find(".event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);

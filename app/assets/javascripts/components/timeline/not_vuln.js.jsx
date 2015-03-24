@@ -1,4 +1,4 @@
-var NotVuln = React.createClass({
+var EventNotVuln = React.createClass({
   componentDidMount: function() {
     $(React.findDOMNode(this)).find(".timestamp").timeago();
     $(React.findDOMNode(this)).find(".timeline-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);

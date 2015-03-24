@@ -2,19 +2,19 @@ var TimelineView = React.createClass({
   render: function() {
     var items = this.props.collection.models.map(function(m) {
       switch (m.get("kind")) {
-          
+
         case "new_app":
-          return <NewAppEvent model={m} />;
+          return <EventNewApp model={m} />;
         case "new_server":
-          return <NewServerEvent model={m} />;
+          return <EventNewServer model={m} />;
         case "vuln":
-          return <VulnEvent model={m} />;
+          return <EventVuln model={m} />;
       }});
 
-    return (
-      <div>
-        {items}
-      </div>
-    );
+      return (
+        <div>
+          {items}
+        </div>
+      );
   }
 });

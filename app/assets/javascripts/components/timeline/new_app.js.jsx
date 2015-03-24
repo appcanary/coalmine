@@ -1,4 +1,4 @@
-var NewAppEvent = React.createClass({
+var EventNewApp = React.createClass({
   componentDidMount: function() {
     $(React.findDOMNode(this)).find(".timestamp").timeago();
     $(React.findDOMNode(this)).find(".event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
