@@ -18,14 +18,14 @@ var EventVuln = React.createClass({
 
     var app_affected = <AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.app().id})} size="tiny" />
 
-    var server_affected = <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.server().id})}size="tiny" />
+var server_affected = <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.server().id})}size="tiny" />
 
-    var details = undefined;
+var details = undefined;
     details = (
       <div className="resolution">
         <section>
           <div className="description">
-            <p className="highlight">{this.vuln()["remediation"]}</p>
+            <p className="highlight">Upgrade to <span>{this.vuln()["patch_to"]}</span></p>
             <p>{this.vuln()["description"]}</p>
           </div>
         </section>
@@ -34,76 +34,71 @@ var EventVuln = React.createClass({
 
 
 
-    return (
-      <section>
-        <div className="timeline-box">
-          <div className="timeline-wrapper vuln">
-            <div className="title">
-              <section>
+      return (
+        <section>
+          <div className="timeline-box">
+            <div className="timeline-wrapper vuln">
+              <div className="title">
+                <section>
 
-                <div className="name">
-                  <p>
-                    <%= image_tag("icon-ruby.png", :className=> "icon") %>
-                    &nbsp;
-                    <strong>RubyGem:</strong> {this.vuln()["artifact"]}
-
-                  </p>
-                </div>
-
-                <div className="version">
-                  <p><strong>Version:</strong> 0.3.7</p>
-                </div>
-
-                <div className="risk">
-                  <p><strong>Risk:</strong> { this.vuln()["criticality"] }</p>
-                </div>
-
-                <div className="timeago">
-                  <span className="timestamp pull-right" title={this.vuln()["notified_at"]}>{this.vuln()["disclosed_at"]}</span>
-                </div>
-              </section>
-            </div>
-
-            <div className="affected">
-              <section>
-                <div className="apps">
-                  <h3>Apps affected</h3>
-                  <ul>
-                    <li>{app_affected}</li>
-                  </ul>
-                </div>
-
-                <div className="servers">
-                  <h3>Servers affected</h3>
-                  <ul>
-                    <li>{server_affected}</li>
-                  </ul>
-                </div>
-              </section>
-            </div>
-
-            {details}
-
-            <div className="resolution">
-              <section>
-                <div className="actions">
-                  <div className="pull-left">
-                    <Eui_button value="Ignore for now" />
+                  <div className="name">
+                    <p>
+                      <%= image_tag("icon-ruby.png", :className=> "icon") %>
+                      &nbsp;<strong>RubyGem:</strong> {this.vuln()["artifact"]}
+                    </p>
                   </div>
-                  <div className="pull-right">
-                    <Eui_button value="Create ticket" style="primary" />
+                  
+                  <div className="version">
+                    <p><strong>Version:</strong> <span>0.3.7</span></p>
+                  </div>
+                  
+                  <div className="risk">
+                    <p><strong>Risk:</strong> { this.vuln()["criticality"] }</p>
                   </div>
 
-                </div>
-              </section>
+                  <div className="timeago">
+                    <span className="timestamp pull-right" title={this.vuln()["notified_at"]}>{this.vuln()["disclosed_at"]}</span>
+                  </div>
+                </section>
+              </div>
+
+              <div className="affected">
+                <section>
+                  <div className="apps">
+                    <h3>Apps affected</h3>
+                    <ul>
+                      <li>{app_affected}</li>
+                    </ul>
+                  </div>
+
+                  <div className="servers">
+                    <h3>Servers affected</h3>
+                    <ul>
+                      <li>{server_affected}</li>
+                    </ul>
+                  </div>
+                </section>
+              </div>
+
+              {details}
+
+              <div className="resolution">
+                <section>
+                  <div className="actions">
+                    <div className="pull-left">
+                      <Eui_button value="Ignore for now" />
+                    </div>
+                    <div className="pull-right">
+                      <Eui_button value="Create ticket" style="primary" />
+                    </div>
+
+                  </div>
+                </section>
+              </div>
             </div>
-
-
-
           </div>
-        </div>
-      </section>
-    );
+        </section>
+      );
   }
 });
 
