@@ -25,7 +25,7 @@
         <AppLayout>
             <Sidepanel model={app}/>
             <div id="app-timeline">
-              <TimelineView collection={Canary.Timeline}/>
+              <TimelineView collection={Canary.Timeline.filterCollection(function(m) {return m.get("app").id.toString() === id})}/>
             </div>
           </AppLayout>,
         document.body
