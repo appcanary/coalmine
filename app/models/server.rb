@@ -15,7 +15,7 @@ class Server
   }
 
   def self.fake_servers
-    [Server.new(:name => "droplet37a",
+    [Server.new(:name => "free-micro-aws",
                :id => 1)]
   end
 end
