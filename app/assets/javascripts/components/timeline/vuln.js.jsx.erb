@@ -21,7 +21,7 @@ var VulnEvent = React.createClass({
 
   render: function() {
 
-    var app_affected = <AvatarWidget model={this.props.model.app()} size="tiny" />
+    var app_affected = <AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.app().id})} size="tiny" />
 
     var server_affected = <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.server().id})}size="tiny" />
 
