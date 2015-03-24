@@ -1,13 +1,4 @@
 var Onboard = React.createClass({
-
-  handleOnboard: function(e) {
-    e.preventDefault();
-    return Canary.Herald.dispatch({
-      actionType: "welcome-add-app",
-    });
-
-  },
-
   render: function() {
     return (
       <div id="main" className="container">
@@ -37,7 +28,7 @@ var Onboard = React.createClass({
             <section>
               <div className="action-bar">
                 <div className="pull-right">
-                  <Eui_button value="Great. Add an app!" href={this.handleOnboard} />
+                  <Eui_button value="Great. Add an app!" href={Canary.Herald.trigger("welcome-add-app")} />
                 </div>
 
               </div>
