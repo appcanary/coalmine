@@ -12,8 +12,8 @@ class App
       Server.new(:app => obj ) 
   }
 
-  mock_attr(:avatar) {
-    RubyIdenticon.create_base64(Faker::App.name, :border_size => 10)
+  mock_attr(:avatar) { |obj|
+    RubyIdenticon.create_base64(obj.name, :border_size => 10)
   }
 
   def self.fake_apps

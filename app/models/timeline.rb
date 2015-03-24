@@ -9,7 +9,7 @@ class Timeline
       new_server(server),
       new_app(airbnb),
       new_app(uber),
-      new_vuln(Vuln.new, server, uber)
+      new_vuln(Vuln.new, server, airbnb)
     ]
     arr.reverse
   end
