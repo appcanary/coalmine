@@ -4,6 +4,10 @@ var NotVuln = React.createClass({
     $(React.findDOMNode(this)).find(".timeline-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
   },
 
+  componentDidUpdate: function() {
+    $(React.findDOMNode(this)).find(".timestamp").timeago();
+  },
+
   render: function() {
     return (
       <section>
