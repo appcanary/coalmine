@@ -7,6 +7,9 @@ class App
   mock_attr(:active_issues) { |app| [Vuln.new(:apps => [app])] }
   mock_attr(:resolved_issues) { [] }
   mock_attr(:ignored_issues) { [] }
+  mock_attr(:rubygems) { nil }
+  mock_attr(:npm) { nil }
+  
 
   mock_attr(:server) { |obj| 
       Server.new(:app => obj ) 
@@ -22,13 +25,16 @@ class App
             :platforms => "Ruby",
             :last_synced_at => 2.seconds.from_now,
             :server => server,
-            :id => 1),
+            :id => 1,
+            :rubygems => 34),
      
      App.new(:name => "Uber for dogs",
                    :platforms => "Node",
                    :last_synced_at => 2.seconds.from_now,
                    :server => server,
-                   :id => 2,)]
+                   :id => 2,
+                   :npm => 49,
+             )]
   end
   
   def vulnerable?

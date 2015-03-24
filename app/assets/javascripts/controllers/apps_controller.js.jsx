@@ -23,7 +23,7 @@
       var app = Canary.AppCollection.get(id)
       React.render(
         <AppLayout>
-            <Sidepanel model={app}/>
+            <Sidepanel model={app} isApp={true}/>
             <div id="app-timeline">
               <TimelineView collection={Canary.Timeline.filterCollection(function(m) {return m.get("app").id.toString() === id})}/>
             </div>

@@ -4,6 +4,7 @@ var Sidepanel = React.createClass({
     $(React.findDOMNode(this)).find(".timestamp").timeago();
   },
   render: function() {
+    //TODO: these should all be compoonenets
     var navTabs = "";
     if (this.props.isApp) {
       navTabs =(
@@ -13,7 +14,58 @@ var Sidepanel = React.createClass({
           <li role="presentation"><a href="#">Dev</a></li>
         </ul>
       );
-  }
+    }
+
+    var rubyGems = "";
+    if (this.props.model.get("rubygems")) {
+      rubyGems = (
+        <tr>
+          <td>
+            <strong>Rubygems</strong>
+          </td>
+          <td>
+            <span>
+              {this.props.model.get("rubygems")}
+            </span>
+            <i className="fa fa-angle-right pull-right"></i>
+          </td>
+        </tr>
+      )
+    }
+
+    var NPM = "";
+    if (this.props.model.get("npm")) {
+      rubyGems = (
+        <tr>
+          <td>
+            <strong>Rubygems</strong>
+          </td>
+          <td>
+            <span>
+              {this.props.model.get("npm")}
+            </span>
+            <i className="fa fa-angle-right pull-right"></i>
+          </td>
+        </tr>
+      )
+    }
+
+    var systemPackages = "";
+    if (this.props.model.get("system_packages")) {
+      systemPackages  =
+      (<tr>
+          <td>
+            <strong>System Packages</strong>
+          </td>
+          <td>
+            <span>
+              830
+            </span>
+            <i className="fa fa-angle-right pull-right"></i>
+          </td>
+      </tr> )
+    }
+    
     return (
       <div className="app-sidepanel">
         <section>
@@ -26,8 +78,8 @@ var Sidepanel = React.createClass({
         </section>
         <section>
           <div className="col-md-12">
-
-                     <table className="table unstyled info">
+            {navTabs}
+            <table className="table unstyled info">
               <tr>
                 <td>
                   <strong>Last Updated</strong>
@@ -43,45 +95,14 @@ var Sidepanel = React.createClass({
                   <strong>Platforms</strong>
                 </td>
                 <td className="platforms">
-                  Ruby, Node
+                  {this.props.model.get("platforms")}
                 </td>
               </tr>
 
-
-              <tr>
-                <td>
-                  <strong>Rubygems</strong>
-                </td>
-                <td>
-                  <span>
-                    34
-                  </span>
-                  <i className="fa fa-angle-right pull-right"></i>
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>NPM</strong>
-                </td>
-                <td>
-                  <span>
-                    49
-                  </span>
-                  <i className="fa fa-angle-right pull-right"></i>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>System Packages</strong>
-                </td>
-                <td>
-                  <span>
-                    830
-                  </span>
-                  <i className="fa fa-angle-right pull-right"></i>
-                </td>
-              </tr>              
+              {rubyGems}
+              {NPM}
+              
+      
             </table>
 
             <section className="issues-nav">

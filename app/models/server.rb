@@ -5,6 +5,9 @@ class Server
   mock_attr(:name) { Faker::Lorem.word }
   mock_attr(:active_issues) { [] }
   mock_attr(:last_synced_at) { Time.now }
+  mock_attr(:rubygems) { 34 }
+  mock_attr(:npm) { 49 }
+  mock_attr(:system_packages) { 830 }
   
 
   mock_attr(:avatar) { |obj|
