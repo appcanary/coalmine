@@ -20,6 +20,10 @@
 
     parse: function(response) {
       return response.timeline;
+    },
+
+    filterCollection: function(predicate) {
+      return new TimelineStore(this.filter(predicate));
     }
   });
 
