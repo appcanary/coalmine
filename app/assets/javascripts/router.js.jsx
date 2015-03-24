@@ -3,7 +3,7 @@
   var Navigator = Backbone.Router.extend({
     
     routes: {
-      "": "login",
+      "hello_yc_hows_it_going": "login",
       "sign_up":        "sign_up",    
       "login":          "login",    
       "dashboard":      "dashboard", 

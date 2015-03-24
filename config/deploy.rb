@@ -6,7 +6,8 @@ set :repo_url, 'git@github.com:stateio/canary-web.git'
 
 set :rails_env, (fetch(:stage) || fetch(:rails_env))
 # Default branch is :master
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+# TODO GET RID OF THIS IN PROD
+ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/var/www/canary-web'

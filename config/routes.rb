@@ -8,16 +8,18 @@ Rails.application.routes.draw do
   
   resources :servers, :only => [:index, :new, :show]
 
-  get 'login' => 'user_sessions#new', :as => :login
+  get 'login' => 'welcome#index', :as => :login #user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   resources :users
-  get 'sign_up' => "users#new", :as => :sign_up
-  post 'sign_up' => "users#create"
+  #get 'sign_up' => "users#new", :as => :sign_up
+  #post 'sign_up' => "users#create"
 
   resources :events, :only => [:index]
   
-  root 'user_sessions#new'
+  root 'welcome#index'
+
+  get '/hello_yc_hows_it_going' => 'user_sessions#new'
 
   get 'launchrock' => 'welcome#index'
   post 'beta/list' => "welcome#beta_list"
