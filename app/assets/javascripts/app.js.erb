@@ -88,3 +88,14 @@ _.extend(Canary.Controller.prototype, Backbone.Events, {
 
 Canary.Controller.extend = Backbone.Model.extend;
 
+// define us some mixins shall we
+
+var TimeagoMixin = {
+  componentDidMount: function() {
+    $(React.findDOMNode(this)).find(".timestamp").timeago();
+  },
+  componentDidUpdate: function() {
+    $(React.findDOMNode(this)).find(".timestamp").timeago();
+  }  
+};
+

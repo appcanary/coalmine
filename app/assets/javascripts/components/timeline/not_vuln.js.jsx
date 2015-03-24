@@ -1,11 +1,7 @@
 var EventNotVuln = React.createClass({
+  mixins: [TimeagoMixin],
   componentDidMount: function() {
-    $(React.findDOMNode(this)).find(".timestamp").timeago();
     $(React.findDOMNode(this)).find(".timeline-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
-  },
-
-  componentDidUpdate: function() {
-    $(React.findDOMNode(this)).find(".timestamp").timeago();
   },
 
   render: function() {
