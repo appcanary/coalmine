@@ -29,6 +29,9 @@
         React.render(
           <AppLayout>
             <Sidepanel model={server}/>
+            <div id="app-timeline">
+              <TimelineView collection={Canary.Timeline}/>
+            </div>
           </AppLayout>,
           document.body
         )
