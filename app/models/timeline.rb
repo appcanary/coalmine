@@ -5,11 +5,14 @@ class Timeline
 
     uber = App.fake_apps[1]
 
+    vuln = Vuln.new
+
     arr = [
       new_server(server),
       new_app(airbnb),
       new_app(uber),
-      new_vuln(Vuln.new, server, airbnb)
+      new_vuln(vuln, server, airbnb),
+      new_not_vuln(vuln, server, airbnb)
     ]
     arr.reverse
   end
@@ -34,6 +37,14 @@ class Timeline
       opt[:vuln] = vuln
       opt[:app] = app
       opt[:server] = server
+      new_event(opt)
+    end
+
+    def new_not_vuln(vuln, server, app, opt = {})
+      opt.merge!({:kind => :not_vuln,
+                  :vuln => vuln,
+                  :server => server,
+                  :app => app})
       new_event(opt)
     end
 

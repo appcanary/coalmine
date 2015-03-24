@@ -12,7 +12,7 @@ class Vuln
   mock_attr(:osvdb) { "98629" }
   mock_attr(:cve) { "2015-0001" }
   mock_attr(:artifact) { "actionpack" }
-  mock_attr(:remediation) { "Upgrade to version 2.3.2" }
+  mock_attr(:patch_to) { "2.3.2" }
   mock_attr(:kind) { :ruby }
 
   def ruby?
