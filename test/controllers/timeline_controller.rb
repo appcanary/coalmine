@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class EventsControllerTest < ActionController::TestCase
+class TimelineControllerTest < ActionController::TestCase
   describe "while authenticated" do
     let(:user) { FactoryGirl.create(:user) }
     it "should get index" do
