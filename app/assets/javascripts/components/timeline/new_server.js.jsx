@@ -4,6 +4,15 @@ var NewServerEvent = React.createClass({
     $(React.findDOMNode(this)).find(".event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
   },
 
+  showServer: function(e) {
+    e.preventDefault();
+    Canary.Herald.dispatch({
+      actionType: "servers-show",
+      id: this.props.model.server().id
+    });
+
+  },
+
   render: function() {
     return (
       <section>
@@ -12,7 +21,7 @@ var NewServerEvent = React.createClass({
             <div className="event-header">
               <section>
                 <div className="note">
-                  <span className="last_synched_at timestamp" title={this.props.model.get("created_at")}>{this.props.model.get("created_at")}</span>
+                  <span className="last_synched_at timestamp" title={this.props.model.get("created_at")}>{this.props.model.get("created_at") }</span>
                   <p>🎉&nbsp;You added a new server!</p>
                 </div>
               </section>
@@ -21,8 +30,7 @@ var NewServerEvent = React.createClass({
               <section>
                 <div className="name">
                   <p>
-                    <img src={"data:image.png;base64," + this.props.model.get("server")["avatar"]} className="icon" />
-                    <strong>&nbsp;<a href="#">{this.props.model.get("server")["name"]}</a></strong>
+                    <AvatarWidget model={this.props.model.server()} onClicked={this.showServer} />
                   </p>
                 </div>
                 <div className="os">

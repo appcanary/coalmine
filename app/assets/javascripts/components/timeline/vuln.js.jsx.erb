@@ -16,9 +16,9 @@ var VulnEvent = React.createClass({
 
   render: function() {
 
-    var app_affected = <AvatarWidget name={this.props.model.app().name} image={this.props.model.app().avatar} size="tiny" />
+    var app_affected = <AvatarWidget model={this.props.model.app()} size="tiny" />
 
-    var server_affected = <AvatarWidget name={this.props.model.server().name} image={this.props.model.server().avatar} size="tiny" />
+    var server_affected = <AvatarWidget model={this.props.model.server()} size="tiny" />
 
     var details = undefined;
     details = (

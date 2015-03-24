@@ -3,8 +3,8 @@ var AvatarWidget = React.createClass({
     var size = this.props.size || ""
     return (
       <span>
-        <img src={"data:image.png;base64," + this.props.image} className={"icon " + size} />
-        <strong>&nbsp;<a href="#">{this.props.name}</a></strong>
+        <img src={"data:image.png;base64," + this.props.model.avatar} className={"icon " + size} onClick={this.props.onClicked}/>
+        <strong>&nbsp;<a href="#" onClick={this.props.onClicked}>{this.props.model.name}</a></strong>
       </span>
 
     );

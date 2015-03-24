@@ -6,6 +6,7 @@
       this.dispatchToken = 
         Canary.Herald.register_action({
         "servers-create":  this.create.bind(this),
+        "servers-show":  this.fetchShow.bind(this),
       });
 
     },
@@ -18,7 +19,22 @@
     },
 
     create: function(app) {
-     this.redirect_to("dashboard");
+      this.redirect_to("dashboard");
+    },
+
+    show: function(id) {
+      Canary.ServerCollection.fetch().done(function() {
+        var server = Canary.ServerCollection.get(id);
+
+        React.render(
+          <h1>LOL SERVER {server.get("name")}</h1>,
+          document.body
+        )
+      });
+    },
+
+    fetchShow: function(payload) {
+      return this.redirect_to("servers/" + payload.id);
     }
 
   });

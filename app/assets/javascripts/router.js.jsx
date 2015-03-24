@@ -9,6 +9,7 @@
       "dashboard":      "dashboard", 
       "welcome":        "welcome", 
       "servers/new":    "servers_new", 
+      "servers/:id":    "servers_show", 
     },
 
     sign_up: function() {
@@ -29,6 +30,10 @@
     
     servers_new: function(action) {
       Canary.ServersController.new();
+    },
+
+    servers_show: function(id) {
+      Canary.ServersController.show(id);
     }
 
   });
