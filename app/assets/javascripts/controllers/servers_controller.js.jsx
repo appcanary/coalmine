@@ -27,7 +27,9 @@
         var server = Canary.ServerCollection.get(id);
 
         React.render(
-          <h1>LOL SERVER {server.get("name")}</h1>,
+          <AppLayout>
+            <Sidepanel />
+          </AppLayout>,
           document.body
         )
       });
