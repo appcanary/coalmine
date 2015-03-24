@@ -1,7 +1,7 @@
 class ServersController < ApplicationController
   def index
     respond_to do |format|
-      format.json { render :json => [Server.new(:name => "droplet37a")] }
+      format.json { render :json => Server.fake_servers }
     end
 
   end

@@ -10,4 +10,9 @@ class Server
   mock_attr(:avatar) { |obj|
     RubyIdenticon.create_base64(obj.name, :border_size => 10)
   }
+
+  def self.fake_servers
+    [Server.new(:name => "droplet37a",
+               :id => 1)]
+  end
 end

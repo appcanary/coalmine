@@ -1,16 +1,9 @@
 class Timeline
   def self.for(user)
-    server = Server.new(:name => "droplet37a")
-    airbnb = App.new(:name => "Airbnb for toothbrushes",
-                     :platforms => "Ruby",
-                     :last_synced_at => 2.seconds.from_now,
-                     :server => server)
+    server = Server.fake_servers[0]
+    airbnb = App.fake_apps[0]
 
-    uber = App.new(:name => "Uber for dogs",
-                   :platforms => "Node",
-                   :last_synced_at => 2.seconds.from_now,
-                   :server => server)
-
+    uber = App.fake_apps[1]
 
     arr = [
       new_server(server),
