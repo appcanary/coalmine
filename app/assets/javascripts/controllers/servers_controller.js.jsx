@@ -5,8 +5,8 @@
     initialize: function() {
       this.dispatchToken = 
         Canary.Herald.register_action({
-        "servers-create":  this.create.bind(this),
-        "servers-show":  this.fetchShow.bind(this),
+        "servers-create":  function(m) {this.redirect_to("dashboard")}.bind(this),
+        "servers-show":  function(payload) {this.redirect_to("servers/" + payload.id)}.bind(this),
       });
 
     },
@@ -17,11 +17,7 @@
         document.body
       )
     },
-
-    create: function(app) {
-      this.redirect_to("dashboard");
-    },
-
+    
     show: function(id) {
       Canary.ServerCollection.fetch().done(function() {
         var server = Canary.ServerCollection.get(id);
@@ -37,11 +33,6 @@
         )
       });
     },
-
-    fetchShow: function(payload) {
-      return this.redirect_to("servers/" + payload.id);
-    }
-
   });
 
 
