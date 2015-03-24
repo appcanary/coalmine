@@ -5,30 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Canary</title>
-    <%= stylesheet_link_tag    'launchrock', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag    'launchrock', media: 'all' %>
+    <%= javascript_include_tag 'launchrock' %>
     <%= csrf_meta_tags %>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <% if current_user %>
-              <li role="presentation"><%= link_to "Log out", logout_path, :method => :post %></li>
-            <% else %>
-              <!-- <li role="presentation"><%#= link_to "Sign Up", sign_up_path %></li> -->
-              <li role="presentation"><%= link_to "Beta Login", login_path %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <h3>Canary</h3>
-      </div>
 
-      <%= flash_messages %>
+    <%= flash_messages %>
 
-      <%= yield %>
-    </div>
+    <%= yield %>
 
+    <script src="//use.typekit.net/dkz5zwp.js"></script>
+    <script>try{Typekit.load();}catch(e){}</script>
   </body>
 </html>

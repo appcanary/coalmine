@@ -52,6 +52,9 @@ GEM
     bootstrap-sass (3.3.3)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
+    bourbon (4.2.1)
+      sass (~> 3.4)
+      thor
     builder (3.2.2)
     byebug (3.5.1)
       columnize (~> 0.8)
@@ -117,6 +120,7 @@ GEM
       minitest (>= 3.0)
     hike (1.2.3)
     hitimes (1.2.2)
+    htmlentities (4.3.3)
     http_parser.rb (0.6.0)
     httparty (0.13.3)
       json (~> 1.8)
@@ -159,6 +163,9 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    neat (1.7.2)
+      bourbon (>= 4.0)
+      sass (>= 3.3)
     nenv (0.2.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -289,6 +296,7 @@ DEPENDENCIES
   annotate
   binding_of_caller
   bootstrap-sass (~> 3.3.3)
+  bourbon
   capistrano (~> 3.2.0)
   capistrano-bundler (~> 1.1.2)
   capistrano-rails (~> 1.1)
@@ -298,12 +306,14 @@ DEPENDENCIES
   font-awesome-rails
   guard-livereload (~> 2.4)
   guard-minitest
+  htmlentities
   httparty
   jbuilder (~> 2.0)
   jquery-rails
   m
   minitest-reporters
   minitest-spec-rails
+  neat
   pg
   pry-byebug
   pry-rails

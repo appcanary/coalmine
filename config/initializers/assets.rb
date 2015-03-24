@@ -25,4 +25,4 @@ Rails.application.config.assets.version = '1.0'
 #   end
 # end
 
-Rails.application.config.assets.precompile += %w( launchrock.css )
+Rails.application.config.assets.precompile += %w( launchrock.css launchrock.js )

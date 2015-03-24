@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   
   root 'user_sessions#new'
 
+  get 'launchrock' => 'welcome#index'
   post 'beta/list' => "welcome#beta_list"
   get 'dashboard' => "dashboard#index", :as => :dashboard
   get 'welcome' => "dashboard#index", :as => :welcome

@@ -1,0 +1,222 @@
+// Main styles go in here. This is the only CSS file that will be included on build.
+@import "bourbon";
+@import "neat";
+
+@import "partials/mixins";
+@import "partials/helpers";
+@import "partials/fonts";
+@import "partials/color";
+
+// grid stuff
+$grid-columns: 12 !global;
+$max-width: em(940px) !global;
+$border-box-sizing: true !global;
+
+// colours
+$text: #333;
+$bg: #f7f7f7;
+$dark-yellow: #eac64b;
+$yellow: #fadc58;
+$brown: #64572b;
+
+$proxima: 'Proxima-Nova', sans-serif;
+$myriad: 'Myriad Pro', sans-serif;
+
+body {
+  background-color: $bg;
+  font-size: 16px;
+  color: $text;
+  line-height: 1.2;
+  font-family: $proxima;
+  text-rendering: optimizeLegibility;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  box-sizing: border-box;
+  @include mobile-all {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
+
+h1 {
+  margin: 0;
+}
+
+a {
+  color: lighten($brown, 40%);
+  text-decoration: none;
+  &:hover {
+    color: $brown;
+    text-decoration: underline;
+  }
+}
+
+.landing-container {
+  @include outer-container;
+  width: $max-width;
+}
+
+.clear {
+  margin: 0 !important;
+}
+
+.topbar {
+  position: fixed;
+  height: 8px;
+  background-color: darken($yellow, 5%);
+  border-bottom: 1px solid $dark-yellow;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.logo {
+  position: fixed;
+  top: 15px;
+  left: 10px;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  font-weight: normal;
+  color: darken($yellow, 22%);
+  img {
+    width: 120px;
+    height: auto;
+    border: 3px solid $yellow;
+    border-radius: 50%;
+    &:hover {
+    }
+  }
+}
+
+.sign-up {
+  margin: 0 auto;
+  input, button {
+    box-shadow: 0px 0px 0px 4px white;
+    background-color: white;
+  }
+  input {
+    width: 50%;
+    font-size: 1.6em;
+    padding: 0.3em 0.5em;
+    border: none;
+    border: 1px solid lighten($text, 50%);
+    border-radius: 6px;
+    margin-right: 0.5em;
+    @include appearance(none);
+    @include transition (all 0.1s ease-out);
+    @include placeholder {
+      font-weight: normal;
+      color: lighten($text, 50%);
+      opacity: 1;
+    }
+    &:hover {
+      border-color: $text;
+      @include transition (all 0.1s ease-in);
+    }
+    &:focus {
+      outline: none;
+      border-color: $text;
+      @include transition (all 0.1s ease-in);
+      @include placeholder {
+        opacity: 0.5;
+        @include transition (all 0.1s ease-out);
+      }
+    }
+  }
+  button {
+    width: 20%;
+    font-size: 1.6em;
+    padding: 0.3em 0.5em;
+    border: none;
+    border: 1px solid lighten($text, 50%);
+    border-radius: 6px;
+    @include appearance(none);
+    @include transition (all 0.1s ease-out);
+    &:hover {
+      border-color: $text;
+      @include transition (all 0.1s ease-in);
+    }
+    &:focus {
+      outline: none;
+      border-color: $text;
+      @include transition (all 0.1s ease-in);
+    }
+  }
+}
+
+.hed {
+  width: 100%;
+  margin: 0 auto 3em auto;
+  background-color: lighten($yellow, 5%);
+  border-bottom: 1px solid darken($yellow, 10%);
+  .bird {
+    padding-top: 3em;
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 200px;
+      @include transition (all 0.1s ease-out);
+      &:hover {
+        opacity: 0.5;
+        @include transition (all 0.1s ease-in);
+      }
+    }
+  }
+  h1 {
+    padding: 0.7em 0 0.9em 0;
+    text-align: center;
+    font-size: 3.2em;
+    font-weight: normal;
+    line-height: 1em;
+    letter-spacing: -0.02em;
+  }
+}
+
+.subhed {
+  text-align: center;
+  font-size: 1.5em;
+  padding-bottom: 1.5em;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.unit {
+  @include row();
+  padding-bottom: 3.5em;
+  margin-bottom: 4em;
+  border-bottom: 1px solid lighten($text, 50%);
+  form {
+    text-align: center;
+  }
+}
+
+.features {
+  @include row();
+  margin-bottom: 2em;
+}
+
+.feature-unit {
+  @include span-columns(3 of 12);
+  text-align: center;
+  h4 {
+    font-family: $myriad;
+    text-transform: uppercase;
+    font-size: 1em;
+    line-height: 1em;
+    margin: 0 0 1em 0;
+  }
+  p {
+    margin: 0 auto;
+    width: 75%;
+  }
+}
+
+footer {
+  text-align: center;
+  margin-top: 5em;
+  text-transform: uppercase;
+  font-size: 0.8em;
+}

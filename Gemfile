@@ -17,6 +17,10 @@ gem 'bootstrap-sass', '~> 3.3.3'
 gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
 gem "font-awesome-rails"
+gem "bourbon"
+gem "neat"
+gem "htmlentities"
+
 
 # auth
 gem 'sorcery'
