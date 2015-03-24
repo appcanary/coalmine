@@ -61,10 +61,10 @@ Flux.Dispatcher.prototype.register_action = function(actions) {
 
 Canary.Herald = new Flux.Dispatcher();
 
-Canary.Herald.trigger = function(event) {
+Canary.Herald.trigger = function(event, obj) {
   return function(e) {
     e.preventDefault();
-    Canary.Herald.dispatch({actionType: event});  
+    Canary.Herald.dispatch(_.extend({actionType: event}, obj));  
   };}
 
 // Our own controller object, copying stuff from how Backbone.Model is setup.

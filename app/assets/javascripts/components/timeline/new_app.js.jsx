@@ -25,8 +25,7 @@ var NewAppEvent = React.createClass({
               <section>
                 <div className="name">
                   <p>
-                    <img src={"data:image.png;base64," + this.props.model.get("app")["avatar"]} className="icon" />
-                    <strong>&nbsp;<a href="#">{this.props.model.get("app")["name"]}</a></strong>
+                    <AvatarWidget model={this.props.model.app()}/>
                   </p>
                 </div>
 
@@ -46,8 +45,7 @@ var NewAppEvent = React.createClass({
                       Server:
                     </strong>
                     &nbsp;
-                    <img src={"data:image.png;base64," + this.props.model.get("app")["server"]["avatar"]} className="icon tiny" />
-                    <strong>&nbsp;<a href="#">{this.props.model.get("app")["server"]["name"]}</a></strong>
+                    <AvatarWidget model={this.props.model.app().server} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.app().server.id})}/>
                   </p>
                 </div>
               </section>

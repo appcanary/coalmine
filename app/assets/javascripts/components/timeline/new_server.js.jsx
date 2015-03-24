@@ -8,15 +8,6 @@ var NewServerEvent = React.createClass({
     $(React.findDOMNode(this)).find(".timestamp").timeago();
   },
 
-  showServer: function(e) {
-    e.preventDefault();
-    Canary.Herald.dispatch({
-      actionType: "servers-show",
-      id: this.props.model.server().id
-    });
-
-  },
-
   render: function() {
     return (
       <section>
@@ -34,7 +25,7 @@ var NewServerEvent = React.createClass({
               <section>
                 <div className="name">
                   <p>
-                    <AvatarWidget model={this.props.model.server()} onClicked={this.showServer} />
+                    <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show",{id: this.props.model.server().id})} />
                   </p>
                 </div>
                 <div className="os">
