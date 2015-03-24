@@ -79,7 +79,7 @@
 }
 
 #app-timeline {
-  .timeline-box {
+  .timeline-box, .event-box {
     @extend .col-sm-offset-3;
   }
 }
