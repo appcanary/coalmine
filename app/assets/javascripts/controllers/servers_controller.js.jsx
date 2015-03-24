@@ -19,18 +19,20 @@
     },
     
     show: function(id) {
+
       Canary.ServerCollection.fetch().done(function() {
         var server = Canary.ServerCollection.get(id);
-
-        React.render(
-          <AppLayout>
-            <Sidepanel model={server}/>
-            <div id="app-timeline">
-              <TimelineView collection={Canary.Timeline.filterCollection(function(m) {return m.get("server").id.toString() === id})}/>
-            </div>
-          </AppLayout>,
-          document.body
-        )
+        Canary.Timeline.fetch().done(function() {
+          React.render(
+            <AppLayout>
+              <Sidepanel model={server}/>
+              <div id="app-timeline">
+                <TimelineView collection={Canary.Timeline.filterCollection(function(m) {return m.get("server").id.toString() === id})}/>
+              </div>
+            </AppLayout>,
+            document.body
+          )
+        });
       });
     },
   });
