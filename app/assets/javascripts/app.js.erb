@@ -61,6 +61,8 @@ Flux.Dispatcher.prototype.register_action = function(actions) {
 
 Canary.Herald = new Flux.Dispatcher();
 
+// consider a link_to mixin?
+
 Canary.Herald.trigger = function(event, obj) {
   return function(e) {
     e.preventDefault();
@@ -80,6 +82,7 @@ _.extend(Canary.Controller.prototype, Backbone.Events, {
     }
     $("#main").velocity("transition.fadeOut", function() {
       React.unmountComponentAtNode(document.getElementById("main"));
+      // components should know to fade in?
       $("#main").velocity({opacity: 1}, { display: 'inherit'})
       Canary.Navigator.navigate(path, {trigger: true});
     });
