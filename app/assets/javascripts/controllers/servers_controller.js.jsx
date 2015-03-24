@@ -5,8 +5,8 @@
     initialize: function() {
       this.dispatchToken = 
         Canary.Herald.register_action({
-        "servers-create":  function(m) {this.redirect_to("dashboard")}.bind(this),
-        "servers-show":  function(payload) {this.redirect_to("servers/" + payload.id)}.bind(this),
+        "servers-create":  function(s) {this.redirect_to("dashboard")}.bind(this),
+        "servers-show":  function(s) {this.redirect_to("servers/" + s.id)}.bind(this),
       });
 
     },
