@@ -40,7 +40,7 @@
     cursor: pointer;
   }
 
-  table.issues td:last-child span {
+  table.issues td:last-child  {
     @extend .pull-right
   }
 

@@ -1,34 +1,39 @@
 var Sidepanel = React.createClass({
   componentDidMount: function() {
-     $(".app-sidepanel").velocity({'z-index': -1 }).velocity("transition.slideLeftBigIn", 400);
+    $(".app-sidepanel").velocity({'z-index': -1 }).velocity("transition.slideLeftBigIn", 400);
+    $(React.findDOMNode(this)).find(".timestamp").timeago();
   },
   render: function() {
+    var navTabs = "";
+    if (this.props.isApp) {
+      navTabs =(
+        <ul className="nav nav-tabs">
+          <li role="presentation" className="active"><a href="#">Production</a></li>
+          <li role="presentation"><a href="#">Staging</a></li>
+          <li role="presentation"><a href="#">Dev</a></li>
+        </ul>
+      );
+  }
     return (
       <div className="app-sidepanel">
         <section>
           <div className="nav-identity">
             <p>
-              <a className="dashboard"><b className='eui-trailing-icon fa fa-angle-double-left'></b> Dashboard</a>
+              <a className="dashboard" href="#" onClick={Canary.Herald.trigger("dashboard-index")}><b className='eui-trailing-icon fa fa-angle-double-left'></b> Dashboard</a>
             </p>
-            <h3>ServerNameHere</h3>
+            <h3><AvatarWidget model={this.props.model.attributes}/></h3>
           </div>
         </section>
         <section>
           <div className="col-md-12">
 
-            <ul className="nav nav-tabs">
-              <li role="presentation" className="active"><a href="#">Production</a></li>
-              <li role="presentation"><a href="#">Staging</a></li>
-              <li role="presentation"><a href="#">Dev</a></li>
-            </ul>
-
-            <table className="table unstyled info">
+                     <table className="table unstyled info">
               <tr>
                 <td>
                   <strong>Last Updated</strong>
                 </td>
                 <td>
-                  <span className="timestamp" title=''></span>
+                  <span className="timestamp" title={this.props.model.get("last_synced_at")}>{this.props.model.get("last_synced_at")}</span>
                 </td>
               </tr>
 
@@ -38,7 +43,7 @@ var Sidepanel = React.createClass({
                   <strong>Platforms</strong>
                 </td>
                 <td className="platforms">
-                  Ruby
+                  Ruby, Node
                 </td>
               </tr>
 
@@ -49,12 +54,34 @@ var Sidepanel = React.createClass({
                 </td>
                 <td>
                   <span>
-                    35-40
+                    34
                   </span>
                   <i className="fa fa-angle-right pull-right"></i>
                 </td>
               </tr>
 
+              <tr>
+                <td>
+                  <strong>NPM</strong>
+                </td>
+                <td>
+                  <span>
+                    49
+                  </span>
+                  <i className="fa fa-angle-right pull-right"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>System Packages</strong>
+                </td>
+                <td>
+                  <span>
+                    830
+                  </span>
+                  <i className="fa fa-angle-right pull-right"></i>
+                </td>
+              </tr>              
             </table>
 
             <section className="issues-nav">

@@ -28,7 +28,7 @@
 
         React.render(
           <AppLayout>
-            <Sidepanel />
+            <Sidepanel model={server}/>
           </AppLayout>,
           document.body
         )
