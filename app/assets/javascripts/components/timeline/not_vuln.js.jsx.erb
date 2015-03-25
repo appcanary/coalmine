@@ -26,7 +26,7 @@ var EventNotVuln = React.createClass({
               <section>
                 <div className="col-sm-4 affected">
                   <p><h3>Servers: </h3>
-                    <AvatarWidget model={this.props.model.get("server")} size="tiny"/></p>
+                    <AvatarWidget model={this.props.model.get("server")} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.get("server").id})} size="tiny"/></p>
                 </div>
                 <div className="col-sm-8 affected">
                   <p><h3>Title: </h3>

@@ -8,6 +8,8 @@ $left-navbar-width: $left-navbar-inner-width + 4;
   @extend .navbar-inverse;
 
   position: fixed;
+  // for demo
+  z-index: -1;
 
   border-radius: 0px;
   border-right: #eac64b solid 1px;

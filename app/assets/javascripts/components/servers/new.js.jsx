@@ -25,12 +25,12 @@ var NewServer = React.createClass({
                     <p>It looks like you're using Ubuntu 14.04!</p>
                     <p>Add us to your apt sources</p>
                     <pre>                                                
-                      echo deb https://apt.appcanary.com/debian/ appcanary non-free &gt;&gt; \ <br/>
+                      echo deb <span className="blur">https://apt.appcanary.com/debian/</span> appcanary non-free &gt;&gt; \ <br/>
                       &nbsp;&nbsp;/etc/apt/sources.list.d/appcanary.list
                     </pre>
                     <p>Put your trust in us:</p>
                     <pre>
-                      wget -O- https://dist.appcanary.com/apt/canary.gpg | apt-key add -
+                      wget -O- <span className="blur">https://dist.appcanary.com/apt/canary.gpg</span> | apt-key add -
                     </pre>
                     <p>Welcome canary into your heart:</p>
                     <pre>
@@ -39,11 +39,10 @@ var NewServer = React.createClass({
                     </pre>
 
                     <p>Setup the agent</p>
-                    <pre>canary-agent --init dd6bc9064adf782b2924da728fcab9bb</pre>
+                    <pre>canary-agent --init <span className="blur">dd6bc9064adf782b2924da728fcab9bb</span></pre>
                     <p>It will prompt you for the location of any apps you have installed. </p>
                     <p>Start the daemon</p>
                     <pre>start canary-agent</pre>
-                    <p>Once you're done, check back here. We'll wait</p>
                   </div>
                 </section>
               </div>
@@ -52,7 +51,7 @@ var NewServer = React.createClass({
                 <section>
                   <div className="action-bar">
                     <div className="pull-right">
-                      <Eui_button href={Canary.Herald.trigger("servers-create")} value="This is a demo. Pretend that I did this." />
+                      <Eui_button href={Canary.Herald.trigger("servers-create")} value="This is a demo. Pretend that I did this." style="primary" />
                     </div>
                   </div>
                 </section>

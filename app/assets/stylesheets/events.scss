@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .vuln-version, .patched-version {
-//  background-color: #c7002b;
+  //  background-color: #c7002b;
   //border: #c7002b solid 2px;
   color: white;
   padding-top: 2px;
@@ -21,4 +21,10 @@
 
 .patched-version {
   background-color: green;
+}
+
+
+.blur {
+  text-shadow: 0 0 9px black;
+  color: transparent;
 }

@@ -8,7 +8,7 @@ class Vuln
   specifiers (e.g. %s and %x) are not properly sanitized in user-supplied
   input when handling email addresses. This may allow a remote attacker
   to cause a denial of service" }
-  mock_attr(:criticality) { [:high, :medium, :low, :unknown].sample }
+  mock_attr(:criticality) { [:high].sample }
   mock_attr(:osvdb) { "98629" }
   mock_attr(:cve) { "2015-0001" }
   mock_attr(:artifact) { "actionpack" }

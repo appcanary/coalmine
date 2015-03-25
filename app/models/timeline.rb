@@ -9,10 +9,10 @@ class Timeline
 
     arr = [
       new_server(server),
-      new_app(airbnb),
-      new_app(uber),
-      new_vuln(vuln, server, airbnb),
-      new_not_vuln(vuln, server, airbnb)
+      # new_app(airbnb),
+      # new_app(uber),
+      # new_vuln(vuln, server, airbnb),
+      # new_not_vuln(vuln, server, airbnb)
     ]
     arr.reverse
   end
