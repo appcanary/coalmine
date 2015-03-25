@@ -5,14 +5,20 @@ class Timeline
 
     uber = App.fake_apps[1]
 
-    vuln = Vuln.new
+    vuln, vuln2 = Vuln.fake_vulns
 
     arr = [
       new_server(server, :tour_enter => 1),
       new_app(airbnb, :tour_enter => 2),
       new_app(uber, :tour_enter => 2),
       new_vuln(vuln, server, airbnb, :tour_enter => 3, :tour_exit => 4),
-      new_not_vuln(vuln, server, airbnb, :tour_enter => 4)
+      new_not_vuln(vuln, server, airbnb, :tour_enter => 4),
+      new_allclear_app(airbnb, :tour_enter => 4),
+
+      # heartbleed
+      new_vuln(vuln2, server, airbnb, :app2 => uber, :tour_enter => 5, :tour_exit => 6),
+      new_not_vuln(vuln2, server, airbnb, :app2 => uber, :tour_enter => 6),
+      new_allclear_server(server, :tour_enter => 6),
     ]
     arr.reverse
   end
@@ -55,5 +61,18 @@ class Timeline
 
       Event.new(default.merge(opt))
     end
+
+    def new_allclear_server(server, opt = {})
+      opt.merge!({:kind => :allclear_server,
+                  :server => server})
+      new_event(opt)
+    end
+
+    def new_allclear_app(app, opt = {})
+      opt.merge!({:kind => :allclear_app,
+                  :app => app})
+      new_event(opt)
+    end
+
   end
 end

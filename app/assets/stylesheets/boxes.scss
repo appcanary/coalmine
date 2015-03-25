@@ -37,6 +37,11 @@
 .event-box {
   @include dashboard-box(".col-sm-8", ".event-wrapper");
 
+  .event-wrapper.resolved {
+    border: #c1e59b solid 2px;
+  }
+
+
   .event-header {
     h3 {
       margin-top: 0px;

@@ -16,21 +16,41 @@ var EventVuln = React.createClass({
 
   render: function() {
 
-    var app_affected = <AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.app().id})} size="tiny" />
+    var apps_affected = [<li><AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.app().id})} size="tiny" /></li>]
+    if(this.props.model.get("app2") !== undefined) {
+      apps_affected = apps_affected.concat(<li><AvatarWidget model={this.props.model.get("app2")} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.get("app2").id})} size="tiny" /></li>)
+    }
 
-var server_affected = <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.server().id})}size="tiny" />
+    var server_affected = <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.server().id})}size="tiny" />
 
-var details = undefined;
+    var details = undefined;
     details = (
       <div className="resolution">
         <section>
           <div className="description">
-            <p className="highlight">Upgrade to <span>{this.vuln()["patch_to"]}</span></p>
+            <p><strong>{this.vuln()["title"]}</strong></p>
             <p>{this.vuln()["description"]}</p>
+            <p className="highlight">Upgrade to <span>{this.vuln()["patch_to"]}</span></p>
           </div>
         </section>
       </div>
     )
+
+
+    var dependency = ""
+    if(this.props.model.get("app2") !== undefined) {
+        dependency = (<p>
+                      <%= image_tag("ubuntu_logo.png", :className=> "icon") %>
+                      &nbsp;<strong>Package:</strong> {this.vuln()["artifact"]}
+                    </p>)
+
+    } else {
+      dependency = (<p>
+                      <%= image_tag("icon-ruby.png", :className=> "icon") %>
+                      &nbsp;<strong>RubyGem:</strong> {this.vuln()["artifact"]}
+                    </p>)
+    }
+
 
 
 
@@ -42,14 +62,11 @@ var details = undefined;
                 <section>
 
                   <div className="name">
-                    <p>
-                      <%= image_tag("icon-ruby.png", :className=> "icon") %>
-                      &nbsp;<strong>RubyGem:</strong> {this.vuln()["artifact"]}
-                    </p>
+                    {dependency}
                   </div>
                   
                   <div className="version">
-                    <p><strong>Version:</strong> <span>0.3.7</span></p>
+                    <p><strong>Version:</strong> <span>{this.vuln()["vuln_version"]}</span></p>
                   </div>
                   
                   <div className="risk">
@@ -57,17 +74,18 @@ var details = undefined;
                   </div>
 
                   <div className="timeago">
-                    <span className="timestamp pull-right" title={this.vuln()["notified_at"]}>{this.vuln()["disclosed_at"]}</span>
+                    <span className="timestamp pull-right" title={this.vuln()["notified_at"]}>{this.vuln()["notified_at"]}</span>
                   </div>
                 </section>
               </div>
 
               <div className="affected">
+                
                 <section>
                   <div className="apps">
                     <h3>Apps affected</h3>
                     <ul>
-                      <li>{app_affected}</li>
+                      {apps_affected}
                     </ul>
                   </div>
 

@@ -1,4 +1,4 @@
-var EventNewServer = React.createClass({
+var EventAllClearServer = React.createClass({
   mixins: [TimeagoMixin],
   componentDidMount: function() {
     $(React.findDOMNode(this)).find(".event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
@@ -9,12 +9,12 @@ var EventNewServer = React.createClass({
     return (
       <section>
         <div className="event-box">
-          <div className="event-wrapper">
+          <div className="event-wrapper resolved">
             <div className="event-header">
               <section>
                 <div className="note">
                   <span className="last_synched_at timestamp" title={this.props.model.get("created_at")}>{this.props.model.get("created_at") }</span>
-                  <p>🎉&nbsp;You added a new server!</p>
+                  <p>⭐️&nbsp;Good job! Your server has no vulnerable dependencies.</p>
                 </div>
               </section>
             </div>
@@ -31,7 +31,7 @@ var EventNewServer = React.createClass({
                      Operating System:
                     </strong>
                     &nbsp;
-                    Ubuntu 12.04.4
+                    Ubuntu 14.04
                   </p>
                 </div>
                   <div className="server-platforms">

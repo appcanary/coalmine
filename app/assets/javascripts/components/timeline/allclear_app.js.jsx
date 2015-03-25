@@ -1,4 +1,4 @@
-var EventNewServer = React.createClass({
+var EventAllClearApp = React.createClass({
   mixins: [TimeagoMixin],
   componentDidMount: function() {
     $(React.findDOMNode(this)).find(".event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
@@ -9,12 +9,12 @@ var EventNewServer = React.createClass({
     return (
       <section>
         <div className="event-box">
-          <div className="event-wrapper">
+          <div className="event-wrapper resolved">
             <div className="event-header">
               <section>
                 <div className="note">
                   <span className="last_synched_at timestamp" title={this.props.model.get("created_at")}>{this.props.model.get("created_at") }</span>
-                  <p>🎉&nbsp;You added a new server!</p>
+                  <p>⭐️&nbsp;Good job! Your app has no vulnerable dependencies.</p>
                 </div>
               </section>
             </div>
@@ -22,27 +22,30 @@ var EventNewServer = React.createClass({
               <section>
                 <div className="name">
                   <p>
-                    <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show",{id: this.props.model.server().id})} />
+                    <AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("app-show",{id: this.props.model.app().id})} />
                   </p>
                 </div>
-                <div className="os">
-                  <p>
-                    <strong>
-                     Operating System:
-                    </strong>
-                    &nbsp;
-                    Ubuntu 12.04.4
-                  </p>
-                </div>
-                  <div className="server-platforms">
+                <div className="platforms">
                   <p>
                     <strong>
                       Platforms:
                     </strong>
                     &nbsp;
-                    Ruby, Node
+                    {this.props.model.get("app")["platforms"]}
                   </p>
-                  </div>
+                </div>
+
+
+                <div className="app-server">
+                  <p>
+                    <strong>
+                      Server:
+                    </strong>
+                    &nbsp;
+                    <AvatarWidget model={this.props.model.app().server} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.app().server.id})} size="tiny"/>
+                  </p>
+                </div>
+
               </section>
             </div>
           </div>

@@ -51,7 +51,7 @@ var EventNotVuln = React.createClass({
                   </p>
                 </div>
                 <div className="col-sm-4">
-                  <p className="pull-right"d><strong>Version:</strong>&nbsp; <span className="vuln-version">0.3.7</span> <i className="fa fa-long-arrow-right"/> <span className="patched-version"> 2.3.2 </span></p>
+                  <p className="pull-right"d><strong>Version:</strong>&nbsp; <span className="vuln-version">{this.vuln()["vuln_version"]}</span> <i className="fa fa-long-arrow-right"/> <span className="patched-version">{this.vuln()["patch_to"]}</span></p>
                 </div>
               </section>
             </div>

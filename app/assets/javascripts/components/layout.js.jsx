@@ -44,6 +44,11 @@ var LeDemo = {
     "Sweet. We found two apps. Now, we wait for a vulnerability.",
     "Oh no! One of your apps is vulnerable. We've notified your ops team",
     "Awesome. Your ops team has gone in and taken care of it.",
+    "Awesome. Your ops team has gone in and taken care of it.",
+    "Awesome. Your ops team has gone in and taken care of it.",
+    "Awesome. Your ops team has gone in and taken care of it.",
+    "Awesome. Your ops team has gone in and taken care of it.",
+    "Awesome. Your ops team has gone in and taken care of it.",
   ],
 
   currentMessage: function(i) {

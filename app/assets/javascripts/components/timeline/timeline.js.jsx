@@ -27,6 +27,11 @@ var TimelineView = React.createClass({
           return <EventVuln model={m} />;
         case "not_vuln":
           return <EventNotVuln model={m} />;
+        case "allclear_server":
+          return <EventAllClearServer model={m} />;
+        case "allclear_app":
+          return <EventAllClearApp model={m} />;
+
       }});
 
       return (
