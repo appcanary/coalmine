@@ -1,4 +1,5 @@
 require 'factory_girl'
+require 'test/factories/user_factory'
 class UserSessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
   before_filter :skip_if_logged_in, :except => :destroy
