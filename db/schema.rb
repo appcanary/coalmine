@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325030540) do
+ActiveRecord::Schema.define(version: 20150325052123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20150325030540) do
     t.string   "unlock_token"
     t.string   "token"
     t.boolean  "onboarded",                       default: false
-    t.integer  "tour_tick",                       default: 1
+    t.integer  "tour_tick",                       default: 0
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree
@@ -51,17 +51,5 @@ ActiveRecord::Schema.define(version: 20150325030540) do
   add_index "users", ["last_logout_at", "last_activity_at"], name: "index_users_on_last_logout_at_and_last_activity_at", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", using: :btree
-
-  create_table "vulns", force: :cascade do |t|
-    t.string  "title"
-    t.date    "disclosed_at"
-    t.text    "description"
-    t.integer "criticality",  default: 0, null: false
-    t.string  "osvdb"
-    t.string  "cve"
-    t.string  "artifact"
-    t.string  "remediation"
-    t.integer "kind",         default: 0, null: false
-  end
 
 end

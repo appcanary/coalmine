@@ -3,6 +3,12 @@ var NewServer = React.createClass({
     $(React.findDOMNode(this)).find(".event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
   },
 
+
+  create_server: function(e) {
+    Canary.current_user.save({tour_tick: 1});
+    Canary.Herald.trigger("servers-create")(e);   
+  },
+
   render: function() {
     return (
       <AppLayout>
@@ -51,7 +57,7 @@ var NewServer = React.createClass({
                 <section>
                   <div className="action-bar">
                     <div className="pull-right">
-                      <Eui_button href={Canary.Herald.trigger("servers-create")} value="This is a demo. Pretend that I did this." style="primary" />
+                      <Eui_button href={this.create_server} value="This is a demo. Pretend that I did this." style="primary" />
                     </div>
                   </div>
                 </section>
