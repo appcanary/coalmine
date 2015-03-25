@@ -28,7 +28,7 @@ var NewServer = React.createClass({
               <div className="event-description">
                 <section>
                   <div className="col-sm-12">
-                    <p>It looks like you're using Ubuntu 14.04!</p>
+                    <p>It looks like you're using Ubuntu!</p>
                     <p>Add us to your apt sources</p>
                     <pre>                                                
                       echo deb <span className="blur">https://apt.appcanary.com/debian/</span> appcanary non-free &gt;&gt; \ <br/>

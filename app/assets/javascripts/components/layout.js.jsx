@@ -19,7 +19,7 @@ var AppLayout = React.createClass({
   render: function() {
     var demo = ""
     if(Canary.current_user.tour_tick() > 0 && Canary.current_user.tour_tick() < LeDemo.messages.length + 1) {
-      demo = <DemoGuide message={LeDemo.currentMessage(this.state.tour_tick)}/>
+      demo = <DemoGuide message={LeDemo.currentMessage(this.state.tour_tick)} buttonValue={LeDemo.currentButton(this.state.tour_tick)}/>
     }
 
 
@@ -50,6 +50,14 @@ var LeDemo = {
 
   currentMessage: function(i) {
     return this.messages[i-1];
+  },
+
+  currentButton: function(i) {
+    if(i == this.messages.length) {
+      return "Awesome."
+    } else {
+      return "Simulate the passage of time"
+    }
   }
 }
 
@@ -74,7 +82,7 @@ var DemoGuide = React.createClass({
             </div>
             <div className="col-sm-2">
               <div style={{marginTop: "20px"}}>
-                <Eui_button value="Simulate the passage of time" style="primary" href={Canary.Herald.trigger("advance-tour")} />
+                <Eui_button value={this.props.buttonValue} style="primary" href={Canary.Herald.trigger("advance-tour")} />
               </div>
             </div>
           </section>
