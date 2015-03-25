@@ -23,6 +23,7 @@
 #  unlock_token                    :string
 #  token                           :string
 #  onboarded                       :boolean          default("false")
+#  tour_tick                       :integer          default("1")
 #
 # Indexes
 #
