@@ -8,11 +8,11 @@ class Timeline
     vuln = Vuln.new
 
     arr = [
-      new_server(server),
-      # new_app(airbnb),
-      # new_app(uber),
-      # new_vuln(vuln, server, airbnb),
-      # new_not_vuln(vuln, server, airbnb)
+      new_server(server, :tour_enter => 1),
+      new_app(airbnb, :tour_enter => 2),
+      new_app(uber, :tour_enter => 2),
+      new_vuln(vuln, server, airbnb, :tour_enter => 3, :tour_exit => 4),
+      new_not_vuln(vuln, server, airbnb, :tour_enter => 4)
     ]
     arr.reverse
   end

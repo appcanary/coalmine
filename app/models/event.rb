@@ -10,6 +10,9 @@ class Event
   mock_attr(:server) { Server.new }
 
   mock_attr(:message) { "You added a new app!" }
+  mock_attr(:tour_enter) { nil }
+  mock_attr(:tour_exit) { 1000 }
+  
 
   def server
     @server ||= Server.new
