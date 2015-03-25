@@ -6,7 +6,7 @@ class Event
   mock_attr(:created_at) { rand(1..10).hours.ago }
 
   mock_attr(:app) { App.new }
-  mock_attr(:app2) { App.new }
+  mock_attr(:app2) { nil }
   mock_attr(:vuln) { Vuln.new }
   mock_attr(:server) { Server.new }
 

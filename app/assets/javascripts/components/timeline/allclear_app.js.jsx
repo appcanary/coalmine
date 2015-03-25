@@ -22,7 +22,7 @@ var EventAllClearApp = React.createClass({
               <section>
                 <div className="name">
                   <p>
-                    <AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("app-show",{id: this.props.model.app().id})} />
+                    <AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("apps-show",{id: this.props.model.app().id})} />
                   </p>
                 </div>
                 <div className="platforms">

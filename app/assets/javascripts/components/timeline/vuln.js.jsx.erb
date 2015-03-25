@@ -15,9 +15,8 @@ var EventVuln = React.createClass({
   },
 
   render: function() {
-
     var apps_affected = [<li><AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.app().id})} size="tiny" /></li>]
-    if(this.props.model.get("app2") !== undefined) {
+    if(this.props.model.get("app2") !== null) {
       apps_affected = apps_affected.concat(<li><AvatarWidget model={this.props.model.get("app2")} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.get("app2").id})} size="tiny" /></li>)
     }
 
@@ -37,8 +36,9 @@ var EventVuln = React.createClass({
     )
 
 
-    var dependency = ""
-    if(this.props.model.get("app2") !== undefined) {
+      var dependency = ""
+
+    if(this.props.model.get("app2") !== null) {
         dependency = (<p>
                       <%= image_tag("ubuntu_logo.png", :className=> "icon") %>
                       &nbsp;<strong>Package:</strong> {this.vuln()["artifact"]}

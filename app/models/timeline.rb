@@ -12,12 +12,12 @@ class Timeline
       new_app(airbnb, :tour_enter => 2),
       new_app(uber, :tour_enter => 2),
       new_vuln(vuln, server, airbnb, :tour_enter => 3, :tour_exit => 4),
-      new_not_vuln(vuln, server, airbnb, :tour_enter => 4),
-      new_allclear_app(airbnb, :tour_enter => 4),
+      new_not_vuln(vuln, server, airbnb, :kind => :not_vuln_app, :tour_enter => 4),
+      new_allclear_app(airbnb, :tour_enter => 4, :tour_exit => 5),
 
       # heartbleed
       new_vuln(vuln2, server, airbnb, :app2 => uber, :tour_enter => 5, :tour_exit => 6),
-      new_not_vuln(vuln2, server, airbnb, :app2 => uber, :tour_enter => 6),
+      new_not_vuln(vuln2, server, airbnb, :app2 => uber, :kind => :not_vuln_server, :tour_enter => 6),
       new_allclear_server(server, :tour_enter => 6),
     ]
     arr.reverse
@@ -47,7 +47,7 @@ class Timeline
     end
 
     def new_not_vuln(vuln, server, app, opt = {})
-      opt.merge!({:kind => :not_vuln,
+      opt.merge!({#:kind => :not_vuln,
                   :vuln => vuln,
                   :server => server,
                   :app => app})
