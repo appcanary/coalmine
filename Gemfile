@@ -55,6 +55,9 @@ gem 'binding_of_caller'
 #misc 
 gem 'ruby_identicon', '0.0.4'
 
+#FOR A HORRIBLE HACK
+gem 'factory_girl_rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry-byebug'
