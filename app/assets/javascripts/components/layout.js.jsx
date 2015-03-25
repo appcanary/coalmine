@@ -40,15 +40,12 @@ var AppLayout = React.createClass({
 
 var LeDemo = {
   messages: [
-    "Oh look. You've added a server! We're scanning it for applications.",
-    "Sweet. We found two apps. Now, we wait for a vulnerability.",
-    "Oh no! One of your apps is vulnerable. We've notified your ops team",
-    "Awesome. Your ops team has gone in and taken care of it.",
-    "Awesome. Your ops team has gone in and taken care of it.",
-    "Awesome. Your ops team has gone in and taken care of it.",
-    "Awesome. Your ops team has gone in and taken care of it.",
-    "Awesome. Your ops team has gone in and taken care of it.",
-    "Awesome. Your ops team has gone in and taken care of it.",
+    "You've added your first server! We're going to scan it for applications.",
+    "Sweet! We found two apps. What happens a new vulnerability comes out?",
+    "Oh no! One of your apps is vulnerable. We've notified you via email.",
+    "Awesome. You updated your gems. But what about your servers?",
+    "Oh jeez, Hearbleed is on CNN! But we got your back.",
+    "Good job. This concludes the tour. Feel free to poke around.",
   ],
 
   currentMessage: function(i) {

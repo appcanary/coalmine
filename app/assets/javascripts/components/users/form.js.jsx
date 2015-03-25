@@ -89,7 +89,8 @@ var UserForm = React.createClass({
 
             {error_alert}
 
-            <h3>{this.props.title}</h3>
+      <h3>Hello YC!<br/>We made a little demo for you.</h3>
+      <h4>Click 'Login' to start.</h4>
             <div className="form-group">
               <input className="form-control" placeholder="Your email address" type="email" name="email" id="user_email" ref="email" required onChange={this.handleChange} value={this.state.email}/>
             </div>
