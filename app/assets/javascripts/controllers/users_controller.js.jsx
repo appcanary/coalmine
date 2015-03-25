@@ -5,8 +5,8 @@
       this.dispatchToken = 
         Canary.Herald.register_action({
         "user-sign-up":  this.create.bind(this),
-        "user-login":    this.create.bind(this)
-      });
+        "user-login":    this.create.bind(this),
+        });
 
     },
 

@@ -17,6 +17,7 @@ var AppLayout = React.createClass({
 
 
 var DemoGuide = React.createClass({
+  
   componentDidMount: function() {
     $("#demo-drawer").velocity("transition.slideUpIn", 2000).velocity({opacity: 0.9});
   },
@@ -30,7 +31,7 @@ var DemoGuide = React.createClass({
             </div>
             <div className="col-sm-2">
               <div style={{marginTop: "20px"}}>
-                <Eui_button value="Simulate the passage of time" style="primary" />
+                <Eui_button value="Simulate the passage of time" style="primary" href={Canary.Herald.trigger("advance-tour")} />
               </div>
             </div>
           </section>

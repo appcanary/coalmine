@@ -5,6 +5,9 @@
     urlRoot: "/users",
     has_onboarded: function() {
       return this.get("onboarded") === true
+    },
+    tour_tick: function() {
+      return this.get("tour_tick");
     }
 
   });
