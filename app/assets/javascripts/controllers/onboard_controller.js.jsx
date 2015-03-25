@@ -11,6 +11,7 @@
     },
 
     index: function(onboarded) {
+      Canary.Timeline.fetch();
       React.render(
         <Onboard />,
         document.body

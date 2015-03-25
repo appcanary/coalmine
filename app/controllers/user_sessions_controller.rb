@@ -1,5 +1,3 @@
-require 'factory_girl'
-require File.join(Rails.root, 'test/factories/user_factory')
 class UserSessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
   before_filter :skip_if_logged_in, :except => :destroy
@@ -11,7 +9,7 @@ class UserSessionsController < ApplicationController
   def create
     user_params = params[:user] || {}
     @user = FactoryGirl.create(:user)
-    
+        
     respond_to do |format|
       if @user = login(@user.email, "somevaluehere")
         format.html { redirect_back_or_to(dashboard_path, notice: 'Login successful') }
