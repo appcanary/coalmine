@@ -81,6 +81,7 @@ var Sidepanel = React.createClass({
           <div className="col-md-12">
             {navTabs}
             <table className="table unstyled info">
+              <tbody>
               <tr>
                 <td>
                   <strong>Last Updated</strong>
@@ -102,7 +103,7 @@ var Sidepanel = React.createClass({
 
               {rubyGems}
               {NPM}
-              
+              </tbody>
       
             </table>
 
@@ -113,6 +114,7 @@ var Sidepanel = React.createClass({
             </section>
 
             <table className="table issues">
+              <tbody>
               <tr className="">
                 <td>
                   Active
@@ -139,6 +141,7 @@ var Sidepanel = React.createClass({
                   <span>3 <i className="fa fa-angle-right"></i></span>
                 </td>
               </tr>
+              </tbody>
             </table>
           </div>
         </section>
