@@ -19,7 +19,10 @@ var AppLayout = React.createClass({
 var DemoGuide = React.createClass({
   
   componentDidMount: function() {
-    $("#demo-drawer").velocity("transition.slideUpIn", 2000).velocity({opacity: 0.9});
+    if(Canary.demo_mounted === undefined) {
+      $("#demo-drawer").velocity("transition.slideUpIn", 2000).velocity({opacity: 0.9});
+      Canary.demo_mounted = true;
+    } 
   },
   render: function() {
     return (

@@ -1,4 +1,13 @@
 var Eui_button = React.createClass({
+
+  handleClick: function(e) {
+    e.preventDefault();
+    if(this.props.href !== undefined) {
+      this.props.href(e);
+    } else {
+      $(React.findDOMNode(this)).tooltip({title: "Sorry! Not in this demo."}).tooltip("show");
+    }
+  },
   render: function() {
     var btn_type = this.props.style || "default"
     return (
@@ -7,7 +16,7 @@ var Eui_button = React.createClass({
         <div className="eui-component">
           <div className="eui-component-wrapper">
             <div className="eui-label">
-              <a href="#" className="eui-label-value" onClick={this.props.href}>
+              <a href="#" className="eui-label-value" onClick={this.handleClick}>
                 {this.props.value}
               </a>
             </div>

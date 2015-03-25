@@ -82,10 +82,6 @@ _.extend(Canary.Controller.prototype, Backbone.Events, {
     }
     
     // components should know to transition in.
-    //$("#main").velocity("transition.fadeOut", function() {
-    //  React.unmountComponentAtNode(document.getElementById("main"));
-     // Canary.Navigator.navigate(path, {trigger: true});
-    //});
      Canary.Navigator.navigate(path, {trigger: true});
   },
 })
