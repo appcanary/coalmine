@@ -32,6 +32,7 @@
             </AppLayout>,
             document.body
           )
+
         });
       });
     },

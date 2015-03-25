@@ -1,7 +1,17 @@
 var Sidepanel = React.createClass({
   mixins: [TimeagoMixin],
   componentDidMount: function() {
-    $(".app-sidepanel").velocity({'z-index': -1 }).velocity("transition.slideLeftBigIn", 400).velocity({'z-index': 1});
+    this.animateIn();
+  },
+
+  componentDidUpdate: function() {
+    if(!$(".app-sidepanel").is(":visible")) {
+      this.animateIn();
+    }
+  },
+
+  animateIn: function() {
+    $(".app-sidepanel").velocity({'z-index': -2 }).velocity("transition.slideLeftBigIn", 400).velocity({'z-index': 1});
   },
 
   render: function() {
