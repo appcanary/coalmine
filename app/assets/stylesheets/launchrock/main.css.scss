@@ -34,7 +34,6 @@ body {
   box-sizing: border-box;
   @include mobile-all {
     width: 100%;
-    margin-top: 20px;
   }
 }
 
@@ -54,6 +53,9 @@ a {
 .landing-container {
   @include outer-container;
   width: $max-width;
+  @include mobile-all {
+    width: 100%;
+  }
 }
 
 .clear {
@@ -123,6 +125,11 @@ a {
         @include transition (all 0.1s ease-out);
       }
     }
+
+    @include mobile-all {
+      width: 65%;
+      font-size: 1.2em;
+    }
   }
   button {
     width: 20%;
@@ -142,6 +149,14 @@ a {
       border-color: $text;
       @include transition (all 0.1s ease-in);
     }
+
+    @include mobile-all {
+      display: block;
+      font-size: 1.2em;
+      width: 45%;
+      margin: 0.8em auto 0 auto;
+    }
+
   }
 }
 
@@ -161,6 +176,10 @@ a {
         opacity: 0.5;
         @include transition (all 0.1s ease-in);
       }
+
+      @include mobile-all {
+        width: 160px;
+      }
     }
   }
   h1 {
@@ -170,6 +189,10 @@ a {
     font-weight: normal;
     line-height: 1em;
     letter-spacing: -0.02em;
+    @include mobile-all {
+      font-size: 2.2em;
+      margin: 0 0.5em 0 0.5em;
+    }
   }
 }
 
@@ -181,6 +204,15 @@ a {
     margin: 0;
     padding: 0;
   }
+
+  @include mobile-all {
+    font-size: 1.3em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    p {
+      padding-bottom: 10px;
+    }
+  }
 }
 
 .unit {
@@ -190,6 +222,11 @@ a {
   border-bottom: 1px solid lighten($text, 50%);
   form {
     text-align: center;
+  }
+  @include mobile-all {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin-bottom: 3.5em;
   }
 }
 
@@ -211,6 +248,16 @@ a {
   p {
     margin: 0 auto;
     width: 75%;
+  }
+
+  @include mobile-all {
+    @include span-columns(12 of 12);
+    margin-bottom: 2.5em;
+
+    h4 {
+      margin: 0 0.5em 0.5em 0.5em;
+    }
+    
   }
 }
 
