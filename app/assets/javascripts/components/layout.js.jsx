@@ -44,7 +44,7 @@ var LeDemo = {
     "Sweet! We found two apps. What happens a new vulnerability comes out?",
     "Oh no! One of your apps is vulnerable. We've notified you via email.",
     "Awesome. You updated your gems. But what about your servers?",
-    "Oh jeez, Hearbleed is on CNN! But we got your back.",
+    "Oh jeez, Heartbleed is on CNN! But we got your back.",
     "Good job. This concludes the tour. Feel free to poke around; this resets on logout",
   ],
 
