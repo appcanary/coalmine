@@ -5,7 +5,6 @@ var NewServer = React.createClass({
 
 
   create_server: function(e) {
-    Canary.current_user.save({tour_tick: 1});
     Canary.Herald.trigger("servers-create")(e);   
   },
 
