@@ -55,10 +55,6 @@ gem 'binding_of_caller'
 #misc 
 gem 'ruby_identicon', '0.0.4'
 
-#FOR A HORRIBLE HACK
-gem 'factory_girl'
-  gem 'faker'
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry-byebug'
@@ -72,7 +68,8 @@ group :development, :test do
   gem 'minitest-spec-rails'
   gem 'minitest-reporters'
   gem 'm'
-#  gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'factory_girl_rails'
 end
 
 
