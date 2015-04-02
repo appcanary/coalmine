@@ -11,8 +11,3 @@ Dir[settings_path].each do |file|
     Rails.configuration.send("#{key}=", OpenStruct.new(new_conf[key]))
   end
 end
-
-
-require 'factory_girl'
-require File.join(Rails.root, 'test/factories/user_factory')
-
