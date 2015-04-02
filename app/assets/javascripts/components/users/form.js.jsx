@@ -2,10 +2,7 @@ var UserForm = React.createClass({
   mixins: [Canary.mixins.RefNodeMixin],
 
   getInitialState: function() {
-    var attr = {
-      email: "sama@ycombinator.com",
-      password: "500 startups",
-    }
+    var attr = {}
 
     if (this.props.sign_up_page !== undefined) {
         attr["password_confirmation"] = "";
@@ -89,8 +86,7 @@ var UserForm = React.createClass({
 
             {error_alert}
 
-      <h3>Hello YC!<br/>We made a little demo for you.</h3>
-      <h4>Click 'Login' to start.</h4>
+            <h3>{this.props.title}</h3>
             <div className="form-group">
               <input className="form-control" placeholder="Your email address" type="email" name="email" id="user_email" ref="email" required onChange={this.handleChange} value={this.state.email}/>
             </div>

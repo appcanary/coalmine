@@ -3,7 +3,7 @@ var Login = React.createClass({
     return (
       <div id="main" className="container">
         <Logo />
-        <UserForm user={this.props.user} title={"Hello YC, we've created a little demo for you! <br/> Click Login to start."}  actionType={"user-login"} />
+        <UserForm user={this.props.user} title={"Nice to see you again."}  actionType={"user-login"} />
       </div>
     );
   },

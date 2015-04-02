@@ -1,28 +1,3 @@
-var SignUp = React.createClass({
-  render: function() {
-    return (
-      <div id="main" className="container">
-        <Logo />
-        <UserForm user={this.props.user} sign_up_page={true} title={"Before we get started, tell us:"} actionType={"user-sign-up"} />
-      </div>
-    );
-  },
-
-});
-
-var Login = React.createClass({  
-  render: function() {
-    return (
-      <div id="main" className="container">
-        <Logo />
-        <UserForm user={this.props.user} title={"Hello YC, We've created a little demo for you! Click Login to start."}  actionType={"user-login"} />
-      </div>
-    );
-  },
-
-});
-
-
 var Logo = React.createClass({
   render: function() {
     return (
