@@ -5,7 +5,7 @@ var Eui_button = React.createClass({
     if(this.props.href !== undefined) {
       this.props.href(e);
     } else {
-      $(React.findDOMNode(this)).tooltip({title: "Sorry! Not in this demo."}).tooltip("show");
+      $(React.findDOMNode(this)).tooltip({title: "Sorry! Not yet."}).tooltip("show");
     }
   },
   render: function() {
