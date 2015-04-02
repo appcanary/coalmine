@@ -1,9 +1,8 @@
 (function() {
 
   var Navigator = Backbone.Router.extend({
-    
+
     routes: {
-      "hello_yc_hows_it_going": "login",
       "sign_up":        "sign_up",    
       "login":          "login",    
       "dashboard":      "dashboard", 
@@ -28,7 +27,7 @@
     welcome: function() {
       Canary.OnboardController.index();
     },
-    
+
     servers_new: function(action) {
       Canary.ServersController.new();
     },
@@ -42,7 +41,7 @@
     },
 
   });
-  
+
   Canary.Navigator = new Navigator();
 
 })();
