@@ -1,0 +1,33 @@
+{
+  "name": "canary-web",
+  "version": "0.0.1",
+  "description": "canary frontend",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "webpack": "webpack",
+    "webpack-w": "webpack -wc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stateio/canary-web.git"
+  },
+  "author": "",
+  "license": "proprietary",
+  "bugs": {
+    "url": "https://github.com/stateio/canary-web/issues"
+  },
+  "homepage": "https://github.com/stateio/canary-web",
+  "dependencies": {
+    "webpack": "^1.7.3",
+    "flux": "^2.0.1",
+    "react": "^0.13.1",
+    "underscore": "^1.8.3",
+    "backbone": "^1.1.2",
+    "babel-core": "^5.0.7",
+    "babel-loader": "^5.0.0"
+  }
+}

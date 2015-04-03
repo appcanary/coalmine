@@ -12,19 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require csrf
-//= require bootstrap-sprockets
-//= require vendor/underscore
-//= require vendor/backbone
-//= require react
-//= require vendor/Flux
-//= require vendor/velocity
-//= require vendor/velocity.ui
-//= require vendor/validator
-//= require vendor/jquery.timeago
-//= require app
-//= require_tree ./components/
-//= require_tree ./stores/
-//= require_tree ./controllers/
-//= require router
-//= require init
+//= require main.bundle
+
+/*
+//*/

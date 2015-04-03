@@ -1,3 +1,17 @@
+var $ = require('jquery');
+var Canary = require('./canary');
+var router = require('./router');
+var csrf = require('./csrf');
+var Backbone = require('backbone');
+
+var loader = require.context("./controllers", true);
+loader.keys().forEach(loader);
+
+var foo = require.context("./stores", true);
+foo.keys().forEach(foo);
+
+window.Canary = Canary;
+
 $(function(){
 
 
