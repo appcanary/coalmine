@@ -1,5 +1,13 @@
+var React = require("react");
 var Canary = require("../canary");
-var UsersController = Canary.Controller.extend({
+var Controller = require("../canary/controller");
+var User = require("../models/user");
+var UserSession = require("../models/user_session");
+
+var Login = require("../components/users/login")
+var SignUp = require("../components/users/sign_up")
+
+var UsersController = Controller.extend({
 
   initialize: function() {
     this.dispatchToken = 
@@ -11,7 +19,7 @@ var UsersController = Canary.Controller.extend({
   },
 
   new: function() {
-    var user = new Canary.User();
+    var user = new User();
     React.render(
       <SignUp user={user} />,
         document.body
@@ -19,7 +27,7 @@ var UsersController = Canary.Controller.extend({
   },
 
   login: function() {
-    var session = new Canary.UserSession();
+    var session = new UserSession();
     React.render(
       <Login user={session} />,
         document.body
@@ -32,7 +40,7 @@ var UsersController = Canary.Controller.extend({
 
     user.save(payload.form, {
       success: function(model, response, opt) {
-        Canary.current_user = new Canary.User(response["user"]);
+        Canary.current_user = new User(response["user"]);
         if(Canary.current_user.has_onboarded()) {
           return controller.redirect_to("dashboard") 
         } else {
@@ -52,5 +60,5 @@ var UsersController = Canary.Controller.extend({
 });
 
 
-Canary.UsersController = new UsersController();
+module.exports = new UsersController();
 

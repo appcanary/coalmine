@@ -1,21 +1,10 @@
 var Canary = require("../canary");
-var Backbone = require("backbone");
+var Collection = require("backbone").Collection;
 
-var TimelineEvent = Backbone.RailsModel.extend({
-  vuln: function() {
-    return this.get("vuln");
-  },
+var TimelineEvent = require("../models/timeline");
 
-  app: function() {
-    return this.get("app");
-  },
 
-  server: function() {
-    return this.get("server");
-  }
-});
-
-var TimelineStore = Backbone.Collection.extend({
+var TimelineStore = Collection.extend({
   url: "/timeline",
   model: TimelineEvent,
 
@@ -28,6 +17,5 @@ var TimelineStore = Backbone.Collection.extend({
   }
 });
 
-Canary.TimelineEvent = TimelineEvent;
-Canary.Timeline = new TimelineStore();
+module.exports = Canary.Timeline = new TimelineStore();
 

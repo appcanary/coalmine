@@ -1,7 +1,11 @@
 var Canary = require("../canary");
+var Controller = require("../canary/controller");
 var React = require("react");
 
-var DashboardController = Canary.Controller.extend({
+var Dashboard = require("../components/dashboard/dashboard");
+var Timeline = require("../stores/timeline_store");
+
+var DashboardController = Controller.extend({
 
   initialize: function() {
     this.dispatchToken =
@@ -26,5 +30,5 @@ var DashboardController = Canary.Controller.extend({
 
 });
 
-
-Canary.DashboardController = new DashboardController();
+// make sure this won't get us in trouble
+module.exports = new DashboardController();

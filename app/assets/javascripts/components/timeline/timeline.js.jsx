@@ -1,3 +1,4 @@
+var React = require("react");
 var TimelineView = React.createClass({
   render: function() {
     var self = this;
@@ -27,3 +28,5 @@ var TimelineView = React.createClass({
       );
   }
 });
+
+module.exports = TimelineView

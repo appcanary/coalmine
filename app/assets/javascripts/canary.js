@@ -15,40 +15,6 @@ define("canary", ["flux", "backbone", "underscore"], function(Flux, Backbone, _)
     }
   }
 
-  Backbone.RailsModel = Backbone.Model.extend({
-    toJSON: function() {
-      json = {};
-      json[this.rootKey] = Backbone.Model.prototype.toJSON.call(this);
-      return json;
-    },
-
-    parse: function(json) {
-      if(this.rootKey === undefined) {
-        return json
-      }
-
-      if(json !== undefined) {
-        return json[this.rootKey];
-      }
-    },
-
-    fromForm: function(form) {
-      var data = $(form).serializeArray();
-      var formData = _.object(_.pluck(data, 'name'), _.pluck(data, 'value'));
-
-      return this.set(formData);
-    },
-
-    setErrors: function(attr) {
-      this.errors = attr || {};
-      if(this.errors.full_messages === undefined) {
-        this.errors.full_messages = [];
-      }
-
-      this.trigger('error');
-      return this.errors;
-    }
-  })
 
   Flux.Dispatcher.prototype.register_action = function(actions) {
 
@@ -71,24 +37,7 @@ define("canary", ["flux", "backbone", "underscore"], function(Flux, Backbone, _)
       Canary.Herald.dispatch(_.extend({actionType: event}, obj));  
     };}
 
-    // Our own controller object, copying stuff from how Backbone.Model is setup.
 
-    Canary.Controller = function() {
-      this.initialize.apply(this, arguments);
-    };
-
-    _.extend(Canary.Controller.prototype, Backbone.Events, {
-      redirect_to: function(path) {
-        if($("#main").length < 1) {
-          console.log("missing main");
-        }
-
-        // components should know to transition in.
-        Canary.Navigator.navigate(path, {trigger: true});
-      },
-    })
-
-    Canary.Controller.extend = Backbone.Model.extend;
 
     // define us some mixins shall we
 

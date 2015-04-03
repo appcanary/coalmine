@@ -1,3 +1,7 @@
+var React = require("react");
+var Logo = require("./logo");
+var UserForm = require("./form");
+
 var SignUp = React.createClass({
   render: function() {
     return (
@@ -8,3 +12,5 @@ var SignUp = React.createClass({
     );
   },
 });
+
+module.exports = SignUp;

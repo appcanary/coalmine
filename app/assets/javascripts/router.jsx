@@ -1,7 +1,10 @@
-var Backbone = require('backbone');
+var Router = require('backbone').Router;
 var Canary = require('./canary');
 
-var Navigator = Backbone.Router.extend({
+var DashboardController = require('./controllers/dashboard_controller');
+var UsersController = require('./controllers/users_controller');
+
+var Navigator = Router.extend({
 
   routes: {
     "sign_up":        "sign_up",    
@@ -18,11 +21,11 @@ var Navigator = Backbone.Router.extend({
   },
 
   login: function() {
-    Canary.UsersController.login();
+    UsersController.login();
   },
 
   dashboard: function(onboard) {
-    Canary.DashboardController.index(onboard);
+    DashboardController.index(onboard);
   },
 
   welcome: function() {

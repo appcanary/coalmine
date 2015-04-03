@@ -4,11 +4,7 @@ var router = require('./router');
 var csrf = require('./csrf');
 var Backbone = require('backbone');
 
-var loader = require.context("./controllers", true);
-loader.keys().forEach(loader);
-
-var foo = require.context("./stores", true);
-foo.keys().forEach(foo);
+var User = require("./models/user");
 
 window.Canary = Canary;
 
@@ -20,7 +16,7 @@ $(function(){
   var current_user_div = document.getElementById('canary-current-user');
   if(current_user_div !== null) {
     var userJSON = JSON.parse(current_user_div.textContent);
-    Canary.current_user = new Canary.User(userJSON["user"]);
+    Canary.current_user = new User(userJSON["user"]);
   }
 
   Backbone.history.start({pushState: true});

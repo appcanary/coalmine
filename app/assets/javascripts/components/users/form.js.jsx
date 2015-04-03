@@ -1,6 +1,8 @@
-var UserForm = React.createClass({
-  mixins: [Canary.mixins.RefNodeMixin],
+var React = require("react");
+var Canary = require("../../canary");
 
+
+var UserForm = React.createClass({
   getInitialState: function() {
     var attr = {}
 
@@ -71,7 +73,7 @@ var UserForm = React.createClass({
     }
 
 
-    password_confirmation_view =  (
+    var password_confirmation_view =  (
       <div className="form-group">
         <input className="form-control" placeholder="The same password again, just to confirm" data-match="#user_password" data-error="Passwords must match" type="password" name="password_confirmation" id="user_password_confirmation" ref="password_confirmation" required onChange={this.handleChange} value={this.state.password_confirmation} />
         <span className="help-block with-errors"></span>
@@ -109,3 +111,5 @@ var UserForm = React.createClass({
     )
   }
 });
+
+module.exports = UserForm;

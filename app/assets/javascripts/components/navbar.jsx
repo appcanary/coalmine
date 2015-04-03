@@ -1,3 +1,5 @@
+var React = require("react");
+
 var Navbar = React.createClass({
   isActive: function (tab) {
     if (this.props.activeTab === tab) {
@@ -52,3 +54,5 @@ var Navbar = React.createClass({
     )
   }
 });
+
+module.exports = Navbar;

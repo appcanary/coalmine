@@ -1,3 +1,5 @@
+var React = require("react");
+
 var Logo = React.createClass({
   render: function() {
     return (
@@ -10,3 +12,4 @@ var Logo = React.createClass({
   }
 });
 
+module.exports = Logo;
