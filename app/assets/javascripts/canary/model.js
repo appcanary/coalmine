@@ -3,7 +3,7 @@ var _ = require("underscore");
 
 var Model = Backbone.Model.extend({
   toJSON: function() {
-    json = {};
+    var json = {};
     json[this.rootKey] = Backbone.Model.prototype.toJSON.call(this);
     return json;
   },
