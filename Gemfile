@@ -14,13 +14,14 @@ gem 'pg'
 # views / assets
 gem 'sass-rails', '~> 5.0'
 gem 'bootstrap-sass', '~> 3.3.3'
-gem 'jquery-rails'
+# gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
 gem "font-awesome-rails"
 gem "bourbon"
 gem "neat"
 gem "htmlentities"
 
+# gem 'react-rails', '~> 0.13.0.0'
 
 # auth
 gem 'sorcery'
@@ -30,7 +31,6 @@ gem 'annotate'
 gem 'httparty'
 gem 'active_model_serializers'
 
-gem 'react-rails', '~> 0.13.0.0'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'

@@ -28,7 +28,6 @@ module.exports = {
   externals: {
     // If you load jQuery through a CDN this will still work
     // jQuery is now available via "require('jquery')"
-    jquery: 'var jQuery'
   },
 
   resolve: {
@@ -39,7 +38,7 @@ module.exports = {
   // @see http://webpack.github.io/docs/using-loaders.html
   module: {
     loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'}
+      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'},
     ]
   }
 };
