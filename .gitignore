@@ -22,3 +22,5 @@ public/assets
 #emacs junk
 \#*\#
 *~
+main.bundle.js
+node_modules
