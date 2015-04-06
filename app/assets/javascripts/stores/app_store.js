@@ -1,8 +1,7 @@
 var Canary = require("../canary");
 var Backbone = require("backbone");
+var AppModel = require("../models/app");
 
-var AppModel = Backbone.RailsModel.extend({
-})
 var AppStore = Backbone.Collection.extend({
   url: "/apps",
   model: AppModel,
@@ -11,4 +10,4 @@ var AppStore = Backbone.Collection.extend({
   },
 });
 
-Canary.AppCollection = new AppStore();
+module.exports = new AppStore();

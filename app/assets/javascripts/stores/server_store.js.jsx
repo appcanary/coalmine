@@ -1,8 +1,8 @@
 var Canary = require("../canary");
 var Backbone = require("backbone");
 
-var ServerModel = Backbone.RailsModel.extend({
-})
+var ServerModel = require("../models/server");
+
 var ServerStore = Backbone.Collection.extend({
   url: "/servers",
   model: ServerModel,
@@ -11,4 +11,4 @@ var ServerStore = Backbone.Collection.extend({
   },
 });
 
-Canary.ServerCollection = new ServerStore();
+module.exports = new ServerStore();

@@ -1,5 +1,17 @@
 var Canary = require("../canary");
-var ServersController = Canary.Controller.extend({
+var Controller = require("../canary/controller");
+
+var React = require("react");
+var NewServer = require("../components/servers/new");
+
+var AppLayout = require("../components/layout");
+var Sidepanel = require("../components/dashboard/sidepanel");
+var TimelineView = require("../components/timeline/timeline");
+
+var ServerCollection = require("../stores/server_store");
+
+
+var ServersController = Controller.extend({
 
   initialize: function() {
     this.dispatchToken = 
@@ -19,8 +31,8 @@ var ServersController = Canary.Controller.extend({
 
   show: function(id) {
 
-    Canary.ServerCollection.fetch().done(function() {
-      var server = Canary.ServerCollection.get(id);
+    ServerCollection.fetch().done(function() {
+      var server = ServerCollection.get(id);
       Canary.Timeline.fetch().done(function() {
         React.render(
           <AppLayout>
@@ -38,4 +50,4 @@ var ServersController = Canary.Controller.extend({
 });
 
 
-Canary.ServersController = new ServersController();
+module.exports = new ServersController();

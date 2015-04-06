@@ -1,3 +1,7 @@
+var React = require('react');
+var AvatarWidget = require('../events/avatar');
+var TimeagoMixin = require("../../canary/mixins").TimeagoMixin
+
 var Sidepanel = React.createClass({
   mixins: [TimeagoMixin],
   componentDidMount: function() {
@@ -160,3 +164,5 @@ var Sidepanel = React.createClass({
     )
   }
 });
+
+module.exports = Sidepanel;

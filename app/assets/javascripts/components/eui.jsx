@@ -1,3 +1,4 @@
+var React = require('react');
 var Eui_button = React.createClass({
 
   handleClick: function(e) {
@@ -26,3 +27,5 @@ var Eui_button = React.createClass({
     )
   }
 });
+
+module.exports = Eui_button;

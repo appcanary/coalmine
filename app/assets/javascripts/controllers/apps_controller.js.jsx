@@ -1,6 +1,13 @@
 var Canary = require("../canary");
+var Controller = require("../canary/controller");
 
-var AppsController = Canary.Controller.extend({
+var React = require("react");
+var AppLayout = require("../components/layout");
+var Sidepanel = require("../components/dashboard/sidepanel");
+var TimelineView = require("../components/timeline/timeline");
+var AppCollection = require("../stores/app_store");
+
+var AppsController = Controller.extend({
 
   initialize: function() {
     this.dispatchToken = 
@@ -19,8 +26,8 @@ var AppsController = Canary.Controller.extend({
   },
 
   show: function(id) {
-    Canary.AppCollection.fetch().done(function() {
-      var app = Canary.AppCollection.get(id);
+    AppCollection.fetch().done(function() {
+      var app = AppCollection.get(id);
       Canary.Timeline.fetch().done(function() {
         React.render(
           <AppLayout>
@@ -38,6 +45,5 @@ var AppsController = Canary.Controller.extend({
 });
 
 
-Canary.AppsController = new AppsController();
-
+module.exports = new AppsController();
 

@@ -6,6 +6,7 @@ var _ = require("underscore")
 
 // needed for loading velocity
 window.jQuery = window.$ = require("jquery")
+require("jquery-ujs");
 
 require("./vendor/velocity");
 require("./vendor/velocity.ui");

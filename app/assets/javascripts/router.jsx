@@ -3,6 +3,9 @@ var Canary = require('./canary');
 
 var DashboardController = require('./controllers/dashboard_controller');
 var UsersController = require('./controllers/users_controller');
+var AppsController = require('./controllers/apps_controller');
+var OnboardController = require('./controllers/onboard_controller');
+var ServersController = require('./controllers/servers_controller');
 
 var Navigator = Router.extend({
 
@@ -17,7 +20,7 @@ var Navigator = Router.extend({
   },
 
   sign_up: function() {
-    Canary.UsersController.new();
+    UsersController.new();
   },
 
   login: function() {
@@ -29,19 +32,19 @@ var Navigator = Router.extend({
   },
 
   welcome: function() {
-    Canary.OnboardController.index();
+    OnboardController.index();
   },
 
   servers_new: function(action) {
-    Canary.ServersController.new();
+    ServersController.new();
   },
 
   servers_show: function(id) {
-    Canary.ServersController.show(id);
+    ServersController.show(id);
   },
 
   apps_show: function(id) {
-    Canary.AppsController.show(id)
+    AppsController.show(id)
   },
 
 });

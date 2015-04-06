@@ -1,6 +1,11 @@
 var Canary = require("../canary");
+var Controller = require("../canary/controller");
 
-var OnboardController = Canary.Controller.extend({
+var Onboard = require("../components/onboard");
+var React = require("react");
+
+
+var OnboardController = Controller.extend({
 
   initialize: function() {
     this.dispatchToken = 
@@ -26,4 +31,4 @@ var OnboardController = Canary.Controller.extend({
 });
 
 
-Canary.OnboardController = new OnboardController();
+module.exports = new OnboardController();
