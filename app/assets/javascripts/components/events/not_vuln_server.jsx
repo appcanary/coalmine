@@ -3,12 +3,12 @@ var React = require("react");
 var AvatarWidget = require("./avatar");
 var TimeagoMixin = require("../../canary/mixins").TimeagoMixin;
 
-var EventNotVulnApp = React.createClass({
+var EventNotVulnServer = React.createClass({
   mixins: [TimeagoMixin], 
   componentDidMount: function() {
     $(React.findDOMNode(this)).find(".timeline-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
   },
-  
+
   vuln: function() {
     return this.props.model.vuln();
   },
@@ -30,8 +30,12 @@ var EventNotVulnApp = React.createClass({
             <div className="event-description">
               <section>
                 <div className="col-sm-4 affected">
-                  <p><h3>Servers: </h3>
-                    <AvatarWidget model={this.props.model.get("server")} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.get("server").id})} size="tiny"/></p>
+                  <p><h3>Apps: </h3>
+                    <ul>
+                      <li><AvatarWidget model={this.props.model.get("app")} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.get("app").id})} size="tiny"/></li>
+                      <li><AvatarWidget model={this.props.model.get("app2")} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.get("app2").id})} size="tiny"/></li>
+                    </ul>
+                  </p>
                 </div>
                 <div className="col-sm-8 affected">
                   <p><h3>Title: </h3>
@@ -43,20 +47,19 @@ var EventNotVulnApp = React.createClass({
               <section>
                 <div className="col-sm-4">
                   <p>
-                    <AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("apps-show", {id: this.props.model.app().id})}/>
+                    <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.server().id})}/>
                   </p>
                 </div>
-                
+
                 <div className="col-sm-4">
                   <p>
-                    <img src={assets_path.ruby_logo} className= "icon" />
-                    &nbsp;
-      <strong>RubyGem:</strong> {this.vuln()["artifact"]}
-      
+                    <img src={assets_path.ubuntu_logo} className="icon" />
+
+                    &nbsp;<strong>Package:</strong> {this.vuln()["artifact"]}
                   </p>
                 </div>
                 <div className="col-sm-4">
-                  <p className="pull-right"d><strong>Version:</strong>&nbsp; <span className="vuln-version">{this.vuln()["vuln_version"]}</span> <i className="fa fa-long-arrow-right"/> <span className="patched-version">{this.vuln()["patch_to"]}</span></p>
+                  <p className="pull-right"d><strong>Version:</strong><br/><span className="vuln-version">{this.vuln()["vuln_version"]}</span> <i className="fa fa-long-arrow-right"/><br style={{lineHeight: "24px"}}/><span className="patched-version">{this.vuln()["patch_to"]}</span></p>
                 </div>
               </section>
             </div>
@@ -67,5 +70,4 @@ var EventNotVulnApp = React.createClass({
   }
 });
 
-
-module.exports = EventNotVulnApp;
+module.exports = EventNotVulnServer;

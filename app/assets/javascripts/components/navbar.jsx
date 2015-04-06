@@ -34,7 +34,7 @@ var Navbar = React.createClass({
             <ul className="menu">
               <li>
                 <a className="navbar-brand" href="/" onClick={Canary.Herald.trigger("dashboard-index")}>
-                  <img src={'<%= image_path("oval-canary.png") %>'} />
+                  <img src={assets_path.logo} />
                 </a>
               </li>
             </ul>

@@ -1,3 +1,9 @@
+var $ = require("jquery");
+var React = require("react");
+var AvatarWidget = require("./avatar");
+var TimeagoMixin = require("../../canary/mixins").TimeagoMixin;
+
+
 var EventNewServer = React.createClass({
   mixins: [TimeagoMixin],
   componentDidMount: function() {
@@ -51,3 +57,6 @@ var EventNewServer = React.createClass({
     )
   }
 });
+
+
+module.exports = EventNewServer;

@@ -1,3 +1,9 @@
+var $ = require("jquery");
+var React = require("react");
+var AvatarWidget = require("./avatar");
+
+var TimeagoMixin = require("../../canary/mixins").TimeagoMixin
+
 var EventAllClearApp = React.createClass({
   mixins: [TimeagoMixin],
   componentDidMount: function() {
@@ -54,3 +60,5 @@ var EventAllClearApp = React.createClass({
     )
   }
 });
+
+module.exports = EventAllClearApp;
