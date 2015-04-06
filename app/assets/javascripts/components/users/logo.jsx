@@ -5,7 +5,7 @@ var Logo = React.createClass({
     return (
       <section>
         <div className="logo">
-          <img src={'<%= image_path("oval-canary.png") %>'} />
+          <img src={assets_path.logo} />
         </div>
       </section>
     );
