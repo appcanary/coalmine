@@ -18,7 +18,9 @@ Rails.application.config.assets.precompile = [loose_assets]
 Rails.application.config.assets.precompile += %w( application.css application.js launchrock.css launchrock.js )
 
 # source maps!
-Rails.application.config.assets.configure do |env|
-  env.unregister_postprocessor 'application/javascript', Sprockets::SafetyColons
+if Rails.env.development?
+  Rails.application.config.assets.configure do |env|
+    env.unregister_postprocessor 'application/javascript', Sprockets::SafetyColons
+  end
 end
 
