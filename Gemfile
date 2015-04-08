@@ -21,6 +21,7 @@ gem "bourbon"
 gem "neat"
 gem "htmlentities"
 
+# gem 'react-rails', '~> 0.13.0.0'
 
 # auth
 gem 'sorcery'
@@ -30,7 +31,6 @@ gem 'annotate'
 gem 'httparty'
 gem 'active_model_serializers'
 
-gem 'react-rails', '~> 0.13.0.0'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
@@ -47,6 +47,7 @@ gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-bundler', '~> 1.1.2'
 gem 'capistrano3-unicorn'
 gem 'capistrano-rails-console'
+gem 'capistrano-npm'
 
 # dev tools
 gem 'pry-rails'
@@ -74,7 +75,7 @@ end
 
 
 group :development do
-  gem "rack-livereload"
-  gem 'guard-livereload', '~> 2.4', require: false
-  gem 'guard-minitest'
+  # gem "rack-livereload"
+  # gem 'guard-livereload', '~> 2.4', require: false
+  # gem 'guard-minitest'
 end

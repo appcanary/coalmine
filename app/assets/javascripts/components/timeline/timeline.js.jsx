@@ -1,3 +1,11 @@
+var React = require("react");
+var NewApp = require("../events/new_app");
+var NewServer = require("../events/new_server");
+var NotVulnApp = require("../events/not_vuln_app");
+var NotVulnServer = require("../events/not_vuln_server");
+var AllClearApp = require("../events/all_clear_app");
+var AllClearServer = require("../events/all_clear_server");
+
 var TimelineView = React.createClass({
   render: function() {
     var self = this;
@@ -5,19 +13,17 @@ var TimelineView = React.createClass({
       switch (m.get("kind")) {
 
         case "new_app":
-          return <EventNewApp model={m} />;
+          return <NewApp model={m} />;
         case "new_server":
-          return <EventNewServer model={m} />;
-        case "vuln":
-          return <EventVuln model={m} />;
+          return <NewServer model={m} />;
         case "not_vuln_app":
-          return <EventNotVulnApp model={m} />;
+          return <NotVulnApp model={m} />;
         case "not_vuln_server":
-          return <EventNotVulnServer model={m} />;
+          return <NotVulnServer model={m} />;
         case "allclear_server":
-          return <EventAllClearServer model={m} />;
+          return <AllClearServer model={m} />;
         case "allclear_app":
-          return <EventAllClearApp model={m} />;
+          return <AllClearApp model={m} />;
       }});
 
       return (
@@ -27,3 +33,5 @@ var TimelineView = React.createClass({
       );
   }
 });
+
+module.exports = TimelineView

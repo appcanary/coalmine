@@ -1,3 +1,4 @@
+// deprecated?
 var EventVuln = React.createClass({
   mixins: [TimeagoMixin],
   componentDidMount: function() {

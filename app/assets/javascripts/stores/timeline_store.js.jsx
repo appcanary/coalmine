@@ -1,33 +1,21 @@
-(function() {
+var Canary = require("../canary");
+var Collection = require("backbone").Collection;
 
-  var TimelineEvent = Backbone.RailsModel.extend({
-    vuln: function() {
-      return this.get("vuln");
-    },
+var TimelineEvent = require("../models/timeline");
 
-    app: function() {
-      return this.get("app");
-    },
 
-    server: function() {
-      return this.get("server");
-    }
-  });
+var TimelineStore = Collection.extend({
+  url: "/timeline",
+  model: TimelineEvent,
 
-  var TimelineStore = Backbone.Collection.extend({
-    url: "/timeline",
-    model: TimelineEvent,
+  parse: function(response) {
+    return response.timeline;
+  },
 
-    parse: function(response) {
-      return response.timeline;
-    },
+  filterCollection: function(predicate) {
+    return new TimelineStore(this.filter(predicate));
+  }
+});
 
-    filterCollection: function(predicate) {
-      return new TimelineStore(this.filter(predicate));
-    }
-  });
+module.exports = Canary.Timeline = new TimelineStore();
 
-  Canary.TimelineEvent = TimelineEvent;
-  Canary.Timeline = new TimelineStore();
-
-})();

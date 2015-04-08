@@ -1,3 +1,5 @@
+var React = require("react");
+var Navbar = require("./navbar");
 var AppLayout = React.createClass({
   render: function() {
     return (
@@ -12,3 +14,5 @@ var AppLayout = React.createClass({
     )
   }
 });
+
+module.exports = AppLayout;

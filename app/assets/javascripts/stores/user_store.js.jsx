@@ -1,26 +1,13 @@
-(function() {
+var Collection = require("backbone").Collection;
+var User = require("../models/user");
 
-  var User = Backbone.RailsModel.extend({
-    rootKey: "user",
-    urlRoot: "/users",
-    has_onboarded: function() {
-      return this.get("onboarded") === true
-    },
-  });
+// for now
+var Canary = require("../canary");
 
-  
-  var UserSession = Backbone.RailsModel.extend({
-    url: '/user_sessions',
-    rootKey: "user",
+var UserStore = Collection.extend({
+  model: User,
+});
 
-  });
+Canary.UserCollection = new UserStore();
 
-  var UserStore = Backbone.Collection.extend({
-    model: User,
-  });
-
-  Canary.User = User;
-  Canary.UserSession = UserSession;
-  Canary.UserCollection = new UserStore();
-
-})();
+module.exports = UserStore;

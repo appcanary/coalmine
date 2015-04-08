@@ -1,4 +1,11 @@
-var EventAllClearApp = React.createClass({
+var $ = require("jquery");
+var React = require("react");
+var AvatarWidget = require("./avatar");
+
+var TimeagoMixin = require("../../canary/mixins").TimeagoMixin
+
+
+var EventAllClearServer = React.createClass({
   mixins: [TimeagoMixin],
   componentDidMount: function() {
     $(React.findDOMNode(this)).find(".event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);
@@ -14,7 +21,7 @@ var EventAllClearApp = React.createClass({
               <section>
                 <div className="note">
                   <span className="last_synched_at timestamp" title={this.props.model.get("created_at")}>{this.props.model.get("created_at") }</span>
-                  <p>⭐️&nbsp;Good job! Your app has no vulnerable dependencies.</p>
+                  <p>⭐️&nbsp;Good job! Your server has no vulnerable dependencies.</p>
                 </div>
               </section>
             </div>
@@ -22,30 +29,27 @@ var EventAllClearApp = React.createClass({
               <section>
                 <div className="name">
                   <p>
-                    <AvatarWidget model={this.props.model.app()} onClicked={Canary.Herald.trigger("apps-show",{id: this.props.model.app().id})} />
+                    <AvatarWidget model={this.props.model.server()} onClicked={Canary.Herald.trigger("servers-show",{id: this.props.model.server().id})} />
                   </p>
                 </div>
-                <div className="platforms">
+                <div className="os">
+                  <p>
+                    <strong>
+                     Operating System:
+                    </strong>
+                    &nbsp;
+                    Ubuntu 14.04
+                  </p>
+                </div>
+                  <div className="server-platforms">
                   <p>
                     <strong>
                       Platforms:
                     </strong>
                     &nbsp;
-                    {this.props.model.get("app")["platforms"]}
+                    Ruby, Node
                   </p>
-                </div>
-
-
-                <div className="app-server">
-                  <p>
-                    <strong>
-                      Server:
-                    </strong>
-                    &nbsp;
-                    <AvatarWidget model={this.props.model.app().server} onClicked={Canary.Herald.trigger("servers-show", {id: this.props.model.app().server.id})} size="tiny"/>
-                  </p>
-                </div>
-
+                  </div>
               </section>
             </div>
           </div>
@@ -54,3 +58,5 @@ var EventAllClearApp = React.createClass({
     )
   }
 });
+
+module.exports = EventAllClearServer;

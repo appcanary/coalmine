@@ -1,3 +1,4 @@
+var React = require("react");
 var AvatarWidget = React.createClass({
   render: function() {
     var size = this.props.size || ""
@@ -11,3 +12,5 @@ var AvatarWidget = React.createClass({
     );
   }
 });
+
+module.exports = AvatarWidget;

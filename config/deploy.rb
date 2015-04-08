@@ -48,6 +48,14 @@ namespace :deploy do
     end
   end
 end
+before 'deploy:compile_assets', 'deploy:compile_webpack_assets'
+namespace :deploy do
+  task :compile_webpack_assets do
+    on roles(:app) do
+      execute "cd #{release_path} && bundle exec rake webpack:compile RAILS_ENV=#{fetch(:rails_env)}"
+    end
+  end
+end
 
 namespace :debug do
   desc "tail rails logs" 

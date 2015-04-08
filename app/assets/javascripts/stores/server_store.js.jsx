@@ -1,13 +1,14 @@
-(function() {
-  var ServerModel = Backbone.RailsModel.extend({
-  })
-  var ServerStore = Backbone.Collection.extend({
-    url: "/servers",
-    model: ServerModel,
-    parse: function(response) {
-      return response.servers;
-    },
-  });
+var Canary = require("../canary");
+var Backbone = require("backbone");
 
-  Canary.ServerCollection = new ServerStore();
-})()
+var ServerModel = require("../models/server");
+
+var ServerStore = Backbone.Collection.extend({
+  url: "/servers",
+  model: ServerModel,
+  parse: function(response) {
+    return response.servers;
+  },
+});
+
+module.exports = new ServerStore();

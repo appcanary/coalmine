@@ -1,3 +1,7 @@
+var React = require("react");
+var AppLayout = require("../layout");
+var TimelineView = require("../timeline/timeline");
+
 var Dashboard = React.createClass({
   componentDidMount: function() {
     this.props.timeline.on("sync", function() {
@@ -17,3 +21,5 @@ var Dashboard = React.createClass({
     )
   }
 });
+
+module.exports = Dashboard;

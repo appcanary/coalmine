@@ -1,11 +1,10 @@
-(function() {
-  if ($) {
+var $ = require('jquery');  
+if ($) {
 
-    $.ajaxSetup( {
-      beforeSend: function ( xhr ) {
-        var token = $( 'meta[name="csrf-token"]' ).attr( 'content' );
-        xhr.setRequestHeader( 'X-CSRF-Token', token );
-      }
-    });      
-  }
-})();
+  $.ajaxSetup( {
+    beforeSend: function ( xhr ) {
+      var token = $( 'meta[name="csrf-token"]' ).attr( 'content' );
+      xhr.setRequestHeader( 'X-CSRF-Token', token );
+    }
+  });      
+}

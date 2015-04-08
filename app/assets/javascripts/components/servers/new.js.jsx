@@ -1,3 +1,7 @@
+var React = require('react');
+var AppLayout = require("../layout");
+var Eui_button = require("../eui");
+
 var NewServer = React.createClass({
   componentDidMount: function() {
     $(React.findDOMNode(this)).find(".event-box").velocity("transition.slideDownIn", { stagger: 250 }).delay(100);

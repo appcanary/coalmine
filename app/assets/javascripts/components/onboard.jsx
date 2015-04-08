@@ -1,3 +1,6 @@
+var React = require('react');
+var Eui_button = require("./eui");
+
 var Onboard = React.createClass({
   render: function() {
     return (
@@ -7,7 +10,7 @@ var Onboard = React.createClass({
           <div className="onboard-wrapper">
             <section>
               <div className="onboard-logo">
-                <%= image_tag("oval-chicks.png") %>
+                <img src={assets_path.logo} />
               </div>
             </section>
 
@@ -41,3 +44,4 @@ var Onboard = React.createClass({
   }
 })
 
+module.exports = Onboard

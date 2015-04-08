@@ -1,13 +1,13 @@
-(function() {
-  var AppModel = Backbone.RailsModel.extend({
-  })
-  var AppStore = Backbone.Collection.extend({
-    url: "/apps",
-    model: AppModel,
-    parse: function(response) {
-      return response.apps;
-    },
-  });
+var Canary = require("../canary");
+var Backbone = require("backbone");
+var AppModel = require("../models/app");
 
-  Canary.AppCollection = new AppStore();
-})()
+var AppStore = Backbone.Collection.extend({
+  url: "/apps",
+  model: AppModel,
+  parse: function(response) {
+    return response.apps;
+  },
+});
+
+module.exports = new AppStore();
