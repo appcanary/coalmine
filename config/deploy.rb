@@ -52,7 +52,7 @@ before 'deploy:compile_assets', 'deploy:compile_webpack_assets'
 namespace :deploy do
   task :compile_webpack_assets do
     on roles(:app) do
-      execute :rake, 'webpack:compile', "RAILS_ENV=#{fetch(:rails_env)}"
+      execute "cd #{release_path} && bundle exec rake webpack:compile RAILS_ENV=#{fetch(:rails_env)}"
     end
   end
 end
