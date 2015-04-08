@@ -6,28 +6,19 @@ Rails.application.config.assets.version = '1.0'
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path
 
-# Precompile additional assets.
-# application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-# Rails.application.config.assets.precompile += %w( search.js )
-# Rails.application.config.assets.precompile << Proc.new do |path|
-#   if path =~ /\.(css|js)\z/
-#     full_path = Rails.application.assets.resolve(path).to_path
-#     app_assets_path = Rails.root.join('app', 'assets').to_path
-#     if full_path.starts_with? app_assets_path
-#       Rails.logger.info "including asset: " + full_path
-#       true
-#     else
-#       Rails.logger.info "excluding asset: " + full_path
-#       false
-#     end
-#   else
-#     false
-#   end
-# end
+# let's ignore jsx and source map files, taken from
+# the upstream assets.precompile code:
 
-Rails.application.config.assets.precompile += %w( launchrock.css launchrock.js )
+loose_assets = lambda do |logical_path, filename|
+  filename.start_with?(::Rails.root.join("app/assets").to_s) &&
+    !%w(.js .css .jsx .map).include?(File.extname(logical_path))
+end
+
+Rails.application.config.assets.precompile = [loose_assets]
+Rails.application.config.assets.precompile += %w( application.css application.js launchrock.css launchrock.js )
 
 # source maps!
 Rails.application.config.assets.configure do |env|
   env.unregister_postprocessor 'application/javascript', Sprockets::SafetyColons
 end
+
