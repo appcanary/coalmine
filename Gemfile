@@ -47,6 +47,7 @@ gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-bundler', '~> 1.1.2'
 gem 'capistrano3-unicorn'
 gem 'capistrano-rails-console'
+gem 'capistrano-npm'
 
 # dev tools
 gem 'pry-rails'
