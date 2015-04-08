@@ -23,4 +23,6 @@ public/assets
 \#*\#
 *~
 main.bundle.js
+main.bundle.js.map
 node_modules
+npm-debug.log
