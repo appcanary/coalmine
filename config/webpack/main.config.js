@@ -2,10 +2,13 @@
  * @see http://webpack.github.io/docs/configuration.html
  * for webpack configuration options
  */
+var webpack = require('webpack');
+var path = require('path');
+
 module.exports = {
   // 'context' sets the directory where webpack looks for module files you list in
   // your 'require' statements
-  context: __dirname + '/app/assets/javascripts',
+  context: path.join(__dirname, "..", "..", "app", "assets", "javascripts"),
 
   // 'entry' specifies the entry point, where webpack starts reading all
   // dependencies listed and bundling them into the output file.
@@ -22,7 +25,8 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     // We want to save the bundle in the same directory as the other JS.
-    path: __dirname + '/app/assets/javascripts',
+    path: path.join(__dirname, "..", "..", "app", "assets", "javascripts"),
+
   },
 
   externals: {
@@ -40,5 +44,9 @@ module.exports = {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader'},
     ]
-  }
+  },
+
+  plugins: [
+
+  ]
 };

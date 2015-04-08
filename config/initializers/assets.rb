@@ -26,3 +26,8 @@ Rails.application.config.assets.version = '1.0'
 # end
 
 Rails.application.config.assets.precompile += %w( launchrock.css launchrock.js )
+
+# source maps!
+Rails.application.config.assets.configure do |env|
+  env.unregister_postprocessor 'application/javascript', Sprockets::SafetyColons
+end
