@@ -14,7 +14,7 @@ loose_assets = lambda do |logical_path, filename|
     !%w(.js .css .jsx .map).include?(File.extname(logical_path))
 end
 
-Rails.application.config.assets.precompile = [loose_assets]
+Rails.application.config.assets.precompile = [loose_assets, /(?:\/|\\|\A)application\.(css|js)$/]
 Rails.application.config.assets.precompile += %w( application.css application.js launchrock.css launchrock.js )
 
 # source maps!
