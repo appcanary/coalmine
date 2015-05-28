@@ -53,7 +53,10 @@ gem 'capistrano-npm'
 gem 'pry-rails'
 gem 'binding_of_caller'
 
-#misc 
+# API client
+gem 'httpclient', '~> 2.6.0.1'
+
+#misc
 gem 'ruby_identicon', '0.0.4'
 
 group :development, :test do
@@ -71,6 +74,9 @@ group :development, :test do
   gem 'm'
   gem 'faker'
   gem 'factory_girl_rails'
+  gem 'webmock', '~> 1.21.0'
+  gem 'vcr', '~> 2.9.3'
+  gem 'recursive-open-struct', '~> 0.6.4'
 end
 
 
