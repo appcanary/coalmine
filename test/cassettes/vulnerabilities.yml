@@ -1,0 +1,292 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:3000/v1/vulnerabilities
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '30510'
+      - '30510'
+      Server:
+      - http-kit
+      Date:
+      - Tue, 02 Jun 2015 16:37:17 GMT
+    body:
+      encoding: UTF-8
+      string: '{"cursor":{"next":50},"vulnerabilities":[{"description":"Echor Gem
+        for Ruby contains a flaw that is due to the program exposing credential information
+        in the system process listing. This may allow a local attacker to gain access
+        to plaintext credential information.","osvdb":[{"id":17592186872303}],"criticality":{"id":17592186045447},"reported-at":"2014-01-14T00:00:00.000Z","cve":[{"id":17592186872304}],"title":"Echor
+        Gem for Ruby Process Listing Local Plaintext Credential Disclosure","id":17592186872302,"artifact":{"id":17592186294610},"uuid":"554bc63b-f322-486b-9981-4f9ed601338d"},{"description":"Echor
+        Gem for Ruby contains a flaw in backplane.rb in the perform_request function
+        that is triggered when a semi-colon (;) is injected into a username or password.
+        This may allow a context-dependent attacker to inject arbitrary commands if
+        the gem is used in a rails application.","osvdb":[{"id":17592186872299}],"criticality":{"id":17592186045447},"reported-at":"2014-01-14T00:00:00.000Z","cve":[{"id":17592186872300}],"title":"Echor
+        Gem for Ruby Arbitrary Command Execution","id":17592186872298,"artifact":{"id":17592186294610},"uuid":"554bc63a-82aa-4c30-9b5c-3cb6bffdc3b4"},{"description":"The
+        Dragonfly gem contains a flaw that allows an attacker to run arbitrary code\non
+        a host machine using carefully crafted requests.","osvdb":[{"id":17592186872295}],"criticality":{"id":17592186045444},"reported-at":"2013-02-19T00:00:00.000Z","cve":[{"id":17592186872296}],"title":"Dragonfly
+        Gem Remote Code Execution","id":17592186872294,"artifact":{"id":17592186132135},"uuid":"554bc63a-f113-4ffb-b8cc-53f5643f3e76"},{"description":"Dragonfly
+        Gem for Ruby contains a flaw in Uploading & Processing that is due\nto the
+        gem failing to restrict arbitrary commands to imagemagicks convert.\nThis
+        may allow a remote attacker to gain read/write access to the filesystem\nand
+        execute arbitrary commands.","osvdb":[{"id":17592186872292}],"criticality":{"id":17592186045447},"reported-at":"2014-08-25T00:00:00.000Z","title":"Dragonfly
+        Gem Remote Code Execution","id":17592186872291,"artifact":{"id":17592186132135},"uuid":"554bc63a-9ac4-4fe3-b7a7-f47ac72d9caf"},{"description":"Fat
+        Free CRM contains a flaw that is due to the application defining a static\nsecurity
+        session token in config/initialiers/secret_token.rb. If a remote\nattacker
+        has explicit knowledge of this token, they can potentially execute\narbitrary
+        code.","osvdb":[{"id":17592186872318}],"criticality":{"id":17592186045445},"reported-at":"2013-12-24T00:00:00.000Z","cve":[{"id":17592186872319}],"title":"Fat
+        Free CRM Gem for Ruby lack of support for cycling the Rails session secret","id":17592186872317,"artifact":{"id":17592186395008},"uuid":"554bc63b-1bd2-423c-a63e-5e5d4767780e"},{"description":"fastreader
+        Gem for Ruby contains a flaw that is triggered during the handling of specially
+        crafted input passed via a URL that contains a '';'' character. This may allow
+        a context-dependent attacker to potentially execute arbitrary commands.","osvdb":[{"id":17592186872314}],"criticality":{"id":17592186045444},"reported-at":"2013-03-13T00:00:00.000Z","cve":[{"id":17592186872315}],"title":"fastreader
+        Gem for Ruby URI Handling Arbitrary Command Injection","id":17592186872313,"artifact":{"id":17592186091239},"uuid":"554bc63b-d030-4059-9495-309fbf8e7a3a"},{"description":"extlib
+        Gem for Ruby contains a flaw that is triggered when a type casting\nerror
+        occurs during the parsing of parameters. This may allow a\ncontext-dependent
+        attacker to potentially execute arbitrary code.","osvdb":[{"id":17592186872310}],"criticality":{"id":17592186045444},"reported-at":"2013-01-08T00:00:00.000Z","cve":[{"id":17592186872311}],"title":"extlib
+        Gem for Ruby Type Casting Parameter Parsing Remote Code Execution","id":17592186872309,"artifact":{"id":17592186056949},"uuid":"554bc63b-99a3-43b1-9716-f569121d8dc0"},{"description":"The
+        enum_column3 Gem for Ruby contains a flaw that may allow a remote denial of
+        service. The issue is due to the program typecasting unexpected strings to
+        symbols. This may allow a remote attacker to crash the program.","osvdb":[{"id":17592186872307}],"criticality":{"id":17592186045447},"reported-at":"2013-06-26T00:00:00.000Z","title":"enum_column3
+        Gem for Ruby Symbol Creation Remote DoS","id":17592186872306,"artifact":{"id":17592186330991},"uuid":"554bc63b-c1b0-4f00-9b0a-0590b9dc9d41"},{"description":"Fat
+        Free CRM contains a flaw that is triggered when the attacker sends a\ndirect
+        request for XML data. This may allow a remote attacker to gain\naccess to
+        potentially sensitive information.","osvdb":[{"id":17592186872334}],"criticality":{"id":17592186045445},"reported-at":"2013-12-24T00:00:00.000Z","cve":[{"id":17592186872335}],"title":"Fat
+        Free CRM Gem for Ruby allows remote attackers to obtain sensitive informations","id":17592186872333,"artifact":{"id":17592186395008},"uuid":"554bc63b-f9d9-4dd1-89cf-6b21eda2cae0"},{"description":"Fat
+        Free CRM contains a flaw that may allow carrying out an SQL injection\nattack.
+        The issue is due to the app/controllers/home_controller.rb script\nnot properly
+        sanitizing user-supplied input to the ''state'' parameter or\ninput passed
+        via comments and emails. This may allow a remote attacker to\ninject or manipulate
+        SQL queries in the back-end database, allowing for\nthe manipulation or disclosure
+        of arbitrary data.","osvdb":[{"id":17592186872330}],"criticality":{"id":17592186045445},"reported-at":"2013-12-24T00:00:00.000Z","cve":[{"id":17592186872331}],"title":"Fat
+        Free CRM Gem for Ruby allows remote attackers to inject or manipulate SQL
+        queries","id":17592186872329,"artifact":{"id":17592186395008},"uuid":"554bc63b-62a7-4707-a602-c816cc497d59"},{"description":"Fat
+        Free CRM contains a flaw in user controllers that is triggered as JSON\nrequests
+        are rendered with a full JSON object. This may allow a remote\nattacker to
+        gain access to potentially sensitive information e.g. other\nusers password
+        hashes.","osvdb":[{"id":17592186872326}],"criticality":{"id":17592186045445},"reported-at":"2013-12-24T00:00:00.000Z","cve":[{"id":17592186872327}],"title":"Fat
+        Free CRM Gem for Ruby allows remote attackers to obtain sensitive informations","id":17592186872325,"artifact":{"id":17592186395008},"uuid":"554bc63b-e82b-4b2b-9cb0-154793451dee"},{"description":"Fat
+        Free CRM contains a flaw as the application is missing the protect_from_forgery\nstatement,
+        therefore HTTP requests to app/controllers/application_controller.rb\ndo not
+        require multiple steps, explicit confirmation, or a unique token when\nperforming
+        certain sensitive actions. By tricking a user into following a specially\ncrafted
+        link, a context-dependent attacker can perform a Cross-Site Request Forgery\n(CSRF
+        / XSRF) attack causing the victim to perform unspecified actions.","osvdb":[{"id":17592186872322}],"criticality":{"id":17592186045444},"reported-at":"2013-12-24T00:00:00.000Z","cve":[{"id":17592186872323}],"title":"Fat
+        Free CRM Gem for Ruby contains multiple cross-site request forgery (CSRF)
+        vulnerabilities","id":17592186872321,"artifact":{"id":17592186395008},"uuid":"554bc63b-1ea9-4c87-89bb-fd7d1cd3f7a8"},{"description":"fileutils
+        Gem for Ruby contains a flaw in file_utils.rb. The issue is triggered when
+        handling a specially crafted URL containing a command after a delimiter (;).
+        This may allow a remote attacker to potentially execute arbitrary commands.","osvdb":[{"id":17592186872352}],"criticality":{"id":17592186045447},"reported-at":"2013-02-28T00:00:00.000Z","cve":[{"id":17592186872353}],"title":"fileutils
+        Gem for Ruby file_utils.rb Crafted URL Handling Remote Command Execution","id":17592186872351,"artifact":{"id":17592186224518},"uuid":"554bc63b-f7c9-4419-89c9-cbf04f23f89b"},{"description":"fileutils
+        Gem for Ruby contains a flaw as the program creates temporary files insecurely.
+        It is possible for a local attacker to use a symlink attack against temporary
+        files created by files_utils.rb to cause the program to unexpectedly overwrite
+        an arbitrary file.","osvdb":[{"id":17592186872346}],"criticality":{"id":17592186045447},"reported-at":"2013-02-28T00:00:00.000Z","title":"fileutils
+        Gem for Ruby files_utils.rb /tmp File Symlink Arbitrary File Overwrite","id":17592186872345,"artifact":{"id":17592186224518},"uuid":"554bc63b-e1d9-43b8-8c89-f4ae5496bfd7"},{"description":"fileutils
+        Gem for Ruby contains a flaw that is due to the program not verifying the
+        existence of a directory before attempting to create it. This may allow a
+        local attacker to create the directory in advance, thus owning any files subsequently
+        written to it.","osvdb":[{"id":17592186872349}],"criticality":{"id":17592186045447},"reported-at":"2013-02-28T00:00:00.000Z","title":"fileutils
+        Gem for Ruby Temporary Directory Hijacking Weakness","id":17592186872348,"artifact":{"id":17592186224518},"uuid":"554bc63b-9f5c-4187-85d9-510a1dc00021"},{"description":"Fat
+        Free CRM contains a flaw as HTTP requests to /admin/users do not require\nmultiple
+        steps, explicit confirmation, or a unique token when performing\ncertain sensitive
+        actions. By tricking a user into following a specially\ncrafted link, a context-dependent
+        attacker can perform a Cross-Site Request\nForgery (CSRF / XSRF) attack causing
+        the victim to creating administrative\nusers.","osvdb":[{"id":17592186872342}],"criticality":{"id":17592186045444},"reported-at":"2015-02-16T00:00:00.000Z","cve":[{"id":17592186872343}],"title":"Fat
+        Free CRM Gem being vulnerable to CSRF-type attacks","id":17592186872341,"artifact":{"id":17592186395008},"uuid":"554bc63b-ebdf-42fc-b317-ee6180fd7ecc"},{"description":"Fat
+        Free CRM Gem contains a javascript cross-site scripting (XSS)\nvulnerability.
+        When a user is created/updated using a specifically\ncrafted username, first
+        name or last name, it is possible for\narbitrary javascript to be executed
+        on all Fat Free CRM pages.\nThis code would be executed for all logged in
+        users.","osvdb":[{"id":17592186872338}],"criticality":{"id":17592186045445},"reported-at":"2014-08-22T00:00:00.000Z","cve":[{"id":17592186872339}],"title":"Fat
+        Free CRM Gem contains a javascript cross-site scripting (XSS) vulnerability","id":17592186872337,"artifact":{"id":17592186395008},"uuid":"554bc63b-3352-44ac-8e8e-e343d2d32928"},{"description":"ftpd
+        Gem for Ruby contains a flaw that is triggered when handling a\nspecially
+        crafted option or filename that contains a shell\ncharacter. This may allow
+        a remote attacker to inject arbitrary\ncommands.","osvdb":[{"id":17592186872367}],"criticality":{"id":17592186045444},"reported-at":"2013-02-28T00:00:00.000Z","cve":[{"id":17592186872368}],"title":"ftpd
+        Gem for Ruby Shell Character Handling Remote Command Injection","id":17592186872366,"artifact":{"id":17592186527482},"uuid":"554bc63b-5c5a-443c-9c5d-8ac4beb4e0e0"},{"description":"fog-dragonfly
+        Gem for Ruby contains a flaw that is due to the program failing to properly
+        sanitize input passed via the imagemagickutils.rb script. This may allow a
+        remote attacker to execute arbitrary commands.","osvdb":[{"id":17592186872363}],"criticality":{"id":17592186045444},"reported-at":"2013-09-03T00:00:00.000Z","cve":[{"id":17592186872364}],"title":"fog-dragonfly
+        Gem for Ruby imagemagickutils.rb Remote Command Execution","id":17592186872362,"artifact":{"id":17592186246221},"uuid":"554bc63b-9722-47da-ab3d-64c8dfe7b235"},{"description":"FlavourSaver
+        contains a flaw in helper method dispatch where it uses\nKernel::send to call
+        helpers without checking that they are defined\nwithin the template context
+        first.  This allows expressions such as\n{{system \"ls\"}} or {{eval \"puts
+        1 + 1\"}} to be executed.","osvdb":[{"id":17592186872360}],"criticality":{"id":17592186045447},"reported-at":"2014-09-04T00:00:00.000Z","title":"FlavourSaver
+        handlebars helper remote code execution.","id":17592186872359,"artifact":{"id":17592186470220},"uuid":"554bc63b-809a-410e-9342-8a370a4bc481"},{"description":"flash_tool
+        Gem for Ruby contains a flaw that is triggered during the handling of downloaded
+        files that contain shell characters. With a specially crafted file, a context-dependent
+        attacker can execute arbitrary commands.","osvdb":[{"id":17592186872356}],"criticality":{"id":17592186045447},"reported-at":"2013-03-04T00:00:00.000Z","cve":[{"id":17592186872357}],"title":"flash_tool
+        Gem for Ruby File Download Handling Arbitrary Command Execution","id":17592186872355,"artifact":{"id":17592186167038},"uuid":"554bc63b-531e-4efd-b8d8-390b87e18850"},{"description":"Specially
+        crafted requests can be used to determine whether a file exists on\nthe filesystem
+        that is outside the Rails application''s root directory.  The\nfiles will
+        not be served, but attackers can determine whether or not the file\nexists.  This
+        vulnerability is very similar to CVE-2014-7818, but the\nspecially crafted
+        string is slightly different.","criticality":{"id":17592186045445},"reported-at":"2014-11-17T00:00:00.000Z","cve":[{"id":17592186872126}],"title":"Arbitrary
+        file existence disclosure in Action Pack","id":17592186872125,"artifact":{"id":17592186053577},"uuid":"554bc63a-760e-4fc8-8263-cb4b6ec64994"},{"description":"http.rb
+        failed to call the OpenSSL::SSL::SSLSocket#post_connection_check method to
+        perform hostname verification.\nBecause of this, an attacker with a valid
+        certificate but with a mismatched subject can perform a MitM attack.","osvdb":[{"id":17592186872383}],"criticality":{"id":17592186045445},"reported-at":"2015-03-24T00:00:00.000Z","cve":[{"id":17592186872384}],"title":"HTTPS
+        MitM vulnerability in http.rb","id":17592186872382,"artifact":{"id":17592186338475},"uuid":"554bc63b-68ee-4d0f-9dbb-c4dd8b3a8316"},{"description":"There
+        is an XSS vulnerability in the number_to_currency helper in Ruby on Raile.\nThe
+        number_to_currency helper allows users to nicely format a numeric value. One\nof
+        the parameters to the helper (unit) is not escaped correctly.  Applications\nwhich
+        pass user controlled data as the unit parameter are vulnerable to an XSS attack.","osvdb":[{"id":17592186872129}],"criticality":{"id":17592186045445},"reported-at":"2013-12-03T00:00:00.000Z","cve":[{"id":17592186872130}],"title":"XSS
+        Vulnerability in number_to_currency","id":17592186872128,"artifact":{"id":17592186053577},"uuid":"554bc63a-e5dc-4fc5-bb13-73b8df920b40"},{"description":"Specially
+        crafted requests can be used to determine whether a file exists on\nthe filesystem
+        that is outside the Rails application''s root directory.  The\nfiles will
+        not be served, but attackers can determine whether or not the file\nexists.","criticality":{"id":17592186045445},"reported-at":"2014-10-30T00:00:00.000Z","cve":[{"id":17592186872123}],"title":"Arbitrary
+        file existence disclosure in Action Pack","id":17592186872122,"artifact":{"id":17592186053577},"uuid":"554bc63a-3c9f-4ac5-8ad7-2018da8e2212"},{"description":"gyazo
+        Gem for Ruby contains a flaw in client.rb that is triggered when handling
+        metacharacters. This may allow a remote attacker to execute arbitrary commands.","osvdb":[{"id":17592186872379}],"criticality":{"id":17592186045447},"reported-at":"2014-06-30T00:00:00.000Z","cve":[{"id":17592186872380}],"title":"Arbitrary
+        code execution","id":17592186872378,"artifact":{"id":17592186395026},"uuid":"554bc63b-e0ce-488a-a8bd-34f09f753ed7"},{"description":"Format
+        string vulnerability in the mdiag_initialize function in\ngtk/src/rbgtkmessagedialog.c
+        in Ruby-GNOME 2 (aka Ruby/Gnome2) 0.16.0, and\nSVN versions before 20071127,
+        allows context-dependent attackers to execute\narbitrary code via format string
+        specifiers in the message parameter.","osvdb":[{"id":17592186872375}],"criticality":{"id":17592186045444},"reported-at":"2007-11-27T00:00:00.000Z","cve":[{"id":17592186872376}],"title":"Ruby-GNOME2
+        gtk/src/rbgtkmessagedialog.c Gtk::MessageDialog.new() Function Format String","id":17592186872374,"artifact":{"id":17592186194902},"uuid":"554bc63b-b269-43ec-b161-1fd01a04165a"},{"description":"There
+        is a vulnerability in the ''implicit render''\nfunctionality in Ruby on Rails.The
+        implicit render functionality\nallows controllers to render a template, even
+        if there is no\nexplicit action with the corresponding name.  This module
+        does not\nperform adequate input sanitization which could allow an attacker
+        to\nuse a specially crafted request to retrieve arbitrary files from the\nrails
+        application server.","criticality":{"id":17592186045445},"reported-at":"2014-05-06T00:00:00.000Z","cve":[{"id":17592186872120}],"title":"Directory
+        Traversal Vulnerability With Certain Route Configurations","id":17592186872119,"artifact":{"id":17592186053577},"uuid":"554bc63a-f756-44fd-a0ad-18a435259350"},{"description":"GitLab
+        Grit Gem for Ruby contains a flaw in the app/contexts/search_context.rb script.
+        The issue is triggered when input passed via the code search box is not properly
+        sanitized, which allows strings to be evaluated by the Bourne shell. This
+        may allow a remote attacker to execute arbitrary commands.","osvdb":[{"id":17592186872371}],"criticality":{"id":17592186045447},"reported-at":"2013-11-04T00:00:00.000Z","cve":[{"id":17592186872372}],"title":"GitLab
+        Grit Gem for Ruby contains a flaw","id":17592186872370,"artifact":{"id":17592186536487},"uuid":"554bc63b-f5d4-425f-bd79-0c95659ae38b"},{"description":"Action
+        Mailer Gem for Ruby contains a format string flaw in the Log Subscriber component.
+        The issue is triggered as format string specifiers (e.g. %s and %x) are not
+        properly sanitized in user-supplied input when handling email addresses. This
+        may allow a remote attacker to cause a denial of service","osvdb":[{"id":17592186872116}],"criticality":{"id":17592186045445},"reported-at":"2013-10-16T00:00:00.000Z","cve":[{"id":17592186872117}],"title":"Action
+        Mailer Gem for Ruby contains a possible DoS Vulnerability","id":17592186872115,"artifact":{"id":17592186049763},"uuid":"554bc63a-96c8-4052-a360-b6fd1417f0fd"},{"description":"kajam
+        Gem for Ruby contains a flaw in /dataset/lib/dataset/database/postgresql.rb
+        that is triggered as the program exposes the MySQL or PostgreSQL password
+        in the process list. This may allow a local attacker to gain access to password
+        information.","osvdb":[{"id":17592186872398}],"criticality":{"id":17592186045447},"reported-at":"2014-06-30T00:00:00.000Z","cve":[{"id":17592186872399}],"title":"Gain
+        access to password information as local attacker","id":17592186872397,"artifact":{"id":17592186309749},"uuid":"554bc63b-6a51-4a1d-9ea3-ca4f4c42287b"},{"description":"There
+        is a vulnerability in the internationalization component of Ruby on\nRails.
+        Under certain common configurations an attacker can provide specially\ncrafted
+        input which will execute a reflective XSS attack.\n\nThe root cause of this
+        issue is a vulnerability in the i18n gem which has\nbeen assigned the identifier
+        CVE-2013-4492.","osvdb":[{"id":17592186872145}],"criticality":{"id":17592186045445},"reported-at":"2013-12-03T00:00:00.000Z","cve":[{"id":17592186872146}],"title":"Reflective
+        XSS Vulnerability in Ruby on Rails","id":17592186872144,"artifact":{"id":17592186053577},"uuid":"554bc63a-3a89-4662-9770-8bec0e6750ed"},{"description":"Ruby
+        on Rails contains a flaw that may allow a remote denial of service.\nThe issue
+        is due to the JSON gem being tricked in to generating Ruby symbols\nduring
+        the parsing of certain JSON documents. Since Ruby symbols are not\ngarbage
+        collected, a remote attacker can crash a users system. This also may\nallow
+        the attacker to create arbitrary objects that may be used to bypass\ncertain
+        security mechanisms and potentially allow SQL injection attacks to\nbe conducted.","osvdb":[{"id":17592186872394}],"criticality":{"id":17592186045444},"reported-at":"2013-02-11T00:00:00.000Z","cve":[{"id":17592186872395}],"title":"Ruby
+        on Rails JSON Gem Arbitrary Symbol Creation Remote DoS","id":17592186872393,"artifact":{"id":17592186045682},"uuid":"554bc63b-bfb1-411a-9e70-33e0f99af0bc"},{"description":"The
+        prior fix to CVE-2013-0155 was incomplete and the use of common\n3rd party
+        libraries can accidentally circumvent the protection. Due\nto the way that
+        Rack::Request and Rails::Request interact, it is\npossible for a 3rd party
+        or custom rack middleware to parse the\nparameters insecurely and store them
+        in the same key that Rails uses\nfor its own parameters.  In the event that
+        happens the application\nwill receive unsafe parameters and could be vulnerable
+        to the earlier\nvulnerability.","osvdb":[{"id":17592186872141}],"criticality":{"id":17592186045445},"reported-at":"2013-12-03T00:00:00.000Z","cve":[{"id":17592186872142}],"title":"Incomplete
+        fix to CVE-2013-0155 (Unsafe Query Generation Risk)","id":17592186872140,"artifact":{"id":17592186053577},"uuid":"554bc63a-a9a4-471b-920c-22a2cb8523f0"},{"description":"The
+        HTML exception message raised by I18n::MissingTranslation fails\nto escape
+        the keys.","osvdb":[{"id":17592186872145}],"criticality":{"id":17592186045445},"reported-at":"2013-12-03T00:00:00.000Z","cve":[{"id":17592186872391}],"title":"i18n
+        missing translation error message XSS","id":17592186872390,"artifact":{"id":17592186085960},"uuid":"554bc63b-4711-4f6e-9adc-38a4ed04754b"},{"description":"There
+        is a vulnerability in the simple_format helper in Ruby on Rails.\nThe simple_format
+        helper converts user supplied text into html text\nwhich is intended to be
+        safe for display. A change made to the\nimplementation of this helper means
+        that any user provided HTML\nattributes will not be escaped correctly. As
+        a result of this error,\napplications which pass user-controlled data to be
+        included as html\nattributes will be vulnerable to an XSS attack.","osvdb":[{"id":17592186872137}],"criticality":{"id":17592186045445},"reported-at":"2013-12-03T00:00:00.000Z","cve":[{"id":17592186872138}],"title":"XSS
+        Vulnerability in simple_format helper","id":17592186872136,"artifact":{"id":17592186053577},"uuid":"554bc63a-fb6a-4caf-8e27-3d40ad644d4b"},{"description":"httparty
+        Gem for Ruby contains a flaw that is triggered when a type casting\nerror
+        occurs during the parsing of parameters. This may allow a\ncontext-dependent
+        attacker to potentially execute arbitrary code.","osvdb":[{"id":17592186872387}],"criticality":{"id":17592186045444},"reported-at":"2013-01-14T00:00:00.000Z","cve":[{"id":17592186872388}],"title":"httparty
+        Gem for Ruby Type Casting Parameter Parsing Remote Code Execution","id":17592186872386,"artifact":{"id":17592186048084},"uuid":"554bc63b-4a48-4c5f-8680-193c0e844c20"},{"description":"There
+        is a denial of service vulnerability in the header handling component of\nAction
+        View.","osvdb":[{"id":17592186872133}],"criticality":{"id":17592186045445},"reported-at":"2013-12-03T00:00:00.000Z","cve":[{"id":17592186872134}],"title":"Denial
+        of Service Vulnerability in Action View","id":17592186872132,"artifact":{"id":17592186053577},"uuid":"554bc63a-0442-400d-8824-7b6c2bb7b39a"},{"description":"Loofah
+        Gem for Ruby contains a flaw that allows a remote cross-site\nscripting (XSS)
+        attack. This flaw exists because the\nLoofah::HTML::Document\\#text function
+        passes properly sanitized\nuser-supplied input to the Loofah::XssFoliate and\nLoofah::Helpers\\#strip_tags
+        functions which convert input back to\ntext. This may allow an attacker to
+        create a specially crafted\nrequest that would execute arbitrary script code
+        in a user''s browser\nwithin the trust relationship between their browser
+        and the server.","osvdb":[{"id":17592186872416}],"criticality":{"id":17592186045445},"reported-at":"2012-09-08T00:00:00.000Z","title":"Loofah
+        HTML and XSS injection vulnerability","id":17592186872415,"artifact":{"id":17592186105577},"uuid":"554bc63b-6895-4730-8e37-6af2a1e6371e"},{"description":"Ruby
+        on Rails contains a flaw that may allow a remote denial of service.\nThe issue
+        is triggered when an error occurs in\nactionpack/lib/action_controller/metal/http_authentication.rb
+        when the\nwith_http_digest helper method is being used. This may allow a remote\nattacker
+        to cause a loss of availability for the program.","osvdb":[{"id":17592186872161}],"criticality":{"id":17592186045445},"reported-at":"2012-07-26T00:00:00.000Z","cve":[{"id":17592186872162}],"title":"Ruby
+        on Rails actionpack/lib/action_controller/metal/http_authentication.rb with_http_digest
+        Helper Method Remote DoS","id":17592186872160,"artifact":{"id":17592186053577},"uuid":"554bc63a-1e95-405b-9e1e-161332585036"},{"description":"ldoce
+        Gem for Ruby contains a flaw that is triggered during the handling of a specially
+        crafted URL or filename for MP3 files that have shell metacharacters injected
+        in to it. This may allow a context-dependent attacker to execute arbitrary
+        commands.","osvdb":[{"id":17592186872412}],"criticality":{"id":17592186045444},"reported-at":"2013-04-01T00:00:00.000Z","cve":[{"id":17592186872413}],"title":"ldoce
+        Gem for Ruby MP3 URL Shell Metacharacter Injection Arbitrary Command Execution","id":17592186872411,"artifact":{"id":17592186386848},"uuid":"554bc63b-efdc-4f09-8784-218dd17420d2"},{"description":"Ruby
+        on Rails contains a flaw that allows a remote cross-site scripting (XSS) \nattack.
+        This flaw exists because the application does not validate manually\ngenerated
+        ''select tag options'' upon submission to\nactionpack/lib/action_view/helpers/form_options_helper.rb.
+        This may allow a\nuser to create a specially crafted request that would execute
+        arbitrary\nscript code in a user''s browser within the trust relationship
+        between their\nbrowser and the server.","osvdb":[{"id":17592186872157}],"criticality":{"id":17592186045445},"reported-at":"2012-03-01T00:00:00.000Z","cve":[{"id":17592186872158}],"title":"Ruby
+        on Rails actionpack/lib/action_view/helpers/form_options_helper.rb Manually
+        Generated Select Tag Options XSS","id":17592186872156,"artifact":{"id":17592186053577},"uuid":"554bc63a-ce08-4646-8f30-78dd88a36945"},{"description":"Ruby
+        on Rails contains a flaw in actionpack/lib/action_view/template/text.rb\nin
+        the text rendering component of Action View that is triggered when\nhandling
+        MIME types that are converted to symbols. This may allow a\nremote attacker
+        to cause a denial of service.","osvdb":[{"id":17592186872153}],"criticality":{"id":17592186045445},"reported-at":"2014-02-18T00:00:00.000Z","cve":[{"id":17592186872154}],"title":"Denial
+        of Service Vulnerability in Action View when using render :text","id":17592186872152,"artifact":{"id":17592186053577},"uuid":"554bc63a-6f2c-4e32-a3ce-175538ae14e4"},{"description":"kompanee-recipes
+        Gem for Ruby contains a flaw in /lib/kompanee-recipes/heroku.rb\nthat is triggered
+        when handling shell metacharacters passed via the ''password'',\n''user'',
+        ''deploy_name'', and ''application'' variables. This may allow a remote\nattacker
+        to execute arbitrary commands.","osvdb":[{"id":17592186872409}],"criticality":{"id":17592186045447},"reported-at":"2014-06-30T00:00:00.000Z","title":"Ruby
+        kompanee-recipes Gem allow a remote attacker to execute arbitrary commands","id":17592186872408,"artifact":{"id":17592186191766},"uuid":"554bc63b-f4e4-44bb-a910-6db384765bbf"},{"description":"kajam
+        Gem for Ruby contains a flaw in /dataset/lib/dataset/database/postgresql.rb
+        that is triggered when handling metacharacters. This may allow a remote attacker
+        to execute arbitrary commands.","osvdb":[{"id":17592186872402}],"criticality":{"id":17592186045447},"reported-at":"2014-06-30T00:00:00.000Z","title":"Arbitrary
+        code execution","id":17592186872401,"artifact":{"id":17592186309749},"uuid":"554bc63b-6378-4dba-9cff-eab306b2874e"},{"description":"Ruby
+        on Rails contains a flaw that allows a cross-site scripting (XSS) attack.\nThis
+        flaw exists because the actionpack/lib/action_view/helpers/number_helper.rb\nscript
+        does not validate input to the ''number_to_currency'', ''number_to_percentage'',\nand
+        ''number_to_human'' helpers before returning it to users. This may allow a\nremote
+        attacker to create a specially crafted request that would execute arbitrary\nscript
+        code in a user''s browser session within the trust relationship between\ntheir
+        browser and the server.","osvdb":[{"id":17592186872149}],"criticality":{"id":17592186045445},"reported-at":"2014-02-18T00:00:00.000Z","cve":[{"id":17592186872150}],"title":"XSS
+        Vulnerability in number_to_currency, number_to_percentage and number_to_human","id":17592186872148,"artifact":{"id":17592186053577},"uuid":"554bc63a-9050-417c-b2e3-14d68c404447"},{"description":"kelredd-pruview
+        Gem for Ruby contains a flaw in /lib/pruview/document.rb. The issue is triggered
+        during the handling of a specially crafted file name that contains injected
+        shell metacharacters. This may allow a context-dependent attacker to potentially
+        execute arbitrary commands.","osvdb":[{"id":17592186872405}],"criticality":{"id":17592186045444},"reported-at":"2013-04-04T00:00:00.000Z","cve":[{"id":17592186872406}],"title":"kelredd-pruview
+        Gem for Ruby /lib/pruview/document.rb File Name Shell Metacharacter Injection
+        Arbitrary Command Execution","id":17592186872404,"artifact":{"id":17592186136492},"uuid":"554bc63b-4193-4f57-b052-2e41696841da"},{"description":"md2pdf
+        Gem for Ruby contains a flaw that is due to the program failing to properly
+        sanitize input passed to md2pdf/converter.rb. With a specially crafted file
+        name that contains shell metacharacters, a context-dependent attacker can
+        execute arbitrary commands","osvdb":[{"id":17592186872431}],"criticality":{"id":17592186045444},"reported-at":"2013-04-13T00:00:00.000Z","cve":[{"id":17592186872432}],"title":"md2pdf
+        Gem for Ruby md2pdf/converter.rb File Name Shell Metacharacter Injection Arbitrary
+        Command Execution","id":17592186872430,"artifact":{"id":17592186556217},"uuid":"554bc63b-8998-4dff-a235-d1826335ff65"},{"description":"There
+        is an XSS vulnerability in the `sanitize_css` method in Action\nPack. Carefully
+        crafted text can bypass the sanitization provided in\nthe `sanitize_css` method
+        in Action Pack","osvdb":[{"id":17592186872177}],"criticality":{"id":17592186045445},"reported-at":"2013-03-19T00:00:00.000Z","cve":[{"id":17592186872178}],"title":"XSS
+        vulnerability in sanitize_css in Action Pack","id":17592186872176,"artifact":{"id":17592186053577},"uuid":"554bc63a-d6d4-4cb0-8d75-0ed1bf5bacd8"},{"description":"Mail
+        Gem for Ruby contains a flaw that occurs within the sendmail and exim\ndelivery
+        methods, which may allow an attacker to execute arbitrary shell\ncommands..","osvdb":[{"id":17592186872427}],"criticality":{"id":17592186045444},"reported-at":"2012-03-14T00:00:00.000Z","cve":[{"id":17592186872428}],"title":"Mail
+        Gem for Ruby Multiple Delivery Method Remote Shell Command Execution","id":17592186872426,"artifact":{"id":17592186125943},"uuid":"554bc63b-59a9-4c2b-ae45-d6883a2828a6"}]}'
+    http_version: 
+  recorded_at: Tue, 02 Jun 2015 16:37:17 GMT
+recorded_with: VCR 2.9.3
