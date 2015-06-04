@@ -1,8 +1,8 @@
 class CanaryClient
-  def initialize(url, o={})
-    opts = {}.merge(o)
-    @user_token = opts[:user_token]
-    @agent_token = opts[:agent_token]
+  def initialize(url, opts={})
+    options = {}.merge(opts)
+    @user_token = options[:user_token]
+    @agent_token = options[:agent_token]
     @conn = Faraday.new(url: url) do |faraday|
       faraday.request :url_encoded
       faraday.response :json
@@ -108,36 +108,34 @@ class CanaryClient
     require 'base64'
     s = c.servers.first
     a = c.server_apps(s['uuid']).first
-    c.vulnerabilities
+    c
   end
 
   protected
 
-  def get(url, o={})
-    opts = {}.merge(o)
-    @conn.get(url) do |req|
-      if opts[:token]
-        req.headers['Authorization'] = 'Token ' + opts[:token]
-      end
-    end.body
+  # TODO: use upsert, rename upsert something else
+  def get(url, opts={})
+    request(:get, url, opts)
   end
 
-  def put(url, o={})
-    upsert(:put, url, o)
+  def put(url, opts={})
+    upsert(:put, url, opts)
   end
 
-  def post(url, o={})
-    upsert(:post, url, o)
+  def post(url, opts={})
+    upsert(:post, url, opts)
   end
 
-  def upsert(method, url, o={})
-    opts = {}.merge(o)
+  def request(method, url, opts={})
+    options = {}.merge(opts)
     @conn.method(method).call(url) do |req|
-      if opts[:token]
-        req.headers['Authorization'] = 'Token ' + opts[:token]
+      if options[:token]
+        req.headers['Authorization'] = 'Token ' + options[:token]
       end
-      req.headers['Content-Type'] = 'application/json'
-      req.body = JSON.generate(opts[:data])
+      if %i(post put).include? methods
+        req.headers['Content-Type'] = 'application/json'
+        req.body = JSON.generate(options[:data])
+      end
     end.on_complete do |res|
       puts res.to_yaml
     end.body
