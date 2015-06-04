@@ -118,12 +118,13 @@ class CanaryClient
     request(:get, url, opts)
   end
 
+  # TODO: untested
   def put(url, opts={})
-    upsert(:put, url, opts)
+    request(:put, url, opts)
   end
 
   def post(url, opts={})
-    upsert(:post, url, opts)
+    request(:post, url, opts)
   end
 
   def request(method, url, opts={})
