@@ -1,4 +1,5 @@
-var $ = require('jquery');
+window.jQuery = window.$ = require('jquery');
+require('jquery-ujs');
 // var Canary = require('./canary');
 // var router = require('./router');
 // var csrf = require('./csrf');
