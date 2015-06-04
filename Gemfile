@@ -53,8 +53,13 @@ gem 'capistrano-npm'
 gem 'pry-rails'
 gem 'binding_of_caller'
 
-#misc 
+# API client
+gem 'faraday', '~> 0.9.1'
+gem 'faraday_middleware', '~> 0.9.1'
+
+#misc
 gem 'ruby_identicon', '0.0.4'
+gem 'request_store', '~> 1.1.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -73,9 +78,14 @@ group :development, :test do
   gem 'factory_girl_rails'
 end
 
+group :test do
+  gem 'webmock', '~> 1.21.0'
+  gem 'vcr', '~> 2.9.3'
+end
+
 
 group :development do
-  # gem "rack-livereload"
-  # gem 'guard-livereload', '~> 2.4', require: false
-  # gem 'guard-minitest'
+  gem "rack-livereload"
+  gem 'guard-livereload', '~> 2.4', require: false
+  gem 'guard-minitest'
 end
