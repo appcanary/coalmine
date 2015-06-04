@@ -1,19 +1,8 @@
-<% if @onboarded %>
-
-  <% @events.each do |event| %>
-    <% if event.app? %>
-      <%# <%= render :partial => "events/notvuln", :locals => { :app => event.app } %>
-
-      <%# <%= render :partial => "events/vuln", :locals => { :vuln => event.app.active_issues.first } %>
-      <%# <%= render :partial => "events/ignored_vuln", :locals => { :vuln => event.app.active_issues.first } %>
-      <%# <%= render :partial => "events/newapp", :locals => { :event => event } %>
-    <% end %>
-  <% end %>
-
-
-  <%# <%= render :partial => "shared/box" %>
-<% else %>
-
-  <%# <%= render :partial => "onboard" %>
-<% end %>
+<div>
+  <div class="navigation">
+    <%= render :partial => "layouts/navbar" %>
+  </div>
+  <div id="main" class="main-drawer container">
+  </div>
+</div>
 

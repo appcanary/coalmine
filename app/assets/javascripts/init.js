@@ -1,13 +1,14 @@
 var $ = require('jquery');
-var Canary = require('./canary');
-var router = require('./router');
-var csrf = require('./csrf');
-var Backbone = require('backbone');
+// var Canary = require('./canary');
+// var router = require('./router');
+// var csrf = require('./csrf');
+// var Backbone = require('backbone');
 
-var User = require("./models/user");
+// var User = require("./models/user");
 
-window.Canary = Canary;
+// window.Canary = Canary;
 
+/*
 $(function(){
 
 
@@ -22,4 +23,4 @@ $(function(){
   Backbone.history.start({pushState: true});
 
 });
-
+*/

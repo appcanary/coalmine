@@ -20,8 +20,10 @@
       </ul>
       <ul class="menu">
         <li class="divider"></li>
-        <li> <a href="#"><i class="fa fa-plus"></i></a> </li>
-        <li> <a href="#"><i class="fa fa-cog"></i></a> </li>
+        <li> <a href="/dashboard" class="active"><i class="fa fa-clock-o"></i></a> </li>
+        <li> <a href="/servers/new" ><i class="fa fa-plus"></i></a> </li>
+
+        <li> <a href="/settings"><i class="fa fa-cog"></i></a> </li>
         <li>
           <%= link_to '<i class="fa fa-sign-out"></i>'.html_safe, logout_path, :method => :post %>
         </li>
