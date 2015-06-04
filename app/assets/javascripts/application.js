@@ -1,2 +1,2 @@
-//= require assets
 //= require main.bundle
+//= require bootstrap-sprockets
