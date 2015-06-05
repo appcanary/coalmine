@@ -18,10 +18,13 @@ $body-margin-top: 10px;
 @import "bootstrap-sprockets";
 @import "bootstrap";
 //@import 'vendor/emberui.scss';
-@import "users";
 @import "font-awesome";
-@import 'left-navbar';
 @import 'boxes';
+
+@import 'common';
+
+@import "users";
+@import 'left-navbar';
 @import 'sidepanel';
 @import 'events';
 @import 'artifacts';
@@ -129,123 +132,4 @@ section {
 .error_explanation {
   @extend .alert;
   @extend .alert-danger;
-}
-
-
-
-table {
-  width: 100%;
-  tr {
-    $border: dashed 1px #ddd;
-    border-bottom: $border;
-    &:hover {
-//      background-color: #f1f1f1;
-    }
-  }
-  td, th {
-    padding: 0 1em 0 1em;
-  }
-  th {
-    font-size: 0.8em;
-    font-weight: bold;
-  }
-
-  td.link {
-    font-size: 1.1em;
-    //    font-weight: bold;
-    padding: 0;
-    a {
-      display: block;
-      width: 100%;
-      //      line-height: 3em;
-      padding: 0.8em;
-      &:hover {
-        background-color: #fafafa;
-        .time_ago {
-          text-decoration: none;
-        }
-      }
-      .title {
-        margin-right: 0.5em;
-      }
-      .info {
-        margin-top: 0.3em;
-        display: block;
-        font-size: 0.8em;
-      }
-    }
-  }
-}
-
-
-.switch {
-  $bg-color: #efefef;
-  @include border-radius(100px);
-  display: block;
-  padding: 0 0.3em 0 0.3em;
-  border: solid 3px black;
-  border-color: #fff #ccc #ccc #fff;
-  background-color: $bg-color;
-  text-decoration: none;
-  font-size: 10px;
-  color: #aaa;
-  font-weight: bold;
-  text-transform: uppercase;
-  width: 80px;
-  line-height: 25px;
-  text-align: center;
-  &.pressed {
-    border-color: #ccc #fff #fff #ccc;
-    background-color: #E6F0E6;
-    color: green;
-  }
-  &:hover {
-    background-color: adjust-lightness($bg-color, 11);
-    color: #aaa;
-  }
-}
-
-.status {
-  font-size: 1.2em;
-  padding-left: 2em;
-  padding-right: 0.5em;
-  .okay {
-    color: rgb(139, 181, 139);
-  }
-}
-
-
-.warn {
-  color: #A60000;
-}
-
-.info {
-  color: #888;
-  .data {
-    color: #333;
-  }
-}
-
-.tabs {
-  $bg-color: #F7F7F7;
-  background-color: $bg-color;
-  padding: 11px 11px 0 11px;
-  .tab {
-    display: inline-block;
-    padding: 0.5em 1em 0.5em 1em;
-    &:not(.active) {
-      background-color: adjust-lightness($bg-color, -3);
-    }
-    &.active {
-      border: solid 1px #F0F0F0;
-      border-bottom: none;
-      background-color: #fff;
-      text-decoration: none;
-      color: #000;
-      cursor: default;
-    }
-    .fa {
-      margin-right: 0.3em;
-    }
-  }
 }

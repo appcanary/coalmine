@@ -19,7 +19,7 @@
           %a{href: server_app_path(1, 1)}
             %span.title
               =Faker::Lorem.words(1..3).join('_')
-            %span.last_updated
+            %span.info
               updated
-              %span.amount=time_ago_in_words rand(120).minutes.ago
+              %span.data=time_ago_in_words rand(120).minutes.ago
               ago
