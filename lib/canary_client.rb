@@ -138,7 +138,6 @@ class CanaryClient
         req.body = JSON.generate(options[:data])
       end
     end.on_complete do |res|
-      puts res.to_yaml
     end.body
   end
 end
