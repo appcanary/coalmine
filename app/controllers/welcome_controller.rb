@@ -4,6 +4,7 @@ class WelcomeController < ApplicationController
   layout "launchrock"
 
   def index
+    render :text => 'asd'
   end
 
   def beta_list

@@ -13,6 +13,7 @@ gem 'pg'
 
 # views / assets
 gem 'sass-rails', '~> 5.0'
+gem 'compass-rails', '~> 2.0.4'
 gem 'bootstrap-sass', '~> 3.3.3'
 gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
@@ -20,6 +21,8 @@ gem "font-awesome-rails"
 gem "bourbon"
 gem "neat"
 gem "htmlentities"
+gem 'haml', '~> 4.0.6'
+gem 'haml-coffee', '~> 0.1.0'
 
 # gem 'react-rails', '~> 0.13.0.0'
 
@@ -53,7 +56,7 @@ gem 'capistrano-npm'
 gem 'pry-rails'
 gem 'binding_of_caller'
 
-#misc 
+#misc
 gem 'ruby_identicon', '0.0.4'
 
 group :development, :test do
@@ -75,7 +78,7 @@ end
 
 
 group :development do
-  # gem "rack-livereload"
-  # gem 'guard-livereload', '~> 2.4', require: false
-  # gem 'guard-minitest'
+  gem "rack-livereload"
+  gem 'guard-livereload', '~> 2.4', require: false
+  gem 'guard-minitest'
 end

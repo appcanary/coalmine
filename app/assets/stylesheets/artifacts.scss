@@ -1,0 +1,51 @@
+table.artifacts {
+  td, th {
+    padding: 1em 2em 1em 2em;
+    vertical-align: top
+  }
+  &.vulnerable {
+    .info {
+      padding-right: 0;
+      width: inherit;
+      .title {
+        padding: .6em 0 .8em 0;
+        font-weight: bold;
+        word-wrap: break-word;
+        max-width: 150px;
+      }
+      .version, .kind {
+        font-size: 0.8em;
+        display: block;
+      }
+      padding-bottom: 2em;
+    }
+    .vulnerabilities {
+      padding-left: 1.5em;
+      ul {
+        list-style: none;
+        padding: 0;
+        li.vulnerability {
+          a {
+            padding: .5em;
+            display: block;
+            &:hover {
+            }
+          }
+        }
+      }
+    }
+  }
+  &.all {
+    th {
+      font-size: 1.1em;
+      color: #ccc;
+    }
+    .name {
+      font-weight: bold;
+    }
+    .version, .kind {
+      width: 1px;
+      text-align: center;
+    }
+  }
+}

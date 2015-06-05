@@ -26,13 +26,13 @@
   </head>
   <body>
 
-    <div id="main" class="container">
+    <div id="main" class="">
       <%= flash_messages %>
       <%= yield %>
     </div>
 
     <% if current_user %>
-      <div id="canary-current-user" style="display: none;">   
+      <div id="canary-current-user" style="display: none;">
         <%= UserSerializer.new(current_user).to_json %>
       </div>
     <% end %>
