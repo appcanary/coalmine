@@ -8,5 +8,6 @@ class DashboardController < ApplicationController
     else
       @skipnav = true
     end
+    render :index
   end
 end

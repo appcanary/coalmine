@@ -16,7 +16,7 @@ class UserSessionsController < ApplicationController
       else
         format.html { 
           @user = User.new
-          flash.now[:alert] = 'Login failed'
+          @user.errors.add :base, "Invalid email or password"
           render action: 'new'
         }
 
