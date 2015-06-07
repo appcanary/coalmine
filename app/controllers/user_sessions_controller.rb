@@ -2,6 +2,8 @@ class UserSessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
   before_filter :skip_if_logged_in, :except => :destroy
 
+  before_filter -> { @skip_flash = true }
+
   def new
     @user = User.new
   end

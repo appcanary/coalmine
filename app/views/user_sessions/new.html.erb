@@ -1,7 +1,7 @@
 <%= render 'shared/logo' %>
-
 <section>
   <div class="user-login">
+    <%= flash_messages %>
     <% content_for :user_form_title do %>
       <h3>Nice to see you again.</h3>
     <% end %>

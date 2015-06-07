@@ -39,8 +39,12 @@
       </div>
     <% else %>
       <div id="main" class="container">
-        <%= flash_messages %>
-        <%= yield %>
+        <% unless @skip_flash %>
+          <section>
+            <%= flash_messages %>
+          </section>
+        <%end %>
+      <%= yield %>
       </div>
     <% end %>
 
