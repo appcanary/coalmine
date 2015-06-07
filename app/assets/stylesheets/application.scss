@@ -133,3 +133,9 @@ section {
   @extend .alert;
   @extend .alert-danger;
 }
+
+.flashes {
+  @extend .col-sm-6;
+  @extend .col-sm-offset-3;
+  padding-top: 10px;
+}

@@ -29,6 +29,7 @@ class UserSessionsController < ApplicationController
 
   def destroy
     logout
-    redirect_to(:root, notice: 'Thanks. Have a good one.')
+    flash.now[:notice] = 'Thanks. Have a good one.'
+    redirect_to(:root)
   end
 end
