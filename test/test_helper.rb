@@ -5,6 +5,7 @@ require 'minitest/mock'
 require "minitest/reporters"
 require 'webmock/minitest'
 require 'vcr'
+require 'mocha/mini_test'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 

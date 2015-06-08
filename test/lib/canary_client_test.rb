@@ -47,4 +47,14 @@ class CanaryClientTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe 'add_user' do
+    it 'should set the post body to the :data option' do
+      VCR.use_cassette('create_user') do
+        user = @client.add_user({name: 'bob', email: 'bob@example.com'})
+        assert_equal 'bob', user['name']
+        assert_equal 'bob@example.com', user['email']
+      end
+    end
+  end
 end
