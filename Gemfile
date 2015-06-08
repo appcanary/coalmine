@@ -34,7 +34,6 @@ gem 'annotate'
 gem 'httparty'
 gem 'active_model_serializers'
 
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -56,7 +55,7 @@ gem 'capistrano-npm'
 gem 'pry-rails'
 gem 'binding_of_caller'
 
-# API client
+# API Client
 gem 'faraday', '~> 0.9.1'
 gem 'faraday_middleware', '~> 0.9.1'
 
@@ -82,10 +81,10 @@ group :development, :test do
 end
 
 group :test do
+  gem 'mocha', '~> 1.1.0'
   gem 'webmock', '~> 1.21.0'
   gem 'vcr', '~> 2.9.3'
 end
-
 
 group :development do
   gem "rack-livereload"

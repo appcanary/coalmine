@@ -4,7 +4,7 @@ class CanaryClientTest < ActiveSupport::TestCase
   def setup
     user_token = 'ohicvf2knu0jt9u6p180vpnu6u7vk3151g0794po2mbfrgc0u4f'
     agent_token = 'p28tdt94c6fu8l3hscq2gq16uef6fncrud4s6smkfh7qfk1sam7'
-    @client = CanaryClient.new('http://localhost:3000/v1',
+    @client = CanaryClient.new(Rails.configuration.x.canary_url,
                                user_token: user_token, agent_token: agent_token)
   end
 
@@ -39,21 +39,22 @@ class CanaryClientTest < ActiveSupport::TestCase
         vulns = @client.vulnerabilities['vulnerabilities']
         assert_equal 50, vulns.count
         v = vulns[7]
-        assert_match /^The enum_column3 Gem for Ruby/, v['description']
-        assert_equal [{"id" => 17592186872307}], v['osvdb']
-        assert_equal({"id"=>17592186045447}, v['criticality'])
-        assert_equal '2013-06-26T00:00:00.000Z', v['reported-at']
-        assert_match /Creation Remote DoS$/, v['title']
+        assert_match /^Fat Free CRM contains/, v['description']
+        assert_equal [{"id" => 17592186872318}], v['osvdb']
+        assert_equal({"id"=>17592186045445}, v['criticality'])
+        assert_equal '2013-12-24T00:00:00.000Z', v['reported-at']
+        assert_match /cycling the Rails session secret$/, v['title']
       end
     end
   end
 
   describe 'add_user' do
     it 'should set the post body to the :data option' do
+      user = FactoryGirl.create :user
+      refute user.email.blank?
       VCR.use_cassette('create_user') do
-        user = @client.add_user({name: 'bob', email: 'bob@example.com'})
-        assert_equal 'bob', user['name']
-        assert_equal 'bob@example.com', user['email']
+        result_user = @client.add_user({name: 'bob', email: user.email})
+        assert_equal user.email, result_user['email']
       end
     end
   end

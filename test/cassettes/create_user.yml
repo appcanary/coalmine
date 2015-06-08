@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: http://localhost:3000/v1/users
+    uri: http://localhost:3000/api/v1/users
     body:
       encoding: UTF-8
-      string: '{"name":"bob","email":"bob@example.com"}'
+      string: '{"name":"bob","email":"alice@example.com"}'
     headers:
       User-Agent:
       - Faraday v0.9.1
@@ -23,15 +23,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '194'
-      - '194'
+      - '197'
+      - '197'
       Server:
       - http-kit
       Date:
-      - Mon, 08 Jun 2015 04:05:44 GMT
+      - Mon, 08 Jun 2015 04:51:30 GMT
     body:
       encoding: UTF-8
-      string: '{"id":17592186872545,"name":"bob","email":"bob@example.com","web-token":"bs9fqhj187g6c1ouie2fpmbigjl3e7n9q8gkh89mqm6gu0jurk4","agent-token":"ie73rcvji2hf5oqb5i666k1834cnprh7gnuqp2u68rb0m557i5n"}'
+      string: '{"id":17592186872761,"name":"bob","email":"alice@example.com","web-token":"ps8a4crll0qksdhj92dlrm50cp4fuuc15qg5tso7be40b5lmf8o","agent-token":"1idraqrvtasi37numso4rrvrij9vl31tnkluf12b1issskp8bqhr"}'
     http_version: 
-  recorded_at: Mon, 08 Jun 2015 04:05:44 GMT
+  recorded_at: Mon, 08 Jun 2015 04:51:30 GMT
 recorded_with: VCR 2.9.3

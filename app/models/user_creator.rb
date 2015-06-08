@@ -15,9 +15,12 @@ class UserCreator
     else
       # password checks out, lets fetch our token
       begin
-        @user.token = Canary.create_user(user.email)
+        client = CanaryClient.new(Rails.configuration.x.canary_url)
+        backend_user = client.add_user({email: user.email, name: ''})
+        @user.token = backend_user['web-token']
         return @user.save
-      rescue Exception => e
+      rescue Faraday::Error => e
+        Rails.logger.error "Failed to connect to Canary backend: \n" + e.to_s
         # differentiate between exceptions later
         @user.errors.add(:to_be_determined, "foobar")
         # handle error

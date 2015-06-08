@@ -11,20 +11,28 @@ class UserCreatorTest < ActiveSupport::TestCase
 
     it "should set a token" do
       @user = FactoryGirl.build(:user)
-      Canary.stub :create_user, "a token" do
-        assert UserCreator.sign_up(@user)
-        assert @user.errors.blank?
-        assert_equal @user.token, "a token"
-        assert_equal @user.new_record?, false
-      end
+      CanaryClient.stubs(:new).with(anything).returns(mock_client)
+      assert UserCreator.sign_up(@user)
+      assert @user.errors.blank?
+      assert_equal @user.token, "a token"
+      assert_equal @user.new_record?, false
     end
 
     it "it should handle rando API failure" do
       @user = FactoryGirl.build(:user)
-      Canary.stub :create_user, -> (bar) { raise "oh no" } do
-         assert_equal UserCreator.sign_up(@user), false
-         assert @user.errors.present?
-      end
+      CanaryClient.any_instance.stubs(:add_user).raises(Faraday::Error.new)
+      assert_equal UserCreator.sign_up(@user), false
+      assert @user.errors.present?
     end
+  end
+
+  private
+
+  def mock_client
+    unless @client
+      @client = mock
+      @client.expects(:add_user).with(anything).returns({'web-token' => 'a token'})
+    end
+    @client
   end
 end
