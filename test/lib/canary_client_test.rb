@@ -4,7 +4,7 @@ class CanaryClientTest < ActiveSupport::TestCase
   def setup
     user_token = 'ohicvf2knu0jt9u6p180vpnu6u7vk3151g0794po2mbfrgc0u4f'
     agent_token = 'p28tdt94c6fu8l3hscq2gq16uef6fncrud4s6smkfh7qfk1sam7'
-    @client = CanaryClient.new(Rails.configuration.x.canary_url,
+    @client = CanaryClient.new(Rails.configuration.canary.uri,
                                user_token: user_token, agent_token: agent_token)
   end
 

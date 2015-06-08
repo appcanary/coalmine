@@ -15,7 +15,7 @@ class UserCreator
     else
       # password checks out, lets fetch our token
       begin
-        client = CanaryClient.new(Rails.configuration.x.canary_url)
+        client = CanaryClient.new(Rails.configuration.canary.uri)
         backend_user = client.add_user({email: user.email, name: ''})
         @user.token = backend_user['web-token']
         return @user.save

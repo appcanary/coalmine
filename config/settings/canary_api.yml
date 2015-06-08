@@ -1,6 +1,6 @@
 development:
   canary:
-    uri: 'localhost:8080'
+    uri: 'http://localhost:3000/api/v1'
 test:
   canary:
-    uri: "LOL"
+    uri: 'http://localhost:3000/api/v1'
