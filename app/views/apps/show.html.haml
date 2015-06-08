@@ -1,14 +1,5 @@
-.heading
-  %h3
-    %span=link_to "My Servers", dashboard_path
-    \/
-    %span.name Acme
-    \/
-    %span=link_to 'Apps', server_path(1)
-    \/
-    %span.name=Faker::Lorem.words(1..2).join('-')
-    \/
-    %span Packages
+= render :partial => "shared/heading"
+
 .app
 
   .tabs.packages

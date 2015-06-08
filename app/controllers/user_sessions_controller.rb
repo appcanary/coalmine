@@ -2,6 +2,8 @@ class UserSessionsController < ApplicationController
   skip_before_filter :require_login, except: [:destroy]
   before_filter :skip_if_logged_in, :except => :destroy
 
+  before_filter -> { @skip_flash = true }
+
   def new
     @user = User.new
   end
@@ -27,6 +29,7 @@ class UserSessionsController < ApplicationController
 
   def destroy
     logout
-    redirect_to(:root, notice: 'Thanks. Have a good one.')
+    flash.now[:notice] = 'Thanks. Have a good one.'
+    redirect_to(:root)
   end
 end

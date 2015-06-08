@@ -10,5 +10,6 @@ class AppsController < ApplicationController
 
   def show
     @app = App.new
+    @server = Server.new
   end
 end

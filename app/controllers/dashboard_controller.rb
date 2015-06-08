@@ -1,5 +1,4 @@
 class DashboardController < ApplicationController
-  skip_before_filter :require_login
   def index
     @events = []
     @onboarded = params[:new_app]
@@ -8,6 +7,8 @@ class DashboardController < ApplicationController
     else
       @skipnav = true
     end
+
+    @servers = 8.times.map { Server.new }
     render :index
   end
 end
