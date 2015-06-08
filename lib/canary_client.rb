@@ -133,11 +133,10 @@ class CanaryClient
       if options[:token]
         req.headers['Authorization'] = 'Token ' + options[:token]
       end
-      if %i(post put).include? methods
+      if %i(post put).include? method
         req.headers['Content-Type'] = 'application/json'
         req.body = JSON.generate(options[:data])
       end
-    end.on_complete do |res|
     end.body
   end
 end
