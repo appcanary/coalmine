@@ -1,0 +1,18 @@
+%td.status
+  -if rand(2) == 1
+    %span.fa.fa-exclamation-triangle.warn
+  -else
+    %span.fa.fa-check-circle.okay
+%td.link
+  %a{href: server_path(1)}
+    %span.avatar
+      = avatar(server)
+    %span.title
+      = server.name.titleize
+    %span.last_updated.info
+      updated
+      %span.data=time_ago_in_words server.last_synced_at
+      ago
+%td.notifications
+  %a.switch{:class => (rand(2) == 0 ? 'pressed' : ''), :href => '#'}
+    notify me

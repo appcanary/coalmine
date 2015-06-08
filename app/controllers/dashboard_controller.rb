@@ -8,6 +8,7 @@ class DashboardController < ApplicationController
       @skipnav = true
     end
 
+    @servers = 8.times.map { Server.new }
     render :index
   end
 end

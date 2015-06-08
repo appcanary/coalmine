@@ -10,5 +10,6 @@ class ServersController < ApplicationController
   end
 
   def show
+    @server = Server.new
   end
 end
