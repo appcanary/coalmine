@@ -3,18 +3,18 @@
 .server
 
   %table.apps
-    -rand(2..3).times do
+    -@server.apps.each do |app|
       %tr.app
         %td.status
-          -if rand(2) == 1
+          -if app.vulnerable?
             %span.fa.fa-exclamation-triangle.warn
           -else
             %span.fa.fa-check-circle.okay
         %td.link
-          %a{href: server_app_path(1, 1)}
+          %a{href: server_app_path(@server, app)}
             %span.title
-              =Faker::Lorem.words(1..3).join('_')
+              =app.path
             %span.info
-              updated
+              updated (fake)
               %span.data=time_ago_in_words rand(120).minutes.ago
               ago

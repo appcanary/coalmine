@@ -4,14 +4,14 @@
   -else
     %span.fa.fa-check-circle.okay
 %td.link
-  %a{href: server_path(1)}
+  %a{href: server_path(server)}
     %span.avatar
       = avatar(server)
     %span.title
-      = server.name.titleize
+      = server.hostname.titleize
     %span.last_updated.info
       updated
-      %span.data=time_ago_in_words server.last_synced_at
+      %span.data=time_ago_in_words server.last_heartbeat
       ago
 %td.notifications
   %a.switch{:class => (rand(2) == 0 ? 'pressed' : ''), :href => '#'}

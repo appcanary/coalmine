@@ -47,40 +47,21 @@ class Canary
     end
   end
 
-  class Base
-    include TrackAttributes
-    def initialize(params={})
-      params.each do |attr, value|
-        setter = attr.tr("-", "_")
-        self.public_send("#{setter}=", value)
-      end if params
-    end
+  # class Vuln < Base
+    # attr_accessor :description, :osvdb, :reported_at, :cve, :title, :id, :artifact, :uuid, :versions, :unaffected_versions, :patched_versions, :criticality
+  # end
 
-    def attributes
-      Hash[attr_accessors.map { |k| [k, send(k)] }]
-    end
-  end
+  # class App < Base
+  #   attr_accessor :id, :name, :path, :uuid, :artifact_versions, :vulnerable_to
+  # end
 
-  class Server < Base
-    attr_accessor :apps, :last_heartbeat, :ip, :name, :hostname, :uname, :id, :uuid
-  end
+  # class User < Base
+  #   attr_accessor :id, :name, :email, :servers, :web_token, :agent_token
+  # end
 
-  class Vuln < Base
-    attr_accessor :description, :osvdb, :reported_at, :cve, :title, :id, 
-      :artifact, :uuid, :versions, :unaffected_versions, :patched_versions, :criticality
-  end
-
-  class App < Base
-    attr_accessor :id, :name, :path, :uuid, :artifact_versions, :vulnerable_to
-  end
-
-  class User < Base
-    attr_accessor :id, :name, :email, :servers, :web_token, :agent_token
-  end
-
-  class Artifact < Base
-    attr_accessor :description, :mailinglist_uri, :source_uri, :name, :id, :unknown_origin, :uri, :uuid, :versions, :authors
-  end
+  # class Artifact < Base
+  #   attr_accessor :description, :mailinglist_uri, :source_uri, :name, :id, :unknown_origin, :uri, :uuid, :versions, :authors
+  # end
 
   # TODO: add pagination to collection methods
 
@@ -117,7 +98,7 @@ class Canary
   end
 
   def server_app_vulnerabilities(server_uuid, app_uuid)
-    wrap Vuln, get("servers/#{server_uuid}/apps/#{app_uuid}/vulnerabilities", token: @user_token)
+    wrap Vuln, get("servers/#{server_uuid}/apps/#{app_uuid}/vulnerabilities", token: @user_token)['vulnerabilities']
   end
 
   def server_vulnerabilities(server_uuid)

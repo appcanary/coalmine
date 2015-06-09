@@ -1,4 +1,4 @@
-module Canary::TrackAttributes
+module TrackAttributes
   extend ActiveSupport::Concern
 
   included do
