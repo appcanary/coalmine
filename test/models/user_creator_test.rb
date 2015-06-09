@@ -11,7 +11,7 @@ class UserCreatorTest < ActiveSupport::TestCase
 
     it "should set a token" do
       @user = FactoryGirl.build(:user)
-      CanaryClient.stubs(:new).with(anything).returns(mock_client)
+      Canary.stubs(:new).with(anything).returns(mock_client)
       assert UserCreator.sign_up(@user)
       assert @user.errors.blank?
       assert_equal @user.token, "a token"
@@ -20,7 +20,7 @@ class UserCreatorTest < ActiveSupport::TestCase
 
     it "it should handle rando API failure" do
       @user = FactoryGirl.build(:user)
-      CanaryClient.any_instance.stubs(:add_user).raises(Faraday::Error.new)
+      Canary.any_instance.stubs(:add_user).raises(Faraday::Error.new)
       assert_equal UserCreator.sign_up(@user), false
       assert @user.errors.present?
     end

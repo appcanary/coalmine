@@ -11,7 +11,7 @@ class UsersControllerTest < ActionController::TestCase
     it "should register new users and log them in" do
       client = mock
       client.expects(:add_user).with(anything).returns({'web-token' => 'a token'})
-      CanaryClient.stubs(:new).with(anything).returns(client)
+      Canary.stubs(:new).with(anything).returns(client)
 
       assert_difference('User.count') do
         post :create, :user => { :email => Faker::Internet.email,
