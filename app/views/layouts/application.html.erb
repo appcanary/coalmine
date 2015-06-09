@@ -32,11 +32,13 @@
           <%= render :partial => "layouts/navbar" %>
         </div>
         <div id="main" class="main-drawer container">
-          <section style>
-            <div class="flashes">
-              <%= flash_messages %>
-            </div>
-          </section>
+          <% if flash_messages %>
+            <section style>
+              <div class="flashes">
+                <%= flash_messages %>
+              </div>
+            </section>
+          <% end %>
           <%= yield %>
         </div>
 

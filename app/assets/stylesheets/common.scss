@@ -74,13 +74,13 @@ table {
   font-size: 1.2em;
   padding-left: 2em;
   padding-right: 0.5em;
-  .okay {
-    color: rgb(139, 181, 139);
-  }
 }
 
 
-.warn {
+.fa.okay {
+  color: rgb(139, 181, 139);
+}
+.fa.warn {
   color: #A60000;
 }
 
@@ -113,4 +113,12 @@ table {
       margin-right: 0.3em;
     }
   }
+}
+
+.empty_message {
+  padding: 2em 3em 2em 3em;
+  font-size: 1.2em;
+  font-style: italic;
+  font-weight: bold;
+  color: #ccc;
 }
