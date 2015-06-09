@@ -34,16 +34,20 @@
                   =link_to vuln.title, '#'
 
   %table#all_artifacts.artifacts.all(style="display:none")
-    %tr
-      %th name
-      %th kind
-      %th version
-    -@artifacts.each do |artifact|
-      %tr.artifact
-        %td.name=artifact.name
-        %td.kind rubygem
-        %td.version
-          ="#{rand(0..5)}.#{rand(0..3)}.#{rand(0..21)}"
+    - if @artifacts.empty?
+      %tr
+        %td.empty_message No packages found for this app!
+    - else
+      %tr
+        %th name
+        %th kind
+        %th version
+      -@artifacts.each do |artifact|
+        %tr.artifact
+          %td.name=artifact.name
+          %td.kind rubygem
+          %td.version
+            ="#{rand(0..5)}.#{rand(0..3)}.#{rand(0..21)}"
 
 :coffeescript
   $('.tabs .tab').click (e) ->
