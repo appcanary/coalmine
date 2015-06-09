@@ -21,10 +21,10 @@ Rails.application.routes.draw do
   end
 
   resources :servers, :only => [:index, :new, :show] do
-    resources :apps, :only => [:index, :new, :show] do
-      resources :servers, :only => [:index, :show]
-    end
+    resources :apps, :only => [:index, :new, :show]
   end
+
+  resources :vulns, :only => [:show]
 
   resources :events, :only => [:index]
 

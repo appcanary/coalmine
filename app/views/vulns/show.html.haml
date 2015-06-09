@@ -1,0 +1,26 @@
+= render :partial => 'shared/heading'
+%dl.vulnerability
+
+  %dt Package:
+  %dd= @vuln.artifact
+
+  %dt Kind:
+  %dd= @vuln.kind
+
+  %dt Title:
+  %dd.title= @vuln.title
+
+  %dt CVE:
+  %dd= link_to(@vuln.cve, "http://cve.mitre.org/cgi-bin/cvename.cgi?name=#{@vuln.cve}", target: 'blank')
+
+  %dt OSVDB:
+  %dd= @vuln.osvdb
+
+  %dt Description:
+  %dd= @vuln.description
+
+  %dt Criticality:
+  %dd= @vuln.criticality
+
+  %dt Patched Versions:
+  %dd= @vuln.patch_to
