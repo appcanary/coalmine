@@ -1,11 +1,11 @@
-<%# <%= render 'shared/logo' %>
+<%= render 'shared/logo' %>
+<section>
+  <div class="user-login">
+    <%= flash_messages %>
+    <% content_for :user_form_title do %>
+      <h3>Nice to see you again.</h3>
+    <% end %>
 
-<!-- <section> -->
-  <!-- <div class="user&#45;login"> -->
-    <%# <% content_for :user_form_title do %>
-      <!-- <h3>Nice to see you again.</h3> -->
-    <%# <% end %>
-
-    <%# <%= render :partial => 'users/form', :locals => { :sign_up => false } %>
-  <!-- </div> -->
-<!-- </section> -->
+    <%= render :partial => 'users/form', :locals => { :sign_up => false } %>
+  </div>
+</section>

@@ -1,0 +1,20 @@
+= render :partial => "shared/heading"
+
+.server
+
+  %table.apps
+    -@server.apps.each do |app|
+      %tr.app
+        %td.status
+          -if app.vulnerable?
+            %span.fa.fa-exclamation-triangle.warn
+          -else
+            %span.fa.fa-check-circle.okay
+        %td.link
+          %a{href: server_app_path(@server, app)}
+            %span.title
+              =app.path
+            %span.info
+              updated (fake)
+              %span.data=time_ago_in_words rand(120).minutes.ago
+              ago

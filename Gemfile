@@ -13,6 +13,7 @@ gem 'pg'
 
 # views / assets
 gem 'sass-rails', '~> 5.0'
+gem 'compass-rails', '~> 2.0.4'
 gem 'bootstrap-sass', '~> 3.3.3'
 gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
@@ -20,6 +21,8 @@ gem "font-awesome-rails"
 gem "bourbon"
 gem "neat"
 gem "htmlentities"
+gem 'haml', '~> 4.0.6'
+gem 'haml-coffee', '~> 0.1.0'
 
 # gem 'react-rails', '~> 0.13.0.0'
 
@@ -31,7 +34,6 @@ gem 'annotate'
 gem 'httparty'
 gem 'active_model_serializers'
 
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -39,6 +41,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+
+# Logging/error notifications
+gem 'sentry-raven', '~> 0.13.3'
 
 # deployment
 gem 'unicorn-rails'
@@ -53,7 +58,7 @@ gem 'capistrano-npm'
 gem 'pry-rails'
 gem 'binding_of_caller'
 
-# API client
+# API Client
 gem 'faraday', '~> 0.9.1'
 gem 'faraday_middleware', '~> 0.9.1'
 
@@ -64,6 +69,7 @@ gem 'request_store', '~> 1.1.0'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'pry-byebug'
+  gem 'better_errors'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
@@ -79,10 +85,10 @@ group :development, :test do
 end
 
 group :test do
+  gem 'mocha', '~> 1.1.0'
   gem 'webmock', '~> 1.21.0'
   gem 'vcr', '~> 2.9.3'
 end
-
 
 group :development do
   gem "rack-livereload"

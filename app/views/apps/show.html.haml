@@ -1,0 +1,47 @@
+= render :partial => "shared/heading"
+
+.app
+
+  .tabs.packages
+    %a.tab.vulnerable.active(href="#vulnerable_artifacts")
+      %span.fa.fa-exclamation-triangle.warn
+      vulnerable packages
+    %a.tab.all(href="#all_artifacts")
+      all packages
+  %table#vulnerable_artifacts.artifacts.vulnerable
+    -@vuln_artifacts.each do |artifact|
+      %tr.artifact
+        %td.info
+          .title.data
+            = artifact.name
+          .version
+            version
+            %span.data 2.0.1
+          .kind
+            kind:
+            %span.data rubygem
+        %td.vulnerabilities
+          %ul
+            - artifact.vulnerabilities.each do |vuln|
+              %li.vulnerability
+                =link_to vuln.title, '#'
+
+  %table#all_artifacts.artifacts.all(style="display:none")
+    %tr
+      %th name
+      %th kind
+      %th version
+    -@artifacts.each do |artifact|
+      %tr.artifact
+        %td.name=artifact.name
+        %td.kind rubygem
+        %td.version
+          ="#{rand(0..5)}.#{rand(0..3)}.#{rand(0..21)}"
+
+:coffeescript
+  $('.tabs .tab').click (e) ->
+    e.preventDefault();
+    $('table.artifacts').hide()
+    $($(this).attr('href')).show()
+    $('.tabs .tab').removeClass('active')
+    $(this).addClass('active')

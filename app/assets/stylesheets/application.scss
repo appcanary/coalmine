@@ -14,15 +14,25 @@
 
 $app-panel-width: 300px;
 $body-margin-top: 10px;
+@import "compass";
 @import "bootstrap-sprockets";
 @import "bootstrap";
-@import 'vendor/emberui.scss';
-@import "users";
+//@import 'vendor/emberui.scss';
 @import "font-awesome";
-@import 'left-navbar';
 @import 'boxes';
+
+@import 'common';
+
+@import "users";
+@import 'left-navbar';
 @import 'sidepanel';
 @import 'events';
+@import 'artifacts';
+@import 'servers';
+@import 'apps';
+@import 'vulns';
+
+$link-color: #3798A5;
 
 body {
   padding-bottom: 20px;
@@ -33,18 +43,54 @@ body {
 // trigger semibold;
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-weight: 600;
+  color: #aaa;
+}
+
+a {
+  color: $link-color;
+  &:hover {
+    color: adjust-lightness($link-color, 16);
+    text-decoration: none;
+    //color: $link-color;
+  }
 }
 
 .main-drawer {
   position: fixed;
-  .container { 
+  background-color: #fff;
+  min-height: 100%;
+  padding: 0;
+  width: 100%;
+  max-width: 900px;
+  .container {
     padding-bottom: 20px;
+  }
+
+  .heading {
+    border-bottom: solid 1px #eee;
+    min-height: 48px;
+    padding-right: 1em;
+    h3 {
+      margin-left: 1.3em;
+      font-weight: normal;
+      line-height: 1.2em;
+    }
+    .name {
+      color: #555;
+      font-weight: bold;
+    }
+    span:not(.name) {
+      text-transform: lowercase;
+    }
+
+    @media (max-width: $grid-float-breakpoint) {
+      padding-left: 30px;
+    }
   }
 
   @media (min-width: $grid-float-breakpoint) {
     position: absolute;
     left: $left-navbar-width;
-    margin-top: $body-margin-top;
   }
 }
 
@@ -73,7 +119,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     margin:auto;
   }
 
-  
+
 }
 
 section {
@@ -89,3 +135,8 @@ section {
   @extend .alert-danger;
 }
 
+.flashes {
+  @extend .col-sm-6;
+  @extend .col-sm-offset-3;
+  padding-top: 10px;
+}

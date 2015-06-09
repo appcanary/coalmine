@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:3000/v1/status
+    uri: http://localhost:3000/api/v1/status
     body:
       encoding: US-ASCII
       string: ''
@@ -26,10 +26,10 @@ http_interactions:
       Server:
       - http-kit
       Date:
-      - Tue, 02 Jun 2015 16:24:45 GMT
+      - Mon, 08 Jun 2015 04:51:28 GMT
     body:
       encoding: UTF-8
       string: '{"status":"ok"}'
     http_version: 
-  recorded_at: Tue, 02 Jun 2015 16:24:45 GMT
+  recorded_at: Mon, 08 Jun 2015 04:51:28 GMT
 recorded_with: VCR 2.9.3

@@ -1,0 +1,8 @@
+.heading
+  %h3
+    %span My Servers
+#dashboard
+  %table.servers
+    - @servers.each do |server|
+      %tr.server
+        = render :partial => "servers/list", :locals => { :server => server }

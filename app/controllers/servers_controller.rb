@@ -10,5 +10,7 @@ class ServersController < ApplicationController
   end
 
   def show
+    @server = current_user.server(params[:id])
+    @server.apps = current_user.server_apps(params[:id])
   end
 end
