@@ -4,6 +4,7 @@ class App < CanaryBase
   attr_accessor :server
 
   has_many Artifact, "artifact_versions"
+  has_many Vulnerability, "vulnerable_to"
 
   def vulns
     @vulns ||= self.canary.server_app_vulnerabilities(self.server.uuid, self.uuid)
@@ -13,11 +14,11 @@ class App < CanaryBase
     RubyIdenticon.create_base64(self.name, :border_size => 10)
   end
 
-  def to_param
-    uuid
-  end
-
   def vulnerable?
     self.vulnerable_to.present?
+  end
+
+  def to_param
+    uuid
   end
 end

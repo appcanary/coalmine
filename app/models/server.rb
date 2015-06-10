@@ -1,7 +1,9 @@
 class Server < CanaryBase
   attr_params :apps, :last_heartbeat, :ip, :name, :hostname, :uname, :id, :uuid
 
-  def apps
+  has_many App
+
+  def all_apps
     @applications ||= self.canary.server_apps(uuid).map do |a|
       a.server = self;
       a

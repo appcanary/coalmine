@@ -18,6 +18,6 @@
               %span.title
                 =app.path
               %span.info
-                updated (fake)
-                %span.data=time_ago_in_words app.last_synced_at
+                updated
+                %span.data=time_ago_in_words @server.last_heartbeat
                 ago

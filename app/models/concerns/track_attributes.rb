@@ -35,11 +35,13 @@ module TrackAttributes
   end
 
   def attr_accessors
-    self.class.instance_variable_get('@attr_accessors')
+    self.class.instance_variable_get('@attr_accessors') || []
   end
 
   def map_key
     self.class.instance_variable_get('@map_key') || {}
   end
+
+  # TODO: convert to AR style attributes
 
 end

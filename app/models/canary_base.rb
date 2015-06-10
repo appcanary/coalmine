@@ -33,9 +33,10 @@ class CanaryBase
     self.class.instance_variable_get('@has_many') || {}
   end
 
+  # todo, remember to add parent association in parse
   def initialize(params = {})
     params.each do |attr, value|
-      setter = attr.tr("-", "_")
+      setter = attr.to_s.tr("-", "_")
       if klass = self.associations[setter]
         self.public_send("#{setter}=", klass.parse(value))
       else

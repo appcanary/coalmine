@@ -16,22 +16,21 @@
       %tr
         %td.empty_message No vulnerable packages found for this app!
     - else
-      -@vuln_artifacts.each do |artifact|
+      -@vuln_artifacts.each do |vuln|
         %tr.artifact
           %td.info
             .title.data
-              = artifact.name
+              = vuln.artifact_name
             .version
               version
-              %span.data 2.0.1
+              %span.data FAKE2.0.1
             .kind
               kind:
-              %span.data rubygem
+              %span.data=vuln.artifact_kind
           %td.vulnerabilities
             %ul
-              - artifact.vulnerabilities.each do |vuln|
-                %li.vulnerability
-                  =link_to vuln.title, '#'
+              %li.vulnerability
+                =link_to vuln.title, '#'
 
   %table#all_artifacts.artifacts.all(style="display:none")
     - if @artifacts.empty?
@@ -44,10 +43,10 @@
         %th version
       -@artifacts.each do |artifact|
         %tr.artifact
-          %td.name=artifact.name
-          %td.kind rubygem
+          %td.name=artifact.name || artifact.artifact.first["name"]
+          %td.kind=artifact.kind
           %td.version
-            ="#{rand(0..5)}.#{rand(0..3)}.#{rand(0..21)}"
+            =artifact.number
 
 :coffeescript
   $('.tabs .tab').click (e) ->

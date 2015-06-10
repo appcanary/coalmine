@@ -10,9 +10,9 @@
       - unless @app
         %span Apps
       - else
-        %span=link_to "apps", server_path(1)
+        %span=link_to "apps", server_path(@server)
         \/
-        %span.name= @app.name
+        %span.name= @app.name.blank? ? "missing app name" : @app.name
         \/
         %span Packages
 
