@@ -11,7 +11,7 @@ class AppsController < ApplicationController
   def show
 
     @server = current_user.server(params[:server_id])
-    @app = current_user.app(params[:server_id], params[:id])
+    @app = @server.app(params[:id])
 
 
     @vuln_artifacts = rand(3..11).times.map { Artifact.new(:vulnerable => true) }

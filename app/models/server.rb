@@ -1,16 +1,22 @@
 class Server < CanaryBase
-  attr_accessor :apps, :last_heartbeat, :ip, :name, :hostname, :uname, :id, :uuid
+  attr_params :apps, :last_heartbeat, :ip, :name, :hostname, :uname, :id, :uuid
 
-  # include Mocker
+  def apps
+    @applications ||= self.canary.server_apps(uuid).map do |a|
+      a.server = self;
+      a
+    end
+  end
 
-  # mock_attr(:id) { 1 }
-  # mock_attr(:name) { Faker::Lorem.word }
-  # mock_attr(:active_issues) { [] }
-  # mock_attr(:last_synced_at) {  rand(120).minutes.ago }
-  # mock_attr(:rubygems) { 34 }
-  # mock_attr(:npm) { 49 }
-  # mock_attr(:system_packages) { 830 }
-  #
+  def app(id)
+    @app ||= self.canary.server_app(uuid, id).tap do |a|
+      a.server = self
+    end
+  end
+
+  def vulns
+    @vulns ||= self.canary.server_vulnerabilities(uuid)
+  end
 
   def avatar
     RubyIdenticon.create_base64(self.name, :border_size => 10)

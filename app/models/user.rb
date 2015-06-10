@@ -41,27 +41,15 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true
 
   def servers
-    client.servers
+    canary.servers
   end
 
   def server(id)
-    client.server(id)
-  end
-
-  def server_apps(id)
-    client.server_apps(id)
-  end
-
-  def app(server, id)
-    client.server_app(server, id)
-  end
-
-  def app_vulns(server, id)
-    client.server_app_vulnerabilities(server, id)
+    canary.server(id)
   end
 
   protected
-  def client
-    @client ||= Canary.new(self.token)
+  def canary
+    @canary ||= Canary.new(self.token)
   end
 end

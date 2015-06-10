@@ -2,22 +2,22 @@ module TrackAttributes
   extend ActiveSupport::Concern
 
   included do
-    define_singleton_method(:attr_reader) do |*params|
-      @attr_readers ||= []
-      @attr_readers.concat params
-      super(*params)
-    end
+    # define_singleton_method(:attr_reader) do |*params|
+    #   @attr_readers ||= []
+    #   @attr_readers.concat params
+    #   super(*params)
+    # end
 
-    define_singleton_method(:attr_writer) do |*params|
-      @attr_writers ||= []
-      @attr_writers.concat params
-      super(*params)
-    end
+    # define_singleton_method(:attr_writer) do |*params|
+    #   @attr_writers ||= []
+    #   @attr_writers.concat params
+    #   super(*params)
+    # end
 
-    define_singleton_method(:attr_accessor) do |*params|
+    define_singleton_method(:attr_params) do |*params|
       @attr_accessors ||= []
       @attr_accessors.concat params
-      super(*params)
+      attr_accessor(*params)
     end
 
     define_singleton_method(:map_key) do |hsh|

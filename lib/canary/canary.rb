@@ -19,12 +19,10 @@ class Canary
       end
     end
 
-    # TODO: use upsert, rename upsert something else
     def get(url, opts={})
       request(:get, url, opts)
     end
 
-    # TODO: untested
     def put(url, opts={})
       request(:put, url, opts)
     end
@@ -72,11 +70,11 @@ class Canary
   # Vulnerabilities
 
   def vulnerabilities
-    wrap Vuln, get('vulnerabilities')['vulnerabilities']
+    wrap Vulnerability, get('vulnerabilities')
   end
 
   def vulnerability(uuid)
-    wrap Vuln, get("vulnerabilities/#{uuid}")
+    wrap Vulnerability, get("vulnerabilities/#{uuid}")
   end
 
   # Servers
@@ -98,11 +96,11 @@ class Canary
   end
 
   def server_app_vulnerabilities(server_uuid, app_uuid)
-    wrap Vuln, get("servers/#{server_uuid}/apps/#{app_uuid}/vulnerabilities", token: @user_token)['vulnerabilities']
+    wrap Vulnerability, get("servers/#{server_uuid}/apps/#{app_uuid}/vulnerabilities", token: @user_token)['vulnerabilities']
   end
 
   def server_vulnerabilities(server_uuid)
-    wrap Vuln, get("servers/#{server_uuid}/vulnerabilities", token: @user_token)
+    wrap Vulnerability, get("servers/#{server_uuid}/vulnerabilities", token: @user_token)
   end
 
   # Artifacts
@@ -120,7 +118,7 @@ class Canary
   end
 
   def artifact_vulnerabilities(uuid)
-    wrap Vuln, get("artifacts/#{uuid}/vulnerabilities")
+    wrap Vulnerability, get("artifacts/#{uuid}/vulnerabilities")
   end
 
   # Users
@@ -130,7 +128,7 @@ class Canary
   end
 
   def my_vulnerabilities
-    wrap Vuln, get('users/me/vulnerabilities', token: @user_token)
+    wrap Vulnerability, get('users/me/vulnerabilities', token: @user_token)
   end
 
   def add_user(data)
@@ -153,10 +151,29 @@ class Canary
 
   protected
   def wrap(klass, col)
-    if col.is_a? Array
-      col.map { |attr| klass.new(attr) }
+
+    # TODO HANDLE COLLECTIONS
+    # right now we throw away cursor info
+    if col.is_a? Hash
+
+      # pass along only the model attr,
+      # ditch cursor info
+      route_key = klass.model_name.route_key
+      if col[route_key]
+        # params should be an array of attrs
+        params = col[route_key]
+      else
+        # turns out there was no cursor info, cool
+        params = col
+      end
     else
-      klass.new(col)
+      params = col
+    end
+
+    if params.is_a? Array
+      params.map { |attr| klass.parse(self, attr) }
+    else
+      klass.parse(self, col)
     end
   end
 
