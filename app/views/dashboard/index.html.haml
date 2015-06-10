@@ -3,6 +3,9 @@
     %span My Servers
 #dashboard
   %table.servers
-    - @servers.each do |server|
-      %tr.server
-        = render :partial => "servers/list", :locals => { :server => server }
+    -if @servers.empty?
+      .empty_message You don't have any servers yet.
+    -else
+      - @servers.each do |server|
+        %tr.server
+          = render :partial => "servers/list", :locals => { :server => server }

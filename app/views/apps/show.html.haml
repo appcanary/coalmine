@@ -4,39 +4,50 @@
 
   .tabs.packages
     %a.tab.vulnerable.active(href="#vulnerable_artifacts")
-      %span.fa.fa-exclamation-triangle.warn
+      -if @vuln_artifacts.empty?
+        %span.fa.fa-check-circle.okay
+      - else
+        %span.fa.fa-exclamation-triangle.warn
       vulnerable packages
     %a.tab.all(href="#all_artifacts")
       all packages
   %table#vulnerable_artifacts.artifacts.vulnerable
-    -@vuln_artifacts.each do |artifact|
-      %tr.artifact
-        %td.info
-          .title.data
-            = artifact.name
-          .version
-            version
-            %span.data 2.0.1
-          .kind
-            kind:
-            %span.data rubygem
-        %td.vulnerabilities
-          %ul
-            - artifact.vulnerabilities.each do |vuln|
-              %li.vulnerability
-                =link_to vuln.title, '#'
+    - if @vuln_artifacts.empty?
+      %tr
+        %td.empty_message No vulnerable packages found for this app!
+    - else
+      -@vuln_artifacts.each do |artifact|
+        %tr.artifact
+          %td.info
+            .title.data
+              = artifact.name
+            .version
+              version
+              %span.data 2.0.1
+            .kind
+              kind:
+              %span.data rubygem
+          %td.vulnerabilities
+            %ul
+              - artifact.vulnerabilities.each do |vuln|
+                %li.vulnerability
+                  =link_to vuln.title, '#'
 
   %table#all_artifacts.artifacts.all(style="display:none")
-    %tr
-      %th name
-      %th kind
-      %th version
-    -@artifacts.each do |artifact|
-      %tr.artifact
-        %td.name=artifact.name
-        %td.kind rubygem
-        %td.version
-          ="#{rand(0..5)}.#{rand(0..3)}.#{rand(0..21)}"
+    - if @artifacts.empty?
+      %tr
+        %td.empty_message No packages found for this app!
+    - else
+      %tr
+        %th name
+        %th kind
+        %th version
+      -@artifacts.each do |artifact|
+        %tr.artifact
+          %td.name=artifact.name
+          %td.kind rubygem
+          %td.version
+            ="#{rand(0..5)}.#{rand(0..3)}.#{rand(0..21)}"
 
 :coffeescript
   $('.tabs .tab').click (e) ->
