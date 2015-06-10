@@ -1,5 +1,7 @@
-class Artifact
-  include Mocker
-  mock_attr(:name) { Faker::Lorem.word }
-  mock_attr(:vulnerabilities) { [Vulnerability.new] }
+class Artifact < CanaryBase
+  attr_params :id, :number, :platform, :artifact
+
+  def name
+    artifact.first.try(:[], "name")
+  end
 end

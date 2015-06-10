@@ -171,9 +171,9 @@ class Canary
     end
 
     if params.is_a? Array
-      params.map { |attr| klass.parse(self, attr) }
+      params.map { |attr| klass.parse(attr, self) }
     else
-      klass.parse(self, col)
+      klass.parse(col, self)
     end
   end
 

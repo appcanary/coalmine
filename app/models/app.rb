@@ -3,6 +3,8 @@ class App < CanaryBase
 
   attr_accessor :server
 
+  has_many Artifact, "artifact_versions"
+
   def vulns
     @vulns ||= self.canary.server_app_vulnerabilities(self.server.uuid, self.uuid)
   end
