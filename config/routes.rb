@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   #get 'sign_up' => "users#new", :as => :sign_up
   #post 'sign_up' => "users#create"
 
+  resource :current_user, :only => [:edit, :update], controller: 'current_user'
+
   get 'timeline' => "timeline#index"
   resources :user_sessions, :only => [:create, :destroy]
   resources :apps, :only => [:index, :new, :show] do

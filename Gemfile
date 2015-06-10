@@ -23,6 +23,7 @@ gem "neat"
 gem "htmlentities"
 gem 'haml', '~> 4.0.6'
 gem 'haml-coffee', '~> 0.1.0'
+gem 'simple_form', '~> 3.1.0'
 
 # gem 'react-rails', '~> 0.13.0.0'
 
