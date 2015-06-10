@@ -53,6 +53,7 @@ gem 'capistrano-bundler', '~> 1.1.2'
 gem 'capistrano3-unicorn'
 gem 'capistrano-rails-console'
 gem 'capistrano-npm'
+gem 'capistrano-deploytags', '~> 1.0.0'
 
 # dev tools
 gem 'pry-rails'
