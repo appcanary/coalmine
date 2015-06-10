@@ -1,0 +1,29 @@
+.navbar-left-side{:role => "navigation"}
+  .container
+    .collapsed-menu
+      %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+    .navbar-collapse.collapse
+      %ul.menu
+        %li
+          %a.navbar-brand{:href => "/"}
+            = image_tag "oval-canary.png"
+      %ul.menu
+        %li.divider
+        %li
+          %a{:href => "/dashboard",
+             class: (controller_name == 'dashboard') ? 'active' : ''}
+            %i.fa.fa-clock-o
+        %li
+          %a{:href => "/servers/new",
+             class: (controller_name == 'servers') ? 'active' : ''}
+            %i.fa.fa-plus
+        %li
+          %a{:href => "/current_user/edit",
+             class: (controller_name == 'current_user') ? 'active' : ''}
+            %i.fa.fa-cog
+        %li
+          = link_to '<i class="fa fa-sign-out"></i>'.html_safe, logout_path, :method => :post

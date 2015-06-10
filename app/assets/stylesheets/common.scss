@@ -1,3 +1,46 @@
+form.simple_form {
+  padding: 1.5em 2em;
+  .input {
+    padding: .3em;
+    $error-color: #F08080;
+    .error {
+      padding: .3em .5em .3em 0;
+      background-color: $error-color;
+      color: #fff;
+    }
+    &.field_with_errors {
+      input.string, input.password {
+        border: solid 5px $error-color;
+      }
+    }
+  }
+  label {
+    color: #aaa;
+  }
+  input.string, input.password {
+    padding: 0.3em .5em;
+    border: solid 5px #ddd;
+    $border-a: #ddd;
+    $border-b: #fafafa;
+    border-color: $border-a $border-b $border-b $border-a;
+    background-color: $border-b;
+  }
+  input.button {
+    $btn-bg: #ddd;
+    @include border-radius(100px);
+    border: solid 5px #ccc;
+    margin: 1em .3em;
+    padding: .5em 1em;
+    border-color: #fff #ccc #ccc #fff;
+    background-color: $btn-bg;
+    font-weight: bold;
+    color: #888;
+    &:hover {
+      background-color: adjust-lightness($btn-bg, 5);
+    }
+  }
+}
+
 table {
   width: 100%;
   tr {
