@@ -2,8 +2,6 @@ class CanaryBase
   include TrackAttributes
   extend ActiveModel::Naming
 
-  attr_accessor :canary
-
   def self.has_many(klass, key = nil)
     @has_many ||= {}
 
@@ -18,11 +16,11 @@ class CanaryBase
   end
 
   def self.client=(canary)
-    Thread.current[:canary_client] = canary
+    @canary = canary
   end
 
   def self.client
-    Thread.current[:canary_client] || Canary.new("")
+    @canary || Canary.new(nil)
   end
 
   def canary
@@ -54,7 +52,10 @@ class CanaryBase
   # that nested collections aren't
   # expected to have cursors?
   def self.parse(attr, canary = nil)
-    self.client ||= canary
+    if canary
+      self.client = canary
+    end
+
     if attr.is_a? Array
       attr.map { |params| self.new(params) }
     else
