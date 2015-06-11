@@ -1,5 +1,4 @@
 form.simple_form {
-  padding: 1.5em 2em;
   .input {
     padding: .3em;
     $error-color: #F08080;
@@ -19,16 +18,9 @@ form.simple_form {
   }
   input.string, input.password {
     padding: 0.3em .5em;
-    border: solid 5px #ddd;
-    $border-a: #ddd;
-    $border-b: #fafafa;
-    border-color: $border-a $border-b $border-b $border-a;
-    background-color: $border-b;
   }
   input.button {
     $btn-bg: #ddd;
-    @include border-radius(100px);
-    border: solid 5px #ccc;
     margin: 1em .3em;
     padding: .5em 1em;
     border-color: #fff #ccc #ccc #fff;
@@ -47,7 +39,6 @@ table {
     $border: dashed 1px #ddd;
     border-bottom: $border;
     &:hover {
-//      background-color: #f1f1f1;
     }
   }
   td, th {
