@@ -18,16 +18,17 @@ Rails.application.routes.draw do
 
   get 'timeline' => "timeline#index"
   resources :user_sessions, :only => [:create, :destroy]
-  resources :apps, :only => [:index, :new, :show] do
-    resources :servers, :only => [:index, :show]
-  end
-
+  
   resources :servers, :only => [:index, :new, :show] do
     resources :apps, :only => [:index, :new, :show]
   end
 
   resources :vulns, :only => [:show]
 
-  resources :events, :only => [:index]
+  # resources :events, :only => [:index]
+  # resources :apps, :only => [:index, :new, :show] do
+  #   resources :servers, :only => [:index, :show]
+  # end
+
 
 end

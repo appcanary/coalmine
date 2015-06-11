@@ -1,5 +1,5 @@
 class VulnsController < ApplicationController
   def show
-    @vuln = Vuln.fake_vulns.first
+    @vuln = Vulnerability.find(params[:id])
   end
 end
