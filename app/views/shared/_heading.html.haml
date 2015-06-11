@@ -4,7 +4,7 @@
     - if @server
       \/
       %span.avatar= avatar(@server)
-      %span.name= @server.name
+      %span.name= @server.hostname
       \/
 
       - unless @app
@@ -12,7 +12,7 @@
       - else
         %span=link_to "apps", server_path(@server)
         \/
-        %span.name= @app.name.blank? ? "missing app name" : @app.name
+        %span.name= @app.short_path
         \/
         %span Packages
 

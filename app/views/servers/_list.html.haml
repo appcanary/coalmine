@@ -1,5 +1,5 @@
 %td.status
-  -if rand(2) == 1
+  -if server.is_vulnerable
     %span.fa.fa-exclamation-triangle.warn
   -else
     %span.fa.fa-check-circle.okay
@@ -14,5 +14,5 @@
       %span.data=time_ago_in_words server.last_heartbeat
       ago
 %td.notifications
-  %a.switch{:class => (rand(2) == 0 ? 'pressed' : ''), :href => '#'}
+  -# %a.switch{:class => (rand(2) == 0 ? 'pressed' : ''), :href => '#'}
     notify me

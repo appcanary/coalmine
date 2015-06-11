@@ -16,21 +16,22 @@
       %tr
         %td.empty_message No vulnerable packages found for this app!
     - else
-      -@vuln_artifacts.each do |vuln|
+      -@vuln_artifacts.each do |artifact|
         %tr.artifact
           %td.info
             .title.data
-              = vuln.artifact_name
+              = artifact.name
             .version
               version
-              %span.data FAKE2.0.1
+              %span.data= artifact.number
             .kind
               kind:
-              %span.data=vuln.artifact_kind
+              %span.data=artifact.kind
           %td.vulnerabilities
             %ul
-              %li.vulnerability
-                =link_to vuln.title, '#'
+              - artifact.vulnerability.each do |vuln|
+                %li.vulnerability
+                  =link_to vuln.title, '#'
 
   %table#all_artifacts.artifacts.all(style="display:none")
     - if @artifacts.empty?
@@ -43,7 +44,7 @@
         %th version
       -@artifacts.each do |artifact|
         %tr.artifact
-          %td.name=artifact.name || artifact.artifact.first["name"]
+          %td.name=artifact.name
           %td.kind=artifact.kind
           %td.version
             =artifact.number

@@ -1,14 +1,8 @@
 class Artifact < CanaryBase
-  attr_params :id, :number, :platform, :artifact
 
-  attr_params :name, :kind, :uuid, :authors, :description, :uri, :vulnerability, 
-
-  def name
-    artifact.first.try(:[], "name")
-  end
+  attr_params :id, :name, :kind, :uuid, :authors, :description, :uri, :vulnerability, 
 
   def kind
-    return platform if platform 
     if @kind["ident"] =~ /rubygem/
       "rubygem"
     else

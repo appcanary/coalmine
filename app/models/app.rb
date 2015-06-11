@@ -3,7 +3,7 @@ class App < CanaryBase
 
   attr_accessor :server
 
-  has_many Artifact, "artifact_versions"
+  has_many ArtifactVersion
   has_many Vulnerability, "vulnerable_to"
 
   def vulns
@@ -20,5 +20,10 @@ class App < CanaryBase
 
   def to_param
     uuid
+  end
+
+  def short_path
+    path_strs = path.split("/")
+    path_strs[0..-2].map(&:first).join("/") + "/" + path_strs[-1]
   end
 end
