@@ -22,7 +22,7 @@ class CanaryBase
   end
 
   def self.client
-    Thread.current[:canary_client]
+    Thread.current[:canary_client] || Canary.new("")
   end
 
   def canary
