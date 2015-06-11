@@ -1,5 +1,5 @@
 class ArtifactVersion < CanaryBase
-  attr_params :id, :number, :platform, :artifact, :vulnerability
+  attr_params :id, :number, :platform, :artifact, :vulnerability, :unknown_origin
 
   has_many Artifact, "artifact"
   has_many Vulnerability, "vulnerability"
