@@ -56,11 +56,9 @@ a {
 .main-drawer {
   position: fixed;
   background-color: #fff;
-  min-height: 100%;
-  width: 100%;
-  .container {
-    padding-bottom: 20px;
-  }
+  // .container {
+  //   padding-bottom: 20px;
+  // }
 
   .heading {
     width: 90%;
@@ -89,6 +87,7 @@ a {
   @media (min-width: $grid-float-breakpoint) {
     position: absolute;
     left: $left-navbar-width;
+    margin-top: $body-margin-top;
   }
 }
 
