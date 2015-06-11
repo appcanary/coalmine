@@ -11,7 +11,7 @@ class Server < CanaryBase
   end
 
   def app(id)
-    @app ||= self.canary.server_app(uuid, id).tap do |a|
+    self.canary.server_app(uuid, id).tap do |a|
       a.server = self
     end
   end
