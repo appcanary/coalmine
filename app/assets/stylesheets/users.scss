@@ -10,5 +10,13 @@
   }
 }
 
-
-
+form.edit_user {
+  .input {
+    label {
+      display: block;
+    }
+    input.string, input.password {
+      width: 300px;
+    }
+  }
+}
