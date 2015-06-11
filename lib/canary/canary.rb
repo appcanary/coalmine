@@ -1,3 +1,5 @@
+require 'faraday_middleware'
+
 class Canary
   delegate :get, :put, :post, :to => :client
   def client
