@@ -31,7 +31,7 @@
             %ul
               - artifact.vulnerability.each do |vuln|
                 %li.vulnerability
-                  =link_to vuln.title, '#'
+                  =link_to vuln.title, vuln_path(vuln)
 
   %table#all_artifacts.artifacts.all(style="display:none")
     - if @artifacts.empty?

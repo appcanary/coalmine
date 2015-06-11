@@ -1,5 +1,5 @@
 class Server < CanaryBase
-  attr_params :apps, :last_heartbeat, :ip, :name, :hostname, :uname, :id, :uuid, :is_vulnerable
+  attr_params :apps, :last_heartbeat_at, :ip, :name, :hostname, :uname, :id, :uuid, :is_vulnerable
 
   has_many App
 

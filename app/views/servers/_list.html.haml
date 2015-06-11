@@ -11,7 +11,7 @@
       = server.hostname.titleize
     %span.last_updated.info
       updated
-      %span.data=time_ago_in_words server.last_heartbeat
+      %span.data=time_ago_in_words server.last_heartbeat_at
       ago
 %td.notifications
   -# %a.switch{:class => (rand(2) == 0 ? 'pressed' : ''), :href => '#'}
