@@ -61,8 +61,8 @@ a {
   // }
 
   .heading {
+    margin-top: -$body-margin-top;
     width: 90%;
-    border-bottom: solid 1px #eee;
     min-height: 48px;
     padding-right: 1em;
     h3 {

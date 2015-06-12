@@ -1,5 +1,5 @@
-class CurrentUserController < ApplicationController
-  def edit
+class SettingsController < ApplicationController
+  def show
     @user = current_user
   end
 
@@ -9,7 +9,7 @@ class CurrentUserController < ApplicationController
       if @user.update(user_params)
         format.html { redirect_to dashboard_path, notice: 'User settings updated!' }
       else
-        format.html { render :edit }
+        format.html { render :show }
       end
     end
   end

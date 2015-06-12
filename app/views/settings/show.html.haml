@@ -4,7 +4,7 @@
 
 .section
   .user_form
-    = simple_form_for @user, url: current_user_path do |f|
+    = simple_form_for @user, url: settings_path do |f|
       =f.input :email
       =f.input :password
       =f.input :password_confirmation
