@@ -17,10 +17,10 @@
           %a{:href => "/dashboard",
              class: (controller_name == 'dashboard') ? 'active' : ''}
             %i.fa.fa-clock-o
-        %li
-          %a{:href => "/servers/new",
-             class: (controller_name == 'servers') ? 'active' : ''}
-            %i.fa.fa-plus
+        -# %li
+        -#   %a{:href => "/servers/new",
+        -#      class: (controller_name == 'servers') ? 'active' : ''}
+        -#     %i.fa.fa-plus
         %li
           %a{:href => settings_path,
              class: (controller_name == 'current_user') ? 'active' : ''}
