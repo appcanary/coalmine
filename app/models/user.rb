@@ -48,6 +48,14 @@ class User < ActiveRecord::Base
     canary.server(id)
   end
 
+  def api_info
+    canary.me
+  end
+
+  def agent_token
+    api_info["agent-token"]
+  end
+
   protected
   def canary
     @canary ||= Canary.new(self.token)

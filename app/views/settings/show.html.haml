@@ -3,6 +3,15 @@
     Settings
 
 .section
+  .user_api
+    %h5
+      Your API token is:
+    %code
+      = current_user.agent_token
+    %br/
+    %br/
+
+.section
   .user_form
     = simple_form_for @user, url: settings_path do |f|
       =f.input :email
