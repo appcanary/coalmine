@@ -1,5 +1,93 @@
 .heading
   %h3
-    Add a server
+    Welcome! Let's add your servers.
+
+%section
+  .col-sm-6
+    .col-sm-12
+      %h4
+        Here's what you gotta do.
+
+      %p
+        Currently, we only support Ruby apps running on Linux operating systems. At the time of writing, you must use either our 
+        %code .deb 
+        or
+        %code .rpm
+        packages.
+
+      %p
+        What is your server's architecture? Pick the corresponding link, copy it, and 
+        %code
+          curl
+        it to your system.
+
+      %table.table
+        %thead
+          %th
+            architecture
+          %th
+          %th
+        %tbody
+          %tr
+            %td
+              i386
+            %td
+              = link_to "Debian", "https://appcanary.s3.amazonaws.com/dist/canary-agent_latest_386.deb", :target => "_blank"
+            %td
+              = link_to "RPM", "https://appcanary.s3.amazonaws.com/dist/canary-agent_latest_386.rpm", :target => "_blank"
+          %tr
+            %td
+              amd64
+            %td
+              = link_to "Debian", "https://appcanary.s3.amazonaws.com/dist/canary-agent_latest_amd64.deb", :target => "_blank"
+            %td
+              = link_to "RPM", "https://appcanary.s3.amazonaws.com/dist/canary-agent_latest_amd64.rpm", :target => "_blank"
+
+      %p
+        While you're still in your shell, go
+      %p
+        %code
+          sudo dpkg -i FILEHERE.deb # debian-etc
+          %br/
+        %code
+          sudo rpm -Uvh FILEHERE.rpm # redhat-etc
+
+      %h4 Awesome.
+
+      %p 
+        Now you just have to edit the configuration file. It's sitting in 
+        %code
+          \/etc/canary/canary.conf
+        \.
+        You will want an API key, so please use this one:
+        %pre
+          = current_user.agent_token
+
+        Finally, point the config file to your
+        %code
+          Gemfile.lock
+        using it's full qualified path. The sample config should be obvious.
+
+      %h4
+        Finally,
+      %p
+        We've shipped an upstart script with the package, so you can just type:
+        %br/
+        %code start canary-agent
+
+      %h5 Contact us at hello@appcanary.com should you have any problems.
+
+%section
+  .col-sm-8
+    .col-sm-12
+      %br/
+      %p
+        %strong
+          (Forgive us, we're still a little rough around the edges.
+          %br/
+          We're working hard to make this easier.)
+
+    .col-sm-4.col-sm-offset-1
+      = image_tag "canary-rough.jpg", :style => "width: 200px"
 
 
