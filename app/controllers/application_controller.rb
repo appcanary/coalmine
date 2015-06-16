@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   before_filter :require_login
 
   private
-  def not_authenticated
+  def not_authenticated(msg)
     redirect_to login_path, alert: "Please login first"
   end
 

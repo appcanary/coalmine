@@ -25,10 +25,9 @@ Rails.application.routes.draw do
 
   resources :vulns, :only => [:show]
 
-  # resources :events, :only => [:index]
-  # resources :apps, :only => [:index, :new, :show] do
-  #   resources :servers, :only => [:index, :show]
-  # end
 
-
+  namespace :admin do
+    root to: "users#index"
+    resources :users
+  end
 end
