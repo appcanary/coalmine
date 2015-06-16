@@ -111,7 +111,7 @@ class Canary
   # Users
 
   def me
-    wrap User, get('users/me', token: @user_token)
+    get('users/me', token: @user_token)
   end
 
   def my_vulnerabilities

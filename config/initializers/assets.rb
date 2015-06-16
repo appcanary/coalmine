@@ -15,7 +15,9 @@ loose_assets = lambda do |logical_path, filename|
 end
 
 Rails.application.config.assets.precompile = [loose_assets, /(?:\/|\\|\A)application\.(css|js)$/]
-Rails.application.config.assets.precompile += %w( application.css application.js launchrock.css launchrock.js fontawesome-webfont.eot fontawesome-webfont.woff2 fontawesome-webfont.woff fontawesome-webfont.ttf fontawesome-webfont.svg)
+Rails.application.config.assets.precompile += %w( application.css application.js launchrock.css launchrock.js )
+Rails.application.config.assets.precompile += %w(*.svg *.eot *.woff *.woff2 *.ttf *.gif *.png *.ico)
+# fontawesome-webfont.eot fontawesome-webfont.woff2 fontawesome-webfont.woff fontawesome-webfont.ttf fontawesome-webfont.svg
 
 # source maps!
 if Rails.env.development?
