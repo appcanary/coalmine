@@ -61,7 +61,7 @@ namespace :debug do
   desc "tail rails logs" 
   task :logs do
     on roles(:app) do
-      execute "tail -f #{shared_path}/log/#{fetch(:rails_env)}.log"
+      execute "tail -f #{shared_path}/log/#{fetch(:rails_env)}.log  #{shared_path}/log/unicorn*.log"
     end
   end
 end
