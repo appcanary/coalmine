@@ -1,0 +1,26 @@
+%section
+  .col-sm-6
+    %h1
+      All the users.
+
+%section
+  .col-sm-6
+    = link_to "New user", new_admin_user_path, :class => "btn btn-default"
+    %table.table
+      %thead
+        %th
+          email
+        %th
+        %th
+      %tbody
+        - @users.each do |user|
+          %tr
+            %td
+              = user.email
+            %td
+              = link_to "edit", [:admin, user]
+            %td
+              - if user != current_user
+                = link_to "impersonate", impersonate_admin_user_path(user), :method => :post
+              - else
+                (that's you!)

@@ -22,8 +22,19 @@
              class: (controller_name == 'servers') ? 'active' : ''}
             %i.fa.fa-plus
         %li
-          %a{:href => settings_path,
-             class: (controller_name == 'current_user') ? 'active' : ''}
+          %a{:href => settings_path, class: (controller_name == 'settings') ? 'active' : ''}
             %i.fa.fa-cog
+        - if current_user.is_admin?
+          %li
+            %a{:href => admin_root_path,
+               class: (controller_path =~ /admin/) ? 'active' : ''}
+              %i.fa.fa-book
+        - if true_user != current_user
+          %li
+            = link_to "<i class='fa fa-ban' ></i>".html_safe, stop_impersonating_users_path,
+              :method => :post
+
+          
+
         %li
           = link_to '<i class="fa fa-sign-out"></i>'.html_safe, logout_path, :method => :post

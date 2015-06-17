@@ -29,6 +29,7 @@ gem 'simple_form', '~> 3.1.0'
 
 # auth
 gem 'sorcery'
+gem 'pretender'
 
 # model stuff
 gem 'annotate'

@@ -47,22 +47,7 @@ class Canary
     end
   end
 
-  # class Vuln < Base
-    # attr_accessor :description, :osvdb, :reported_at, :cve, :title, :id, :artifact, :uuid, :versions, :unaffected_versions, :patched_versions, :criticality
-  # end
-
-  # class App < Base
-  #   attr_accessor :id, :name, :path, :uuid, :artifact_versions, :vulnerable_to
-  # end
-
-  # class User < Base
-  #   attr_accessor :id, :name, :email, :servers, :web_token, :agent_token
-  # end
-
-  # class Artifact < Base
-  #   attr_accessor :description, :mailinglist_uri, :source_uri, :name, :id, :unknown_origin, :uri, :uuid, :versions, :authors
-  # end
-
+  
   # TODO: add pagination to collection methods
 
   def status
