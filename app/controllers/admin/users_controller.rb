@@ -1,10 +1,17 @@
 class Admin::UsersController < AdminController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
+
   def index
+    @users = User.all
   end
 
   def new
     @user = User.new
+  end
+
+  def impersonate
+    impersonate_user(@user)
+    redirect_to dashboard_path, notice: "You are now #{@user.email}. Be careful!"
   end
 
   def show
@@ -15,12 +22,11 @@ class Admin::UsersController < AdminController
 
     respond_to do |format|
       if UserCreator.sign_up(@user)
-        auto_login(@user)
-        format.html { redirect_to dashboard_path }
-        format.json { render json: @user, status: :created, location: @user }
+        format.html { redirect_to admin_root_path }
+        # format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render :new }
-        format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
+        # format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
       end
     end
   end
@@ -30,11 +36,11 @@ class Admin::UsersController < AdminController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render json: @user, status: :ok, location: @user }
+        format.html { redirect_to admin_users_path, notice: 'User was successfully updated.' }
+        # format.json { render json: @user, status: :ok, location: @user }
       else
         format.html { render :edit }
-        format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
+        # format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
       end
     end
   end

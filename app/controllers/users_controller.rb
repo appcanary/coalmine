@@ -4,6 +4,11 @@ class UsersController < ApplicationController
   
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  def stop_impersonating
+    stop_impersonating_user
+    redirect_to admin_root_path, notice: "Welcome back."
+  end
+
   # GET /users
   # GET /users.json
   def index

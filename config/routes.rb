@@ -10,13 +10,15 @@ Rails.application.routes.draw do
   get 'welcome' => "dashboard#index", :as => :welcome
 
 
-  resources :users
+  resources :users do
+    post "stop_impersonating", on: :collection
+  end
   #get 'sign_up' => "users#new", :as => :sign_up
   #post 'sign_up' => "users#create"
 
   resource :settings, :only => [:show, :update]
 
-  get 'timeline' => "timeline#index"
+  # get 'timeline' => "timeline#index"
   resources :user_sessions, :only => [:create, :destroy]
   
   resources :servers, :only => [:new, :show] do
@@ -28,6 +30,8 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root to: "users#index"
-    resources :users
+    resources :users do
+      post "impersonate", on: :member
+    end
   end
 end
