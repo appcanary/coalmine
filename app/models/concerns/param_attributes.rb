@@ -1,4 +1,4 @@
-module TrackAttributes
+module ParamAttributes
   extend ActiveSupport::Concern
 
   included do
@@ -23,6 +23,11 @@ module TrackAttributes
       @has_many = @has_many.merge({key => klass})
     end
 
+    # TODO: handle collections
+    # for now this is distinct from the Canary#wrap code in so far
+    # that nested collections aren't expected to have cursors
+
+
     def parse(attr, canary = nil)
       if canary
         self.client = canary
@@ -46,12 +51,8 @@ module TrackAttributes
   end
 
 
-  # TODO remember to add parent association?
-  # TODO: handle collections
-  # for now this is distinct from the Canary#wrap code in so far
-  # that nested collections aren't
-  # expected to have cursors?
-
+  # TODO remember to add parent association
+ 
   def initialize(params = {})
     assoc = self.associations
     attrs = self.attr_params.map(&:to_s)
@@ -68,6 +69,8 @@ module TrackAttributes
   def attributes
     Hash[attr_params.map { |k| [k, send(k)] }]
   end
+
+  protected
 
   def associations
     self.class.instance_variable_get('@has_many') || {}

@@ -1,4 +1,4 @@
 class CanaryBase
-  include TrackAttributes
+  include ParamAttributes
   extend ActiveModel::Naming
 end
