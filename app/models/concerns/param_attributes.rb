@@ -48,6 +48,10 @@ module ParamAttributes
       @canary || Canary.new(nil)
     end
 
+    def _attr_params
+      @attr_params || []
+    end
+
   end
 
 
@@ -70,7 +74,6 @@ module ParamAttributes
     Hash[attr_params.map { |k| [k, send(k)] }]
   end
 
-  protected
 
   def associations
     self.class.instance_variable_get('@has_many') || {}
@@ -80,6 +83,8 @@ module ParamAttributes
   def attr_params
     self.class.instance_variable_get('@attr_params') || []
   end
+
+  protected
 
   def canary
     self.class.client

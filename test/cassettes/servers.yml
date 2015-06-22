@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:3000/api/v1/servers
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Authorization:
+      - Token 142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '3808'
+      - '3808'
+      Server:
+      - http-kit
+      Date:
+      - Mon, 22 Jun 2015 06:26:31 GMT
+    body:
+      encoding: UTF-8
+      string: '[{"apps":[{"id":17592186873901,"uuid":"55837b53-f613-428e-b15e-be4aa8c0bef0","name":"","path":"/Users/phillmv/code/state/canary-agent/test/data/Gemfile.lock","vulnerable-to":[{"title":"Arbitrary
+        file existence disclosure in Action Pack","cve":[{"cve-id":"CVE-2014-7829","url":"http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-7829"}],"criticality":{"ident":"vulnerability.criticality/medium"},"reported-at":"2014-11-17T00:00:00.000Z","uuid":"554bc63a-760e-4fc8-8263-cb4b6ec64994","id":17592186872125,"patched-versions":[">=
+        4.1.8","~> 3.2.21","~> 4.0.11.1","~> 4.0.12","~> 4.1.7.1"],"description":"Specially
+        crafted requests can be used to determine whether a file exists on\nthe filesystem
+        that is outside the Rails application''s root directory.  The\nfiles will
+        not be served, but attackers can determine whether or not the file\nexists.  This
+        vulnerability is very similar to CVE-2014-7818, but the\nspecially crafted
+        string is slightly different.","artifact":{"id":17592186053577,"name":"actionpack","kind":{"ident":"artifact.kind/rubygem"},"uuid":"554b9d13-d585-4584-b369-aca3eb0834e9","description":"Web-flow
+        and rendering framework putting the VC in MVC (part of Rails).","uri":"https://www.rubygems.org/gems/actionpack"}},{"title":"Possible
+        Denial of Service attack in Active Support","cve":[{"cve-id":"CVE-2015-3227","url":"http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-3227"}],"criticality":{"ident":"vulnerability.criticality/unknown"},"reported-at":"2015-06-16T00:00:00.000Z","uuid":"558074fc-e172-470e-b952-f4fbfe7e7e34","id":17592186873660,"patched-versions":[">=
+        4.2.2","~> 3.2.22","~> 4.1.11"],"description":"Specially crafted XML documents
+        can cause applications to raise a \n`SystemStackError` and potentially cause
+        a denial of service attack.  This \nonly impacts applications using REXML
+        or JDOM as their XML processor.  Other \nXML processors that Rails supports
+        are not impacted. \n\nAll users running an affected release should either
+        upgrade or use one of the work arounds immediately.\n\nWorkarounds \n-----------
+        \nUse an XML parser that is not impacted by this problem, such as Nokogiri
+        or \nLibXML.  You can change the processor like this: \n\n  ActiveSupport::XmlMini.backend
+        = ''Nokogiri'' \n\nIf you cannot change XML parsers, then adjust \n`RUBY_THREAD_MACHINE_STACK_SIZE`.","artifact":{"id":17592186048293,"name":"activesupport","kind":{"ident":"artifact.kind/rubygem"},"uuid":"554b9d11-cafe-45bd-93bd-fdf22761d734","description":"A
+        toolkit of support libraries and Ruby core extensions extracted from the Rails
+        framework.","uri":"https://www.rubygems.org/gems/activesupport"}},{"title":"Potential
+        Denial of Service Vulnerability in Rack","cve":[{"cve-id":"CVE-2015-3225","url":"http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-3225"}],"criticality":{"ident":"vulnerability.criticality/unknown"},"reported-at":"2015-06-16T00:00:00.000Z","uuid":"558074fc-cfbc-4c24-9717-19817296577d","id":17592186873664,"patched-versions":[">=
+        1.6.2","~> 1.4.6","~> 1.5.4"],"description":"Carefully crafted requests can
+        cause a `SystemStackError` and potentially \ncause a denial of service attack.
+        \n\nAll users running an affected release should upgrade.","artifact":{"id":17592186050289,"name":"rack","kind":{"ident":"artifact.kind/rubygem"},"uuid":"554b9d12-63ed-446a-8690-c1e41194d4cd","description":"a
+        modular Ruby webserver interface","uri":"https://www.rubygems.org/gems/rack"}}]}],"ip":"172.20.14.238","name":"why
+        is this here?","hostname":"maryanne.local","uname":"Darwin maryanne.local
+        14.3.0 Darwin Kernel Version 14.3.0: Mon Mar 23 11:59:05 PDT 2015; root:xnu-2782.20.48~5/RELEASE_X86_64
+        x86_64 i386 MacBookPro12,1 Darwin\n","id":17592186873898,"uuid":"55837b51-2e9d-45ad-ab38-9caf2f2b78b5","last-heartbeat-at":"2015-06-22T06:26:25.815Z","is-vulnerable":true}]'
+    http_version: 
+  recorded_at: Mon, 22 Jun 2015 06:26:31 GMT
+recorded_with: VCR 2.9.3
