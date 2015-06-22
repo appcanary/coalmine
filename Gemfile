@@ -97,4 +97,5 @@ group :development do
   gem "rack-livereload"
   gem 'guard-livereload', '~> 2.4', require: false
   gem 'guard-minitest'
+  gem 'guard-ctags-bundler'
 end
