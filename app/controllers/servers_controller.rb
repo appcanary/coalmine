@@ -1,8 +1,6 @@
 class ServersController < ApplicationController
-  def index
-  end
-
   def new
+    @agent_token = current_user.agent_token
   end
 
   def show

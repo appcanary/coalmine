@@ -115,7 +115,7 @@ class CanaryClientTest < ActiveSupport::TestCase
  
   describe 'add_user' do
     it 'should set the post body to the :data option' do
-      user = FactoryGirl.create :user
+      user = FactoryGirl.build :user, :email => "alice@example.com"
       refute user.email.blank?
       VCR.use_cassette('create_user') do
         result_user = @client.add_user({name: 'bob', email: user.email})
