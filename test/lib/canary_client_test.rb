@@ -1,11 +1,45 @@
 require "#{File.dirname(__FILE__)}/../test_helper"
 
 class CanaryClientTest < ActiveSupport::TestCase
-  def setup
-    user_token = 'ohicvf2knu0jt9u6p180vpnu6u7vk3151g0794po2mbfrgc0u4f'
-    agent_token = 'p28tdt94c6fu8l3hscq2gq16uef6fncrud4s6smkfh7qfk1sam7'
+  setup do
+    user_token = '142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9'
     @client = Canary.new(user_token)
   end
+
+
+  def attr_smokescreen(obj, klass)
+    assert_equal klass, obj.class
+
+    params = obj.attr_params
+
+    # all objects got attrs and a uuid
+    assert obj.attributes.present?
+    assert obj.uuid.present?
+
+    params.each do |key|
+      # here we're at least testing that
+      # the only empty? values being sent
+      # is nil.
+      unless val = obj.send(key).nil?
+        assert obj.send(key).present?, key
+      end
+    end
+
+    
+    obj.associations.each_pair do |key, klass|
+      assert_nothing_raised do
+        unless (assoc_obj = obj.send(key)).nil?
+          if assoc_obj.is_a? Array
+            assert assoc_obj.present?
+            assoc_obj = assoc_obj.first
+          end
+
+          assert assoc_obj.class == klass
+        end
+      end
+    end
+  end
+
 
   describe 'status' do
     it 'returns the server status' do
@@ -15,41 +49,73 @@ class CanaryClientTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'vulnerability' do
-    it 'should return the vulnerability with the supplied uuid' do
-      VCR.use_cassette('vulnerability') do
-        vulnerability = @client.vulnerability('554bc63b-f322-486b-9981-4f9ed601338d')
-        assert_match /^Echor Gem for Ruby/, vulnerability.description
-        assert_equal 17592186872303, vulnerability.osvdb.first['id']
-        assert_equal 17592186045447, vulnerability.criticality['id']
-        assert_equal '2014-01-14T00:00:00.000Z', vulnerability.reported_at
-        assert_equal 17592186872304, vulnerability.cve.first['id']
-        assert_match /^Echor Gem/, vulnerability.title
-        assert_equal 17592186872302, vulnerability.id
-        assert_equal 17592186294610, vulnerability.artifact['id']
-        assert_equal '554bc63b-f322-486b-9981-4f9ed601338d', vulnerability.uuid
+  describe "vulns" do
+    it "returns vulns properly wrapped" do
+      VCR.use_cassette("vulnerabilities") do
+        our_vulns = @client.vulnerabilities
+        assert our_vulns.present?
+        assert our_vulns.size > 1
+
+        vuln = our_vulns.first
+        attr_smokescreen(vuln, Vulnerability)
+
+      end
+    end
+
+    it "returns an indiv vuln properly wrapped" do
+      VCR.use_cassette("a_vulnerability") do
+        vuln_uuid = "5571e720-949e-49f0-b37f-32784f171290"
+        vuln = @client.vulnerability(vuln_uuid)
+
+        attr_smokescreen(vuln, Vulnerability)
       end
     end
   end
 
-  describe 'vulnerabilities' do
-    it 'should return all vulnerabilities' do
-      VCR.use_cassette('vulnerabilities') do
-        vulns = @client.vulnerabilities
-        assert_equal 50, vulns.count
-        v = vulns[7]
-        assert_match /^Fat Free CRM contains/, v.description
-        assert_equal [{"id" => 17592186872318}], v.osvdb
-        assert_equal({"id"=>17592186045445}, v.criticality)
-        assert_equal '2013-12-24T00:00:00.000Z', v.reported_at
-        assert_match /cycling the Rails session secret$/, v.title
+  describe "servers" do
+    it "returns servers properly wrapped" do
+      VCR.use_cassette("servers") do
+        servers = @client.servers
+
+        assert servers.present?
+        assert servers.size >= 1
+        
+        server = servers.first
+
+        attr_smokescreen(server, Server)
       end
     end
+
+    it "returns an indiv server properly wrapped" do
+      server_uuid = "55837b51-2e9d-45ad-ab38-9caf2f2b78b5"
+      VCR.use_cassette("a_server") do
+
+
+        a_server = @client.server(server_uuid)
+
+        attr_smokescreen(a_server, Server)
+      end
+    end
+
+
+    it "returns a server's apps properly wrapped" do
+      server_uuid = "55837b51-2e9d-45ad-ab38-9caf2f2b78b5"
+
+      VCR.use_cassette("a_server_apps") do
+        a_server = @client.server_apps(server_uuid)
+        
+        # TODO wrap it up
+
+        # attr_smokescreen(a_server, App)
+      end
+    end
+
   end
 
+ 
   describe 'add_user' do
     it 'should set the post body to the :data option' do
-      user = FactoryGirl.create :user
+      user = FactoryGirl.build :user, :email => "alice@example.com"
       refute user.email.blank?
       VCR.use_cassette('create_user') do
         result_user = @client.add_user({name: 'bob', email: user.email})

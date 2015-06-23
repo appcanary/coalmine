@@ -1,7 +1,16 @@
 require 'test_helper'
 
 class UserCreatorTest < ActiveSupport::TestCase
-  describe "UserCreator#sign_up" do
+  describe "talking to the API" do
+    it "should register a user" do 
+      VCR.use_cassette("user_creator") do
+        @user = FactoryGirl.build(:user)
+        assert UserCreator.sign_up(@user)
+        assert @user.errors.blank?
+      end
+    end
+  end
+  describe "handling User objects" do
     it "should fail on invalid users" do
       @user = FactoryGirl.build(:invalid_user)
 

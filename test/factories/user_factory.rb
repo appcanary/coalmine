@@ -36,10 +36,17 @@
 
 FactoryGirl.define do
   factory :user do
-    email 'alice@example.com'
+    sequence :email do |n|
+      "alice#{n}@example.com"
+    end
+
     after(:build) do |u|
       u.password = "somevaluehere"
       u.password_confirmation = u.password
+    end
+
+    factory :admin_user do
+      is_admin { true }
     end
 
     factory :invalid_user do
