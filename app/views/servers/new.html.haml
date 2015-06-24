@@ -9,55 +9,31 @@
         Here's what you gotta do.
 
       %p
-        Currently, we only support Ruby apps running on Linux operating systems. At the time of writing, you must use either our 
-        %code .deb 
-        or
-        %code .rpm
-        packages.
+        Currently, we only support:
+        %ol
+          %li 
+            %span{}
+              = image_tag "icon-ruby.png", :style => "width: 13px"
+            Ruby
+          %li
+            %span{}
+              = image_tag "icon-ubuntu.png", :style => "width: 13px"
+            Ubuntu
+
 
       %p
-        What is your server's architecture? Pick the corresponding link, copy it, and 
+        Long story short, copy and paste the following into a shell:
+        %br/
         %code
-          curl
-        it to your system.
-
-      %table.table
-        %thead
-          %th
-            architecture
-          %th
-          %th
-        %tbody
-          %tr
-            %td
-              i386
-            %td
-              = link_to "Debian", "https://appcanary.s3.amazonaws.com/dist/canary-agent_latest_i386.deb", :target => "_blank"
-            %td
-              = link_to "RPM", "https://appcanary.s3.amazonaws.com/dist/canary-agent_latest_i386.rpm", :target => "_blank"
-          %tr
-            %td
-              amd64
-            %td
-              = link_to "Debian", "https://appcanary.s3.amazonaws.com/dist/canary-agent_latest_amd64.deb", :target => "_blank"
-            %td
-              = link_to "RPM", "https://appcanary.s3.amazonaws.com/dist/canary-agent_latest_amd64.rpm", :target => "_blank"
-
-      %p
-        While you're still in your shell, go
-      %p
-        %code
-          sudo dpkg -i FILEHERE.deb # debian-etc
-          %br/
-        %code
-          sudo rpm -Uvh FILEHERE.rpm # redhat-etc
-
+          curl -s https://packagecloud.io/install/repositories/appcanary/agent/script.deb.sh | sudo bash
+          apt-get install appcanary
+      
       %h4 Awesome.
 
       %p 
         Now you just have to edit the configuration file. It's sitting in 
         %code
-          \/etc/canary/canary.conf
+          \/etc/appcanary/agent.conf
         \.
         You will want an API key, so please use this one:
         %pre
@@ -73,7 +49,7 @@
       %p
         We've shipped an upstart script with the package, so you can just type:
         %br/
-        %code start canary-agent
+        %code start appcanary-agent
 
       %h5 Contact us at hello@appcanary.com should you have any problems.
 
