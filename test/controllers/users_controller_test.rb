@@ -3,7 +3,7 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   describe "new user" do
     it "should display signup page" do
-      get :new
+      get :new, :source => "signupsource"
       assert_response :success
       assert_not_nil assigns(:user)
     end
@@ -21,6 +21,24 @@ class UsersControllerTest < ActionController::TestCase
       assert assigns(:current_user)
       assert_redirected_to dashboard_path
     end
+
+    it "should register new BETA users and log them in" do
+      client = mock
+      client.expects(:add_user).with(anything).returns({'web-token' => 'a token'})
+      Canary.stubs(:new).with(anything).returns(client)
+
+      assert_difference('User.count') do
+        post :create, :source => "betasource", :user => { :email => Faker::Internet.email,
+          :password => TestValues::PASSWORD,
+          :password_confirmation => TestValues::PASSWORD,
+          :beta_signup_source => "zomgtest"
+        }
+      end
+      assert assigns(:current_user)
+      assert User.last.beta_signup_source == "zomgtest"
+      assert_redirected_to dashboard_path
+    end
+
   end
 
   describe "existing user" do
@@ -33,7 +51,7 @@ class UsersControllerTest < ActionController::TestCase
 
     it "should fail if email is taken" do
 
-      post :create, :user => { :email => user.email,
+      post :create, :source => "betasource", :user => { :email => user.email,
                                :password => TestValues::PASSWORD,
                                :password_confirmation => TestValues::PASSWORD }
 

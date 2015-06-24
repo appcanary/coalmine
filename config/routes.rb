@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   #get 'sign_up' => "users#new", :as => :sign_up
   #post 'sign_up' => "users#create"
 
+  get "secretsignup/:source" => "users#new", :as => :new_beta_sign_up
+  post "secretsignup/:source" => "users#create", :as => :beta_sign_up
+
   resource :settings, :only => [:show, :update]
 
   # get 'timeline' => "timeline#index"

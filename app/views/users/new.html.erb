@@ -1,9 +1,47 @@
-<%# <%= render 'shared/logo' %>
-<%# <section> %>
-  <%#   <div class="user-login"> %>
-<%#     <% content_for :user_form_title do %>
-<%#       <h3>Before we get started, tell us:</h3>
-<%#     <% end %>
-<%#     <%= render :partial => 'form', :locals => { :sign_up => true } %>
-<%#   </div> %>
-<%# </section> %>
+<%= render 'shared/logo' %>
+<section>
+  <div class="user-login">
+    <% content_for :user_form_title do %>
+      <h3>Before we get started, tell us:</h3>
+    <% end %>
+
+
+    <%= form_for(@user, :url => beta_sign_up_path(params[:source])) do |f| %>
+      <% if @user.errors.any? %>
+        <div class="error_explanation" role="alert">
+          <h4>Oops. We encountered an error:</h4>
+
+          <ul>
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= yield :user_form_title %>
+      
+      <%= f.hidden_field :beta_signup_source, :value => params[:source] %>
+
+      <div class="form-group">
+        <%= f.email_field :email, :class => "form-control", :placeholder => "Your email address" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.password_field :password, :class => "form-control", :placeholder => "A password, or a secret between us", :'data-minlength' => "6", :'data-error' => 'At least 6 characters' %>
+        <span class="help-block with-errors"></span>
+
+      </div>
+
+      <div class="form-group">
+        <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "The same password again, just to confirm", :'data-match' => "#user_password", :'data-error' => "Passwords must match" %>
+        <span class="help-block with-errors"></span>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Sign Up", :class => "btn btn-black" %>
+      </div>
+    <% end %>
+
+  </div>
+</section> 
