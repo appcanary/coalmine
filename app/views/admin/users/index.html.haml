@@ -11,12 +11,16 @@
         %th
           email
         %th
+          source
+        %th
         %th
       %tbody
         - @users.each do |user|
           %tr
             %td
               = user.email
+            %td
+              = user.beta_signup_source
             %td
               = link_to "edit", [:admin, user]
             %td

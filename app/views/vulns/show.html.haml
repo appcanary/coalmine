@@ -20,12 +20,18 @@
         %dd= @vuln.osvdb
 
       %dt Description:
-      %dd= @vuln.description
+      %dd
+        - @vuln.description.each_line do |str|
+          = str
+          <br/>
 
       %dt Criticality:
       %dd= @vuln.criticality_name
 
       %dt Patched Versions:
       %dd
-        %pre
-          = @vuln.patched_versions
+        %pre{style: "border: none;"}
+          - @vuln.patched_versions.each do |vers|
+            = vers
+            <br/>
+
