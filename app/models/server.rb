@@ -21,7 +21,7 @@ class Server < CanaryBase
   end
 
   def avatar
-    RubyIdenticon.create_base64(self.hostname, :border_size => 10)
+    RubyIdenticon.create_base64(self.hostname || "", :border_size => 10)
   end
 
   def to_param
