@@ -8,7 +8,7 @@
     %span.avatar
       = avatar(server)
     %span.title
-      = server.hostname.titleize
+      = server.hostname
     %span.last_updated.info
       updated
       %span.data=time_ago_in_words server.last_heartbeat_at
