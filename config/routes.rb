@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   
   resources :servers, :only => [:new, :show] do
     resources :apps, :only => [:index, :new, :show]
+    get "install", on: :collection
   end
 
   resources :vulns, :only => [:show]

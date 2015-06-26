@@ -24,12 +24,9 @@
       %p
         Long story short, copy and paste the following into a shell:
         %br/
-        %code
-          curl -s https://packagecloud.io/install/repositories/appcanary/agent/script.deb.sh | sudo bash
-        %br/
-        %br/
-        %code
-          apt-get install appcanary
+        %pre
+          curl -s https://appcanary.com/servers/install.sh | sudo bash
+        The above script adds our repository to your apt sources, and installs our package. Feel free to review prior to running.
       
       %h4 Awesome.
 

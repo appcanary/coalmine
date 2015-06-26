@@ -38,5 +38,12 @@ class ServersControllerTest < ActionController::TestCase
       assert_response :redirect
     end
 
+    it "should get the install script" do
+      get :install
+      assert_equal "text/x-shellscript", response.content_type
+      assert_equal "inline; filename=\"appcanary.debian.sh\"", response.headers["Content-Disposition"]
+      assert_equal "binary", response.headers["Content-Transfer-Encoding"]
+      assert_equal File.read(File.join(Rails.root, "lib/assets/script.deb.sh")), response.body
+    end
   end
 end
