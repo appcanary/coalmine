@@ -170,7 +170,7 @@ a {
     img {
       display: block;
       margin: 0 auto;
-      width: 200px;
+      width: 270px;
       @include transition (all 0.1s ease-out);
       &:hover {
         opacity: 0.5;
