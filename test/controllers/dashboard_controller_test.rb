@@ -1,15 +1,25 @@
 require 'test_helper'
 
 class DashboardControllerTest < ActionController::TestCase
-  setup do
-    Canary.any_instance.stubs(:servers).with(anything).returns([])
-  end
   describe "while authenticated" do
     let(:user) { FactoryGirl.create(:user) }
-    it "should get index" do
-      login_user(user)
-      get :index
-      assert_response :success
+    describe "while onboarded" do
+      it "should get index" do
+        Canary.any_instance.stubs(:servers).with(anything).returns([FactoryGirl.build(:server)])
+        login_user(user)
+        get :index
+        assert_response :success
+      end
+    end
+
+    describe "while not onboarded" do
+      it "should be redirected to servers/new" do
+        Canary.any_instance.stubs(:servers).with(anything).returns([])
+        login_user(user)
+
+        get :index
+        assert_redirected_to new_server_path
+      end
     end
   end
 
