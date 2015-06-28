@@ -124,8 +124,7 @@
 }
 
 .onboard-box {
-  @extend .col-sm-6;
-  @extend .col-sm-offset-3;
+  @extend .col-sm-8;
 
   margin-top: 20px;
   font-size: 16px;
@@ -136,7 +135,7 @@
     @include border-bottom-radius(5px);
     background-color: white;
     border: #ccc solid 1px;
-    padding: 30px;
+    padding: 20px;
 
     h3 {
     }
@@ -168,8 +167,17 @@
     }
   }
 
+  .onboard-title {
+    @extend .col-sm-12;
+    padding-bottom: 10px;
+    h3 {
+      margin-top: 0px;
+    }
+  }
+
   .onboard-desc {
     @extend .col-sm-12;
+    margin-top: 10px;
     li {
       padding-bottom: 15px;
     }

@@ -1,6 +1,15 @@
 class DashboardController < ApplicationController
   def index
     @servers = current_user.servers
-    render :index
+    @onboarded = @servers.present?
+
+    if @onboarded
+      render :index
+    else
+      if params[:done]
+        @opts = {notice: "Sorry, we can't see your server. Try again in a few moments, or contact us at hello@appcanary.com"}
+      end
+      redirect_to new_server_path, @opts || {}
+    end
   end
 end

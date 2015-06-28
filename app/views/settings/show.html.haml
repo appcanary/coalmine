@@ -2,7 +2,7 @@
   %h3
     Settings
 
-.section
+%section
   .user_api
     %h5
       Your API token is:
@@ -11,8 +11,8 @@
     %br/
     %br/
 
-.section
-  .user_form
+%section
+  .col-sm-4
     = simple_form_for @user, url: settings_path do |f|
       =f.input :password
       =f.input :password_confirmation

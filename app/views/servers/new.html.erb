@@ -1,0 +1,75 @@
+<div class="onboard-box">
+  <div class="onboard-wrapper">
+    <section>
+      <div class="onboard-title">
+        <h3>Welcome! Let's add your servers.</h3>
+      </section>
+
+      <section>
+        <div class="onboard-desc">
+          <p>Canary works by continously monitoring your infrastructure. You need to install our agent.</p>
+          <p>Current, we only support 
+            <span>
+              <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
+            <span>
+              <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu, </span> but we're hard at work adding other platforms.</p>
+          <h4>Step 1</h4>
+        <pre>curl -s https://appcanary.com/servers/install.sh | sudo bash</pre>
+          <p>The above script adds our repository to your apt sources, and installs our package.      
+          </p>
+
+          <h4>Step 2</h4>
+          <p>Now you just have to edit the configuration sitting in <code>/etc/appcanary/agent.conf</code>.
+            <br/>
+            You will want an API key so please use this one:
+            <pre>
+          <%= @agent_token %>
+          </pre>
+            Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
+          </p>
+
+          <h4>Step 3</h4>
+          <p>Start the agent. We shipped an upstart script, so type:
+            <br/>
+            <pre>
+            start appcanary
+          </pre>
+          </p>
+
+          <h4>Problems? Suggestions?</h4>
+          <p>Contact us at hello@appcanary.com for any and all reasons.</p>
+        </div>
+      </section>
+
+
+      <section>
+        <div class="action-bar">
+          <div class="pull-right">
+            <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+
+
+  <section>
+    <div class="col-sm-8">
+      <div class="col-sm-12">
+        <br/>
+        <p>
+          <strong>(Forgive us, we're still a little rough around the edges.<br/>We're working hard to make this easier.)</strong>
+        </p>
+
+      </div>
+
+      <div class="col-sm-4 col-sm-offset-1">
+        <%= image_tag "canary-rough.jpg", :style => "width: 200px" %>
+      </div>
+    </div>
+  </section>
+
+
