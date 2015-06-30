@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     get "install", on: :collection
   end
 
+  get "onboarding" => "servers#new", :as => :onboarding
+
   resources :vulns, :only => [:show]
 
 

@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true
 
   def servers
-    canary.servers
+    @servers ||= canary.servers
   end
 
   def server(id)

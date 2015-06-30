@@ -1,43 +1,67 @@
-<div class="onboard-box">
-  <div class="onboard-wrapper">
-    <section>
-      <div class="onboard-title">
-        <h3>Welcome! Let's add your servers.</h3>
+<section>
+  <div class="col-sm-4">
+
+    <div style="width: 200px; margin-left: auto; margin-right: auto;">
+      <%= image_tag "canary-egg.medium.png", :style => "width: 200px" %>
+      <% if @onboardd %>
+        <h3 style="text-align: center">Howdy!</h3>
+      <% else %>
+        <h3 style="text-align: center">Welcome!</h3>
+      <% end %>
+    </div>
+
+    <p>Canary works by monitoring your infrastructure. You will need to install our agent.</p>
+    <p>Current, we only support 
+      <span>
+        <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
+      <span>
+        <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu, </span> but we're hard at work adding other platforms.
+    </p>
+
+    <h4>Problems? Suggestions?</h4>
+    <p>Forgive us, we're still a little rough around the edges. Contact us at hello@appcanary.com for any and all reasons.</p>
+
+
+  </div>
+
+  <div class="onboard-box">
+    <div class="onboard-wrapper">
+      <section>
+        <div class="onboard-title">
+          <h3>Instructions</h3>
+        </div>
       </section>
 
       <section>
         <div class="onboard-desc">
-          <p>Canary works by continously monitoring your infrastructure. You need to install our agent.</p>
-          <p>Current, we only support 
-            <span>
-              <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
-            <span>
-              <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu, </span> but we're hard at work adding other platforms.</p>
-          <h4>Step 1</h4>
-        <pre>curl -s https://appcanary.com/servers/install.sh | sudo bash</pre>
-          <p>The above script adds our repository to your apt sources, and installs our package.      
+          <h4>Step 1.</h4>
+          <p>Open a shell on your favourite server. The following script adds our repository to your apt sources, and installs our package:
+            <kbd>curl -s https://appcanary.com/servers/install.sh | sudo bash</kbd>
+            <br/>
+            (instructions for chef, ansible, etc, coming soon)
           </p>
 
-          <h4>Step 2</h4>
-          <p>Now you just have to edit the configuration sitting in <code>/etc/appcanary/agent.conf</code>.
+          <h4>Step 2.</h4>
+          <p>Now edit the configuration. 
             <br/>
-            You will want an API key so please use this one:
+            <kbd>$EDITOR /etc/appcanary/agent.conf</kbd>
+            <br/>
+            You're going to need to add your API key, so feel free to copy and paste the following:
+            <br/>
             <pre>
-          <%= @agent_token %>
-          </pre>
+api_key = "<%= @agent_token %>"
+
+[[files]]
+# Add files to monitor here
+# path = "/var/www/someapp/current/Gemfile.lock"</pre>
             Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
           </p>
 
-          <h4>Step 3</h4>
+          <h4>Step 3.</h4>
           <p>Start the agent. We shipped an upstart script, so type:
             <br/>
-            <pre>
-            start appcanary
-          </pre>
+            <kbd>start appcanary</kbd>
           </p>
-
-          <h4>Problems? Suggestions?</h4>
-          <p>Contact us at hello@appcanary.com for any and all reasons.</p>
         </div>
       </section>
 
@@ -45,6 +69,7 @@
       <section>
         <div class="action-bar">
           <div class="pull-right">
+            <%# <%= eui_button "I need help!", href: dashboard_path(done: true), :class => "eui-button-medium-primary" %>
             <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
           </div>
 
@@ -55,21 +80,5 @@
   </div>
 
 
-
-  <section>
-    <div class="col-sm-8">
-      <div class="col-sm-12">
-        <br/>
-        <p>
-          <strong>(Forgive us, we're still a little rough around the edges.<br/>We're working hard to make this easier.)</strong>
-        </p>
-
-      </div>
-
-      <div class="col-sm-4 col-sm-offset-1">
-        <%= image_tag "canary-rough.jpg", :style => "width: 200px" %>
-      </div>
-    </div>
-  </section>
-
+</section>
 
