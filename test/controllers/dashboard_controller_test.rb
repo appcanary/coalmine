@@ -18,7 +18,7 @@ class DashboardControllerTest < ActionController::TestCase
         login_user(user)
 
         get :index
-        assert_redirected_to new_server_path
+        assert_redirected_to onboarding_path
       end
     end
   end

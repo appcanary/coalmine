@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
   impersonates :user
-  
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  before_filter :require_login, :set_onboarded
- 
+  before_filter :require_login
+
   private
   def not_authenticated
     redirect_to login_path, alert: "Please login first"
@@ -17,9 +17,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def set_onboarded
-    if current_user
-      @onboarded = current_user.servers.present?
+
+  # TODO: test
+  unless Rails.env.test?
+    before_filter :set_onboarded
+    def set_onboarded
+      if current_user
+        @onboarded = current_user.servers.present?
+      end
     end
   end
 end
