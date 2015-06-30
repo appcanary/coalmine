@@ -3,7 +3,7 @@
 .server
 
   %table.apps
-    - if @server.apps.empty?
+    - if @server.apps.blank?
       .empty_message No apps were found on this server.
     - else
       -@server.apps.each do |app|
