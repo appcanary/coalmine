@@ -171,6 +171,8 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
+    intercom-rails (0.2.28)
+      activesupport (> 3.0)
     jbuilder (2.2.6)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -374,6 +376,7 @@ DEPENDENCIES
   haml-coffee (~> 0.1.0)
   htmlentities
   httparty
+  intercom-rails
   jbuilder (~> 2.0)
   jquery-rails
   m

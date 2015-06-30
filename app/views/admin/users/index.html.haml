@@ -4,7 +4,7 @@
       All the users.
 
 %section
-  .col-sm-6
+  .col-sm-8
     = link_to "New user", new_admin_user_path, :class => "btn btn-default"
     %table.table
       %thead
@@ -12,6 +12,10 @@
           email
         %th
           source
+        %th
+          created at
+        %th
+          last login at
         %th
         %th
       %tbody
@@ -21,6 +25,10 @@
               = user.email
             %td
               = user.beta_signup_source
+            %td
+              = user.created_at.strftime("%y/%m/%d %H:%M")
+            %td
+              = user.last_login_at.try(:strftime, "%y/%m/%d %H:%M")
             %td
               = link_to "edit", [:admin, user]
             %td
