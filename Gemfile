@@ -25,8 +25,6 @@ gem 'haml', '~> 4.0.6'
 gem 'haml-coffee', '~> 0.1.0'
 gem 'simple_form', '~> 3.1.0'
 
-# gem 'react-rails', '~> 0.13.0.0'
-
 # auth
 gem 'sorcery'
 gem 'pretender'
@@ -68,6 +66,7 @@ gem 'faraday_middleware', '~> 0.9.1'
 #misc
 gem 'ruby_identicon', '0.0.4'
 gem 'request_store', '~> 1.1.0'
+gem 'intercom-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
