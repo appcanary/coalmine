@@ -139,8 +139,8 @@ class Canary
   protected
   def wrap(klass, col)
 
-    # TODO HANDLE COLLECTIONS
-    # right now we throw away cursor info
+    # TODO HANDLE CURSORED COLLECTIONS
+    # in the meantime, throw away cursor info
     if col.is_a? Hash
 
       # pass along only the model attr,
@@ -160,7 +160,7 @@ class Canary
     if params.is_a? Array
       params.map { |attr| klass.parse(attr, self) }
     else
-      klass.parse(col, self)
+      klass.parse(params, self)
     end
   end
 
