@@ -20,13 +20,18 @@ class CanaryClientTest < ActiveSupport::TestCase
       # here we're at least testing that
       # the only empty? values being sent
       # is nil.
-      unless val = obj.send(key).nil?
-        assert obj.send(key).present?, key
+      unless (val = obj.send(key)).nil?
+        if obj.attr_enforce_collection_params.include?(key)
+          assert val.is_a?(Array), key
+        else
+          assert val.present?, key
+        end
       end
     end
 
     
-    obj.associations.each_pair do |key, klass|
+    # TODO - enforce that has many are arrays
+    obj.has_many_associations.each_pair do |key, klass|
       assert_nothing_raised do
         unless (assoc_obj = obj.send(key)).nil?
           if assoc_obj.is_a? Array
