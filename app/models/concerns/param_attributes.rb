@@ -29,21 +29,33 @@ module ParamAttributes
       @has_many = @has_many.merge({key => klass})
     end
 
-    # TODO: handle collections
-    # for now this is distinct from the Canary#wrap code in so far
-    # that nested collections aren't expected to have cursors
+    def has_one(klass, key = nil)
+      @has_one ||= {}
+      if key.nil?
+        key = klass.model_name.singular_route_key
+      end
 
+      # ensure we got strs and not syms
+      key = key.to_s
 
+      @has_one = @has_one.merge({key => klass})
+    end
+
+    # these parse methods are probably redundant
+    # and should be folded into initialize
+    #
+    # parse_* sets up the canary client,
+    # wraps things if we're enforcing a collection
+    # and then passes off to initialize
     def parse(attr, canary = nil)
       if canary
         self.client = canary
       end
 
-      # if this is not a has_many
-      # attrs being an array is technically
-      # an error
       if attr.is_a? Array
-        attr.map { |params| self.new(params) }
+        # this is an error.
+        Rails.logger.error("CanaryBase.parse was passed Array")
+        raise ArgumentError.new("CanaryBase.parse was passed an Array")
       elsif attr.nil?
         return nil
       else
@@ -88,10 +100,14 @@ module ParamAttributes
 
 
   # TODO remember to add parent association
+  # aka belongs_to maybe?
  
   def initialize(input_params = {})
-    coll_association = self.has_many_associations
     attrs = self.attr_params.map(&:to_s)
+
+    # keep track of our associations
+    coll_association = self.has_many_associations
+    sing_association = self.has_one_associations
     must_be_coll = attr_enforce_collection_params.map(&:to_s)
 
     params = sanitize_param_keys(input_params)
@@ -99,6 +115,8 @@ module ParamAttributes
       value = params[setter]
       if klass = coll_association[setter]
         self.public_send("#{setter}=", klass.parse_many(value))
+      elsif klass = sing_association[setter]
+        self.public_send("#{setter}=", klass.parse(value))
       else
 
         if must_be_coll.include?(setter)
@@ -118,6 +136,10 @@ module ParamAttributes
 
   def has_many_associations
     self.class.instance_variable_get('@has_many') || {}
+  end
+
+  def has_one_associations
+    self.class.instance_variable_get('@has_one') || {}
   end
 
   def attr_enforce_collection_params
