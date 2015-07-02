@@ -17,7 +17,7 @@
 
       - if @vuln.osvdb.present?
         %dt OSVDB:
-        %dd= @vuln.osvdb
+        %dd= link_to(@vuln.osvdb_id, @vuln.osvdb_url, target: "blank")
 
       %dt Description:
       %dd
