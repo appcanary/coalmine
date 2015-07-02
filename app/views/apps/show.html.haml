@@ -32,11 +32,8 @@
               - artifact.vulnerability.each do |vuln|
                 %li.vulnerability
                   =link_to vuln.title, vuln_path(vuln)
-                  - if vuln.patched_versions.present?
-                    Upgrade to 
-                    = vuln.patched_versions.map { |pv| "<code>#{pv}</code>" }.join(" or ").html_safe
-                  - else
-                    No patches exist right now.
+                  Upgrade to 
+                  = vuln.patched_versions.map { |pv| "<code>#{pv}</code>" }.join(" or ").html_safe
 
 
   %table#all_artifacts.artifacts.all(style="display:none")
