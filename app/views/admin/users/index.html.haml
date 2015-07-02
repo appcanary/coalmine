@@ -2,6 +2,20 @@
   .col-sm-6
     %h1
       All the users.
+%section
+  .col-sm-8
+    %table.table
+      %thead
+        %th
+          Server Count
+        %th
+          Recent Heartbeats
+      %tbody
+        %tr
+          %td
+            = @servers_count
+          %td
+            = @recent_heartbeats
 
 %section
   .col-sm-8
@@ -15,6 +29,8 @@
         %th
           created at
         %th
+          servers
+        %th
           last login at
         %th
         %th
@@ -27,6 +43,8 @@
               = user.beta_signup_source
             %td
               = user.created_at.strftime("%y/%m/%d %H:%M")
+            %td
+              = user.servers.size
             %td
               = user.last_login_at.try(:strftime, "%y/%m/%d %H:%M")
             %td

@@ -3,6 +3,8 @@ class Admin::UsersController < AdminController
 
   def index
     @users = User.all.order("created_at DESC")
+    @servers_count = Backend.servers_count
+    @recent_heartbeats = Backend.recent_heartbeats
   end
 
   def new
