@@ -1,13 +1,12 @@
 class App < CanaryBase
-  attr_params :id, :name, :path, :uuid, :artifact_versions, :vulnerable_to
+  attr_params :id, :name, :path, :uuid, :artifact_versions, :is_vulnerable
 
   attr_accessor :server
 
   has_many ArtifactVersion
-  has_many Vulnerability, "vulnerable_to"
 
   def vulns
-    @vulns ||= self.canary.server_app_vulnerabilities(self.server.uuid, self.uuid)
+    @vulns ||= self.artifact_versions.select { |av| av.vulnerability.present?}.map(&:vulnerability).flatten
   end
 
   def avatar
@@ -15,7 +14,7 @@ class App < CanaryBase
   end
 
   def vulnerable?
-    self.vulnerable_to.present?
+    self.is_vulnerable
   end
 
   def to_param
