@@ -6,7 +6,7 @@ class Canary
     @client ||= Client.new(Rails.configuration.canary.uri)
   end
 
-  def initialize(user_token)
+  def initialize(user_token = "")
     @user_token = user_token
   end
 
@@ -52,6 +52,18 @@ class Canary
 
   def status
     get('status')
+  end
+
+  def stats_servers_without_hearbeats
+    wrap Server, get("stats/servers/no-heartbeat")
+  end
+
+  def stats_servers_count_recent_heartbeats
+    get("stats/servers/count-recent-heartbeats")
+  end
+
+  def stats_servers_count
+    get("stats/servers/count")
   end
 
   # Vulnerabilities
@@ -139,9 +151,15 @@ class Canary
   protected
   def wrap(klass, col)
 
+   
     # TODO HANDLE CURSORED COLLECTIONS
     # in the meantime, throw away cursor info
     if col.is_a? Hash
+
+      if msg = col["error"]
+        raise ArgumentError.new("Canary API: #{msg}")
+      end
+
 
       # pass along only the model attr,
       # ditch cursor info
@@ -163,5 +181,4 @@ class Canary
       klass.parse(params, self)
     end
   end
-
 end

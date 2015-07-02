@@ -48,6 +48,10 @@ class Admin::UsersControllerTest < ActionController::TestCase
     end
 
     it "should let them see stuff" do
+      Backend.stubs(:servers_count).returns(1)
+      Backend.stubs(:recent_heartbeats).returns(1)
+      Backend.stubs(:without_heartbeats).returns([])
+      User.any_instance.stubs(:servers).returns([])
       get :index
       assert_response :success
     end
