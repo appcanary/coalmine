@@ -31,6 +31,8 @@
         %th
           servers
         %th
+          beating?
+        %th
           last login at
         %th
         %th
@@ -45,6 +47,8 @@
               = user.created_at.strftime("%y/%m/%d %H:%M")
             %td
               = user.servers.size
+            %td
+              = user.active_servers.size
             %td
               = user.last_login_at.try(:strftime, "%y/%m/%d %H:%M")
             %td

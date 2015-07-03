@@ -46,6 +46,10 @@ class User < ActiveRecord::Base
     @servers ||= canary.servers
   end
 
+  def active_servers
+    servers.reject(&:gone_silent?)
+  end
+
   def server(id)
     canary.server(id)
   end

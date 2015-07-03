@@ -24,6 +24,10 @@ class Server < CanaryBase
     RubyIdenticon.create_base64(self.hostname || "", :border_size => 10)
   end
 
+  def gone_silent?
+    last_heartbeat_at < 2.hours.ago.iso8601
+  end
+
   def to_param
     uuid
   end
