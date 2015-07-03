@@ -15,7 +15,7 @@
       %dt CVE:
       %dd= link_to(@vuln.cve_id, @vuln.cve_url, target: 'blank')
 
-      - if @vuln.osvdb
+      - if @vuln.osvdb.present?
         %dt OSVDB:
         %dd= @vuln.osvdb
 
@@ -25,8 +25,9 @@
           = str
           <br/>
 
-      %dt Criticality:
-      %dd= @vuln.criticality_name
+      - if @vuln.criticality_name
+        %dt Criticality:
+        %dd= @vuln.criticality_name
 
       %dt Patched Versions:
       %dd
