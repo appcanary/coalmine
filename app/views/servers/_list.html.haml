@@ -1,5 +1,7 @@
 %td.status
-  -if server.is_vulnerable
+  - if server.apps.empty?
+    %span.fa.fa-question-circle
+  -elsif server.is_vulnerable
     %span.fa.fa-exclamation-triangle.warn
   -else
     %span.fa.fa-check-circle.okay

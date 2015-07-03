@@ -4,7 +4,9 @@
 
   %table.apps
     - if @server.apps.blank?
-      .empty_message No apps were found on this server.
+      .empty_message 
+        No apps were found on this server. 
+        =link_to "Click here for instructions.", onboarding_path
     - else
       -@server.apps.each do |app|
         %tr.app
