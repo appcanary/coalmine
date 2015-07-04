@@ -33,6 +33,7 @@ Rails.application.routes.draw do
 
   resources :vulns, :only => [:show]
 
+  put "billing" => "billing#update", :as => :billing
 
   namespace :admin do
     root to: "users#index"

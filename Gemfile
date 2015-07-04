@@ -44,6 +44,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # external services
 gem 'sentry-raven', '~> 0.13.3'
 gem 'intercom-rails', '~> 0.2.28'
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 # deployment
 gem 'unicorn-rails'

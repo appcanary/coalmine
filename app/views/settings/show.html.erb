@@ -6,11 +6,36 @@
   <div class="user_api">
     <h5>Your API token is:</h5>
     <code>
-      <%= current_user.agent_token %></code>
+      <%= @user.agent_token %></code>
     <br/>
     <br/>
   </div>
 </section>
+
+
+<% unless @user.has_billing? %>
+  <%= render :partial => "credit_card_form" %>
+<% else %>
+  <section>
+    <div class="col-sm-4">
+      <h4>Credit card on file:</h4>
+      <% @user.payment_info.each do |card| %>
+        <dl>
+
+          <dt>Last four digits:</dt>
+          <dd><%= card.last4 %></dd>
+
+          <dt>Expiry:</dt>
+          <dd><%= card.exp_month %> / <%= card.exp_year %></dd>
+
+
+        </dl>
+
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
 <section>
   <div class="col-sm-4">
     <%= form_for @user, url: settings_path do |f| %>
