@@ -1,0 +1,32 @@
+<div class="heading">
+  <h3>Settings</h3>
+</div>
+
+<section>
+  <div class="user_api">
+    <h5>Your API token is:</h5>
+    <code>
+      <%= current_user.agent_token %></code>
+    <br/>
+    <br/>
+  </div>
+</section>
+<section>
+  <div class="col-sm-4">
+    <%= form_for @user, url: settings_path do |f| %>
+      <div class="form-group">
+        <%= f.label "New password" %>
+        <br/>
+        <%=f.password_field :password, :class => "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label "Confirm new password" %>
+        <br/>
+        <%= f.password_field :password_confirmation, :class => "form-control" %>
+      </div>
+      <div class="form-group">
+        <%=f.submit "Change password", :class => "btn btn-default" %>
+      </div>
+    <% end %>
+  </div>
+</section>

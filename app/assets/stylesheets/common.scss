@@ -1,38 +1,3 @@
-form.simple_form {
-  .input {
-    padding: .3em;
-    $error-color: #F08080;
-    .error {
-      padding: .3em .5em .3em 0;
-      background-color: $error-color;
-      color: #fff;
-    }
-    &.field_with_errors {
-      input.string, input.password {
-        border: solid 5px $error-color;
-      }
-    }
-  }
-  label {
-    color: #aaa;
-  }
-  input.string, input.password {
-    padding: 0.3em .5em;
-  }
-  input.button {
-    $btn-bg: #ddd;
-    margin: 1em .3em;
-    padding: .5em 1em;
-    border-color: #fff #ccc #ccc #fff;
-    background-color: $btn-bg;
-    font-weight: bold;
-    color: #888;
-    &:hover {
-      background-color: adjust-lightness($btn-bg, 5);
-    }
-  }
-}
-
 table {
   width: 100%;
   tr {
