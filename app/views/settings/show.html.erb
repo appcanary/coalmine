@@ -13,9 +13,9 @@
 </section>
 
 
-<% unless @user.has_billing? %>
+<% if false #unless @user.has_billing? %>
   <%= render :partial => "credit_card_form" %>
-<% else %>
+<% elsif false %>
   <section>
     <div class="col-sm-4">
       <h4>Credit card on file:</h4>
