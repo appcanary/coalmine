@@ -5,7 +5,7 @@ class ServersController < ApplicationController
   end
 
   def show
-    @server = current_user.server(params[:id])
+    server
   end
 
   def install
@@ -13,5 +13,17 @@ class ServersController < ApplicationController
       :filename => "appcanary.debian.sh",
       :type => "text/x-shellscript",
       :disposition => :inline
+  end
+
+  def destroy
+    if server.destroy
+      redirect_to dashboard_path
+    end
+  end
+
+  protected
+
+  def server
+    @server ||= current_user.server(params[:id])
   end
 end

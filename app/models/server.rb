@@ -31,4 +31,8 @@ class Server < CanaryBase
   def to_param
     uuid
   end
+
+  def destroy
+    self.canary.delete_server(uuid).to_s
+  end
 end

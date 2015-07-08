@@ -1,7 +1,7 @@
 require 'faraday_middleware'
 
 class Canary
-  delegate :get, :put, :post, :to => :client
+  delegate :get, :put, :post, :delete, :to => :client
   def client
     @client ||= Client.new(Rails.configuration.canary.uri)
   end
@@ -33,6 +33,10 @@ class Canary
       request(:post, url, opts)
     end
 
+    def delete(url, opts={})
+      request(:delete, url, opts)
+    end
+
     def request(method, url, opts={})
       options = {}.merge(opts)
       @conn.method(method).call(url) do |req|
@@ -47,7 +51,7 @@ class Canary
     end
   end
 
-  
+
   # TODO: add pagination to collection methods
 
   def status
@@ -77,7 +81,7 @@ class Canary
   end
 
   # Servers
-  
+
   def servers
     wrap Server, get('servers', token: @user_token)
   end
@@ -100,6 +104,10 @@ class Canary
 
   def server_vulnerabilities(server_uuid)
     wrap Vulnerability, get("servers/#{server_uuid}/vulnerabilities", token: @user_token)
+  end
+
+  def delete_server(server_uuid)
+    wrap Vulnerability, delete("servers/#{server_uuid}", token: @user_token)
   end
 
   # Artifacts
@@ -151,7 +159,7 @@ class Canary
   protected
   def wrap(klass, col)
 
-   
+
     # TODO HANDLE CURSORED COLLECTIONS
     # in the meantime, throw away cursor info
     if col.is_a? Hash
