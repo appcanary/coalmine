@@ -1,7 +1,7 @@
 window.jQuery = window.$ = require('jquery');
 require('jquery-ujs');
 
-$(document).ready(function() { 
+$(document).ready(function() {
     $('#payment-form').submit(function(event) {
       var $form = $(this);
 
@@ -32,3 +32,12 @@ function stripeResponseHandler(status, response) {
     $form.get(0).submit();
   }
 };
+
+$(document).ready(function() {
+  $(".feedback").on("click", function(e) {
+    e.preventDefault();
+    if(typeof Intercom != "undefined") {
+      Intercom("showNewMessage")
+    }
+  })
+});

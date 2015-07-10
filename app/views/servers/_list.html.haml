@@ -10,7 +10,7 @@
     %span.avatar
       = avatar(server)
     %span.title
-      = server.hostname
+      = server.name.blank? ? server.hostname : server.name
     %span.last_updated.info
       updated
       %span.data=time_ago_in_words server.last_heartbeat_at
@@ -18,3 +18,8 @@
 %td.notifications
   -# %a.switch{:class => (rand(2) == 0 ? 'pressed' : ''), :href => '#'}
     notify me
+
+%td.actions
+  =link_to('', edit_server_path(server), class: 'fa fa-pencil-square-o')
+  =link_to('', server_path(server), method: :delete, class: 'fa fa-trash-o',
+           data: {confirm: "Are you sure you want to delete this server?"})
