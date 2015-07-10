@@ -13,7 +13,7 @@
 </section>
 
 
-<% if false #unless @user.has_billing? %>
+<% if Rails.env == 'development' #unless @user.has_billing? %>
   <%= render :partial => "credit_card_form" %>
 <% elsif false %>
   <section>
@@ -38,19 +38,17 @@
 
 <section>
   <div class="col-sm-4">
-    <%= form_for @user, url: settings_path do |f| %>
-      <div class="form-group">
+    <%= form_for @user, url: settings_path, html: { class: 'basic settings' } do |f| %>
+      <div class="field password">
         <%= f.label "New password" %>
-        <br/>
-        <%=f.password_field :password, :class => "form-control" %>
+        <%=f.password_field :password, :class => "text" %>
       </div>
-      <div class="form-group">
+      <div class="field">
         <%= f.label "Confirm new password" %>
-        <br/>
-        <%= f.password_field :password_confirmation, :class => "form-control" %>
+        <%= f.password_field :password_confirmation, :class => "text" %>
       </div>
-      <div class="form-group">
-        <%=f.submit "Change password", :class => "btn btn-default" %>
+      <div class="field">
+        <%=f.submit "Change Password", :class => "btn btn-default" %>
       </div>
     <% end %>
   </div>
