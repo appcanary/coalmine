@@ -45,9 +45,9 @@ form.basic {
   }
 
   input.text {
-    @include box-shadow(#ccc 0px 1px 5px inset);
+    @include box-shadow(#ccc 0px 1px 3px inset);
     @include border-radius(.3em);
-    padding: 1.2em .8em .5em .65em;
+    padding: 1.2em .8em .3em .65em;
     border: solid 1px #ccc;
     color: #555;
     font-size: 1.5em;

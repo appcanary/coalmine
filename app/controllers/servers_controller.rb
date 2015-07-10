@@ -27,7 +27,7 @@ class ServersController < ApplicationController
 
   def update
     respond_to do |format|
-      if server.update(params[:server])
+      if server.update(server_params)
         format.html { redirect_back_or_to(dashboard_path) }
       else
         format.html { render :edit }
@@ -39,5 +39,9 @@ class ServersController < ApplicationController
 
   def server
     @server ||= current_user.server(params[:id])
+  end
+
+  def server_params
+    params.require(:server).permit(:name)
   end
 end
