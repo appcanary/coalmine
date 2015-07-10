@@ -107,7 +107,11 @@ class Canary
   end
 
   def delete_server(server_uuid)
-    wrap Vulnerability, delete("servers/#{server_uuid}", token: @user_token)
+    wrap Server, delete("servers/#{server_uuid}", token: @user_token)
+  end
+
+  def update_server(server_uuid, params)
+    wrap Server, put("servers/#{server_uuid}", data: params, token: @user_token)
   end
 
   # Artifacts

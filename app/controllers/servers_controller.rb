@@ -21,6 +21,20 @@ class ServersController < ApplicationController
     end
   end
 
+  def edit
+    server
+  end
+
+  def update
+    respond_to do |format|
+      if server.update(params[:server])
+        format.html { redirect_back_or_to(dashboard_path) }
+      else
+        format.html { render :edit }
+      end
+    end
+  end
+
   protected
 
   def server

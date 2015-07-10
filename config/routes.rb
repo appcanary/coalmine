@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   # get 'timeline' => "timeline#index"
   resources :user_sessions, :only => [:create, :destroy]
 
-  resources :servers, :only => [:new, :show, :destroy] do
+  resources :servers, :only => [:new, :show, :destroy, :edit, :update] do
     resources :apps, :only => [:index, :new, :show]
     get "install", on: :collection
   end

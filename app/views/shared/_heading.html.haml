@@ -5,11 +5,16 @@
       \/
       %span.avatar= avatar(@server)
       %span.name= @server.hostname
-      \/
 
       - unless @app
-        %span Apps
+        -if action_name == 'show'
+          \/
+          %span Apps
+        -if action_name == 'edit'
+          \/
+          %span Edit
       - else
+        \/
         %span=link_to "apps", server_path(@server)
         \/
         %span.name= @app.short_path

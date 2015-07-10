@@ -33,6 +33,43 @@ form.simple_form {
   }
 }
 
+form.basic {
+  padding: 0 2em 0 2em;
+  label {
+    color: #aaa;
+    font-size: 0.88em;
+    display: block;
+    top: 2.5em;
+    left: 1.2em;
+    position: relative;
+  }
+
+  input.text {
+    @include box-shadow(#ccc 0px 1px 5px inset);
+    @include border-radius(.3em);
+    padding: 1.2em .8em .5em .65em;
+    border: solid 1px #ccc;
+    color: #555;
+    font-size: 1.5em;
+    @include input-placeholder {
+      color: #ddd;
+    }
+  }
+
+  input[type="submit"] {
+    @include border-radius(.3em);
+    $bg: #aaa;
+    margin-top: 1.5em;
+    padding: 1em;
+    background-color: $bg;
+    border: none;
+    color: #fff;
+    &:hover {
+      background-color: adjust-lightness($bg, 11);
+    }
+  }
+}
+
 table {
   width: 100%;
   tr {

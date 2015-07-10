@@ -4,7 +4,11 @@ table.servers {
     white-space: no-wrap;
   }
   .actions {
-    width: 1px;
+    width: 70px;
+    text-align: right;
+    a {
+      margin-left: 5px;
+    }
   }
   .avatar img {
     width: 14px;
@@ -14,5 +18,15 @@ table.servers {
 .heading {
   .avatar img {
     width: 18px;
+  }
+}
+
+form.edit_server {
+  .field {
+    &.name {
+    }
+    input.text {
+      width: 500px;
+    }
   }
 }

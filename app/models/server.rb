@@ -32,6 +32,10 @@ class Server < CanaryBase
     uuid
   end
 
+  def update(params)
+    self.canary.update_server(uuid, params)
+  end
+
   def destroy
     self.canary.delete_server(uuid).to_s
   end
