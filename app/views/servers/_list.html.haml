@@ -10,7 +10,7 @@
     %span.avatar
       = avatar(server)
     %span.title
-      = server.name.blank? ? server.hostname : server.name
+      = server.display_name
     %span.last_updated.info
       updated
       %span.data=time_ago_in_words server.last_heartbeat_at
