@@ -3,6 +3,13 @@ table.servers {
     width: 1px;
     white-space: no-wrap;
   }
+  .actions {
+    width: 70px;
+    text-align: right;
+    a {
+      margin-left: 5px;
+    }
+  }
   .avatar img {
     width: 14px;
   }
@@ -14,3 +21,12 @@ table.servers {
   }
 }
 
+form.edit_server {
+  .field {
+    &.name {
+    }
+    input.text {
+      width: 500px;
+    }
+  }
+}

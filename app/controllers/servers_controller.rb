@@ -5,7 +5,7 @@ class ServersController < ApplicationController
   end
 
   def show
-    @server = current_user.server(params[:id])
+    server
   end
 
   def install
@@ -13,5 +13,35 @@ class ServersController < ApplicationController
       :filename => "appcanary.debian.sh",
       :type => "text/x-shellscript",
       :disposition => :inline
+  end
+
+  def destroy
+    if server.destroy
+      redirect_to dashboard_path
+    end
+  end
+
+  def edit
+    server
+  end
+
+  def update
+    respond_to do |format|
+      if server.update(server_params)
+        format.html { redirect_back_or_to(dashboard_path) }
+      else
+        format.html { render :edit }
+      end
+    end
+  end
+
+  protected
+
+  def server
+    @server ||= current_user.server(params[:id])
+  end
+
+  def server_params
+    params.require(:server).permit(:name)
   end
 end
