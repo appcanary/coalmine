@@ -2,9 +2,11 @@
 %section
   .col-sm-12
     %dl.vulnerability
-
-      %dt Package:
-      %dd= @vuln.artifact_name
+      - if @vuln.artifact.count > 1
+        %dt Packages:
+      - else
+        %dt Package:
+      %dd= @vuln.artifact.map(&:name).join(", ")
 
       %dt Kind:
       %dd= @vuln.kind
