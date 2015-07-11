@@ -3,6 +3,10 @@ class Server < CanaryBase
 
   has_many App
 
+  def display_name
+    name.blank? ? hostname : name
+  end
+
   def all_apps
     @applications ||= self.canary.server_apps(uuid).map do |a|
       a.server = self;
@@ -30,5 +34,13 @@ class Server < CanaryBase
 
   def to_param
     uuid
+  end
+
+  def update(params)
+    self.canary.update_server(uuid, params)
+  end
+
+  def destroy
+    self.canary.delete_server(uuid).to_s
   end
 end
