@@ -1,23 +1,52 @@
 table.servers {
-  .status, .notifications {
-    width: 1px;
-    white-space: no-wrap;
+  tr {
+    // height: 5em;
   }
+  td section {
+    padding-top: 1em;
+    padding-bottom: 1em;
+  }
+
+  .status, {
+    @extend .col-xs-1;
+    padding-top: 0.2em;
+    width: 2em;
+    font-size: 1.8em;
+    margin-left: 1em;
+    padding-right: 0px;
+  }
+
+  .icon {
+    width: 1.2em;
+    display: inline;
+  }
+
+  .description {
+    @extend .col-xs-4;
+    .title {
+    }
+    .last_updated a {
+      color: grey;
+      font-size: 14px;
+    }
+  }
+
   .actions {
     width: 70px;
-    text-align: right;
+    // text-align: right;
     a {
       margin-left: 5px;
     }
-  }
-  .avatar img {
-    width: 14px;
   }
 }
 
 .heading {
   .avatar img {
     width: 18px;
+  }
+
+  .last_updated a {
+    text-decoration: none;
   }
 }
 
