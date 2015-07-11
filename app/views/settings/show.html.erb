@@ -38,17 +38,15 @@
 
 <section>
   <div class="col-sm-4">
-    <%= form_for @user, url: settings_path, html: { class: 'basic settings' } do |f| %>
-      <div class="field password">
-        <%= f.label "New password" %>
-        <%=f.password_field :password, :class => "text" %>
+    <%= form_for @user, url: settings_path do |f| %>
+      <div class="form-group">
+        <%=f.password_field :password, :class => "form-control", :placeholder => "New password" %>
       </div>
-      <div class="field">
-        <%= f.label "Confirm new password" %>
-        <%= f.password_field :password_confirmation, :class => "text" %>
+      <div class="form-group">
+        <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "Confirm password" %>
       </div>
-      <div class="field">
-        <%=f.submit "Change Password", :class => "btn btn-default" %>
+      <div class="form-group">
+        <%=f.submit "Change password", :class => "btn btn-default" %>
       </div>
     <% end %>
   </div>

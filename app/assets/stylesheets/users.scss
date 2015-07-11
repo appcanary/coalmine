@@ -59,6 +59,9 @@ form#payment-form {
   input[type="submit"] {
     width: 300px;
   }
+  .buttons {
+    margin-top: 2em;
+  }
 }
 
 form.settings {
@@ -73,8 +76,5 @@ form.settings {
   input.text {
     width: 100%;
     margin: 0;
-  }
-  input[type="submit"] {
-    width: 300px;
   }
 }
