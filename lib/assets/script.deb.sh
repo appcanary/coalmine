@@ -84,6 +84,12 @@ fi
 
 echo "Detected operating system as $os/$dist."
 
+echo -n "Running apt-get update... "
+# update apt on this system
+apt-get update &> /dev/null
+echo "done."
+
+
 curl_check
 
 echo -n "Installing apt-transport-https... "
@@ -144,7 +150,7 @@ echo -n "Running apt-get update... "
 apt-get update &> /dev/null
 echo "done."
 
-echo -n "Installing appcanary"
+echo -n "Installing appcanary... "
 apt-get install appcanary &> /dev/null
 echo "done."
 
