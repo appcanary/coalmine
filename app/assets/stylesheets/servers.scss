@@ -1,7 +1,4 @@
 table.servers {
-  tr {
-    // height: 5em;
-  }
   td section {
     padding-top: 1em;
     padding-bottom: 1em;
@@ -24,6 +21,7 @@ table.servers {
   .description {
     @extend .col-xs-4;
     .title {
+      font-size: 18px;
     }
     .last_updated a {
       color: grey;
@@ -32,23 +30,20 @@ table.servers {
   }
 
   .actions {
-    width: 70px;
-    // text-align: right;
-    a {
-      margin-left: 5px;
-    }
+    @extend .col-xs-4;
   }
 }
 
-.heading {
-  .avatar img {
-    width: 18px;
-  }
 
-  .last_updated a {
-    text-decoration: none;
-  }
+.server-info {
+  @extend .col-sm-12;
 }
+
+.server-apps {
+  @extend .col-sm-12;
+  margin-top: 20px;
+}
+
 
 form.edit_server {
   .field {

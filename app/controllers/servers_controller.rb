@@ -17,7 +17,7 @@ class ServersController < ApplicationController
 
   def destroy
     if server.destroy
-      redirect_to dashboard_path
+      redirect_to dashboard_path, notice: "OK. Do remember to turn off the agent!"
     end
   end
 
