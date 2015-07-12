@@ -53,7 +53,12 @@ api_key = "<%= @agent_token %>"
 
 [[files]]
 # Add files to monitor here
-# path = "/var/www/someapp/current/Gemfile.lock"</pre>
+# path = "/var/www/someapp/current/Gemfile.lock"
+
+# if you are on ubuntu, uncomment these lines
+#[[files]]
+#path = "/var/lib/dpkg/available"
+</pre>
             Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
           </p>
 
