@@ -14,6 +14,7 @@
 %section
   .col-sm-4
     = simple_form_for @user, url: settings_path do |f|
+      =f.input :email
       =f.input :password
       =f.input :password_confirmation
       =f.button :submit, :class => "btn btn-default"

@@ -1,0 +1,39 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: http://localhost:3000/api/v1/users/me
+    body:
+      encoding: UTF-8
+      string: '{"email":"new@example.com"}'
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Authorization:
+      - Token 142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '193'
+      - '193'
+      Server:
+      - http-kit
+      Date:
+      - Mon, 13 Jul 2015 07:01:43 GMT
+    body:
+      encoding: UTF-8
+      string: '{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}'
+    http_version: 
+  recorded_at: Mon, 13 Jul 2015 07:01:43 GMT
+recorded_with: VCR 2.9.3
