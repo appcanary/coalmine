@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:3000/api/v1/vulnerabilities
+    uri: http://localhost:4000/api/v1/vulnerabilities
     body:
       encoding: US-ASCII
       string: ''

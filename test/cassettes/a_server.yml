@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:3000/api/v1/servers/55837b51-2e9d-45ad-ab38-9caf2f2b78b5
+    uri: http://localhost:4000/api/v1/servers/55837b51-2e9d-45ad-ab38-9caf2f2b78b5
     body:
       encoding: US-ASCII
       string: ''
