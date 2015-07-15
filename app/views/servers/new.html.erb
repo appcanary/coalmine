@@ -51,13 +51,18 @@
             <pre>
 api_key = "<%= @agent_token %>"
 
-[[files]]
-# Add files to monitor here
-# path = "/var/www/someapp/current/Gemfile.lock"
+# Fill in your Ruby app's path and 
+# uncomment the next two lines:
+#[[files]]
+#path = "/var/www/someapp/current/Gemfile.lock"
+#
+#[[files]]
+#path = "/var/www/anotherapp/current/Gemfile.lock"
+
 
 # if you are on ubuntu, uncomment these lines
 #[[files]]
-#path = "/var/lib/dpkg/available"
+#path = "/var/lib/dpkg/status"
 </pre>
             Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
           </p>
