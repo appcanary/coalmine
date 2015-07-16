@@ -1,5 +1,5 @@
 class ServersController < ApplicationController
-  skip_before_filter :require_login, :only => :install
+  skip_before_filter :require_login, :only => [:deb, :rpm]
   def new
     @agent_token = current_user.agent_token
   end
