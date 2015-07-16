@@ -4,6 +4,13 @@ class ServersController < ApplicationController
     @agent_token = current_user.agent_token
   end
 
+  def onboarding
+    @hide_sidebar = true
+    @agent_token = current_user.agent_token
+    
+    render :new
+  end
+
   def show
     server
   end

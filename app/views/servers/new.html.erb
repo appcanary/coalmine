@@ -1,94 +1,122 @@
-<section>
-  <div class="col-sm-4">
+<section id="onboarding" style="padding-top: 10px;">
+  <div class="col-sm-3">
 
     <div style="width: 200px; margin-left: auto; margin-right: auto;">
       <%= image_tag "canary-egg.medium.png", :style => "width: 200px" %>
-      <% if @onboardd %>
-        <h3 style="text-align: center">Howdy!</h3>
-      <% else %>
-        <h3 style="text-align: center">Welcome!</h3>
-      <% end %>
     </div>
 
-    <p>Canary works by monitoring your infrastructure. You will need to install our agent.</p>
-    <p>Current, we only support 
-      <span>
-        <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
-      <span>
-        <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu, </span> but we're hard at work adding other platforms.
-    </p>
-
-    <h4>Problems? Suggestions?</h4>
-    <p>Forgive us, we're still a little rough around the edges. Contact us at hello@appcanary.com for any and all reasons.</p>
+    <h3>Welcome!</h3>
+    <h4>Problems? Feedback?</h4>
+    <p>Hit up <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>, or click the button below.</p>
+    <p>We <b>really</b> want to hear from you.</p>
+    <%= eui_button "Hey, I got opinions", href: "", :class => "eui-button-medium-primary feedback" %>
 
 
   </div>
+  <div class="col-sm-6">
+    <section>
+      <div class="onboard-box" style="margin-bottom: 10px">
+        <div class="onboard-wrapper">
+          <section>
+            <div class="onboard-title">
+              <h3>How it works</h3>
+            </div>
+          </section>
+          <section>
+            <div class="onboard-desc">
+              <p>We notify you when you gotta take action to update unsafe software on your servers. We can do this bcause we know what software you have installed and where. We accomplish all of this via an agent that you install.
+              <p>
+                <ol>
+                  <li>The agent is <a href="https://github.com/appcanary/agent">open source and up on github</a>. Tell us what you think.</li>
+                  <li>The agent regularly checks files that list what you have installed. Whenever you install, update or deploy something, we'll know.</li>
+                  <li>We <b>only</b> ever scan the files specified in the config.</li>
+                </ol>
+              </p>
 
-  <div class="onboard-box">
-    <div class="onboard-wrapper">
-      <section>
-        <div class="onboard-title">
-          <h3>Instructions</h3>
+              <p>Currently we support 
+                <span>
+                  <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
+                <span>
+                  <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu, </span> and we're adding more real soon.
+              </p>
+
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
-      <section>
-        <div class="onboard-desc">
-          <h4>Step 1.</h4>
-          <p>Open a shell on your favourite server. The following script adds our repository to your apt sources, and installs our package:
-            <kbd>curl -s https://appcanary.com/servers/install.sh | sudo bash</kbd>
-            <br/>
-            (instructions for chef, ansible, etc, coming soon)
-          </p>
+      <div class="onboard-box">
+        <div class="onboard-wrapper">
+          <section style="border: none">
+            <div class="onboard-title">
+              <h3>Instructions</h3>
+              <br/>
+              <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>
+                <li role="presentation"><a href="#">Redhat, Centos & Amazon</a></li>
+              </ul>
+            </div>
+          </section>
 
-          <h4>Step 2.</h4>
-          <p>Now edit the configuration. 
-            <br/>
-            <kbd>$EDITOR /etc/appcanary/agent.conf</kbd>
-            <br/>
-            You're going to need to add your API key, so feel free to copy and paste the following:
-            <br/>
-            <pre>
+          <section>
+            <div class="onboard-desc">
+              <h4>Add our repo, and install the package</h4>
+              <p>Open a shell on your favourite server. The following script adds our repository to your apt sources, and installs our package:
+                <kbd>curl -s https://appcanary.com/servers/install.sh | sudo bash</kbd>
+                <br/>
+                (instructions for chef, ansible, etc, coming soon)
+              </p>
+
+              <h4>Edit the configuration</h4>
+              <p>Now edit the configuration. 
+                <br/>
+                <kbd>vim /etc/appcanary/agent.conf</kbd>
+                <br/>
+                You're going to need to add your API key, so feel free to copy and paste the following:
+                <br/>
+                <pre>
 api_key = "<%= @agent_token %>"
 
 # Fill in your Ruby app's path and 
 # uncomment the next two lines:
+
 #[[files]]
 #path = "/var/www/someapp/current/Gemfile.lock"
-#
+
 #[[files]]
 #path = "/var/www/anotherapp/current/Gemfile.lock"
 
-
-# if you are on ubuntu, uncomment these lines
+# if you are on ubuntu, you will see these lines as well:
 #[[files]]
 #path = "/var/lib/dpkg/status"
 </pre>
-            Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
-          </p>
+                Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
+              </p>
 
-          <h4>Step 3.</h4>
-          <p>Start the agent. We shipped an upstart script, so type:
-            <br/>
-            <kbd>start appcanary</kbd>
-          </p>
+              <h4>Let's get started</h4>
+              <p>Start the agent:
+                <br/>
+                <kbd>sudo start appcanary</kbd><br/> or<br/>
+                <kbd>sudo systemctl start application</kbd>
+              </p>
+            </div>
+          </section>
+
+
+          <section>
+            <div class="action-bar">
+              <div class="pull-right">
+                <%= eui_button "Feedback", href: "", :class => "eui-button-medium-primary feedback" %>
+                <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
+              </div>
+
+            </div>
+          </section>
+
         </div>
-      </section>
-
-
-      <section>
-        <div class="action-bar">
-          <div class="pull-right">
-            <%= eui_button "Feedback", href: "", :class => "eui-button-medium-primary feedback" %>
-            <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
-          </div>
-
-        </div>
-      </section>
-
-    </div>
+      </div>
+    </section>
   </div>
-
 
 </section>
 

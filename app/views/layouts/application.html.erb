@@ -26,7 +26,7 @@
   </head>
   <body>
 
-    <% if current_user %>
+    <% if current_user && !@hide_sidebar %>
       <div>
         <div class="navigation">
           <%= render :partial => "layouts/navbar" %>
