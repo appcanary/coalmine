@@ -1,0 +1,37 @@
+<h4>Add our repo, and install the package</h4>
+<p>Open a shell on your favourite server. The following script adds our repository to your apt sources, and installs our package:
+  <kbd>curl -s https://appcanary.com/servers/rpm.sh | sudo bash</kbd>
+  <br/>
+  (instructions for chef, ansible, etc, coming soon)
+</p>
+
+<h4>Edit the configuration</h4>
+<p>Now edit the configuration. 
+  <br/>
+  <kbd>vim /etc/appcanary/agent.conf</kbd>
+  <br/>
+  You're going to need to add your API key, so feel free to copy and paste the following:
+  <br/>
+  <pre>
+api_key = "<%= @agent_token %>"
+
+# Fill in your Ruby app's path and 
+# uncomment the next two lines:
+
+#[[files]]
+#path = "/var/www/someapp/current/Gemfile.lock"
+
+#[[files]]
+#path = "/var/www/anotherapp/current/Gemfile.lock"
+</pre>
+  Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
+</p>
+
+<h4>Let's get started</h4>
+<p>Start the agent:
+  <br/>
+  <kbd>sudo start appcanary</kbd><br/> or<br/>
+  <kbd>sudo systemctl start application</kbd>
+</p>
+
+

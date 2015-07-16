@@ -24,10 +24,10 @@
           </section>
           <section>
             <div class="onboard-desc">
-              <p>We notify you when you gotta take action to update unsafe software on your servers. We can do this bcause we know what software you have installed and where. We accomplish all of this via an agent that you install.
-              <p>
+              <p>We notify you when you got to take action whenever your servers end up running unsafe software. We can do this bcause we know what software you have installed and where. 
+              <p>We accomplish the above via an agent.
                 <ol>
-                  <li>The agent is <a href="https://github.com/appcanary/agent">open source and up on github</a>. Tell us what you think.</li>
+                  <li>The agent is <a href="https://github.com/appcanary/agent" target="_blank">open source and up on github</a>. Tell us what you think.</li>
                   <li>The agent regularly checks files that list what you have installed. Whenever you install, update or deploy something, we'll know.</li>
                   <li>We <b>only</b> ever scan the files specified in the config.</li>
                 </ol>
@@ -52,53 +52,24 @@
               <h3>Instructions</h3>
               <br/>
               <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>
-                <li role="presentation"><a href="#">Redhat, Centos & Amazon</a></li>
+                <li role="presentation" class="active"><a href="#deb" data-toggle="tab"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>
+                <li role="presentation"><a href="#rpm" data-toggle="tab">Redhat, Centos & Amazon</a></li>
               </ul>
             </div>
           </section>
 
           <section>
             <div class="onboard-desc">
-              <h4>Add our repo, and install the package</h4>
-              <p>Open a shell on your favourite server. The following script adds our repository to your apt sources, and installs our package:
-                <kbd>curl -s https://appcanary.com/servers/install.sh | sudo bash</kbd>
-                <br/>
-                (instructions for chef, ansible, etc, coming soon)
-              </p>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="deb">
+                  <%= render :partial => "debian" %>
+                </div>
 
-              <h4>Edit the configuration</h4>
-              <p>Now edit the configuration. 
-                <br/>
-                <kbd>vim /etc/appcanary/agent.conf</kbd>
-                <br/>
-                You're going to need to add your API key, so feel free to copy and paste the following:
-                <br/>
-                <pre>
-api_key = "<%= @agent_token %>"
+                <div role="tabpanel" class="tab-pane active" id="rpm">
+                  <%= render :partial => "redhat" %>
+                </div>
 
-# Fill in your Ruby app's path and 
-# uncomment the next two lines:
-
-#[[files]]
-#path = "/var/www/someapp/current/Gemfile.lock"
-
-#[[files]]
-#path = "/var/www/anotherapp/current/Gemfile.lock"
-
-# if you are on ubuntu, you will see these lines as well:
-#[[files]]
-#path = "/var/lib/dpkg/status"
-</pre>
-                Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
-              </p>
-
-              <h4>Let's get started</h4>
-              <p>Start the agent:
-                <br/>
-                <kbd>sudo start appcanary</kbd><br/> or<br/>
-                <kbd>sudo systemctl start application</kbd>
-              </p>
+              </div>
             </div>
           </section>
 

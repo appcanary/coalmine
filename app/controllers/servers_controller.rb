@@ -15,12 +15,20 @@ class ServersController < ApplicationController
     server
   end
 
-  def install
+  def deb
     send_file File.join(Rails.root, "lib/assets/script.deb.sh"),
       :filename => "appcanary.debian.sh",
       :type => "text/x-shellscript",
       :disposition => :inline
   end
+
+  def rpm
+    send_file File.join(Rails.root, "lib/assets/script.rpm.sh"),
+      :filename => "appcanary.debian.sh",
+      :type => "text/x-shellscript",
+      :disposition => :inline
+  end
+
 
   def destroy
     if server.destroy

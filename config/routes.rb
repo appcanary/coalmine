@@ -26,7 +26,8 @@ Rails.application.routes.draw do
 
   resources :servers, :only => [:new, :show, :destroy, :edit, :update] do
     resources :apps, :only => [:index, :new, :show]
-    get "install", on: :collection
+    get "deb", on: :collection
+    get "rpm", on: :collection
   end
 
   get "hello" => "servers#onboarding", :as => :onboarding
