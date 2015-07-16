@@ -169,8 +169,6 @@ fi
 
 echo "Generating yum cache for appcanary_agent..."
 yum -q makecache -y --disablerepo='*' --enablerepo='appcanary_agent'
-quick install
-curl -s https://packagecloud.io/install/repositories/appcanary/agent
 
 echo -n "Installing appcanary..."
 yum -y install appcanary
