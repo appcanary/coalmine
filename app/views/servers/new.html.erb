@@ -24,68 +24,93 @@
           </section>
           <section>
             <div class="onboard-desc">
-                <ol>
-                  <li>Install our <b>tiny</b> agent. It's written in golang and it's <a href="https://github.com/appcanary/agent" target="_blank">entirely open source and up on github</a>. Tell us what you think.</li>
-                  <li>The agent figures out what you have installed and <b>sends you an email when you're vulnerable to security flaws</b>.</li>
-                  <li>There is no step three.</li>
-                </ol>
-              </p>
+              <ol>
+                <li>Install our <b>tiny</b> agent. It's written in golang and it's <a href="https://github.com/appcanary/agent" target="_blank">entirely open source and up on github</a>. Tell us what you think.</li>
+                <li>The agent figures out what you have installed and <b>sends you an email when you're vulnerable to security flaws</b>.</li>
+                <li>There is no step three.</li>
+              </ol>
+            </p>
 
-              <p>Currently we can tell you about vulnerable
-                <span>
-                  <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
-                <span>
-                  <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> packages, and we're adding more real soon.
-              </p>
+            <p>Currently we can tell you about vulnerable
+              <span>
+                <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
+              <span>
+                <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> packages (we're adding more real soon) and you can install it on almost any Linux.
+            </p>
 
-            </div>
-          </section>
-        </div>
-      </div>
-
-      <div class="onboard-box">
-        <div class="onboard-wrapper">
-          <section style="border: none">
-            <div class="onboard-title">
-              <h3>Instructions</h3>
-              <br/>
-              <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#deb" data-toggle="tab"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>
-                <li role="presentation"><a href="#rpm" data-toggle="tab"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat, <%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS and Amazon</a></li>
-              </ul>
-            </div>
-          </section>
-
-          <section>
-            <div class="onboard-desc">
-              <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="deb">
-                  <%= render :partial => "debian" %>
-                </div>
-
-                <div role="tabpanel" class="tab-pane" id="rpm">
-                  <%= render :partial => "redhat" %>
-                </div>
-
+            <p>
+              This is what it looks like:
+              <div style="width: 300px; margin-left: auto; margin-right: auto; ">
+                <a href="#screenshot" data-toggle="modal" data-target="#screenshot"><%= image_tag "screenshot-vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a>
               </div>
-            </div>
-          </section>
+            </p>
 
+          </div>
+        </section>
+      </div>
+    </div>
 
-          <section>
-            <div class="action-bar">
-              <div class="pull-right">
-                <%= eui_button "Feedback", href: "", :class => "eui-button-medium-primary feedback" %>
-                <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
+    <div class="onboard-box">
+      <div class="onboard-wrapper">
+        <section style="border: none">
+          <div class="onboard-title">
+            <h3>Instructions</h3>
+            <br/>
+            <ul class="nav nav-tabs">
+              <li role="presentation" class="active"><a href="#deb" data-toggle="tab"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>
+              <li role="presentation"><a href="#rpm" data-toggle="tab"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat, <%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS and Amazon</a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <div class="onboard-desc">
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="deb">
+                <%= render :partial => "debian" %>
+              </div>
+
+              <div role="tabpanel" class="tab-pane" id="rpm">
+                <%= render :partial => "redhat" %>
               </div>
 
             </div>
-          </section>
+          </div>
+        </section>
 
-        </div>
+
+        <section>
+          <div class="action-bar">
+            <div class="pull-right">
+              <%= eui_button "Feedback", href: "", :class => "eui-button-medium-primary feedback" %>
+              <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
+            </div>
+
+          </div>
+        </section>
+
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
+</div>
 
 </section>
 
+
+
+<div class="modal fade" id="screenshot" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Screenshot</h4>
+      </div>
+      <div class="modal-body">
+        <%= image_tag "screenshot-vuln.jpg", :style => "width: 725px;" %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

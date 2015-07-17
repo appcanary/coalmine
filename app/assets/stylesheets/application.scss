@@ -142,3 +142,11 @@ section {
   @extend .col-sm-offset-3;
   padding-top: 10px;
 }
+
+
+
+// onboarding deal with later
+#screenshot .modal-dialog {
+  @extend .modal-dialog;
+  width: 750px;
+}
