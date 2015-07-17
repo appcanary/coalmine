@@ -1,5 +1,5 @@
 class ServersController < ApplicationController
-  skip_before_filter :require_login, :only => [:deb, :rpm]
+  skip_before_filter :require_login, :only => [:deb, :rpm, :install]
   def new
     @agent_token = current_user.agent_token
   end
@@ -7,12 +7,19 @@ class ServersController < ApplicationController
   def onboarding
     @hide_sidebar = true
     @agent_token = current_user.agent_token
-    
+
     render :new
   end
 
   def show
     server
+  end
+
+  def install
+    send_file File.join(Rails.root, "lib/assets/script.deb.sh"),
+      :filename => "appcanary.debian.sh",
+      :type => "text/x-shellscript",
+      :disposition => :inline
   end
 
   def deb
