@@ -1,62 +1,57 @@
 <div class="topbar"></div>
+
 <div class="action">
-  <div class="login">
-    <%= link_to "Login", login_path, :class => "btn btn-white" %>
+  <div class="action_unit action_login">
+    <%= link_to "Log in", login_path, :class => "button" %>
+  </div>
+  <div class="action_unit action_sign-up">
+    <%= link_to "Sign Up", login_path, :class => "button" %>
   </div>
 </div>
 
-<div class="hed">
-  <div class="bird">
-    <%= image_tag "appcanary.rect.png" %>
+
+<div class="hero-wrapper">
+  <div class="hero">
+
+    <div class="hero_logo">
+      <%= image_tag "appcanary-hero.png" %>
+    </div>
+
+    <h1 class="hero_sell-line">Never run vulnerable<br>software again.</h1>
+
+    <div class="hero_form-group">
+      <div class="flash subhed" style="display: none">
+        <p>Thanks! We&rsquo;ll be in touch soon.</p>
+      </div>
+      <%= form_tag "/beta/list", :method => :post, :name => :user, :class =>"hero_sign-up" do %>
+        <input type="email" name="email" class="form-control input-md" placeholder="jane@example.com">
+        <button type="submit" class="btn btn-default">Get started</button>
+      <% end %>
+    </div>
+
   </div>
-  <h1>Secure your apps,<br/>one dependency at a time.</h1>
 </div>
 
 <div class="landing-container">
 
   <div class="unit">
-
-    <div class="subhed">
-      <p>Stop worrying about your infrastructure's security.</p>
-      <p>We'll tell you what's vulnerable and how to update it.</p>
+    <h2>How it works</h2>
+    <div class="how-unit">
+      <%= image_tag "howto-1.png" %>
+      <h3>We sit on your servers. Installing our <a href="http://www.github.com/appcanary/agent">agent</a> takes five minutes.</h3>
     </div>
-
-    <div class="flash subhed" style="display: none"><p>Thanks! We'll be in touch soon.</p></div>
-      <%= form_tag "/beta/list", :method => :post, :name => :user, :class =>"sign-up" do %>
-        <input type="email" name="email" class="form-control input-md" placeholder="jane@example.com">
-        <button type="submit" class="btn btn-default">Let me know</button>
-      <% end %>
-
-  </div>
-
-  <div class="features">
-
-    <div class="feature-unit">
-      <h4>Never miss<br>out again</h4>
-      <p>Don't find out about vulnerabilities through Hacker News and Twitter.</p>
+    <div class="how-unit">
+      <%= image_tag "howto-2.png" %>
+      <h3>We find out what software is vulnerable.</h3>
     </div>
-
-    <div class="feature-unit">
-      <h4>Vulnerabilities<br>are inevitable</h4>
-      <p>Getting hacked doesn't have to be. Make the next Heartbleed be like any other day on the job.</p>
+    <div class="how-unit">
+      <%= image_tag "howto-3.png" %>
+      <h3>You fix your security issues and look like a hero.</h3>
     </div>
-
-   
-    <div class="feature-unit">
-      <h4>Make your response predictable</h4>
-      <p>We track your team's responses to security events, and give you auditable logs of your actions.</p>
-    </div>
-
-     <div class="feature-unit">
-      <h4>Improve the quality of your sleep</h4>
-      <p>We monitor your infrastructure and notify you when you need to act.</p>
-    </div>
-
-
   </div>
 
   <footer class="footer">
-    <p>&copy; Manufactured by <a href="http://state.io">State Machinery</a>, 2015</p>
+    <p>&copy; Manufactured by Canary Computer Corporation , 2015</p>
   </footer>
 
 </div>
