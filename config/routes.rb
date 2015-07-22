@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   #post 'sign_up' => "users#create"
 
   get "secretsignup/:source" => "users#new", :as => :new_beta_sign_up
+  get "hey_hn" => "users#new"
   post "secretsignup/:source" => "users#create", :as => :beta_sign_up
 
   resource :settings, :only => [:show, :update]

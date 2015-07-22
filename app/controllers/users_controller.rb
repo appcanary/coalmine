@@ -23,6 +23,9 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    if request.path =~ /hn/
+      params[:source] = "hn"
+    end
   end
 
   # GET /users/1/edit
