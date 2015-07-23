@@ -17,7 +17,10 @@
       <%= image_tag "appcanary-hero.png" %>
     </div>
 
-    <h1 class="hero_sell-line">Never run vulnerable<br>software again.</h1>
+    <div class="hero_sell-line">
+      <h1>Never run vulnerable software again.</h1>
+      <h3>We monitor your servers, and notify you when you need to update. Try us for free:</h3>
+    </div>
 
     <div class="hero_form-group">
       <div class="flash subhed" style="display: none">
@@ -32,26 +35,116 @@
   </div>
 </div>
 
-<div class="landing-container">
-
-  <div class="unit">
-    <h2>How it works</h2>
-    <div class="how-unit">
-      <%= image_tag "howto-1.png" %>
-      <h3>We sit on your servers. Installing our <a href="http://www.github.com/appcanary/agent">agent</a> takes five minutes.</h3>
+<div class="unit-container">
+  <div class="unit demo">
+    <div class="unit_demo-box unit_demo-box-before">
+      <p>Drop a file on me!</p>
     </div>
-    <div class="how-unit">
-      <%= image_tag "howto-2.png" %>
-      <h3>We find out what software is vulnerable.</h3>
-    </div>
-    <div class="how-unit">
-      <%= image_tag "howto-3.png" %>
-      <h3>You fix your security issues and look like a hero.</h3>
+    <div class="unit_demo-copy">
+      <h3>We&rsquo;ll tell you what&rsquo;s vulnerable and how to update it.</h3>
+      <p>Try dragging one of the files below onto the area on the left, or drag and drop in your own <strong>Gemfile</strong> or <strong>package.json</strong>:</p>
+      <div class="button button-ruby">Gemfile</div>
+      <div class="button button-node">package.json</div>
+      <div class="button button-ubuntu">dpkg</div>
     </div>
   </div>
-
-  <footer class="footer">
-    <p>&copy; Manufactured by Canary Computer Corporation , 2015</p>
-  </footer>
-
 </div>
+
+<div class="unit-container">
+  <div class="unit how">
+    <h2>How it works</h2>
+    <div class="unit_how">
+      <%= image_tag "howto-1.png" %>
+      <h3>We sit on your servers.<br>Installing our <a href="http://www.github.com/appcanary/agent">agent</a> takes five minutes.</h3>
+    </div>
+    <div class="unit_how">
+      <%= image_tag "howto-2.png" %>
+      <h3>We find out what software is vulnerable.<br>We make sure you know about it.</h3>
+    </div>
+    <div class="unit_how">
+      <%= image_tag "howto-3.png" %>
+      <h3>You fix your security issues, your servers stay safe and you save the day.</h3>
+    </div>
+  </div>
+</div>
+
+<div class="unit-container">
+  <div class="unit vulns">
+    <h3>We&rsquo;re currently tracking</h3>
+    <h1>1,200 vulnerabilities</h1>
+    <h3>over hundreds of thousands of packages so you don&rsquo;t have to.</h3>
+  </div>
+</div>
+
+<div class="unit-container">
+  <div class="unit pricing">
+    <h2>Pricing</h2>
+    <div class="unit_pricing">
+      <div class="circle"></div>
+      <h3>Egg</h3>
+      <p class="unit_pricing-price">Free!</p>
+      <p>One server</p>
+    </div>
+    <div class="unit_pricing">
+      <div class="circle"></div>
+      <h3>Tweetie Bird</h3>
+      <p class="unit_pricing-price">$49/month</p>
+      <p>up to 5 servers</p>
+    </div>
+    <div class="unit_pricing">
+      <div class="circle"></div>
+      <h3>Canary</h3>
+      <p class="unit_pricing-price">$199/month</p>
+      <p>up to 25 servers</p>
+    </div>
+    <div class="unit_pricing">
+      <div class="circle"></div>
+      <h3>Coalmine</h3>
+      <p class="unit_pricing-price">More than 25?</p>
+      <p>Let&rsquo;s chat!</p>
+    </div>
+  </div>
+</div>
+
+<div class="unit-container unit-container_yellow">
+  <div class="unit sign-up">
+    <h1>Get started with a risk-free 14 day trial.</h1>
+
+    <div class="sign-up_form-group">
+      <div class="flash subhed" style="display: none">
+        <p>Thanks! We&rsquo;ll be in touch soon.</p>
+      </div>
+      <%= form_tag "/beta/list", :method => :post, :name => :user, :class => "full-sign-up" do %>
+        <div class="form-fields">
+          <label>Name</label>
+          <input type="text" name="name" placeholder="Jane Doe">
+
+          <label>Email</label>
+          <input type="email" name="email" class="form-control input-md" placeholder="jane@example.com">
+
+          <label>Password</label>
+          <input type="text" name="password" placeholder="Please enter a password">
+
+          <label>Confirm password</label>
+          <input type="text" name="password-confirm" placeholder="Confirm your password">
+        </div>
+        <button type="submit">Sign up now</button>
+      <% end %>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <%= image_tag "footer-egg.png" %>
+  <nav>
+    <ul>
+      <li><a href="www.google.com">Home</a></li>
+      <li><a href="www.google.com">Dashboard</a></li>
+      <li><a href="www.google.com">Contact</a></li>
+      <li><a href="www.google.com">Blog</a></li>
+      <li><a href="www.google.com">Twitter</a></li>
+    </ul>
+  </nav>
+  <p>&copy; 2015 Canary Computer Corporation</p>
+</footer>
