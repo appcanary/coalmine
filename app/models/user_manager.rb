@@ -31,6 +31,17 @@ class UserManager
   end
 
   def update!(params)
+    if params[:password].blank?
+      params.delete(:password)
+      params.delete(:password_confirmation)
+    end
+
+    @user.assign_attributes(params)
+
+    if !@user.valid?
+      return false
+    end
+
     if email = params[:email]
       begin
         resp = @client.update_user({email: email})
@@ -41,7 +52,7 @@ class UserManager
       end
     end
 
-    @user.update_attributes(params)
+    @user.save
   end
 
   def self.update(user, params)
