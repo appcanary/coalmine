@@ -1,25 +1,19 @@
-%td.status
-  - if server.apps.empty?
-    %span.fa.fa-question-circle
-  -elsif server.is_vulnerable
-    %span.fa.fa-exclamation-triangle.warn
-  -else
-    %span.fa.fa-check-circle.okay
-%td.link
-  %a{href: server_path(server)}
-    %span.avatar
-      = avatar(server)
-    %span.title
-      = server.display_name
-    %span.last_updated.info
-      updated
-      %span.data=time_ago_in_words server.last_heartbeat_at
-      ago
-%td.notifications
-  -# %a.switch{:class => (rand(2) == 0 ? 'pressed' : ''), :href => '#'}
-    notify me
+%td
+  %section
+    .status
+      - if server.apps.empty?
+        %span.fa.fa-question-circle
+      -elsif server.is_vulnerable
+        %span.fa.fa-exclamation-triangle.warn
+      -else
+        %span.fa.fa-check-circle.okay
+    .description
+      %span.title
+        -# = link_to avatar(server), server_path(server), :class => "avatar"
+        = link_to server.display_name, server_path(server)
+      %div.last_updated.info
+        = link_to "updated #{time_ago_in_words server.last_heartbeat_at} ago", server_path(server)
+    .actions
+      =link_to('edit', edit_server_path(server), class: 'btn btn-primary')
+      =link_to('delete', server_path(server), method: :delete, class: 'btn btn-danger', data: {confirm: "Are you sure you want to delete this server?"})
 
-%td.actions
-  =link_to('', edit_server_path(server), class: 'fa fa-pencil-square-o')
-  =link_to('', server_path(server), method: :delete, class: 'fa fa-trash-o',
-           data: {confirm: "Are you sure you want to delete this server?"})

@@ -1,0 +1,39 @@
+<h4>1. Add our repo, and install the package</h4>
+<p>Install our <b>tiny</b> agent. It's written in golang and it's <a href="https://github.com/appcanary/agent" target="_blank">entirely open source</a>.</p>
+
+<p>Open a shell on your favourite server. The following script adds our repository to your apt sources, and installs our package:
+  <kbd>curl -s https://appcanary.com/servers/rpm.sh | sudo bash</kbd>
+  <br/>
+  <span style="font-size: 12px">(We know <code>curl http://foo | bash</code>sucks. We're working on it.)</span>
+</p>
+
+<h4>2. Add your API key</h4>
+<p>Now edit the configuration:
+  <br/>
+  <kbd>vim /etc/appcanary/agent.conf</kbd>
+  <br/>
+  <br/>
+  The following block has your API key; make sure to fill in the full path of your <code>Gemfile.lock</code> files:
+  <br/>
+  <pre>
+api_key = "<%= @agent_token %>"
+
+# Fill in your Ruby app's path and 
+# uncomment the next two lines:
+
+#[[files]]
+#path = "/path/to/a/Gemfile.lock"
+
+#[[files]]
+#path = "/path/to/a/different/Gemfile.lock"
+</pre>
+</p>
+
+<h4>3. Boot the agent</h4>
+<p>Start the agent, using either upstart, sysvinit or systemd:
+  <br/>
+  <kbd>sudo start appcanary</kbd><br/> or<br/>
+  <kbd>sudo systemctl start appcanary</kbd>
+</p>
+
+

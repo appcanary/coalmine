@@ -26,8 +26,7 @@ $body-margin-top: 10px;
 @import "users";
 @import 'left-navbar';
 @import 'sidepanel';
-@import 'events';
-@import 'artifacts';
+// @import 'events';
 @import 'servers';
 @import 'apps';
 @import 'vulns';
@@ -61,12 +60,13 @@ a {
   // }
 
   .heading {
+    @extend .col-sm-12;
     margin-top: -$body-margin-top;
-    width: 90%;
-    min-height: 48px;
-    padding-right: 1em;
+    // width: 90%;
+    // min-height: 48px;
+    // padding-right: 1em;
     h3 {
-      margin-left: 15px;
+      // margin-left: 15px;
       font-weight: normal;
       line-height: 1.2em;
       color: #aaa;
@@ -78,6 +78,11 @@ a {
     span:not(.name) {
       text-transform: lowercase;
     }
+
+    .last_updated a {
+      text-decoration: none;
+    }
+
 
     @media (max-width: $grid-float-breakpoint) {
       padding-left: 30px;
@@ -136,4 +141,12 @@ section {
   @extend .col-sm-6;
   @extend .col-sm-offset-3;
   padding-top: 10px;
+}
+
+
+
+// onboarding deal with later
+#screenshot .modal-dialog {
+  @extend .modal-dialog;
+  width: 750px;
 }

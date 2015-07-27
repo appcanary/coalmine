@@ -1,10 +1,47 @@
 table.apps {
-  .status {
-    width: 1px;
-    white-space: no-wrap;
+  td section {
+    padding-top: 1em;
+    padding-bottom: 1em;
   }
 
-  td.link .info {
+  .status, {
+    @extend .col-xs-1;
+    padding-top: 0.2em;
+    width: 2em;
+    font-size: 1.8em;
+    margin-left: 1em;
+    padding-right: 0px;
+  }
+
+  .icon {
+    width: 1.2em;
     display: inline;
   }
+
+  .description {
+    @extend .col-xs-6;
+      padding-top: 8px;
+    .title {
+      font-size: 18px;
+    }
+    .last_updated a {
+      color: grey;
+      font-size: 14px;
+    }
+  }
+
+  .actions {
+    @extend .col-xs-4;
+  }
 }
+
+// table.apps {
+//   .status {
+//     width: 1px;
+//     white-space: no-wrap;
+//   }
+// 
+//   td.link .info {
+//     display: inline;
+//   }
+// }
