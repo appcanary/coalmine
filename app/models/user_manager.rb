@@ -1,4 +1,4 @@
-class UserCreator
+class UserManager
   attr_accessor :user
 
   def self.sign_up(user)
@@ -6,7 +6,7 @@ class UserCreator
   end
 
   def initialize(user)
-    @client = Canary.new(nil)
+    @client = Canary.new(user.token)
     @user = user
   end
 
@@ -29,4 +29,13 @@ class UserCreator
       end
     end
   end
+
+  def update!(params)
+    true
+  end
+
+  def self.update(user, params)
+    self.new(user).update!(params)
+  end
 end
+
