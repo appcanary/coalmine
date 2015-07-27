@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: put
-    uri: http://localhost:3000/api/v1/users/me
+    uri: http://localhost:4000/api/v1/users/me
     body:
       encoding: UTF-8
       string: '{"email":"new@example.com"}'
