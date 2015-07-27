@@ -31,7 +31,17 @@ class UserManager
   end
 
   def update!(params)
-    true
+    if email = params[:email]
+      begin
+        resp = @client.update_user({email: email})
+      rescue Faraday::Error => e
+        @user.errors.add(:email, "Something went wrong. Please try again.")
+        Raven.capture_exception(e)
+        return false
+      end
+    end
+
+    @user.update_attributes(params)
   end
 
   def self.update(user, params)

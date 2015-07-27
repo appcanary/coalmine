@@ -38,11 +38,10 @@
 class User < ActiveRecord::Base
   authenticates_with_sorcery!
   validates_confirmation_of :password
-  validates :password, length: { minimum: 6 }, :if => :password, :allow_blank => true
-  validates_confirmation_of :password, :if => :password, :allow_blank => true
-  validates :email, uniqueness: true
+  validates :password, length: { minimum: 6 }, :if => :password
+  validates_confirmation_of :password, :if => :password
+  validates :email, uniqueness: true, presence: true
 
-  after_update :api_update
 
   def servers
     @servers ||= canary.servers
@@ -69,9 +68,4 @@ class User < ActiveRecord::Base
     @canary ||= Canary.new(self.token)
   end
 
-  def api_update
-    if (changed & ['email']).any?
-      canary.update_user(:email => self.email)
-    end
-  end
 end
