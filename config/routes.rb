@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get 'welcome' => "dashboard#index", :as => :welcome
 
 
-  resources :users do
+  resources :users, :only => [:new, :create, :destroy] do
     post "stop_impersonating", on: :collection
   end
   #get 'sign_up' => "users#new", :as => :sign_up
