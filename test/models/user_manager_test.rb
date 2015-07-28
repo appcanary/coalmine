@@ -35,6 +35,8 @@ class UserManagerTest < ActiveSupport::TestCase
     end
   end
 
+  # todo attr update, mostly covered in settings test
+
   private
 
   def mock_client

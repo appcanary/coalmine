@@ -30,4 +30,23 @@ class SettingsControllerTest < ActionController::TestCase
     user.reload
     assert_equal user.email, new_email
   end
+
+   it "users changing their email should fail gracefully" do
+    login_user(user)
+
+    new_email = "new@example.com"
+
+    client = mock
+    client.expects(:update_user).with(anything).raises(Faraday::Error, "lol nope")
+    client.expects(:me).with(anything).returns({"agent-token": "test"})
+    Canary.stubs(:new).with(anything).returns(client)
+
+    post :update, :user => { :email => new_email }
+
+    assert user.errors["email"].present?
+
+    user.reload
+    assert_not_equal user.email, new_email
+  end
+
 end
