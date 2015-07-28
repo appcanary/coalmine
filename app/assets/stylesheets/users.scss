@@ -45,8 +45,13 @@ form#payment-form {
     margin: 0;
   }
   .cc-number {
-    width: 300px;
+    width: 350px;
   }
+
+  .cc-name {
+    width: 350px;
+  }
+
   .cc-mm {
     width: 100px;
   }
@@ -63,6 +68,8 @@ form#payment-form {
     margin-top: 2em;
   }
 }
+
+
 
 form.settings {
   padding: 0;

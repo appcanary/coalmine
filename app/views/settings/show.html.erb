@@ -12,11 +12,10 @@
   </div>
 </section>
 
-
-<% if Rails.env == 'development' #unless @user.has_billing? %>
-  <%= render :partial => "credit_card_form" %>
-<% elsif false %>
-  <section>
+<section>
+  <% if Rails.env == 'development' #unless @user.has_billing? %>
+    <%= render :partial => "credit_card_form" %>
+  <% elsif false %>
     <div class="col-sm-4">
       <h4>Credit card on file:</h4>
       <% @user.payment_info.each do |card| %>
@@ -33,8 +32,8 @@
 
       <% end %>
     </div>
-  </section>
-<% end %>
+  <% end %>
+</section>
 
 <section>
   <div class="col-sm-4">

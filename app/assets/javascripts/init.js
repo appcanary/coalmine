@@ -8,7 +8,17 @@ $(document).ready(function() {
       // Disable the submit button to prevent repeated clicks
       $form.find('button').prop('disabled', true);
 
-      Stripe.card.createToken($form, stripeResponseHandler);
+      var card = {}
+      $form.find('[data-stripe]').each(function(i, e) {
+        var elem = $(e);
+        card[elem.data("stripe")] = elem.val()
+      })
+
+      var expiry = $form.find("[name=expiry]").val().split("/").map(function(e) { return $.trim(e) })
+      card["exp_month"] = expiry[0];
+      card["exp_year"] = expiry[1];
+
+      Stripe.card.createToken(card, stripeResponseHandler);
 
       // Prevent the form from submitting with the default action
       return false;
@@ -34,6 +44,13 @@ function stripeResponseHandler(status, response) {
 };
 
 $(document).ready(function() {
+
+
+  if($("#payment-form").length > 0) {
+    require('card');
+    var card_form = new Card({form: '#payment-form', container: ".card-wrapper"})
+  }
+
   $(".feedback").on("click", function(e) {
     e.preventDefault();
     if(typeof Intercom != "undefined") {
