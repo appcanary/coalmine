@@ -2,7 +2,8 @@ class Admin::UsersController < AdminController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
 
   def index
-    @users = User.all.order("created_at DESC")
+    @users = User.order("created_at DESC")
+    @user_count = User.count
     @servers_count = Backend.servers_count
     @recent_heartbeats = Backend.recent_heartbeats
   end
@@ -23,7 +24,7 @@ class Admin::UsersController < AdminController
     @user = User.new(user_params)
 
     respond_to do |format|
-      if UserCreator.sign_up(@user)
+      if UserManager.sign_up(@user)
         format.html { redirect_to admin_root_path }
         # format.json { render json: @user, status: :created, location: @user }
       else

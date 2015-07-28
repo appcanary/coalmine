@@ -1,7 +1,14 @@
 class ServersController < ApplicationController
-  skip_before_filter :require_login, :only => :install
+  skip_before_filter :require_login, :only => [:deb, :rpm, :install]
   def new
     @agent_token = current_user.agent_token
+  end
+
+  def onboarding
+    @hide_sidebar = true
+    @agent_token = current_user.agent_token
+
+    render :new
   end
 
   def show
@@ -15,9 +22,24 @@ class ServersController < ApplicationController
       :disposition => :inline
   end
 
+  def deb
+    send_file File.join(Rails.root, "lib/assets/script.deb.sh"),
+      :filename => "appcanary.debian.sh",
+      :type => "text/x-shellscript",
+      :disposition => :inline
+  end
+
+  def rpm
+    send_file File.join(Rails.root, "lib/assets/script.rpm.sh"),
+      :filename => "appcanary.debian.sh",
+      :type => "text/x-shellscript",
+      :disposition => :inline
+  end
+
+
   def destroy
     if server.destroy
-      redirect_to dashboard_path
+      redirect_to dashboard_path, notice: "OK. Do remember to turn off the agent!"
     end
   end
 
@@ -27,7 +49,7 @@ class ServersController < ApplicationController
 
   def update
     respond_to do |format|
-      if server.update(params[:server])
+      if server.update(server_params)
         format.html { redirect_back_or_to(dashboard_path) }
       else
         format.html { render :edit }
@@ -39,5 +61,9 @@ class ServersController < ApplicationController
 
   def server
     @server ||= current_user.server(params[:id])
+  end
+
+  def server_params
+    params.require(:server).permit(:name)
   end
 end

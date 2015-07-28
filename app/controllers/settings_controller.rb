@@ -8,7 +8,7 @@ class SettingsController < ApplicationController
     @user = current_user
 
     respond_to do |format|
-      if @user.update(user_params)
+      if UserManager.update(@user, user_params)
         format.html { redirect_to dashboard_path, notice: 'User settings updated!' }
       else
         format.html { render :show }

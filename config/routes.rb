@@ -10,13 +10,14 @@ Rails.application.routes.draw do
   get 'welcome' => "dashboard#index", :as => :welcome
 
 
-  resources :users do
+  resources :users, :only => [:new, :create, :destroy] do
     post "stop_impersonating", on: :collection
   end
   #get 'sign_up' => "users#new", :as => :sign_up
   #post 'sign_up' => "users#create"
 
   get "secretsignup/:source" => "users#new", :as => :new_beta_sign_up
+  get "hey_hn" => "users#new"
   post "secretsignup/:source" => "users#create", :as => :beta_sign_up
 
   resource :settings, :only => [:show, :update]
@@ -27,9 +28,11 @@ Rails.application.routes.draw do
   resources :servers, :only => [:new, :show, :destroy, :edit, :update] do
     resources :apps, :only => [:index, :new, :show]
     get "install", on: :collection
+    get "deb", on: :collection
+    get "rpm", on: :collection
   end
 
-  get "onboarding" => "servers#new", :as => :onboarding
+  get "hello" => "servers#onboarding", :as => :onboarding
 
   resources :vulns, :only => [:show]
 

@@ -1,3 +1,5 @@
+// get rid of this file
+
 form.simple_form {
   .input {
     padding: .3em;
@@ -70,49 +72,6 @@ form.basic {
   }
 }
 
-table {
-  width: 100%;
-  tr {
-    $border: dashed 1px #ddd;
-    border-bottom: $border;
-    &:hover {
-    }
-  }
-  td, th {
-    padding: 0 1em 0 1em;
-  }
-  th {
-    font-size: 0.8em;
-    font-weight: bold;
-  }
-
-  td.link {
-    font-size: 1.1em;
-    //    font-weight: bold;
-    padding: 0;
-    a {
-      display: block;
-      width: 100%;
-      //      line-height: 3em;
-      padding: 0.8em;
-      &:hover {
-        background-color: #fafafa;
-        .time_ago {
-          text-decoration: none;
-        }
-      }
-      .title {
-        margin-right: 0.5em;
-      }
-      .info {
-        margin-top: 0.3em;
-        display: block;
-        font-size: 0.8em;
-      }
-    }
-  }
-}
-
 
 .switch {
   $bg-color: #efefef;
@@ -140,13 +99,6 @@ table {
     color: #aaa;
   }
 }
-
-.status {
-  font-size: 1.2em;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-}
-
 
 .fa.okay {
   color: rgb(139, 181, 139);

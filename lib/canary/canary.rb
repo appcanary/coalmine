@@ -146,6 +146,10 @@ class Canary
     post('users', data: data)
   end
 
+  def update_user(data)
+    put("users/me", data: data, token: @user_token)
+  end
+
   # Agents
 
   def add_agent_server(data)

@@ -41,7 +41,8 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
-  validates :email, uniqueness: true
+  validates :email, uniqueness: true, presence: true
+
 
   def servers
     @servers ||= canary.servers
@@ -85,4 +86,5 @@ class User < ActiveRecord::Base
   def canary
     @canary ||= Canary.new(self.token)
   end
+
 end

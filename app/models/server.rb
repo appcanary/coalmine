@@ -3,6 +3,10 @@ class Server < CanaryBase
 
   has_many App
 
+  def display_name
+    name.blank? ? hostname : name
+  end
+
   def all_apps
     @applications ||= self.canary.server_apps(uuid).map do |a|
       a.server = self;

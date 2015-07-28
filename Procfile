@@ -1,2 +1,2 @@
-web: bundle exec rails s -p 4000
+web: bundle exec rails s
 node: npm run webpack-w

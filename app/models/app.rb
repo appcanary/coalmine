@@ -21,6 +21,10 @@ class App < CanaryBase
     uuid
   end
 
+  def display_name
+    name.blank? ? path : name
+  end
+
   def short_path
     path_strs = path.split("/")
     path_strs[0..-2].map(&:first).join("/") + "/" + path_strs[-1]

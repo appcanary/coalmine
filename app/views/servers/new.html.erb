@@ -1,84 +1,116 @@
-<section>
-  <div class="col-sm-4">
+<section id="onboarding" style="padding-top: 10px;">
+  <div class="col-sm-3">
 
     <div style="width: 200px; margin-left: auto; margin-right: auto;">
       <%= image_tag "canary-egg.medium.png", :style => "width: 200px" %>
-      <% if @onboardd %>
-        <h3 style="text-align: center">Howdy!</h3>
-      <% else %>
-        <h3 style="text-align: center">Welcome!</h3>
-      <% end %>
     </div>
 
-    <p>Canary works by monitoring your infrastructure. You will need to install our agent.</p>
-    <p>Current, we only support 
-      <span>
-        <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
-      <span>
-        <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu, </span> but we're hard at work adding other platforms.
-    </p>
-
-    <h4>Problems? Suggestions?</h4>
-    <p>Forgive us, we're still a little rough around the edges. Contact us at hello@appcanary.com for any and all reasons.</p>
+    <h3>Welcome!</h3>
+    <h4>Problems? Feedback?</h4>
+    <p>Hit up <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>, or click the button below.</p>
+    <p>We <b>really</b> want to hear from you.</p>
+    <%= eui_button "Hey, I got opinions", href: "", :class => "eui-button-medium-primary feedback" %>
 
 
   </div>
+  <div class="col-sm-6">
+    <section>
+      <div class="onboard-box" style="margin-bottom: 10px">
+        <div class="onboard-wrapper">
+          <section>
+            <div class="onboard-title">
+              <h3>What is this?</h3>
+            </div>
+          </section>
+          <section>
+            <div class="onboard-desc">
+              <p>
+                We track thousands of vulnerabilities across hundreds of thousands of open source packages so you can do other, more productive things with your time. 
+              </p>
 
-  <div class="onboard-box">
-    <div class="onboard-wrapper">
-      <section>
-        <div class="onboard-title">
-          <h3>Instructions</h3>
-        </div>
-      </section>
+              <p>We monitor your server and your application's dependencies, and we will notify you when new vulnerabilities get disclosed.</p>
+            </p>
 
-      <section>
-        <div class="onboard-desc">
-          <h4>Step 1.</h4>
-          <p>Open a shell on your favourite server. The following script adds our repository to your apt sources, and installs our package:
-            <kbd>curl -s https://appcanary.com/servers/install.sh | sudo bash</kbd>
-            <br/>
-            (instructions for chef, ansible, etc, coming soon)
-          </p>
+            <p>Currently we can tell you about vulnerable
+              <span>
+                <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and/or
+              <span>
+                <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> packages (we're adding more real soon) and you can install it on most Linuxes.
+            </p>
 
-          <h4>Step 2.</h4>
-          <p>Now edit the configuration. 
-            <br/>
-            <kbd>$EDITOR /etc/appcanary/agent.conf</kbd>
-            <br/>
-            You're going to need to add your API key, so feel free to copy and paste the following:
-            <br/>
-            <pre>
-api_key = "<%= @agent_token %>"
+            <p>
+              This is what it looks like:
+              <div style="width: 300px; margin-left: auto; margin-right: auto; ">
+                <a href="#screenshot" data-toggle="modal" data-target="#screenshot"><%= image_tag "screenshot-vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a>
+              </div>
+            </p>
 
-[[files]]
-# Add files to monitor here
-# path = "/var/www/someapp/current/Gemfile.lock"</pre>
-            Finally, point the config file to your <code>Gemfile.lock</code> using its full qualified path.
-          </p>
-
-          <h4>Step 3.</h4>
-          <p>Start the agent. We shipped an upstart script, so type:
-            <br/>
-            <kbd>start appcanary</kbd>
-          </p>
-        </div>
-      </section>
-
-
-      <section>
-        <div class="action-bar">
-          <div class="pull-right">
-            <%= eui_button "Feedback", href: "", :class => "eui-button-medium-primary feedback" %>
-            <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
           </div>
-
-        </div>
-      </section>
-
+        </section>
+      </div>
     </div>
-  </div>
 
+    <div class="onboard-box">
+      <div class="onboard-wrapper">
+        <section style="border: none">
+          <div class="onboard-title">
+            <h3>Instructions (about five minutes)</h3>
+            <br/>
+            <ul class="nav nav-tabs">
+              <li role="presentation" class="active"><a href="#deb" data-toggle="tab"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>
+              <li role="presentation"><a href="#rpm" data-toggle="tab"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat, <%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS and Amazon</a></li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <div class="onboard-desc">
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="deb">
+                <%= render :partial => "debian" %>
+              </div>
+
+              <div role="tabpanel" class="tab-pane" id="rpm">
+                <%= render :partial => "redhat" %>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+
+        <section>
+          <div class="action-bar">
+            <div class="pull-right">
+              <%= eui_button "I need something else", href: "", :class => "eui-button-medium-primary feedback-else" %>
+              <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </section>
+</div>
 
 </section>
 
+
+
+<div class="modal fade" id="screenshot" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Screenshot</h4>
+      </div>
+      <div class="modal-body">
+        <%= image_tag "screenshot-vuln.jpg", :style => "width: 725px;" %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
