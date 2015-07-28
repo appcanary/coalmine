@@ -12,28 +12,30 @@
   </div>
 </section>
 
-<section>
-  <% if Rails.env == 'development' #unless @user.has_billing? %>
-    <%= render :partial => "credit_card_form" %>
-  <% elsif false %>
-    <div class="col-sm-4">
-      <h4>Credit card on file:</h4>
-      <% @user.payment_info.each do |card| %>
-        <dl>
+<% if false # not ready for public consumption yet %>
+  <section>
+    <% if Rails.env == 'development' #unless @user.has_billing? %>
+      <%= render :partial => "credit_card_form" %>
+    <% elsif false %>
+      <div class="col-sm-4">
+        <h4>Credit card on file:</h4>
+        <% @user.payment_info.each do |card| %>
+          <dl>
 
-          <dt>Last four digits:</dt>
-          <dd><%= card.last4 %></dd>
+            <dt>Last four digits:</dt>
+            <dd><%= card.last4 %></dd>
 
-          <dt>Expiry:</dt>
-          <dd><%= card.exp_month %> / <%= card.exp_year %></dd>
+            <dt>Expiry:</dt>
+            <dd><%= card.exp_month %> / <%= card.exp_year %></dd>
 
 
-        </dl>
+          </dl>
 
-      <% end %>
-    </div>
-  <% end %>
-</section>
+        <% end %>
+      </div>
+    <% end %>
+  </section>
+<% end %>
 
 <section>
   <div class="col-sm-4">
