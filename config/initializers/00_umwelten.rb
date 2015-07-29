@@ -6,15 +6,20 @@ search_dirs = [settings_path]
 files = []
 
 until search_dirs.empty?
+
   search_path = search_dirs.shift 
- 
   Find.find(search_path) do |path|
-  
+
     unless path == search_path 
-    
+
       if File.directory?( path )
-        puts "sd2 #{search_dirs}"
-        search_dirs << path
+        
+        if File.symlink?(path)
+          search_dirs << "#{path}/"
+        else
+          search_dirs << path
+        end
+
       else
         files << path
       end
@@ -31,12 +36,10 @@ files.each do |file|
 
   if new_conf[Rails.env]
     new_settings = new_conf[Rails.env]
-  else
-    new_settings = new_conf
-  end
 
-  key = new_settings.keys.first
-  if key
-    Rails.configuration.send("#{key}=", OpenStruct.new(new_settings[key]))
+    key = new_settings.keys.first
+    if key
+      Rails.configuration.send("#{key}=", OpenStruct.new(new_settings[key]))
+    end
   end
 end
