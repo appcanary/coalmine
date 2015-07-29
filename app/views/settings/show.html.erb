@@ -1,6 +1,8 @@
-<div class="heading">
-  <h3>Settings</h3>
-</div>
+<section>
+  <div class="heading">
+    <h3>Settings</h3>
+  </div>
+</section>
 
 <section>
   <div class="user_api">
@@ -40,6 +42,18 @@
 <section>
   <div class="col-sm-4">
     <%= form_for @user, url: settings_path do |f| %>
+
+      <%= f.label :email %>
+      <div class="form-group">
+        <%=f.text_field :email, :class => "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%=f.submit "Change email", :class => "btn btn-default" %>
+      </div>
+
+      <%= f.label :password %>
+
       <div class="form-group">
         <%=f.password_field :password, :class => "form-control", :placeholder => "New password" %>
       </div>
