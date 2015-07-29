@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624000026) do
+ActiveRecord::Schema.define(version: 20150727222019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(version: 20150624000026) do
     t.string   "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "uploads", force: :cascade do |t|
+    t.integer  "user_id"
+    t.text     "result"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "gemfile_file_name"
+    t.string   "gemfile_content_type"
+    t.integer  "gemfile_file_size"
+    t.datetime "gemfile_updated_at"
   end
 
   create_table "users", force: :cascade do |t|
@@ -45,6 +56,7 @@ ActiveRecord::Schema.define(version: 20150624000026) do
     t.boolean  "onboarded",                       default: false
     t.boolean  "is_admin",                        default: false, null: false
     t.string   "beta_signup_source"
+    t.string   "stripe_customer_id"
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree

@@ -25,6 +25,7 @@
 #  onboarded                       :boolean          default("false")
 #  is_admin                        :boolean          default("false"), not null
 #  beta_signup_source              :string
+#  stripe_customer_id              :string
 #
 # Indexes
 #
@@ -61,6 +62,24 @@ class User < ActiveRecord::Base
 
   def agent_token
     api_info["agent-token"]
+  end
+
+  def stripe_customer
+    if stripe_customer_id
+      Billing.find_customer(self)
+    end
+  end
+
+  def has_billing?
+    stripe_customer_id.present?
+  end
+
+  def payment_info
+    if has_billing?
+      stripe_customer.sources
+    else 
+      []
+    end
   end
 
   protected

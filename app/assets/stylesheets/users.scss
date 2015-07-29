@@ -31,3 +31,57 @@ form.edit_user {
     color: black;
   }
 }
+
+form#payment-form {
+  padding: 0 0 2em 0;
+  .field {
+    display: inline-block;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+  }
+  input.text {
+    width: 100%;
+    margin: 0;
+  }
+  .cc-number {
+    width: 350px;
+  }
+
+  .cc-name {
+    width: 350px;
+  }
+
+  .cc-mm {
+    width: 100px;
+  }
+  .cc-yyyy {
+    width: 100px;
+  }
+  .cc-cvc {
+    width: 93px;
+  }
+  input[type="submit"] {
+    width: 300px;
+  }
+  .buttons {
+    margin-top: 2em;
+  }
+}
+
+
+
+form.settings {
+  padding: 0;
+  .field {
+    display: inline-block;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    width: 300px;
+  }
+  input.text {
+    width: 100%;
+    margin: 0;
+  }
+}

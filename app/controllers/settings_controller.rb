@@ -1,10 +1,12 @@
 class SettingsController < ApplicationController
   def show
+    @show_stripe = true
     @user = current_user
   end
 
   def update
     @user = current_user
+
     respond_to do |format|
       if UserManager.update(@user, user_params)
         format.html { redirect_to dashboard_path, notice: 'User settings updated!' }

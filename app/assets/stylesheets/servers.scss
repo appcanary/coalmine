@@ -46,11 +46,5 @@ table.servers {
 
 
 form.edit_server {
-  .field {
-    &.name {
-    }
-    input.text {
-      width: 500px;
-    }
-  }
+  width: 500px;
 }
