@@ -10,19 +10,23 @@ Rails.application.routes.draw do
   get 'welcome' => "dashboard#index", :as => :welcome
 
 
-  resources :users, :only => [:new, :create, :destroy] do
-    post "stop_impersonating", on: :collection
-  end
-  #get 'sign_up' => "users#new", :as => :sign_up
-  #post 'sign_up' => "users#create"
-
   get "secretsignup/:source" => "users#new", :as => :new_beta_sign_up
   get "hey_hn" => "users#new"
   post "secretsignup/:source" => "users#create", :as => :beta_sign_up
 
+  #get 'sign_up' => "users#new", :as => :sign_up
+  #post 'sign_up' => "users#create"
+
+  get "hello" => "servers#onboarding", :as => :onboarding
+
+  put "billing" => "billing#update", :as => :billing
+
+  resources :users, :only => [:new, :create, :destroy] do
+    post "stop_impersonating", on: :collection
+  end
+  
   resource :settings, :only => [:show, :update]
 
-  # get 'timeline' => "timeline#index"
   resources :user_sessions, :only => [:create, :destroy]
 
   resources :servers, :only => [:new, :show, :destroy, :edit, :update] do
@@ -32,11 +36,7 @@ Rails.application.routes.draw do
     get "rpm", on: :collection
   end
 
-  get "hello" => "servers#onboarding", :as => :onboarding
-
   resources :vulns, :only => [:show]
-
-  put "billing" => "billing#update", :as => :billing
 
   namespace :admin do
     root to: "users#index"
