@@ -66,7 +66,7 @@ class GreatReviewController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :onboarded, :beta_signup_source, :source)
+    params.require(:user).permit(:email, :password, :password_confirmation, :onboarded, :beta_signup_source)
   end
 
 end
