@@ -1,0 +1,52 @@
+<div class="container">
+  <section>
+    <div class="signup-logo">
+      <%= link_to image_tag("appcanary.png"), root_path %>
+    </div>
+  </section>
+
+  <section>
+    <div class="user-login">
+
+      <%= form_for(@user, :url => great_review_sign_up_path, :method => :post) do |f| %>
+        <% if @user.errors.any? %>
+          <div class="error_explanation" role="alert">
+            <h4>Oops. We encountered an error:</h4>
+
+            <ul>
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= yield :user_form_title %>
+        <h3>Hello.</h3><h3>Please sign in or create an account:</h3>
+
+        <div class="form-group">
+          <%= f.email_field :email, :class => "form-control", :placeholder => "Your email address" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.password_field :password, :class => "form-control", :placeholder => "A password, or a secret between us", :'data-minlength' => "6", :'data-error' => 'At least 6 characters' %>
+          <span class="help-block with-errors"></span>
+
+        </div>
+
+        <div class="form-group">
+          <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "The same password again, just to confirm", :'data-match' => "#user_password", :'data-error' => "Passwords must match" %>
+          <span class="help-block with-errors"></span>
+        </div>
+
+
+        <%= f.hidden_field :source, :value => "great_review" %>
+        <div class="form-group">
+          <%= f.submit "Sign Up", :class => "btn btn-black" %>
+        </div>
+
+      <% end %>
+
+    </div>
+  </section>
+</div>

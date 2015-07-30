@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   root 'welcome#index'
   get 'launchrock' => 'welcome#index'
   post 'beta/list' => "welcome#beta_list"
@@ -20,6 +21,11 @@ Rails.application.routes.draw do
   get "hello" => "servers#onboarding", :as => :onboarding
 
   put "billing" => "billing#update", :as => :billing
+
+  get 'greatrubyreview' => "great_review#show", :as => :great_review
+  get 'greatrubyreview/hello' => "great_review#hello", :as => :great_review_login
+  post 'greatrubyreview/sign_up' => "great_review#sign_up", :as => :great_review_sign_up
+  post 'greatrubyreview/payment' => "great_review#payment", :as => :great_review_payment
 
   resources :users, :only => [:new, :create, :destroy] do
     post "stop_impersonating", on: :collection
