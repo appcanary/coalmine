@@ -96,6 +96,21 @@
   }
 }
 
+.join-us {
+  @include row();
+  border-top: 1px solid lighten($text, 50%);
+  padding-top: 3.5em;
+
+  .contribution {
+    @include shift(3);
+    @include span-columns(6 of 12);
+    h3 {
+      margin-top: 0px;
+    }
+  }
+
+}
+
 
 
 form.basic {

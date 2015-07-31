@@ -1,6 +1,6 @@
 class GreatReviewController < ApplicationController
   skip_before_filter :require_login
-  before_filter :require_great_review_login, :except => [:hello, :sign_up]
+  # before_filter :require_great_review_login, :except => [:hello, :sign_up]
 
   layout 'great_review'
   def index
