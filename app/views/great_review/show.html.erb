@@ -1,0 +1,133 @@
+<div class="topbar"></div>
+
+<div class="hed">
+  <% if current_user.has_billing? %>
+    <div class="bird">
+      <%= image_tag "canary-miner.medium.png" %>
+    </div>
+    <h2>Great. We now have your credit card on file.</h2>
+    <h1>You'll be hearing from us soon!</h3>
+  <% else %>
+    <div class="bird">
+      <%= image_tag "canary-miner.medium.png" %>
+    </div>
+    <h2>appCanary presents</h2>
+    <h1>The Great Ruby Review</h1>
+    <!-- <h1>Secure your apps,<br/>one dependency at a time.</h1> -->
+  <% end %>
+</div>
+
+<% unless current_user.has_billing? %>
+  <div class="landing-container">
+
+    <div class="unit">
+      <div class="subhed">
+        <p>We're doing something a little different.</p>
+        <br/>
+        <p>We're auditing the Ruby open source ecosystem, one gem at a time.<br/>And we need your help.</p>
+      </div>
+    </div>
+
+
+
+    <div class="features">
+      <div class="aside">
+        <h3>What are you doing, exactly?</h3>
+      </div>
+      <div class="review-unit">
+        <p>We're picking Ruby libraries and we're getting them audited by security professionals.</p>
+        <br/>
+        <p>We have years of experience performing code reviews, and we know how to get the job done. </p>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="aside">
+        <h3>What happens when you find something?</h3>
+      </div>
+      <div class="review-unit">
+        <p>As vulnerabilities get discovered, we'll be following a 90 day responsible discloure policy.</p>
+        <br/>
+        <p>We'll contact maintainers, help them prepare patches and coordinate disclosures.</p>
+      </div>
+    </div>
+
+    <div class="features" style="padding-bottom: 3em">
+      <div class="aside">
+        <h3>What's in it for me?</h3>
+      </div>
+      <div class="review-unit">
+        <p>You'll find out what's vulnerable as soon as we do. You get a say in which libraries we look at next.</p>
+        <br/>
+        <p>You get to give back to the community, and improve everyone's security. We'll make sure people know about your contribution.</p>
+      </div>
+    </div>
+
+    <div class="payment">
+      <div class="contribution">
+        <h3>Okay. You've convinced me. Now what?</h3>
+        <p>Join the club. 
+          <br/>
+          <br/>
+          If you're reading this it's because we've emailed you and you're onboard.
+          <br/>
+          <br/>
+          The form to the right of this text will collect your credit card (token) and we will charge the agreed upon amount of $5,000.
+          <br/>
+          <br/>
+          Thanks, we're going to do some great things together.
+        </p>
+      </div>
+      <div class="creditcard">
+        <%= form_for @user, url: great_review_payment_path, :method => :post, html: { id: "payment-form", class: 'basic' } do |f| %>
+
+          <span class="payment-errors"></span>
+          <div class="card-wrapper" style="width: 350px"></div>
+
+          <div class="level">
+            <div class="field cc-number">
+              <label>Card Number</label>
+              <input type="text" class="text" size="20" maxlength="20" name="number" data-stripe="number"/>
+            </div>
+          </div>
+
+          <div class="level">
+            <div class="field cc-name">
+              <label>Name (as appears on card)</label>
+              <input type="text" class="text" size="20" maxlength="255" name="name" data-stripe="name"/>
+            </div>
+          </div>
+
+          <div class="level">
+            <div class="field cc-mm">
+              <label>
+                Expiry
+              </label>
+              <input type="text" class="text" size="7" maxlength="7" name="expiry"/>
+            </div>
+
+            <div class="field cc-cvc">
+              <label>
+                CVC
+              </label>
+              <input type="text" class="text" size="4" maxlength="4" name="cvc" data-stripe="cvc"/>
+            </div>
+
+          </div>
+
+          <div class="form-group buttons">
+            <button type="submit" class="btn btn-primary submit">Submit</button>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+
+
+    <footer class="footer">
+      <p>&copy; 2015 Canary Computer Corporation</p>
+    </footer>
+
+  </div>
+
+<% end %>

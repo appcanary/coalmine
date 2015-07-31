@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
+ruby '2.2.0'
 
 gem 'rails', '4.2.0'
 
@@ -23,7 +23,6 @@ gem "neat"
 gem "htmlentities"
 gem 'haml', '~> 4.0.6'
 gem 'haml-coffee', '~> 0.1.0'
-gem 'simple_form', '~> 3.1.0'
 
 # auth
 gem 'sorcery'
@@ -42,8 +41,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Logging/error notifications
+# external services
 gem 'sentry-raven', '~> 0.13.3'
+gem 'intercom-rails', '~> 0.2.28'
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 # deployment
 gem 'unicorn-rails'
@@ -66,7 +67,6 @@ gem 'faraday_middleware', '~> 0.9.1'
 #misc
 gem 'ruby_identicon', '0.0.4'
 gem 'request_store', '~> 1.1.0'
-gem 'intercom-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

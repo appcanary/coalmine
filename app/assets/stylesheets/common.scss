@@ -36,7 +36,7 @@ form.simple_form {
 }
 
 form.basic {
-  padding: 0 2em 0 2em;
+  padding: 0;
   label {
     color: #aaa;
     font-size: 0.88em;
@@ -59,16 +59,16 @@ form.basic {
   }
 
   input[type="submit"] {
-    @include border-radius(.3em);
+    @include text-shadow(1px 1px 1px 1px #555);
+    border: solid 1px #777;
     $bg: #aaa;
+    $bg-default: linear-gradient($bg, adjust-lightness($bg, -30));
+    @include border-radius(.3em);
+    background-image: $bg-default;
     margin-top: 1.5em;
     padding: 1em;
     background-color: $bg;
-    border: none;
     color: #fff;
-    &:hover {
-      background-color: adjust-lightness($bg, 11);
-    }
   }
 }
 
@@ -99,7 +99,6 @@ form.basic {
     color: #aaa;
   }
 }
-
 
 .fa.okay {
   color: rgb(139, 181, 139);

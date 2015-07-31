@@ -1,0 +1,14 @@
+development:
+  stripe:
+    api_key: sk_test_BFrpXwChkcFOCCdJSsppJiwk
+    publishable_key: pk_test_0OTTq2jwg4IPdkxPDgV8yzuQ
+
+test:
+  stripe:
+    api_key: sk_test_BFrpXwChkcFOCCdJSsppJiwk
+    publishable_key: pk_test_0OTTq2jwg4IPdkxPDgV8yzuQ
+
+staging:
+  stripe:
+    api_key: sk_test_BFrpXwChkcFOCCdJSsppJiwk
+    publishable_key: pk_test_0OTTq2jwg4IPdkxPDgV8yzuQ

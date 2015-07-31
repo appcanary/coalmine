@@ -2,11 +2,15 @@
 <section>
   <div class="user-login">
     <% content_for :user_form_title do %>
-    <h2>appCanary Pilot Program</h2>
-    <p>We make sure you never run vulnerable software on your servers.</p>
-    <p>The service will be <b>free</b> for the duration of the pilot period. After we launch, plans will start at $10 per server per month.</p>
-    <br/>
-    <h4>Before we get started, tell us:</h4>
+      <%if params[:source] == "hn" %>
+        <h2>Hey Hacker News!<br/>Try out our pilot program.</h2>
+      <% else %>
+        <h2>appCanary Pilot Program</h2>
+      <% end %>
+      <p>We make sure you never run vulnerable software on your servers. We monitor the software you have installed, and our notifications let you take action and keep your servers safe.</p>
+      <p>The service will be <b>free</b> for the duration of the pilot period. After we launch, plans will start at $9 per server per month. Right now we work best on Ruby + any linux, or Ubuntu + any app - more is coming soon.</p>
+      <br/>
+      <h4>Before we get started, tell us:</h4>
     <% end %>
 
 
@@ -24,7 +28,7 @@
       <% end %>
 
       <%= yield :user_form_title %>
-      
+
       <%= f.hidden_field :beta_signup_source, :value => params[:source] %>
 
       <div class="form-group">

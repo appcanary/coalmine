@@ -128,4 +128,13 @@ class CanaryClientTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe 'update_user' do
+    it 'should update the user email' do
+      VCR.use_cassette('user_update') do
+        updated_user = @client.update_user({email: "new@example.com"})
+        assert_equal 'new@example.com', updated_user['email']
+      end
+    end
+  end
 end

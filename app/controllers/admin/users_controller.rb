@@ -24,7 +24,7 @@ class Admin::UsersController < AdminController
     @user = User.new(user_params)
 
     respond_to do |format|
-      if UserCreator.sign_up(@user)
+      if UserManager.sign_up(@user)
         format.html { redirect_to admin_root_path }
         # format.json { render json: @user, status: :created, location: @user }
       else

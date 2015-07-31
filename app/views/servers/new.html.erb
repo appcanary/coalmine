@@ -19,23 +19,23 @@
         <div class="onboard-wrapper">
           <section>
             <div class="onboard-title">
-              <h3>How it works</h3>
+              <h3>What is this?</h3>
             </div>
           </section>
           <section>
             <div class="onboard-desc">
-              <ol>
-                <li>Install our <b>tiny</b> agent. It's written in golang and it's <a href="https://github.com/appcanary/agent" target="_blank">entirely open source and up on github</a>. Tell us what you think.</li>
-                <li>The agent figures out what you have installed and <b>sends you an email when you're vulnerable to security flaws</b>.</li>
-                <li>There is no step three.</li>
-              </ol>
+              <p>
+                We track thousands of vulnerabilities across hundreds of thousands of open source packages so you can do other, more productive things with your time. 
+              </p>
+
+              <p>We monitor your server and your application's dependencies, and we will notify you when new vulnerabilities get disclosed.</p>
             </p>
 
             <p>Currently we can tell you about vulnerable
               <span>
-                <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and
+                <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and/or
               <span>
-                <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> packages (we're adding more real soon) and you can install it on almost any Linux.
+                <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> packages (we're adding more real soon) and you can install it on most Linuxes.
             </p>
 
             <p>
@@ -54,7 +54,7 @@
       <div class="onboard-wrapper">
         <section style="border: none">
           <div class="onboard-title">
-            <h3>Instructions</h3>
+            <h3>Instructions (about five minutes)</h3>
             <br/>
             <ul class="nav nav-tabs">
               <li role="presentation" class="active"><a href="#deb" data-toggle="tab"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>
@@ -82,7 +82,7 @@
         <section>
           <div class="action-bar">
             <div class="pull-right">
-              <%= eui_button "Feedback", href: "", :class => "eui-button-medium-primary feedback" %>
+              <%= eui_button "I need something else", href: "", :class => "eui-button-medium-primary feedback-else" %>
               <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
             </div>
 
