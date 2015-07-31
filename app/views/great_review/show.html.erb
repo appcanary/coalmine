@@ -1,7 +1,7 @@
 <div class="topbar"></div>
 
 <div class="hed">
-  <% if current_user && current_user.has_billing? %>
+  <% if false #current_user && current_user.has_billing? %>
     <div class="bird">
       <%= image_tag "canary-miner.medium.png" %>
     </div>
@@ -17,7 +17,7 @@
   <% end %>
 </div>
 
-<% unless current_user && current_user.has_billing? %>
+<% unless false #current_user && current_user.has_billing? %>
   <div class="landing-container">
 
     <div class="unit">
@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <% if current_user %>
+    <% if false#current_user %>
       <div class="payment">
         <div class="contribution">
           <h3>Okay. You've convinced me. Now what?</h3>
