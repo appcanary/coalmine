@@ -343,6 +343,10 @@ img {
     @include span-columns(4 of 12);
     img {
       margin-bottom: 1em;
+      margin-left: auto;
+      margin-right: auto;
+      width: 70%;
+      display: block;
     }
     h3 {
       padding: 0 0.6em;

@@ -19,4 +19,13 @@ $(document).ready(function() {
       }
     });
   });
+
+
+  $(".feedback-enterprise").on("click", function(e) {
+    e.preventDefault();
+    if(typeof Intercom != "undefined") {
+      Intercom("showNewMessage", "Hey! I have a lot of servers. Let's talk!")
+    }
+  });
+
 });
