@@ -8,6 +8,16 @@ class UsersControllerTest < ActionController::TestCase
       assert_not_nil assigns(:user)
     end
 
+    it "should display signup page w/email prefilled in" do
+      email = "zomgtest@example.com"
+      session[:pre_user_email] = email
+      get :new
+      assert_response :success
+      assert_not_nil assigns(:user)
+      assert_select "#user_email[value=?]", email
+    end
+
+
     it "should register new users and log them in" do
       client = mock
       client.expects(:add_user).with(anything).returns({'web-token' => 'a token'})
@@ -39,6 +49,13 @@ class UsersControllerTest < ActionController::TestCase
       assert_redirected_to dashboard_path
     end
 
+    it "should pass along emails in pre_sign_up" do
+      email = "zomgtest@example.com"
+      assert_difference("PreUser.count") do
+        post :pre_sign_up, :pre_user => { :email => email }
+      end
+      assert_redirected_to sign_up_path
+    end
   end
 
   describe "existing user" do
