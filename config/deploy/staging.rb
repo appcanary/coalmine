@@ -4,9 +4,9 @@
 # is considered to be the first unless any hosts have the primary
 # property set.  Don't declare `role :all`, it's a meta role.
 
-role :app, %w{deploy@104.131.36.90}
-role :web, %w{deploy@104.131.36.90}
-role :db,  %w{deploy@104.131.36.90}
+role :app, %w{deploy@staging.appcanary.com}
+role :web, %w{deploy@staging.appcanary.com}
+role :db,  %w{deploy@staging.appcanary.com}
 
 
 # eager_load = true
