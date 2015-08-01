@@ -15,8 +15,9 @@ Rails.application.routes.draw do
   get "hey_hn" => "users#new"
   post "secretsignup/:source" => "users#create", :as => :beta_sign_up
 
-  #get 'sign_up' => "users#new", :as => :sign_up
-  #post 'sign_up' => "users#create"
+  post "presignup" => "users#pre_sign_up", :as => :pre_sign_up
+  get 'sign_up' => "users#new", :as => :sign_up
+  post 'sign_up' => "users#create"
 
   get "hello" => "servers#onboarding", :as => :onboarding
 

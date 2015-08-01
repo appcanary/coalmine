@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_filter :require_login, only: [:new, :create]
+  skip_before_filter :require_login, only: [:new, :create, :pre_sign_up]
   before_filter :skip_if_logged_in, :only => [:new, :create]
   
   before_action :set_user, only: [:show, :edit, :update, :destroy]
@@ -9,9 +9,19 @@ class UsersController < ApplicationController
     redirect_to admin_root_path, notice: "Welcome back."
   end
 
+  def pre_sign_up
+    @preuser = PreUser.create(preuser_params)
+    session[:pre_user_email] = @preuser.email
+    redirect_to sign_up_path
+  end
+
   # GET /users/new
   def new
     @user = User.new
+    if email = session.delete(:pre_user_email)
+      @user.email = email
+    end
+
     if request.path =~ /hn/
       params[:source] = "hn"
     end
@@ -68,6 +78,10 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :onboarded, :beta_signup_source)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :onboarded, :beta_signup_source)
+    end
+
+    def preuser_params
+      params.require(:pre_user).permit(:email)
     end
 end

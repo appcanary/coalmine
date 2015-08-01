@@ -5,7 +5,7 @@
     <%= link_to "Log in", login_path, :class => "button" %>
   </div>
   <div class="action_unit action_sign-up">
-    <%= link_to "Sign Up", login_path, :class => "button" %>
+    <%= link_to "Sign Up", sign_up_path, :class => "button" %>
   </div>
 </div>
 
@@ -26,10 +26,13 @@
       <div class="flash subhed" style="display: none">
         <p>Thanks! We&rsquo;ll be in touch soon.</p>
       </div>
-      <%= form_tag "/beta/list", :method => :post, :name => :user, :class =>"hero_sign-up" do %>
-        <input type="email" name="email" class="form-control input-md" placeholder="jane@example.com">
-        <button type="submit" class="btn btn-default">Get started</button>
-      <% end %>
+      <div class="hero_sign-up">
+        <%= form_for @preuser, :url => pre_sign_up_path do |f| %>
+          <%= f.email_field :email, :class => "form-control input-md", :placeholder => "jane@example.com" %>
+
+          <button type="submit" class="btn btn-default signup">Get started</button>
+        <% end %>
+      </div>
     </div>
 
   </div>
@@ -101,37 +104,27 @@
       <div class="flash subhed" style="display: none">
         <p>Thanks! We&rsquo;ll be in touch soon.</p>
       </div>
-      <%= form_tag "/beta/list", :method => :post, :name => :user, :class => "full-sign-up" do %>
+      <%= form_for @user, :class => "full-sign-up" do |f| %>
         <div class="form-fields">
-          <label>Name</label>
-          <input type="text" name="name" placeholder="Jane Doe">
+          <%= f.label :email %>
+          <%= f.email_field :email, :placeholder => "jane@example.com" %>
 
-          <label>Email</label>
-          <input type="email" name="email" class="form-control input-md" placeholder="jane@example.com">
+          <%= f.label :name %>
+          <%= f.text_field :name, :placeholder => "Jane Doe" %>
 
-          <label>Password</label>
-          <input type="text" name="password" placeholder="Please enter a password">
+          <%= f.label :password %>
+          <%= f.password_field :password, :placeholder => "A secret between us" %>
 
-          <label>Confirm password</label>
-          <input type="text" name="password-confirm" placeholder="Confirm your password">
+          <%= f.label :password_confirmation, "Confirm Password" %>
+          <%= f.password_field :password_confirmation, :placeholder => "The above again, to make sure" %>
+
+          <button type="submit">Sign up now</button>
+
         </div>
-        <button type="submit">Sign up now</button>
       <% end %>
-    </div>
 
+    </div>
   </div>
 </div>
 
-<footer class="footer">
-  <%= image_tag "footer-egg.png" %>
-  <nav>
-    <ul>
-      <li><a href="www.google.com">Home</a></li>
-      <li><a href="www.google.com">Dashboard</a></li>
-      <li><a href="www.google.com">Contact</a></li>
-      <li><a href="www.google.com">Blog</a></li>
-      <li><a href="www.google.com">Twitter</a></li>
-    </ul>
-  </nav>
-  <p>&copy; 2015 Canary Computer Corporation</p>
-</footer>
+  <%= render :partial => "shared/footer" %>

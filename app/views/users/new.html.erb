@@ -14,7 +14,7 @@
     <% end %>
 
 
-    <%= form_for(@user, :url => beta_sign_up_path(params[:source])) do |f| %>
+    <%= form_for(@user, :url => sign_up_path(params[:source])) do |f| %>
       <% if @user.errors.any? %>
         <div class="error_explanation" role="alert">
           <h4>Oops. We encountered an error:</h4>
