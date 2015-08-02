@@ -528,13 +528,6 @@ footer {
     position: relative;
     z-index: 1;
     padding-bottom: 4em;
-    &:hover {
-      cursor: pointer;
-      .circle {
-        @include transition (all 0.1s ease-in);
-        opacity: 1;
-      }
-    }
   }
 
 
