@@ -11,8 +11,10 @@ class UsersController < ApplicationController
   end
 
   def pre_sign_up
-    @preuser = PreUser.create(preuser_params)
-    session[:pre_user_email] = @preuser.email
+    if preuser_params[:email]
+      @preuser = PreUser.create(preuser_params)
+      session[:pre_user_email] = @preuser.email
+    end
     redirect_to sign_up_path
   end
 

@@ -32,5 +32,18 @@
     font-weight: 600;
     font-size: 2em;
   }
+
+  h2 {
+    margin-bottom: 1em;
+  }
+
+  a {
+    color: black;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
