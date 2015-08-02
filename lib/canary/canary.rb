@@ -70,6 +70,14 @@ class Canary
     get("stats/servers/count")
   end
 
+  def stats_vulnerabilities_count
+    get("stats/vulnerabilities/count")
+  end
+
+  def stats_artifacts_count
+    get("stats/artifacts/count")
+  end
+  
   # Vulnerabilities
 
   def vulnerabilities
