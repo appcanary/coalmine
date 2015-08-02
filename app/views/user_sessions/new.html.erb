@@ -15,15 +15,9 @@
 <div class="hero-wrapper">
   <div class="sign-up-page">
     <div class="sign-up">
-      <div class="riskfree">
-        <h1>Hey there!</h1>
-        <h2>It's nice to see you again.</h2>
-        <% if @user.errors.present? %>
-          <br/>
-          <br/>
-          <br/>
-          <h2>Sorry! <%= @user.errors.full_messages.join(". ")%></h2>
-        <% end %>
+      <div class="riskfree" style="text-align: center;">
+        <h1 style="padding-bottom: 20px">Nice to see you again.</h1>
+        <%= image_tag "canary-worm.medium.png", :style => "width: 65%" %>
       </div>
       <%= render :partial => "form" %>
     </div>

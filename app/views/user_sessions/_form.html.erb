@@ -1,5 +1,8 @@
 <div class="sign-up_form-group">
   <%= form_for @user, :url => user_sessions_path, :class => "full-sign-up" do |f| %>
+    <% if @user.errors.present? %>
+      <h2>Sorry! <%= @user.errors.full_messages.join(". ")%></h2>
+    <% end %>
     <div class="form-fields">
       <%= label_with_error(f, @user, :email) %>
       <%= f.email_field :email, :placeholder => "jane@example.com" %>
