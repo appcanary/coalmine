@@ -517,4 +517,71 @@ footer {
 }
 
 
+.about { 
+  .unit_about {
+    float: left;
+    display: block;
+    // margin-right: 3.3576516%;
+    width: 60%;
+    margin-left: 19%;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 4em;
+    &:hover {
+      cursor: pointer;
+      .circle {
+        @include transition (all 0.1s ease-in);
+        opacity: 1;
+      }
+    }
+  }
+
+
+  .half {
+    float: left;
+    display: block;
+    margin-right: 3.3576516%;
+    width: 44.8211742%;
+    p {
+      text-align: justify;
+      padding: 1em;
+    }
+    a {
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+  .full {
+    @include span-columns(12 of 12);
+    text-align: left;
+  }
+
+  img {
+    width: 200px;
+    display: inline;
+    &:hover {
+      @include transition (all 0.1s ease-in);
+      opacity: 0.8;
+    }
+
+  }
+
+  .yc { 
+    color: #F0652F
+  }
+
+  a {
+    font-weight: bold;
+    color: black;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+
+}
+
+
 @import "signup";
