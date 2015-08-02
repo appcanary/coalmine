@@ -1,7 +1,7 @@
 <div class="topbar"></div>
 
 <div class="hed">
-  <% if current_user.has_billing? %>
+  <% if false #current_user && current_user.has_billing? %>
     <div class="bird">
       <%= image_tag "canary-miner.medium.png" %>
     </div>
@@ -17,7 +17,7 @@
   <% end %>
 </div>
 
-<% unless current_user.has_billing? %>
+<% unless false #current_user && current_user.has_billing? %>
   <div class="landing-container">
 
     <div class="unit">
@@ -63,65 +63,77 @@
       </div>
     </div>
 
-    <div class="payment">
-      <div class="contribution">
-        <h3>Okay. You've convinced me. Now what?</h3>
-        <p>Join the club. 
-          <br/>
-          <br/>
-          If you're reading this it's because we've emailed you and you're onboard.
-          <br/>
-          <br/>
-          The form to the right of this text will collect your credit card (token) and we will charge the agreed upon amount of $5,000.
-          <br/>
-          <br/>
-          Thanks, we're going to do some great things together.
-        </p>
+    <% if false#current_user %>
+      <div class="payment">
+        <div class="contribution">
+          <h3>Okay. You've convinced me. Now what?</h3>
+          <p>Join the club. 
+            <br/>
+            <br/>
+            If you're reading this it's because we've emailed you and you're onboard.
+            <br/>
+            <br/>
+            The form to the right of this text will collect your credit card (token) and we will charge the agreed upon amount of $5,000.
+            <br/>
+            <br/>
+            Thanks, we're going to do some great things together.
+          </p>
+        </div>
+        <div class="creditcard">
+          <%= form_for @user, url: great_review_payment_path, :method => :post, html: { id: "payment-form", class: 'basic' } do |f| %>
+
+            <span class="payment-errors"></span>
+            <div class="card-wrapper" style="width: 350px"></div>
+
+            <div class="level">
+              <div class="field cc-number">
+                <label>Card Number</label>
+                <input type="text" class="text" size="20" maxlength="20" name="number" data-stripe="number"/>
+              </div>
+            </div>
+
+            <div class="level">
+              <div class="field cc-name">
+                <label>Name (as appears on card)</label>
+                <input type="text" class="text" size="20" maxlength="255" name="name" data-stripe="name"/>
+              </div>
+            </div>
+
+            <div class="level">
+              <div class="field cc-mm">
+                <label>
+                  Expiry
+                </label>
+                <input type="text" class="text" size="7" maxlength="7" name="expiry"/>
+              </div>
+
+              <div class="field cc-cvc">
+                <label>
+                  CVC
+                </label>
+                <input type="text" class="text" size="4" maxlength="4" name="cvc" data-stripe="cvc"/>
+              </div>
+
+            </div>
+
+            <div class="form-group buttons">
+              <button type="submit" class="btn btn-primary submit">Submit</button>
+            </div>
+          <% end %>
+
+        </div>
       </div>
-      <div class="creditcard">
-        <%= form_for @user, url: great_review_payment_path, :method => :post, html: { id: "payment-form", class: 'basic' } do |f| %>
-
-          <span class="payment-errors"></span>
-          <div class="card-wrapper" style="width: 350px"></div>
-
-          <div class="level">
-            <div class="field cc-number">
-              <label>Card Number</label>
-              <input type="text" class="text" size="20" maxlength="20" name="number" data-stripe="number"/>
-            </div>
-          </div>
-
-          <div class="level">
-            <div class="field cc-name">
-              <label>Name (as appears on card)</label>
-              <input type="text" class="text" size="20" maxlength="255" name="name" data-stripe="name"/>
-            </div>
-          </div>
-
-          <div class="level">
-            <div class="field cc-mm">
-              <label>
-                Expiry
-              </label>
-              <input type="text" class="text" size="7" maxlength="7" name="expiry"/>
-            </div>
-
-            <div class="field cc-cvc">
-              <label>
-                CVC
-              </label>
-              <input type="text" class="text" size="4" maxlength="4" name="cvc" data-stripe="cvc"/>
-            </div>
-
-          </div>
-
-          <div class="form-group buttons">
-            <button type="submit" class="btn btn-primary submit">Submit</button>
-          </div>
-        <% end %>
-
+    <% else %>
+      <div class="join-us">
+        <div class="contribution">
+          <h3>Okay. You've convinced me. Now what?</h3>
+          <p>Join the club.</p>
+          <p>We're enrolling our first batch of sponsors now. Contact us at hello@appcanary.com to learn more.</p>
+        </div>
       </div>
-    </div>
+
+          
+    <% end %>
 
 
     <footer class="footer">
