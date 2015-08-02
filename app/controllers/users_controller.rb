@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_filter :skip_if_logged_in, :only => [:new, :create]
   
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  layout 'launchrock'
 
   def stop_impersonating
     stop_impersonating_user
@@ -17,6 +18,7 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
+
     @user = User.new
     if email = session.delete(:pre_user_email)
       @user.email = email

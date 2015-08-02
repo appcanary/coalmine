@@ -1,0 +1,21 @@
+<div class="sign-up_form-group">
+  <%= form_for @user, :class => "full-sign-up" do |f| %>
+    <div class="form-fields">
+      <%= label_with_error(f, @user, :email) %>
+      <%= f.email_field :email, :placeholder => "jane@example.com" %>
+
+      <%= label_with_error(f, @user, :name) %>
+      <%= f.text_field :name, :placeholder => "Jane Doe" %>
+
+      <%= label_with_error(f, @user, :password) %>
+      <%= f.password_field :password, :placeholder => "A secret between us" %>
+
+      <%= label_with_error(f, @user, :password_confirmation) %>
+      <%= f.password_field :password_confirmation, :placeholder => "The above again, to make sure" %>
+
+      <button type="submit">Sign up now</button>
+
+    </div>
+  <% end %>
+</div>
+

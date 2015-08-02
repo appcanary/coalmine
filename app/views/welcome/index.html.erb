@@ -98,33 +98,11 @@
 
 <div class="unit-container unit-container_yellow">
   <div class="unit sign-up">
-    <h1>Get started with a risk-free 14 day trial.</h1>
-
-    <div class="sign-up_form-group">
-      <div class="flash subhed" style="display: none">
-        <p>Thanks! We&rsquo;ll be in touch soon.</p>
-      </div>
-      <%= form_for @user, :class => "full-sign-up" do |f| %>
-        <div class="form-fields">
-          <%= f.label :email %>
-          <%= f.email_field :email, :placeholder => "jane@example.com" %>
-
-          <%= f.label :name %>
-          <%= f.text_field :name, :placeholder => "Jane Doe" %>
-
-          <%= f.label :password %>
-          <%= f.password_field :password, :placeholder => "A secret between us" %>
-
-          <%= f.label :password_confirmation, "Confirm Password" %>
-          <%= f.password_field :password_confirmation, :placeholder => "The above again, to make sure" %>
-
-          <button type="submit">Sign up now</button>
-
-        </div>
-      <% end %>
-
+    <div class="riskfree">
+      <h1>Get started with a risk-free 14 day trial.</h1>
     </div>
+    <%= render :partial => "users/new_form" %>
   </div>
 </div>
 
-  <%= render :partial => "shared/footer" %>
+<%= render :partial => "shared/footer" %>

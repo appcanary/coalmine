@@ -414,9 +414,11 @@ img {
 }
 
 .sign-up {
-  h1 {
+  .riskfree {
     @include span-columns(4);
     @include shift(1);
+  }
+  h1 {
     font-size: 3.6em;
     font-weight: 300;
     line-height: 1em;
@@ -513,3 +515,6 @@ footer {
     text-align: right;
   }
 }
+
+
+@import "signup";

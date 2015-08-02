@@ -1,0 +1,31 @@
+.top-left-brand {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  z-index: 500;
+  img {
+    width: 250px;
+  }
+  .action_unit {
+    display: inline;
+    margin-left: 15px;
+  }
+  .action_login .button {
+    box-shadow: none;
+    border: 1px solid $text;
+    background: none;
+    &:hover {
+      background-color: $dark-yellow;
+    }
+  }
+}
+
+
+.sign-up-page {
+  @include outer-container;
+  padding: 8.5em 0 5.5em 0;
+  .field-error {
+    color: #e54427;
+  }
+}
+

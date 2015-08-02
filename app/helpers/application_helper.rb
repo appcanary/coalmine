@@ -55,4 +55,19 @@ module ApplicationHelper
     end
     image_tag("data:image.png;base64,#{obj.avatar}", :class => klass)
   end
+
+
+  def label_with_error(form, model, field)
+    if model.errors[field].blank?
+      form.label field
+    else
+      form.label field, "#{field.to_s.titleize} #{fmt_errors(model.errors[field])}".html_safe
+    end
+  end
+
+  def fmt_errors(errors)
+    content_tag("span", :class => "field-error") do 
+      errors.join(" ")
+    end
+  end
 end
