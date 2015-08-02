@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   post "presignup" => "users#pre_sign_up", :as => :pre_sign_up
   get 'sign_up' => "users#new", :as => :sign_up
-  post 'sign_up' => "users#create"
+  post 'sign_up' => "users#create", :as => :create_sign_up
 
   get "hello" => "servers#onboarding", :as => :onboarding
 
