@@ -1,0 +1,580 @@
+@import "bourbon";
+@import "neat";
+
+@import "partials/mixins";
+@import "partials/helpers";
+@import "partials/fonts";
+@import "partials/color";
+
+// grid stuff
+$grid-columns: 12 !global;
+$max-width: em(1180px) !global;
+$border-box-sizing: true !global;
+
+// colours
+$text: #111;
+$bg: #f2f2f2;
+$yellow: lighten(#fadc58, 5%);
+$dark-yellow: darken($yellow, 20%);
+$brown: #64572b;
+
+$lightgray: #b0b0b0;
+
+$ruby: #ee6161;
+$node: #53b164;
+$ubuntu: #586be2;
+
+$proxima: 'Proxima-Nova', sans-serif;
+$myriad: 'Myriad Pro', sans-serif;
+
+%button {
+  box-shadow: 0px 0px 0px 0.2em white;
+  background-color: white;
+  font-size: 1rem;
+  padding: 0.35em 0.5em 0.3em 0.5em;
+  border: none;
+  border: 1px solid lighten($text, 50%);
+  border-radius: 6px;
+  color: $text;
+  font-family: $proxima;
+  @include appearance(none);
+  @include transition (all 0.1s ease-out);
+  &:hover {
+    border-color: $text;
+    color: $text;
+    text-decoration: none;
+    @include transition (all 0.1s ease-in);
+    cursor: pointer;
+  }
+  &:focus {
+    outline: none;
+    border-color: $text;
+    @include transition (all 0.1s ease-in);
+  }
+  @include mobile-all {
+    font-size: 1.2em;
+  }
+}
+
+%input {
+  @extend %button;
+  @include placeholder {
+    font-weight: 300;
+    color: lighten($text, 50%);
+    opacity: 1;
+  }
+  &:focus {
+    @include placeholder {
+      opacity: 0.5;
+      @include transition (all 0.1s ease-out);
+    }
+  }
+}
+
+body {
+  background-color: $bg;
+  font-size: 16px;
+  color: $text;
+  line-height: 1.2;
+  font-family: $proxima;
+  text-rendering: optimizeLegibility;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  box-sizing: border-box;
+  @include mobile-all {
+    width: 100%;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: -0.035em;
+}
+
+a {
+  color: darken($dark-yellow, 20%);
+  text-decoration: none;
+  &:hover {
+    color: $text;
+    text-decoration: none;
+  }
+}
+
+img {
+  @include fill-parent;
+}
+
+.clear {
+  margin: 0 !important;
+}
+
+.topbar {
+  position: fixed;
+  height: 8px;
+  background-color: darken($yellow, 5%);
+  border-bottom: 1px solid $dark-yellow;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.action {
+  position: absolute;
+  top: 35px;
+  right: 20px;
+  z-index: 500;
+  .action_unit {
+    display: inline;
+    margin-left: 15px;
+  }
+  .action_login .button {
+    box-shadow: none;
+    border: 1px solid $text;
+    background: none;
+    &:hover {
+      background-color: $dark-yellow;
+    }
+  }
+}
+
+.button {
+  @extend %button;
+}
+
+.hero-wrapper {
+  width: 100%;
+  background-color: lighten($yellow, 5%);
+  border-bottom: 1px solid darken($yellow, 10%);
+}
+
+.hero {
+  @include outer-container;
+  padding: 5em 0 3.5em 0;
+  .hero_logo {
+    @include row();
+    @include span-columns(8 of 12);
+    @include shift(2);
+    display: block;
+    margin-bottom: 2.8em;
+    img {
+      border: none;
+      text-align: center;
+    }
+  }
+  .hero_sell-line {
+    @include span-columns(8 of 12);
+    @include shift(2);
+    text-align: center;
+    font-weight: 300;
+    line-height: 1em;
+    margin-bottom: 2.5em;
+    @include mobile-all {
+      font-size: 2.2em;
+      margin: 0 0.5em 0 0.5em;
+    }
+    h1 {
+      font-weight: 600;
+      font-size: 2.7em;
+      margin-bottom: 0.5em;
+    }
+    h3 {
+      font-size: 2em;
+      line-height: 1.1em;
+      padding: 0 3em;
+    }
+  }
+  .hero_form-group {
+    @include span-columns(6 of 12);
+    @include shift(3);
+    .hero_sign-up {
+      text-align: center;
+    }
+    input, button {
+      font-size: 1.8em;
+      box-shadow: 0px 0px 0px 0.2em white;
+    }
+    input {
+      @extend %input;
+      width: 49%;
+      margin-right: 0.6em;
+    }
+    button {
+      @extend %button;
+      width: 32%;
+    }
+  }
+}
+
+.subhed {
+  text-align: center;
+  font-size: 1.5em;
+  padding-bottom: 1.5em;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  @include mobile-all {
+    font-size: 1.3em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    p {
+      padding-bottom: 10px;
+    }
+  }
+}
+
+.unit-container {
+  border-bottom: 1px solid lighten($text, 70%);
+  padding: 5em 0;
+  @include mobile-all {
+    width: 100%;
+  }
+}
+
+.unit-container_yellow {
+  background-color: $yellow;
+}
+
+.unit {
+  @include outer-container;
+  h2 {
+    font-size: 3.4em;
+    font-weight: 400;
+    margin-bottom: 1.4em;
+    line-height: 0.9em;
+  }
+  @include mobile-all {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin-bottom: 3.5em;
+  }
+}
+
+.vulns {
+  text-align: center;
+  h1 {
+    font-weight: 600;
+    font-size: 5.4em;
+  }
+  h3 {
+    font-size: 2.2em;
+  }
+}
+
+.demo {
+  padding: 1em 0;
+  .unit_demo-box {
+    @include span-columns(5);
+    @include shift(1);
+    border-radius: 1em;
+    height: 24em;
+  }
+  .unit_demo-box-before {
+    border: 6px dashed $lightgray;
+    opacity: 0.6;
+    @include transition (all 0.1s ease-out);
+    p {
+      font-size: 4.2em;
+      font-weight: 600;
+      color: $lightgray;
+      padding: 0.3em 1.2em 0 1.2em;
+      line-height: 1em;
+      text-align: center;
+    }
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+      cursor: -webkit-grab;
+      @include transition (all 0.1s ease-in);
+    }
+  }
+  .unit_demo-box-after {
+    background-color: lighten($text, 10%);
+  }
+  .unit_demo-copy {
+    @include span-columns(5);
+    h3 {
+      font-weight: 600;
+      font-size: 2.2em;
+      line-height: 1em;
+    }
+    p {
+      font-size: 1.6em;
+      line-height: 1.1em;
+      margin-top: 0.6em;
+    }
+    .button {
+      display: inline-block;
+      font-size: 1.6em;
+      font-weight: 300;
+      margin-right: 0.5em;
+    }
+    .button-ruby {
+      color: $ruby;
+      border-color: $ruby;
+      &:hover {
+        background-color: $ruby;
+        color: white;
+      }
+    }
+    .button-node {
+      color: $node;
+      border-color: $node;
+      &:hover {
+        background-color: $node;
+        color: white;
+      }
+    }
+    .button-ubuntu {
+      color: $ubuntu;
+      border-color: $ubuntu;
+      &:hover {
+        background-color: $ubuntu;
+        color: white;
+      }
+    }
+  }
+}
+
+.how {
+  .unit_how {
+    @include span-columns(4 of 12);
+    img {
+      margin-bottom: 1em;
+      margin-left: auto;
+      margin-right: auto;
+      width: 70%;
+      display: block;
+    }
+    h3 {
+      padding: 0 0.6em;
+      font-size: 2.1em;
+      line-height: 1em;
+      text-align: center;
+    }
+  }
+  form {
+    text-align: center;
+  }
+}
+
+.pricing {
+  .unit_pricing {
+    @include span-columns(3 of 12);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 4em;
+    &:hover {
+      cursor: pointer;
+      .circle {
+        @include transition (all 0.1s ease-in);
+        opacity: 1;
+      }
+    }
+  }
+  .circle {
+    background-color: white;
+    border-radius: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+    z-index: -1;
+    opacity: 0.4;
+    @include transition (all 0.1s ease-out);
+  }
+  h3 {
+    padding-top: 1em;
+    font-weight: 600;
+    font-family: $myriad;
+    font-size: 3em;
+    margin-bottom: 0.2em;
+    z-index: 100;
+  }
+  p {
+    font-weight: 500;
+    line-height: 1em;
+    font-size: 2em;
+    margin: 0;
+    z-index: 100;
+    padding: 0 1em;
+  }
+  .unit_pricing-price {
+    font-weight: 600;
+    font-size: 2.2em;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.sign-up {
+  .riskfree {
+    @include span-columns(4);
+    @include shift(1);
+  }
+  h1 {
+    font-size: 3.6em;
+    font-weight: 300;
+    line-height: 1em;
+  }
+  .sign-up_form-group {
+    @include span-columns(5);
+    @include shift(1);
+  }
+  .form-fields {
+    box-shadow: 0px 0px 0px 0.4em white;
+    background-color: white;
+    font-size: 1rem;
+    padding: 1.6em 1.4em 1.4em 1.4em;
+    border: 1px solid $text;
+    border-radius: 6px;
+    color: $text;
+    font-family: $proxima;
+    @include mobile-all {
+      font-size: 1.2em;
+    }
+    label {
+      display: block;
+      text-transform: uppercase;;
+      font-family: $myriad;
+      font-size: 1em;
+      font-weight: 600;
+    }
+    input {
+      display: block;
+      width: 100%;
+      border: none;
+      margin-bottom: 1em;
+      font-size: 1.7em;
+      border-bottom: 1px solid lighten($text, 60%);
+      @include appearance(none);
+      @include transition (all 0.1s ease-out);
+      @include placeholder {
+        font-weight: 300;
+        color: lighten($text, 60%);
+        opacity: 1;
+      }
+      &:last-of-type {
+        margin-bottom: 0.3em;
+      }
+      &:active, &:focus, &:hover {
+        box-shadow: none;
+        outline: 0;
+        border-bottom: 1px solid $text;
+        @include transition (all 0.1s ease-in);
+      }
+    }
+  }
+  button {
+   @extend %button;
+   width: 100%;
+   font-size: 1.7em;
+   margin-top: 1.2em;
+  }
+}
+
+footer {
+  @include outer-container();
+  padding: 1.4em 0;
+  img {
+    @include span-columns(1 of 12);
+    width: 50px;
+  }
+  nav {
+    @include span-columns (5 of 12);
+    padding-top: 1em;
+    vertical-align: top;
+    ul {
+      list-style-type: none;
+      display: inline;
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      display: inline;
+      padding-right: 0.5em;
+      a {
+        color: $text;
+        &:hover {
+         text-decoration: underline;
+        }
+      }
+    }
+  }
+  p {
+    @include span-columns (6 of 12);
+    padding-top: 0.3em;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    text-align: right;
+  }
+}
+
+
+.about { 
+  .unit_about {
+    float: left;
+    display: block;
+    // margin-right: 3.3576516%;
+    width: 60%;
+    margin-left: 19%;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 4em;
+  }
+
+
+  .half {
+    float: left;
+    display: block;
+    margin-right: 3.3576516%;
+    width: 44.8211742%;
+    p {
+      text-align: justify;
+      padding: 1em;
+    }
+    a {
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+  .full {
+    @include span-columns(12 of 12);
+    text-align: left;
+  }
+
+  img {
+    width: 200px;
+    display: inline;
+    &:hover {
+      @include transition (all 0.1s ease-in);
+      opacity: 0.8;
+    }
+
+  }
+
+  .yc { 
+    color: #F0652F
+  }
+
+  a {
+    font-weight: bold;
+    color: black;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+
+}
+
+
+@import "signup";

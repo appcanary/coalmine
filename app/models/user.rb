@@ -26,6 +26,7 @@
 #  is_admin                        :boolean          default("false"), not null
 #  beta_signup_source              :string
 #  stripe_customer_id              :string
+#  name                            :string
 #
 # Indexes
 #
@@ -38,10 +39,10 @@
 
 class User < ActiveRecord::Base
   authenticates_with_sorcery!
-  validates_confirmation_of :password
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
   validates :email, uniqueness: true, presence: true
+  # validates :name, presence: true
 
 
   def servers

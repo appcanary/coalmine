@@ -1,55 +1,96 @@
-<%= render 'shared/logo' %>
-<section>
-  <div class="user-login">
-    <% content_for :user_form_title do %>
-      <%if params[:source] == "hn" %>
-        <h2>Hey Hacker News!<br/>Try out our pilot program.</h2>
-      <% else %>
-        <h2>appCanary Pilot Program</h2>
+<div class="topbar"></div>
+<div class="top-left-brand">
+  <a href="https://appcanary.com">
+    <%= image_tag "appcanary-hero.png", :alt => "appCanary" %>
+  </a>
+</div>
+
+
+<div class="action">
+  <div class="action_unit action_login">
+    <%= link_to "Log in", login_path, :class => "button" %>
+  </div>
+</div>
+
+<div class="hero-wrapper">
+  <div class="sign-up-page">
+    <div class="sign-up">
+      <div class="riskfree">
+        <h1>Sign up for our 14 day trial.</h1>
+        <h2>Never run vulnerable software on your servers again.</h2>
+        
+        <p>
+          <strong>How does it work?</strong>
+          <br/>
+          With our tiny, <a href="https://github.com/appcanary/agent">open source agent</a> we can monitor your infrastructure, and make sure you're never blindsided by a vulnerability again.
+          <br/>
+          <br/>
+          <strong>What data do you collect?</strong>
+          <br/>
+          We only ever collect your server and app's list of packages. Our agent is not capable of looking at your code or your data.
+        </p>
+      </div>
+      <%= render :partial => "users/new_form" %>
+    </div>
+  </div>
+</div>
+<%= render :partial => "shared/footer" %>
+
+
+<% if false %>
+  <%= render 'shared/logo' %>
+  <section>
+    <div class="user-login">
+      <% content_for :user_form_title do %>
+        <%if params[:source] == "hn" %>
+          <h2>Hey Hacker News!<br/>Try out our pilot program.</h2>
+        <% else %>
+          <h2>appCanary Pilot Program</h2>
+        <% end %>
+        <p>We make sure you never run vulnerable software on your servers. We monitor the software you have installed, and our notifications let you take action and keep your servers safe.</p>
+        <p>The service will be <b>free</b> for the duration of the pilot period. After we launch, plans will start at $9 per server per month. Right now we work best on Ruby + any linux, or Ubuntu + any app - more is coming soon.</p>
+        <br/>
+        <h4>Before we get started, tell us:</h4>
       <% end %>
-      <p>We make sure you never run vulnerable software on your servers. We monitor the software you have installed, and our notifications let you take action and keep your servers safe.</p>
-      <p>The service will be <b>free</b> for the duration of the pilot period. After we launch, plans will start at $9 per server per month. Right now we work best on Ruby + any linux, or Ubuntu + any app - more is coming soon.</p>
-      <br/>
-      <h4>Before we get started, tell us:</h4>
-    <% end %>
 
 
-    <%= form_for(@user, :url => beta_sign_up_path(params[:source])) do |f| %>
-      <% if @user.errors.any? %>
-        <div class="error_explanation" role="alert">
-          <h4>Oops. We encountered an error:</h4>
+      <%= form_for(@user, :url => sign_up_path(params[:source])) do |f| %>
+        <% if @user.errors.any? %>
+          <div class="error_explanation" role="alert">
+            <h4>Oops. We encountered an error:</h4>
 
-          <ul>
-            <% @user.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-            <% end %>
-          </ul>
+            <ul>
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= yield :user_form_title %>
+
+        <%= f.hidden_field :beta_signup_source, :value => params[:source] %>
+
+        <div class="form-group">
+          <%= f.email_field :email, :class => "form-control", :placeholder => "Your email address" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.password_field :password, :class => "form-control", :placeholder => "A password, or a secret between us", :'data-minlength' => "6", :'data-error' => 'At least 6 characters' %>
+          <span class="help-block with-errors"></span>
+
+        </div>
+
+        <div class="form-group">
+          <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "The same password again, just to confirm", :'data-match' => "#user_password", :'data-error' => "Passwords must match" %>
+          <span class="help-block with-errors"></span>
+        </div>
+
+        <div class="form-group">
+          <%= f.submit "Sign Up", :class => "btn btn-black" %>
         </div>
       <% end %>
 
-      <%= yield :user_form_title %>
-
-      <%= f.hidden_field :beta_signup_source, :value => params[:source] %>
-
-      <div class="form-group">
-        <%= f.email_field :email, :class => "form-control", :placeholder => "Your email address" %>
-      </div>
-
-      <div class="form-group">
-        <%= f.password_field :password, :class => "form-control", :placeholder => "A password, or a secret between us", :'data-minlength' => "6", :'data-error' => 'At least 6 characters' %>
-        <span class="help-block with-errors"></span>
-
-      </div>
-
-      <div class="form-group">
-        <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "The same password again, just to confirm", :'data-match' => "#user_password", :'data-error' => "Passwords must match" %>
-        <span class="help-block with-errors"></span>
-      </div>
-
-      <div class="form-group">
-        <%= f.submit "Sign Up", :class => "btn btn-black" %>
-      </div>
-    <% end %>
-
-  </div>
-</section> 
+    </div>
+  </section> 
+<% end %>

@@ -11,4 +11,13 @@ class WelcomeControllerTest < ActionController::TestCase
       assert_redirected_to dashboard_path 
     end
   end
+
+  describe "while unauthenticated" do
+    it "should get the front page" do
+      get :index
+      assert_response :success
+
+      assert_select("#new_pre_user")
+    end 
+  end
 end
