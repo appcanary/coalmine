@@ -5,5 +5,4 @@ machine:
 dependencies:
   pre:
     - npm install
-    - bundle install
-    - bundle exec rake webpack:compile RAILS_ENV=test
+    - npm run webpack-bundle
