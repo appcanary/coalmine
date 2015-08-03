@@ -50,9 +50,9 @@
             %td
               = user.created_at.strftime("%y/%m/%d %H:%M")
             %td
-              = user.servers.size
+              = user.server_count
             %td
-              = user.active_servers.size
+              = user.active_server_count
             %td
               = user.last_login_at.try(:strftime, "%y/%m/%d %H:%M")
             %td

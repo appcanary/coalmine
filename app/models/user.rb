@@ -57,8 +57,16 @@ class User < ActiveRecord::Base
     canary.server(id)
   end
 
+  def server_count
+    api_info["server_count"]
+  end
+
+  def active_server_count
+    api_info["active_server_count"]
+  end
+
   def api_info
-    canary.me
+    @api_info ||= canary.me
   end
 
   def agent_token
