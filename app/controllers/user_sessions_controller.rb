@@ -3,6 +3,7 @@ class UserSessionsController < ApplicationController
   before_filter :skip_if_logged_in, :except => :destroy
 
   before_filter -> { @skip_flash = true }
+  layout 'launchrock'
 
   def new
     @user = User.new

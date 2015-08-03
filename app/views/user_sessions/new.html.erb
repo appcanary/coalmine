@@ -1,11 +1,26 @@
-<%= render 'shared/logo' %>
-<section>
-  <div class="user-login">
-    <%= flash_messages %>
-    <% content_for :user_form_title do %>
-      <h3>Nice to see you again.</h3>
-    <% end %>
+<div class="topbar"></div>
+<div class="top-left-brand">
+  <a href="https://appcanary.com">
+    <%= image_tag "appcanary-hero.png", :alt => "appCanary" %>
+  </a>
+</div>
 
-    <%= render :partial => 'users/form', :locals => { :sign_up => false } %>
+
+<div class="action">
+  <div class="action_unit action_login">
+    <%= link_to "Log in", login_path, :class => "button" %>
   </div>
-</section>
+</div>
+
+<div class="hero-wrapper">
+  <div class="sign-up-page">
+    <div class="sign-up">
+      <div class="riskfree" style="text-align: center;">
+        <h1 style="padding-bottom: 20px">Nice to see you again.</h1>
+        <%= image_tag "canary-worm.medium.png", :style => "width: 65%" %>
+      </div>
+      <%= render :partial => "form" %>
+    </div>
+  </div>
+</div>
+<%= render :partial => "shared/footer" %>

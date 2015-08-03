@@ -5,9 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>appCanary</title>
-    <script src="//use.typekit.net/dkz5zwp.js"></script>
-    <script>try{Typekit.load();}catch(e){}</script>
 
+    <%= render :partial => "layouts/typekit" %> 
     <%= stylesheet_link_tag    'application', media: 'all'%>
     <%= javascript_include_tag 'application' %>
     <% if Rails.env == "production" %>
@@ -24,7 +23,10 @@
 s.src='https://widget.intercom.io/widget/{app_id}';
         var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
       </script>
-    <%= csrf_meta_tags %>
+
+    <%= render :partial => "layouts/google_analytics" %> 
+    <%= render :partial => "layouts/stripe" %> 
+
   </head>
   <body>
     

@@ -4,6 +4,8 @@ class WelcomeController < ApplicationController
   layout "launchrock"
 
   def index
+    @user = User.new
+    @preuser = PreUser.new
   end
 
   def beta_list

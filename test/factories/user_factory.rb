@@ -25,6 +25,8 @@
 #  onboarded                       :boolean          default("false")
 #  is_admin                        :boolean          default("false"), not null
 #  beta_signup_source              :string
+#  stripe_customer_id              :string
+#  name                            :string
 #
 # Indexes
 #

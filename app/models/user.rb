@@ -25,6 +25,8 @@
 #  onboarded                       :boolean          default("false")
 #  is_admin                        :boolean          default("false"), not null
 #  beta_signup_source              :string
+#  stripe_customer_id              :string
+#  name                            :string
 #
 # Indexes
 #
@@ -37,10 +39,11 @@
 
 class User < ActiveRecord::Base
   authenticates_with_sorcery!
-  validates_confirmation_of :password
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
-  validates :email, uniqueness: true
+  validates :email, uniqueness: true, presence: true
+  # validates :name, presence: true
+
 
   def servers
     @servers ||= canary.servers
@@ -66,8 +69,27 @@ class User < ActiveRecord::Base
     api_info["agent-token"]
   end
 
+  def stripe_customer
+    if stripe_customer_id
+      Billing.find_customer(self)
+    end
+  end
+
+  def has_billing?
+    stripe_customer_id.present?
+  end
+
+  def payment_info
+    if has_billing?
+      stripe_customer.sources
+    else 
+      []
+    end
+  end
+
   protected
   def canary
     @canary ||= Canary.new(self.token)
   end
+
 end
