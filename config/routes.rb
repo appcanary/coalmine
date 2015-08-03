@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+  class IsItVulnConstraint
+    def self.matches?(request)
+      Rails.configuration.is_it_vuln.domains.include? request.domain
+    end
+  end
+
+  constraints IsItVulnConstraint do
+    root 'is_it_vuln#index', :as => :vuln_root
+    get "isitvuln" => "is_it_vuln#index"
+  end
+
 
   root 'welcome#index'
   get 'launchrock' => 'welcome#index'

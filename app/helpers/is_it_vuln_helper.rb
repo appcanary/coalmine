@@ -1,0 +1,2 @@
+module IsItVulnHelper
+end
