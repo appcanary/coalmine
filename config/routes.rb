@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   constraints IsItVulnConstraint do
     root 'is_it_vuln#index', :as => :vuln_root
-    get "isitvuln" => "is_it_vuln#index"
+    get '/results' => "is_it_vuln#results", :as => :vuln_results
   end
 
 
@@ -34,10 +34,13 @@ Rails.application.routes.draw do
 
   put "billing" => "billing#update", :as => :billing
 
+  # microsites
   get 'greatrubyreview' => "great_review#show", :as => :great_review
   get 'greatrubyreview/hello' => "great_review#hello", :as => :great_review_login
   post 'greatrubyreview/sign_up' => "great_review#sign_up", :as => :great_review_sign_up
   post 'greatrubyreview/payment' => "great_review#payment", :as => :great_review_payment
+
+  get "isitvuln" => "is_it_vuln#index"
 
   resources :users, :only => [:new, :create, :destroy] do
     post "stop_impersonating", on: :collection

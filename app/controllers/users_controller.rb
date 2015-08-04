@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_filter :skip_if_logged_in, :only => [:new, :create]
   
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token, :only => [:pre_sign_up]
   layout 'launchrock'
 
   def stop_impersonating

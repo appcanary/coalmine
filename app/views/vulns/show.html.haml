@@ -1,4 +1,10 @@
-= render :partial => 'shared/heading'
+- if current_user 
+  = render :partial => 'shared/heading'
+- else
+  .topbar
+  %section
+    .col-sm-6
+      %h1 More information:
 %section
   .col-sm-12
     %dl.vulnerability
@@ -14,8 +20,9 @@
       %dt Title:
       %dd.title= @vuln.title
 
-      %dt CVE:
-      %dd= link_to(@vuln.cve_id, @vuln.cve_url, target: 'blank')
+      - if @vuln.cve_id.present?
+        %dt CVE:
+        %dd= link_to(@vuln.cve_id, @vuln.cve_url, target: 'blank')
 
       - if @vuln.osvdb.present?
         %dt OSVDB:

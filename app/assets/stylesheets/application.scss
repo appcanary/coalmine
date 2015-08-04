@@ -145,6 +145,17 @@ section {
 }
 
 
+.topbar {
+  position: fixed;
+  height: 8px;
+  background-color: #fadc58;
+  border-bottom: 1px solid  darken( #fadc58, 20%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 
 // onboarding deal with later
 #screenshot .modal-dialog {
