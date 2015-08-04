@@ -14,6 +14,11 @@ class UserSessionsController < ApplicationController
         
     respond_to do |format|
       if @user = login(user_params[:email], user_params[:password])
+        Analytics.track({
+          user_id: @user.datomic_id,
+          event: 'Logged In'
+        })
+
         format.html { redirect_back_or_to(dashboard_path, notice: 'Login successful') }
         format.json { render json: @user, status: :created, location: dashboard_path }
       else
@@ -29,6 +34,10 @@ class UserSessionsController < ApplicationController
   end
 
   def destroy
+    Analytics.track({
+      user_id: current_user.datomic_id,
+      event: 'Logged Out'
+    })
     logout
     flash.now[:notice] = 'Thanks. Have a good one.'
     redirect_to(:root)
