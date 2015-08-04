@@ -1,2 +1,36 @@
-<h1>IsItVuln#index</h1>
-<p>Find me in app/views/is_it_vuln/index.html.erb</p>
+<div class="top-left-brand">
+  <a href="https://appcanary.com">
+    <%= image_tag "appcanary.rect.png", :alt => "appCanary", :class => "logo" %>
+  </a>
+</div>
+
+<div class="hero-wrapper">
+  <div class="hero-vuln">
+
+    <div class="hero_sell-line">
+      <h1>Is it vulnerable?</h1>
+      <h3>When did you last check your library versions?</h3>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="unit-container">
+  <div class="unit demo">
+    <div class="unit_demo-box unit_demo-box-before">
+      <p>Drop a file on me!</p>
+    </div>
+    <div class="unit_demo-copy">
+      <h3>We&rsquo;ll tell you what&rsquo;s vulnerable and how to update it.</h3>
+      <p>Try dragging one of the files below onto the area on the left, or drag and drop in your own <strong>Gemfile.lock</strong> or <strong>/var/pkg/status</strong>:</p>
+      <div class="button button-ruby">Gemfile</div>
+      <!-- <div class="button button&#45;node">package.json</div> -->
+      <div class="button button-ubuntu">dpkg</div>
+    </div>
+  </div>
+</div>
+
+
+<%= render :partial => "shared/footer" %>
+
