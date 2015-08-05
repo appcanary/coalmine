@@ -682,9 +682,23 @@ footer {
 
     }
   }
-  #vulnerable_artifacts, .artifact_versions {
+  #vulnerable_artifacts, .artifact_versions, .all_good {
     @include span-columns(6 of 12);
     @include shift(3);
+  }
+
+  .all_good {
+    .vanquished {
+      width: 18em;
+      padding-top: 2em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      display: block;
+      font-size: 4em;
+      text-align: center;
+    }
   }
 }
 

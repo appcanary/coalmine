@@ -6,7 +6,13 @@ class IsItVulnController < ApplicationController
   end
 
   def results
-    @vuln_artifacts = Testvuln.artifact_versions
+    if params[:nope]
+      @vuln_artifacts = []
+    else
+      @vuln_artifacts = Testvuln.artifact_versions
+    end
+
+    @is_vuln = @vuln_artifacts.present?
     @preuser = PreUser.new
   end
 end

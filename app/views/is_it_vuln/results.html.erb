@@ -8,14 +8,25 @@
   <div class="hero-vuln">
 
     <div class="hero_sell-line">
-      <h1>Yep, it's vulnerable.</h1>
-      <br/>
-      <br/>
-      <h2>Want to get these alerts in your inbox?</h2>
-      <br/>
-      <h2>We provide <a href="https://appcanary.com">a service</a> that monitors your dependencies:</h2>
-      <br/> 
-      <br/>
+      <% if @is_vuln %>
+        <h1>Yep, it's vulnerable.</h1>
+        <br/>
+        <br/>
+        <h2>Want to get these alerts in your inbox?</h2>
+        <br/>
+        <h2>We provide <a href="https://appcanary.com">a service</a> that monitors your dependencies:</h2>
+        <br/> 
+        <br/>
+      <% else %>
+        <h1>Nice!, you seem to be fine.</h1>
+        <br/>
+        <br/>
+        <h2>Want to know when you're not?</h2>
+        <br/>
+        <h2>We provide <a href="https://appcanary.com">a service</a> that monitors your dependencies:</h2>
+        <br/> 
+        <br/>
+      <% end %>
     </div>
 
     <div class="hero_form-group">
@@ -35,40 +46,50 @@
 
 <div class="unit-container results">
   <div id="results">
-    <div class="artifact_versions">
-      <h2>Please consult the following and update where appropriate.</h2>
-      <br/>
-      <br/>
-      <% @vuln_artifacts.each do |artifact| %>
-        <div>
-          <h1><%= link_to artifact.name, "https://rubygems.org/gems/#{artifact.name}", :target => "_blank" %></h1> <h3><code class="bad"><%= artifact.number %></code></h3>
+    <% if @is_vuln %>
+      <div class="artifact_versions">
+        <h2>Please consult the following and update where appropriate.</h2>
+        <br/>
+        <br/>
+        <% @vuln_artifacts.each do |artifact| %>
+          <div>
+            <h1><%= link_to artifact.name, "https://rubygems.org/gems/#{artifact.name}", :target => "_blank" %></h1> <h3><code class="bad"><%= artifact.number %></code></h3>
 
 
-          <table class="artifacts vulnerable">
-            <thead>
-              <th>
-              </th>
-              <th>
-                Upgrade to:
-              </th>
-            </thead>
-            <tbody>
-              <% artifact.vulnerability.each do |v| %>
-                <tr>
-                  <td class="advisory">
-                    <%= link_to v.title, vuln_path(v), :target => "_blank" %>
-                  </td>
-                  <td class="patch">
-                    <%= upgrade_to(v) %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+            <table class="artifacts vulnerable">
+              <thead>
+                <th>
+                </th>
+                <th>
+                  Upgrade to:
+                </th>
+              </thead>
+              <tbody>
+                <% artifact.vulnerability.each do |v| %>
+                  <tr>
+                    <td class="advisory">
+                      <%= link_to v.title, vuln_path(v), :target => "_blank" %>
+                    </td>
+                    <td class="patch">
+                      <%= upgrade_to(v) %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
 
+          </div>
         </div>
       <% end %> 
-    </div>
+    <% else %>
+
+      <div class="all_good">
+        <h1>Good job!</h1>
+        <div class="vanquished">
+          <%= image_tag "canary-vanquished.medium.png" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
 
