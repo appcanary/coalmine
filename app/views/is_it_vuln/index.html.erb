@@ -16,6 +16,12 @@
 
 </div>
 
+<% if flash[:error] %>
+<div class="flash-error">
+  <p><%= flash[:error] %></p>
+</div>
+<% end %>
+
 <div class="unit-container">
   <div class="unit demo">
     <div class="unit_demo-box unit_demo-box-before">

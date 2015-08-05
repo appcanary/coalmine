@@ -3,6 +3,9 @@ class IsItVulnController < ApplicationController
   layout 'isitvuln'
   def index
     @preuser = PreUser.new
+    if params[:error]
+      flash[:error] = 'Sorry. Are you sure that was a Gemfile.lock? Please try again.'
+    end
   end
 
   def results
