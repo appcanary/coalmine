@@ -7,7 +7,8 @@ Rails.application.routes.draw do
 
   constraints IsItVulnConstraint do
     root 'is_it_vuln#index', :as => :vuln_root
-    get '/results' => "is_it_vuln#results", :as => :vuln_results
+    post '/results' => "is_it_vuln#results", :as => :submit_gemfile
+    #get '/results' => "is_it_vuln#results", :as => :vuln_results
   end
 
 

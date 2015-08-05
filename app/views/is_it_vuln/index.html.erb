@@ -24,6 +24,15 @@
 
 <div class="unit-container">
   <div class="unit demo">
+    <%= form_tag submit_gemfile_path, multipart: true do %>
+      <%= file_field_tag "file" %>
+      <%= submit_tag %>
+    <% end %>
+ </div>
+</div>
+
+<div class="unit-container">
+  <div class="unit demo">
     <div class="unit_demo-box unit_demo-box-before">
       <p>Drop a file on me!</p>
     </div>
