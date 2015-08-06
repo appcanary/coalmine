@@ -1,4 +1,17 @@
 Rails.application.routes.draw do
+  class IsItVulnConstraint
+    def self.matches?(request)
+      Rails.configuration.is_it_vuln.domains.include? request.domain
+    end
+  end
+
+  constraints IsItVulnConstraint do
+    root 'is_it_vuln#index', :as => :vuln_root
+    post '/submit' => "is_it_vuln#submit", :as => :submit_gemfile
+    get '/results/sample' => "is_it_vuln#sample_results", :as => :sample_results
+    get '/results/:ident' => "is_it_vuln#results", :as => :vuln_results
+  end
+
 
   root 'welcome#index'
   get 'launchrock' => 'welcome#index'
@@ -23,10 +36,13 @@ Rails.application.routes.draw do
 
   put "billing" => "billing#update", :as => :billing
 
+  # microsites
   get 'greatrubyreview' => "great_review#show", :as => :great_review
   get 'greatrubyreview/hello' => "great_review#hello", :as => :great_review_login
   post 'greatrubyreview/sign_up' => "great_review#sign_up", :as => :great_review_sign_up
   post 'greatrubyreview/payment' => "great_review#payment", :as => :great_review_payment
+
+  get "isitvuln" => "is_it_vuln#index"
 
   resources :users, :only => [:new, :create, :destroy] do
     post "stop_impersonating", on: :collection

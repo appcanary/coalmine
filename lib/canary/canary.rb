@@ -164,6 +164,13 @@ class Canary
     post("agent/heartbeat/#{server_uuid}", data: data, token: @agent_token)
   end
 
+  # File upload
+  def upload_gemfile(contents)
+    wrap ArtifactVersion, post("upload", data: {:contents => Base64.strict_encode64(contents),
+                                                :kind => "gemfile"})
+  end
+
+
   protected
   def wrap(klass, col)
 

@@ -47,5 +47,9 @@
       </div>
     <% end %>
 
+    <% unless Rails.env.test? %>
+      <%= intercom_script_tag %>
+    <% end %>
+    
   </body>
 </html>

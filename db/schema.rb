@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150801174405) do
+ActiveRecord::Schema.define(version: 20150806023953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,10 +22,20 @@ ActiveRecord::Schema.define(version: 20150801174405) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "pre_users", force: :cascade do |t|
-    t.string   "email"
+  create_table "is_it_vuln_results", force: :cascade do |t|
+    t.string   "ident",      null: false
+    t.text     "result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  add_index "is_it_vuln_results", ["ident"], name: "index_is_it_vuln_results_on_ident", using: :btree
+
+  create_table "pre_users", force: :cascade do |t|
+    t.string   "email"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "preferred_platform"
   end
 
   create_table "uploads", force: :cascade do |t|
