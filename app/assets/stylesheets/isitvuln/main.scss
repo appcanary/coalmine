@@ -305,6 +305,13 @@ img {
       line-height: 1em;
       text-align: center;
     }
+    #spinner {
+      width: 3em;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      padding-top: 10em;
+    }
     &:hover {
       opacity: 1;
       cursor: pointer;
