@@ -24,18 +24,14 @@
 
 <div class="unit-container">
   <div class="unit demo">
-    <%= form_tag submit_gemfile_path, multipart: true do %>
+    <%= form_tag submit_gemfile_path, multipart: true, :id => "drop" do %>
+      <div id="dragbox" class="unit_demo-box unit_demo-box-before">
+        <p>Click or drag a file here!</p>
+      </div>
       <%= file_field_tag "file" %>
       <%= submit_tag %>
     <% end %>
- </div>
-</div>
 
-<div class="unit-container">
-  <div class="unit demo">
-    <div class="unit_demo-box unit_demo-box-before">
-      <p>Drop a file on me!</p>
-    </div>
     <div class="unit_demo-copy">
       <h3>We&rsquo;ll tell you what&rsquo;s vulnerable and how to update it.</h3>
       <p>Try dragging one of the files below onto the area on the left, or drag and drop in your own <strong>Gemfile.lock</strong> or <strong>/var/pkg/status</strong>:</p>
