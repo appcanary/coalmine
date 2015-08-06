@@ -38,6 +38,17 @@ ActiveRecord::Schema.define(version: 20150806023953) do
     t.string   "preferred_platform"
   end
 
+  create_table "uploads", force: :cascade do |t|
+    t.integer  "user_id"
+    t.text     "result"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "gemfile_file_name"
+    t.string   "gemfile_content_type"
+    t.integer  "gemfile_file_size"
+    t.datetime "gemfile_updated_at"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                                           null: false
     t.string   "crypted_password"

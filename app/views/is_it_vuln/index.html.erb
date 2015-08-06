@@ -30,18 +30,25 @@
       <%= form_tag submit_gemfile_path, multipart: true, :id => "drop" do %>
       <p id="dragmessage">Click or drag a file here!</p>
       <% end %>
-      </div>
-      
+    </div>
+
     <div class="unit_demo-copy">
-      <h3>We&rsquo;ll tell you what&rsquo;s vulnerable and how to update it.</h3>
-      <p>Drag your <strong>Gemfile.lock</strong> onto the area on the left, and we'll tell you what's vulnerable!</p>
-      <h3>Don't use Ruby?</h3>
-      <p>What platform should we support next?</p>
-      <%= form_for @preuser, :html => {:id => "preferred_platform"}, :url => pre_sign_up_path do |f| %>
-        <%= f.select :preferred_platform, PreUser::PLATFORMS,:class => "form-control input-md", :include_blank => true, :prompt => "Platform" %>
-        <%= f.email_field :email, :class => "form-control input-md", :placeholder => "jane@example.com" %>
-        <button type="submit" class="btn btn-default signup">We're on it</button>
-      <% end %>
+      <div class="intro">
+        <h3>We&rsquo;ll tell you what&rsquo;s vulnerable and how to update it.</h3>
+        <p>Drag your <strong>Gemfile.lock</strong> onto the area on the left, and we'll take it from there.</p>
+
+      </div>
+      <div class="no-ruby">
+        <h3>Don&rsquo;t use Ruby?</h3>
+        <p>What platform should we support next?</p>
+
+        <%= form_for @preuser, :html => {:id => "preferred_platform"}, :url => pre_sign_up_path do |f| %>
+          <%= f.text_field :preferred_platform, :class => "form-control input-sm", :placeholder => "Platform here" %>
+          <%= f.email_field :email, :class => "form-control input-md", :placeholder => "jane@example.com" %>
+          <button type="submit" class="button">Gotcha!</button>
+        <% end %>
+
+      </div>
     </div>
   </div>
 </div>

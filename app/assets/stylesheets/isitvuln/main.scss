@@ -662,6 +662,15 @@ footer {
 .unit-container.results {
   padding-top: 4em;
 }
+
+.unit-container .demo {
+  .no-ruby {
+    margin-top: 3em;
+  }
+  .intro p, .no-ruby p {
+    margin-top: 0.2em;
+  }
+}
 #results {
   @include outer-container;
 
@@ -815,4 +824,60 @@ $success-color: #e6efc2 !default;
 
 .flash-success {
   @include flash($success-color);
+}
+
+
+
+#preferred_platform {
+  button {
+    @extend %button;
+    margin-left: 20px;
+  }
+  input {
+    @extend %input;
+  }
+  .input-sm {
+    width: 8em;
+  }
+
+
+  .select-wrapper {
+    position: relative;
+    display: inline-block;
+    &:after {
+      @include user-select(none);
+      pointer-events: none;
+      content: "";
+      height: 0;
+      width: 0;
+      @include triangle(10px 8px, $text, down);
+      position: absolute;
+      top: 50%;
+      margin-top: -3px;
+      right: 7px;
+      @include transition (all 0.1s ease-out);
+    }
+    &:hover:after {
+      @include transition (all 0.1s ease-in);
+      @include triangle(10px 8px, black, down);
+    }
+  }
+
+  select {
+    @extend %input;
+    //   font-size: 1.3em;
+    //   border: 1px solid $text;
+    //   outline: none;
+    //   background: transparent;
+    //   width: auto;
+    padding: 0.3em 1em 0.3em 0.5em;
+    @include appearance(none);
+    @include transition (all 0.1s ease-out);
+    &:hover {
+      //     // color: $red;
+      cursor: pointer;
+      //     // border-color: $red;
+      @include transition (all 0.1s ease-in);
+    }
+  }
 }
