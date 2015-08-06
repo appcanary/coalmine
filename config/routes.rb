@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   class IsItVulnConstraint
     def self.matches?(request)
-      Rails.configuration.is_it_vuln.domains.include? request.domain
+      Rails.configuration.is_it_vuln.domains.include? request.host
     end
   end
 
