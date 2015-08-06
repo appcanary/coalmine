@@ -664,11 +664,15 @@ footer {
 }
 
 .unit-container .demo {
-  .no-ruby {
-    margin-top: 3em;
-  }
   .intro p, .no-ruby p {
     margin-top: 0.2em;
+  }
+  a {
+    color: black;
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 #results {
