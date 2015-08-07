@@ -31,7 +31,7 @@
 
     <div class="hero_form-group">
       <div class="hero_sign-up">
-        <%= form_for @preuser, :url => "http://appcanary.com/presignup" do |f| %>
+        <%= form_for @preuser, :url => "https://appcanary.com/presignup" do |f| %>
           <%= f.email_field :email, :class => "form-control input-md", :placeholder => "jane@example.com" %>
 
           <button type="submit" class="btn btn-default signup">Get started</button>
@@ -79,17 +79,18 @@
             </table>
 
           </div>
-      <% end %> 
-    <% else %>
-
-      <div class="all_good">
-        <h1>Good job!</h1>
-        <div class="vanquished">
-          <%= image_tag "canary-vanquished.medium.png" %>
-        </div>
+        <% end %> 
       </div>
-    <% end %>
+      <% else %>
+
+        <div class="all_good">
+          <h1>Good job!</h1>
+          <div class="vanquished">
+            <%= image_tag "canary-vanquished.medium.png" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
   </div>
-</div>
 
 <%= render :partial => "shared/footer" %>
