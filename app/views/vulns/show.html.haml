@@ -15,7 +15,7 @@
       %dd= @vuln.artifact.map(&:name).join(", ")
 
       %dt Kind:
-      %dd= @vuln.kind
+      %dd= @vuln.kind_pretty
 
       %dt Title:
       %dd.title= @vuln.title
