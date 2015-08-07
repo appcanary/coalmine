@@ -11,6 +11,8 @@ $grid-columns: 12 !global;
 $max-width: em(1180px) !global;
 $border-box-sizing: true !global;
 
+$mobile: new-breakpoint(max-width 736px 4);
+
 // colours
 $text: #111;
 $bg: #f2f2f2;
@@ -51,7 +53,7 @@ $myriad: 'Myriad Pro', sans-serif;
     border-color: $text;
     @include transition (all 0.1s ease-in);
   }
-  @include mobile-all {
+  @include media($mobile) {
     font-size: 1.2em;
   }
 }
@@ -81,7 +83,7 @@ body {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
   box-sizing: border-box;
-  @include mobile-all {
+  @include media($mobile) {
     width: 100%;
   }
 }
@@ -170,19 +172,28 @@ img {
     font-weight: 300;
     line-height: 1em;
     margin-bottom: 2.5em;
-    @include mobile-all {
-      font-size: 2.2em;
-      margin: 0 0.5em 0 0.5em;
+    @include media($mobile) {
+      @include span-columns(4 of 4);
+      @include shift(0);
     }
     h1 {
       font-weight: 600;
       font-size: 2.7em;
       margin-bottom: 0.5em;
+      @include media($mobile) {
+        font-size: 2em;
+        line-height: 0.80;
+      }
     }
     h3 {
-      font-size: 2em;
+      font-size: 2.3em;
       line-height: 1.1em;
       padding: 0 3em;
+      @include media($mobile) {
+        margin-top: 0.6em;
+        font-size: 2em;
+        padding: 0 0.2em;
+      }
     }
   }
   .hero_form-group {
@@ -207,15 +218,26 @@ img {
   }
 }
 
-.hero-vuln { 
+.hero-vuln {
   @extend .hero;
   padding-top: 8em;
+  @include media($mobile) {
+    padding-top: 2em;
+  }
   .hero_sell-line {
     @include span-columns(10 of 12);
     @include shift(1);
     margin-bottom: 0em;
+    @include media($mobile) {
+      @include span-columns(4 of 4);
+      @include shift(0);
+    }
     h1 {
-      font-size: 4.5em;
+      font-size: 6em;
+      @include media($mobile) {
+        font-size: 4em;
+        margin: 0 0.5em 0 0.5em;
+      }
     }
   }
 
@@ -237,7 +259,7 @@ img {
     margin: 0;
     padding: 0;
   }
-  @include mobile-all {
+  @include media($mobile) {
     font-size: 1.3em;
     padding-right: 0.5em;
     padding-left: 0.5em;
@@ -249,9 +271,10 @@ img {
 
 .unit-container {
   border-bottom: 1px solid lighten($text, 70%);
-  padding: 5em 0;
-  @include mobile-all {
+  padding: 3.8em 0;
+  @include media($mobile) {
     width: 100%;
+    padding: 0 15px;
   }
 }
 
@@ -267,7 +290,7 @@ img {
     margin-bottom: 1.4em;
     line-height: 0.9em;
   }
-  @include mobile-all {
+  @include media($mobile) {
     padding-left: 0.5em;
     padding-right: 0.5em;
     margin-bottom: 3.5em;
@@ -291,7 +314,12 @@ img {
     @include span-columns(5);
     @include shift(1);
     border-radius: 1em;
-    height: 24em;
+    height: 27em;
+    @include media($mobile) {
+      @include span-columns(4);
+      @include shift(0);
+      margin: 2em 0;
+    }
   }
   .unit_demo-box-before {
     border: 6px dashed $lightgray;
@@ -301,9 +329,14 @@ img {
       font-size: 4.2em;
       font-weight: 600;
       color: $lightgray;
-      padding: 0.3em 1.2em 0 1.2em;
+      padding: 0.6em 1.2em 0 1.2em;
       line-height: 1em;
       text-align: center;
+      @include media($mobile) {
+        font-size: 3.6em;
+        padding: 2em 0.2em;
+        margin: 0;
+      }
     }
     #spinner {
       width: 3em;
@@ -324,15 +357,25 @@ img {
   }
   .unit_demo-copy {
     @include span-columns(5);
+    @include media($mobile) {
+      @include span-columns(4);
+    }
     h3 {
       font-weight: 600;
-      font-size: 2.2em;
+      font-size: 1.8em;
       line-height: 1em;
+      padding-bottom: 0.2em;
+      @include media($mobile) {
+        font-size: 2.4em;
+      }
     }
     p {
-      font-size: 1.6em;
+      font-size: 1.4em;
       line-height: 1.1em;
       margin-top: 0.6em;
+      @include media($mobile) {
+        font-size: 1.8em;
+      }
     }
     .button {
       display: inline-block;
@@ -465,7 +508,7 @@ img {
     border-radius: 6px;
     color: $text;
     font-family: $proxima;
-    @include mobile-all {
+    @include media($mobile) {
       font-size: 1.2em;
     }
     label {
@@ -514,11 +557,20 @@ footer {
   img {
     @include span-columns(1 of 12);
     width: 50px;
+    @include media($mobile) {
+      display: none;
+    }
   }
   nav {
     @include span-columns (5 of 12);
     padding-top: 1em;
     vertical-align: top;
+    @include media($mobile) {
+      @include span-columns(4 of 4);
+      text-align: center;
+      margin: 0 auto;
+      padding-bottom: 10px;
+    }
     ul {
       list-style-type: none;
       display: inline;
@@ -542,11 +594,16 @@ footer {
     text-transform: uppercase;
     font-size: 0.8em;
     text-align: right;
+    @include media($mobile) {
+      @include span-columns(4 of 4);
+      text-align: center;
+      margin: 0 auto;
+    }
   }
 }
 
 
-.about { 
+.about {
   .unit_about {
     float: left;
     display: block;
@@ -590,7 +647,7 @@ footer {
 
   }
 
-  .yc { 
+  .yc {
     color: #F0652F
   }
 
@@ -611,6 +668,9 @@ footer {
   top: 18px;
   left: 10px;
   z-index: 500;
+  @include media($mobile) {
+    display: none;
+  }
   img {
     width: 250px;
   }
@@ -628,6 +688,19 @@ footer {
     &:hover {
       background-color: $dark-yellow;
     }
+  }
+}
+
+.top-brand {
+  display: none;
+  @include media($mobile) {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 2em;
+  }
+  .mobile-logo {
+    width: 40%;
   }
 }
 
@@ -833,15 +906,36 @@ $success-color: #e6efc2 !default;
 
 
 #preferred_platform {
+  @include media($mobile) {
+    font-size: 1.4em;
+  }
   button {
     @extend %button;
-    margin-left: 20px;
+    font-size: 1.6em;
+    width: 94%;
+    margin-top: 0.8em;
+    @include media($mobile) {
+      width: 100%;
+      margin: 0.3em 0;
+    }
   }
   input {
     @extend %input;
+    font-size: 1.6em;
+    width: 53%;
+    @include media($mobile) {
+      width: 100%;
+      margin: 0.3em 0;
+    }
   }
   .input-sm {
-    width: 8em;
+    font-size: 1.6em;
+    width: 38%;
+    margin-right: 0.4em;
+    @include media($mobile) {
+      width: 100%;
+      margin: 0.3em 0;
+    }
   }
 
 

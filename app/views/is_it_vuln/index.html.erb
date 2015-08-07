@@ -5,6 +5,13 @@
 </div>
 
 <div class="hero-wrapper">
+
+  <div class="top-brand">
+    <a href="https://appcanary.com">
+      <%= image_tag "appcanary.rect.png", :alt => "appCanary", :class => "mobile-logo" %>
+    </a>
+  </div>
+
   <div class="hero-vuln">
 
     <div class="hero_sell-line">
@@ -24,7 +31,7 @@
 
 <div class="unit-container">
   <div class="unit demo">
-    
+
     <div id="dragbox" class="unit_demo-box unit_demo-box-before">
       <%= image_tag "spinner.gif", id: "spinner", style: "display:none"%>
       <%= form_tag submit_gemfile_path, multipart: true, :id => "drop" do %>
