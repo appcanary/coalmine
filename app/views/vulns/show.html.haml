@@ -40,8 +40,11 @@
 
       %dt Patched Versions:
       %dd
-        %pre{style: "border: none;"}
-          - @vuln.patched_versions.each do |vers|
-            = vers
-            <br/>
+        - if @vuln.patched_versions.present?
+          %pre{style: "border: none;"}
+            - @vuln.patched_versions.each do |vers|
+              = vers
+              <br/>
+        - else
+          No patches exist right now
 
