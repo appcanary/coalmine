@@ -407,6 +407,8 @@ img {
         color: white;
       }
     }
+
+    .red { color: $ruby }
   }
 }
 
@@ -743,6 +745,7 @@ footer {
   a {
     color: black;
     font-weight: bold;
+      text-decoration: underline;
     &:hover {
       text-decoration: underline;
     }
@@ -800,6 +803,11 @@ table.artifacts {
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
+
+   a {
+     text-decoration: underline;
+  }
+
 
   .advisory {
     width: 70%;
