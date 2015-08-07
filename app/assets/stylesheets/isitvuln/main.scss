@@ -180,6 +180,7 @@ img {
       font-weight: 600;
       font-size: 2.7em;
       margin-bottom: 0.5em;
+      line-height: 0.9;
       @include media($mobile) {
         font-size: 2em;
         line-height: 0.80;
@@ -194,6 +195,10 @@ img {
         font-size: 2em;
         padding: 0 0.2em;
       }
+    }
+
+    .hero_nice { 
+      font-size: 5.5em; 
     }
   }
   .hero_form-group {

@@ -49,10 +49,10 @@ class IsItVulnController < ApplicationController
   def sample_results
     @preuser = PreUser.new
 
-      @vuln_artifacts = Testvuln.artifact_versions
+    @vuln_artifacts = Testvuln.artifact_versions
 
-      @is_vuln = @vuln_artifacts.present?
-      render :results
+    @is_vuln = @vuln_artifacts.present?
+    render :results
   end
 
 
