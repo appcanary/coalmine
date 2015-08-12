@@ -8,6 +8,7 @@
     <%= stylesheet_link_tag    'isitvuln', media: 'all' %>
     <%= javascript_include_tag 'isitvuln' %>
     <%= csrf_meta_tags %>
+    <%= render :partial => "layouts/typekit" %> 
   </head>
   <body>
 
@@ -16,7 +17,6 @@
     <div class="topbar"></div>
     <%= yield %>
 
-    <%= render :partial => "layouts/typekit" %> 
     <%= render :partial => "layouts/google_analytics" %> 
   </body>
 </html>
