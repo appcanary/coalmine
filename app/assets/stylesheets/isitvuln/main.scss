@@ -240,7 +240,7 @@ img {
     h1 {
       font-size: 6em;
       @include media($mobile) {
-        font-size: 4em;
+        font-size: 3.5em;
         margin: 0 0.5em 0 0.5em;
       }
     }
