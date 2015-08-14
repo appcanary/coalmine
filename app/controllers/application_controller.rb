@@ -9,6 +9,15 @@ class ApplicationController < ActionController::Base
   before_filter :require_login
 
   private
+  def track_event(user, event)
+    if Rails.env.production?
+      Analytics.track({
+        user_id: user.datomic_id,
+        event: event
+      })
+    end
+  end
+
   def not_authenticated
     redirect_to login_path, alert: "Please login first"
   end
