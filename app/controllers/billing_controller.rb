@@ -5,6 +5,7 @@ class BillingController < ApplicationController
   end
 
   def update
+    @show_stripe = true
     @user = current_user
 
     @user.subscription_plan = params[:user][:subscription_plan]

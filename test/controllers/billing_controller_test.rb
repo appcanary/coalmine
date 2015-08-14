@@ -55,8 +55,8 @@ class BillingControllerTest < ActionController::TestCase
       assert_template :show
     end
 
-     test "should allow discount plans if user is from beta" do
-       user.beta_signup_source = "test"
+    test "should allow discount plans if user is from beta" do
+      user.beta_signup_source = "test"
 
       VCR.use_cassette("new_stripe_customer") do
         token = create_token
@@ -67,6 +67,22 @@ class BillingControllerTest < ActionController::TestCase
       assert user.stripe_customer_id.present?
       assert_equal SubscriptionPlan::AC_DISCOUNT_STARTER, user.subscription_plan
       assert_redirected_to dashboard_path
+    end
+
+    test "should pop out an error when given a bad card" do
+      user.stubs(:servers_count).with(anything).returns(3)
+      
+      VCR.use_cassette("bad_stripe_card") do
+        token = create_declined_token
+        put :update, user: { stripe_token: token.id, subscription_plan: SubscriptionPlan::AC_STARTER }
+
+        assert_equal false, user.stripe_customer_id.present?
+        assert_equal true, user.errors.present?
+        assert_response :success
+        assert_template :show
+
+      end
+
     end
 
 
@@ -88,4 +104,16 @@ class BillingControllerTest < ActionController::TestCase
       }
     )
   end
+
+  def create_declined_token(year = nil)
+    Stripe::Token.create(
+      :card => {
+        :number => "4000000000000002",
+        :exp_month => 7,
+        :exp_year => 2019,
+        :cvc => "314"
+      }
+    )
+  end
+
 end

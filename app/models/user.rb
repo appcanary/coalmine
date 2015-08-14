@@ -44,6 +44,12 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password, :if => :password
   validates :email, uniqueness: true, presence: true
   validate :correct_subscription_plan?
+  validate :absence_of_stripe_errors
+  attr_accessor :stripe_errors
+
+  def stripe_errors
+    @stripe_errors ||= []
+  end
 
   def servers
     @servers ||= canary.servers
@@ -124,4 +130,14 @@ class User < ActiveRecord::Base
     @canary ||= Canary.new(self.token)
   end
 
+  def absence_of_stripe_errors
+    if @stripe_errors.present?
+      @stripe_errors.each do |e|
+        self.errors.add(:base, e)
+      end
+      false
+    else
+      true
+    end
+  end
 end
