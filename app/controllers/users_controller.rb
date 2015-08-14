@@ -39,11 +39,13 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if UserManager.sign_up(@user)
-        Analytics.track({
-          user_id: @user.datomic_id,
-          event: 'Signed Up'
-        })
         auto_login(@user)
+        if Rails.env == "production"
+          Analytics.track({
+            user_id: @user.datomic_id,
+            event: 'Signed Up'
+         })
+        end
         format.html { redirect_to dashboard_path }
         format.json { render json: @user, status: :created, location: @user }
       else
