@@ -49,6 +49,10 @@ class User < ActiveRecord::Base
     @servers ||= canary.servers
   end
 
+  def datomic_id
+    @datomic_id ||= canary.me["id"]
+  end
+
   def active_servers
     servers.reject(&:gone_silent?)
   end

@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/stripe/stripe-ruby
-  revision: 8b0a074cbf12751daf12cfa191e4ef918ea84ccb
+  revision: 8ce205c7e2ca8a52d598ca4523d1dda828e48f1b
   specs:
-    stripe (1.22.0)
+    stripe (1.23.0)
       json (~> 1.8.1)
       rest-client (~> 1.4)
 
@@ -47,6 +47,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
+    analytics-ruby (2.0.12)
     annotate (2.6.5)
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
@@ -183,8 +184,6 @@ GEM
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
-    intercom-rails (0.2.28)
-      activesupport (> 3.0)
     jbuilder (2.2.6)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -367,6 +366,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
+  analytics-ruby (~> 2.0.0)
   annotate
   better_errors
   binding_of_caller
@@ -393,7 +393,6 @@ DEPENDENCIES
   haml-coffee (~> 0.1.0)
   htmlentities
   httparty
-  intercom-rails (~> 0.2.28)
   jbuilder (~> 2.0)
   jquery-rails
   m
