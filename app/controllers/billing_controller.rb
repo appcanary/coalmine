@@ -1,6 +1,7 @@
 class BillingController < ApplicationController
   def show
     @show_stripe = true
+    @user = current_user
   end
 
   def update

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
   get "hello" => "servers#onboarding", :as => :onboarding
 
+  get "billing" => "billing#show", :as => :show_billing
   put "billing" => "billing#update", :as => :billing
 
   # microsites
