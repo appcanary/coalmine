@@ -6,7 +6,7 @@
 
 <section>
   <div class="user_api">
-    <h5>Your API token is:</h5>
+    <h4>Your API token is:</h4>
     <code>
       <%= @user.agent_token %></code>
     <br/>
@@ -14,32 +14,11 @@
   </div>
 </section>
 
-<% if false # not ready for public consumption yet %>
-  <section>
-    <% if Rails.env == 'development' #unless @user.has_billing? %>
-      <%= render :partial => "credit_card_form" %>
-    <% elsif false %>
-      <div class="col-sm-4">
-        <h4>Credit card on file:</h4>
-        <% @user.payment_info.each do |card| %>
-          <dl>
-
-            <dt>Last four digits:</dt>
-            <dd><%= card.last4 %></dd>
-
-            <dt>Expiry:</dt>
-            <dd><%= card.exp_month %> / <%= card.exp_year %></dd>
-
-
-          </dl>
-
-        <% end %>
-      </div>
-    <% end %>
-  </section>
-<% end %>
-
 <section>
+  <div class="col-sm-12">
+    <h4>User settings:</h4>
+  </div>
+
   <div class="col-sm-4">
     <%= form_for @user, url: settings_path do |f| %>
 
@@ -66,3 +45,5 @@
     <% end %>
   </div>
 </section>
+
+<%= render :partial => "settings/subscription" %>

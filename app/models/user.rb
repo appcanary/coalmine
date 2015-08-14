@@ -27,6 +27,7 @@
 #  beta_signup_source              :string
 #  stripe_customer_id              :string
 #  name                            :string
+#  subscription_plan               :string
 #
 # Indexes
 #
@@ -42,8 +43,7 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
   validates :email, uniqueness: true, presence: true
-  # validates :name, presence: true
-
+  validate :correct_subscription_plan?
 
   def servers
     @servers ||= canary.servers
@@ -80,6 +80,38 @@ class User < ActiveRecord::Base
       stripe_customer.sources
     else 
       []
+    end
+  end
+
+  def servers_count
+    self.servers.count
+  end
+
+  def discounted?
+    beta_signup_source.present?
+  end
+
+  def correct_subscription_plan?
+    unless valid_subscription?
+      self.errors.add(:subscription_plan, "is not valid.")
+    end
+  end
+
+  def valid_subscription?
+    if self.subscription_plan.nil?
+      # can't reset subscription plan
+      # if we have a cc
+      if has_billing?
+        false
+      else
+        true
+      end
+    else
+      if discounted?
+        SubscriptionPlan.discount_plans.include? self.subscription_plan
+      else
+        SubscriptionPlan.all_plans.include? self.subscription_plan
+      end
     end
   end
 
