@@ -1,0 +1,69 @@
+<div class="top-left-brand">
+  <a href="https://appcanary.com">
+    <%= image_tag "appcanary.rect.png", :alt => "appCanary", :class => "logo" %>
+  </a>
+</div>
+
+<div class="hero-wrapper">
+
+  <div class="top-brand">
+    <a href="https://appcanary.com">
+      <%= image_tag "appcanary.rect.png", :alt => "appCanary", :class => "mobile-logo" %>
+    </a>
+  </div>
+
+  <div class="hero-vuln">
+
+    <div class="hero_sell-line">
+      <h1>Is it vulnerable?</h1>
+      <h3>When did you last check your Ruby library versions?</h3>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="flash-error" style="display:none">
+</div>
+
+<div class="flash-notice" style="display:none">
+</div>
+
+<div class="unit-container">
+  <div class="unit demo">
+
+    <div id="dragbox" class="unit_demo-box unit_demo-box-before">
+      <%= image_tag "spinner.gif", id: "spinner", style: "display:none"%>
+      <%= form_tag submit_gemfile_path, multipart: true, :id => "drop" do %>
+      <p id="dragmessage">Click or drag a file here!</p>
+      <% end %>
+    </div>
+
+    <div class="unit_demo-copy">
+      <div class="intro">
+        <h3>We&rsquo;ll tell you what&rsquo;s vulnerable and how to update it.</h3>
+        <p>Drag your <strong class="red">Gemfile.lock</strong> onto the area on the left, and we'll take it from there.</p>
+
+        <h3>What does it look like?</h3>
+        <p>Here is <%= link_to "a sample", sample_results_path, :target => "_blank" %>.</p>
+
+
+      </div>
+      <div class="no-ruby">
+        <h3>Don&rsquo;t use Ruby?</h3>
+        <p>What platform should we support next?</p>
+
+        <%= form_for @preuser, :html => {:id => "preferred_platform"}, :url => pre_sign_up_path do |f| %>
+          <%= f.text_field :preferred_platform, :class => "form-control input-sm", :placeholder => "Platform here" %>
+          <%= f.email_field :email, :class => "form-control input-md", :placeholder => "jane@example.com" %>
+          <button type="submit" class="button">Gotcha!</button>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%= render :partial => "shared/footer" %>
+

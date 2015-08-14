@@ -17,4 +17,8 @@ class ArtifactVersion < CanaryBase
     platform
   end
 
+  def is_vulnerable?
+    vulnerability.present?
+  end
+
 end
