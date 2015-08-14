@@ -28,7 +28,12 @@ $(document).ready(function() {
           $("#dragmessage").hide();
           $("#spinner").show();
         })
-        this.on("success", function(file, response) { window.location = "/results/" + response.id });
+        this.on("success", function(file, response) {
+          if (typeof analytics != "undefined") {
+            analytics.track('IsItVulnerable Upload')
+          }
+          window.location = "/results/" + response.id
+        });
         this.on("error", function(file, response) {
           $("#dragmessage").show();
           $("#spinner").hide();

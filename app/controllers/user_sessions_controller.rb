@@ -14,6 +14,8 @@ class UserSessionsController < ApplicationController
         
     respond_to do |format|
       if @user = login(user_params[:email], user_params[:password])
+        track_event(@user, "Logged In")
+       
         format.html { redirect_back_or_to(dashboard_path, notice: 'Login successful') }
         format.json { render json: @user, status: :created, location: dashboard_path }
       else
@@ -29,6 +31,8 @@ class UserSessionsController < ApplicationController
   end
 
   def destroy
+    track_event(current_user, "Logged Out") 
+
     logout
     flash.now[:notice] = 'Thanks. Have a good one.'
     redirect_to(:root)

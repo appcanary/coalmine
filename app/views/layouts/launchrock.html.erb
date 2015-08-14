@@ -16,9 +16,6 @@
     <%= yield %>
 
     <%= render :partial => "layouts/typekit" %> 
-    <%= render :partial => "layouts/google_analytics" %> 
-    <% unless Rails.env.test? %>
-      <%= intercom_script_tag %>
-    <% end %>
+    <%= render :partial => "layouts/analytics" %>
   </body>
 </html>
