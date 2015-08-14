@@ -39,6 +39,7 @@ class SettingsControllerTest < ActionController::TestCase
     client = mock
     client.expects(:update_user).with(anything).raises(Faraday::Error, "lol nope")
     client.expects(:me).with(anything).returns({"agent-token": "test"})
+    client.stubs(:servers).returns({})
     Canary.stubs(:new).with(anything).returns(client)
 
     post :update, :user => { :email => new_email }

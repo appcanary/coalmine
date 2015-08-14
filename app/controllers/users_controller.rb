@@ -40,7 +40,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if UserManager.sign_up(@user)
         auto_login(@user)
-        track_event(user, "Signed Up")
+        track_event(@user, "Signed Up")
 
         format.html { redirect_to dashboard_path }
         format.json { render json: @user, status: :created, location: @user }
