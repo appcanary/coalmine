@@ -41,8 +41,10 @@ form#payment-form {
     padding: 0;
   }
   input.text {
-    width: 100%;
+    height: initial;
     margin: 0;
+    font-size: 1.5em;
+    
   }
   .cc-number {
     width: 350px;
@@ -53,13 +55,20 @@ form#payment-form {
   }
 
   .cc-mm {
-    width: 100px;
-  }
-  .cc-yyyy {
-    width: 100px;
+    // display: inline;
+    // width: 100px;
+    input {
+    //   display: inline;
+      width: 100px;
+    }
   }
   .cc-cvc {
-    width: 93px;
+    // display: inline;
+    // width: 93px;
+    input {
+    //   display: inline;
+      width: 93px;
+    }
   }
   input[type="submit"] {
     width: 300px;
