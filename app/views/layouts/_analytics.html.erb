@@ -10,16 +10,17 @@
     <script>
       analytics.identify("<%=j true_user.datomic_id.to_s %>", {
         email: "<%=j true_user.email %>",
-          createdAt: "<%=j true_user.created_at.iso8601 %>",
-          name: "<%=j true_user.name %>",
-          signup_source: "<%=j true_user.beta_signup_source %>"
-    }, {
-      integrations: {
-        Intercom : {
-          user_hash : '<%=j OpenSSL::HMAC.hexdigest("sha256", Rails.configuration.segment.intercom_key, true_user.datomic_id.to_s) %>'
+        createdAt: "<%=j true_user.created_at.iso8601 %>",
+        name: "<%=j true_user.name %>",
+        signup_source: "<%=j true_user.beta_signup_source %>",
+        servers_count: "<%= j true_user.servers_count %>"
+      }, {
+        integrations: {
+          Intercom : {
+            user_hash : '<%=j OpenSSL::HMAC.hexdigest("sha256", Rails.configuration.segment.intercom_key, true_user.datomic_id.to_s) %>'
+          }
         }
-      }
-    });
+      });
     </script>
   <% end %>
 <% end %>
