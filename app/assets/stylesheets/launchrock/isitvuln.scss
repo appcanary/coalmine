@@ -1,0 +1,322 @@
+.top-left-brand {
+  position: absolute;
+  top: 18px;
+  left: 10px;
+  z-index: 500;
+  @include media($mobile) {
+    display: none;
+  }
+  img {
+    width: 250px;
+  }
+  img.logo {
+    width: 75px;
+  }
+  .action_unit {
+    display: inline;
+    margin-left: 15px;
+  }
+  .action_login .button {
+    box-shadow: none;
+    border: 1px solid $text;
+    background: none;
+    &:hover {
+      background-color: $dark-yellow;
+    }
+  }
+}
+
+.top-brand {
+  display: none;
+  @include media($mobile) {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 2em;
+  }
+  .mobile-logo {
+    width: 40%;
+  }
+}
+
+
+.sign-up-page {
+  @include outer-container;
+  padding: 8.5em 0 5.5em 0;
+  .field-error {
+    color: #e54427;
+  }
+
+  h1 {
+    font-weight: 600;
+    font-size: 2em;
+  }
+
+  h2 {
+    margin-bottom: 1em;
+  }
+
+  a {
+    color: black;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// begin fork from launchrock
+.unit-container.results {
+  padding-top: 4em;
+}
+
+.unit-container .demo {
+  .intro p, .no-ruby p {
+    margin-top: 0.2em;
+  }
+  a {
+    color: black;
+    font-weight: bold;
+      text-decoration: underline;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+#results {
+  @include outer-container;
+
+  a {
+    color: black;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h1, h3 {
+    display: inline;
+    padding-right: 0.2em;
+    code {
+      font-style: italic;
+      font-size: 0.8em;
+    }
+
+    code.bad {
+      padding: 2px 4px;
+      font-size: 90%;
+      color: #c7254e;
+      background-color: #f9f2f4;
+      border-radius: 4px;
+
+    }
+  }
+  #vulnerable_artifacts, .artifact_versions, .all_good {
+    @include span-columns(6 of 12);
+    @include shift(3);
+  }
+
+  .all_good {
+    .vanquished {
+      width: 18em;
+      padding-top: 2em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      display: block;
+      font-size: 4em;
+      text-align: center;
+    }
+  }
+}
+
+table.artifacts {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+   a {
+     text-decoration: underline;
+  }
+
+
+  .advisory {
+    width: 70%;
+  }
+
+  .patch {
+    width: 30%;
+  }
+
+  td, th {
+    vertical-align: top;
+    text-align: left;
+  }
+  td {
+    padding-bottom: 1.5em;
+  }
+
+  code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-radius: 4px;
+  }
+  &.all {
+    th {
+      font-size: 1.1em;
+      color: #ccc;
+    }
+    .name {
+      font-weight: bold;
+    }
+    .version, .kind {
+      width: 1px;
+      text-align: center;
+    }
+  }
+}
+
+.vulnerability {
+  $label-width: 150px;
+  padding: 1.5em 3em 1.5em 1.5em;
+  dd, dt {
+    margin-bottom: 1em;
+  }
+  dt {
+    width: $label-width;
+    float: left;
+    text-align: right;
+  }
+  dd {
+    margin-left: $label-width + 10px;
+  }
+
+  .title {
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+}
+
+
+$base-spacing: 1.5em !default;
+$alert-color: #fff6bf !default;
+$error-color: #fbe3e4 !default;
+$notice-color: #e5edf8 !default;
+$success-color: #e6efc2 !default;
+
+@mixin flash($color) {
+  background-color: $color;
+  color: darken($color, 60%);
+  display: block;
+  font-weight: 600;
+  margin-bottom: $base-spacing / 2;
+  padding: $base-spacing / 2;
+  text-align: center;
+
+  a {
+    color: darken($color, 70%);
+    text-decoration: underline;
+
+    &:focus,
+    &:hover {
+      color: darken($color, 90%);
+    }
+  }
+}
+
+.flash-alert {
+  @include flash($alert-color);
+}
+
+.flash-error {
+  @include flash($error-color);
+}
+
+.flash-notice {
+  @include flash($notice-color);
+}
+
+.flash-success {
+  @include flash($success-color);
+}
+
+
+
+#preferred_platform {
+  @include media($mobile) {
+    font-size: 1.4em;
+  }
+  button {
+    @extend %button;
+    font-size: 1.6em;
+    width: 94%;
+    margin-top: 0.8em;
+    @include media($mobile) {
+      width: 100%;
+      margin: 0.3em 0;
+    }
+  }
+  input {
+    @extend %input;
+    font-size: 1.6em;
+    width: 53%;
+    @include media($mobile) {
+      width: 100%;
+      margin: 0.3em 0;
+    }
+  }
+  .input-sm {
+    font-size: 1.6em;
+    width: 38%;
+    margin-right: 0.4em;
+    @include media($mobile) {
+      width: 100%;
+      margin: 0.3em 0;
+    }
+  }
+
+
+  .select-wrapper {
+    position: relative;
+    display: inline-block;
+    &:after {
+      @include user-select(none);
+      pointer-events: none;
+      content: "";
+      height: 0;
+      width: 0;
+      @include triangle(10px 8px, $text, down);
+      position: absolute;
+      top: 50%;
+      margin-top: -3px;
+      right: 7px;
+      @include transition (all 0.1s ease-out);
+    }
+    &:hover:after {
+      @include transition (all 0.1s ease-in);
+      @include triangle(10px 8px, black, down);
+    }
+  }
+
+  select {
+    @extend %input;
+    //   font-size: 1.3em;
+    //   border: 1px solid $text;
+    //   outline: none;
+    //   background: transparent;
+    //   width: auto;
+    padding: 0.3em 1em 0.3em 0.5em;
+    @include appearance(none);
+    @include transition (all 0.1s ease-out);
+    &:hover {
+      //     // color: $red;
+      cursor: pointer;
+      //     // border-color: $red;
+      @include transition (all 0.1s ease-in);
+    }
+  }
+}

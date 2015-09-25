@@ -27,6 +27,7 @@
 #  beta_signup_source              :string
 #  stripe_customer_id              :string
 #  name                            :string
+#  subscription_plan               :string
 #
 # Indexes
 #

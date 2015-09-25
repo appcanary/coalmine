@@ -41,28 +41,28 @@ class Billing
       # param is '' in this case
       puts "Param is: #{err[:param]}"
       puts "Message is: #{err[:message]}"
-      @user.errors.add(:stripe, err[:message])
+      @user.stripe_errors << err[:message]
     rescue Stripe::InvalidRequestError => e
       Raven.capture_exception(e)
       # Invalid parameters were supplied to Stripe's API
-      @user.errors.add(:stripe, "Invalid paramemters supplied to Stripe. Sorry, probably our fault.")
+      @user.stripe_errors << "Invalid paramemters supplied to Stripe. Sorry, probably our fault."
     rescue Stripe::AuthenticationError => e
       # Authentication with Stripe's API failed
       # (maybe you changed API keys recently)
       Raven.capture_exception(e)
-      @user.errors.add(:stripe, "Stripe authentication failure. Sorry, probably our fault.")
+      @user.stripe_errors << "Stripe authentication failure. Sorry, probably our fault."
     rescue Stripe::APIConnectionError => e
       # Network communication with Stripe failed
       Raven.capture_exception(e)
-      @user.errors.add(:stripe, "Stripe seems to be down. Please try again in a bit.")
+      @user.stripe_errors << "Stripe seems to be down. Please try again in a bit."
     rescue Stripe::StripeError => e
       # Display a very generic error to the user, and maybe send
       # yourself an email
       Raven.capture_exception(e)
-      @user.errors.add(:stripe, "Something went wrong with Stripe. We're looking into it.")
+      @user.stripe_errors << "Something went wrong with Stripe. We're looking into it."
     rescue => e
       Raven.capture_exception(e)
-      @user.errors.add(:stripe, "Something went wrong with this transaction. We're looking into it.")
+      @user.stripe_errors << "Something went wrong with this transaction. We're looking into it."
     end
   end
 end

@@ -1,21 +1,29 @@
-= render :partial => 'shared/heading'
+- if current_user 
+  = render :partial => 'shared/heading'
+- else
+  .topbar
+  %section
+    .col-sm-6
+      %h1 More information:
 %section
   .col-sm-12
     %dl.vulnerability
-      - if @vuln.artifact.count > 1
-        %dt Packages:
-      - else
-        %dt Package:
-      %dd= @vuln.artifact.map(&:name).join(", ")
+      - if @vuln.artifact
+        - if @vuln.artifact.count > 1
+          %dt Packages:
+        - else
+          %dt Package:
+        %dd= @vuln.artifact.map(&:name).join(", ")
 
       %dt Kind:
-      %dd= @vuln.kind
+      %dd= @vuln.kind_pretty
 
       %dt Title:
       %dd.title= @vuln.title
 
-      %dt CVE:
-      %dd= link_to(@vuln.cve_id, @vuln.cve_url, target: 'blank')
+      - if @vuln.cve_id.present?
+        %dt CVE:
+        %dd= link_to(@vuln.cve_id, @vuln.cve_url, target: 'blank')
 
       - if @vuln.osvdb.present?
         %dt OSVDB:
@@ -33,8 +41,11 @@
 
       %dt Patched Versions:
       %dd
-        %pre{style: "border: none;"}
-          - @vuln.patched_versions.each do |vers|
-            = vers
-            <br/>
+        - if @vuln.patched_versions.present?
+          %pre{style: "border: none;"}
+            - @vuln.patched_versions.each do |vers|
+              = vers
+              <br/>
+        - else
+          No patches exist right now
 

@@ -43,7 +43,6 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # external services
 gem 'sentry-raven', '~> 0.13.3'
-gem 'intercom-rails', '~> 0.2.28'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 # deployment
@@ -67,6 +66,7 @@ gem 'faraday_middleware', '~> 0.9.1'
 #misc
 gem 'ruby_identicon', '0.0.4'
 gem 'request_store', '~> 1.1.0'
+gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

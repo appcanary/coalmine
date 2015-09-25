@@ -1,0 +1,10 @@
+production:
+  segment: 
+    key: "4d4VwYpHGbxQI5vUiRzOwVsV3yw7PTxs"
+    intercom_key: "4cpTQn3krCBcKd0XxbFDy8-ahk1Rup5WgZpgXRZW"
+
+development:
+  segment: 
+    key: "4d4VwYpHGbxQI5vUiRzOwVsV3yw7PTxs"
+    intercom_key: "4cpTQn3krCBcKd0XxbFDy8-ahk1Rup5WgZpgXRZW"
+    

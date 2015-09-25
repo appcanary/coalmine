@@ -27,6 +27,7 @@
 #  beta_signup_source              :string
 #  stripe_customer_id              :string
 #  name                            :string
+#  subscription_plan               :string
 #
 # Indexes
 #
@@ -42,15 +43,28 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
   validates :email, uniqueness: true, presence: true
-  # validates :name, presence: true
+  validate :correct_subscription_plan?
+  validate :absence_of_stripe_errors
+  attr_accessor :stripe_errors
 
+  def stripe_errors
+    @stripe_errors ||= []
+  end
 
   def servers
     @servers ||= canary.servers
   end
 
+  def datomic_id
+    @datomic_id ||= canary.me["id"]
+  end
+
   def active_servers
     servers.reject(&:gone_silent?)
+  end
+
+  def active_servers_count
+    active_servers.count
   end
 
   def server(id)
@@ -91,9 +105,51 @@ class User < ActiveRecord::Base
     end
   end
 
+  def servers_count
+    self.servers.count
+  end
+
+  def discounted?
+    beta_signup_source.present?
+  end
+
+  def correct_subscription_plan?
+    unless valid_subscription?
+      self.errors.add(:subscription_plan, "is not valid.")
+    end
+  end
+
+  def valid_subscription?
+    if self.subscription_plan.nil?
+      # can't reset subscription plan
+      # if we have a cc
+      if has_billing?
+        false
+      else
+        true
+      end
+    else
+      if discounted?
+        SubscriptionPlan.discount_plans.include? self.subscription_plan
+      else
+        SubscriptionPlan.all_plans.include? self.subscription_plan
+      end
+    end
+  end
+
   protected
   def canary
     @canary ||= Canary.new(self.token)
   end
 
+  def absence_of_stripe_errors
+    if @stripe_errors.present?
+      @stripe_errors.each do |e|
+        self.errors.add(:base, e)
+      end
+      false
+    else
+      true
+    end
+  end
 end
