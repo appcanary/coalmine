@@ -8,7 +8,7 @@ class UserCSV
     [:email,
      :name,
      :servers_count,
-     :active_servers_count,
+     :active_server_count,
      :created_at,
      :beta_signup_source]
   end
