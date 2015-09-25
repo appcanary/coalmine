@@ -68,11 +68,11 @@ class User < ActiveRecord::Base
   end
 
   def server_count
-    api_info["server_count"]
+    api_info["server-count"]
   end
 
   def active_server_count
-    api_info["active_server_count"]
+    api_info["active-server-count"]
   end
 
   def api_info
