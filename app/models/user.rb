@@ -63,16 +63,20 @@ class User < ActiveRecord::Base
     servers.reject(&:gone_silent?)
   end
 
-  def active_servers_count
-    active_servers.count
-  end
-
   def server(id)
     canary.server(id)
   end
 
+  def server_count
+    api_info["server-count"]
+  end
+
+  def active_server_count
+    api_info["active-server-count"]
+  end
+
   def api_info
-    canary.me
+    @api_info ||= canary.me
   end
 
   def agent_token
