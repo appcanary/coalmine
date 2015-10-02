@@ -16,7 +16,7 @@ echo '                                                                          
 echo '                                                                                '
 echo '                                                                                '
 echo '                                                                                '
-sleep 1
+echo -e "\n"
 
 unknown_os ()
 {
