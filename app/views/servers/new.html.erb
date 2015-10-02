@@ -19,32 +19,28 @@
         <div class="onboard-wrapper">
           <section>
             <div class="onboard-title">
-              <h3>What is this?</h3>
+              <h3>What you get:</h3>
             </div>
           </section>
           <section>
-            <div class="onboard-desc">
-              <p>
-                We track thousands of vulnerabilities across hundreds of thousands of open source packages so you can do other, more productive things with your time. 
-              </p>
+            
 
-              <p>We monitor your server and your application's dependencies, and we will notify you when new vulnerabilities get disclosed.</p>
-            </p>
-
-            <p>Currently we can tell you about vulnerable
-              <span>
-                <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and/or
-              <span>
-                <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> packages (we're adding more real soon) and you can install it on most Linuxes.
-            </p>
-
-            <p>
-              This is what it looks like:
+             <p>
               <div style="width: 300px; margin-left: auto; margin-right: auto; ">
                 <a href="#screenshot" data-toggle="modal" data-target="#screenshot"><%= image_tag "screenshot-vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a>
               </div>
             </p>
 
+             <div class="onboard-desc">
+             <p>
+               We track <strong><%= number_with_delimiter(@artifacts_count) %></strong> vulnerabilities across <strong><%= number_with_delimiter(@vulnerabilities_count) %></strong> packages so you don't have to. 
+             </p>
+            <p>Currently we can tell you about vulnerable
+              <span>
+                <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and/or
+              <span>
+                <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> packages (we're adding more real soon) and you can install it on most Linuxes.
+            </p> 
           </div>
         </section>
       </div>
@@ -54,7 +50,7 @@
       <div class="onboard-wrapper">
         <section style="border: none">
           <div class="onboard-title">
-            <h3>Instructions (about five minutes)</h3>
+            <h3>5 minute install:</h3>
             <br/>
             <ul class="nav nav-tabs">
               <li role="presentation" class="active"><a href="#deb" data-toggle="tab"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>

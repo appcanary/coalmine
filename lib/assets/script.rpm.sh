@@ -2,6 +2,29 @@
 # shamelessly adapted from packagecloud.io's install script
 # they're pretty cool, you should check them out
 
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo '     __     _____   _____     ___     __      ___      __     _ __   __  __     '
+echo '   /'\''__`\  /\ '\''__`\/\ '\''__`\  /'\''___\ /'\''__`\  /'\'' _ `\  /'\''__`\  /\`'\''__\/\ \/\ \    '
+echo '  /\ \L\.\_\ \ \L\ \ \ \L\ \/\ \__//\ \L\.\_/\ \/\ \/\ \L\.\_\ \ \/ \ \ \_\ \   '
+echo '  \ \__/.\_\\ \ ,__/\ \ ,__/\ \____\ \__/.\_\ \_\ \_\ \__/.\_\\ \_\  \/`____ \  '
+echo '   \/__/\/_/ \ \ \/  \ \ \/  \/____/\/__/\/_/\/_/\/_/\/__/\/_/ \/_/   `/___/> \ '
+echo '              \ \_\   \ \_\                                              /\___/ '
+echo '               \/_/    \/_/                                              \/__/  '
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo -e "\n"
+
+install_error ()
+{
+  echo "Unfortunately, we can't install the package. Often this means your operating system distrubtion and version (${os} ${major_version}) is not supported."
+  echo "Please email support@appcanary.com and we will be happy to help."
+  exit 2
+}
+
 major_version=
 os=
 host=
@@ -170,6 +193,13 @@ fi
 echo "Generating yum cache for appcanary_agent..."
 yum -q makecache -y --disablerepo='*' --enablerepo='appcanary_agent'
 
-echo -n "Installing appcanary..."
+echo "Installing appcanary..."
 yum -y install appcanary
-echo "done."
+
+rpm --query --queryformat "" appcanary &> /dev/null
+rpm_exit_code=$?
+
+if [ "$rpm_exit_code" -gt "0" ]; then
+  echo -e "\n\n"
+  install_error
+fi

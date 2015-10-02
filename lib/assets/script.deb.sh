@@ -2,11 +2,34 @@
 # shamelessly adapted from packagecloud.io's install script
 # they're pretty cool, you should check them out
 
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo '     __     _____   _____     ___     __      ___      __     _ __   __  __     '
+echo '   /'\''__`\  /\ '\''__`\/\ '\''__`\  /'\''___\ /'\''__`\  /'\'' _ `\  /'\''__`\  /\`'\''__\/\ \/\ \    '
+echo '  /\ \L\.\_\ \ \L\ \ \ \L\ \/\ \__//\ \L\.\_/\ \/\ \/\ \L\.\_\ \ \/ \ \ \_\ \   '
+echo '  \ \__/.\_\\ \ ,__/\ \ ,__/\ \____\ \__/.\_\ \_\ \_\ \__/.\_\\ \_\  \/`____ \  '
+echo '   \/__/\/_/ \ \ \/  \ \ \/  \/____/\/__/\/_/\/_/\/_/\/__/\/_/ \/_/   `/___/> \ '
+echo '              \ \_\   \ \_\                                              /\___/ '
+echo '               \/_/    \/_/                                              \/__/  '
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo -e "\n"
+
 unknown_os ()
 {
   echo "Unfortunately, your operating system distribution and version are not supported by this script."
   echo "Please email support@appcanary.com and we will be happy to help."
   exit 1
+}
+
+install_error ()
+{
+  echo "Unfortunately, we can't install the package. This usually means your operating system distribution and version ($os/$dist) is not supported."
+  echo "Please email support@appcanary.com and we will be happy to help!"
+  exit 2
 }
 
 curl_check ()
@@ -152,5 +175,12 @@ echo "done."
 
 echo -n "Installing appcanary... "
 apt-get install appcanary &> /dev/null
-echo "done."
+apt_exit_code=$?
+
+if [ "$apt_exit_code" -gt "0" ]; then
+  echo -e "\n\n"
+  install_error
+else
+  echo "done."
+fi
 

@@ -12,6 +12,15 @@ class Backend < CanaryBase
     canary.stats_servers_without_hearbeats
   end
 
+  def self.vulnerabilities_count
+    wrap(canary.stats_vulnerabilities_count)["count"]
+  end
+
+  def self.artifacts_count
+    wrap(canary.stats_artifacts_count)["count"]
+  end
+
+
   def self.wrap(obj)
     obj || {}
   end
