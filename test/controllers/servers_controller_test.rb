@@ -21,6 +21,8 @@ class ServersControllerTest < ActionController::TestCase
 
     it "should show the new page" do
       User.any_instance.stubs(:agent_token).returns("1234")
+      Backend.stubs(:artifacts_count).returns("1235")
+      Backend.stubs(:vulnerabilities_count).returns("1236")
       get :new
       assert_response :success
       assert assigns(:agent_token)

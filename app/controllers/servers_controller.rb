@@ -2,6 +2,8 @@ class ServersController < ApplicationController
   skip_before_filter :require_login, :only => [:deb, :rpm, :install]
   def new
     @agent_token = current_user.agent_token
+    @artifacts_count = Backend.artifacts_count
+    @vulnerabilities_count = Backend.vulnerabilities_count
   end
 
   def onboarding
