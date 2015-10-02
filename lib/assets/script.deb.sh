@@ -9,6 +9,13 @@ unknown_os ()
   exit 1
 }
 
+install_error ()
+{
+  echo "Unfortunately, we can't install the package. This usually means your operating system distribution and version ($os/$dist) is not supported."
+  echo "Please email support@appcanary.com and we will be happy to help!"
+  exit 2
+}
+
 curl_check ()
 {
   echo "Checking for curl..."
@@ -152,5 +159,12 @@ echo "done."
 
 echo -n "Installing appcanary... "
 apt-get install appcanary &> /dev/null
-echo "done."
+apt_exit_code=$?
+
+if [ "$apt_exit_code" -gt "0" ]; then
+  echo -e "\n\n"
+  install_error
+else
+  echo "done."
+fi
 
