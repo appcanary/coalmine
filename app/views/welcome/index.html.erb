@@ -1,62 +1,134 @@
-<div class="topbar"></div>
 <div class="action">
-  <div class="login">
-    <%= link_to "Login", login_path, :class => "btn btn-white" %>
+  <div class="action_unit action_login">
+    <%= link_to "Log in", login_path, :class => "button" %>
+  </div>
+  <div class="action_unit action_sign-up">
+    <%= link_to "Sign Up", sign_up_path, :class => "button" %>
   </div>
 </div>
 
-<div class="hed">
-  <div class="bird">
-    <%= image_tag "appcanary.rect.png" %>
+
+<div class="hero-wrapper">
+  <div class="hero-main">
+
+    <div class="hero_logo">
+      <%= image_tag "appcanary-hero.png" %>
+    </div>
+
+    <div class="hero_sell-line">
+      <h1>Never run vulnerable software again.</h1>
+      <h3>We monitor your servers, and notify you when you need to update. Try us for free:</h3>
+    </div>
+
+    <div class="hero_form-group">
+      <div class="flash subhed" style="display: none">
+        <p>Thanks! We&rsquo;ll be in touch soon.</p>
+      </div>
+      <div class="hero_sign-up">
+        <%= form_for @preuser, :url => pre_sign_up_path do |f| %>
+          <%= f.email_field :email, :class => "form-control input-md", :placeholder => "jane@example.com" %>
+
+          <button type="submit" class="btn btn-default signup">Get started</button>
+        <% end %>
+      </div>
+    </div>
+
   </div>
-  <h1>Secure your apps,<br/>one dependency at a time.</h1>
 </div>
 
-<div class="landing-container">
-
-  <div class="unit">
-
-    <div class="subhed">
-      <p>Stop worrying about your infrastructure's security.</p>
-      <p>We'll tell you what's vulnerable and how to update it.</p>
-    </div>
-
-    <div class="flash subhed" style="display: none"><p>Thanks! We'll be in touch soon.</p></div>
-      <%= form_tag "/beta/list", :method => :post, :name => :user, :class =>"sign-up" do %>
-        <input type="email" name="email" class="form-control input-md" placeholder="jane@example.com">
-        <button type="submit" class="btn btn-default">Let me know</button>
-      <% end %>
-
+<div class="unit-container">
+  <div class="unit vulns">
+    <h3>We&rsquo;re currently tracking more than</h3>
+    <h1>1,236 vulnerabilities</h1>
+    <h3>over hundreds of thousands of packages so you don&rsquo;t have to.</h3>
   </div>
-
-  <div class="features">
-
-    <div class="feature-unit">
-      <h4>Never miss<br>out again</h4>
-      <p>Don't find out about vulnerabilities through Hacker News and Twitter.</p>
-    </div>
-
-    <div class="feature-unit">
-      <h4>Vulnerabilities<br>are inevitable</h4>
-      <p>Getting hacked doesn't have to be. Make the next Heartbleed be like any other day on the job.</p>
-    </div>
-
-   
-    <div class="feature-unit">
-      <h4>Make your response predictable</h4>
-      <p>We track your team's responses to security events, and give you auditable logs of your actions.</p>
-    </div>
-
-     <div class="feature-unit">
-      <h4>Improve the quality of your sleep</h4>
-      <p>We monitor your infrastructure and notify you when you need to act.</p>
-    </div>
-
-
-  </div>
-
-  <footer class="footer">
-    <p>&copy; 2015 Canary Computer Corporation</p>
-  </footer>
-
 </div>
+
+
+<div class="unit-container">
+  <div class="unit how">
+    <h2>How it works</h2>
+    <div class="unit_how">
+      <%= image_tag "howto-1.png" %>
+      <h3>We sit on your servers.<br>Installing our open source <a href="http://www.github.com/appcanary/agent">agent</a> takes five minutes.</h3>
+    </div>
+    <div class="unit_how">
+      <%= image_tag "howto-2.png" %>
+      <h3>We find out what software is vulnerable.<br>We make sure you know about it.</h3>
+    </div>
+    <div class="unit_how">
+      <%= image_tag "howto-3.png" %>
+      <h3>You fix your security issues, your servers stay safe and you save the day.</h3>
+    </div>
+  </div>
+</div>
+
+
+<div class="unit-container">
+  <div class="unit pricing">
+    <h2>Pricing</h2>
+    <div class="unit_pricing">
+      <div class="circle"></div>
+      <h3>Egg</h3>
+      <p class="unit_pricing-price">$29/month</p>
+      <p>1-5 servers</p>
+    </div>
+    <div class="unit_pricing">
+      <div class="circle"></div>
+      <h3>Tweetie</h3>
+      <p class="unit_pricing-price">$99/month</p>
+      <p>6-15 servers</p>
+    </div>
+    <div class="unit_pricing">
+      <div class="circle"></div>
+      <h3>Canary</h3>
+      <p class="unit_pricing-price">$299/month</p>
+      <p>16-50 servers</p>
+    </div>
+    <div class="unit_pricing feedback-enterprise">
+      <div class="circle"></div>
+      <h3>Coalmine</h3>
+      <p class="unit_pricing-price">More than 50?</p>
+      <p>Click here to chat.</p>
+    </div>
+  </div>
+</div>
+
+<div class="unit-container unit-container_yellow">
+  <div class="unit sign-up">
+    <div class="riskfree">
+      <h1>Get started with a risk-free 14 day trial.</h1>
+    </div>
+    <%= render :partial => "users/new_form" %>
+  </div>
+</div>
+
+<a name="team"></a>
+<div class="unit-container">
+    <div class="unit about">
+      <h2>Team</h2>
+      <div class="bio">
+        <div class="unit_about phill">
+          <div class="half">
+            <a href="https://twitter.com/phillmv">
+              <%= image_tag "phillmv.png" %>
+              <h1>Phill MV</h1>
+            </a>
+            <p>Phill has a BSc. in Computer Science, Ryerson University, and has been a professional web developer since 2009. Phill enjoys photography and ultimate frisbee, and throws storytelling nights, for nerds. </p>
+          </div>
+          <div class="half">
+            <a href="https://twitter.com/mveytsman">
+              <%= image_tag "mveytsman.png" %>
+              <h1>Max Veytsman</h1>
+            </a>
+            <p>Max has a BSc. in Computer Science, University of Toronto, and has been a security professional since 2010. Max enjoys cooking, functional programming, and powerlifting.  He's partial to Irish whiskey.</p>
+          </div>
+          <div class="full">
+            <p>In 2012, Phill and Max started a security and web development consultancy together. In 2013, they cofounded <a href="http://rubysec.com">Rubysec</a>, an open-source project that catalogues all Ruby-related software vulnerabilities. <br/><br/>In 2015, they shuttered the consultancy to begin working on appCanary. They have received funding from <a href="https://ycombinator.com" class="yc">Y Combinator</a>. </p>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<%= render :partial => "shared/footer" %>

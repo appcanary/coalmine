@@ -55,4 +55,27 @@ module ApplicationHelper
     end
     image_tag("data:image.png;base64,#{obj.avatar}", :class => klass)
   end
+
+
+  def label_with_error(form, model, field)
+    if model.errors[field].blank?
+      form.label field
+    else
+      form.label field, "#{field.to_s.titleize} #{fmt_errors(model.errors[field])}".html_safe
+    end
+  end
+
+  def fmt_errors(errors)
+    content_tag("span", :class => "field-error") do 
+      errors.join(" ")
+    end
+  end
+
+  def upgrade_to(vuln)
+    if vuln.patched_versions.present?
+      versions = vuln.patched_versions.sort { |a, b| a.gsub(/\D/, '') <=> b.gsub(/\D/, '')}.map { |pv|  "<code>#{h pv}</code>" }.join("<br/>").html_safe
+    else
+      "No patches exist right now"
+    end
+  end
 end

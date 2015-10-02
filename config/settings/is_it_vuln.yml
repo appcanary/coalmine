@@ -1,0 +1,20 @@
+development:
+  is_it_vuln:
+    domains:
+      - isitvuln.dev
+
+test:
+  is_it_vuln:
+    domains:
+      - isitvuln.dev
+
+
+staging:
+  is_it_vuln:
+    domains:
+      - isitvuln.staging.appcanary.com
+
+production:
+  is_it_vuln:
+    domains:
+      - isitvulnerable.com

@@ -31,6 +31,7 @@ function stripeResponseHandler(status, response) {
 
   if (response.error) {
     // Show the errors on the form
+    $form.find('.payment-errors').css("display", "block");
     $form.find('.payment-errors').text(response.error.message);
     $form.find('button').prop('disabled', false);
   } else {
