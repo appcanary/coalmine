@@ -2,6 +2,21 @@
 # shamelessly adapted from packagecloud.io's install script
 # they're pretty cool, you should check them out
 
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo '     __     _____   _____     ___     __      ___      __     _ __   __  __     '
+echo '   /'\''__`\  /\ '\''__`\/\ '\''__`\  /'\''___\ /'\''__`\  /'\'' _ `\  /'\''__`\  /\`'\''__\/\ \/\ \    '
+echo '  /\ \L\.\_\ \ \L\ \ \ \L\ \/\ \__//\ \L\.\_/\ \/\ \/\ \L\.\_\ \ \/ \ \ \_\ \   '
+echo '  \ \__/.\_\\ \ ,__/\ \ ,__/\ \____\ \__/.\_\ \_\ \_\ \__/.\_\\ \_\  \/`____ \  '
+echo '   \/__/\/_/ \ \ \/  \ \ \/  \/____/\/__/\/_/\/_/\/_/\/__/\/_/ \/_/   `/___/> \ '
+echo '              \ \_\   \ \_\                                              /\___/ '
+echo '               \/_/    \/_/                                              \/__/  '
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo '                                                                                '
+echo -e "\n"
 
 install_error ()
 {
