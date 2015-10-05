@@ -1,0 +1,66 @@
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <%= image_tag "appcanary.rect.png" %>
+
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <%= li_active "dashboard" do %>
+          <a href="/dashboard">
+            <i class="fa fa-clock-o"></i> Dashboard</a>
+        <% end %>
+
+        <%= li_active "servers", "new" do %>
+          <a href="/servers/new">
+            <i class="fa fa-plus"></i> Add servers
+          </a>
+        <% end %>
+
+        <%= li_active "settings" do %>
+          <a href="/settings">
+            <i class="fa fa-cog"></i> Settings
+          </a>
+        <% end %>
+
+        <% if current_user.is_admin? %>
+          <%= li_active "admin" do %>
+            <a href="/admin">
+              <i class="fa fa-book"></i> Admin
+            </a>
+          <% end %>
+        <% end %>
+
+
+        <% if true_user != current_user %>
+          <%= li_active "" do %>
+            <%= link_to "<i class='fa fa-ban' ></i> STAHP".html_safe, stop_impersonating_users_path, :method => :post %>
+          <% end %>
+        <% end %> 
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="" class="feedback">
+            <i class="fa fa-bullhorn"></i> Feedback
+          </a>
+        </li>
+
+        <li>
+          <%= link_to '<i class="fa fa-sign-out"></i> Logout'.html_safe, logout_path, :method => :post %>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

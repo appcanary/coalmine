@@ -1,29 +1,23 @@
-<section>
-  <div class="col-sm-12">
-    <h4>Subscription</h4>
-  </div>
+<div class="col-sm-6">
+  <h4>Subscription:</h4>
   <% if !@user.has_billing? %>
     <%= render :partial => "settings/credit_card_form" %>
   <% else %>
-    <div class="col-sm-4">
-      <%= render :partial => "settings/subscription_form" %>
-    </div>
-    <div class="col-sm-4">
-      <h5>Credit card on file:</h5>
+    <%= render :partial => "settings/subscription_form" %>
+    <h5>Credit card on file:</h5>
 
-      <% @user.payment_info.each do |card| %>
-        <dl>
+    <% @user.payment_info.each do |card| %>
+      <dl>
 
-          <dt>Last four digits:</dt>
-          <dd><%= card.last4 %></dd>
+        <dt>Last four digits:</dt>
+        <dd><%= card.last4 %></dd>
 
-          <dt>Expiry:</dt>
-          <dd><%= card.exp_month %> / <%= card.exp_year %></dd>
+        <dt>Expiry:</dt>
+        <dd><%= card.exp_month %> / <%= card.exp_year %></dd>
 
 
-        </dl>
+      </dl>
 
-      <% end %>
-    </div>
+    <% end %>
   <% end %>
-</section>
+</div>

@@ -19,22 +19,38 @@
   <body>
     
     <% if current_user && !@hide_sidebar %>
-      <div>
-        <div class="navigation">
-          <%= render :partial => "layouts/navbar" %>
-        </div>
-        <div id="main" class="main-drawer container">
-          <% if flash_messages %>
-            <section style>
-              <div class="flashes">
-                <%= flash_messages %>
-              </div>
-            </section>
-          <% end %>
-          <%= yield %>
-        </div>
 
+      <div class="topbar"></div>
+      
+      <%= render :partial => "layouts/newnavbar" %>
+      <div id="main" class="container">
+        <% if flash_messages %>
+          <section style>
+            <div class="flashes">
+              <%= flash_messages %>
+            </div>
+          </section>
+        <% end %>
+        <%= yield %>
       </div>
+
+      <% if false %>
+        <div>
+          <div class="navigation">
+            <%= render :partial => "layouts/navbar" %>
+          </div>
+          <div id="main" class="main-drawer container">
+            <% if flash_messages %>
+              <section style>
+                <div class="flashes">
+                  <%= flash_messages %>
+                </div>
+              </section>
+            <% end %>
+            <%= yield %>
+          </div>
+        </div>
+      <% end %>
     <% else %>
       <div id="main" class="container">
         <% unless @skip_flash %>
