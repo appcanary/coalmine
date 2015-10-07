@@ -12,8 +12,12 @@
  *
  */
 
-$app-panel-width: 300px;
-$body-margin-top: 10px;
+$dark-yellow: #fadc58;
+$slightly-darker-yellow: #eac64b;
+
+$navbar-default-bg: $dark-yellow;
+$navbar-default-border: $slightly-darker-yellow;
+
 @import "compass";
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -24,8 +28,8 @@ $body-margin-top: 10px;
 @import 'common';
 
 @import "users";
-@import 'left-navbar';
-@import 'sidepanel';
+// @import 'left-navbar';
+// @import 'sidepanel';
 // @import 'events';
 @import 'servers';
 @import 'apps';
@@ -52,21 +56,10 @@ a {
   }
 }
 
-.main-drawer {
-  position: fixed;
-  background-color: #fff;
-  padding-left: 38px;
-  padding-right: 38px;
-  // .container {
-  //   padding-bottom: 20px;
-  // }
 
+#main {
   .heading {
     @extend .col-sm-12;
-    margin-top: -$body-margin-top;
-    // width: 90%;
-    // min-height: 48px;
-    // padding-right: 1em;
     h3 {
       font-weight: normal;
       line-height: 1.2em;
@@ -89,11 +82,17 @@ a {
       padding-left: 30px;
     }
   }
+}
 
-  @media (min-width: $grid-float-breakpoint) {
-    position: absolute;
-    left: $left-navbar-width;
-    margin-top: $body-margin-top;
+.navbar {
+  .navbar-brand {
+    padding-top: 10px;
+    img {
+      margin-left: auto;
+      margin-right: auto;
+
+      width: 40px;
+    }
   }
 }
 
@@ -148,8 +147,8 @@ section {
 .topbar {
   position: fixed;
   height: 8px;
-  background-color: #fadc58;
-  border-bottom: 1px solid  darken( #fadc58, 20%);
+  background-color: $dark-yellow;
+  border-bottom: 1px solid  darken( $dark-yellow, 20%);
   top: 0;
   left: 0;
   width: 100%;
@@ -161,4 +160,65 @@ section {
 #screenshot .modal-dialog {
   @extend .modal-dialog;
   width: 750px;
+}
+
+.navbar {
+  font-size: 16px;
+}
+
+// used to replicate the navigational side bar 
+// see in bs3's docs page
+
+.bs-docs-sidebar {
+    padding-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* all links */
+.bs-docs-sidebar .nav>li>a {
+    color: #999;
+    border-left: 2px solid transparent;
+    padding: 4px 20px;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+/* nested links */
+.bs-docs-sidebar .nav .nav>li>a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+    font-size: 12px;
+}
+
+/* active & hover links */
+.bs-docs-sidebar .nav>.active>a, 
+.bs-docs-sidebar .nav>li>a:hover, 
+.bs-docs-sidebar .nav>li>a:focus {
+    color: #563d7c;                 
+    text-decoration: none;          
+    background-color: transparent;  
+    border-left-color: #563d7c; 
+}
+/* all active links */
+.bs-docs-sidebar .nav>.active>a, 
+.bs-docs-sidebar .nav>.active:hover>a,
+.bs-docs-sidebar .nav>.active:focus>a {
+    font-weight: 700;
+}
+/* nested active links */
+.bs-docs-sidebar .nav .nav>.active>a, 
+.bs-docs-sidebar .nav .nav>.active:hover>a,
+.bs-docs-sidebar .nav .nav>.active:focus>a {
+    font-weight: 500;
+}
+
+/* hide inactive nested list */
+.bs-docs-sidebar .nav ul.nav {
+    display: none;           
+}
+/* show active nested list */
+.bs-docs-sidebar .nav>.active>ul.nav {
+    display: block;           
 }

@@ -78,4 +78,20 @@ module ApplicationHelper
       "No patches exist right now"
     end
   end
+
+  def li_active(kontroller, aktion = nil) 
+    same_action = true
+    klass = ""
+    if aktion
+      same_action = aktion == action_name
+    end
+
+    if kontroller == controller_name && same_action
+      klass = "active"
+    end
+
+    content_tag("li", :class => klass) do
+      yield
+    end
+  end
 end
