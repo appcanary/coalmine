@@ -1,6 +1,55 @@
+// old vertical navbar. deprecated.
 $left-navbar-inner-width: 60px;
 $left-navbar-width: $left-navbar-inner-width + 4;
+$body-margin-top: 10px;
+
 @import "bootstrap/fixed-side";
+.main-drawer {
+  position: fixed;
+  background-color: #fff;
+  padding-left: 38px;
+  padding-right: 38px;
+  // .container {
+  //   padding-bottom: 20px;
+  // }
+
+  .heading {
+    @extend .col-sm-12;
+    margin-top: -$body-margin-top;
+    // width: 90%;
+    // min-height: 48px;
+    // padding-right: 1em;
+    h3 {
+      font-weight: normal;
+      line-height: 1.2em;
+      color: #aaa;
+    }
+    .name {
+      color: #555;
+      font-weight: bold;
+    }
+    span:not(.name) {
+      text-transform: lowercase;
+    }
+
+    .last_updated a {
+      text-decoration: none;
+    }
+
+
+    @media (max-width: $grid-float-breakpoint) {
+      padding-left: 30px;
+    }
+  }
+
+  @media (min-width: $grid-float-breakpoint) {
+    position: absolute;
+    left: $left-navbar-width;
+    margin-top: $body-margin-top;
+  }
+}
+
+
 .navbar-left-side {
   @extend .navbar;
   @extend .navbar-fixed-side;
