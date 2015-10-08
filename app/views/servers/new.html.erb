@@ -52,6 +52,25 @@
           <div class="onboard-title">
             <h3>5 minute install:</h3>
             <br/>
+            <h4>Using chef/puppet</h4>
+            <p>We've published libraries for both chef and puppet. 
+              <ul>
+                <li><strong>Chef</strong>: You can find our cookbook <a href="https://supermarket.chef.io/cookbooks/appcanary" target="_blank">on the supermarket</a>.</li>
+                <li><strong>Puppet</strong>: You can find our module <a href="https://forge.puppetlabs.com/appcanary/appcanary" target="_blank">on the forge</a>.</li>
+              </ul>
+
+              Each corresponding page will have instructions on how to add it to your own deployment. 
+              <br/>
+              <br/>
+              In both cases you will want the following api key:
+              <kbd>
+                <%= @agent_token %>
+              </kbd>
+            </p>
+
+            <br/>
+            <h4>Manual installation</h4>
+
             <ul class="nav nav-tabs">
               <li role="presentation" class="active"><a href="#deb" data-toggle="tab"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu and <%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</a></li>
               <li role="presentation"><a href="#rpm" data-toggle="tab"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat, <%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS and Amazon</a></li>
