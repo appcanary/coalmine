@@ -1,50 +1,92 @@
 <section id="onboarding" style="padding-top: 10px;">
-  <div class="col-sm-3">
+  <!-- <div class="col&#45;sm&#45;3"> -->
 
-    <div style="width: 200px; margin-left: auto; margin-right: auto;">
-      <%= image_tag "canary-egg.medium.png", :style => "width: 200px" %>
-    </div>
+    <!-- <div style="width: 200px; margin&#45;left: auto; margin&#45;right: auto;"> -->
+  <!--     <%= image_tag "canary&#45;egg.medium.png", :style => "width: 200px" %> -->
+  <!--   </div> -->
 
-    <h3>Welcome!</h3>
-    <h4>Problems? Feedback?</h4>
-    <p>Hit up <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>, or click the button below.</p>
-    <p>We <b>really</b> want to hear from you.</p>
-    <%= eui_button "Hey, I got opinions", href: "", :class => "eui-button-medium-primary feedback" %>
+  <!--   <h3>Welcome!</h3> -->
+  <!--   <h4>Problems? Feedback?</h4> -->
+  <!--   <p>Hit up <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>, or click the button below.</p> -->
+  <!--   <p>We <b>really</b> want to hear from you.</p> -->
+  <!--   <%= eui_button "Hey, I got opinions", href: "", :class => "eui&#45;button&#45;medium&#45;primary feedback" %> -->
+
+  <!-- </div> -->
 
 
-  </div>
-  <div class="col-sm-6">
-    <section>
-      <div class="onboard-box" style="margin-bottom: 10px">
-        <div class="onboard-wrapper">
-          <section>
-            <div class="onboard-title">
-              <h3>What you get:</h3>
-            </div>
-          </section>
-          <section>
-            
-
-             <p>
-              <div style="width: 300px; margin-left: auto; margin-right: auto; ">
-                <a href="#screenshot" data-toggle="modal" data-target="#screenshot"><%= image_tag "screenshot-vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a>
-              </div>
-            </p>
-
-             <div class="onboard-desc">
-             <p>
-               We track <strong><%= number_with_delimiter(@vulnerabilities_count) %></strong> vulnerabilities across <strong><%= number_with_delimiter(@artifacts_count) %></strong> packages so you don't have to. 
-             </p>
-            <p>Currently we can tell you about vulnerable
-              <span>
-                <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby </span> and/or
-              <span>
-                <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> packages (we're adding more real soon) and you can install it on most Linuxes.
-            </p> 
-          </div>
-        </section>
+<div class="col-sm-3">
+  <div class=" sidemenu">
+    <div class="sidewrapper">
+      <div style="margin-top: 20px;">
+        <%= image_tag "canary-egg.medium.png", :style => "width: 150px" %>
       </div>
+
+      <ul class="nav nav-pills nav-stacked">
+        <li><h2>Welcome!</h2></li>
+        <li><a href="" >What do I get?</a></li>
+        <li><a href="" >How does it work?</a></li>
+        <li><h5>Getting Started</h5></li>
+        <li><a>Using chef</a></li>
+        <li><a>Using puppet</a></li>
+        <li><a>Manual install</a></li>
+      </ul>
     </div>
+  </div>
+</div>
+<div class="col-sm-6">
+
+    <h2>What do I get?</h2>
+    <ul>
+      <li>We track <strong><%= number_with_delimiter(@vulnerabilities_count) %></strong> vulnerabilities across <strong><%= number_with_delimiter(@artifacts_count) %></strong> packages so you don't have to. </li>
+      <li>Whenever a vulnerability that affects your servers comes out, you receive an email.</li>
+      <li>We tell you how to patch your servers and your apps and stay safe.</li>
+    </ul>
+    <p>Here is a screenshot:</p>
+
+    <div style="width: 300px; margin-left: auto; margin-right: auto; margin-bottom: 20px;">
+      <a href="#screenshot" data-toggle="modal" data-target="#screenshot"><%= image_tag "screenshot-vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a>
+    </div>
+
+    <table class="table">
+      <thead>
+        <th>What platforms get notifications?</th>
+        <th>Where can I install it?</th>
+      </thead>
+      <tr>
+        <td><span class="platform-logo">
+            <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby</span>,
+          <span class="platform-logo">
+            <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> <span class="platform-logo">(more soon, stay tuned!)</span>
+        </td>
+        <td>
+
+          Most versions of <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>, <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>, <span class="platform-logo"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat</span>, <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS</span>, Amazon and Mint Linux.</a>
+        </td>
+      </tr>
+    </table>
+
+    <h2>How does it work?</h2>
+    <p>We monitor the dependencies your application depends on. Right now this means you install our <b>tiny</b> agent. It's written in golang and it's <b><a href="https://github.com/appcanary/agent" target="_blank">entirely open source</a></b>.
+    </p>
+    <p>You tell us which files list your server's dependencies, and we keep track of them. Whenever you make a deploy - or new packages are installed - we find out. 
+
+      <h2>Getting started</h2>
+      <h4>
+      <ul class="install-nav">
+        <li>
+          Using chef
+        </li>
+         <li>
+          Using puppet
+        </li>
+         <li>
+          Manual installation
+        </li>
+      </ul>
+      </h4>
+        
+    <h3>Install manually:</h3>
+    <section>
 
     <div class="onboard-box">
       <div class="onboard-wrapper">

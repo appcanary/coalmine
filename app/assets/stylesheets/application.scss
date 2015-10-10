@@ -34,6 +34,7 @@ $navbar-default-border: $slightly-darker-yellow;
 @import 'servers';
 @import 'apps';
 @import 'vulns';
+@import 'onboard';
 
 $link-color: #3798A5;
 
@@ -153,13 +154,6 @@ section {
   left: 0;
   width: 100%;
   z-index: 1000;
-}
-
-
-// onboarding deal with later
-#screenshot .modal-dialog {
-  @extend .modal-dialog;
-  width: 750px;
 }
 
 .navbar {

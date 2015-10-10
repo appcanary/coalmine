@@ -1,0 +1,30 @@
+#onboarding {
+  span.platform-logo {
+    display: inline-block;
+  }
+
+  // onboarding deal with later
+  #screenshot .modal-dialog {
+    @extend .modal-dialog;
+    width: 750px;
+  }
+
+  ul.install-nav {
+    li {
+      margin-bottom: 10px;
+    }
+  }
+
+  .sidemenu {
+    @media screen and (max-width: 736px) {
+      display: none;
+    }   
+
+
+    position: absolute;
+    .sidewrapper {
+      position: fixed;
+      top: 60px;
+    }
+  }
+}
