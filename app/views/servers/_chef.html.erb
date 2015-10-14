@@ -1,0 +1,88 @@
+<section>
+  <div class="onboard-box">
+    <div class="onboard-wrapper">
+      <section style="border: none">
+        <div class="onboard-title">
+
+          <h3>
+            <span class="platform-logo"><%= image_tag "icon-chef.png", :style => "width: 20px" %> Using chef</span>
+          </h3>
+          <br/>
+
+          <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#berkshelf" data-toggle="tab">Berkshelf</a></li>
+            <li role="presentation"><a href="#librarian" data-toggle="tab">Librarian</a></li>
+            <li role="presentation"><a href="#knife" data-toggle="tab">Knife</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <div class="onboard-desc">
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="berkshelf">
+                  <pre>cookbook 'appcanary', '~&gt; 0.2.0'</pre>
+          </div>
+
+          <div role="tabpanel" class="tab-pane" id="librarian">
+                  <pre>cookbook 'appcanary', '~&gt; 0.2.0'</pre>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="knife">
+          <pre>knife cookbook site install appcanary
+knife cookbook site download appcanary</pre>
+      </div>
+    </div>
+    <br/>
+    <h4>Attributes</h4>
+    <table class="table">
+      <thead>
+        <th>Key</th>
+        <th>Type</th>
+        <th>Desc</th>
+      </thead>
+      <tr>
+        <td><code>['appcanary']['agent']['api_key']</code></td> 
+        <td>String</td>
+        <td>Your API key</td>
+      </tr>
+      <tr>
+        <td><code>['appcanary']['agent']['paths']</code></td>
+        <td>Array</td>
+        <td>Your Gemfile.locks</td>
+      </tr>
+    </table>
+    <p>Your api key is:</p>
+<pre><%= @agent_token %></pre>
+
+    <br>
+    <p>Your paths should look like:</p>
+<pre>/path/to/a/Gemfile.lock
+/path/to/a/different/Gemfile.lock</pre>
+    <br>
+    <h4>Usage</h4>
+    <p>Include appcanary in your node's run_list:</p>
+<pre>
+{
+  "run_list": [
+    "recipe[appcanary::default]"
+  ]
+}</pre>
+
+    <br>
+    <p>Bam! You should be good. For slightly more information, <a href="https://supermarket.chef.io/cookbooks/appcanary">visit the supermarket page</a>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="action-bar">
+    <div class="pull-right">
+      <%= eui_button "This didn't work.", href: "", :class => "eui-button-medium-primary feedback-else" %>
+      <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
+    </div>
+  </div>
+</section>
+
+      </div>
+    </div>
+  </section>

@@ -160,6 +160,13 @@ section {
   font-size: 16px;
 }
 
+.anchor-offset {
+  display: block; 
+  position: relative; 
+  top: -20px; 
+  visibility: hidden;
+}
+
 // used to replicate the navigational side bar 
 // see in bs3's docs page
 
