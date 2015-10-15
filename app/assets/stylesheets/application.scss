@@ -34,6 +34,7 @@ $navbar-default-border: $slightly-darker-yellow;
 @import 'servers';
 @import 'apps';
 @import 'vulns';
+@import 'onboard';
 
 $link-color: #3798A5;
 
@@ -155,15 +156,15 @@ section {
   z-index: 1000;
 }
 
-
-// onboarding deal with later
-#screenshot .modal-dialog {
-  @extend .modal-dialog;
-  width: 750px;
-}
-
 .navbar {
   font-size: 16px;
+}
+
+.anchor-offset {
+  display: block; 
+  position: relative; 
+  top: -20px; 
+  visibility: hidden;
 }
 
 // used to replicate the navigational side bar 
