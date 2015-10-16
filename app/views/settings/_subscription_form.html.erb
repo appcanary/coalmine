@@ -1,4 +1,4 @@
-<%= form_for @user, url: billing_path, :method => :put, html: { id: "payment-form", class: 'basic' } do |f| %>
+<%= form_for @user, url: billing_path, :method => :put, html: { id: "payment-form" } do |f| %>
   <% if @user.errors.any? %>
     <div class="error_explanation" role="alert">
       <h4>Oops. We encountered an error:</h4>

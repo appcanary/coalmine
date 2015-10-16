@@ -4,12 +4,23 @@
   }
   p.upgrade_to {
     margin-bottom: 0px;
+    code {
+      color: #288A24;
+      background-color: #DDF9DC;
+    }
   }
   .remaining_versions {
     font-size: 12px;
     code {
       color: black;
       background-color: inherit;
+    }
+  }
+
+  .info {
+    color: #888;
+    .data {
+      color: #333;
     }
   }
 }
