@@ -1,26 +1,33 @@
-<section>
-  <div class="heading">
-    <h3>Settings</h3>
-  </div>
-</section>
+<section id="onboarding" style="padding-top: 10px;">
+  <div class="col-sm-3">
+    <div class=" sidemenu">
+      <div class="sidewrapper">
+        <div style="margin-top: 20px;">
+          <%= image_tag "canary-letter.medium.png", :style => "width: 150px" %>
+        </div>
 
-<section>
 
-  <div class="col-sm-6">
-
-    <section>
-      <div class="user_api">
-        <h4>Your API token is:</h4>
-        <code>
-          <%= @user.agent_token %></code>
-        <br/>
-        <br/>
+        <ul class="nav nav-pills nav-stacked">
+          <li><h2>Settings</h2></li>
+          <li><a href="#account">Account</a></li>
+          <li><a href="#subscription">Subscription</a></li>
+        </ul>
       </div>
-    </section>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <a name="account" class="anchor-offset"></a>
+    <h2>Account</h2>
+    <div class="user_api">
+      <h4>API token</h4>
+      <code>
+        <%= @user.agent_token %></code>
+      <br/>
+      <br/>
+    </div>
 
     <section>
       <div class="col-sm-6">
-        <h4>Account:</h4>
 
         <%= form_for @user, url: settings_path do |f| %>
 
@@ -48,6 +55,7 @@
       </div>
     </section>
     <section>
+      <a name="subscription" class="anchor-offset"></a>
       <%= render :partial => "settings/subscription" %>
     </section>
   </div>
