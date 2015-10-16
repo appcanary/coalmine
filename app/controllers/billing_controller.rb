@@ -7,6 +7,7 @@ class BillingController < ApplicationController
   def update
     @show_stripe = true
     @user = current_user
+    notice = "You've successfully changed your billing settings. Thanks!" 
 
     @user.subscription_plan = params[:user][:subscription_plan]
     if @user.valid? && @user.subscription_plan.present?
@@ -18,6 +19,7 @@ class BillingController < ApplicationController
           # about empty params
           @user.stripe_customer_id = customer.id
           track_event @user, "Added credit card"
+          notice = "Thanks for subscribing! You are awesome."
         end
       end
 
@@ -30,7 +32,7 @@ class BillingController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to dashboard_path, notice: "You've successfully changed your billing settings. Thanks!" }
+        format.html { redirect_to dashboard_path, notice: notice }
       else
         format.html { render :show }
       end

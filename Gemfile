@@ -4,8 +4,9 @@ ruby '2.2.0'
 
 gem 'rails', '4.2.0'
 
-# Use sqlite3 as the database for Active Record
 gem 'pg'
+gem 'redis'
+gem 'rollout'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -21,7 +22,6 @@ gem "bourbon"
 gem "neat"
 gem "htmlentities"
 gem 'haml', '~> 4.0.6'
-gem 'haml-coffee', '~> 0.1.0'
 
 # auth
 gem 'sorcery'
