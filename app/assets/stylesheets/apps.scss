@@ -1,47 +1,15 @@
-table.apps {
-  td section {
-    padding-top: 1em;
-    padding-bottom: 1em;
+.app {
+  ul.nav {
+    padding-top: 10px;
   }
-
-  .status, {
-    @extend .col-xs-1;
-    padding-top: 0.2em;
-    width: 2em;
-    font-size: 1.8em;
-    margin-left: 1em;
-    padding-right: 0px;
+  p.upgrade_to {
+    margin-bottom: 0px;
   }
-
-  .icon {
-    width: 1.2em;
-    display: inline;
-  }
-
-  .description {
-    @extend .col-xs-6;
-      padding-top: 8px;
-    .title {
-      font-size: 18px;
+  .remaining_versions {
+    font-size: 12px;
+    code {
+      color: black;
+      background-color: inherit;
     }
-    .last_updated a {
-      color: grey;
-      font-size: 14px;
-    }
-  }
-
-  .actions {
-    @extend .col-xs-4;
   }
 }
-
-// table.apps {
-//   .status {
-//     width: 1px;
-//     white-space: no-wrap;
-//   }
-// 
-//   td.link .info {
-//     display: inline;
-//   }
-// }

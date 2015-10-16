@@ -1,0 +1,95 @@
+<%= render :partial => "shared/heading" %>
+
+<div class="app">
+  <ul class="nav nav-tabs">
+    <li class="active" role="presentation">
+      <a href="#vuln"  data-toggle="tab">
+        <% if @vuln_artifacts.empty? %>
+          <span class="fa fa-check-circle okay"></span>
+        <% else %>
+          <span class="fa fa-exclamation-triangle warn"></span>
+          vulnerable packages
+        <% end %>
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#allartifacts" data-toggle="tab">
+        all packages
+      </a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="vuln" role="tabpanel" class="tab-pane active">
+      <table id="vulnerable_artifacts" class="artifacts vulnerable">
+
+        <% if @vuln_artifacts.empty? %>
+          <tr>
+            <td class="empty_message">No vulnerable packages found for this app!</td>
+          </tr>
+        <% else %>
+          <% @vuln_artifacts.each do |artifact| %>
+            <tr class="artifact">
+              <td class="info">
+                <div class="title data">
+                  <%= artifact.name %>
+                </div>
+                <div class="version">
+                  version
+                  <span class="data"><%= artifact.number %></span>
+                </div>
+                <div class="kind">
+                  kind:
+                  <span class="data"><%= artifact.kind %></span>
+                </div>
+              </td>
+              <td class="vulnerabilities">
+                <ul>
+                  <% artifact.vulnerability.each do |vuln| %>
+                    <li class="vulnerability">
+                      <p><%= link_to vuln.title, vuln_path(vuln) %></p>
+
+                      <% if vuln.patched_versions.present? %>
+                        <p class="upgrade_to"> Upgrade to <%= versions_in_english(vuln.patched_versions) %></p>
+                        <!-- <p class="upgrade_to"> Upgrade to <%#= versions_in_english(vuln.upgrade_to) %></p> -->
+
+                        <!-- <p class="remaining_versions">(Other patched versions include: <%#= versions_in_english(vuln.remaining_versions) %>)</p> -->
+                      <% else %>
+                        <p>No patches exist right now.</p>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+    </div>
+
+    <div id="allartifacts" role="tabpanel" class="tab-pane">
+      <table id="all_artifacts" class="artifacts all">
+        <% if @artifacts.empty? %>
+          <tr>
+            <td class="empty_message">
+              No packages found for this app!
+            </td>
+          </tr>
+        <% else %>
+          <tr>
+            <th>name</th>
+            <th>kind</th>
+            <th>version</th>
+          </tr>
+          <% @artifacts.each do |artifact| %>
+            <tr class="artifact">
+              <td class="name"><%= artifact.name %></td>
+              <td class="kind"><%= artifact.kind %></td>
+              <td class="version"><%= artifact.number %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

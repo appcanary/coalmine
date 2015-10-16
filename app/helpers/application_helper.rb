@@ -71,6 +71,11 @@ module ApplicationHelper
     end
   end
 
+  def versions_in_english(versions)
+    versions.map { |pv| "<code>#{pv}</code>" }.join(" or ").html_safe
+  end
+
+
   def upgrade_to(vuln)
     if vuln.patched_versions.present?
       versions = vuln.patched_versions.sort { |a, b| a.gsub(/\D/, '') <=> b.gsub(/\D/, '')}.map { |pv|  "<code>#{h pv}</code>" }.join("<br/>").html_safe
