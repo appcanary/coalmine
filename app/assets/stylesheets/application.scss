@@ -18,7 +18,6 @@ $slightly-darker-yellow: #eac64b;
 $navbar-default-bg: $dark-yellow;
 $navbar-default-border: $slightly-darker-yellow;
 
-@import "compass";
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import 'vendor/emberui.scss';
@@ -160,12 +159,22 @@ section {
   font-size: 16px;
 }
 
+// used for #url anchors to offset the top of the page
 .anchor-offset {
   display: block; 
   position: relative; 
   top: -20px; 
   visibility: hidden;
 }
+
+
+.fa.okay {
+  color: rgb(139, 181, 139);
+}
+.fa.warn {
+  color: #A60000;
+}
+
 
 // used to replicate the navigational side bar 
 // see in bs3's docs page

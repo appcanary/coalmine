@@ -1,112 +1,106 @@
 // get rid of this file
 
-form.simple_form {
-  .input {
-    padding: .3em;
-    $error-color: #F08080;
-    .error {
-      padding: .3em .5em .3em 0;
-      background-color: $error-color;
-      color: #fff;
-    }
-    &.field_with_errors {
-      input.string, input.password {
-        border: solid 5px $error-color;
-      }
-    }
-  }
-  label {
-    color: #aaa;
-  }
-  input.string, input.password {
-    padding: 0.3em .5em;
-  }
-  input.button {
-    $btn-bg: #ddd;
-    margin: 1em .3em;
-    padding: .5em 1em;
-    border-color: #fff #ccc #ccc #fff;
-    background-color: $btn-bg;
-    font-weight: bold;
-    color: #888;
-    &:hover {
-      background-color: adjust-lightness($btn-bg, 5);
-    }
-  }
-}
+// form.simple_form {
+//   .input {
+//     padding: .3em;
+//     $error-color: #F08080;
+//     .error {
+//       padding: .3em .5em .3em 0;
+//       background-color: $error-color;
+//       color: #fff;
+//     }
+//     &.field_with_errors {
+//       input.string, input.password {
+//         border: solid 5px $error-color;
+//       }
+//     }
+//   }
+//   label {
+//     color: #aaa;
+//   }
+//   input.string, input.password {
+//     padding: 0.3em .5em;
+//   }
+//   input.button {
+//     $btn-bg: #ddd;
+//     margin: 1em .3em;
+//     padding: .5em 1em;
+//     border-color: #fff #ccc #ccc #fff;
+//     background-color: $btn-bg;
+//     font-weight: bold;
+//     color: #888;
+//     &:hover {
+//       background-color: adjust-lightness($btn-bg, 5);
+//     }
+//   }
+// }
 
-form.basic {
-  padding: 0;
-  
-  .field label {
-    color: #aaa;
-    font-size: 0.88em;
-    display: block;
-    top: 2.5em;
-    left: 1.2em;
-    position: relative;
-  }
+// form.basic {
+//   padding: 0;
+//   
+//   .field label {
+//     color: #aaa;
+//     font-size: 0.88em;
+//     display: block;
+//     top: 2.5em;
+//     left: 1.2em;
+//     position: relative;
+//   }
+// 
+//   input.text {
+//     // @include box-shadow(#ccc 0px 1px 3px inset);
+//     // @include border-radius(.3em);
+//     padding: 1.2em .8em .3em .65em;
+//     border: solid 1px #ccc;
+//     color: #555;
+//     font-size: 1.5em;
+//     // @include input-placeholder {
+//       color: #ddd;
+//     // }
+//   }
+// 
+//   input[type="submit"] {
+//     // @include text-shadow(1px 1px 1px 1px #555);
+//     border: solid 1px #777;
+//     $bg: #aaa;
+//     $bg-default: linear-gradient($bg, adjust-lightness($bg, -30));
+//     // @include border-radius(.3em);
+//     background-image: $bg-default;
+//     margin-top: 1.5em;
+//     padding: 1em;
+//     background-color: $bg;
+//     color: #fff;
+//   }
+// }
+// 
 
-  input.text {
-    @include box-shadow(#ccc 0px 1px 3px inset);
-    @include border-radius(.3em);
-    padding: 1.2em .8em .3em .65em;
-    border: solid 1px #ccc;
-    color: #555;
-    font-size: 1.5em;
-    @include input-placeholder {
-      color: #ddd;
-    }
-  }
+// .switch {
+//   $bg-color: #efefef;
+//   // @include border-radius(100px);
+//   display: block;
+//   padding: 0 0.3em 0 0.3em;
+//   border: solid 3px black;
+//   border-color: #fff #ccc #ccc #fff;
+//   background-color: $bg-color;
+//   text-decoration: none;
+//   font-size: 10px;
+//   color: #aaa;
+//   font-weight: bold;
+//   text-transform: uppercase;
+//   width: 80px;
+//   line-height: 25px;
+//   text-align: center;
+//   &.pressed {
+//     border-color: #ccc #fff #fff #ccc;
+//     background-color: #E6F0E6;
+//     color: green;
+//   }
+//   &:hover {
+//     background-color: adjust-lightness($bg-color, 11);
+//     color: #aaa;
+//   }
+// }
 
-  input[type="submit"] {
-    @include text-shadow(1px 1px 1px 1px #555);
-    border: solid 1px #777;
-    $bg: #aaa;
-    $bg-default: linear-gradient($bg, adjust-lightness($bg, -30));
-    @include border-radius(.3em);
-    background-image: $bg-default;
-    margin-top: 1.5em;
-    padding: 1em;
-    background-color: $bg;
-    color: #fff;
-  }
-}
-
-
-.switch {
-  $bg-color: #efefef;
-  @include border-radius(100px);
-  display: block;
-  padding: 0 0.3em 0 0.3em;
-  border: solid 3px black;
-  border-color: #fff #ccc #ccc #fff;
-  background-color: $bg-color;
-  text-decoration: none;
-  font-size: 10px;
-  color: #aaa;
-  font-weight: bold;
-  text-transform: uppercase;
-  width: 80px;
-  line-height: 25px;
-  text-align: center;
-  &.pressed {
-    border-color: #ccc #fff #fff #ccc;
-    background-color: #E6F0E6;
-    color: green;
-  }
-  &:hover {
-    background-color: adjust-lightness($bg-color, 11);
-    color: #aaa;
-  }
-}
-
-.fa.okay {
-  color: rgb(139, 181, 139);
-}
-.fa.warn {
-  color: #A60000;
-}
 
 .info {
   color: #888;
