@@ -1,7 +1,7 @@
 %td
   %section
     .status
-      - if server.apps.empty?
+      - if server.apps.empty? || server.gone_silent?
         %span.fa.fa-question-circle
       -elsif server.is_vulnerable
         %span.fa.fa-exclamation-triangle.warn
@@ -9,7 +9,6 @@
         %span.fa.fa-check-circle.okay
     .description
       %span.title
-        -# = link_to avatar(server), server_path(server), :class => "avatar"
         = link_to server.display_name, server_path(server)
       %div.last_updated.info
         = link_to "updated #{time_ago_in_words server.last_heartbeat_at} ago", server_path(server)

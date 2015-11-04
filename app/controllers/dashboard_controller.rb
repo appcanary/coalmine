@@ -3,6 +3,8 @@ class DashboardController < ApplicationController
     @servers = current_user.servers
     @onboarded = @servers.present?
 
+    @silent_servers, @active_servers = @servers.partition(&:gone_silent?)
+
     if @onboarded
       render :index
     else

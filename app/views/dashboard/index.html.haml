@@ -5,10 +5,22 @@
         %span My Servers
 -if @onboarded
   #dashboard
-    %table.table.servers
-      - @servers.each do |server|
-        %tr.server
-          = render :partial => "servers/list", :locals => { :server => server }
+    - if @active_servers.present?
+      %table.table.servers
+        - @active_servers.each do |server|
+          %tr.server
+            = render :partial => "servers/list", :locals => { :server => server }
+
+    - if @silent_servers.present?
+      %p
+        %strong Psst! We haven't heard from these servers in a while:
+      %table.table.servers
+        - @silent_servers.each do |server|
+          %tr.server
+            = render :partial => "servers/list", :locals => { :server => server }
+
+
+    
 -else
   %section
     .col-sm-8
@@ -19,5 +31,3 @@
         You should
         = link_to "add some", new_server_path
         and come back once you're done.
-
--# = eui_button "Feedback", href: "", :class => "eui-button-medium-primary feedback"
