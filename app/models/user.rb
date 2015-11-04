@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   authenticates_with_sorcery!
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
-  validates :email, uniqueness: true, presence: true
+  validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
   validate :correct_subscription_plan?
   validate :absence_of_stripe_errors
   attr_accessor :stripe_errors

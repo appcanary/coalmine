@@ -30,6 +30,18 @@
       <div class="col-sm-6">
 
         <%= form_for @user, url: settings_path do |f| %>
+          <% if @user.errors.any? %>
+            <div class="error_explanation" role="alert">
+              <h4>Oops. We encountered an error:</h4>
+
+              <ul>
+                <% @user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
 
           <%= f.label :email %>
           <div class="form-group">
