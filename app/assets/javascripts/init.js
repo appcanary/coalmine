@@ -47,7 +47,7 @@ function stripeResponseHandler(status, response) {
 $(document).ready(function() {
 
 
-  if($("#payment-form").length > 0) {
+  if($("#payment-form .card-wrapper").length > 0) {
     require('card');
     var card_form = new Card({form: '#payment-form', container: ".card-wrapper"})
   }
