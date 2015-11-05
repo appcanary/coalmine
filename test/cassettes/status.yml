@@ -26,10 +26,10 @@ http_interactions:
       Server:
       - http-kit
       Date:
-      - Mon, 22 Jun 2015 06:26:31 GMT
+      - Thu, 05 Nov 2015 22:52:12 GMT
     body:
       encoding: UTF-8
       string: '{"status":"ok"}'
     http_version: 
-  recorded_at: Mon, 22 Jun 2015 06:26:31 GMT
+  recorded_at: Thu, 05 Nov 2015 22:52:12 GMT
 recorded_with: VCR 2.9.3

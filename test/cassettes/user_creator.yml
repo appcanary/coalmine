@@ -5,7 +5,7 @@ http_interactions:
     uri: http://localhost:4000/api/v1/users
     body:
       encoding: UTF-8
-      string: '{"email":"alice@example.com","name":""}'
+      string: '{"email":"alice19@example.com","name":""}'
     headers:
       User-Agent:
       - Faraday v0.9.1
@@ -23,15 +23,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '194'
-      - '194'
+      - '240'
+      - '240'
       Server:
       - http-kit
       Date:
-      - Mon, 22 Jun 2015 17:41:23 GMT
+      - Thu, 05 Nov 2015 21:58:08 GMT
     body:
       encoding: UTF-8
-      string: '{"id":17592186896912,"name":"","email":"alice@example.com","web-token":"1b36jdksrka92eaoe5i12voigoq6kpi281t7n3eetfkpd7j8prkm","agent-token":"80k47d688svci1p2n2kghdh9rqamvouedcdl0h7angp3nq77if2"}'
+      string: '{"id":17592186921558,"name":"","email":"alice19@example.com","web-token":"781cuuemi6npse91d0qp7d8u9u1aqgncj9un5ljs21pp3d2escp","agent-token":"1aqohu49s35m9mbuvt0hcdmepfmnfbc15sjnb5khnrlcobf702nr","server-count":null,"active-server-count":0}'
     http_version: 
-  recorded_at: Mon, 22 Jun 2015 17:41:23 GMT
+  recorded_at: Thu, 05 Nov 2015 21:58:08 GMT
 recorded_with: VCR 2.9.3
