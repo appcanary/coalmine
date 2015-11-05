@@ -10,6 +10,6 @@ class AppsController < ApplicationController
     @server = current_user.server(params[:server_id])
     @app = @server.app(params[:id])
     @artifacts = @app.artifact_versions
-    @vuln_artifacts = @artifacts.select { |a| a.vulnerability.present? }
+    @vuln_artifacts = @app.vulnerable_artifact_versions
   end
 end
