@@ -7,7 +7,6 @@ class ServersController < ApplicationController
   end
 
   def onboarding
-    @hide_sidebar = true
     @agent_token = current_user.agent_token
 
     render :new
