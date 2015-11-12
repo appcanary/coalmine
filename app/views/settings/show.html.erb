@@ -1,6 +1,6 @@
 <section id="onboarding" style="padding-top: 10px;">
   <div class="col-sm-3">
-    <div class=" sidemenu">
+    <div class="sidemenu">
       <div class="sidewrapper">
         <div style="margin-top: 20px;">
           <%= image_tag "canary-letter.medium.png", :style => "width: 150px" %>
@@ -9,26 +9,31 @@
 
         <ul class="nav nav-pills nav-stacked">
           <li><h2>Settings</h2></li>
-          <li><a href="#account">Account</a></li>
+          <li><a href="#api-token">API Token</a></li>
+          <li><a href="#email">Email</a></li>
+          <li><a href="#password">Password</a></li>
           <li><a href="#subscription">Subscription</a></li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="col-sm-6">
-    <a name="account" class="anchor-offset"></a>
-    <h2>Account</h2>
-    <div class="user_api">
-      <h4>API token</h4>
-      <code>
-        <%= @user.agent_token %></code>
-      <br/>
-      <br/>
-    </div>
-
+  <div class="col-sm-9">
     <section>
-      <div class="col-sm-6">
 
+      <div class="col-sm-12">
+        <a name="api-token" class="anchor-offset"></a>
+        <div class="user_api">
+          <h4>API token</h4>
+          <code><%= @user.agent_token %></code>
+          <hr>
+        </div>
+      </div>
+    </section>
+    <section>
+
+      <div class="col-sm-12">
+
+        <a name="email" class="anchor-offset"></a>
         <%= form_for @user, url: settings_path do |f| %>
           <% if @user.errors.any? %>
             <div class="error_explanation" role="alert">
@@ -42,27 +47,46 @@
             </div>
           <% end %>
 
+          <section>
 
-          <%= f.label :email %>
-          <div class="form-group">
-            <%=f.text_field :email, :class => "form-control" %>
-          </div>
+            <div class="col-sm-6">
+              <%= f.label :email, "<h4>Email</h4>".html_safe %>
+              <div class="form-group">
+                <%=f.text_field :email, :class => "form-control" %>
+              </div>
 
-          <div class="form-group">
-            <%=f.submit "Change email", :class => "btn btn-default" %>
-          </div>
+              <div class="form-group">
+                <p>We will send notifications to this email address.</p> 
+                <%= f.check_box :newsletter_consent %>
+                <%= f.label :newsletter_consent, "Occasionally, we will also send you messages about product updates and interesting security news.", :style => "font-weight: normal; display: inline;" %>
+              </div>
 
-          <%= f.label :password %>
+              <div class="form-group">
+                <%=f.submit "Change email", :class => "btn btn-default" %>
+              </div>
+            </div>
+          </section>
 
-          <div class="form-group">
-            <%=f.password_field :password, :class => "form-control", :placeholder => "New password" %>
-          </div>
-          <div class="form-group">
-            <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "Confirm password" %>
-          </div>
-          <div class="form-group">
-            <%=f.submit "Change password", :class => "btn btn-default" %>
-          </div>
+          <hr>
+
+          <a name="password" class="anchor-offset"></a>
+          <section>
+
+            <div class="col-sm-6">
+
+              <%= f.label :password, "<h4>Password</h4>".html_safe %>
+
+              <div class="form-group">
+                <%=f.password_field :password, :class => "form-control", :placeholder => "New password" %>
+              </div>
+              <div class="form-group">
+                <%= f.password_field :password_confirmation, :class => "form-control", :placeholder => "Confirm password" %>
+              </div>
+              <div class="form-group">
+                <%=f.submit "Change password", :class => "btn btn-default" %>
+              </div>
+            </div>
+          </section>
         <% end %>
       </div>
     </section>

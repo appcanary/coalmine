@@ -28,6 +28,7 @@
 #  stripe_customer_id              :string
 #  name                            :string
 #  subscription_plan               :string
+#  newsletter_consent              :boolean          default("true"), not null
 #
 # Indexes
 #
