@@ -10,7 +10,7 @@ http_interactions:
       User-Agent:
       - Faraday v0.9.1
       Authorization:
-      - Token 142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9
+      - Token sn3sel6h81cdsjl7r1ea34f4pjpqbirv40sugt3mm9d9rc7it85
       Content-Type:
       - application/json
       Accept-Encoding:
@@ -25,15 +25,15 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '193'
-      - '193'
+      - '232'
+      - '232'
       Server:
       - http-kit
       Date:
-      - Mon, 13 Jul 2015 07:01:43 GMT
+      - Thu, 05 Nov 2015 22:52:09 GMT
     body:
       encoding: UTF-8
-      string: '{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}'
+      string: '{"id":17592186874777,"name":"","email":"new@example.com","web-token":"sn3sel6h81cdsjl7r1ea34f4pjpqbirv40sugt3mm9d9rc7it85","agent-token":"14ep54n4cmueve8uuaj21d433g423rbflsnqk8hdmledvb86cgd","server-count":4,"active-server-count":0}'
     http_version: 
-  recorded_at: Mon, 13 Jul 2015 07:01:43 GMT
+  recorded_at: Thu, 05 Nov 2015 22:52:09 GMT
 recorded_with: VCR 2.9.3

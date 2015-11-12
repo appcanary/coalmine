@@ -2,7 +2,7 @@ require "#{File.dirname(__FILE__)}/../test_helper"
 
 class CanaryClientTest < ActiveSupport::TestCase
   setup do
-    user_token = '142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9'
+    user_token = 'sn3sel6h81cdsjl7r1ea34f4pjpqbirv40sugt3mm9d9rc7it85'
     @client = Canary.new(user_token)
   end
 
@@ -17,16 +17,14 @@ class CanaryClientTest < ActiveSupport::TestCase
     assert obj.uuid.present?
 
     params.each do |key|
-      # here we're at least testing that
-      # the only empty? values being sent
-      # is nil.
       unless (val = obj.send(key)).nil?
         if obj.attr_enforce_collection_params.include?(key)
           assert val.is_a?(Array), key
-        else
-          assert val.present?, key
         end
       end
+
+      # simple schema test
+      assert obj.attributes.has_key?(key), key
     end
 
     
@@ -69,7 +67,7 @@ class CanaryClientTest < ActiveSupport::TestCase
 
     it "returns an indiv vuln properly wrapped" do
       VCR.use_cassette("a_vulnerability") do
-        vuln_uuid = "5571e720-949e-49f0-b37f-32784f171290"
+        vuln_uuid = "563ba056-f6f1-4327-b744-b00c92683403"
         vuln = @client.vulnerability(vuln_uuid)
 
         attr_smokescreen(vuln, Vulnerability)
@@ -84,7 +82,7 @@ class CanaryClientTest < ActiveSupport::TestCase
 
         assert servers.present?
         assert servers.size >= 1
-        
+
         server = servers.first
 
         attr_smokescreen(server, Server)
@@ -92,9 +90,8 @@ class CanaryClientTest < ActiveSupport::TestCase
     end
 
     it "returns an indiv server properly wrapped" do
-      server_uuid = "55837b51-2e9d-45ad-ab38-9caf2f2b78b5"
+      server_uuid = "5588b669-7b00-4259-a290-5bb579a86c90"
       VCR.use_cassette("a_server") do
-
 
         a_server = @client.server(server_uuid)
 
@@ -104,11 +101,11 @@ class CanaryClientTest < ActiveSupport::TestCase
 
 
     it "returns a server's apps properly wrapped" do
-      server_uuid = "55837b51-2e9d-45ad-ab38-9caf2f2b78b5"
+      server_uuid = "5588b669-7b00-4259-a290-5bb579a86c90"
 
       VCR.use_cassette("a_server_apps") do
         a_server = @client.server_apps(server_uuid)
-        
+
         # TODO wrap it up
 
         # attr_smokescreen(a_server, App)
@@ -120,7 +117,7 @@ class CanaryClientTest < ActiveSupport::TestCase
  
   describe 'add_user' do
     it 'should set the post body to the :data option' do
-      user = FactoryGirl.build :user, :email => "alice@example.com"
+      user = FactoryGirl.build :user, :email => "alicezhang@example.com"
       refute user.email.blank?
       VCR.use_cassette('create_user') do
         result_user = @client.add_user({name: 'bob', email: user.email})
