@@ -15,16 +15,19 @@
     }
   }
 
-  .sidemenu {
-    @media screen and (max-width: 736px) {
-      display: none;
-    }   
+  .fixed-side-menu {
+    @extend .col-sm-3;
+    .outer-wrapper {
+      position: absolute;
 
+      @media screen and (max-width: 736px) {
+        display: none;
+      }
 
-    position: absolute;
-    .sidewrapper {
-      position: fixed;
-      top: 60px;
+      .inner-wrapper {
+        position: fixed;
+        top: 60px;
+      }
     }
   }
 }
