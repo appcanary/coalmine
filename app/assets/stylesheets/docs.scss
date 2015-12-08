@@ -1,0 +1,23 @@
+#docs {
+  code {
+    background: none;
+    color: black;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  pre {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  dl {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    dt {
+      @extend code;
+    }
+    dd {
+      margin-bottom: 10px;
+    }
+  }
+}

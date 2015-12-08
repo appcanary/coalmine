@@ -14,20 +14,4 @@
       margin-bottom: 10px;
     }
   }
-
-  .fixed-side-menu {
-    @extend .col-sm-3;
-    .outer-wrapper {
-      position: absolute;
-
-      @media screen and (max-width: 736px) {
-        display: none;
-      }
-
-      .inner-wrapper {
-        position: fixed;
-        top: 60px;
-      }
-    }
-  }
 }
