@@ -25,6 +25,13 @@ $(document).ready(function() {
     });
 });
 
+var hljs = require('highlight.js')
+$(document).ready(function() {
+  $('#docs pre').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+});
+
 
 function stripeResponseHandler(status, response) {
   var $form = $('#payment-form');

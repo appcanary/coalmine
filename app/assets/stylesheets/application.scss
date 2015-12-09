@@ -17,6 +17,7 @@ $slightly-darker-yellow: #eac64b;
 
 $navbar-default-bg: $dark-yellow;
 $navbar-default-border: $slightly-darker-yellow;
+@import "bourbon";
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
@@ -25,13 +26,13 @@ $navbar-default-border: $slightly-darker-yellow;
 @import 'boxes';
 
 @import "users";
-// @import 'left-navbar';
-// @import 'sidepanel';
-// @import 'events';
 @import 'servers';
 @import 'apps';
 @import 'vulns';
 @import 'onboard';
+@import 'docs';
+// for hljs
+@import 'vendor/github-gist.css';
 
 $link-color: #3798A5;
 
@@ -181,3 +182,28 @@ section {
   color: #555;
   text-align: center;
 }
+
+// used for fixed-with-nav menus
+.fixed-side-menu {
+    @extend .col-sm-3;
+    .outer-wrapper {
+      position: absolute;
+
+      @media screen and (max-width: 736px) {
+        display: none;
+      }
+
+      .inner-wrapper {
+        position: fixed;
+        top: 60px;
+        // width: 18%;
+        // background-color: #ccc;
+        // @include border-top-radius(5px);
+        // @include border-right-radius(5px);
+        // @include border-bottom-radius(5px);
+        // @include border-left-radius(5px);
+
+      }
+    }
+  }
+

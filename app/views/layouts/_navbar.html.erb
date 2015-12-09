@@ -28,6 +28,12 @@
           </a>
         <% end %>
 
+        <%= li_active "docs" do %>
+          <a href="/docs">
+            <i class="fa fa-book"></i> Docs
+          </a>
+        <% end %>
+
         <%= li_active "settings" do %>
           <a href="/settings">
             <i class="fa fa-cog"></i> Settings
@@ -37,11 +43,10 @@
         <% if current_user.is_admin? %>
           <%= li_active "admin" do %>
             <a href="/admin">
-              <i class="fa fa-book"></i> Admin
+              <i class="fa fa-floppy-o"></i> Admin
             </a>
           <% end %>
         <% end %>
-
 
         <% if true_user != current_user %>
           <%= li_active "" do %>
