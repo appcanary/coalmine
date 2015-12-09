@@ -9,6 +9,16 @@
   pre {
     margin-top: 20px;
     margin-bottom: 20px;
+    border-radius: 0px;
+    border-left: none;
+    border-right: none;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    
+    // so help me god
+    // the Authorization: Token string is too long
+    // but I don't want to increase the grid width cos then it's too hard to read
+    width: 105%;
   }
   dl {
     margin-top: 20px;

@@ -31,6 +31,8 @@ $navbar-default-border: $slightly-darker-yellow;
 @import 'vulns';
 @import 'onboard';
 @import 'docs';
+// for hljs
+@import 'vendor/github-gist.css';
 
 $link-color: #3798A5;
 

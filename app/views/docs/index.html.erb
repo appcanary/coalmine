@@ -23,15 +23,14 @@
     <h1>Hello!</h1>
     <p>Welcome to Appcanary. The purpose of this documentation is to show you how to connect to our service. This API and accompanying documentation is in beta, pending feedback from users just like you.</p> 
     <p><strong>Please tell us what you think!</strong> Also, we will be careful and try to communicate this clearly when it happens, but given the feedback we receive we may ship breaking changes.</p>
-    <p>The API is loosely RESTful, and loosely modeled after JSON API.</p> 
 
     <hr>
     <a name="authentication" class="anchor-offset"></a>
     
     <h2>Authentication</h2>
     <p>All communication with our APIs require your API key to be included as an <code>Authentication</code> header. These can be set in <code>curl</code> like so:</p>
-    <pre>curl -H "Authentication: <%= @user.agent_token %>" \
-     https://appcanary.com/v2/status</pre>
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+     https://appcanary.com/api/v2/status</pre>
 
     <p>The status endpoint shown above will respond appropriately if your request is authenticated and your account is in good standing.</p>
     <hr>
@@ -43,8 +42,7 @@
 
     <p>Simply <code>POST</code> your file to <code>https://appcanary.com/api/v2/check/ruby</code> - like so:</p>
 
-    <pre>
-curl -H "Authentication: <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
      -X POST -F file=@./Gemfile.lock \
      https://appcanary.com/api/v2/check/ruby
 </pre>
@@ -66,7 +64,7 @@ curl -H "Authentication: <%= @user.agent_token %>" \
     <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data.</p>
     <p>All successful responses will be wrapped in a <code>"data"</code> container object. This container object <strong>shall always</strong> contain an array, whether it's empty or not.</p>
     <p>For example, if your dependency file does not have any known vulnerabilities, the response body will look like this:</p>
-    <pre>
+    <pre class="json">
 {
   "data": []
 }
@@ -82,7 +80,7 @@ curl -H "Authentication: <%= @user.agent_token %>" \
     </dl>
 
     <p>However, if your app does have vulnerable dependencies, then the container object will consist of a series of <code>artifact-version</code> objects, and look like the following example response:</p>
-        <pre>
+        <pre class="json">
 {
   "data": [
     {
@@ -176,7 +174,7 @@ curl -H "Authentication: <%= @user.agent_token %>" \
     <h2>Errors</h2>
     <p>Occasionally, we won't be able to process your request. We'll try to give you meaningful hints. All responses shall have a 400 or 500 series status - most commonly one of: <code>400 Bad Request</code>, <code>422 Unprocessable Entity</code> or <code>500 Internal Server Error</code>.</p>
     <p>A sample error request looks like the following:</p>
-    <pre>
+    <pre class="json">
 {
   "errors": [
     {
