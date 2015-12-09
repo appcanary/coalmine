@@ -28,4 +28,12 @@ $(document).ready(function() {
     }
   });
 
+  
+  if ($('form#new_user').length > 0) {
+    $("#forgot-password").on("click", function(e) {
+      $("form#new_user #password_reset").val("true");
+      $("form#new_user").submit();
+    })
+  }
+
 });

@@ -7,8 +7,8 @@
 
 
 <div class="action">
-  <div class="action_unit action_login">
-    <%= link_to "Log in", login_path, :class => "button" %>
+  <div class="action_unit action_sign-up">
+    <%= link_to "Sign Up", sign_up_path, :class => "button" %>
   </div>
 </div>
 
@@ -16,7 +16,12 @@
   <div class="sign-up-page">
     <div class="sign-up">
       <div class="riskfree" style="text-align: center;">
-        <h1 style="padding-bottom: 20px">Nice to see you again.</h1>
+
+        <% if flash.present? %>
+          <h1 style="padding-bottom: 20px"><%= flash.to_hash.values.join(" ") %></h1>
+        <% else %>
+          <h1 style="padding-bottom: 20px">Nice to see you again.</h1>
+        <% end %>
         <%= image_tag "canary-worm.medium.png", :style => "width: 65%" %>
       </div>
       <%= render :partial => "form" %>

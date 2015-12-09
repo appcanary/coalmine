@@ -54,6 +54,7 @@ Rails.application.routes.draw do
   resources :users, :only => [:new, :create, :destroy] do
     post "stop_impersonating", on: :collection
   end
+  resources :password_reset, :only => [:show, :update]
   
   resource :settings, :only => [:show, :update]
 

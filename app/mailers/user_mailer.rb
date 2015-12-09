@@ -1,24 +1,10 @@
 class UserMailer < ApplicationMailer
+  default from: "Appcanary Support <support@appcanary.com>"
+  layout 'mailer'
 
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.user_mailer.activation_needed_email.subject
-  #
-  def activation_needed_email
-    @greeting = "Hi"
-
-    mail to: "to@example.org"
-  end
-
-  # Subject can be set in your I18n file at config/locales/en.yml
-  # with the following lookup:
-  #
-  #   en.user_mailer.activation_success_email.subject
-  #
-  def activation_success_email
-    @greeting = "Hi"
-
-    mail to: "to@example.org"
+  def reset_password_email(user)
+    @user = user
+    @link = password_reset_url(@user.reset_password_token)
+    mail(to: user.email, :subject => "Appcanary Password Reset")
   end
 end

@@ -3,6 +3,7 @@ require 'test_helper'
 class UserSessionsControllerTest < ActionController::TestCase
   describe "login page" do
     let(:user) { FactoryGirl.create(:user) }
+    
     it "should display the login page" do
       get :new
       assert_template("new")
@@ -52,6 +53,44 @@ class UserSessionsControllerTest < ActionController::TestCase
       assert_redirected_to root_path
       assert_nil assigns(:current_user)
     end
+  end
+
+  describe "pwd resets" do
+    let(:user) { FactoryGirl.create(:user) }
+    before do
+      # silence mailer issues
+      @mock_mailer = mock("mailer")
+      @mock_mailer.stubs(:deliver).returns(true)
+      @mock_mailer 
+    end
+
+    it "should send pw resets" do
+      # check that emails get called
+      UserMailer.stubs(:reset_password_email).with(anything).returns(@mock_mailer).once
+
+      assert_nil user.reset_password_token
+      post :create, {:user => {:email => user.email }, :password_reset => "true"}
+      assert_redirected_to login_path
+
+      assert_nil user.reset_password_token
+      # refetch obj
+      user.reload
+      assert_not_nil user.reset_password_token
+
+      assert_equal flash[:notice], "We've sent a reset to your email!"
+
+      # OK. Let's whether we can trigger multiple emails
+      post :create, {:user => {:email => user.email }, :password_reset => "true"}
+      assert_equal flash[:notice], "Seems like we already sent a reset. Check your spam folder?"
+    end
+
+    it "should respond properly when email doesn't exist" do
+      UserMailer.stubs(:reset_password_email).with(anything).returns(@mock_mailer).never
+      post :create, {:user => {:email => "fakewrong@example.com" }, :password_reset => "true"}
+      assert_redirected_to login_path
+      assert_equal flash[:notice], "Sorry, couldn't find that email."
+    end
+
   end
 
 end
