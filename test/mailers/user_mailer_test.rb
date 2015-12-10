@@ -1,20 +1,11 @@
 require 'test_helper'
 
 class UserMailerTest < ActionMailer::TestCase
-  test "activation_needed_email" do
-    mail = UserMailer.activation_needed_email
-    assert_equal "Activation needed email", mail.subject
-    assert_equal ["to@example.org"], mail.to
-    assert_equal ["from@example.com"], mail.from
-    assert_match "Hi", mail.body.encoded
-  end
+  let(:user) { FactoryGirl.create(:user) }
+  test "reset password email" do
+    user.generate_reset_password_token!
+    mail = UserMailer.reset_password_email(user)
 
-  test "activation_success_email" do
-    mail = UserMailer.activation_success_email
-    assert_equal "Activation success email", mail.subject
-    assert_equal ["to@example.org"], mail.to
-    assert_equal ["from@example.com"], mail.from
-    assert_match "Hi", mail.body.encoded
+    assert(mail.body.encoded.match(Rails.application.routes.url_helpers.password_reset_path(:id => user.reset_password_token)), "the correct link is used")
   end
-
 end

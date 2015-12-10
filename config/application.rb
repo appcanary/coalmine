@@ -30,3 +30,6 @@ module CanaryWeb
     
   end
 end
+
+Rails.application.routes.default_url_options[:host] = "appcanary.com"
+Rails.application.routes.default_url_options[:protocol] = 'https'

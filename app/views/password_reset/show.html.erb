@@ -1,0 +1,49 @@
+<div class="top-left-brand">
+  <a href="https://appcanary.com">
+    <%= image_tag "appcanary-hero.png", :alt => "Appcanary" %>
+  </a>
+</div>
+
+
+<div class="action">
+  <div class="action_unit action_login">
+    <%= link_to "Log in", login_path, :class => "button" %>
+  </div>
+</div>
+
+<div class="hero-wrapper">
+  <div class="sign-up-page">
+    <div class="sign-up">
+       <div class="riskfree" style="text-align: center;">
+
+        <% if flash.present? %>
+          <h1 style="padding-bottom: 20px"><%= flash.to_hash.values.join(" ") %></h1>
+        <% else %>
+          <h1 style="padding-bottom: 20px">Choose a new password.</h1>
+        <% end %>
+        <%= image_tag "canary-nest.medium.png", :style => "width: 65%" %>
+      </div>
+
+      <div class="sign-up_form-group">
+
+        <%= form_for @user, :url => password_reset_path(@token), :class => "full-sign-up", :html => {:method => :put} do |f| %>
+          <% if @user.errors.present? %>
+            <h2>Sorry! <%= @user.errors.full_messages.join(". ")%></h2>
+          <% end %>
+
+          <div class="form-fields">
+            <%= f.label :email %>
+            <%= f.email_field :email, :disabled => true %>
+            <%= label_with_error(f, @user, :password) %>
+            <%= f.password_field :password %>
+            <%= label_with_error(f, @user, :password_confirmation) %>
+            <%= f.password_field :password_confirmation %>
+          </div>
+          <button type="submit">Reset Password</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render :partial => "shared/footer" %>

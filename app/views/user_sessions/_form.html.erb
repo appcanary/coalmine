@@ -9,8 +9,10 @@
 
       <%= label_with_error(f, @user, :password) %>
       <%= f.password_field :password, :placeholder => "A secret between us" %>
-
     </div>
+
+    <%= hidden_field_tag :password_reset %>
+    <a class="button" id="forgot-password">Forgot password</a>
     <button type="submit">Log in</button>
   <% end %>
 </div>

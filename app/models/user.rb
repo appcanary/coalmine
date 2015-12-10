@@ -150,4 +150,15 @@ class User < ActiveRecord::Base
       true
     end
   end
+
+  # when a password gets reset, the default sorcery 
+  # action doesn't reset reset_password_email_sent_at
+  # this is a problem because: if you reset, and change pw
+  # you can't re-reset your pw until the time period expires.
+  def clear_reset_password_token
+    config = sorcery_config
+    self.send(:"#{config.reset_password_token_attribute_name}=", nil)
+    self.send(:"#{config.reset_password_token_expires_at_attribute_name}=", nil) if config.reset_password_expiration_period
+    self.reset_password_email_sent_at = nil
+  end
 end

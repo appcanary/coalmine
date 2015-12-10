@@ -1,0 +1,7 @@
+development:
+  mandrill:
+    api_key: "5SJYsgnd9OBaUDIJaCR52g"
+
+test:
+  mandrill:
+    api_key: "lolnope"
