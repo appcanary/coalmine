@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209151358) do
+ActiveRecord::Schema.define(version: 20151217113403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,8 +64,10 @@ ActiveRecord::Schema.define(version: 20151209151358) do
     t.string   "stripe_customer_id"
     t.string   "name"
     t.string   "subscription_plan"
-    t.boolean  "newsletter_consent",              default: true,  null: false
+    t.boolean  "newsletter_email_consent",        default: true,  null: false
     t.boolean  "api_beta",                        default: false, null: false
+    t.boolean  "marketing_email_consent",         default: true,  null: false
+    t.boolean  "daily_email_consent",             default: false, null: false
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree

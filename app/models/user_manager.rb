@@ -52,11 +52,38 @@ class UserManager
       end
     end
 
+    begin
+      intercom_email_sync!(user)
+    rescue Exception => e
+      @user.errors.add(:base, "Something went wrong. Please try again")
+      return false
+    end
+
     @user.save
   end
 
   def self.update(user, params)
     self.new(user).update!(params)
+  end
+
+  def intercom_keys
+    ["newsletter_email_consent", "marketing_email_consent", "daily_email_consent"]
+  end
+
+  def intercom_email_sync!(user)
+    ic_keys = user.changed_attributes.slice(*intercom_keys).keys
+    if (ic_attr = user.attributes.slice(*ic_keys)).present?
+      subscribe = ic_attr.select { |k, v| v }
+      unsubscribe = ic_attr.reject { |k, v| v }
+
+      subscribe.each do |tag, value|
+        OurIntercom.tags.tag(name: tag, users: [{user_id: user.datomic_id}])
+      end
+
+      unsubscribe.each do |tag, val|
+        OurIntercom.tags.untag(name: tag, users: [{user_id: user.datomic_id}])
+      end
+    end
   end
 end
 

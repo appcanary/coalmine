@@ -66,6 +66,7 @@ gem 'faraday_middleware', '~> 0.9.1'
 gem 'ruby_identicon', '0.0.4'
 gem 'request_store', '~> 1.1.0'
 gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'
+gem 'intercom'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
