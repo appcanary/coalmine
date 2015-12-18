@@ -56,21 +56,15 @@
               </div>
 
               <div class="form-group">
-                <p>We will send security notifications to this email address. Opt out by deleting your monitored files in the dashboard.</p> 
-                <p>You may get emails reminding you to try out the service. Those can be unsubscribed by following the link in the message.</p> 
+                <p>We will send security notifications to this email address. Opt out by deleting your monitored servers in the dashboard.</p> 
                 <p>
                   <%= f.check_box :newsletter_email_consent %>
-                  <%= f.label :newsletter_email_consent, "Send me your monthly newsletter containing product updates and interesting security news.", :style => "font-weight: normal; display: inline;" %></p>
-                <p>
-                  <%= f.check_box :daily_email_consent %>
-                  <%= f.label :daily_email_consent, "Send me your very frequent development diary newsletter.", :style => "font-weight: normal; display: inline;" %>
+                  <%= f.label :newsletter_email_consent, "Send me your monthly newsletter containing product updates and interesting security news.", :style => "font-weight: normal; display: inline;" %>
                 </p>
-
-
               </div>
 
               <div class="form-group">
-                <%=f.submit "Change email", :class => "btn btn-default" %>
+                <%=f.submit "Update email settings", :class => "btn btn-default" %>
               </div>
             </div>
           </section>
