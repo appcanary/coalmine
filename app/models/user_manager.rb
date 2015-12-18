@@ -66,22 +66,27 @@ class UserManager
     self.new(user).update!(params)
   end
 
-  def intercom_keys
+  def intercom_attr
     ["newsletter_email_consent", "marketing_email_consent", "daily_email_consent"]
   end
 
   def intercom_email_sync!(user)
-    ic_keys = user.changed_attributes.slice(*intercom_keys).keys
-    if (ic_attr = user.attributes.slice(*ic_keys)).present?
-      subscribe = ic_attr.select { |k, v| v }
-      unsubscribe = ic_attr.reject { |k, v| v }
+    # slice out keys pertaining to intercom attr we care about
+    # if their values were updated
+    ic_keys = user.changed_attributes.slice(*intercom_attr).keys
 
-      subscribe.each do |tag, value|
-        OurIntercom.tags.tag(name: tag, users: [{user_id: user.datomic_id}])
-      end
+    if ic_keys.present?
 
-      unsubscribe.each do |tag, val|
-        OurIntercom.tags.untag(name: tag, users: [{user_id: user.datomic_id}])
+      # if ic attr were changed, fetch current value
+      ic_attr = user.attributes.slice(*ic_keys)
+
+      # once assigned in AR, they get cast into boolean, so just:
+      ic_attr.each_pair do |tag, subscribed| 
+        if subscribed
+          OurIntercom.tags.tag(name: tag, users: [{user_id: user.datomic_id}])
+        else
+          OurIntercom.tags.untag(name: tag, users: [{user_id: user.datomic_id}])
+        end
       end
     end
   end
