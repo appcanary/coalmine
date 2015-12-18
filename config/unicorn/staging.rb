@@ -14,7 +14,7 @@ timeout 30
 # Force the bundler gemfile environment variable to
 # reference the capistrano "current" symlink
 before_exec do |_|
-  ENV["BUNDLE_GEMFILE"] = File.join(root, 'Gemfile')
+  ENV["BUNDLE_GEMFILE"] = File.join(app_path, 'Gemfile')
 end
 
 before_fork do |server, worker|
