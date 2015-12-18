@@ -20,11 +20,10 @@ class UserManager
         @user.token = backend_user['web-token']
         return @user.save
       rescue Faraday::Error => e
-        # TODO: must register an error via sentry, etc
         Rails.logger.error "Failed to connect to Canary backend: \n" + e.to_s
-        # differentiate between exceptions later
-        @user.errors.add(:to_be_determined, "foobar")
-        # handle error
+        @user.errors.add(:base, "Hrm. Seems like our backend is down. Please try again.")
+
+        Raven.capture_exception(e)
         return false
       end
     end
@@ -56,6 +55,7 @@ class UserManager
       intercom_email_sync!(user)
     rescue Exception => e
       @user.errors.add(:base, "Something went wrong. Please try again")
+      Raven.capture_exception(e)
       return false
     end
 
