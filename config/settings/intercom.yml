@@ -1,0 +1,9 @@
+development:
+  intercom:
+    app_id: uotxlvil
+    api_key: 566addc7fa13255c85282c1d992e3200de6c3daf
+
+test:
+  intercom:
+    app_id: lol
+    api_key: nope
