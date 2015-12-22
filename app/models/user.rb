@@ -137,6 +137,11 @@ class User < ActiveRecord::Base
     end
   end
 
+
+  def delete_api_user!
+    canary.delete_user
+  end
+
   protected
   def canary
     @canary ||= Canary.new(self.token)
