@@ -71,11 +71,11 @@ class User < ActiveRecord::Base
     canary.server(id)
   end
 
-  def server_count
+  def servers_count
     api_info["server-count"]
   end
 
-  def active_server_count
+  def active_servers_count
     api_info["active-server-count"]
   end
 
@@ -103,10 +103,6 @@ class User < ActiveRecord::Base
     else 
       []
     end
-  end
-
-  def servers_count
-    self.servers.count
   end
 
   def discounted?
