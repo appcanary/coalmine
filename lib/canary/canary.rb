@@ -158,6 +158,10 @@ class Canary
     put("users/me", data: data, token: @user_token)
   end
 
+  def delete_user()
+    delete("users/me", token: @user_token)
+  end
+
   # Agents
 
   def add_agent_server(data)
