@@ -20,11 +20,15 @@ class BillingController < ApplicationController
           @user.stripe_customer_id = customer.id
           track_event @user, "Added credit card"
           notice = "Thanks for subscribing! You are awesome."
+          
+          Raven.capture_message("Subscription added by: #{@user.email}")
         end
       end
 
       if @user.subscription_plan == SubscriptionPlan::CANCEL
         track_event @user, "Canceled subscription"
+        Raven.capture_message("Subscription canceled by: #{@user.email}")
+        
         @user.stripe_customer_id = nil
         @user.subscription_plan = nil
       end
