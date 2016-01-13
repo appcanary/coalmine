@@ -3,7 +3,12 @@ class Admin::UsersController < AdminController
 
   def index
     @users = User.order("created_at DESC")
-    @api_users = Backend.all_users.group_by { |u| u["id"] }
+
+    # Turn the list of users into a hash
+    @api_users = {}
+    Backend.all_users.each do |u|
+      @api_users[u["id"]] = u
+    end
     @user_count = User.count
     @servers_count = Backend.servers_count
     @recent_heartbeats = Backend.recent_heartbeats
