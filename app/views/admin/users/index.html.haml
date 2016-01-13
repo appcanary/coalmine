@@ -50,9 +50,9 @@
             %td
               = user.created_at.strftime("%y/%m/%d %H:%M")
             %td
-              = user.servers_count
+              = @api_users[user.datomic_id]["server-count"]
             %td
-              = user.active_servers_count
+              = @api_users[user.datomic_id]["active-server-count"]
             %td
               = user.last_login_at.try(:strftime, "%y/%m/%d %H:%M")
             %td

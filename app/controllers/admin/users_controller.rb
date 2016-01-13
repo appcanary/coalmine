@@ -3,6 +3,7 @@ class Admin::UsersController < AdminController
 
   def index
     @users = User.order("created_at DESC")
+    @api_users = Backend.all_users.group_by { |u| u["id"] }
     @user_count = User.count
     @servers_count = Backend.servers_count
     @recent_heartbeats = Backend.recent_heartbeats

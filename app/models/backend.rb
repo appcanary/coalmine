@@ -20,6 +20,10 @@ class Backend < CanaryBase
     wrap(canary.stats_artifacts_count)["count"]
   end
 
+  def self.all_users
+    canary.all_users
+  end
+
 
   def self.wrap(obj)
     obj || {}

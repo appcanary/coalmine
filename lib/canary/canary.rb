@@ -77,6 +77,10 @@ class Canary
   def stats_artifacts_count
     get("stats/artifacts/count")
   end
+
+  def all_users
+    get("users")
+  end
   
   # Vulnerabilities
 
