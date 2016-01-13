@@ -66,7 +66,7 @@
     <p>For example, if your dependency file does not have any known vulnerabilities, the response body will look like this:</p>
     <pre class="json">
 {
-  "vulnerable": false
+  "vulnerable": false,
   "data": []
 }
 </pre>
@@ -83,7 +83,7 @@
     <p>However, if your app does have vulnerable dependencies, then the container object will consist of a series of <code>artifact-version</code> objects, and look like the following example response:</p>
         <pre class="json">
 {
-  "vulnerable": true
+  "vulnerable": true,
   "data": [
     {
       "type": "artifact-version",
