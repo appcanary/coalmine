@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151217113403) do
+ActiveRecord::Schema.define(version: 20160113220608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20151217113403) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                                           null: false
+    t.string   "email",                                                     null: false
     t.string   "crypted_password"
     t.string   "salt"
     t.datetime "created_at"
@@ -54,20 +54,21 @@ ActiveRecord::Schema.define(version: 20151217113403) do
     t.datetime "last_logout_at"
     t.datetime "last_activity_at"
     t.string   "last_login_from_ip_address"
-    t.integer  "failed_logins_count",             default: 0
+    t.integer  "failed_logins_count",                       default: 0
     t.datetime "lock_expires_at"
     t.string   "unlock_token"
     t.string   "token"
-    t.boolean  "onboarded",                       default: false
-    t.boolean  "is_admin",                        default: false, null: false
+    t.boolean  "onboarded",                                 default: false
+    t.boolean  "is_admin",                                  default: false, null: false
     t.string   "beta_signup_source"
     t.string   "stripe_customer_id"
     t.string   "name"
     t.string   "subscription_plan"
-    t.boolean  "newsletter_email_consent",        default: true,  null: false
-    t.boolean  "api_beta",                        default: false, null: false
-    t.boolean  "marketing_email_consent",         default: true,  null: false
-    t.boolean  "daily_email_consent",             default: false, null: false
+    t.boolean  "newsletter_email_consent",                  default: true,  null: false
+    t.boolean  "api_beta",                                  default: false, null: false
+    t.boolean  "marketing_email_consent",                   default: true,  null: false
+    t.boolean  "daily_email_consent",                       default: false, null: false
+    t.integer  "datomic_id",                      limit: 8
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree

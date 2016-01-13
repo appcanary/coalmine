@@ -32,6 +32,7 @@
 #  api_beta                        :boolean          default("false"), not null
 #  marketing_email_consent         :boolean          default("true"), not null
 #  daily_email_consent             :boolean          default("false"), not null
+#  datomic_id                      :integer
 #
 # Indexes
 #
@@ -60,7 +61,13 @@ class User < ActiveRecord::Base
   end
 
   def datomic_id
-    @datomic_id ||= canary.me["id"]
+    @datomic_id = read_attribute(:datomic_id)
+    if @datomic_id.nil?
+      # We get the id from the api and save it for next time
+      @datomic_id = canary.me["id"]
+      update_attribute(:datomic_id, @datomic_id)
+    end
+    @datomic_id
   end
 
   def active_servers
