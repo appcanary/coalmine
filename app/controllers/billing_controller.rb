@@ -9,24 +9,26 @@ class BillingController < ApplicationController
     @user = current_user
     notice = "You've successfully changed your billing settings. Thanks!" 
 
-    @user.subscription_plan = params[:user][:subscription_plan]
-    if @user.valid? && @user.subscription_plan.present?
-      # was a cc also submitted?
-      if stripe_token = stripe_params[:stripe_token]
-        customer = Billing.add_customer(stripe_token, @user)
-        if customer
-          # hack to get strong params to shut up
-          # about empty params
-          @user.stripe_customer_id = customer.id
-          track_event @user, "Added credit card"
-          notice = "Thanks for subscribing! You are awesome."
+    if params[:user]
+      @user.subscription_plan = params[:user][:subscription_plan]
+      if @user.valid? && @user.subscription_plan.present?
+        # was a cc also submitted?
+        if stripe_token = stripe_params[:stripe_token]
+          customer = Billing.add_customer(stripe_token, @user)
+          if customer
+            # hack to get strong params to shut up
+            # about empty params
+            @user.stripe_customer_id = customer.id
+            track_event @user, "Added credit card"
+            notice = "Thanks for subscribing! You are awesome."
+          end
         end
-      end
 
-      if @user.subscription_plan == SubscriptionPlan::CANCEL
-        track_event @user, "Canceled subscription"
-        @user.stripe_customer_id = nil
-        @user.subscription_plan = nil
+        if @user.subscription_plan == SubscriptionPlan::CANCEL
+          track_event @user, "Canceled subscription"
+          @user.stripe_customer_id = nil
+          @user.subscription_plan = nil
+        end
       end
     end
 

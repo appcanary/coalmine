@@ -82,7 +82,14 @@ class BillingControllerTest < ActionController::TestCase
         assert_template :show
 
       end
+    end
 
+    it "should not fail when given no params" do
+      begin
+        put :update
+      rescue NoMethodError
+        assert false
+      end
     end
 
 
