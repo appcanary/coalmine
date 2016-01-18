@@ -18,12 +18,16 @@ class UserManagerTest < ActiveSupport::TestCase
       assert @user.errors.present?
     end
 
-    it "should set a token" do
+    it "should set a token and an id" do
       @user = FactoryGirl.build(:user)
       Canary.stubs(:new).with(anything).returns(mock_client)
       assert UserManager.sign_up(@user)
+
+      @user.reload
+
       assert @user.errors.blank?
       assert_equal @user.token, "a token"
+      assert_equal @user.datomic_id, 123
       assert_equal @user.new_record?, false
     end
 
@@ -42,7 +46,7 @@ class UserManagerTest < ActiveSupport::TestCase
   def mock_client
     unless @client
       @client = mock
-      @client.expects(:add_user).with(anything).returns({'web-token' => 'a token'})
+      @client.expects(:add_user).with(anything).returns({'web-token' => 'a token', 'id' => 123})
     end
     @client
   end
