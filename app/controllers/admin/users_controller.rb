@@ -2,13 +2,8 @@ class Admin::UsersController < AdminController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
 
   def index
-    @users = User.order("created_at DESC")
+    @users = User.all_from_api("created_at DESC")
 
-    # Turn the list of users into a hash
-    @api_users = {}
-    Backend.all_users.each do |u|
-      @api_users[u["id"]] = u
-    end
     @user_count = User.count
     @servers_count = Backend.servers_count
     @recent_heartbeats = Backend.recent_heartbeats

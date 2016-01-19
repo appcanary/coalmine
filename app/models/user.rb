@@ -50,7 +50,19 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
   validate :correct_subscription_plan?
   validate :absence_of_stripe_errors
-  attr_accessor :stripe_errors
+  attr_accessor :stripe_errors, :servers_count, :active_servers_count
+
+  def self.all_from_api(order = "created_at DESC")
+    api_users = Backend.all_users.reduce({}) do |hsh, usr|
+      hsh.tap { |h| h.store(usr["id"], usr) }
+    end
+
+    all_users = self.order(order)
+    all_users.each do |u|
+      u.servers_count = api_users[u.datomic_id]["server-count"]
+      u.active_servers_count = api_users[u.datomic_id]["active-server-count"]
+    end
+  end
 
   def stripe_errors
     @stripe_errors ||= []
@@ -69,11 +81,11 @@ class User < ActiveRecord::Base
   end
 
   def servers_count
-    api_info["server-count"]
+    @servers_count ||= api_info["server-count"]
   end
 
   def active_servers_count
-    api_info["active-server-count"]
+    @active_servers_count ||= api_info["active-server-count"]
   end
 
   def api_info
