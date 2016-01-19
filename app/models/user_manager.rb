@@ -18,6 +18,8 @@ class UserManager
       begin
         backend_user = @client.add_user({email: user.email, name: ''})
         @user.token = backend_user['web-token']
+        @user.datomic_id = backend_user['id']
+
         return @user.save
       rescue Faraday::Error => e
         Rails.logger.error "Failed to connect to Canary backend: \n" + e.to_s

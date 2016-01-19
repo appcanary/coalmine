@@ -51,8 +51,11 @@ class Admin::UsersControllerTest < ActionController::TestCase
       Backend.stubs(:servers_count).returns(1)
       Backend.stubs(:recent_heartbeats).returns(1)
       Backend.stubs(:without_heartbeats).returns([])
-      User.any_instance.stubs(:servers_count).returns(5)
-      User.any_instance.stubs(:active_servers_count).returns(2)
+      User.any_instance.stubs(:datomic_id).returns(12345)
+      Backend.stubs(:all_users).returns([{"id" => 12345,
+                                          "active-server-count" => 15,
+                                          "server-count" => 22,
+                                          "api-calls-count" => 100}])
       get :index
       assert_response :success
     end
