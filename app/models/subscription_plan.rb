@@ -54,6 +54,9 @@ class SubscriptionPlan
       [starter]
     when 16..50
       [starter, middle]
+    else
+      # lol plans above 50 servers
+      [starter, middle]
     end
   end
 
