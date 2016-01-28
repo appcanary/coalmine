@@ -3,7 +3,7 @@
     %h1
       All the users.
 %section
-  .col-sm-8
+  .col-sm-12
     %table.table
       %thead
         %th
@@ -22,7 +22,7 @@
             = @recent_heartbeats
 
 %section
-  .col-sm-8
+  .col-sm-12
     = link_to "New user", new_admin_user_path, :class => "btn btn-default"
     %table.table
       %thead
@@ -36,6 +36,8 @@
           servers
         %th
           beating?
+        %th
+          api count
         %th
           last login at
         %th
@@ -51,6 +53,8 @@
               = user.created_at.strftime("%y/%m/%d %H:%M")
             %td
               = user.servers_count
+            %td
+              = user.api_calls_count
             %td
               = user.active_servers_count
             %td
