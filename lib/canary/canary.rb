@@ -194,11 +194,12 @@ class Canary
     # TODO HANDLE CURSORED COLLECTIONS
     # in the meantime, throw away cursor info
     if col.is_a? Hash
-
+      # The old API returns "error" while the new one returns "errors"
       if msg = col["error"]
         raise ArgumentError.new("Canary API: #{msg}")
+      elsif errors = col["errors"]
+        raise ArgumentError.new("Canary API: #{errors.first["title"]}: #{errors.first["details"]}")
       end
-
 
       # pass along only the model attr,
       # ditch cursor info
