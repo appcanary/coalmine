@@ -50,13 +50,9 @@
                       <p><%= link_to vuln.title, vuln_path(vuln) %></p>
 
                       <% if vuln.patched_versions.present? %>
-                        <% if $rollout.active?(:upgradeto) %>
-                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(vuln.upgrade_to) %></p>
-                          <% if vuln.remaining_versions.present? %>
-                            <p class="remaining_versions">Other patched versions include: <%= versions_in_english(vuln.remaining_versions) %></p>
-                          <% end %>
-                        <% else %>
-                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(sort_versions(vuln.patched_versions)) %></p>
+                        <p class="upgrade_to"> Upgrade to <%= versions_in_english(vuln.upgrade_to) %></p>
+                        <% if vuln.remaining_versions.present? %>
+                          <p class="remaining_versions">Other patched versions include: <%= versions_in_english(vuln.remaining_versions) %></p>
                         <% end %>
                       <% else %>
                         <p>No patches exist right now.</p>
