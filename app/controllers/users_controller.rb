@@ -37,8 +37,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    @user.api_beta = (@user.beta_signup_source == "api")
-
     respond_to do |format|
       if UserManager.sign_up(@user)
         auto_login(@user)
