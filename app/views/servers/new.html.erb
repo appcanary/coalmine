@@ -8,9 +8,9 @@
 
         <ul class="nav nav-pills nav-stacked">
           <li><h2>Welcome!</h2></li>
-          <li><a href="#whatiget">What do I get?</a></li>
+          <li><a href="#gettingstarted">Getting started</a></li>
           <li><a href="#howitworks">How does it work?</a></li>
-          <li><h5>Getting Started</h5></li>
+          <li><h5>How to install:</h5></li>
           <li><a href="#chef">Using Chef</a></li>
           <li><a href="#puppet">Using Puppet</a></li>
           <li><a href="#bash">Using Bash</a></li>
@@ -19,9 +19,58 @@
     </div>
   </div>
 
-  <div class="col-sm-6">
-    <a name="whatiget" class="anchor-offset"></a>
-    <h2>What do I get?</h2>
+  <div class="col-sm-7">
+    <a name="gettingstarted" class="anchor-offset"></a>
+
+    <h2>Getting started</h2>
+    <ol>
+      <li>You tell us what packages you use.</li>
+      <li>We notify you whenever you're vulnerable.</li>
+      <li>You keep your servers and your customers safe.</li>
+    </ol>
+
+    <p>Installing our agent is easy and takes five minutes.</p>
+
+    <table class="table">
+      <thead>
+        <th>What platforms get notifications?</th>
+        <th>Where can I install it?</th>
+      </thead>
+      <tr>
+        <td>
+          <span class="platform-logo"><%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby</span>,
+          <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>,
+          <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS 7</span>
+          <span class="platform-logo">(more soon, stay tuned!)</span>
+        </td>
+        <td>
+          <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>, <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>, <span class="platform-logo"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat</span>, <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS</span>, Amazon and Mint Linux.
+        </td>
+      </tr>
+    </table>
+
+    <h4>How do you provision your servers?</h4>
+
+    <%= eui_button "#{image_tag "icon-chef.png", :style => "width: 15px"} Using Chef".html_safe, href: "#chef" %>
+    <%= eui_button "#{image_tag "icon-puppet.png", :style => "width: 15px"} Using Puppet".html_safe, href: "#puppet" %>
+    <%# <%= eui_button "Using Puppet", href: "#puppet" %>
+    <%= eui_button "<span style='font-family: monospace'>#!</span> Using the shell".html_safe, href: "#bash" %>
+
+
+    <br/>
+    <br/>
+
+    <h3>Why an agent?</h3>
+    <p>It's the best way to keep track of what you actually have deployed. Do you really know what's running on that server your intern set up? When was the last time you provisioned staging?</p>
+    <p>We don't look at your code. We only ever see what you explicitly set in the configuration.</p>
+      
+    <p>Our agent is <b>tiny</b>, it's written in golang and it's <b><a href="https://github.com/appcanary/agent" target="_blank">all on GitHub</a></b>.</p>
+
+
+    <br/>
+
+    <a name="howitworks" class="anchor-offset"></a>
+    <h2>How does it work?</h2>
     <ul>
       <li>We track <strong><%= number_with_delimiter(@vulnerabilities_count) %></strong> vulnerabilities across <strong><%= number_with_delimiter(@artifacts_count) %></strong> packages so you don't have to. </li>
       <li>Whenever a vulnerability that affects your servers comes out, you receive an email.</li>
@@ -33,30 +82,10 @@
       <a href="#screenshot" data-toggle="modal" data-target="#screenshot"><%= image_tag "screenshot-vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a>
     </div>
 
-    <table class="table">
-      <thead>
-        <th>What platforms get notifications?</th>
-        <th>Where can I install it?</th>
-      </thead>
-      <tr>
-        <td><span class="platform-logo">
-            <%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby</span>,
-          <span class="platform-logo">
-            <%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span> <span class="platform-logo">(more soon, stay tuned!)</span>
-        </td>
-        <td>
-
-          Most versions of <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>, <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>, <span class="platform-logo"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat</span>, <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS</span>, Amazon and Mint Linux.</a>
-      </td>
-    </tr>
-  </table>
-
-  <a name="howitworks" class="anchor-offset"></a>
-  <h2>How does it work?</h2>
-  <p>We monitor the dependencies your application depends on. Right now this means you install our <b>tiny</b> agent. It's written in golang and it's <b><a href="https://github.com/appcanary/agent" target="_blank">entirely open source</a></b>.
-  </p>
-  <p>You tell us which files list your server's dependencies, and we keep track of them. We only ever see the files *explicitly listed* in the configuration. Whenever you make a deploy - or new packages are installed - we find out.
-    <h2>Getting started</h2>
+    
+    <p>We monitor the dependencies your application depends on. You tell us which files list your server's dependencies, and we keep track of them. We only ever see the files *explicitly listed* in the configuration. Whenever you make a deploy - or new packages are installed - we find out.</p>
+    <br/>
+    <h2>How to install:</h2>
     <br/>
     <a name="chef" class="anchor-offset"></a>
     <%= render :partial => "chef" %>
@@ -77,22 +106,20 @@
     <br>
     <br>
   </div>
-</section>
-
-
-<div class="modal fade" id="screenshot" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Screenshot</h4>
-      </div>
-      <div class="modal-body">
-        <%= image_tag "screenshot-vuln.jpg", :style => "width: 725px;" %>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  <div class="modal fade" id="screenshot" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Screenshot</h4>
+        </div>
+        <div class="modal-body">
+          <%= image_tag "screenshot-vuln.jpg", :style => "width: 725px;" %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>

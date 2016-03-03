@@ -17,6 +17,10 @@
   <pre>
 api_key = "<%= @agent_token %>"
 
+# if you are on Ubuntu, uncomment these lines:
+#[[files]]
+#path = "/var/lib/dpkg/status"
+
 # Fill in your Ruby app's path and 
 # uncomment the next two lines:
 
@@ -29,9 +33,6 @@ api_key = "<%= @agent_token %>"
 #[[files]]
 #path = "/path/to/a/different/Gemfile.lock"
 
-# if you are on ubuntu, you will need these lines as well:
-#[[files]]
-#path = "/var/lib/dpkg/status"
 </pre>
 </p>
 
