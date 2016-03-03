@@ -6,6 +6,8 @@ class WelcomeController < ApplicationController
   def index
     @user = User.new
     @preuser = PreUser.new
+    @artifacts_count = Backend.artifacts_count
+    @vulnerabilities_count = Backend.vulnerabilities_count
   end
 
   def beta_list

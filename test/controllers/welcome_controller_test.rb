@@ -2,6 +2,11 @@ require 'test_helper'
 
 # No need for this test in yc demo
 class WelcomeControllerTest < ActionController::TestCase
+  before(:suite) do
+    Backend.stubs(:artifacts_count).returns("1235")
+    Backend.stubs(:vulnerabilities_count).returns("1236")
+  end
+
   describe "while authenticated" do
     let(:user) { FactoryGirl.create(:user) }
 
