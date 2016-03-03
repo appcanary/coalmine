@@ -39,7 +39,7 @@
 <div class="unit-container">
   <div class="unit vulns">
     <h3>We&rsquo;re currently tracking more than</h3>
-    <h1><%= number_with_delimiter(vulnerabilities_count)@ %> vulnerabilities</h1>
+    <h1><%= number_with_delimiter(@vulnerabilities_count) %> vulnerabilities</h1>
     <h3>over <%= number_with_delimiter(@artifacts_count) %> packages so you don&rsquo;t have to.</h3>
   </div>
 </div>
