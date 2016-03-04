@@ -18,6 +18,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def identify_user(user)
+    if Rails.env.production?
+      Analytics.identify(
+        user_id: user.datomic_id,
+        traits: {
+          email: user.email,
+          createdAt: user.created_at,
+          name: user.name,
+          signup_source: user.beta_signup_source
+        })
+    end
+  end
+
   def not_authenticated
     redirect_to login_path, alert: "Please login first!"
   end
