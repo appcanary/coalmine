@@ -7,11 +7,13 @@
           <h2 style="text-align: center">API Docs</h2>
         </div>
         <ul class="nav nav-pills nav-stacked">
-          <li><a href="#start">Getting started</a></li>
+          <h4>Getting started</h4>
           <li><a href="#authentication">Authentication</a></li>
-          <li><a href="#check-endpoint">Check endpoint</a></li>
-          <li><a href="#check-responses">Check responses</a></li>
-          <li><a href="#errors">Errors</a></li>
+          <h4>/check</h4>
+          <li><a href="#check-endpoint">Endpoint</a></li>
+          <li><a href="#check-responses">Response</a></li>
+          <h4>In the event of failure</h4>
+          <li><a href="#errors">Error Response</a></li>
           <li><a href="#feedback">Questions? Feedback?</a></li>
         </ul>
 
@@ -28,6 +30,7 @@
     <a name="authentication" class="anchor-offset"></a>
     
     <h2>Authentication</h2>
+    <h4>⤻ <code>https://appcanary.com/api/v2/status</code></h4>
     <p>All communication with our APIs require your API key to be included as an <code>Authentication</code> header. These can be set in <code>curl</code> like so:</p>
     <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
      https://appcanary.com/api/v2/status</pre>
@@ -35,34 +38,61 @@
     <p>The status endpoint shown above will respond appropriately if your request is authenticated and your account is in good standing.</p>
     <hr>
     <a name="check-endpoint" class="anchor-offset"></a>
-    <h2>Check endpoint</h2>
-    <h4><code>https://appcanary.com/api/v2/check/ruby</code></h4>
-    <p>The purpose of this endpoint is to show which vulnerabilities your app's dependencies are affected by.</p> 
-    <p>Application dependencies are typically expressed in a file; at the moment we only accept requests with <code>Content-Type: multipart/form-data</code> with an embedded <code>application/octet-stream</code>. Soon, we'll also be accepting JSON.</p>
+    <h2>Check Endpoint</h2>
+    <h4>⤻ <code>https://appcanary.com/api/v2/check/:platform/:release</code></h4>
 
-    <p>Simply <code>POST</code> your file to <code>https://appcanary.com/api/v2/check/ruby</code> - like so:</p>
-
+    <p>Check your dependencies for vulnerabilities. For example, with Ruby:</p>
+    
     <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
-     -X POST -F file=@./Gemfile.lock \
-     https://appcanary.com/api/v2/check/ruby
+     -X POST -F <strong>file</strong>=@./Gemfile.lock \
+     https://appcanary.com/api/v2/check/<strong>ruby</strong>
 </pre>
 
-    <h4>Required parameters</h4>
+    <h4>Required URL parameters</h4>
      <dl class="dl-horizontal">
-      <dt>file</dt>
-      <dd>The dependency file you want to check, form encoded.<br/>
-        i.e. a <code>Gemfile.lock</code>; the API will not work against just a <code>Gemfile</code>.</dd>
+      <dt>platform</dt>
+        <dd>The platform being checked. One of: <code>ruby</code>, <code>ubuntu</code>, <code>centos</code>.</dd>
+        <dt>release</dt>
+        <dd>Where appropriate, the specific release version being checked. <br/>When the platform is:
+        <dl class="sublist">
+          <dt>ubuntu</dt>
+          <dd><code>15.10</code>, <code>15.04</code>, <code>14.04</code> or <code>12.04</code>, etc</dd>
+          <dt>centos</dt>
+          <dd><code>7</code></dd>
+          <dt>ruby</dt>
+          <dd>None, leave blank.</dd>
+        </dl>
     </dl>
 
+
+    <h4>Required query parameters</h4>
+     <dl class="dl-horizontal">
+      <dt>file</dt>
+      <dd>The dependencies you want to check, form encoded.<br/> When the platform is:
+      <dl class="sublist">
+          <dt>ubuntu</dt>
+          <dd><code>/var/lib/dpkg/status</code></dd>
+          <dt>centos</dt>
+          <dd>The output of: <code>rpm -qa</code></dd>
+          <dt>ruby</dt>
+          <dd>Your <code>Gemfile.lock</code></dd>
+      </dl>
+      </dd>
+    </dl>
+    <hr>
+
+    <p>The purpose of this endpoint is to show which vulnerabilities your app's dependencies are affected by.</p> 
+    <p>At the moment we only accept requests with <code>Content-Type: multipart/form-data</code> with an embedded <code>application/octet-stream</code>. If enough people request it, we're open to accepting JSON as well.</p>
+
     <h4>Please note!</h4>
-    <p>We <strong>do not store raw submitted files</strong>, only our parsed representations. We strive to discard sensitive information but be mindful when submitting files containing credentials.</p>
+    <p>We cache requests. We strive to discard sensitive information but be mindful when submitting files containing credentials.</p>
     <p>All requests are currently unmetered. This may change as appropriate.</p>
 
     <hr>
     <a name="check-responses" class="anchor-offset"></a>
     <h2>Check Responses</h2>
     <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data.</p>
-    <p>All successful responses will be wrapped in a <code>"data"</code> container object and contain a <code>"vulnerable"</code> boolean field. This container object <strong>shall always</strong> contain an array, whether it's empty or not.</p>
+    <p>All successful responses will be wrapped in a <code>"data"</code> container object and contain a <code>"vulnerable"</code> boolean field. This container object <strong>shall always</strong> contain an array, whether it's empty or not. This schema is loosely based on the <a href="http://jsonapi.org/">jsonapi</a> spec.</p>
     <p>For example, if your dependency file does not have any known vulnerabilities, the response body will look like this:</p>
     <pre class="json">
 {
@@ -71,7 +101,7 @@
 }
 </pre>
     
-    <h4>The request container object</h4>
+    <h4>The response container object</h4>
     <dl class="dl-horizontal">
       <dt>data</dt>
       <dd>An array containing the data we're returning. May be empty if there is no data</dd>
@@ -132,7 +162,7 @@
       <dt>name</dt>
       <dd>The name of the package, dependency or artifact</dd>
       <dt>kind</dt>
-      <dd>The name of the platform, ecosystem or environment this artifact belongs to. Currently it may only be <code>rubygem</code>.</dd>
+      <dd>The name of the platform, ecosystem or environment this artifact belongs to.</dd>
       <dt>number</dt>
       <dd>The specific version string of the artifact being discussed. Version string formats vary from artifact kind to artifact kind.</dd>
 

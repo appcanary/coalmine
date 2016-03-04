@@ -24,10 +24,26 @@
     margin-top: 20px;
     margin-bottom: 20px;
     dt {
-      @extend code;
+      background: none;
+      color: black;
+      padding-left: 0px;
+      padding-right: 0px;
     }
     dd {
       margin-bottom: 10px;
+      code {
+        background: #eee;
+        padding: 5px;
+      }
+    }
+  }
+
+  dl.sublist {
+    dt {
+      width: 100px;
+    }
+    dd {
+      margin-left: 120px;
     }
   }
 }

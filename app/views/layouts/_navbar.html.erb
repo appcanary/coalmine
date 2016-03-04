@@ -28,12 +28,10 @@
           </a>
         <% end %>
 
-        <% if current_user.api_beta? %>
-          <%= li_active "docs" do %>
-            <a href="/docs">
-              <i class="fa fa-book"></i> API Docs
-            </a>
-          <% end %>
+        <%= li_active "docs" do %>
+          <a href="/docs">
+            <i class="fa fa-book"></i> API Docs
+          </a>
         <% end %>
 
         <%= li_active "settings" do %>

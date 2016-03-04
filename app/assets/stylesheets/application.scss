@@ -185,25 +185,24 @@ section {
 
 // used for fixed-with-nav menus
 .fixed-side-menu {
-    @extend .col-sm-3;
-    .outer-wrapper {
-      position: absolute;
+  @extend .col-sm-3;
+  .outer-wrapper {
+    position: absolute;
 
-      @media screen and (max-width: 736px) {
-        display: none;
-      }
+    @media screen and (max-width: 736px) {
+      display: none;
+    }
 
-      .inner-wrapper {
-        position: fixed;
-        top: 60px;
-        // width: 18%;
-        // background-color: #ccc;
-        // @include border-top-radius(5px);
-        // @include border-right-radius(5px);
-        // @include border-bottom-radius(5px);
-        // @include border-left-radius(5px);
+    .inner-wrapper {
+      position: fixed;
+      top: 60px;
+      // width: 18%;
+      // background-color: #ccc;
+      // @include border-top-radius(5px);
+      // @include border-right-radius(5px);
+      // @include border-bottom-radius(5px);
+      // @include border-left-radius(5px);
 
-      }
     }
   }
-
+}
