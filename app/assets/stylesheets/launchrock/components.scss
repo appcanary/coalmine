@@ -62,7 +62,7 @@
 
 .action {
   position: absolute;
-  top: 35px;
+  top: $margin-from-topbar;
   right: 20px;
   z-index: 500;
   .action_unit {
@@ -80,11 +80,6 @@
 }
 
 // used in isitvuln
-$base-spacing: 1.5em !default;
-$alert-color: #fff6bf !default;
-$error-color: #fbe3e4 !default;
-$notice-color: #e5edf8 !default;
-$success-color: #e6efc2 !default;
 
 @mixin flash($color) {
   background-color: $color;
@@ -123,4 +118,21 @@ $success-color: #e6efc2 !default;
 }
 
 
+.alert-cta-wrapper {
+  position: absolute;
+  // mysteriously won't line up with
+  // buttons in .action sans -9px
+  top: $margin-from-topbar - 9px;
+  left: 0;
+  width: 100%;
+}
+
+.alert-cta {  
+  @include flash($alert-color);
+  border: none;
+  border: 1px solid lighten($alert-color, 50%);
+  border-radius: 6px;
+  margin: 0 auto;
+  width: 30%;
+}
 

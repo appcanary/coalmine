@@ -21,3 +21,13 @@ $ubuntu-colour: #586be2;
 $proxima: 'Proxima-Nova', sans-serif;
 $myriad: 'Myriad Pro', sans-serif;
 
+
+// flashes
+$base-spacing: 1.5em !default;
+$alert-color: #fff6bf !default;
+$error-color: #fbe3e4 !default;
+$notice-color: #e5edf8 !default;
+$success-color: #e6efc2 !default;
+
+// see .topbar
+$margin-from-topbar: 35px;
