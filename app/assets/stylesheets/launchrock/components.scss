@@ -1,0 +1,138 @@
+%button {
+  box-shadow: 0px 0px 0px 0.2em white;
+  background-color: white;
+  font-size: 1rem;
+  padding: 0.35em 0.5em 0.3em 0.5em;
+  border: none;
+  border: 1px solid lighten($text-colour, 50%);
+  border-radius: 6px;
+  color: $text-colour;
+  font-family: $proxima;
+  @include appearance(none);
+  @include transition (all 0.1s ease-out);
+  &:hover {
+    border-color: $text-colour;
+    color: $text-colour;
+    text-decoration: none;
+    @include transition (all 0.1s ease-in);
+    cursor: pointer;
+  }
+  &:focus {
+    outline: none;
+    border-color: $text-colour;
+    @include transition (all 0.1s ease-in);
+  }
+  @include media($mobile-width) {
+    font-size: 1.2em;
+  }
+}
+
+.button {
+  @extend %button;
+}
+
+%input {
+  @extend %button;
+  @include placeholder {
+    font-weight: 300;
+    color: lighten($text-colour, 50%);
+    opacity: 1;
+  }
+  &:focus {
+    @include placeholder {
+      opacity: 0.5;
+      @include transition (all 0.1s ease-out);
+    }
+  }
+}
+
+.topbar {
+  position: fixed;
+  height: 8px;
+  background-color: darken($yellow, 5%);
+  border-bottom: 1px solid $dark-yellow;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+// the action bar on top right
+// in most pages
+
+.action {
+  position: absolute;
+  top: $margin-from-topbar;
+  right: 20px;
+  z-index: 500;
+  .action_unit {
+    display: inline;
+    margin-left: 15px;
+  }
+  .action_login .button {
+    box-shadow: none;
+    border: 1px solid $text-colour;
+    background: none;
+    &:hover {
+      background-color: $dark-yellow;
+    }
+  }
+}
+
+// used in isitvuln
+
+@mixin flash($color) {
+  background-color: $color;
+  color: darken($color, 60%);
+  display: block;
+  font-weight: 600;
+  margin-bottom: $base-spacing / 2;
+  padding: $base-spacing / 2;
+  text-align: center;
+
+  a {
+    color: darken($color, 70%);
+    text-decoration: underline;
+
+    &:focus,
+    &:hover {
+      color: darken($color, 90%);
+    }
+  }
+}
+
+.flash-alert {
+  @include flash($alert-color);
+}
+
+.flash-error {
+  @include flash($error-color);
+}
+
+.flash-notice {
+  @include flash($notice-color);
+}
+
+.flash-success {
+  @include flash($success-color);
+}
+
+
+.alert-cta-wrapper {
+  position: absolute;
+  // mysteriously won't line up with
+  // buttons in .action sans -9px
+  top: $margin-from-topbar - 9px;
+  left: 0;
+  width: 100%;
+}
+
+.alert-cta {  
+  @include flash($alert-color);
+  border: none;
+  border: 1px solid lighten($alert-color, 50%);
+  border-radius: 6px;
+  margin: 0 auto;
+  width: 30%;
+}
+
