@@ -1,77 +1,12 @@
 @import "bourbon";
 @import "neat";
 
+@import "globals";
 @import "partials/mixins";
 @import "partials/helpers";
 @import "partials/fonts";
 @import "partials/color";
-
-$mobile-width: new-breakpoint(max-width 736px 4);
-
-// grid stuff
-$grid-columns: 12 !global;
-$max-width: em(1180px) !global;
-$border-box-sizing: true !global;
-
-// colours
-$text-colour: #111;
-$bg-colour: #f2f2f2;
-$yellow: lighten(#fadc58, 5%);
-$dark-yellow: darken($yellow, 20%);
-$brown: #64572b;
-
-$lightgray: #b0b0b0;
-
-$ruby-colour: #ee6161;
-$node-colour: #53b164;
-$ubuntu-colour: #586be2;
-
-$proxima: 'Proxima-Nova', sans-serif;
-$myriad: 'Myriad Pro', sans-serif;
-
-%button {
-  box-shadow: 0px 0px 0px 0.2em white;
-  background-color: white;
-  font-size: 1rem;
-  padding: 0.35em 0.5em 0.3em 0.5em;
-  border: none;
-  border: 1px solid lighten($text-colour, 50%);
-  border-radius: 6px;
-  color: $text-colour;
-  font-family: $proxima;
-  @include appearance(none);
-  @include transition (all 0.1s ease-out);
-  &:hover {
-    border-color: $text-colour;
-    color: $text-colour;
-    text-decoration: none;
-    @include transition (all 0.1s ease-in);
-    cursor: pointer;
-  }
-  &:focus {
-    outline: none;
-    border-color: $text-colour;
-    @include transition (all 0.1s ease-in);
-  }
-  @include media($mobile-width) {
-    font-size: 1.2em;
-  }
-}
-
-%input {
-  @extend %button;
-  @include placeholder {
-    font-weight: 300;
-    color: lighten($text-colour, 50%);
-    opacity: 1;
-  }
-  &:focus {
-    @include placeholder {
-      opacity: 0.5;
-      @include transition (all 0.1s ease-out);
-    }
-  }
-}
+@import "components";
 
 body {
   background-color: $bg-colour;
@@ -111,39 +46,6 @@ img {
   margin: 0 !important;
 }
 
-.topbar {
-  position: fixed;
-  height: 8px;
-  background-color: darken($yellow, 5%);
-  border-bottom: 1px solid $dark-yellow;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
-.action {
-  position: absolute;
-  top: 35px;
-  right: 20px;
-  z-index: 500;
-  .action_unit {
-    display: inline;
-    margin-left: 15px;
-  }
-  .action_login .button {
-    box-shadow: none;
-    border: 1px solid $text-colour;
-    background: none;
-    &:hover {
-      background-color: $dark-yellow;
-    }
-  }
-}
-
-.button {
-  @extend %button;
-}
 
 .hero-wrapper {
   width: 100%;
