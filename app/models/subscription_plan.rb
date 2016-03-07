@@ -50,6 +50,8 @@ class SubscriptionPlan
     end
 
     case server_count
+    when 0..5
+      []
     when 6..15
       [starter]
     when 16..50
