@@ -14,17 +14,17 @@ $max-width: em(1180px) !global;
 $border-box-sizing: true !global;
 
 // colours
-$text: #111;
-$bg: #f2f2f2;
+$text-colour: #111;
+$bg-colour: #f2f2f2;
 $yellow: lighten(#fadc58, 5%);
 $dark-yellow: darken($yellow, 20%);
 $brown: #64572b;
 
 $lightgray: #b0b0b0;
 
-$ruby: #ee6161;
-$node: #53b164;
-$ubuntu: #586be2;
+$ruby-colour: #ee6161;
+$node-colour: #53b164;
+$ubuntu-colour: #586be2;
 
 $proxima: 'Proxima-Nova', sans-serif;
 $myriad: 'Myriad Pro', sans-serif;
@@ -35,22 +35,22 @@ $myriad: 'Myriad Pro', sans-serif;
   font-size: 1rem;
   padding: 0.35em 0.5em 0.3em 0.5em;
   border: none;
-  border: 1px solid lighten($text, 50%);
+  border: 1px solid lighten($text-colour, 50%);
   border-radius: 6px;
-  color: $text;
+  color: $text-colour;
   font-family: $proxima;
   @include appearance(none);
   @include transition (all 0.1s ease-out);
   &:hover {
-    border-color: $text;
-    color: $text;
+    border-color: $text-colour;
+    color: $text-colour;
     text-decoration: none;
     @include transition (all 0.1s ease-in);
     cursor: pointer;
   }
   &:focus {
     outline: none;
-    border-color: $text;
+    border-color: $text-colour;
     @include transition (all 0.1s ease-in);
   }
   @include media($mobile-width) {
@@ -62,7 +62,7 @@ $myriad: 'Myriad Pro', sans-serif;
   @extend %button;
   @include placeholder {
     font-weight: 300;
-    color: lighten($text, 50%);
+    color: lighten($text-colour, 50%);
     opacity: 1;
   }
   &:focus {
@@ -74,9 +74,9 @@ $myriad: 'Myriad Pro', sans-serif;
 }
 
 body {
-  background-color: $bg;
+  background-color: $bg-colour;
   font-size: 16px;
-  color: $text;
+  color: $text-colour;
   line-height: 1.2;
   font-family: $proxima;
   text-rendering: optimizeLegibility;
@@ -98,7 +98,7 @@ a {
   color: darken($dark-yellow, 20%);
   text-decoration: none;
   &:hover {
-    color: $text;
+    color: $text-colour;
     text-decoration: none;
   }
 }
@@ -133,7 +133,7 @@ img {
   }
   .action_login .button {
     box-shadow: none;
-    border: 1px solid $text;
+    border: 1px solid $text-colour;
     background: none;
     &:hover {
       background-color: $dark-yellow;
@@ -310,7 +310,7 @@ img {
 }
 
 .unit-container {
-  border-bottom: 1px solid lighten($text, 70%);
+  border-bottom: 1px solid lighten($text-colour, 70%);
   padding: 3.8em 0;
   @include media($mobile-width) {
     width: 100%;
@@ -406,7 +406,7 @@ img {
     }
   }
   .unit_demo-box-after {
-    background-color: lighten($text, 10%);
+    background-color: lighten($text-colour, 10%);
   }
   .unit_demo-copy {
     @include span-columns(5);
@@ -437,31 +437,31 @@ img {
       margin-right: 0.5em;
     }
     .button-ruby {
-      color: $ruby;
-      border-color: $ruby;
+      color: $ruby-colour;
+      border-color: $ruby-colour;
       &:hover {
-        background-color: $ruby;
+        background-color: $ruby-colour;
         color: white;
       }
     }
     .button-node {
-      color: $node;
-      border-color: $node;
+      color: $node-colour;
+      border-color: $node-colour;
       &:hover {
-        background-color: $node;
+        background-color: $node-colour;
         color: white;
       }
     }
     .button-ubuntu {
-      color: $ubuntu;
-      border-color: $ubuntu;
+      color: $ubuntu-colour;
+      border-color: $ubuntu-colour;
       &:hover {
-        background-color: $ubuntu;
+        background-color: $ubuntu-colour;
         color: white;
       }
     }
 
-    .red { color: $ruby }
+    .red { color: $ruby-colour }
   }
 }
 
@@ -600,9 +600,9 @@ img {
     background-color: white;
     font-size: 1rem;
     padding: 1.6em 1.4em 1.4em 1.4em;
-    border: 1px solid $text;
+    border: 1px solid $text-colour;
     border-radius: 6px;
-    color: $text;
+    color: $text-colour;
     font-family: $proxima;
     @include media($mobile-width) {
       font-size: 1.2em;
@@ -620,12 +620,12 @@ img {
       border: none;
       margin-bottom: 1em;
       font-size: 1.7em;
-      border-bottom: 1px solid lighten($text, 60%);
+      border-bottom: 1px solid lighten($text-colour, 60%);
       @include appearance(none);
       @include transition (all 0.1s ease-out);
       @include placeholder {
         font-weight: 300;
-        color: lighten($text, 60%);
+        color: lighten($text-colour, 60%);
         opacity: 1;
       }
       &:last-of-type {
@@ -634,7 +634,7 @@ img {
       &:active, &:focus, &:hover {
         box-shadow: none;
         outline: 0;
-        border-bottom: 1px solid $text;
+        border-bottom: 1px solid $text-colour;
         @include transition (all 0.1s ease-in);
       }
     }
@@ -659,8 +659,8 @@ img {
     margin-right: 3%;
     display: inline-block;
     text-align: center;
-    border-color: lighten($text, 80%);
-    color: lighten($text, 20%);
+    border-color: lighten($text-colour, 80%);
+    color: lighten($text-colour, 20%);
   }
 
 }
@@ -695,7 +695,7 @@ footer {
       display: inline;
       padding-right: 0.5em;
       a {
-        color: $text;
+        color: $text-colour;
         &:hover {
          text-decoration: underline;
         }

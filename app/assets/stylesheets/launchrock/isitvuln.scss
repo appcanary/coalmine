@@ -18,7 +18,7 @@
   }
   .action_login .button {
     box-shadow: none;
-    border: 1px solid $text;
+    border: 1px solid $text-colour;
     background: none;
     &:hover {
       background-color: $dark-yellow;
@@ -289,7 +289,7 @@ $success-color: #e6efc2 !default;
       content: "";
       height: 0;
       width: 0;
-      @include triangle(10px 8px, $text, down);
+      @include triangle(10px 8px, $text-colour, down);
       position: absolute;
       top: 50%;
       margin-top: -3px;
@@ -305,7 +305,7 @@ $success-color: #e6efc2 !default;
   select {
     @extend %input;
     //   font-size: 1.3em;
-    //   border: 1px solid $text;
+    //   border: 1px solid $text-colour;
     //   outline: none;
     //   background: transparent;
     //   width: auto;
