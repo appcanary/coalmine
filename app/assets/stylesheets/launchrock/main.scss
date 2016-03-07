@@ -6,7 +6,7 @@
 @import "partials/fonts";
 @import "partials/color";
 
-$mobile: new-breakpoint(max-width 736px 4);
+$mobile-width: new-breakpoint(max-width 736px 4);
 
 // grid stuff
 $grid-columns: 12 !global;
@@ -53,7 +53,7 @@ $myriad: 'Myriad Pro', sans-serif;
     border-color: $text;
     @include transition (all 0.1s ease-in);
   }
-  @include media($mobile) {
+  @include media($mobile-width) {
     font-size: 1.2em;
   }
 }
@@ -83,7 +83,7 @@ body {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
   box-sizing: border-box;
-  @include media($mobile) {
+  @include media($mobile-width) {
     width: 100%;
   }
 }
@@ -160,7 +160,7 @@ img {
     @include shift(2);
     display: block;
     margin-bottom: 2.8em;
-    @include media($mobile) {
+    @include media($mobile-width) {
       @include span-columns(12 of 12);
       @include shift(0);
       margin-top: 1em;
@@ -180,7 +180,7 @@ img {
     font-weight: 300;
     line-height: 1em;
     margin-bottom: 2.5em;
-    @include media($mobile) {
+    @include media($mobile-width) {
       @include span-columns(4 of 4);
       @include shift(0);
       margin: 0 0em 0 0em;
@@ -189,7 +189,7 @@ img {
       font-weight: 600;
       font-size: 2.7em;
       margin-bottom: 0.3em;
-      @include media($mobile) {
+      @include media($mobile-width) {
         font-size: 1.5em;
         line-height: 0.9em;
       }
@@ -198,7 +198,7 @@ img {
       font-size: 2em;
       line-height: 1.1em;
       padding: 0 3em;
-      @include media($mobile) {
+      @include media($mobile-width) {
         padding-left: 0.4em;
         padding-right: 0.4em;
         padding-bottom: 1em;
@@ -210,7 +210,7 @@ img {
     @include span-columns(6 of 12);
     @include shift(3);
 
-    @include media($mobile) {
+    @include media($mobile-width) {
       @include span-columns(12 of 12);
       @include shift(0);
     }
@@ -221,7 +221,7 @@ img {
     input, button {
       font-size: 1.8em;
       box-shadow: 0px 0px 0px 0.2em white;
-      @include media($mobile) {
+      @include media($mobile-width) {
         font-size: 1em;
       }
     }
@@ -240,7 +240,7 @@ img {
 .hero-main {
   @extend .hero;
   .hero_sell-line {
-    @include media($mobile) {
+    @include media($mobile-width) {
       font-size: 2.2em;
     }
   }
@@ -249,27 +249,27 @@ img {
 .hero-vuln {
   @extend .hero;
   padding-top: 6em;
-  @include media($mobile) {
+  @include media($mobile-width) {
     padding-top: 2em;
   }
   .hero_sell-line {
     @include span-columns(10 of 12);
     @include shift(1);
     margin-bottom: 0em;
-    @include media($mobile) {
+    @include media($mobile-width) {
       @include span-columns(4 of 4);
       @include shift(0);
     }
     h1 {
       font-size: 6em;
-      @include media($mobile) {
+      @include media($mobile-width) {
         font-size: 3.5em;
         margin: 0 0.5em 0 0.5em;
       }
     }
 
     h3 {
-      @include media($mobile) {
+      @include media($mobile-width) {
         margin-top: 0.6em;
         font-size: 2em;
         padding: 0 0.2em;
@@ -299,7 +299,7 @@ img {
     margin: 0;
     padding: 0;
   }
-  @include media($mobile) {
+  @include media($mobile-width) {
     font-size: 1.3em;
     padding-right: 0.5em;
     padding-left: 0.5em;
@@ -312,7 +312,7 @@ img {
 .unit-container {
   border-bottom: 1px solid lighten($text, 70%);
   padding: 3.8em 0;
-  @include media($mobile) {
+  @include media($mobile-width) {
     width: 100%;
     padding-top: 3em;
     padding-bottom: 2em;
@@ -320,7 +320,7 @@ img {
 }
 
 .isitvuln.unit-container {
-  @include media($mobile) {
+  @include media($mobile-width) {
     padding: 0 15px;
   }
 }
@@ -337,7 +337,7 @@ img {
     margin-bottom: 1.4em;
     line-height: 0.9em;
   }
-  @include media($mobile) {
+  @include media($mobile-width) {
     padding-left: 0.5em;
     padding-right: 0.5em;
     margin-bottom: 1.5em;
@@ -368,7 +368,7 @@ img {
     @include shift(1);
     border-radius: 1em;
     height: 27em;
-    @include media($mobile) {
+    @include media($mobile-width) {
       @include span-columns(4);
       @include shift(0);
       margin: 2em 0;
@@ -385,7 +385,7 @@ img {
       padding: 0.6em 1.2em 0 1.2em;
       line-height: 1em;
       text-align: center;
-      @include media($mobile) {
+      @include media($mobile-width) {
         font-size: 3.6em;
         padding: 2em 0.2em;
         margin: 0;
@@ -410,7 +410,7 @@ img {
   }
   .unit_demo-copy {
     @include span-columns(5);
-    @include media($mobile) {
+    @include media($mobile-width) {
       @include span-columns(4);
     }
     h3 {
@@ -418,7 +418,7 @@ img {
       font-size: 1.8em;
       line-height: 1em;
       padding-bottom: 0.2em;
-      @include media($mobile) {
+      @include media($mobile-width) {
         font-size: 2.4em;
       }
     }
@@ -426,7 +426,7 @@ img {
       font-size: 1.4em;
       line-height: 1.1em;
       margin-top: 0.6em;
-      @include media($mobile) {
+      @include media($mobile-width) {
         font-size: 1.8em;
       }
     }
@@ -604,7 +604,7 @@ img {
     border-radius: 6px;
     color: $text;
     font-family: $proxima;
-    @include media($mobile) {
+    @include media($mobile-width) {
       font-size: 1.2em;
     }
     label {
@@ -671,7 +671,7 @@ footer {
   img {
     @include span-columns(1 of 12);
     width: 50px;
-    @include media($mobile) {
+    @include media($mobile-width) {
       display: none;
     }
   }
@@ -679,7 +679,7 @@ footer {
     @include span-columns (5 of 12);
     padding-top: 1em;
     vertical-align: top;
-    @include media($mobile) {
+    @include media($mobile-width) {
       @include span-columns(4 of 4);
       text-align: center;
       margin: 0 auto;
@@ -708,7 +708,7 @@ footer {
     text-transform: uppercase;
     font-size: 0.8em;
     text-align: right;
-    @include media($mobile) {
+    @include media($mobile-width) {
       @include span-columns(4 of 4);
       text-align: center;
       margin: 0 auto;

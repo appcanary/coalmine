@@ -3,7 +3,7 @@
   top: 18px;
   left: 10px;
   z-index: 500;
-  @include media($mobile) {
+  @include media($mobile-width) {
     display: none;
   }
   img {
@@ -28,7 +28,7 @@
 
 .top-brand {
   display: none;
-  @include media($mobile) {
+  @include media($mobile-width) {
     display: block;
     margin: 0 auto;
     text-align: center;
@@ -247,7 +247,7 @@ $success-color: #e6efc2 !default;
 
 
 #preferred_platform {
-  @include media($mobile) {
+  @include media($mobile-width) {
     font-size: 1.4em;
   }
   button {
@@ -255,7 +255,7 @@ $success-color: #e6efc2 !default;
     font-size: 1.6em;
     width: 94%;
     margin-top: 0.8em;
-    @include media($mobile) {
+    @include media($mobile-width) {
       width: 100%;
       margin: 0.3em 0;
     }
@@ -264,7 +264,7 @@ $success-color: #e6efc2 !default;
     @extend %input;
     font-size: 1.6em;
     width: 53%;
-    @include media($mobile) {
+    @include media($mobile-width) {
       width: 100%;
       margin: 0.3em 0;
     }
@@ -273,7 +273,7 @@ $success-color: #e6efc2 !default;
     font-size: 1.6em;
     width: 38%;
     margin-right: 0.4em;
-    @include media($mobile) {
+    @include media($mobile-width) {
       width: 100%;
       margin: 0.3em 0;
     }
