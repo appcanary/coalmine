@@ -5,6 +5,6 @@ production:
 
 development:
   segment: 
-    key: "4d4VwYpHGbxQI5vUiRzOwVsV3yw7PTxs"
-    intercom_key: "4cpTQn3krCBcKd0XxbFDy8-ahk1Rup5WgZpgXRZW"
+    key: "CPttBE3RXFIwbPq2QSN6HBNmEMaJZzp0"
+    intercom_key: "InP8xKZ-VpDDoTpRX-VrN7zb1z160eLupoizpy2m"
     
