@@ -801,9 +801,65 @@ footer {
       text-decoration: underline;
     }
   }
-
-
 }
+
+
+
+$base-spacing: 1.5em !default;
+$alert-color: #fff6bf !default;
+$error-color: #fbe3e4 !default;
+$notice-color: #e5edf8 !default;
+$success-color: #e6efc2 !default;
+
+@mixin flash($color) {
+  background-color: $color;
+  color: darken($color, 60%);
+  display: block;
+  margin-bottom: $base-spacing / 2;
+  padding: $base-spacing / 2;
+  text-align: center;
+  margin: 0 auto;
+  width: 30%;
+
+  border: none;
+  border: 1px solid lighten($color, 50%);
+  border-radius: 6px;
+
+ 
+  a {
+    color: darken($color, 70%);
+    text-decoration: underline;
+
+    &:focus,
+    &:hover {
+      color: darken($color, 90%);
+    }
+  }
+}
+
+.flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.flash-alert {  
+  @include flash($alert-color);
+}
+
+.flash-error {
+  @include flash($error-color);
+}
+
+.flash-notice {
+  @include flash($notice-color);
+}
+
+.flash-success {
+  @include flash($success-color);
+}
+
 
 @import "signup";
 @import "isitvuln";
