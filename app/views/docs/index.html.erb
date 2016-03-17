@@ -24,13 +24,15 @@
     <a name="start" class="anchor-offset"></a>
     <h1>Hello!</h1>
     <p>Welcome to Appcanary. The purpose of this documentation is to show you how to connect to our service. This API and accompanying documentation is in beta, pending feedback from users just like you.</p> 
-    <p><strong>Please tell us what you think!</strong> Also, we will be careful and try to communicate this clearly when it happens, but given the feedback we receive we may ship breaking changes.</p>
+    <p><strong>Please tell us what you think!</strong> You can email us at <a href="hello@appcanary.com>hello@appcanary.com</a>.</p>
+
+    <p>Also, we will be careful and try to communicate this clearly when it happens, but as this API is still in development, we may ship breaking changes.</p>
 
     <hr>
     <a name="authentication" class="anchor-offset"></a>
     
     <h2>Authentication</h2>
-    <h4>⤻ <code>https://appcanary.com/api/v2/status</code></h4>
+    <h4>⤻ <code>GET https://appcanary.com/api/v2/status</code></h4>
     <p>All communication with our APIs require your API key to be included as an <code>Authentication</code> header. These can be set in <code>curl</code> like so:</p>
     <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
      https://appcanary.com/api/v2/status</pre>
@@ -39,7 +41,7 @@
     <hr>
     <a name="check-endpoint" class="anchor-offset"></a>
     <h2>Check Endpoint</h2>
-    <h4>⤻ <code>https://appcanary.com/api/v2/check/:platform/:release</code></h4>
+    <h4>⤻ <code>POST https://appcanary.com/api/v2/check/:platform/:release</code></h4>
 
     <p>Check your dependencies for vulnerabilities. For example, with Ruby:</p>
     
@@ -62,7 +64,7 @@
           <dt>ruby</dt>
           <dd>None, leave blank.</dd>
         </dl>
-    </dl>
+     </dl>
 
 
     <h4>Required query parameters</h4>
@@ -82,7 +84,7 @@
     <hr>
 
     <p>The purpose of this endpoint is to show which vulnerabilities your app's dependencies are affected by.</p> 
-    <p>At the moment we only accept requests with <code>Content-Type: multipart/form-data</code> with an embedded <code>application/octet-stream</code>. If enough people request it, we're open to accepting JSON as well.</p>
+    <p>At the moment we only accept requests with <code>Content-Type: multipart/form-data</code> with an embedded <code>application/octet-stream</code>. If you need to send data in a different format, please let us <a href="mailto:hello@appcanary.com">know</a>.</p>
 
     <h4>Please note!</h4>
     <p>We cache requests. We strive to discard sensitive information but be mindful when submitting files containing credentials.</p>
@@ -107,7 +109,7 @@
       <dd>An array containing the data we're returning. May be empty if there is no data</dd>
 
       <dt>metadata</dt>
-      <dd>An array of metadata attributes largely meant for human consumption. The primary means of warning you of deprecation, or rate overages.</dd>
+      <dd>An array of metadata attributes largely meant for human consumption. A means of warning you of deprecation, or rate overages.</dd>
     </dl>
 
     <p>However, if your app does have vulnerable dependencies, then the container object will consist of a series of <code>artifact-version</code> objects, and look like the following example response:</p>
