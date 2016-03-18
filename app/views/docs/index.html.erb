@@ -9,9 +9,15 @@
         <ul class="nav nav-pills nav-stacked">
           <h4>Getting started</h4>
           <li><a href="#authentication">Authentication</a></li>
-          <h4>/check</h4>
-          <li><a href="#check-endpoint">Endpoint</a></li>
-          <li><a href="#check-responses">Response</a></li>
+          <h4>Check API</h4>
+          <li><a href="#check-endpoint">Check Endpoint</a></li>
+          <li><a href="#check-responses">Check Response</a></li>
+          <h4>Monitor API</h4>
+          <li><a href="#create-monitor">Create a Monitor</a></li>
+          <li><a href="#update-monitor">Update a Monitor</a></li>
+          <li><a href="#list-monitors">List Monitors</a></li>
+          <li><a href="#show-monitor">Show a Monitor</a></li>
+          <li><a href="#delete-monitor">Delete a Monitor</a></li>
           <h4>In the event of failure</h4>
           <li><a href="#errors">Error Response</a></li>
           <li><a href="#feedback">Questions? Feedback?</a></li>
@@ -50,37 +56,11 @@
      https://appcanary.com/api/v2/check/<strong>ruby</strong>
 </pre>
 
-    <h4>Required URL parameters</h4>
-     <dl class="dl-horizontal">
-      <dt>platform</dt>
-        <dd>The platform being checked. One of: <code>ruby</code>, <code>ubuntu</code>, <code>centos</code>.</dd>
-        <dt>release</dt>
-        <dd>Where appropriate, the specific release version being checked. <br/>When the platform is:
-        <dl class="sublist">
-          <dt>ubuntu</dt>
-          <dd><code>15.10</code>, <code>15.04</code>, <code>14.04</code> or <code>12.04</code>, etc</dd>
-          <dt>centos</dt>
-          <dd><code>7</code></dd>
-          <dt>ruby</dt>
-          <dd>None, leave blank.</dd>
-        </dl>
-     </dl>
-
+    <h4>Required path parameters</h4>
+    <%= render :partial => "platform_release" %>
 
     <h4>Required query parameters</h4>
-     <dl class="dl-horizontal">
-      <dt>file</dt>
-      <dd>The dependencies you want to check, form encoded.<br/> When the platform is:
-      <dl class="sublist">
-          <dt>ubuntu</dt>
-          <dd><code>/var/lib/dpkg/status</code></dd>
-          <dt>centos</dt>
-          <dd>The output of: <code>rpm -qa</code></dd>
-          <dt>ruby</dt>
-          <dd>Your <code>Gemfile.lock</code></dd>
-      </dl>
-      </dd>
-    </dl>
+    <%= render :partial => "file" %>
     <hr>
 
     <p>The purpose of this endpoint is to show which vulnerabilities your app's dependencies are affected by.</p> 
@@ -104,13 +84,7 @@
 </pre>
     
     <h4>The response container object</h4>
-    <dl class="dl-horizontal">
-      <dt>data</dt>
-      <dd>An array containing the data we're returning. May be empty if there is no data</dd>
-
-      <dt>metadata</dt>
-      <dd>An array of metadata attributes largely meant for human consumption. A means of warning you of deprecation, or rate overages.</dd>
-    </dl>
+    <% render :partial => "response_coll" %>
 
     <p>However, if your app does have vulnerable dependencies, then the container object will consist of a series of <code>artifact-version</code> objects, and look like the following example response:</p>
         <pre class="json">
@@ -150,60 +124,298 @@
 }
 </pre>
     <h4>ArtifactVersion container object</h4>
-    <dl class="dl-horizontal">
-      <dt>type</dt>
-      <dd>Describes the type of the resource - may only be "<code>artifact-version</code>"</dd>
-      <dt>attributes</dt>
-      <dd>A nested series of attributes relating to the ArtifactVersion.</dd>
-    </dl>
+    <%= render :partial => "artifact_version_container" %>
 
     <h4>ArtifactVersion attributes object</h4>
-    <p>An ArtifactVersion may be thought of as a unique (<code>name</code>, <code>kind</code>, <code>number</code>) tuple.</p>
+    <%= render :partial => "artifact_version" %>
 
-    <dl class="dl-horizontal">
-      <dt>name</dt>
-      <dd>The name of the package, dependency or artifact</dd>
-      <dt>kind</dt>
-      <dd>The name of the platform, ecosystem or environment this artifact belongs to.</dd>
-      <dt>number</dt>
-      <dd>The specific version string of the artifact being discussed. Version string formats vary from artifact kind to artifact kind.</dd>
-
-      <dt>vulnerabilities</dt>
-      <dd>A array of objects describing the vulnerabilities that affect this specific ArtifactVersion. Due to the nature of this API endpoint, this array should never be empty.</dd>
-    </dl>
-
-    <h4>Vulnerabilty object</h4>
-    <dl class="dl-horizontal">
-      <dt>title</dt>
-      <dd>A human readable summary of the vulnerability.</dd>
-
-      <dt>description</dt>
-      <dd>A human readable long form description of the vulnerability. May contain unescaped HTML or raw markdown - beware if injecting this into a web page</dd>
-
-      <dt>criticality</dt>
-      <dd>A subjective rating of how seriously of this vulnerability should be treated. May consist of <code>unknown</code>, <code>low</code>, <code>medium</code> or <code>high</code>. </dd>
-
-      <dt>cve</dt>
-      <dd>An array of strings, containing CVE ids. A given vulnerability may be related to multiple CVEs. If none are available, will present an empty array.</dd>
-
-      <dt>osvdb</dt>
-      <dd>An array of strings, containing OSVDB ids. A given vulnerability may be related to multiple OSVDB ids. If none are available, will present an empty array.</dd>
-
-      <dt>patched-versions</dt>
-      <dd>An array of versions strings representing new releases of the artifact that have been patched to deal with the vulnerability. The strings usually contain version operators like <code>~</code> or <code>&gt;=</code>.<br/><br/>We strive to only tell you about patched vulnerabilities, but it's possible that this array may turn up empty. Note: the semantics of the version operators may be different from artifact kind to artifact kind.</dd>
-
-      <dt>unaffected-versions</dt>
-      <dd>An array of version strings representing releases of the artifact that are unaffected by this vulnerability. In the absence of unaffected versions, this array may be empty.</dd>
-
-      <dt>upgrade-to</dt>
-      <dd>An array of version strings representing and sorted by the <strong>nearest upgrade</strong>. Use this field to guide you to the next closest version to your current one. If the <code>patched-versions</code> field is empty, so will this one.</dd>
-
-      <dt>uuid</dt>
-      <dd>A randomly generated identifier. Refer to this field when submitting support requests.</dd>
-    </dl>
+    <h4>Vulnerability object</h4>
+    <%= render :partial => "vulnerability" %>
 
     <hr>
+
+    <a name="create-monitor" class="anchor-offset"></a>
+    <h2>Create a Monitor</h2>
+    <p>A <em>monitor</em> is used to send us a set of packages to watch. You upload a file kind we support, and we will email you updates whenever any of the packages in it have a known vulnerability.</p>
+    <p>It's like registering a server using our agent, but you get complete control of what we're watching using the Monitor API.</p>
+    <p>Every monitor has a name unique to your account. You can specify the
+    monitor's name, or let us generate one for you.</p>
+    <h3>Create a named Monitor</h3>
+    <h4>⤻ <code>POST https://appcanary.com/api/v2/monitors/:name?platform=:platform&release=:release</code></h4>
+
+    <p>Creates a monitor with the specified name. For example, with Ubuntu:</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      -X POST -F <strong>file</strong>=@/var/lib/dpkg/status \
+      https://appcanary.com/api/v2/monitors/<strong>my-server-name</strong>?kind=<strong>ubuntu</strong>&release=<strong>12.04</strong></pre>
+
+    <h3>Create a unnamed Monitor</h3>
+    <h4>⤻ <code>POST https://appcanary.com/api/v2/monitors?platform=:platform&release=:release</code></h4>
+
+    <p>Creates a monitor. We will return an auto-generated name. For example, with Ubuntu:</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      -X POST -F <strong>file</strong>=@/var/lib/dpkg/status \
+      https://appcanary.com/api/v2/monitors?kind=<strong>ubuntu</strong>&release=<strong>12.04</strong></pre>
+
+
+    <h4>Optional path parameters</h4>
+    <dl class="dl-horizontal">
+      <dt>name</dt>
+      <dd>The name of the monitor you want to create, form encoded.
+        <br/>
+        If unspecified, we will generate one for you.
+      </dd>
+    </dl>
+
+    <h4>Required URL query parameters</h4>
+    <%= render :partial => "platform_release" %>
+
+    <h4>Required query parameters</h4>
+    <%= render :partial => "file" %>
+    <hr>
+
+    <a name="create-monitor-responses" class="anchor-offset"></a>
+    <h2>Create Monitor Response</h2>
+    <p>Successful requests will have a <code>201 CREATED</code> response code containing <code>application/json</code> data.</p>
+    <p>All successful responses will be wrapped in a <code>"data"</code> container object.
+    <p>For example, a response body will look like this:</p>
+    <pre class="json">
+{
+  "data": {
+    "type": "monitor",
+    "attributes": {
+      "name": "my-server",
+      "uuid": "56eac124-35c2-49bd-ab02-45de56c03ef4",
+      "is-vulnerable": true
+    }
+  }
+}
+</pre>
+    
+    <h4>The response container object</h4>
+    <%= render :partial => "response_single" %>
+
+    <h4>Monitor object</h4>
+    <%= render :partial => "monitor" %>
+    <hr>
     <a name="errors" class="anchor-offset"></a>
+
+
+    <a name="update-monitor" class="anchor-offset"></a>
+    <h2>Update a Monitor</h2>
+    <p>When you change the dependencies of a server or app you're monitoring, you update the monitor.</p>
+    <h4>⤻ <code>PUT https://appcanary.com/api/v2/monitors/:name</code></h4>
+
+    <p>Updates a monitor with the specified name with the contents of file. For example, with Ubuntu:</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      -X PUT -F <strong>file</strong>=@/var/lib/dpkg/status \
+      https://appcanary.com/api/v2/monitors/<strong>my-server-name</strong></pre>
+
+
+    <h4>Required path parameters</h4>
+    <%= render :partial => "monitor_name" %> 
+
+    <h4>Required query parameters</h4>
+    <%= render :partial => "file" %>
+
+    <hr>
+
+    <a name="update-monitor-responses" class="anchor-offset"></a>
+    <h2>Update Monitor Response</h2>
+    <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data.</p>
+    <p>All successful responses will be wrapped in a <code>"data"</code> container object.
+
+    <p>For example, a response body will look like this:</p>
+    <pre class="json">
+{
+  "data": {
+    "type": "monitor",
+    "attributes": {
+      "name": "my-server",
+      "uuid": "56eac124-35c2-49bd-ab02-45de56c03ef4",
+      "is-vulnerable": true
+    }
+  }
+}
+</pre>
+    
+    <h4>The response container object</h4>
+    <%= render :partial => "response_single" %>
+
+    <h4>Monitor object</h4>
+    <%= render :partial => "monitor" %>
+
+    <hr>
+
+    <a name="list-monitors" class="anchor-offset"></a>
+    <h2>List Monitors</h2>
+    <p>To list all of the monitors you have registered:</p>
+    <h4>⤻ <code>GET https://appcanary.com/api/v2/monitors</code></h4>
+
+    <p>For example</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      https://appcanary.com/api/v2/monitors/</pre>
+
+    <hr>
+
+    <a name="list-monitors-response" class="anchor-offset"></a>
+    <h2>List Monitors Response</h2>
+    <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data, which shall always contain an array.</p>
+    <p>All successful responses will be wrapped in a <code>"data"</code> container object.
+
+    <p>For example, a response body will look like this:</p>
+    <pre class="json">
+{
+  "data": [
+    {
+      "type": "monitor",
+      "attributes": {
+        "name": "my-server",
+        "uuid": "56ded706-d01d-4727-b13c-dd630b0c3c15",
+        "is-vulnerable": true
+      }
+    },
+    {
+      "type": "monitor",
+      "attributes": {
+        "name": "my-ruby-app",
+        "uuid": "56e03f35-f1b5-48a8-bce7-31394d908c83",
+        "is-vulnerable": true
+      }
+    }
+  ]
+}
+</pre>
+    
+    <h4>The response container object</h4>
+    <%= render :partial => "response_coll" %>
+
+    <h4>Monitor object</h4>
+    <%= render :partial => "monitor" %>
+
+    <hr>
+
+    <a name="show-monitor" class="anchor-offset"></a>
+    <h2>Show Monitor</h2>
+    <p>To show details about a specific monitor:</p>
+    <h4>⤻ <code>GET https://appcanary.com/api/v2/monitors/<strong>:name</strong></code></h4>
+
+    <p>For example</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      https://appcanary.com/api/v2/monitors/my-server</pre>
+
+    <h4>Required path parameters</h4>
+    <%= render :partial => "platform_release" %>
+    <hr>
+
+
+    <a name="show-monitor-response" class="anchor-offset"></a>
+    <h2>Show Monitors Response</h2>
+    <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data.</p>
+    <p>All successful responses will be wrapped in a <code>"data"</code> container object.
+
+    <p>For example, a response body will look like this:</p>
+    <pre class="json">
+{
+  "data": {
+    "type": "monitor",
+    "attributes": {
+      "name": "centos-server",
+      "uuid": "56ded718-b01d-4948-840a-45ea73d3bf97",
+      "is-vulnerable": true,
+      "vulnerable-versions": [
+        {
+          "type": "artifact-version",
+          "attributes": {
+            "name": "kernel-devel",
+            "kind": "centos",
+            "number": "3.10.0-229.el7",
+            "arch": "x86_64",
+            "vulnerabilities": [
+              {
+                "description": " The kernel packages contain the Linux kernel, the core of any Linux operating system. * A flaw was found in the kernel's implementation of the Berkeley Packet Filter (BPF). A local attacker could craft BPF code to crash the system by creating a situation in which the JIT compiler would fail to correctly optimize the JIT image on the last pass. This would lead to the CPU executing instructions that were not part of the JIT code. (CVE-2015-4700, Important) * Two flaws were found in the way the Linux kernel's networking implementation handled UDP packets with incorrect checksum values. A remote attacker could potentially use these flaws to trigger an infinite loop in the kernel, resulting in a denial of service on the system, or cause a denial of service in applications using the edge triggered epoll functionality. (CVE-2015-5364, CVE-2015-5366, Important) * A flaw was found in the way the Linux kernel's ext4 file system handled the \"page size > block size\" condition when the fallocate zero range functionality was used. A local attacker could use this flaw to crash the system. (CVE-2015-0275, Moderate) * It was found that the Linux kernel's keyring implementation would leak memory when adding a key to a keyring via the add_key() function. A local attacker could use this flaw to exhaust all available memory on the system. (CVE-2015-1333, Moderate) * A race condition flaw was found in the way the Linux kernel's SCTP implementation handled Address Configuration lists when performing Address Configuration Change (ASCONF). A local attacker could use this flaw to crash the system via a race condition triggered by setting certain ASCONF options on a socket. (CVE-2015-3212, Moderate) * An information leak flaw was found in the way the Linux kernel's Virtual Dynamic Shared Object (vDSO) implementation performed address randomization. A local, unprivileged user could use this flaw to leak kernel memory addresses to user-space. (CVE-2014-9585, Low) Red Hat would like to thank Daniel Borkmann for reporting CVE-2015-4700, and Canonical for reporting the CVE-2015-1333 issue. The CVE-2015-0275 issue was discovered by Xiong Zhou of Red Hat, and the CVE-2015-3212 issue was discovered by Ji Jianwen of Red Hat Engineering. This update also fixes several bugs. Refer to the following Knowledgebase article for further information: https://access.redhat.com/articles/1614563 All kernel users are advised to upgrade to these updated packages, which contain backported patches to correct these issues. The system must be rebooted for this update to take effect. ",
+                "osvdb": [],
+                "upgrade-to": [
+                  "kernel-devel-3.10.0-229.14.1.el7.x86_64"
+                ],
+                "criticality": "high",
+                "rhsa": [
+                  "RHSA-2015:1778"
+                ],
+                "cve": [
+                  "CVE-2015-4700",
+                  "CVE-2014-9585",
+                  "CVE-2015-0275",
+                  "CVE-2015-3212",
+                  "CVE-2015-1333",
+                  "CVE-2015-5366",
+                  "CVE-2015-5364"
+                ],
+                "title": "Important CentOS kernel Security Update",
+                "uuid": "56ca960e-a7b0-44d6-9e02-2bdb3b00aeef",
+                "unaffected-versions": [],
+                "patched-versions": [
+                  "kernel-devel-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "kernel-abi-whitelists-3.10.0-229.14.1.el7.noarch.rpm",
+                  "perf-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "kernel-debug-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "kernel-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "kernel-doc-3.10.0-229.14.1.el7.noarch.rpm",
+                  "kernel-tools-libs-devel-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "kernel-tools-libs-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "python-perf-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "kernel-3.10.0-229.14.1.el7.src.rpm",
+                  "kernel-debug-devel-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "kernel-tools-3.10.0-229.14.1.el7.x86_64.rpm",
+                  "kernel-headers-3.10.0-229.14.1.el7.x86_64.rpm"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+    </pre>
+    
+    <h4>The response container object</h4>
+    <%= render :partial => "response_single" %>
+
+    <h4>Monitor object</h4>
+    <%= render :partial => "monitor_detailed" %>
+
+    <h4>ArtifactVersion container object</h4>
+    <%= render :partial => "artifact_version_container" %>
+
+    <h4>ArtifactVersion attributes object</h4>
+    <%= render :partial => "artifact_version" %>
+
+    <h4>Vulnerability object</h4>
+    <%= render :partial => "vulnerability" %>
+
+    <hr>
+
+    <a name="delete-monitor" class="anchor-offset"></a>
+    <h2>Delete Monitor</h2>
+    <p>To delete a monitor you have previously registered</p>
+    <h4>⤻ <code>DELETE https://appcanary.com/api/v2/monitors/<strong>:name</strong></code></h4>
+
+    <p>For example</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      https://appcanary.com/api/v2/monitors/</pre>
+
+    <hr>
+
+    <h2>Delete Monitors Response</h2>
+    <p>Successful requests will have a <code>204 NO CONTENT</code> response code containing no data.</p>
+
+    <hr>
 
     <h2>Errors</h2>
     <p>Occasionally, we won't be able to process your request. We'll try to give you meaningful hints. All responses shall have a 400 or 500 series status - most commonly one of: <code>400 Bad Request</code>, <code>422 Unprocessable Entity</code> or <code>500 Internal Server Error</code>.</p>
