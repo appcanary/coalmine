@@ -6,8 +6,15 @@
 <p>Check your dependencies for vulnerabilities. For example, with Ruby:</p>
 
 <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
- https://appcanary.com/api/v2/check/<strong>ruby</strong> -X POST \
+ https://appcanary.com/api/v2/check?platform=<strong>ruby</strong> -X POST \
  -F <strong>file</strong>=@./Gemfile.lock
+</pre>
+
+<strong>or</strong>
+
+<pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+ https://appcanary.com/api/v2/check?platform=<strong>ubuntu</strong>&amp;release=<strong>14.04</strong> -X POST \
+ -F <strong>file</strong>=@/var/lib/dpkg/status
 </pre>
 
 <h4>Required path parameters</h4>
