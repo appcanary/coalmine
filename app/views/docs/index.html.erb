@@ -9,9 +9,17 @@
         <ul class="nav nav-pills nav-stacked">
           <h4>Getting started</h4>
           <li><a href="#authentication">Authentication</a></li>
-          <h4>/check</h4>
-          <li><a href="#check-endpoint">Endpoint</a></li>
-          <li><a href="#check-responses">Response</a></li>
+          <h4>Check API</h4>
+          <li><a href="#check-endpoint">Check Request</a></li>
+          <li><a href="#check-responses">Check Response</a></li>
+          <% if $rollout.active?(:monitor_api, current_user) %>
+          <h4>Monitor API</h4>
+          <li><a href="#create-monitor">Create</a></li>
+          <li><a href="#show-monitor">Read</a></li>
+          <li><a href="#update-monitor">Update</a></li>
+          <li><a href="#delete-monitor">Delete</a></li>
+          <li><a href="#list-monitors">List</a></li>
+          <% end %>
           <h4>In the event of failure</h4>
           <li><a href="#errors">Error Response</a></li>
           <li><a href="#feedback">Questions? Feedback?</a></li>
@@ -24,185 +32,42 @@
     <a name="start" class="anchor-offset"></a>
     <h1>Hello!</h1>
     <p>Welcome to Appcanary. The purpose of this documentation is to show you how to connect to our service. This API and accompanying documentation is in beta, pending feedback from users just like you.</p> 
-    <p><strong>Please tell us what you think!</strong> Also, we will be careful and try to communicate this clearly when it happens, but given the feedback we receive we may ship breaking changes.</p>
+    <p><strong>Please tell us what you think!</strong> You can email us at <a href="hello@appcanary.com">hello@appcanary.com</a>.</p>
+
+    <p>Also, we will be careful and try to communicate this clearly when it happens but: this API is still in development and we may ship breaking changes.</p>
 
     <hr>
     <a name="authentication" class="anchor-offset"></a>
     
     <h2>Authentication</h2>
-    <h4>⤻ <code>https://appcanary.com/api/v2/status</code></h4>
+    <h4><code>GET https://appcanary.com/api/v2/status</code></h4>
     <p>All communication with our APIs require your API key to be included as an <code>Authentication</code> header. These can be set in <code>curl</code> like so:</p>
     <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
      https://appcanary.com/api/v2/status</pre>
 
     <p>The status endpoint shown above will respond appropriately if your request is authenticated and your account is in good standing.</p>
     <hr>
-    <a name="check-endpoint" class="anchor-offset"></a>
-    <h2>Check Endpoint</h2>
-    <h4>⤻ <code>https://appcanary.com/api/v2/check/:platform/:release</code></h4>
+    <br/>
+    <br/>
+    <br/>
+    <%= render :partial => "check_api" %>
 
-    <p>Check your dependencies for vulnerabilities. For example, with Ruby:</p>
-    
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
-     -X POST -F <strong>file</strong>=@./Gemfile.lock \
-     https://appcanary.com/api/v2/check/<strong>ruby</strong>
-</pre>
-
-    <h4>Required URL parameters</h4>
-     <dl class="dl-horizontal">
-      <dt>platform</dt>
-        <dd>The platform being checked. One of: <code>ruby</code>, <code>ubuntu</code>, <code>centos</code>.</dd>
-        <dt>release</dt>
-        <dd>Where appropriate, the specific release version being checked. <br/>When the platform is:
-        <dl class="sublist">
-          <dt>ubuntu</dt>
-          <dd><code>15.10</code>, <code>15.04</code>, <code>14.04</code> or <code>12.04</code>, etc</dd>
-          <dt>centos</dt>
-          <dd><code>7</code></dd>
-          <dt>ruby</dt>
-          <dd>None, leave blank.</dd>
-        </dl>
-    </dl>
+    <hr/>
+    <br/>
+    <br/>
+    <br/>
 
 
-    <h4>Required query parameters</h4>
-     <dl class="dl-horizontal">
-      <dt>file</dt>
-      <dd>The dependencies you want to check, form encoded.<br/> When the platform is:
-      <dl class="sublist">
-          <dt>ubuntu</dt>
-          <dd><code>/var/lib/dpkg/status</code></dd>
-          <dt>centos</dt>
-          <dd>The output of: <code>rpm -qa</code></dd>
-          <dt>ruby</dt>
-          <dd>Your <code>Gemfile.lock</code></dd>
-      </dl>
-      </dd>
-    </dl>
+    <% if $rollout.active?(:monitor_api, current_user) %>
+    <%= render :partial => "monitor_api" %>
+   
     <hr>
+    <br/>
+    <br/>
+    <br/>
+    <% end %>
 
-    <p>The purpose of this endpoint is to show which vulnerabilities your app's dependencies are affected by.</p> 
-    <p>At the moment we only accept requests with <code>Content-Type: multipart/form-data</code> with an embedded <code>application/octet-stream</code>. If enough people request it, we're open to accepting JSON as well.</p>
-
-    <h4>Please note!</h4>
-    <p>We cache requests. We strive to discard sensitive information but be mindful when submitting files containing credentials.</p>
-    <p>All requests are currently unmetered. This may change as appropriate.</p>
-
-    <hr>
-    <a name="check-responses" class="anchor-offset"></a>
-    <h2>Check Responses</h2>
-    <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data.</p>
-    <p>All successful responses will be wrapped in a <code>"data"</code> container object and contain a <code>"vulnerable"</code> boolean field. This container object <strong>shall always</strong> contain an array, whether it's empty or not. This schema is loosely based on the <a href="http://jsonapi.org/">jsonapi</a> spec.</p>
-    <p>For example, if your dependency file does not have any known vulnerabilities, the response body will look like this:</p>
-    <pre class="json">
-{
-  "vulnerable": false,
-  "data": []
-}
-</pre>
-    
-    <h4>The response container object</h4>
-    <dl class="dl-horizontal">
-      <dt>data</dt>
-      <dd>An array containing the data we're returning. May be empty if there is no data</dd>
-
-      <dt>metadata</dt>
-      <dd>An array of metadata attributes largely meant for human consumption. The primary means of warning you of deprecation, or rate overages.</dd>
-    </dl>
-
-    <p>However, if your app does have vulnerable dependencies, then the container object will consist of a series of <code>artifact-version</code> objects, and look like the following example response:</p>
-        <pre class="json">
-{
-  "vulnerable": true,
-  "data": [
-    {
-      "type": "artifact-version",
-      "attributes": {
-        "name": "rack",
-        "kind": "rubygem",
-        "number": "1.6.0",
-        "vulnerabilities": [
-          {
-            "title": "Potential Denial of Service Vulnerability in Rack",
-            "description": "Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade.",
-            "criticality": "high",
-            "cve": [
-              "CVE-2015-3225"
-            ],
-            "osvdb": [],
-            "patched-versions": [
-              "~&lt; 1.5.4",
-              "~&lt; 1.4.6",
-              "&gt;= 1.6.2"
-            ],
-            "unaffected-versions": [],
-            "uuid": "55807540-053f-40f0-9266-a3d1ca6a5838",
-            "upgrade-to": [
-              "&gt;= 1.6.2"
-            ]
-          }
-        ]
-      }
-    }
-  ]
-}
-</pre>
-    <h4>ArtifactVersion container object</h4>
-    <dl class="dl-horizontal">
-      <dt>type</dt>
-      <dd>Describes the type of the resource - may only be "<code>artifact-version</code>"</dd>
-      <dt>attributes</dt>
-      <dd>A nested series of attributes relating to the ArtifactVersion.</dd>
-    </dl>
-
-    <h4>ArtifactVersion attributes object</h4>
-    <p>An ArtifactVersion may be thought of as a unique (<code>name</code>, <code>kind</code>, <code>number</code>) tuple.</p>
-
-    <dl class="dl-horizontal">
-      <dt>name</dt>
-      <dd>The name of the package, dependency or artifact</dd>
-      <dt>kind</dt>
-      <dd>The name of the platform, ecosystem or environment this artifact belongs to.</dd>
-      <dt>number</dt>
-      <dd>The specific version string of the artifact being discussed. Version string formats vary from artifact kind to artifact kind.</dd>
-
-      <dt>vulnerabilities</dt>
-      <dd>A array of objects describing the vulnerabilities that affect this specific ArtifactVersion. Due to the nature of this API endpoint, this array should never be empty.</dd>
-    </dl>
-
-    <h4>Vulnerabilty object</h4>
-    <dl class="dl-horizontal">
-      <dt>title</dt>
-      <dd>A human readable summary of the vulnerability.</dd>
-
-      <dt>description</dt>
-      <dd>A human readable long form description of the vulnerability. May contain unescaped HTML or raw markdown - beware if injecting this into a web page</dd>
-
-      <dt>criticality</dt>
-      <dd>A subjective rating of how seriously of this vulnerability should be treated. May consist of <code>unknown</code>, <code>low</code>, <code>medium</code> or <code>high</code>. </dd>
-
-      <dt>cve</dt>
-      <dd>An array of strings, containing CVE ids. A given vulnerability may be related to multiple CVEs. If none are available, will present an empty array.</dd>
-
-      <dt>osvdb</dt>
-      <dd>An array of strings, containing OSVDB ids. A given vulnerability may be related to multiple OSVDB ids. If none are available, will present an empty array.</dd>
-
-      <dt>patched-versions</dt>
-      <dd>An array of versions strings representing new releases of the artifact that have been patched to deal with the vulnerability. The strings usually contain version operators like <code>~</code> or <code>&gt;=</code>.<br/><br/>We strive to only tell you about patched vulnerabilities, but it's possible that this array may turn up empty. Note: the semantics of the version operators may be different from artifact kind to artifact kind.</dd>
-
-      <dt>unaffected-versions</dt>
-      <dd>An array of version strings representing releases of the artifact that are unaffected by this vulnerability. In the absence of unaffected versions, this array may be empty.</dd>
-
-      <dt>upgrade-to</dt>
-      <dd>An array of version strings representing and sorted by the <strong>nearest upgrade</strong>. Use this field to guide you to the next closest version to your current one. If the <code>patched-versions</code> field is empty, so will this one.</dd>
-
-      <dt>uuid</dt>
-      <dd>A randomly generated identifier. Refer to this field when submitting support requests.</dd>
-    </dl>
-
-    <hr>
     <a name="errors" class="anchor-offset"></a>
-
     <h2>Errors</h2>
     <p>Occasionally, we won't be able to process your request. We'll try to give you meaningful hints. All responses shall have a 400 or 500 series status - most commonly one of: <code>400 Bad Request</code>, <code>422 Unprocessable Entity</code> or <code>500 Internal Server Error</code>.</p>
     <p>A sample error request looks like the following:</p>

@@ -1,0 +1,13 @@
+<p>An ArtifactVersion may be thought of as a unique (<code>name</code>, <code>kind</code>, <code>number</code>) tuple.</p>
+
+<dl class="dl-horizontal">
+  <dt>name</dt>
+  <dd>The name of the package, dependency or artifact</dd>
+  <dt>kind</dt>
+  <dd>The name of the platform, ecosystem or environment this artifact belongs to.</dd>
+  <dt>number</dt>
+  <dd>The specific version string of the artifact being discussed. Version string formats vary from artifact kind to artifact kind.</dd>
+
+  <dt>vulnerabilities</dt>
+  <dd>A array of objects describing the vulnerabilities that affect this specific ArtifactVersion. Due to the nature of this API endpoint, this array should never be empty.</dd>
+</dl>
