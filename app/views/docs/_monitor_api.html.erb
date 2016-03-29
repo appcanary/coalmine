@@ -11,7 +11,7 @@
     
     <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
       -X POST -F <strong>file</strong>=@/var/lib/dpkg/status \
-      https://appcanary.com/api/v2/monitors/<strong>my-server-name</strong>?kind=<strong>ubuntu</strong>&amp;release=<strong>12.04</strong></pre>
+      "https://appcanary.com/api/v2/monitors/<strong>my-server-name</strong>?platform=<strong>ubuntu</strong>&amp;release=<strong>12.04</strong>"</pre>
 
     <h4>Optional path parameters</h4>
     <dl class="dl-horizontal">
