@@ -47,6 +47,7 @@
 }
 
 .topbar {
+  display: none;
   position: fixed;
   height: 8px;
   background-color: darken($yellow, 5%);
@@ -55,6 +56,58 @@
   left: 0;
   width: 100%;
   z-index: 1000;
+}
+
+.top-menu-wrapper {
+  background-color: $yellow;
+  border-bottom: 1px solid darken($yellow, 5%);
+  z-index: 1001;
+}
+
+.top-menu-container {
+  @include outer-container;
+}
+
+.top-menu {
+  @include row();
+  padding: 0.8em 0 0.5em 0;
+
+  img {
+    width: 100%;
+  }
+
+  .logo {
+    @include span-columns(2 of 12);
+  }
+
+  .menu-action {
+    @include span-columns(4 of 12);
+    @include shift(6);
+
+    > a {
+      margin-left: 15px;
+    }
+
+    .login {
+      box-shadow: none;
+      border: 1px solid $text-colour;
+      background: none;
+      &:hover {
+        background-color: $dark-yellow;
+      }
+    }
+
+    .button {
+      display: inline-block;
+    }
+
+    .nav {
+      color: black;
+      &:hover {
+        color: darken($dark-yellow, 20%);
+      }
+    }
+  }
 }
 
 // the action bar on top right

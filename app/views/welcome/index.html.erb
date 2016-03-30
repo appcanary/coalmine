@@ -1,15 +1,18 @@
-<div class="action">
-  <div class="action_unit action_login">
-    <%= link_to "Log in", login_path, :class => "button" %>
-  </div>
-  <div class="action_unit action_sign-up">
-    <%= link_to "Sign Up", sign_up_path, :class => "button" %>
-  </div>
-</div>
+<div class="top-menu-wrapper">
+  <div class="top-menu-container">
+    <div class="top-menu">
+      <div class="logo">
+        <%= image_tag "appcanary-hero.png" %>
+      </div>
 
-<div class="alert-cta-wrapper">
-  <div class="alert-cta">
-    <span>Hey! We now have an API &amp; support CentOS!<br/>Click <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">here for more info.</a></span>
+      <div class="menu-action">
+        <%= link_to "About", "#", :class => "nav" %>
+        <%= link_to "Blog", "#", :class => "nav" %>
+        <%= link_to "Pricing", "#", :class => "nav" %>
+        <%= link_to "Log in", login_path, :class => "login button" %>
+        <%= link_to "Sign Up", sign_up_path, :class => "button" %>
+      </div>
+    </div>
   </div>
 </div>
 
