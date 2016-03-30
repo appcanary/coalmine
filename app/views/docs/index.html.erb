@@ -20,6 +20,11 @@
           <li><a href="#update-monitor">Update</a></li>
           <li><a href="#delete-monitor">Delete</a></li>
           <% end %>
+          <% if $rollout.active?(:server_api, current_user) %>
+          <h4>Server API</h4>
+          <li><a href="#list-servers">List</a></li>
+          <li><a href="#show-server">Show</a></li>
+          <% end %>
           <h4>In the event of failure</h4>
           <li><a href="#errors">Error Response</a></li>
           <li><a href="#feedback">Questions? Feedback?</a></li>
@@ -61,6 +66,15 @@
     <% if $rollout.active?(:monitor_api, current_user) %>
     <%= render :partial => "monitor_api" %>
    
+    <hr>
+    <br/>
+    <br/>
+    <br/>
+    <% end %>
+
+    <% if $rollout.active?(:server_api, current_user) %>
+    <%= render :partial => "server_api" %>
+
     <hr>
     <br/>
     <br/>

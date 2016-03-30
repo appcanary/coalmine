@@ -1,0 +1,255 @@
+<a name="list-servers" class="anchor-offset"></a>
+<h1>Server API</h1>
+  <p>The <em>server</em> allows you to query information about servers that you register with our <a href="http://localhost:3000/servers/new">agents</a>.</p>
+  <h2>List Servers</h2>
+    <p>To list all of the servers you have registered:</p>
+    <h4><code>GET https://appcanary.com/api/v2/servers</code></h4>
+
+    <p>For example</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      https://appcanary.com/api/v2/servers</pre>
+
+
+    <a name="list-monitors-response" class="anchor-offset"></a>
+  <h2>List Servers Response</h2>
+    <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data, which shall always contain an array.</p>
+    <p>All successful responses will be wrapped in a <code>"data"</code> container object.
+
+    <p>For example, a response body will look like this:</p>
+    <pre class="json">
+{
+  "data": [
+    {
+      "type": "server",
+      "attributes": {
+        "name": "server1",
+        "uuid": "55a5baeb-2ad4-4787-8784-a062d254900e",
+        "hostname": "server1",
+        "last-heartbeat-at": "2016-03-27T03:33:02.185Z",
+        "is-vulnerable": true,
+        "apps": [
+          {
+            "name": "",
+            "path": "/var/lib/dpkg/status",
+            "uuid": "55a5baec-3e5c-4cca-832c-06aaa36418f6",
+            "is-vulnerable": true
+          },
+          {
+            "name": "",
+            "path": "/var/www/myapp/current/Gemfile.lock",
+            "uuid": "55a5baec-027d-4618-b8de-12638281f34c",
+            "is-vulnerable": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "server",
+      "attributes": {
+        "name": "server2",
+        "uuid": "560b0e75-1317-481c-98bb-15e6ae5978b6",
+        "hostname": "database",
+        "last-heartbeat-at": "2016-03-08T00:21:31.105Z",
+        "is-vulnerable": true,
+        "apps": [
+          {
+            "name": "",
+            "path": "/var/lib/dpkg/status",
+            "uuid": "560b0e77-0a26-41fd-bc35-38b5aac33709",
+            "is-vulnerable": true
+          },
+        ]
+      }
+    }
+  ]
+}
+    </pre>
+    
+    <h4>The response container object</h4>
+    <%= render :partial => "response_coll_container_fields" %>
+
+    <h4>Server object</h4>
+    <%= render :partial => "server_fields" %>
+
+    <h4>App object </h4>
+    <%= render :partial => "app_fields" %>
+
+    <hr>
+    <br/>
+    <br/>
+
+<a name="show-server" class="anchor-offset"></a>
+ <h2>Show Server</h2>
+    <p>To show details about a specific server:</p>
+    <h4><code>GET https://appcanary.com/api/v2/servers/<strong>:uuid</strong></code></h4>
+
+    <p>For example</p>
+
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      https://appcanary.com/api/v2/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
+
+    <h4>Required path parameters</h4>
+    <%= render :partial => "server_uuid" %>
+
+    <h2>Show Server Response</h2>
+    <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data.</p>
+    <p>All successful responses will be wrapped in a <code>"data"</code> container object.
+
+    <p>For example, a response body will look like this:</p>
+    <pre class="json">
+{
+  "data": {
+    "type": "server",
+    "attributes": {
+      "name": "",
+      "uuid": "56cb0a86-edff-45ef-a4b7-d5ae230f898c",
+      "hostname": "vagrant-ubuntu-trusty-64",
+      "last-heartbeat-at": "2016-02-22T13:18:43.084Z",
+      "is-vulnerable": true,
+      "apps": [
+        {
+          "type": "app",
+          "attributes": {
+            "name": "",
+            "path": "/var/lib/dpkg/status",
+            "uuid": "56cb0a88-a9b2-4bde-a614-ad74e27053b2",
+            "is-vulnerable": true,
+            "vulnerable-versions": [
+              {
+                "type": "artifact-version",
+                "attributes": {
+                  "name": "linux-image-3.13.0-55-generic",
+                  "kind": "ubuntu",
+                  "number": "3.13.0-55.92",
+                  "arch": null,
+                  "vulnerabilities": [
+                    {
+                      "description": "The Fix for CVE-2015-1328 introduced a regression into the Linux kernel's\noverlayfs file system. The removal of a directory that only exists on the\nlower layer results in a kernel panic.\n\nWe apologize for the inconvenience.\n\nOriginal advisory details:\n\n Philip Pettersson discovered a privilege escalation when using overlayfs\n mounts inside of user namespaces. A local user could exploit this flaw to\n gain administrative privileges on the system.\n\nAfter a standard system update you need to reboot your computer to make\nall the necessary changes.\n",
+                      "osvdb": [],
+                      "upgrade-to": [],
+                      "criticality": "unknown",
+                      "rhsa": [],
+                      "cve": [
+                        "http://bugs.launchpad.net/bugs/1465998"
+                      ],
+                      "title": "USN-2643-2: Linux kernel regression",
+                      "uuid": "55a20803-5a30-4b1d-b4c0-fd2ef4845235",
+                      "unaffected-versions": [
+                        "vivid linux-image-3.13.0-55-lowlatency",
+                        "natty linux-image-3.13.0-55-generic",
+                        "natty linux-image-3.13.0-55-powerpc64-smp",
+                        "quantal linux-image-3.13.0-55-powerpc-e500",
+                        "hardy linux-image-3.13.0-55-powerpc64-emb",
+                        "raring linux-image-3.13.0-55-powerpc-e500mc",
+                        "utopic linux-image-3.13.0-55-generic-lpae",
+                        "lucid linux-image-3.13.0-55-lowlatency",
+                        "vivid linux-image-3.13.0-55-powerpc-smp",
+                        "oneiric linux-image-3.13.0-55-powerpc-smp",
+                        "natty linux-image-3.13.0-55-powerpc-e500mc",
+                        "quantal linux-image-3.13.0-55-powerpc-smp",
+                        "quantal linux-image-3.13.0-55-powerpc-e500mc",
+                        "saucy linux-image-3.13.0-55-powerpc64-emb",
+                        "precise linux-image-3.13.0-55-generic",
+                        "lucid linux-image-3.13.0-55-powerpc-e500mc",
+                        "quantal linux-image-3.13.0-55-generic-lpae",
+                        "utopic linux-image-3.13.0-55-lowlatency",
+                        "hardy linux-image-3.13.0-55-powerpc64-smp",
+                        "oneiric linux-image-3.13.0-55-lowlatency",
+                        "raring linux-image-3.13.0-55-generic",
+                        "lucid linux-image-3.13.0-55-generic",
+                        "saucy linux-image-3.13.0-55-lowlatency",
+                        "natty linux-image-3.13.0-55-generic-lpae",
+                        "vivid linux-image-3.13.0-55-powerpc-e500mc",
+                        "precise linux-image-3.13.0-55-powerpc-smp",
+                        "vivid linux-image-3.13.0-55-powerpc-e500",
+                        "raring linux-image-3.13.0-55-powerpc64-emb",
+                        "utopic linux-image-3.13.0-55-powerpc64-smp",
+                        "lucid linux-image-3.13.0-55-generic-lpae",
+                        "vivid linux-image-3.13.0-55-powerpc64-emb",
+                        "saucy linux-image-3.13.0-55-powerpc-e500",
+                        "saucy linux-image-3.13.0-55-powerpc64-smp",
+                        "raring linux-image-3.13.0-55-generic-lpae",
+                        "natty linux-image-3.13.0-55-lowlatency",
+                        "oneiric linux-image-3.13.0-55-generic",
+                        "hardy linux-image-3.13.0-55-powerpc-e500",
+                        "precise linux-image-3.13.0-55-powerpc-e500mc",
+                        "vivid linux-image-3.13.0-55-powerpc64-smp",
+                        "precise linux-image-3.13.0-55-lowlatency",
+                        "quantal linux-image-3.13.0-55-generic",
+                        "raring linux-image-3.13.0-55-lowlatency",
+                        "natty linux-image-3.13.0-55-powerpc-smp",
+                        "raring linux-image-3.13.0-55-powerpc64-smp",
+                        "saucy linux-image-3.13.0-55-powerpc-smp",
+                        "utopic linux-image-3.13.0-55-powerpc64-emb",
+                        "precise linux-image-3.13.0-55-powerpc-e500",
+                        "saucy linux-image-3.13.0-55-powerpc-e500mc",
+                        "oneiric linux-image-3.13.0-55-powerpc-e500",
+                        "saucy linux-image-3.13.0-55-generic-lpae",
+                        "hardy linux-image-3.13.0-55-powerpc-e500mc",
+                        "precise linux-image-3.13.0-55-powerpc64-emb",
+                        "quantal linux-image-3.13.0-55-lowlatency",
+                        "hardy linux-image-3.13.0-55-lowlatency",
+                        "natty linux-image-3.13.0-55-powerpc-e500",
+                        "lucid linux-image-3.13.0-55-powerpc64-emb",
+                        "vivid linux-image-3.13.0-55-generic",
+                        "precise linux-image-3.13.0-55-generic-lpae",
+                        "precise linux-image-3.13.0-55-powerpc64-smp",
+                        "utopic linux-image-3.13.0-55-powerpc-e500",
+                        "quantal linux-image-3.13.0-55-powerpc64-smp",
+                        "hardy linux-image-3.13.0-55-powerpc-smp",
+                        "lucid linux-image-3.13.0-55-powerpc-smp",
+                        "lucid linux-image-3.13.0-55-powerpc64-smp",
+                        "lucid linux-image-3.13.0-55-powerpc-e500",
+                        "raring linux-image-3.13.0-55-powerpc-smp",
+                        "utopic linux-image-3.13.0-55-powerpc-smp",
+                        "utopic linux-image-3.13.0-55-powerpc-e500mc",
+                        "raring linux-image-3.13.0-55-powerpc-e500",
+                        "saucy linux-image-3.13.0-55-generic",
+                        "oneiric linux-image-3.13.0-55-powerpc-e500mc",
+                        "natty linux-image-3.13.0-55-powerpc64-emb",
+                        "utopic linux-image-3.13.0-55-generic",
+                        "hardy linux-image-3.13.0-55-generic",
+                        "oneiric linux-image-3.13.0-55-powerpc64-emb",
+                        "oneiric linux-image-3.13.0-55-generic-lpae",
+                        "quantal linux-image-3.13.0-55-powerpc64-emb",
+                        "hardy linux-image-3.13.0-55-generic-lpae",
+                        "vivid linux-image-3.13.0-55-generic-lpae",
+                        "oneiric linux-image-3.13.0-55-powerpc64-smp"
+                      ],
+                      "patched-versions": [
+                        "3.13.0-55.94"
+                      ]
+                    }
+                  ]
+                }
+              },
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+    </pre>
+
+    <h4>The response container object</h4>
+    <%= render :partial => "response_container_fields" %>
+
+    <h4>Server object</h4>
+    <%= render :partial => "server_fields" %>
+
+    <h4>App object </h4>
+    <%= render :partial => "app_fields" %>
+
+    <h4>ArtifactVersion container object</h4>
+    <%= render :partial => "artifact_version_container_fields" %>
+
+    <h4>ArtifactVersion attributes object</h4>
+    <%= render :partial => "artifact_version_fields" %>
+
+    <h4>Vulnerability object</h4>
+    <%= render :partial => "vulnerability_fields" %>
+<hr>
+<br/>
+<br/>
