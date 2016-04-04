@@ -59,7 +59,7 @@ http_interactions:
         modular Ruby webserver interface","uri":"https://www.rubygems.org/gems/rack"}}]}],"ip":"172.20.14.238","name":"why
         is this here?","hostname":"maryanne.local","uname":"Darwin maryanne.local
         14.3.0 Darwin Kernel Version 14.3.0: Mon Mar 23 11:59:05 PDT 2015; root:xnu-2782.20.48~5/RELEASE_X86_64
-        x86_64 i386 MacBookPro12,1 Darwin\n","id":17592186873898,"uuid":"55837b51-2e9d-45ad-ab38-9caf2f2b78b5","last-heartbeat-at":"2015-06-22T06:19:45.812Z","is-vulnerable":true}]'
+        x86_64 i386 MacBookPro12,1 Darwin\n","id":17592186873898,"uuid":"55837b51-2e9d-45ad-ab38-9caf2f2b78b5","last-heartbeat-at":"2015-06-22T06:19:45.812Z","vulnerable":true}]'
     http_version: 
   recorded_at: Mon, 22 Jun 2015 06:19:48 GMT
 - request:
