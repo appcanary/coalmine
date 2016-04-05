@@ -7,10 +7,9 @@ class DocsControllerTest < ActionController::TestCase
     User.any_instance.stubs(:agent_token).returns("1234")
 
     login_user(user)
-
     get :index
     assert_response :success
-    assert assigns(:user)
+    assert assigns(:agent_token)
   end
 
 end

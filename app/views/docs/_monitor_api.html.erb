@@ -9,7 +9,7 @@
 
     <p>Every monitor has a name unique to your account. You can specify the monitor's name, or let us generate one for you. Creates a monitor with an optionally specified name. For example, with Ubuntu:</p>
     
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
       -X POST -F <strong>file</strong>=@/var/lib/dpkg/status \
       "https://appcanary.com/api/v2/monitors/<strong>my-server</strong>?platform=<strong>ubuntu</strong>&amp;release=<strong>12.04</strong>"</pre>
 
@@ -63,7 +63,7 @@
 
     <p>For example</p>
     
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
       https://appcanary.com/api/v2/monitors/</pre>
 
 
@@ -113,7 +113,7 @@
 
     <p>For example</p>
 
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
       https://appcanary.com/api/v2/monitors/<strong>my-server</strong></pre>
 
     <h4>Required path parameters</h4>
@@ -216,7 +216,7 @@
 
     <p>Updates a monitor with the specified name with the contents of file. For example, with Ubuntu:</p>
     
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
       -X PUT -F <strong>file</strong>=@/var/lib/dpkg/status \
       https://appcanary.com/api/v2/monitors/<strong>my-server</strong></pre>
 
@@ -265,7 +265,7 @@
 
     <p>For example</p>
     
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
       https://appcanary.com/api/v2/monitors/</pre>
 
 
