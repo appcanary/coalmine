@@ -262,3 +262,17 @@
 <hr>
 <br/>
 <br/>
+<a name="delete-server" class="anchor-offset"></a>
+    <h2>Delete Server</h2>
+    <p>To delete a server:</p>
+    <h4><code>DELETE https://appcanary.com/api/v2/servers/<strong>:uuid</strong></code></h4>
+
+    <p>For example</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+     -X DELETE \
+     https://appcanary.com/api/v2/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
+
+
+    <h2>Delete Server Response</h2>
+    <p>Successful requests will have a <code>204 NO CONTENT</code> response code containing no data.</p>
