@@ -1,5 +1,5 @@
 class App < CanaryBase
-  attr_params :id, :name, :path, :uuid, :artifact_versions, :vulnerable_artifact_versions, :is_vulnerable
+  attr_params :id, :name, :path, :uuid, :artifact_versions, :vulnerable_artifact_versions, :vulnerable
 
   attr_accessor :server
 
@@ -15,7 +15,7 @@ class App < CanaryBase
   end
 
   def vulnerable?
-    self.is_vulnerable
+    self.vulnerable
   end
 
   def to_param
