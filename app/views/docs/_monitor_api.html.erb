@@ -266,8 +266,9 @@
     <p>For example</p>
     
     <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
-      https://appcanary.com/api/v2/monitors/</pre>
+     -X DELETE \
+     https://appcanary.com/api/v2/monitors/<strong>my-server</strong></pre>
 
 
-    <h2>Delete Monitors Response</h2>
+    <h2>Delete Monitor Response</h2>
     <p>Successful requests will have a <code>204 NO CONTENT</code> response code containing no data.</p>
