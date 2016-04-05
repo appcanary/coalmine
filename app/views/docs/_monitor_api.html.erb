@@ -41,7 +41,7 @@
     "attributes": {
       "name": "my-server",
       "uuid": "56eac124-35c2-49bd-ab02-45de56c03ef4",
-      "is-vulnerable": true
+      "vulnerable": true
     }
   }
 }
@@ -52,6 +52,56 @@
 
     <h4>Monitor object</h4>
     <%= render :partial => "monitor_fields" %>
+    <hr>
+    <br/>
+    <br/>
+
+    <a name="list-monitors" class="anchor-offset"></a>
+    <h2>List Monitors</h2>
+    <p>To list all of the monitors you have registered:</p>
+    <h4><code>GET https://appcanary.com/api/v2/monitors</code></h4>
+
+    <p>For example</p>
+    
+    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+      https://appcanary.com/api/v2/monitors/</pre>
+
+
+    <a name="list-monitors-response" class="anchor-offset"></a>
+    <h2>List Monitors Response</h2>
+    <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data, which shall always contain an array.</p>
+    <p>All successful responses will be wrapped in a <code>"data"</code> container object.
+
+    <p>For example, a response body will look like this:</p>
+    <pre class="json">
+{
+  "data": [
+    {
+      "type": "monitor",
+      "attributes": {
+        "name": "my-server",
+        "uuid": "56ded706-d01d-4727-b13c-dd630b0c3c15",
+        "vulnerable": true
+      }
+    },
+    {
+      "type": "monitor",
+      "attributes": {
+        "name": "my-ruby-app",
+        "uuid": "56e03f35-f1b5-48a8-bce7-31394d908c83",
+        "vulnerable": true
+      }
+    }
+  ]
+}
+</pre>
+    
+    <h4>The response container object</h4>
+    <%= render :partial => "response_coll_container_fields" %>
+
+    <h4>Monitor object</h4>
+    <%= render :partial => "monitor_fields" %>
+
     <hr>
     <br/>
     <br/>
@@ -81,7 +131,7 @@
     "attributes": {
       "name": "centos-server",
       "uuid": "56ded718-b01d-4948-840a-45ea73d3bf97",
-      "is-vulnerable": true,
+      "vulnerable": true,
       "vulnerable-versions": [
         {
           "type": "artifact-version",
@@ -192,7 +242,7 @@
     "attributes": {
       "name": "my-server",
       "uuid": "56eac124-35c2-49bd-ab02-45de56c03ef4",
-      "is-vulnerable": true
+      "vulnerable": true
     }
   }
 }
@@ -221,55 +271,3 @@
 
     <h2>Delete Monitors Response</h2>
     <p>Successful requests will have a <code>204 NO CONTENT</code> response code containing no data.</p>
-
-
-    <hr>
-    <br/>
-    <br/>
-
-    <a name="list-monitors" class="anchor-offset"></a>
-    <h2>List Monitors</h2>
-    <p>To list all of the monitors you have registered:</p>
-    <h4><code>GET https://appcanary.com/api/v2/monitors</code></h4>
-
-    <p>For example</p>
-    
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
-      https://appcanary.com/api/v2/monitors/</pre>
-
-
-    <a name="list-monitors-response" class="anchor-offset"></a>
-    <h2>List Monitors Response</h2>
-    <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data, which shall always contain an array.</p>
-    <p>All successful responses will be wrapped in a <code>"data"</code> container object.
-
-    <p>For example, a response body will look like this:</p>
-    <pre class="json">
-{
-  "data": [
-    {
-      "type": "monitor",
-      "attributes": {
-        "name": "my-server",
-        "uuid": "56ded706-d01d-4727-b13c-dd630b0c3c15",
-        "is-vulnerable": true
-      }
-    },
-    {
-      "type": "monitor",
-      "attributes": {
-        "name": "my-ruby-app",
-        "uuid": "56e03f35-f1b5-48a8-bce7-31394d908c83",
-        "is-vulnerable": true
-      }
-    }
-  ]
-}
-</pre>
-    
-    <h4>The response container object</h4>
-    <%= render :partial => "response_coll_container_fields" %>
-
-    <h4>Monitor object</h4>
-    <%= render :partial => "monitor_fields" %>
-

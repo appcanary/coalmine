@@ -3,7 +3,7 @@
     .status
       - if server.apps.empty? || server.gone_silent?
         %span.fa.fa-question-circle
-      -elsif server.is_vulnerable
+      -elsif server.vulnerable
         %span.fa.fa-exclamation-triangle.warn
       -else
         %span.fa.fa-check-circle.okay

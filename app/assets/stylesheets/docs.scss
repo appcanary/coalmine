@@ -1,4 +1,21 @@
 #docs {
+
+  .side-menu {
+    position: fixed;
+    @extend .col-sm-2;
+    margin-left: 6.5%;
+    top: 60px;
+    bottom: 0px;
+    left: 0px;
+    overflow: scroll;
+    margin-bottom: 20px;
+
+    @media screen and (max-width: 736px) {
+      display: none;
+    }
+
+  }
+
   code {
     background: none;
     color: black;

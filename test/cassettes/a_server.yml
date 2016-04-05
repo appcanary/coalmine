@@ -65,9 +65,9 @@ http_interactions:
       - Thu, 05 Nov 2015 22:52:09 GMT
     body:
       encoding: UTF-8
-      string: '{"apps":[{"id":17592186886943,"name":"","path":"/u/apps/gemcanary/current/Gemfile.lock","uuid":"5588b66a-945d-4723-9aac-816169562007","package-file":null,"last-crc":1440643180,"is-vulnerable":true}],"ip":"173.255.231.9","name":null,"memory":null,"release":null,"hostname":"gemcanary","uname":"Linux
+      string: '{"apps":[{"id":17592186886943,"name":"","path":"/u/apps/gemcanary/current/Gemfile.lock","uuid":"5588b66a-945d-4723-9aac-816169562007","package-file":null,"last-crc":1440643180,"vulnerable":true}],"ip":"173.255.231.9","name":null,"memory":null,"release":null,"hostname":"gemcanary","uname":"Linux
         gemcanary 3.18.5-x86-linode70 #1 SMP Thu Feb 5 12:10:41 EST 2015 i686 i686
-        i386 GNU/Linux\n","distro":null,"id":17592186886940,"agent-version":"unreleased","uuid":"5588b669-7b00-4259-a290-5bb579a86c90","is-vulnerable":true,"last-heartbeat-at":"2015-07-02T22:03:10.371Z","cpu":null}'
+        i386 GNU/Linux\n","distro":null,"id":17592186886940,"agent-version":"unreleased","uuid":"5588b669-7b00-4259-a290-5bb579a86c90","vulnerable":true,"last-heartbeat-at":"2015-07-02T22:03:10.371Z","cpu":null}'
     http_version: 
   recorded_at: Thu, 05 Nov 2015 22:52:09 GMT
 recorded_with: VCR 2.9.3

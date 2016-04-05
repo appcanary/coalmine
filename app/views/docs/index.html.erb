@@ -1,34 +1,35 @@
 <section id="docs">
-  <div class="fixed-side-menu">
-    <div class="outer-wrapper">
-      <div class="inner-wrapper">
-        <div style="margin-top: 20px;">
-          <%= image_tag "canary-map.medium.stroke.png", :style => "width: 150px" %>
-          <h2 style="text-align: center">API Docs</h2>
-        </div>
-        <ul class="nav nav-pills nav-stacked">
-          <h4>Getting started</h4>
-          <li><a href="#authentication">Authentication</a></li>
-          <h4>Check API</h4>
-          <li><a href="#check-endpoint">Check Request</a></li>
-          <li><a href="#check-responses">Check Response</a></li>
-          <% if $rollout.active?(:monitor_api, current_user) %>
-          <h4>Monitor API</h4>
-          <li><a href="#create-monitor">Create</a></li>
-          <li><a href="#show-monitor">Read</a></li>
-          <li><a href="#update-monitor">Update</a></li>
-          <li><a href="#delete-monitor">Delete</a></li>
-          <li><a href="#list-monitors">List</a></li>
-          <% end %>
-          <h4>In the event of failure</h4>
-          <li><a href="#errors">Error Response</a></li>
-          <li><a href="#feedback">Questions? Feedback?</a></li>
-        </ul>
-
-      </div>
+  <div class="side-menu">
+    <div>
+      <%= image_tag "canary-map.medium.stroke.png", :style => "width: 150px" %>
+      <h2>API Docs</h2>
     </div>
+    <ul class="nav nav-pills nav-stacked">
+      <h4>Getting started</h4>
+      <li><a href="#authentication">Authentication</a></li>
+      <h4>Check API</h4>
+      <li><a href="#check-endpoint">Check Request</a></li>
+      <li><a href="#check-responses">Check Response</a></li>
+      <% if $rollout.active?(:monitor_api, current_user) %>
+<h4>Monitor API</h4>
+      <li><a href="#create-monitor">Create</a></li>
+      <li><a href="#list-monitors">List</a></li>
+      <li><a href="#show-monitor">Show</a></li>
+      <li><a href="#update-monitor">Update</a></li>
+      <li><a href="#delete-monitor">Delete</a></li>
+      <% end %>
+      <% if $rollout.active?(:server_api, current_user) %>
+<h4>Server API</h4>
+      <li><a href="#list-servers">List</a></li>
+      <li><a href="#show-server">Show</a></li>
+      <% end %>
+      <h4>In the event of failure</h4>
+      <li><a href="#errors">Error Response</a></li>
+      <li><a href="#feedback">Questions? Feedback?</a></li>
+    </ul>
   </div>
-  <div class="col-sm-7">
+
+  <div class="col-sm-7 col-sm-offset-2">
     <a name="start" class="anchor-offset"></a>
     <h1>Hello!</h1>
     <p>Welcome to Appcanary. The purpose of this documentation is to show you how to connect to our service. This API and accompanying documentation is in beta, pending feedback from users just like you.</p> 
@@ -61,6 +62,15 @@
     <% if $rollout.active?(:monitor_api, current_user) %>
     <%= render :partial => "monitor_api" %>
    
+    <hr>
+    <br/>
+    <br/>
+    <br/>
+    <% end %>
+
+    <% if $rollout.active?(:server_api, current_user) %>
+    <%= render :partial => "server_api" %>
+
     <hr>
     <br/>
     <br/>
