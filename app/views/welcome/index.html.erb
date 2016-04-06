@@ -19,15 +19,13 @@
 <div class="hero-wrapper">
   <div class="hero-main">
 
-    <div class="hero_logo">
-      <%= image_tag "appcanary-hero.png" %>
-    </div>
-
     <div class="hero_sell-line">
-      <h1>Never run vulnerable software again.</h1>
-      <h3>We monitor your servers, and notify you when you need to update. Try us for free:</h3>
-    </div>
+      <h1>Tired of worrying about security patches?</h1>
+      <h3>Appcanary monitors your apps and servers, and notifies you whenever you're vulnerable.</h3>
 
+      <h3 class="cta">Try us for free:</h3>
+
+    </div>
     <div class="hero_form-group">
       <div class="flash subhed" style="display: none">
         <p>Thanks! We&rsquo;ll be in touch soon.</p>
@@ -41,11 +39,17 @@
       </div>
     </div>
 
+    <div class="illustration">
+      <%= image_tag "iterm-screenshot.short.png", :class => "gasp" %>
+    </div>
+
   </div>
+
 </div>
 
 <div class="unit-container">
   <div class="unit vulns">
+      <h3>Don't find out about security vulnerabilities from Hacker News or Twitter.</h3>
     <h3>We&rsquo;re currently tracking more than</h3>
     <h1><%= number_with_delimiter(@vulnerabilities_count) %> vulnerabilities</h1>
     <h3>over hundreds of thousands of packages so you don&rsquo;t have to.</h3>

@@ -59,8 +59,8 @@
 }
 
 .top-menu-wrapper {
-  background-color: $yellow;
-  border-bottom: 1px solid darken($yellow, 5%);
+  background-color: lighten($yellow, 5%);
+  // border-bottom: 1px solid darken($yellow, 5%);
   z-index: 1001;
 }
 

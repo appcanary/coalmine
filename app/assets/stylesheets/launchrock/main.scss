@@ -53,9 +53,26 @@ img {
   border-bottom: 1px solid darken($yellow, 10%);
 }
 
+// .glob {
+//   position: fixed;
+//   width: 100%;
+// }
+// .test {
+//   @include outer-container;
+//   .test-row {
+//     @include row();
+//     .span {
+//       @include span-columns(1 of 12);
+//   height: 1000px;
+//       border-right: solid black 1px;
+//       border-left: solid black 1px;
+//     }
+//   }
+// }
+
 .hero {
   @include outer-container;
-  padding: 5em 0 3.5em 0;
+  padding: 2.5em 0 0em 0;
   .hero_logo {
     @include row();
     @include span-columns(8 of 12);
@@ -75,13 +92,22 @@ img {
       text-align: center;
     }
   }
-  .hero_sell-line {
+
+  .illustration {
     @include span-columns(8 of 12);
     @include shift(2);
+    img {
+      display: block;
+    }
+  }
+
+  .hero_sell-line {
+    @include span-columns(10 of 12);
+    @include shift(1);
     text-align: center;
     font-weight: 300;
     line-height: 1em;
-    margin-bottom: 2.5em;
+    margin-bottom: 2em;
     @include media($mobile-width) {
       @include span-columns(4 of 4);
       @include shift(0);
@@ -89,7 +115,7 @@ img {
     }
     h1 {
       font-weight: 600;
-      font-size: 2.7em;
+      font-size: 3.2em;
       margin-bottom: 0.3em;
       @include media($mobile-width) {
         font-size: 1.5em;
@@ -97,8 +123,8 @@ img {
       }
     }
     h3 {
-      font-size: 2em;
-      line-height: 1.1em;
+      font-size: 2.5em;
+      line-height: 1em;
       padding: 0 3em;
       @include media($mobile-width) {
         padding-left: 0.4em;
@@ -107,6 +133,11 @@ img {
         font-size: 1em;
       }
     }
+
+    .cta {
+      margin-top: 1em;
+    }
+
   }
   .hero_form-group {
     @include span-columns(6 of 12);
