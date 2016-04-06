@@ -6,9 +6,9 @@
       </div>
 
       <div class="menu-action">
-        <%= link_to "About", "#", :class => "nav" %>
-        <%= link_to "Blog", "#", :class => "nav" %>
-        <%= link_to "Pricing", "#", :class => "nav" %>
+        <%= link_to "About", "https://appcanary.com/#team", :class => "nav" %>
+        <%= link_to "Blog", "https://blog.appcanary.com", :class => "nav" %>
+        <%= link_to "Pricing", "https://appcanary.com/#pricing", :class => "nav" %>
         <%= link_to "Log in", login_path, :class => "login button" %>
         <%= link_to "Sign Up", sign_up_path, :class => "button" %>
       </div>
@@ -66,20 +66,19 @@
 
 <div class="unit-container">
   <div class="unit how">
-    <!-- <h2>Our products</h2> -->
     <div class="unit_how">
       <h2 class="title">Agent</h2>
-      <%= image_tag "canary.sparrow.huge.png" %>
+      <%= image_tag "canary.sparrow.medium.png" %>
       <h3>Our agent stays with your servers and checks up on them regularly. It's very unobtrusive</h3>
     </div>
     <div class="unit_how">
       <h2 class="title">Check API</h2>
-      <%= image_tag "canary.pigeon.huge.png" %>
+      <%= image_tag "canary.pigeon.medium.png" %>
       <h3>Check with us whenever you run tests, or submit pull requests.</h3>
     </div>
     <div class="unit_how">
       <h2 class="title">Monitor API</h2>
-      <%= image_tag "canary.bluejay.huge.png" %>
+      <%= image_tag "canary.bluejay.medium.png" %>
       <h3>Let us know whenever you deploy and we'll notify you later. Works great with Docker and Heroku!</h3>
     </div>
   </div>
@@ -87,6 +86,7 @@
 
 
 
+<a name="pricing"></a>
 <div class="unit-container">
   <div class="unit">
     <h2>Pricing</h2>
