@@ -60,7 +60,6 @@
 
 .top-menu-wrapper {
   background-color: lighten($yellow, 5%);
-  // border-bottom: 1px solid darken($yellow, 5%);
   z-index: 1001;
 }
 
@@ -78,11 +77,20 @@
 
   .logo {
     @include span-columns(2 of 12);
+    @include mobile-all {
+      @include span-columns(12 of 12);
+      margin-bottom: 20px;
+    }
+
   }
 
   .menu-action {
-    @include span-columns(4 of 12);
-    @include shift(6);
+    @include span-columns(10 of 12);
+    text-align: right;
+
+    @include mobile-all {
+      @include span-columns(12 of 12);
+    }
 
     > a {
       margin-left: 15px;
