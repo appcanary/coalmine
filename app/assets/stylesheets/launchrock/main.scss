@@ -404,6 +404,12 @@ img {
     @include mobile-all {
       text-align: center;
     }
+
+    &.title {
+      text-align: center;
+      margin-bottom: 0px;
+    }
+
   }
 
   .unit_how {
