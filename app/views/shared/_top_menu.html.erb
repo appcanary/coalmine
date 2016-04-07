@@ -1,0 +1,17 @@
+<div class="top-menu-wrapper">
+  <div class="top-menu-container">
+    <div class="top-menu">
+      <div class="logo">
+        <%= link_to image_tag("appcanary-hero.png", :alt => "Appcanary"), "/" %>
+      </div>
+
+      <div class="menu-action">
+        <%= link_to "About", "/#team", :class => "nav" %>
+        <%= link_to "Blog", "http://blog.appcanary.com", :class => "nav" %>
+        <%= link_to "Pricing", "/#pricing", :class => "nav" %>
+        <%= link_to "Log in", login_path, :class => "login button" %>
+        <%= link_to "Sign Up", sign_up_path, :class => "button" %>
+      </div>
+    </div>
+  </div>
+</div>
