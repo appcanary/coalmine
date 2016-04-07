@@ -66,6 +66,110 @@
   }
 }
 
+.demo {
+  padding: 1em 0;
+  .unit_demo-box {
+    @include span-columns(5);
+    @include shift(1);
+    border-radius: 1em;
+    height: 27em;
+    @include media($mobile-width) {
+      @include span-columns(4);
+      @include shift(0);
+      margin: 2em 0;
+    }
+  }
+  .unit_demo-box-before {
+    border: 6px dashed $lightgray;
+    opacity: 0.6;
+    @include transition (all 0.1s ease-out);
+    p {
+      font-size: 4.2em;
+      font-weight: 600;
+      color: $lightgray;
+      padding: 0.6em 1.2em 0 1.2em;
+      line-height: 1em;
+      text-align: center;
+      @include media($mobile-width) {
+        font-size: 3.6em;
+        padding: 2em 0.2em;
+        margin: 0;
+      }
+    }
+    #spinner {
+      width: 3em;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      padding-top: 10em;
+    }
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+      cursor: -webkit-grab;
+      @include transition (all 0.1s ease-in);
+    }
+  }
+  .unit_demo-box-after {
+    background-color: lighten($text-colour, 10%);
+  }
+  .unit_demo-copy {
+    @include span-columns(5);
+    @include media($mobile-width) {
+      @include span-columns(4);
+    }
+    h3 {
+      font-weight: 600;
+      font-size: 1.8em;
+      line-height: 1em;
+      padding-bottom: 0.2em;
+      @include media($mobile-width) {
+        font-size: 2.4em;
+      }
+    }
+    p {
+      font-size: 1.4em;
+      line-height: 1.1em;
+      margin-top: 0.6em;
+      @include media($mobile-width) {
+        font-size: 1.8em;
+      }
+    }
+    .button {
+      display: inline-block;
+      font-size: 1.6em;
+      font-weight: 300;
+      margin-right: 0.5em;
+    }
+    .button-ruby {
+      color: $ruby-colour;
+      border-color: $ruby-colour;
+      &:hover {
+        background-color: $ruby-colour;
+        color: white;
+      }
+    }
+    .button-node {
+      color: $node-colour;
+      border-color: $node-colour;
+      &:hover {
+        background-color: $node-colour;
+        color: white;
+      }
+    }
+    .button-ubuntu {
+      color: $ubuntu-colour;
+      border-color: $ubuntu-colour;
+      &:hover {
+        background-color: $ubuntu-colour;
+        color: white;
+      }
+    }
+
+    .red { color: $ruby-colour }
+  }
+}
+
 // begin fork from launchrock
 .unit-container.results {
   padding-top: 4em;
@@ -273,5 +377,56 @@ table.artifacts {
       //     // border-color: $red;
       @include transition (all 0.1s ease-in);
     }
+  }
+}
+
+.hero-vuln {
+  @extend .hero;
+  padding-top: 6em;
+  @include media($mobile-width) {
+    padding-top: 2em;
+  }
+  .hero_sell-line {
+    @include span-columns(10 of 12);
+    @include shift(1);
+    margin-bottom: 0em;
+    @include media($mobile-width) {
+      @include span-columns(4 of 4);
+      @include shift(0);
+    }
+    h1 {
+      font-size: 6em;
+      @include media($mobile-width) {
+        font-size: 3.5em;
+        margin: 0 0.5em 0 0.5em;
+      }
+    }
+
+    h3 {
+      @include media($mobile-width) {
+        margin-top: 0.6em;
+        font-size: 2em;
+        padding: 0 0.2em;
+      }
+    }
+
+    .hero_nice { 
+      font-size: 5.5em; 
+    }
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+    font-weight: 600;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.isitvuln.unit-container {
+  @include media($mobile-width) {
+    padding: 0 15px;
   }
 }
