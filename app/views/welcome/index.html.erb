@@ -1,30 +1,31 @@
-<div class="action">
-  <div class="action_unit action_login">
-    <%= link_to "Log in", login_path, :class => "button" %>
-  </div>
-  <div class="action_unit action_sign-up">
-    <%= link_to "Sign Up", sign_up_path, :class => "button" %>
-  </div>
-</div>
+<div class="top-menu-wrapper">
+  <div class="top-menu-container">
+    <div class="top-menu">
+      <div class="logo">
+        <%= image_tag "appcanary-hero.png" %>
+      </div>
 
-<div class="alert-cta-wrapper">
-  <div class="alert-cta">
-    <span>Hey! We now have an API &amp; support CentOS!<br/>Click <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">here for more info.</a></span>
+      <div class="menu-action">
+        <%= link_to "About", "https://appcanary.com/#team", :class => "nav" %>
+        <%= link_to "Blog", "http://blog.appcanary.com", :class => "nav" %>
+        <%= link_to "Pricing", "https://appcanary.com/#pricing", :class => "nav" %>
+        <%= link_to "Log in", login_path, :class => "login button" %>
+        <%= link_to "Sign Up", sign_up_path, :class => "button" %>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="hero-wrapper">
   <div class="hero-main">
 
-    <div class="hero_logo">
-      <%= image_tag "appcanary-hero.png" %>
-    </div>
-
     <div class="hero_sell-line">
-      <h1>Never run vulnerable software again.</h1>
-      <h3>We monitor your servers, and notify you when you need to update. Try us for free:</h3>
-    </div>
+      <h1>Stop worrying about security patches.</h1>
+      <h3>Appcanary monitors your apps and servers, and notifies you whenever you're vulnerable.</h3>
 
+      <h3 class="cta">Try us for free:</h3>
+
+    </div>
     <div class="hero_form-group">
       <div class="flash subhed" style="display: none">
         <p>Thanks! We&rsquo;ll be in touch soon.</p>
@@ -38,66 +39,147 @@
       </div>
     </div>
 
+    <div class="illustration">
+      <%= image_tag "iterm-screenshot.short2.png", :class => "gasp" %>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="unit-container">
+  <div class="unit vulns">
+    <h3 style="padding-bottom: 20px">Don't find out about security vulnerabilities through Twitter or Hacker News.</h3>
+    <h3>Show your boss how effective you are at keeping your systems safe.</h3>
   </div>
 </div>
 
 <div class="unit-container">
   <div class="unit vulns">
+
     <h3>We&rsquo;re currently tracking more than</h3>
     <h1><%= number_with_delimiter(@vulnerabilities_count) %> vulnerabilities</h1>
-    <h3>over hundreds of thousands of packages so you don&rsquo;t have to.</h3>
+    <h3>over hundreds of thousands of packages<br/>across Ruby, Ubuntu and CentOS</h3>
   </div>
 </div>
 
 
 <div class="unit-container">
   <div class="unit how">
-    <h2>How it works</h2>
     <div class="unit_how">
-      <%= image_tag "howto-1.png" %>
-      <h3>We sit on your servers.<br>Installing our open source <a href="http://www.github.com/appcanary/agent">agent</a> takes five minutes.</h3>
+      <h2 class="title">Agent</h2>
+      <%= image_tag "canary.bluejay.medium.png" %>
+      <h3>Our agent stays with your servers and checks up on them regularly.</br><br/>It's very polite and discreet.</h3>
     </div>
     <div class="unit_how">
-      <%= image_tag "howto-2.png" %>
-      <h3>We find out what software is vulnerable.<br>We make sure you know about it.</h3>
+      <h2 class="title">Check API</h2>
+      <%= image_tag "canary.pigeon.medium.png" %>
+      <h3>Check with us whenever you run tests, or submit pull requests.</h3>
     </div>
     <div class="unit_how">
-      <%= image_tag "howto-3.png" %>
-      <h3>You fix your security issues, your servers stay safe and you save the day.</h3>
+      <h2 class="title">Monitor API</h2>
+      <%= image_tag "canary.sparrow.medium.png" %>
+      <h3>Let us know whenever you deploy and we'll notify you later.</br><br/>Works great with Docker and Heroku!</h3>
     </div>
   </div>
 </div>
 
 
+
+<a name="pricing"></a>
 <div class="unit-container">
-  <div class="unit pricing">
+  <div class="unit">
     <h2>Pricing</h2>
-    <div class="unit_pricing">
-      <div class="circle"></div>
-      <h3>Egg</h3>
-      <p class="unit_pricing-price">$29/month</p>
-      <p>1-5 servers</p>
+    <div class="pricing-row">
+      <div class="label">
+      </div>
+      <div class="tier">
+        <h3>Small</h3>
+      </div>
+      <div class="tier">
+        <h3>Medium</h3>
+      </div>
+      <div class="tier">
+        <h3>Large</h3>
+      </div>
+      <div class="tier">
+        <h3>Enterprise</h3>
+      </div>
     </div>
-    <div class="unit_pricing">
-      <div class="circle"></div>
-      <h3>Tweetie</h3>
-      <p class="unit_pricing-price">$99/month</p>
-      <p>6-15 servers</p>
+
+    <div class="pricing-row">
+      <div class="label">
+      </div>
+      <div class="tier">
+        <p class="price"><span class="value">$29</span><br/>per month</p>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <p class="price"><span class="value">$99</span><br/>per month</p>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <p class="price"><span class="value">$299</span><br/>per month</p>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <p>Click <a href="mailto:hello@appcanary.com?subject=Enterprise" target="_blank">here</a> to chat.</p>
+      </div>
+
     </div>
-    <div class="unit_pricing">
-      <div class="circle"></div>
-      <h3>Canary</h3>
-      <p class="unit_pricing-price">$299/month</p>
-      <p>16-50 servers</p>
+
+    <div class="pricing-row">
+      <div class="label">
+        <div>
+          Monitored servers or apps
+        </div>
+      </div>
+
+      <div class="tier">
+        <div>1-5</div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div>6-15</div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div>16-50</div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div>╮ (. ❛ ᴗ ❛.) ╭ </div>
+        &nbsp;
+      </div>
     </div>
-    <div class="unit_pricing feedback-enterprise">
-      <div class="circle"></div>
-      <h3>Coalmine</h3>
-      <p class="unit_pricing-price">More than 50?</p>
-      <p>Click here to chat.</p>
+
+    <div class="pricing-row">
+      <div class="label">
+        <div>
+          Check API calls
+        </div>
+      </div>
+
+      <div class="tier">
+        <div>50</div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div>200</div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div>500</div>
+        &nbsp;
+      </div>
+      <div class="tier last">
+        <div>Unlimited</div>
+        &nbsp;
+      </div>
     </div>
   </div>
 </div>
+
 
 <div class="unit-container unit-container_yellow">
   <div class="unit sign-up">
@@ -111,7 +193,7 @@
 <a name="team"></a>
 <div class="unit-container">
     <div class="unit about">
-      <h2>Team</h2>
+      <h2>About</h2>
       <div class="bio">
         <div class="unit_about phill">
           <div class="half">
@@ -119,17 +201,15 @@
               <%= image_tag "phillmv.png" %>
               <h1>Phill MV</h1>
             </a>
-            <p>Phill has a BSc. in Computer Science, Ryerson University, and has been a professional web developer since 2009. Phill enjoys photography and ultimate frisbee, and throws storytelling nights, for nerds. </p>
           </div>
           <div class="half">
             <a href="https://twitter.com/mveytsman">
               <%= image_tag "mveytsman.png" %>
               <h1>Max Veytsman</h1>
             </a>
-            <p>Max has a BSc. in Computer Science, University of Toronto, and has been a security professional since 2010. Max enjoys cooking, functional programming, and powerlifting.  He's partial to Irish whiskey.</p>
           </div>
           <div class="full">
-            <p>In 2012, Phill and Max started a security and web development consultancy together. In 2013, they cofounded <a href="http://rubysec.com">Rubysec</a>, an open-source project that catalogues all Ruby-related software vulnerabilities. <br/><br/>In 2015, they shuttered the consultancy to begin working on Appcanary. They have received funding from <a href="https://ycombinator.com" class="yc">Y Combinator</a>. </p>
+            <p>In 2012, Phill and Max started a security and web development consultancy together. In 2013, they cofounded <a href="http://rubysec.com">Rubysec</a>, an open-source project that catalogues all Ruby-related software vulnerabilities. <br/><br/>In 2015, they shuttered the consultancy to begin working on Appcanary. That summer they moved to Mountain View, California to participate in <a href="https://ycombinator.com" class="yc">Y Combinator</a>. </p>
           </div>
         </div>
       </div>
