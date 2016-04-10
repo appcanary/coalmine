@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160118221733) do
+ActiveRecord::Schema.define(version: 20160410015633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,9 +33,10 @@ ActiveRecord::Schema.define(version: 20160118221733) do
 
   create_table "pre_users", force: :cascade do |t|
     t.string   "email"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "preferred_platform"
+    t.boolean  "from_isitvuln",      default: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -69,6 +70,7 @@ ActiveRecord::Schema.define(version: 20160118221733) do
     t.boolean  "marketing_email_consent",                   default: true,  null: false
     t.boolean  "daily_email_consent",                       default: false, null: false
     t.integer  "datomic_id",                      limit: 8
+    t.boolean  "has_personal_plan"
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree

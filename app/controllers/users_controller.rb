@@ -90,6 +90,6 @@ class UsersController < ApplicationController
     end
 
     def preuser_params
-      params.require(:pre_user).permit(:email, :preferred_platform)
+      params.require(:pre_user).permit(:email, :preferred_platform, :from_isitvuln)
     end
 end

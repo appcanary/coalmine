@@ -10,6 +10,7 @@ $(document).ready(function() {
       $.post($(this).attr("action"), {
         'pre_user[preferred_platform]': $(this).children('#pre_user_preferred_platform').val(),
         'pre_user[email]': $(this).children('#pre_user_email').val(),
+        'pre_user[from_isitvuln]': $(this).children('#pre_user_from_isitvuln').val(),
         'authenticity_token': $(this).children('#authenticity_token').val()
       }).done(function(data) {
         $(".flash-notice").html("<p>Thanks! We'll be in touch soon.</p>").show();
