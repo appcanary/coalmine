@@ -120,6 +120,9 @@ img {
     font-size: 2.2em;
     text-align: center;
     padding-bottom: 0.8em;
+    @include mobile-all {
+      padding-bottom: 0em;
+    }
   }
 
   
@@ -136,12 +139,25 @@ img {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
+        @include mobile-all {
+          margin-top: 0px;
+        }
       }
     }
+
+    @include mobile-all {
+      @include span-columns(6 of 12);
+      margin-right: 0em;
+      margin-top: 2em;
+      // margin-left: 1em;
+    }
   }
+
   .customer:first-of-type {
     @include shift(2);
-    color: white;
+    @include mobile-all {
+      @include shift(0);
+    }
   }
 
 }
