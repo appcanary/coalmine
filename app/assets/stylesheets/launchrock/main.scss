@@ -113,6 +113,39 @@ img {
   }
 }
 
+.trust {
+
+  padding-bottom: 2em;
+  h3 {
+    font-size: 2.2em;
+    text-align: center;
+    padding-bottom: 0.8em;
+  }
+
+  
+  .customer { 
+    @include span-columns(2 of 12);
+    
+
+    .brand {
+      position: relative;
+      img {
+        width: initial;
+        max-width: 80%;
+        margin-top: 20px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  .customer:first-of-type {
+    @include shift(2);
+    color: white;
+  }
+
+}
+
 .vulns {
   text-align: center;
   h1 {
