@@ -5,6 +5,7 @@
 @import "partials/mixins";
 @import "components";
 @import "hero";
+@import "errors";
 
 body {
   background-color: $bg-colour;
@@ -605,44 +606,6 @@ footer {
   }
 }
 
-#error-page {
-  .unit-container {
-    padding:50px 0; 
-    position:absolute; 
-    top:0; 
-    bottom:0; 
-    left:0; 
-    right:0;
-  }
-
-  .sorry {
-    @include span-columns(6);
-    @include shift(3);
-  }
-  h1 {
-    font-size: 3.6em;
-    font-weight: 300;
-    line-height: 1em;
-    text-align: center;
-  }
-
-  h3 {
-    text-align: center;
-    font-weight: 300;
-  }
-
-  .illustration {
-    @include span-columns(6);
-    @include shift(3);
-    margin-top: 50px;
-
-    img {
-      display:block;
-      margin:auto;
-      width: 500px;
-    }
-  }
-}
 
 @import "isitvuln";
 @import "static";

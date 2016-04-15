@@ -7,7 +7,7 @@ class ErrorsController < ApplicationController
   end
  
   def unacceptable
-    render :text => "", :status => 422
+    render :status => 422
   end
  
   def internal_error
