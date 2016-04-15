@@ -27,9 +27,18 @@ module CanaryWeb
     config.active_record.raise_in_transactional_callbacks = true
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('lib/canary')
-    
+
+    # custom errors
+    config.exceptions_app = self.routes
   end
 end
 
-Rails.application.routes.default_url_options[:host] = "appcanary.com"
-Rails.application.routes.default_url_options[:protocol] = 'https'
+case Rails.env
+when "development"
+  Rails.application.routes.default_url_options[:host] = "canary.dev:3000"
+when "staging"
+  Rails.application.routes.default_url_options[:host] = "staging.appcanary.com"
+else
+  Rails.application.routes.default_url_options[:host] = "appcanary.com"
+  Rails.application.routes.default_url_options[:protocol] = 'https'
+end

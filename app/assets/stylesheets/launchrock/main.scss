@@ -5,6 +5,7 @@
 @import "partials/mixins";
 @import "components";
 @import "hero";
+@import "errors";
 
 body {
   background-color: $bg-colour;
@@ -604,6 +605,7 @@ footer {
     }
   }
 }
+
 
 @import "isitvuln";
 @import "static";

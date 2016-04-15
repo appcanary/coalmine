@@ -1,0 +1,33 @@
+#error-page {
+  padding: 3.8em 0;
+
+  .sorry {
+    @include span-columns(8);
+    @include shift(2);
+  }
+
+  h1 {
+    font-size: 3.6em;
+    font-weight: 300;
+    line-height: 1em;
+    text-align: center;
+  }
+
+  h3 {
+    text-align: center;
+    font-weight: 300;
+  }
+
+  .illustration {
+    @include span-columns(4);
+    @include shift(4);
+    margin-top: 50px;
+
+    img {
+      display:block;
+      margin:auto;
+      width: 100%;
+    }
+  }
+}
+
