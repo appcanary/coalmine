@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
   end
 
   def servers
-    @servers ||= canary.servers
+    @servers ||= canary2.get("servers").map { |s| Server.parse(s) }
   end
 
   def active_servers
@@ -155,6 +155,10 @@ class User < ActiveRecord::Base
   protected
   def canary
     @canary ||= Canary.new(self.token)
+  end
+
+  def canary2
+    @canary2 ||= Canary2.new(self.token)
   end
 
   def absence_of_stripe_errors
