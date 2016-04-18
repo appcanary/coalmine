@@ -1,4 +1,4 @@
-class Backend < CanaryBase
+class Backend
   def self.servers_count
     wrap(canary.get("stats/servers/count"))["count"]
   end
