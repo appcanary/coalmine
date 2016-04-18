@@ -20,7 +20,7 @@ class UserManagerTest < ActiveSupport::TestCase
 
     it "should set a token and an id" do
       @user = FactoryGirl.build(:user)
-      Canary2.stubs(:new).with(anything).returns(mock_client)
+      CanaryClient.stubs(:new).with(anything).returns(mock_client)
       assert UserManager.sign_up(@user)
 
       @user.reload
@@ -33,7 +33,7 @@ class UserManagerTest < ActiveSupport::TestCase
 
     it "it should handle rando API failure" do
       @user = FactoryGirl.build(:user)
-      Canary2.any_instance.stubs(:post).with("users", anything).raises(Faraday::Error.new)
+      CanaryClient.any_instance.stubs(:post).with("users", anything).raises(Faraday::Error.new)
       assert_equal UserManager.sign_up(@user), false
       assert @user.errors.present?
     end

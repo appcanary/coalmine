@@ -1,6 +1,6 @@
 require 'faraday_middleware'
 
-class Canary2
+class CanaryClient
   delegate :request, :to => :client
   def client
     @client ||= Client.new(Rails.configuration.canary.uri)

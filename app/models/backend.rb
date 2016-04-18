@@ -37,6 +37,6 @@ class Backend < CanaryBase
 
 
   def self.canary
-    @canary ||= Canary2.new
+    @canary ||= CanaryClient.new
   end
 end

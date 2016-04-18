@@ -3,7 +3,7 @@ require "#{File.dirname(__FILE__)}/../test_helper"
 class CanaryClientTest < ActiveSupport::TestCase
   setup do
     user_token = 'sn3sel6h81cdsjl7r1ea34f4pjpqbirv40sugt3mm9d9rc7it85'
-    @client = Canary2.new(user_token)
+    @client = CanaryClient.new(user_token)
   end
 
 

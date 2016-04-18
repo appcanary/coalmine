@@ -1,7 +1,7 @@
 class App < ApiBase 
 
   def self.find(user, server_id, id)
-    client = Canary2.new(user.token)
+    client = CanaryClient.new(user.token)
     resp = client.get("servers/#{server_id}/apps/#{id}")
 
     self.parse(resp.body, client)

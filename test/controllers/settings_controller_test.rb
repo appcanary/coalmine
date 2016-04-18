@@ -23,7 +23,7 @@ class SettingsControllerTest < ActionController::TestCase
 
     client = mock
     client.expects(:put).with("users/me", anything).returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
-    Canary2.stubs(:new).with(anything).returns(client)
+    CanaryClient.stubs(:new).with(anything).returns(client)
 
     put :update, :user => { :email => new_email }
 
@@ -35,7 +35,7 @@ class SettingsControllerTest < ActionController::TestCase
     before do
       client = mock
       client.stubs(:get).with("user/me").returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
-      Canary2.stubs(:new).with(anything).returns(client)
+      CanaryClient.stubs(:new).with(anything).returns(client)
     end
 
 
@@ -95,7 +95,7 @@ class SettingsControllerTest < ActionController::TestCase
     # client.expects(:update_user).with(anything).raises(Faraday::Error, "lol nope")
     # client.expects(:me).with(anything).returns({"agent-token": "test"})
     # client.stubs(:servers).returns({})
-    Canary2.stubs(:new).with(anything).returns(client)
+    CanaryClient.stubs(:new).with(anything).returns(client)
 
     put :update, :user => { :email => new_email }
 

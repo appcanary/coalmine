@@ -6,7 +6,7 @@ class UserManager
   end
 
   def initialize(user)
-    @client = Canary2.new(user.token)
+    @client = CanaryClient.new(user.token)
     @user = user
   end
 

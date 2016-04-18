@@ -94,7 +94,7 @@ class User < ActiveRecord::Base
   end
 
   def api_info
-    @api_info ||= canary2.get('users/me')
+    @api_info ||= canary.get('users/me')
   end
 
   def agent_token
@@ -153,8 +153,8 @@ class User < ActiveRecord::Base
   # end
 
   protected
-  def canary2
-    @canary2 ||= Canary2.new(self.token)
+  def canary
+    @canary ||= CanaryClient.new(self.token)
   end
 
   def absence_of_stripe_errors

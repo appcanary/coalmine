@@ -64,7 +64,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
       # TODO: find a way to share this with other users test
       client = mock
       client.expects(:post).with("users", anything).returns({'web-token' => 'a token'})
-      Canary2.stubs(:new).with(anything).returns(client)
+      CanaryClient.stubs(:new).with(anything).returns(client)
 
       assert_difference('User.count') do
         post :create, :user => { 
