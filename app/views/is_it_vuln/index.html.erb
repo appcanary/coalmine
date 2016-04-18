@@ -60,6 +60,7 @@
         <%= form_for @preuser, :html => {:id => "preferred_platform"}, :url => pre_sign_up_path do |f| %>
           <%= f.text_field :preferred_platform, :class => "form-control input-sm", :placeholder => "Platform here" %>
           <%= f.email_field :email, :class => "form-control input-md", :placeholder => "jane@example.com" %>
+          <%= f.hidden_field :from_isitvuln, :value => true %>
           <button type="submit" class="button">Gotcha!</button>
         <% end %>
 

@@ -1,19 +1,9 @@
 <div class="topbar"></div>
-<div class="action">
-  <div class="action_unit action_login">
-    <%= link_to "Log in", login_path, :class => "button" %>
-  </div>
-  <div class="action_unit action_sign-up">
-    <%= link_to "Sign Up", sign_up_path, :class => "button" %>
-  </div>
-</div>
+<%= render :partial => "shared/top_menu" %>
 
 <div class="hero-wrapper">
   <div class="hero-legal">
 
-    <div class="hero_logo">
-      <%= image_tag "appcanary-hero.png" %>
-    </div>
     <div class="hero_sell-line">
       <h1>Privacy Policy</h1>
     </div>

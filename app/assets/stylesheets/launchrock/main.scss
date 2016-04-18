@@ -3,10 +3,9 @@
 
 @import "globals";
 @import "partials/mixins";
-@import "partials/helpers";
-@import "partials/fonts";
-@import "partials/color";
 @import "components";
+@import "hero";
+@import "errors";
 
 body {
   background-color: $bg-colour;
@@ -47,151 +46,25 @@ img {
 }
 
 
-.hero-wrapper {
-  width: 100%;
-  background-color: lighten($yellow, 5%);
-  border-bottom: 1px solid darken($yellow, 10%);
-}
 
-.hero {
-  @include outer-container;
-  padding: 5em 0 3.5em 0;
-  .hero_logo {
-    @include row();
-    @include span-columns(8 of 12);
-    @include shift(2);
-    display: block;
-    margin-bottom: 2.8em;
-    @include media($mobile-width) {
-      @include span-columns(12 of 12);
-      @include shift(0);
-      margin-top: 1em;
-      margin-bottom: 1em;
-      padding-left: 1em;
-      padding-right: 1em;
-    }
-    img {
-      border: none;
-      text-align: center;
-    }
-  }
-  .hero_sell-line {
-    @include span-columns(8 of 12);
-    @include shift(2);
-    text-align: center;
-    font-weight: 300;
-    line-height: 1em;
-    margin-bottom: 2.5em;
-    @include media($mobile-width) {
-      @include span-columns(4 of 4);
-      @include shift(0);
-      margin: 0 0em 0 0em;
-    }
-    h1 {
-      font-weight: 600;
-      font-size: 2.7em;
-      margin-bottom: 0.3em;
-      @include media($mobile-width) {
-        font-size: 1.5em;
-        line-height: 0.9em;
-      }
-    }
-    h3 {
-      font-size: 2em;
-      line-height: 1.1em;
-      padding: 0 3em;
-      @include media($mobile-width) {
-        padding-left: 0.4em;
-        padding-right: 0.4em;
-        padding-bottom: 1em;
-        font-size: 1em;
-      }
-    }
-  }
-  .hero_form-group {
-    @include span-columns(6 of 12);
-    @include shift(3);
+// .glob {
+//   position: fixed;
+//   width: 100%;
+// }
+// .test {
+//   @include outer-container;
+//   .test-row {
+//     @include row();
+//     .span {
+//       @include span-columns(1 of 12);
+//   height: 1000px;
+//       border-right: solid black 1px;
+//       border-left: solid black 1px;
+//     }
+//   }
+// }
 
-    @include media($mobile-width) {
-      @include span-columns(12 of 12);
-      @include shift(0);
-    }
 
-    .hero_sign-up {
-      text-align: center;
-    }
-    input, button {
-      font-size: 1.8em;
-      box-shadow: 0px 0px 0px 0.2em white;
-      @include media($mobile-width) {
-        font-size: 1em;
-      }
-    }
-    input {
-      @extend %input;
-      width: 49%;
-      margin-right: 0.6em;
-    }
-    button {
-      @extend %button;
-      width: 32%;
-    }
-  }
-}
-
-.hero-main {
-  @extend .hero;
-  .hero_sell-line {
-    @include media($mobile-width) {
-      font-size: 2.2em;
-    }
-  }
-}
-
-.hero-vuln {
-  @extend .hero;
-  padding-top: 6em;
-  @include media($mobile-width) {
-    padding-top: 2em;
-  }
-  .hero_sell-line {
-    @include span-columns(10 of 12);
-    @include shift(1);
-    margin-bottom: 0em;
-    @include media($mobile-width) {
-      @include span-columns(4 of 4);
-      @include shift(0);
-    }
-    h1 {
-      font-size: 6em;
-      @include media($mobile-width) {
-        font-size: 3.5em;
-        margin: 0 0.5em 0 0.5em;
-      }
-    }
-
-    h3 {
-      @include media($mobile-width) {
-        margin-top: 0.6em;
-        font-size: 2em;
-        padding: 0 0.2em;
-      }
-    }
-
-    .hero_nice { 
-      font-size: 5.5em; 
-    }
-  }
-
-  a {
-    color: black;
-    text-decoration: none;
-    font-weight: 600;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
 
 .subhed {
   text-align: center;
@@ -221,11 +94,6 @@ img {
   }
 }
 
-.isitvuln.unit-container {
-  @include media($mobile-width) {
-    padding: 0 15px;
-  }
-}
 
 .unit-container_yellow {
   background-color: $yellow;
@@ -246,6 +114,55 @@ img {
   }
 }
 
+.trust {
+
+  padding-bottom: 2em;
+  h3 {
+    font-size: 2.2em;
+    text-align: center;
+    padding-bottom: 0.8em;
+    @include mobile-all {
+      padding-bottom: 0em;
+    }
+  }
+
+  
+  .customer { 
+    @include span-columns(2 of 12);
+    
+
+    .brand {
+      position: relative;
+      img {
+        width: initial;
+        max-width: 80%;
+        margin-top: 20px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        @include mobile-all {
+          margin-top: 0px;
+        }
+      }
+    }
+
+    @include mobile-all {
+      @include span-columns(6 of 12);
+      margin-right: 0em;
+      margin-top: 2em;
+      // margin-left: 1em;
+    }
+  }
+
+  .customer:first-of-type {
+    @include shift(2);
+    @include mobile-all {
+      @include shift(0);
+    }
+  }
+
+}
+
 .vulns {
   text-align: center;
   h1 {
@@ -263,116 +180,18 @@ img {
   }
 }
 
-.demo {
-  padding: 1em 0;
-  .unit_demo-box {
-    @include span-columns(5);
-    @include shift(1);
-    border-radius: 1em;
-    height: 27em;
-    @include media($mobile-width) {
-      @include span-columns(4);
-      @include shift(0);
-      margin: 2em 0;
-    }
-  }
-  .unit_demo-box-before {
-    border: 6px dashed $lightgray;
-    opacity: 0.6;
-    @include transition (all 0.1s ease-out);
-    p {
-      font-size: 4.2em;
-      font-weight: 600;
-      color: $lightgray;
-      padding: 0.6em 1.2em 0 1.2em;
-      line-height: 1em;
-      text-align: center;
-      @include media($mobile-width) {
-        font-size: 3.6em;
-        padding: 2em 0.2em;
-        margin: 0;
-      }
-    }
-    #spinner {
-      width: 3em;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
-      padding-top: 10em;
-    }
-    &:hover {
-      opacity: 1;
-      cursor: pointer;
-      cursor: -webkit-grab;
-      @include transition (all 0.1s ease-in);
-    }
-  }
-  .unit_demo-box-after {
-    background-color: lighten($text-colour, 10%);
-  }
-  .unit_demo-copy {
-    @include span-columns(5);
-    @include media($mobile-width) {
-      @include span-columns(4);
-    }
-    h3 {
-      font-weight: 600;
-      font-size: 1.8em;
-      line-height: 1em;
-      padding-bottom: 0.2em;
-      @include media($mobile-width) {
-        font-size: 2.4em;
-      }
-    }
-    p {
-      font-size: 1.4em;
-      line-height: 1.1em;
-      margin-top: 0.6em;
-      @include media($mobile-width) {
-        font-size: 1.8em;
-      }
-    }
-    .button {
-      display: inline-block;
-      font-size: 1.6em;
-      font-weight: 300;
-      margin-right: 0.5em;
-    }
-    .button-ruby {
-      color: $ruby-colour;
-      border-color: $ruby-colour;
-      &:hover {
-        background-color: $ruby-colour;
-        color: white;
-      }
-    }
-    .button-node {
-      color: $node-colour;
-      border-color: $node-colour;
-      &:hover {
-        background-color: $node-colour;
-        color: white;
-      }
-    }
-    .button-ubuntu {
-      color: $ubuntu-colour;
-      border-color: $ubuntu-colour;
-      &:hover {
-        background-color: $ubuntu-colour;
-        color: white;
-      }
-    }
-
-    .red { color: $ruby-colour }
-  }
-}
-
 .how {
   
   h2 {
     @include mobile-all {
       text-align: center;
     }
+
+    &.title {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
   }
 
   .unit_how {
@@ -402,6 +221,88 @@ img {
   }
 }
 
+.mobile-pricing {
+  @include not-mobile {
+    display: none;
+  }
+  .tier {
+    @include span-columns(6 of 12);
+    margin-right: 0em;
+
+    h3 {
+      padding-top: 0;
+      font-weight: 600;
+      font-family: $myriad;
+      font-size: 1.8em;
+      margin-bottom: 0.2em;
+    }
+
+    .price {
+      font-variant: small-caps;
+      font-size: 1.2em;
+      margin-top: 0;
+    }
+    .add-margin {
+      margin-bottom: 2em;
+    }
+  }
+
+}
+
+
+.pricing-row {
+  @include mobile-all {
+    display: none;
+  }
+  @include fill-parent();
+  @include row(table);
+
+  font-size: 1.5em;
+
+  .tier {
+    @include span-columns(2 of 12);
+    padding-top: 10px;
+    border-right: 1px solid black;
+    &:last-of-type {
+      border-right: none;
+    }
+
+    
+    text-align: center;
+
+    h3 {
+      padding-top: 0;
+      font-weight: 600;
+      font-family: $myriad;
+      font-size: 1.8em;
+      margin-bottom: 0.2em;
+    }
+
+    .price {
+      margin-bottom: 0px;
+      .value {
+        font-size: 1.8em;
+      }
+      font-variant: small-caps;
+    }
+  }
+
+  .hl {
+    background: white;
+  }
+  .label {
+    @include span-columns(1 of 12);
+    padding-top: 10px;
+    text-align: right;
+    font-size: 0.8em;
+  }
+
+  .last {
+    @include reset-display;
+  }
+}
+
+// deprecated
 .pricing {
 
   h2 {
@@ -704,6 +605,7 @@ footer {
     }
   }
 }
+
 
 @import "isitvuln";
 @import "static";

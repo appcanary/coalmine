@@ -7,6 +7,7 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  preferred_platform :string
+#  from_isitvuln      :boolean          default("false")
 #
 
 require 'test_helper'
