@@ -101,30 +101,32 @@ module ParamAttributes
 
   # TODO remember to add parent association
   # aka belongs_to maybe?
- 
+
   def initialize(input_params = {})
-    attrs = self.attr_params.map(&:to_s)
+    unless input_params.is_a? Numeric
+      attrs = self.attr_params.map(&:to_s)
 
-    # keep track of our associations
-    coll_association = self.has_many_associations
-    sing_association = self.has_one_associations
-    must_be_coll = attr_enforce_collection_params.map(&:to_s)
+      # keep track of our associations
+      coll_association = self.has_many_associations
+      sing_association = self.has_one_associations
+      must_be_coll = attr_enforce_collection_params.map(&:to_s)
 
-    params = sanitize_param_keys(input_params)
-    attrs.each do |setter|
-      value = params[setter]
-      if klass = coll_association[setter]
-        self.public_send("#{setter}=", klass.parse_many(value))
-      elsif klass = sing_association[setter]
-        self.public_send("#{setter}=", klass.parse(value))
-      else
-
-        if must_be_coll.include?(setter)
-          self.public_send("#{setter}=", wrap_array(value))
+      params = sanitize_param_keys(input_params)
+      attrs.each do |setter|
+        value = params[setter]
+        if klass = coll_association[setter]
+          self.public_send("#{setter}=", klass.parse_many(value))
+        elsif klass = sing_association[setter]
+          self.public_send("#{setter}=", klass.parse(value))
         else
-          self.public_send("#{setter}=", value)
-        end
 
+          if must_be_coll.include?(setter)
+            self.public_send("#{setter}=", wrap_array(value))
+          else
+            self.public_send("#{setter}=", value)
+          end
+
+        end
       end
     end
   end
