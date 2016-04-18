@@ -31,7 +31,7 @@ class Backend < CanaryBase
     resp = @canary.post("upload", data: {:contents => Base64.strict_encode64(contents), :kind => "gemfile"})
 
     resp.body.map do |av|
-      ArtifactVersionTwo.parse(av)
+      ArtifactVersion.parse(av)
     end
   end
 

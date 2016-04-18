@@ -1,25 +1,10 @@
-class App < CanaryBase
-  attr_params :id, :name, :path, :uuid, :artifact_versions, :vulnerable_artifact_versions, :vulnerable
+class App < ApiBase 
 
-  attr_accessor :server
+  def self.find(user, server_id, id)
+    client = Canary2.new(user.token)
+    resp = client.get("servers/#{server_id}/apps/#{id}")
 
-  has_many ArtifactVersion
-  has_many ArtifactVersion, "vulnerable_artifact_versions"
-
-  def vulns
-    @vulns ||= self.vulnerable_artifact_versions.map(&:vulnerability).flatten
-  end
-
-  def avatar
-    RubyIdenticon.create_base64(self.name, :border_size => 10)
-  end
-
-  def vulnerable?
-    self.vulnerable
-  end
-
-  def to_param
-    uuid
+    self.parse(resp.body, client)
   end
 
   def display_name
@@ -30,4 +15,22 @@ class App < CanaryBase
     path_strs = path.split("/")
     path_strs[0..-2].map(&:first).join("/") + "/" + path_strs[-1]
   end
+
+  def vulnerable?
+    self.vulnerable
+  end
+
+
+  def artifact_versions
+    if_enum(self.attributes["artifact_versions"]).map do |av|
+      ArtifactVersion.parse(av)
+    end
+  end
+
+  def vulnerable_artifact_versions
+     if_enum(self.attributes["vulnerable_artifact_versions"]).map do |av|
+      ArtifactVersion.parse(av)
+    end
+  end
+
 end

@@ -62,7 +62,7 @@ class ServersController < ApplicationController
 
   def server
     # @server ||= current_user.server(params[:id])
-    @server ||= ServerTwo.find(current_user, params[:id])
+    @server ||= Server.find(current_user, params[:id])
   end
 
   def server_params

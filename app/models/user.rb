@@ -70,16 +70,16 @@ class User < ActiveRecord::Base
   end
 
   def servers
-    @servers ||= canary2.get("servers").map { |s| Server.parse(s) }
+    @servers ||= Server.find_all(self)
   end
 
   def active_servers
     servers.reject(&:gone_silent?)
   end
 
-  def server(id)
-    canary.server(id)
-  end
+  # def server(id)
+  #   canary.server(id)
+  # end
 
   def servers_count
     @servers_count ||= api_info["server-count"]
@@ -94,7 +94,7 @@ class User < ActiveRecord::Base
   end
 
   def api_info
-    @api_info ||= canary.me
+    @api_info ||= canary2.get('users/me')
   end
 
   def agent_token
@@ -148,15 +148,11 @@ class User < ActiveRecord::Base
   end
 
 
-  def delete_api_user!
-    canary.delete_user
-  end
+  # def delete_api_user!
+  #   canary.delete_user
+  # end
 
   protected
-  def canary
-    @canary ||= Canary.new(self.token)
-  end
-
   def canary2
     @canary2 ||= Canary2.new(self.token)
   end

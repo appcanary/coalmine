@@ -34,4 +34,8 @@ class ApiBase < OpenStruct
     uuid
   end
 
+  def if_enum(obj)
+    obj || []
+  end
+
 end

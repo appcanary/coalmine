@@ -1,6 +1,6 @@
 class DashboardController < ApplicationController
   def index
-    @servers = ServerTwo.find_all(current_user)
+    @servers = Server.find_all(current_user)
     @onboarded = @servers.present?
 
     @silent_servers, @active_servers = @servers.partition(&:gone_silent?)

@@ -1,46 +1,40 @@
-class Server < CanaryBase
-  attr_params :apps, :last_heartbeat_at, :ip, :name, :hostname, :uname, :id, :uuid, :vulnerable
+class Server < ApiBase
+  def self.find(user, id)
+    client = Canary2.new(user.token)
+    resp = client.get("servers/#{id}")
 
-  has_many App
+    self.parse(resp.body, client)
+  end
+
+  def self.find_all(user)
+    client = Canary2.new(user.token)
+    resp = client.get("servers")
+    body = resp.body
+
+    body.map do |s| 
+      self.parse(s, client)
+    end
+  end
 
   def display_name
     name.blank? ? hostname : name
   end
 
-  def all_apps
-    @applications ||= self.canary.server_apps(uuid).map do |a|
-      a.server = self;
-      a
+  def apps
+    if_enum(self.attributes["apps"]).map do |a|
+      App.parse(a, __client)
     end
-  end
-
-  def app(id)
-    self.canary.server_app(uuid, id).tap do |a|
-      a.server = self
-    end
-  end
-
-  def vulns
-    @vulns ||= self.canary.server_vulnerabilities(uuid)
-  end
-
-  def avatar
-    RubyIdenticon.create_base64(self.hostname || "", :border_size => 10)
   end
 
   def gone_silent?
     last_heartbeat_at < 2.hours.ago.iso8601
   end
 
-  def to_param
-    uuid
-  end
-
   def update(params)
-    self.canary.update_server(uuid, params)
+    __client.put("servers/#{uuid}", params)
   end
 
   def destroy
-    self.canary.delete_server(uuid).to_s
+    __client.delete("servers/#{uuid}")
   end
 end
