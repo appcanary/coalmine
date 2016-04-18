@@ -44,7 +44,7 @@
     <h2>Authentication</h2>
     <h4><code>GET https://appcanary.com/api/v2/status</code></h4>
     <p>All communication with our APIs require your API key to be included as an <code>Authentication</code> header. These can be set in <code>curl</code> like so:</p>
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
      https://appcanary.com/api/v2/status</pre>
 
     <p>The status endpoint shown above will respond appropriately if your request is authenticated and your account is in good standing.</p>
