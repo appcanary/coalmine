@@ -22,8 +22,8 @@ class SettingsControllerTest < ActionController::TestCase
     new_email = "new@example.com"
 
     client = mock
-    client.expects(:update_user).with(anything).returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
-    Canary.stubs(:new).with(anything).returns(client)
+    client.expects(:put).with("users/me", anything).returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
+    Canary2.stubs(:new).with(anything).returns(client)
 
     put :update, :user => { :email => new_email }
 
@@ -34,8 +34,8 @@ class SettingsControllerTest < ActionController::TestCase
   describe "Intercom" do
     before do
       client = mock
-      client.stubs(:me).with(anything).returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
-      Canary.stubs(:new).with(anything).returns(client)
+      client.stubs(:get).with("user/me").returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
+      Canary2.stubs(:new).with(anything).returns(client)
     end
 
 
@@ -88,10 +88,14 @@ class SettingsControllerTest < ActionController::TestCase
     new_email = "new@example.com"
 
     client = mock
-    client.expects(:update_user).with(anything).raises(Faraday::Error, "lol nope")
-    client.expects(:me).with(anything).returns({"agent-token": "test"})
-    client.stubs(:servers).returns({})
-    Canary.stubs(:new).with(anything).returns(client)
+    client.expects(:get).with("users/me").returns({"agent-token": "test"})
+    client.expects(:put).with("users/me", anything).raises(Faraday::Error, "lol nope")
+    Server.stubs(:find_all).with(anything).returns([])
+
+    # client.expects(:update_user).with(anything).raises(Faraday::Error, "lol nope")
+    # client.expects(:me).with(anything).returns({"agent-token": "test"})
+    # client.stubs(:servers).returns({})
+    Canary2.stubs(:new).with(anything).returns(client)
 
     put :update, :user => { :email => new_email }
 

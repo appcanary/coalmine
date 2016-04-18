@@ -43,6 +43,7 @@ class CanaryClientTest < ActiveSupport::TestCase
     end
   end
 
+=begin
 
   describe 'status' do
     it 'returns the server status' do
@@ -134,4 +135,6 @@ class CanaryClientTest < ActiveSupport::TestCase
       end
     end
   end
+
+=end
 end

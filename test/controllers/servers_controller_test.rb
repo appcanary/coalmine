@@ -5,7 +5,7 @@ class ServersControllerTest < ActionController::TestCase
   let(:server) { FactoryGirl.build(:server) }
 
   before(:suite) do
-    Canary.any_instance.stubs(:server).with(anything).returns(server)
+    Server.stubs(:find).with(anything, anything).returns(server)
   end
 
   describe "while authenticated" do
