@@ -7,7 +7,7 @@
 
     <p>For example</p>
     
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
       https://appcanary.com/api/v2/servers</pre>
 
 
@@ -95,7 +95,7 @@
 
     <p>For example</p>
 
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
       https://appcanary.com/api/v2/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
 
     <h4>Required path parameters</h4>
@@ -269,7 +269,7 @@
 
     <p>For example</p>
     
-    <pre class="bash">curl -H "Authorization: Token <%= @user.agent_token %>" \
+    <pre class="bash">curl -H "Authorization: Token <%= @agent_token %>" \
      -X DELETE \
      https://appcanary.com/api/v2/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
 
