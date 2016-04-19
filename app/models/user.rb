@@ -77,10 +77,6 @@ class User < ActiveRecord::Base
     servers.reject(&:gone_silent?)
   end
 
-  # def server(id)
-  #   canary.server(id)
-  # end
-
   def servers_count
     @servers_count ||= api_info["server-count"]
   end
