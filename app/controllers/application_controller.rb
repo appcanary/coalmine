@@ -8,6 +8,40 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_filter :require_login, :set_raven_context
 
+  # custom error handling
+
+  rescue_from CanaryClient::NotFoundError, :with => :error_not_found
+
+  # nominally meant for the ErrorsController,
+  # Rails tries hard to prevent you from calling another
+  # controller's action. In order to have errors show properly,
+  # without a redirect, simplest solution was to just place
+  # these methods here - so they can be called from *any*
+  # controller, i.e. see the above rescue_from
+  # these can't be private, btw, since we route to them
+  # inside routes.rb
+  #
+  # Rails has some mechanism for catching 
+  # ActiveRecord::NotFounds and, coupled with making the router
+  # the config.exceptions_app middleware as defined in
+  # config.rb, is also "smart" enough to know that is a 404.
+  #
+  # Barring spending another hour tracking down that code, so
+  # I can properly intercept it - and maybe make a blog post -
+  # this solution shall suffice.
+  def error_not_found
+    render "errors/not_found", :layout => 'launchrock', :status => 404
+  end
+
+  def error_unacceptable
+    render "errors/not_found", :layout => 'launchrock', :status => 422
+  end
+
+  def error_internal_error
+    render "errors/internal_error", :layout => 'launchrock', :status => 500
+  end
+
+
   private
   def track_event(user, event)
     if Rails.env.production?
@@ -58,4 +92,6 @@ class ApplicationController < ActionController::Base
                        email: current_user.try(:email))
     Raven.extra_context(params: params.to_hash, url: request.url)
   end
+
+
 end
