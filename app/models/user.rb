@@ -70,15 +70,11 @@ class User < ActiveRecord::Base
   end
 
   def servers
-    @servers ||= canary.servers
+    @servers ||= Server.find_all(self)
   end
 
   def active_servers
     servers.reject(&:gone_silent?)
-  end
-
-  def server(id)
-    canary.server(id)
   end
 
   def servers_count
@@ -94,7 +90,7 @@ class User < ActiveRecord::Base
   end
 
   def api_info
-    @api_info ||= canary.me
+    @api_info ||= canary.get('users/me')
   end
 
   def agent_token
@@ -148,13 +144,13 @@ class User < ActiveRecord::Base
   end
 
 
-  def delete_api_user!
-    canary.delete_user
-  end
+  # def delete_api_user!
+  #   canary.delete_user
+  # end
 
   protected
   def canary
-    @canary ||= Canary.new(self.token)
+    @canary ||= CanaryClient.new(self.token)
   end
 
   def absence_of_stripe_errors

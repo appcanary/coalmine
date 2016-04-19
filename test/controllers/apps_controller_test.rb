@@ -6,8 +6,8 @@ class AppsControllerTest < ActionController::TestCase
   let(:app) { FactoryGirl.build(:app) }
 
   before(:suite) do
-    User.any_instance.stubs(:server).returns(server)
-    Server.any_instance.stubs(:app).returns(app)
+    App.stubs(:find).returns(app)
+    Server.stubs(:find).returns(server)
   end
 
   describe "while authenticated" do

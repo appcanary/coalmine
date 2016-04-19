@@ -45,7 +45,7 @@
               </td>
               <td class="vulnerabilities">
                 <ul>
-                  <% artifact.vulnerability.each do |vuln| %>
+                  <% artifact.vulnerabilities.each do |vuln| %>
                     <li class="vulnerability">
                       <p><%= link_to vuln.title, vuln_path(vuln) %></p>
 

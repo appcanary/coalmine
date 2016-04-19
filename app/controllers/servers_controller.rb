@@ -61,7 +61,7 @@ class ServersController < ApplicationController
   protected
 
   def server
-    @server ||= current_user.server(params[:id])
+    @server ||= Server.find(current_user, params[:id])
   end
 
   def server_params

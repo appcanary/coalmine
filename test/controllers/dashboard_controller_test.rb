@@ -5,7 +5,7 @@ class DashboardControllerTest < ActionController::TestCase
     let(:user) { FactoryGirl.create(:user) }
     describe "while onboarded" do
       it "should get index" do
-        Canary.any_instance.stubs(:servers).with(anything).returns([FactoryGirl.build(:server)])
+        Server.stubs(:find_all).with(anything).returns(FactoryGirl.build(:server))
         login_user(user)
         get :index
         assert_response :success
@@ -14,7 +14,7 @@ class DashboardControllerTest < ActionController::TestCase
 
     describe "while not onboarded" do
       it "should be redirected to servers/new" do
-        Canary.any_instance.stubs(:servers).with(anything).returns([])
+        Server.stubs(:find_all).with(anything).returns([])
         login_user(user)
 
         get :index

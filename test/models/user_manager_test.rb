@@ -20,7 +20,7 @@ class UserManagerTest < ActiveSupport::TestCase
 
     it "should set a token and an id" do
       @user = FactoryGirl.build(:user)
-      Canary.stubs(:new).with(anything).returns(mock_client)
+      CanaryClient.stubs(:new).with(anything).returns(mock_client)
       assert UserManager.sign_up(@user)
 
       @user.reload
@@ -33,7 +33,7 @@ class UserManagerTest < ActiveSupport::TestCase
 
     it "it should handle rando API failure" do
       @user = FactoryGirl.build(:user)
-      Canary.any_instance.stubs(:add_user).raises(Faraday::Error.new)
+      CanaryClient.any_instance.stubs(:post).with("users", anything).raises(Faraday::Error.new)
       assert_equal UserManager.sign_up(@user), false
       assert @user.errors.present?
     end
@@ -46,7 +46,7 @@ class UserManagerTest < ActiveSupport::TestCase
   def mock_client
     unless @client
       @client = mock
-      @client.expects(:add_user).with(anything).returns({'web-token' => 'a token', 'id' => 123})
+      @client.expects(:post).with("users", anything).returns({'web-token' => 'a token', 'id' => 123})
     end
     @client
   end

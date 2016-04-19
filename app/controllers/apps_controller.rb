@@ -7,8 +7,9 @@ class AppsController < ApplicationController
   end
 
   def show
-    @server = current_user.server(params[:server_id])
-    @app = @server.app(params[:id])
+    @server = Server.find(current_user, params[:server_id])
+    @app = App.find(current_user, params[:server_id], params[:id])
+
     @artifacts = @app.artifact_versions
     @vuln_artifacts = @app.vulnerable_artifact_versions
   end

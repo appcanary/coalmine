@@ -6,7 +6,7 @@ class UserManager
   end
 
   def initialize(user)
-    @client = Canary.new(user.token)
+    @client = CanaryClient.new(user.token)
     @user = user
   end
 
@@ -16,7 +16,7 @@ class UserManager
     else
       # password checks out, lets fetch our token
       begin
-        backend_user = @client.add_user({email: user.email, name: ''})
+        backend_user = @client.post('users', {email: user.email, name: ''})
         @user.token = backend_user['web-token']
         @user.datomic_id = backend_user['id']
 
@@ -45,7 +45,7 @@ class UserManager
 
     if email = params[:email]
       begin
-        resp = @client.update_user({email: email})
+        resp = @client.put('users/me', {email: email})
       rescue Faraday::Error => e
         @user.errors.add(:email, "Something went wrong. Please try again.")
         Raven.capture_exception(e)

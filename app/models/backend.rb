@@ -1,35 +1,42 @@
-class Backend < CanaryBase
-
+class Backend
   def self.servers_count
-    wrap(canary.stats_servers_count)["count"]
+    wrap(canary.get("stats/servers/count"))["count"]
   end
 
   def self.recent_heartbeats
-    wrap(canary.stats_servers_count_recent_heartbeats)["count"]
+    wrap(canary.get("stats/servers/count-recent-heartbeats"))["count"]
   end
 
   def self.without_heartbeats
-    canary.stats_servers_without_hearbeats
+    canary.get("stats/servers/no-heartbeat")
   end
 
   def self.vulnerabilities_count
-    wrap(canary.stats_vulnerabilities_count)["count"]
+    wrap(canary.get("stats/vulnerabilities/count"))["count"]
   end
 
   def self.artifacts_count
-    wrap(canary.stats_artifacts_count)["count"]
+    wrap(canary.get("stats/artifacts/count"))["count"]
   end
 
   def self.all_users
-    canary.all_users
+    canary.get("users")
   end
-
 
   def self.wrap(obj)
     obj || {}
   end
 
+  def self.upload_gemfile(contents)
+    resp = @canary.post("upload", data: {:contents => Base64.strict_encode64(contents), :kind => "gemfile"})
+
+    resp.body.map do |av|
+      ArtifactVersion.parse(av)
+    end
+  end
+
+
   def self.canary
-    @canary ||= Canary.new
+    @canary ||= CanaryClient.new
   end
 end

@@ -1,6 +1,4 @@
-class Artifact < CanaryBase
-
-  attr_params :id, :name, :kind, :uuid, :authors, :description, :uri, :vulnerability 
+class Artifact < ApiBase
   def kind_pretty
     if kind =~ /rubygem/
       "rubygem"

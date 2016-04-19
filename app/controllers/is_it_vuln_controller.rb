@@ -61,7 +61,7 @@ class IsItVulnController < ApplicationController
     raise EmptyFileError if file.blank?
 
     file_contents = file.read
-    all_artifacts = Canary.new.upload_gemfile(file_contents)
+    all_artifacts = Backend.upload_gemfile(file_contents)
 
     raise ArgumentError if all_artifacts.blank?
 

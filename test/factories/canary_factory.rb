@@ -16,12 +16,13 @@ FactoryGirl.define do
     uuid { SecureRandom.uuid }
     description { Faker::Hacker.say_something_smart }
     title { Faker::Lorem.sentence }
-    artifact { 50.times.map { FactoryGirl.build(:artifact) } }
+
+    # lol, ApiBase assumes this is all a parsed json hash
+    attributes { {"artifact" => 5.times.map { FactoryGirl.build(:artifact).to_h } } }
   end
 
   factory :artifact_versions do
     vulnerability {
-      maybe_vulnerability
     }
 
     kind { ["Ruby", "Lol"].sample }
@@ -31,17 +32,7 @@ FactoryGirl.define do
     uuid { SecureRandom.uuid }
     description { Faker::Lorem.sentence }
     kind { ["Ruby", "Lol"].sample }
-    vulnerability {
-      maybe_vulnerability
-    }
-  end
-
-  def maybe_vulnerability
-    if rand(2) == 0
-      nil
-    else
-      rand(1..5).times.map { FactoryGirl.build(:vulnerability) }
-    end
+    name { Faker::Hacker.ingverb }
   end
 
 end
