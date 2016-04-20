@@ -39,33 +39,6 @@
   }
 }
 
-
-.sign-up-page {
-  @include outer-container;
-  padding: 8.5em 0 5.5em 0;
-  .field-error {
-    color: #e54427;
-  }
-
-  h1 {
-    font-weight: 600;
-    font-size: 2em;
-  }
-
-  h2 {
-    margin-bottom: 1em;
-  }
-
-  a {
-    color: black;
-    font-weight: bold;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
 .demo {
   padding: 1em 0;
   .unit_demo-box {

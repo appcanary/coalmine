@@ -1,15 +1,6 @@
-<div class="top-left-brand">
-  <a href="https://appcanary.com">
-    <%= image_tag "appcanary-hero.png", :alt => "Appcanary" %>
-  </a>
-</div>
+<div class="topbar"></div>
 
-
-<div class="action">
-  <div class="action_unit action_login">
-    <%= link_to "Log in", login_path, :class => "button" %>
-  </div>
-</div>
+<%= render :partial => "shared/top_menu" %>
 
 <div class="hero-wrapper">
   <div class="sign-up-page">
