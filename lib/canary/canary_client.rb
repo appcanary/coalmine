@@ -1,33 +1,45 @@
 require 'faraday_middleware'
 
 class CanaryClient
-  delegate :request, :to => :client
   def client
-    @client ||= Client.new(Rails.configuration.canary.uri)
+    @client ||= Client.new(Rails.configuration.canary.uri + @prefix, @options)
   end
 
-  def initialize(user_token = "")
+  def initialize(user_token = "", opts={})
+    @options = {}.merge(opts)
+    @options[:prefix] ||= "/v1"
+
     @user_token = user_token
+    @prefix = @options[:prefix]
   end
 
-  def get(url, opts={})
-    perform_request(:get, url, opts)
+  def get(url, data={})
+    perform_request(:get, url, data)
   end
 
-  def put(url, opts={})
-    perform_request(:put, url, opts)
+  def put(url, data={})
+    perform_request(:put, url, data)
   end
 
-  def post(url, opts={})
-    perform_request(:post, url, opts)
+  def post(url, data={})
+    perform_request(:post, url, data)
   end
 
-  def delete(url, opts={})
-    perform_request(:delete, url, opts)
+  def delete(url, data={})
+    perform_request(:delete, url, data)
   end
 
-  def perform_request(verb, url, opts = {})
-    Response.new(request(verb, url, {:token => @user_token, :data => opts}))
+  def post_file(url, file)
+    perform_request(:post, url, {:file => Faraday::UploadIO.new(file, "application/octet-stream")}, {"Content-Type" => "multipart/form-data"})
+  end
+
+  def put_file(url, file)
+    perform_request(:put, url, {:file => Faraday::UploadIO.new(file, "application/octet-stream")}, {"Content-Type" => "multipart/form-data"})
+  end
+
+
+  def perform_request(verb, url, data = {}, headers = {})
+    Response.new(client.request(verb, url, {:token => @user_token, :data => data, :headers => headers}))
   end
 
 
@@ -35,6 +47,14 @@ class CanaryClient
     def initialize(url, opts={})
       options = {}.merge(opts)
       @conn = Faraday.new(url: url) do |faraday|
+        # used solely for receiving files.
+        #
+        # since this configuration option happens
+        # on client init, we may want to move
+        # Faraday initialization to the request method
+        if options[:multipart]
+          faraday.request :multipart
+        end
         faraday.request :url_encoded
         faraday.response :json
         faraday.adapter Faraday.default_adapter # NetHttp
@@ -44,13 +64,23 @@ class CanaryClient
     def request(method, url, opts={})
       options = {}.merge(opts)
       @conn.method(method).call(url) do |req|
-        if options[:token]
+        if options[:token].present?
           req.headers['Authorization'] = 'Token ' + options[:token]
         end
-        if %i(post put).include? method
-          req.headers['Content-Type'] = 'application/json'
-          req.body = JSON.generate(options[:data])
+
+        if options[:headers]
+          req.headers.merge!(options[:headers])
         end
+
+        if %i(post put).include? method
+          if req.headers['Content-Type'].blank?
+            req.headers['Content-Type'] = 'application/json'
+            req.body = JSON.generate(options[:data])
+          else
+            req.body = options[:data]
+          end
+        end
+
       end
     end
   end
