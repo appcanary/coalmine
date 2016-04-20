@@ -189,8 +189,8 @@
     }
   }
   #vulnerable_artifacts, .artifact_versions, .all_good {
-    @include span-columns(6 of 12);
-    @include shift(3);
+    @include span-columns(8 of 12);
+    @include shift(2);
   }
 
   .all_good {
@@ -356,6 +356,7 @@ table.artifacts {
 .hero-vuln {
   @extend .hero;
   padding-top: 6em;
+  padding-bottom: 2em;
   @include media($mobile-width) {
     padding-top: 2em;
   }
