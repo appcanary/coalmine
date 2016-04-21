@@ -25,7 +25,7 @@ class Moniter < ApiBase
   end
 
   def self.create(user, file, environs, name = nil)
-    client = obtain_clientv2(user, :multipart => true)
+    client = obtain_clientv2(user)
 
     query = build_rl("monitors", name, environs)
     resp = client.post_file(query, file)
@@ -37,7 +37,7 @@ class Moniter < ApiBase
   end
 
   def self.update(user, file, environs, name)
-    client = obtain_clientv2(user, :multipart => true)
+    client = obtain_clientv2(user)
 
     query = build_rl("monitors", name, environs)
     resp = client.put_file(query, file)
