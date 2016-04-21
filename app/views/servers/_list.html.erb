@@ -1,0 +1,25 @@
+<td>
+  <section>
+    <div class="status">
+      <% if server.apps.empty? || server.gone_silent? %>
+        <span class="fa fa-question-circle"></span>
+      <% elsif server.vulnerable %>
+        <span class="fa fa-exclamation-triangle warn"></span>
+      <% else %>
+        <span class="fa fa-check-circle okay"></span>
+      <% end %>
+    </div>
+    <div class="description">
+      <span class="title">
+        <%= link_to server.display_name, server_path(server) %>
+      </span>
+      <div class="last_updated info">
+        <%= link_to "updated #{time_ago_in_words server.last_heartbeat_at} ago", server_path(server) %>
+      </div>
+    </div>
+    <div class="actions">
+      <%=link_to('edit', edit_server_path(server), class: 'btn btn-primary') %>
+      <%=link_to('delete', server_path(server), method: :delete, class: 'btn btn-danger', data: {confirm: "Are you sure you want to delete this server?"}) %>
+    </div>
+  </section>
+</td>
