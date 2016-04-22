@@ -1,38 +1,50 @@
-<% if @servers.present? %>
-  <section>
-    <div class="heading">
-      <h3>
-        <span> My Servers</span>
-      </h3>
-    </div>
-  </section>
-<% end %>
 <% if @onboarded %>
   <div id="dashboard">
-    <% if @active_servers.present? %>
-      <table class="table servers">
-        <% @active_servers.each do |server| %>
-          <tr class="server">
-            <%= render :partial => "servers/list", :locals => { :server => server } %>
-          </tr>
-        <% end %>
-      </table>
-    <% end %>
-
-    <% if @silent_servers.present? %>
-      <p>
-        <strong> Psst! We haven't heard from these servers in a while:</strong>
+    <section>
+      <div class="col-sm-12">
+        <p>
+          At a glance: <%= at_a_glance(@monitors, @active_servers, @silent_servers) %>
       </p>
-      <table class="table servers">
-        <% @silent_servers.each do |server| %>
-          <tr class="server">
-            <%= render :partial => "servers/list", :locals => { :server => server } %>
-          </tr>
-        <% end %>
-      </table>
-    <% end %>
+    </div>
   </div>
-    
+
+  <% if @monitors.present? %>
+    <div class="monitors">
+      <h3>Monitors</h3>
+      <table class="table servers">
+        <% @monitors.each do |monitor| %>
+          <%= render :partial => "monitors/list", :locals => { :monitor => monitor } %>
+      <% end %>
+    </table>
+  </div>
+<% end %>
+
+<% if @active_servers.present? %>
+  <h3>Servers</h3>
+  
+  <table class="table servers">
+    <% @active_servers.each do |server| %>
+      <tr class="server">
+        <%= render :partial => "servers/list", :locals => { :server => server } %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<% if @silent_servers.present? %>
+  <p>
+    <strong> Psst! We haven't heard from these servers in a while:</strong>
+  </p>
+  <table class="table servers">
+    <% @silent_servers.each do |server| %>
+      <tr class="server">
+        <%= render :partial => "servers/list", :locals => { :server => server } %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+</div>
+
 <% else %>
   <section>
     <div class="col-sm-8">

@@ -28,7 +28,7 @@ class App < ApiBase
   end
 
   def vulnerable_artifact_versions
-     if_enum(self.attributes["vulnerable_artifact_versions"]).map do |av|
+    if_enum(self.attributes["vulnerable_artifact_versions"]).map do |av|
       ArtifactVersion.parse(av)
     end
   end

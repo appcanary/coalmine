@@ -1,6 +1,7 @@
 class DashboardController < ApplicationController
   def index
     @servers = Server.find_all(current_user)
+    @monitors = Moniter.find_all(current_user)
 
     wizard = OnboardWizard.new(current_user, @servers)
     @onboarded = wizard.onboarded?
