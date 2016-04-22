@@ -17,16 +17,16 @@
             /
             <span>Edit</span>
           <% end %>
-        <% end %>
 
-      <% else %>
-        /
-        <span><%=link_to "apps", server_path(@server) %></span>
-        /
-        <span class="name"<%= @app.short_path %></span>
-        /
-        <span>Packages</span>
-      <% end%>
+        <% else %>
+          /
+          <span><%=link_to "apps", server_path(@server) %></span>
+          /
+          <span class="name"<%= @app.short_path %></span>
+          /
+          <span>Packages</span>
+        <% end%>
+      <% end %>
 
       <% if @vuln %>
         | vulnerabilities /
