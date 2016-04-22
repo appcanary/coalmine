@@ -14,36 +14,42 @@
       <table class="table servers">
         <% @monitors.each do |monitor| %>
           <%= render :partial => "monitors/list", :locals => { :monitor => monitor } %>
-      <% end %>
-    </table>
-  </div>
-<% end %>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
 
-<% if @active_servers.present? %>
-  <h3>Servers</h3>
-  
-  <table class="table servers">
-    <% @active_servers.each do |server| %>
-      <tr class="server">
-        <%= render :partial => "servers/list", :locals => { :server => server } %>
-      </tr>
-    <% end %>
-  </table>
-<% end %>
+  <% if @active_servers.present? || @silent_servers.present? %>
+    <h3>Servers</h3>
 
-<% if @silent_servers.present? %>
-  <p>
-    <strong> Psst! We haven't heard from these servers in a while:</strong>
-  </p>
-  <table class="table servers">
-    <% @silent_servers.each do |server| %>
-      <tr class="server">
-        <%= render :partial => "servers/list", :locals => { :server => server } %>
-      </tr>
+    <% if @active_servers.present? %>
+      <table class="table servers">
+        <% @active_servers.each do |server| %>
+          <tr class="server">
+            <%= render :partial => "servers/list", :locals => { :server => server } %>
+          </tr>
+        <% end %>
+      </table>
     <% end %>
-  </table>
-<% end %>
-</div>
+
+    <% if @silent_servers.present? %>
+      <p>
+        <strong> Psst! We haven't heard from these servers in a while:</strong>
+      </p>
+
+      <table class="table servers">
+        <% @silent_servers.each do |server| %>
+          <tr class="server">
+            <%= render :partial => "servers/list", :locals => { :server => server } %>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
+
+  <% end %>
+
+
+
 
 <% else %>
   <section>
