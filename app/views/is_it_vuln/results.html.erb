@@ -65,7 +65,7 @@
                 </th>
               </thead>
               <tbody>
-                <% artifact.vulnerability.each do |v| %>
+                <% artifact.vulnerabilities.each do |v| %>
                   <tr>
                     <td class="advisory">
                       <%= link_to v.title, vuln_path(v), :target => "_blank" %>
