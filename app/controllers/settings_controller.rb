@@ -2,6 +2,7 @@ class SettingsController < ApplicationController
   def show
     @show_stripe = true
     @user = current_user
+    @agent_token = @user.agent_token
   end
 
   def update
