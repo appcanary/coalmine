@@ -131,12 +131,13 @@ img {
     
 
     .brand {
-      position: relative;
       img {
+        display: block;
         width: initial;
         max-width: 80%;
         margin-top: 20px;
-        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
         top: 50%;
         transform: translateY(-50%);
         @include mobile-all {
@@ -154,7 +155,7 @@ img {
   }
 
   .customer:first-of-type {
-    @include shift(2);
+    @include shift(1);
     @include mobile-all {
       @include shift(0);
     }
