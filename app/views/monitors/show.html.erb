@@ -2,7 +2,7 @@
   <div class="heading">
     <h3>
       <span><%= link_to "<< Back", dashboard_path %></span>
-  </h3>
+    </h3>
   </div>
 </section>
 
@@ -62,7 +62,7 @@
 
         <% if @vuln_artifacts.empty? %>
           <tr>
-            <td class="empty_message">No vulnerable packages found for this app!</td>
+            <td class="empty_message">No vulnerable packages found for this monitor!</td>
           </tr>
         <% else %>
           <% @vuln_artifacts.each do |artifact| %>
