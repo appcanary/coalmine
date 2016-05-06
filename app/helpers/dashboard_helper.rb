@@ -29,17 +29,17 @@ module DashboardHelper
   end
 
   def monitor_kind_label(monitor)
-    img_str = case monitor.kind
-    when "ruby"
-      image_tag("icon-ruby.png", :style => "width: 13px") + " Ruby"
-    when "centos"
-      image_tag("icon-centos.png", :style => "width: 13px") + " CentOS"
-    when "ubuntu"
-      image_tag("icon-ubuntu.png", :style => "width: 13px") + " Ubuntu`"
-    end
+    icon, label = case monitor.kind
+                  when "ruby"
+                    ["ruby.png", "Ruby"]
+                  when "centos"
+                    ["centos.png", "CentOS"]
+                  when "ubuntu"
+                    ["ubuntu.png", "Ubuntu"]
+                  end
 
     content_tag(:span) do 
-      img_str
+      image_tag("icon-#{icon}", :style => "width: 13px") + " #{label}"
     end
   end
 end
