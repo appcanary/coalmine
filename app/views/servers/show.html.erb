@@ -1,0 +1,64 @@
+<%= render :partial => "shared/heading" %>
+
+<section>
+  <div class="server-info">
+    <table class="table">
+      <thead>
+        <th>
+          hostname
+        </th>
+        <th>
+          address
+        </th>
+        <th>
+          last heartbeat
+        </th>
+        <th>
+          uname
+        </th>
+      </thead>
+      <tbody>
+        <tr>
+          <td> 
+            <%= @server.display_name %>
+          </td>
+          <td>
+            <%= @server.ip %>
+          </td>
+          <td>
+            <%= "#{time_ago_in_words @server.last_heartbeat_at} ago" %>
+          </td>
+          <td>
+            <%=@server.uname %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section>
+  <div class="server-apps">
+    <% if @server.apps.present? %>
+      <h4>Apps and dependencies:</h4>
+      <table class="table apps">
+        <% @server.apps.each do |app| %>
+          <tr>
+            <%= render :partial => "apps/list", :locals => { :app => app } %>
+          </tr>
+        <% end %>
+      </table>
+
+    <% else %>
+      <h3>Hey! We don't seem to be monitoring any apps.</h3>
+      <p> 
+        Please consult the 
+        <%= link_to "onboarding page", onboarding_path %>
+        for instructions.
+        Ideally we'd tell you a bit more than this, but we're hard at work to improve this page!
+      </p>
+    <% end %>
+  </div>
+</section>
+

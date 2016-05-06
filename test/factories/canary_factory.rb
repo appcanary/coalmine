@@ -12,6 +12,16 @@ FactoryGirl.define do
     artifact_versions { [] }
   end
 
+  factory :moniter do
+    uuid { SecureRandom.uuid }
+    name { SecureRandom.uuid }
+    path { "/var/www/fake/Gemfile.lock" }
+    artifact_versions { [] }
+    created_at { 5.minutes.ago }
+    vulnerable_versions { [] }
+  end
+
+
   factory :vulnerability do
     uuid { SecureRandom.uuid }
     description { Faker::Hacker.say_something_smart }

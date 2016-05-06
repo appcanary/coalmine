@@ -1,7 +1,10 @@
 class DashboardController < ApplicationController
   def index
     @servers = Server.find_all(current_user)
-    @onboarded = @servers.present?
+    @monitors = Moniter.find_all(current_user)
+
+    wizard = OnboardWizard.new(current_user, @servers)
+    @onboarded = wizard.onboarded?
 
     @silent_servers, @active_servers = @servers.partition(&:gone_silent?)
 

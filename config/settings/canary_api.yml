@@ -1,12 +1,12 @@
 development:
   canary:
-    uri: 'http://localhost:4000/api/v1'
+    uri: 'http://localhost:4000/api'
 test:
   canary:
-    uri: 'http://localhost:4000/api/v1'
+    uri: 'http://localhost:4000/api'
 staging:
   canary:
-    uri: 'http://localhost/api/v1'
+    uri: 'http://localhost/api'
 production:
   canary:
-    uri: 'http://localhost/api/v1'
+    uri: 'http://localhost/api'

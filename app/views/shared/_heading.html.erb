@@ -1,0 +1,37 @@
+<section>
+  <div class="heading">
+    <h3>
+      <span><%= link_to "dashboard", dashboard_path %></span>
+      <% if @server %>
+        /
+        <span class="name"><%= @server.hostname %></span>
+
+
+        <% unless @app %>
+          <% if action_name == 'show' %>
+            /
+            <span>Apps</span>
+          <% end %>
+
+          <% if action_name == 'edit' %>
+            /
+            <span>Edit</span>
+          <% end %>
+
+        <% else %>
+          /
+          <span><%=link_to "apps", server_path(@server) %></span>
+          /
+          <span class="name"<%= @app.short_path %></span>
+          /
+          <span>Packages</span>
+        <% end%>
+      <% end %>
+
+      <% if @vuln %>
+        | vulnerabilities /
+        <%=  truncate @vuln.title, length: 50 %>
+      <% end %>
+    </h3>
+  </div>
+</section>

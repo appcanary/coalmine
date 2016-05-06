@@ -1,0 +1,25 @@
+<tr class="server">
+  <td>
+    <section>
+      <div class="status">
+        <% if monitor.vulnerable %>
+          <span class="fa fa-exclamation-triangle warn"></span>
+        <% else %>
+          <span class="fa fa-check-circle okay"></span>
+        <% end %>
+      </div>
+      <div class="description">
+        <span class="title">
+          <%= link_to monitor.name, monitor_path(monitor) %>
+        </span>
+        <div class="last_updated info">
+          <%= monitor_kind_label(monitor) %>
+          <%= link_to "created #{time_ago_in_words monitor.created_at} ago", monitor_path(monitor) %>
+        </div>
+      </div>
+      <div class="actions">
+        <%=link_to('delete', monitor_path(monitor), method: :delete, class: 'btn btn-danger', data: {confirm: "Are you sure you want to delete this monitor?"}) %>
+      </div>
+    </section>
+  </td>
+</tr>

@@ -1,208 +1,26 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- */
-
 $dark-yellow: #fadc58;
 $slightly-darker-yellow: #eac64b;
 
 $navbar-default-bg: $dark-yellow;
 $navbar-default-border: $slightly-darker-yellow;
+$link-color: #3798A5;
+
 @import "bourbon";
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import 'vendor/emberui.scss';
 @import "font-awesome";
-@import 'boxes';
+@import "internal/main";
+@import "internal/dashboard";
+@import 'internal/boxes';
 
-@import "users";
-@import 'servers';
-@import 'apps';
-@import 'vulns';
-@import 'onboard';
-@import 'docs';
+@import "internal/users";
+@import 'internal/servers';
+@import 'internal/apps';
+@import 'internal/vulns';
+@import 'internal/onboard';
+@import 'internal/docs';
 // for hljs
 @import 'vendor/github-gist';
 
-$link-color: #3798A5;
-
-body {
-  padding-bottom: 20px;
-  background-color: #fff;
-  font-family: 'proxima-nova',sans-serif;
-}
-
-// trigger semibold;
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-weight: 600;
-}
-
-a {
-  color: $link-color;
-  &:hover {
-    color: adjust-lightness($link-color, 16);
-    text-decoration: none;
-  }
-}
-
-
-#main {
-  .heading {
-    @extend .col-sm-12;
-    h3 {
-      font-weight: normal;
-      line-height: 1.2em;
-      color: #aaa;
-    }
-    .name {
-      color: #555;
-      font-weight: bold;
-    }
-    span:not(.name) {
-      text-transform: lowercase;
-    }
-
-    .last_updated a {
-      text-decoration: none;
-    }
-
-
-    @media (max-width: $grid-float-breakpoint) {
-      padding-left: 30px;
-    }
-  }
-}
-
-.navbar {
-  .navbar-brand {
-    padding-top: 10px;
-    img {
-      margin-left: auto;
-      margin-right: auto;
-
-      width: 40px;
-    }
-  }
-}
-
-.logo {
-  @extend .col-sm-6;
-  @extend .col-sm-offset-3;
-  margin-top: 20px;
-  margin-bottom: 10px;
-
-  img {
-    max-width: 175px;
-    display:block;
-    margin:auto;
-  }
-}
-
-.intro-logo {
-  @extend .col-sm-6;
-  @extend .col-sm-offset-3;
-  margin-top: 20px;
-  margin-bottom: 10px;
-
-  img {
-    max-width: 175px;
-    display:block;
-    margin:auto;
-  }
-
-
-}
-
-section {
-  @include make-row();
-}
-
-.btn.btn-black {
-  @include button-variant(white, black, grey)
-}
-
-.error_explanation {
-  @extend .alert;
-  @extend .alert-danger;
-}
-
-.flashes {
-  @extend .col-sm-6;
-  @extend .col-sm-offset-3;
-  padding-top: 10px;
-}
-
-
-.topbar {
-  position: fixed;
-  height: 8px;
-  background-color: $dark-yellow;
-  border-bottom: 1px solid  darken( $dark-yellow, 20%);
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
-.navbar {
-  font-size: 16px;
-}
-
-// used for #url anchors to offset the top of the page
-.anchor-offset {
-  display: block; 
-  position: relative; 
-  top: -20px; 
-  visibility: hidden;
-}
-
-
-.fa.okay {
-  color: rgb(139, 181, 139);
-}
-.fa.warn {
-  color: #A60000;
-}
-
-.empty_message {
-  padding: 2em 3em 2em 3em;
-  font-size: 1.2em;
-  font-style: italic;
-  font-weight: bold;
-  color: #555;
-  text-align: center;
-}
-
-// used for fixed-with-nav menus
-.fixed-side-menu {
-  @extend .col-sm-3;
-  .outer-wrapper {
-    position: absolute;
-
-    @media screen and (max-width: 736px) {
-      display: none;
-    }
-
-    .inner-wrapper {
-      position: fixed;
-      top: 60px;
-      // width: 18%;
-      // background-color: #ccc;
-      // @include border-top-radius(5px);
-      // @include border-right-radius(5px);
-      // @include border-bottom-radius(5px);
-      // @include border-left-radius(5px);
-
-    }
-  }
-}

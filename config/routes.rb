@@ -72,6 +72,7 @@ Rails.application.routes.draw do
     get "rpm", on: :collection
   end
 
+  resources :monitors, :only => [:show, :destroy]
   resources :vulns, :only => [:show]
 
   namespace :admin do

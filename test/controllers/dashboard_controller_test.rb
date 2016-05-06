@@ -5,7 +5,8 @@ class DashboardControllerTest < ActionController::TestCase
     let(:user) { FactoryGirl.create(:user) }
     describe "while onboarded" do
       it "should get index" do
-        Server.stubs(:find_all).with(anything).returns(FactoryGirl.build(:server))
+        Server.stubs(:find_all).with(anything).returns([FactoryGirl.build(:server)])
+        Moniter.stubs(:find_all).with(anything).returns([FactoryGirl.build(:moniter)])
         login_user(user)
         get :index
         assert_response :success
@@ -15,6 +16,7 @@ class DashboardControllerTest < ActionController::TestCase
     describe "while not onboarded" do
       it "should be redirected to servers/new" do
         Server.stubs(:find_all).with(anything).returns([])
+        Moniter.stubs(:find_all).with(anything).returns([FactoryGirl.build(:moniter)])
         login_user(user)
 
         get :index

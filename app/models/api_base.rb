@@ -38,4 +38,26 @@ class ApiBase < OpenStruct
     obj || []
   end
 
+  def self.obtain_clientv2(user=nil, opt = {})
+    CanaryClient.new(user.try(:agent_token), opt.merge(:prefix => "/v2"))
+  end
+
+  def self.build_rl(endpoint, path = nil, query = {})
+    str = [endpoint, path].select(&:present?).join("/")
+    [str, query.to_query].select(&:present?).join("?")
+  end
+
+  def self.validate_attr!(body)
+    if body["errors"].present?
+      raise CanaryApiError.new(body["errors"])
+    else
+      if body["data"].blank?
+        raise CanaryApiError.new("Missing data key in #{body}")
+      end
+    end
+    true
+  end
+
+  class CanaryApiError < StandardError; end;
+
 end
