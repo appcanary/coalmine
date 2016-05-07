@@ -14,4 +14,8 @@ class OnboardWizard
   def onboarded?
     servers.present?
   end
+
+  def new_user?
+    !onboarded?
+  end
 end

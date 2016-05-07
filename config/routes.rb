@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
-  get 'welcome' => "dashboard#index", :as => :welcome
+  get 'welcome' => "onboarding#welcome", :as => :welcome
 
 
   get "secretsignup/:source" => "users#new", :as => :new_beta_sign_up
@@ -39,8 +39,6 @@ Rails.application.routes.draw do
   post "presignup" => "users#pre_sign_up", :as => :pre_sign_up
   get 'sign_up' => "users#new", :as => :sign_up
   post 'sign_up' => "users#create", :as => :create_sign_up
-
-  get "hello" => "servers#onboarding", :as => :onboarding
 
   get "billing" => "billing#show", :as => :show_billing
   put "billing" => "billing#update", :as => :billing
