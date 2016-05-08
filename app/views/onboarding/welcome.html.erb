@@ -5,7 +5,7 @@
         <h1>Welcome!</h1>
       </div>
       <div class="preamble">
-        <h5>Thanks for signing up. Let's get you started!</h5>
+        <h5>Let's get you started! How it works:</h5>
         <ol>
           <li>Tell us what packages you use.</li>
           <li>We notify you via email whenever you're vulnerable.</li>
@@ -17,7 +17,7 @@
       <div class="preamble">
         <table class="table">
           <thead>
-            <th>What platforms get notifications?</th>
+            <th>Supported platforms:</th>
           </thead>
           <tr>
             <td>
@@ -46,35 +46,28 @@
         <h2>Agent</h2>
       </div>
       <p>Our tiny, open-source, agent sits on your servers and auto-updates whenever you deploy. Perfect for passively monitoring your servers.</p>
+      <p>Available for: <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>, <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>, <span class="platform-logo"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat</span>, <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS,</span> Amazon and Linux Mint.</p>
 
-      <table class="table">
-        <thead>
-          <th>Where can I install it?</th>
-        </thead>
-        <tr>
-          <td>
-            <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>, <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>, <span class="platform-logo"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat</span>, <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS</span>, Amazon and Linux Mint.
-          </td>
-        </tr>
-      </table>
-
+      <button class="btn btn-default">Read the docs</button>
     </div>
 
     <div class="monitor">
       <div class="header">
         <%= image_tag "canary-worm.medium.stroke.png" %>
-        <h2>Monitor</h2>
+        <h2>Monitor API</h2>
       </div>
       <p>Register your server and application dependencies. Whenever something becomes vulnerable in the future, we'll let you know.</p>
-      <p>Works great with containerized servers and deployments!</p>
+      <p>Works great with containerized deployments and immutable infrastructure!</p>
+      <button class="btn btn-default">Read the docs</button>
     </div>
 
     <div class="check">
       <div class="header">
         <%= image_tag "canary-map.medium.stroke.png" %>
-        <h2>Check</h2>
+        <h2>Check API</h2>
         <p>Perform a programmatic one-time check of your packages. Never accept a pull request, or deploy a new app or server, with vulnerable code ever again.</p>
-        <p>Intended for use with test suites, and continuous integration and deployment.</p> 
+        <p>Designed for use with test suites, and continuous integration and deployment.</p> 
+        <button class="btn btn-default">Read the docs</button>
       </div>
     </div>
   </section>

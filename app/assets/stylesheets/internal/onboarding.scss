@@ -47,5 +47,10 @@
     .title {
       @extend .col-sm-12;
     }
+
+    .table th {
+      font-weight: normal;
+      border-bottom: 1px solid #ddd;
+    }
   }
 }
