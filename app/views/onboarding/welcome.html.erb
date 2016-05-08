@@ -42,33 +42,41 @@
 
     <div class="agent">
       <div class="header">
-        <%= image_tag "canary-nest.medium.stroke.png" %>
-        <h2>Agent</h2>
+        <a href="<%= new_server_path %>">
+          <%= image_tag "canary-nest.medium.stroke.png" %>
+          <h2>Agent</h2>
+        </a>
       </div>
       <p>Our tiny, open-source, agent sits on your servers and auto-updates whenever you deploy. Perfect for passively monitoring your servers.</p>
       <p>Available for: <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>, <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>, <span class="platform-logo"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat</span>, <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS,</span> Amazon and Linux Mint.</p>
 
-      <button class="btn btn-default">Read the docs</button>
+      <%= link_to "Read the docs", new_server_path, :class => "btn btn-default" %>
     </div>
 
     <div class="monitor">
       <div class="header">
-        <%= image_tag "canary-worm.medium.stroke.png" %>
-        <h2>Monitor API</h2>
+        <a href="<%= docs_path %>">
+          <%= image_tag "canary-worm.medium.stroke.png" %>
+          <h2>Monitor API</h2>
+        </a>
       </div>
       <p>Register your server and application dependencies. Whenever something becomes vulnerable in the future, we'll let you know.</p>
       <p>Works great with containerized deployments and immutable infrastructure!</p>
-      <button class="btn btn-default">Read the docs</button>
+
+      <%= link_to "Read the docs", docs_path, :class => "btn btn-default" %>
     </div>
 
     <div class="check">
       <div class="header">
-        <%= image_tag "canary-map.medium.stroke.png" %>
-        <h2>Check API</h2>
-        <p>Perform a programmatic one-time check of your packages. Never accept a pull request, or deploy a new app or server, with vulnerable code ever again.</p>
-        <p>Designed for use with test suites, and continuous integration and deployment.</p> 
-        <button class="btn btn-default">Read the docs</button>
+        <a href="<%= docs_path %>">
+          <%= image_tag "canary-map.medium.stroke.png" %>
+          <h2>Check API</h2>
+        </a>
       </div>
+
+      <p>Perform a programmatic one-time check of your packages. Never accept a pull request, or deploy a new app or server, with vulnerable code ever again.</p>
+      <p>Designed for use with test suites, and continuous integration and deployment.</p> 
+      <%= link_to "Read the docs", docs_path, :class => "btn btn-default" %>
     </div>
   </section>
 </div>

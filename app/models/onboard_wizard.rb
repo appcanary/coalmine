@@ -1,18 +1,18 @@
 class OnboardWizard
-  attr_accessor :user, :servers
-  def initialize(user, servers)
-    @user = user
-    # let's avoid having to make this call
-    # several times if we don't have to.
-    @servers = servers
-  end
+  attr_accessor :user, :servers, :monitors
 
-  def servers
-    @servers ||= Server.find_all(@user)
+  # we take in servers and monitors explicitly,
+  # so we can avoid making multiple API calls
+  # in the dashboard
+  
+  def initialize(user, servers, monitors)
+    @user = user
+    @servers = servers
+    @monitors = monitors
   end
 
   def onboarded?
-    servers.present?
+    servers.present? || monitors.present?
   end
 
   def new_user?

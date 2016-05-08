@@ -25,6 +25,9 @@
     @extend .col-sm-4;
 
     .header {
+      a {
+        color: inherit;
+      }
       h2 {
         text-align: center;
       }

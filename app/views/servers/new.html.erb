@@ -7,8 +7,7 @@
         </div>
 
         <ul class="nav nav-pills nav-stacked">
-          <li><h2>Welcome!</h2></li>
-          <li><a href="#gettingstarted">Getting started</a></li>
+          <li><h2>Add a server</h2></li>
           <li><a href="#howitworks">How does it work?</a></li>
           <li><h5>How to install:</h5></li>
           <li><a href="#chef">Using Chef</a></li>
@@ -20,21 +19,14 @@
   </div>
 
   <div class="col-sm-7">
-    <a name="gettingstarted" class="anchor-offset"></a>
 
-    <h2>Getting started</h2>
-    <ol>
-      <li>You tell us what packages you use.</li>
-      <li>We notify you whenever you're vulnerable.</li>
-      <li>You keep your servers and your customers safe.</li>
-    </ol>
+     <a name="howitworks" class="anchor-offset"></a>
+    <h2>How does it work?</h2>
+    <p>You tell us which files list your servers' and apps' dependencies, and our agent will periodically check if anything has changed. Whenever you make a deploy - or new packages are installed - we find out.</p>
+    <p>We don't look at your code. We only ever see the files *explicitly listed* in the configuration. All of the agent's code is <b><a href="https://github.com/appcanary/agent" target="_blank">available on GitHub</a></b>.</p>
 
-    <p>There are two ways to stay on top of your dependencies: our API and our agent.</p>
 
-    <h3>Tell me more about your API.</h3>
-    <p>Consult our <a href="/docs">API docs</a>!</p>
 
-    <h3>Tell me more about your agent.</h3>
 
     <table class="table">
       <thead>
@@ -58,38 +50,28 @@
 
     <%= eui_button "#{image_tag "icon-chef.png", :style => "width: 15px"} Using Chef".html_safe, href: "#chef" %>
     <%= eui_button "#{image_tag "icon-puppet.png", :style => "width: 15px"} Using Puppet".html_safe, href: "#puppet" %>
-    <%# <%= eui_button "Using Puppet", href: "#puppet" %>
     <%= eui_button "<span style='font-family: monospace'>#!</span> Using the shell".html_safe, href: "#bash" %>
 
     <br/>
     <br/>
 
   
-    <h3>Why an agent?</h3>
-    <p>It's the best way to keep track of what you actually have deployed. Do you really know what's running on that server your intern set up? When was the last time you provisioned staging?</p>
-    <p>We don't look at your code. We only ever see what you explicitly set in the configuration.</p>
-      
-    <p>Our agent is <b>tiny</b>, it's written in golang and it's <b><a href="https://github.com/appcanary/agent" target="_blank">all on GitHub</a></b>.</p>
+       <br/>
 
+    <!-- <h2>How does it work?</h2> -->
+    <!-- <ul> -->
+    <!--   <li>We track <strong><%= number_with_delimiter(@vulnerabilities_count) %></strong> vulnerabilities across <strong><%= number_with_delimiter(@artifacts_count) %></strong> packages so you don't have to. </li> -->
+    <!--   <li>Whenever a vulnerability that affects your servers comes out, you receive an email.</li> -->
+    <!--   <li>We tell you how to patch your servers and your apps and stay safe.</li> -->
+    <!-- </ul> -->
+    <!-- <p>Here is a screenshot:</p> -->
 
-    <br/>
+    <!-- <div style="width: 300px; margin&#45;left: auto; margin&#45;right: auto; margin&#45;bottom: 20px;"> -->
+    <!--   <a href="#screenshot" data&#45;toggle="modal" data&#45;target="#screenshot"><%= image_tag "screenshot&#45;vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a> -->
+    <!-- </div> -->
 
-    <a name="howitworks" class="anchor-offset"></a>
-    <h2>How does it work?</h2>
-    <ul>
-      <li>We track <strong><%= number_with_delimiter(@vulnerabilities_count) %></strong> vulnerabilities across <strong><%= number_with_delimiter(@artifacts_count) %></strong> packages so you don't have to. </li>
-      <li>Whenever a vulnerability that affects your servers comes out, you receive an email.</li>
-      <li>We tell you how to patch your servers and your apps and stay safe.</li>
-    </ul>
-    <p>Here is a screenshot:</p>
-
-    <div style="width: 300px; margin-left: auto; margin-right: auto; margin-bottom: 20px;">
-      <a href="#screenshot" data-toggle="modal" data-target="#screenshot"><%= image_tag "screenshot-vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a>
-    </div>
-
-    
-    <p>We monitor the dependencies your application depends on. You tell us which files list your server's dependencies, and we keep track of them. We only ever see the files *explicitly listed* in the configuration. Whenever you make a deploy - or new packages are installed - we find out.</p>
-    <br/>
+    <!--  -->
+    <!-- <br/> -->
     <h2>How to install:</h2>
     <br/>
     <a name="chef" class="anchor-offset"></a>

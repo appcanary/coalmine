@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
-  get 'welcome' => "onboarding#welcome", :as => :welcome
+  get 'welcome' => "onboarding#welcome", :as => :onboarding
 
 
   get "secretsignup/:source" => "users#new", :as => :new_beta_sign_up
