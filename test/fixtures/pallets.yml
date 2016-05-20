@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  account_id: 
+  name: MyString
+  path: MyString
+  kind: MyString
+  release: MyString
+  last_crc: 
+  from_api: false
+
+two:
+  account_id: 
+  name: MyString
+  path: MyString
+  kind: MyString
+  release: MyString
+  last_crc: 
+  from_api: false
