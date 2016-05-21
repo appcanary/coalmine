@@ -1,7 +1,7 @@
 class CreateVulnerabilities < ActiveRecord::Migration
   def change
     create_table :vulnerabilities do |t|
-      t.reference :package_id
+      t.references :package
       t.string :title
       t.datetime :reported_at
       t.text :description
