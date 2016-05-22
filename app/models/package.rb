@@ -19,4 +19,8 @@
 
 class Package < ActiveRecord::Base
   has_many :pallets, :through => :package_set
+
+  def vulnerable?
+    self.vulnerabilities.present?
+  end
 end

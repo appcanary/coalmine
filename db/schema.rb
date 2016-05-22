@@ -11,15 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160520174805) do
+ActiveRecord::Schema.define(version: 20160522191756) do
 
   create_table "package_sets", force: :cascade do |t|
     t.integer  "pallet_id"
     t.integer  "package_id"
-    t.boolean  "vulnerable"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean  "vulnerable", default: false, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
+
+  add_index "package_sets", ["package_id"], name: "index_package_sets_on_package_id"
+  add_index "package_sets", ["pallet_id"], name: "index_package_sets_on_pallet_id"
 
   create_table "packages", force: :cascade do |t|
     t.string   "name"
@@ -44,9 +47,12 @@ ActiveRecord::Schema.define(version: 20160520174805) do
     t.string   "release"
     t.integer  "last_crc",   limit: 8
     t.boolean  "from_api"
+    t.datetime "deleted_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
+
+  add_index "pallets", ["account_id"], name: "index_pallets_on_account_id"
 
   create_table "vulnerabilities", force: :cascade do |t|
     t.integer  "package_id"
@@ -63,5 +69,17 @@ ActiveRecord::Schema.define(version: 20160520174805) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "vulnerabilities", ["package_id"], name: "index_vulnerabilities_on_package_id"
+
+  create_table "vulnerable_packages", force: :cascade do |t|
+    t.integer  "package_id"
+    t.integer  "vulnerability_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "vulnerable_packages", ["package_id"], name: "index_vulnerable_packages_on_package_id"
+  add_index "vulnerable_packages", ["vulnerability_id"], name: "index_vulnerable_packages_on_vulnerability_id"
 
 end

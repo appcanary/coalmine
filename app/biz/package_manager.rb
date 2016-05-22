@@ -1,12 +1,19 @@
 class PackageManager
-  def self.parse_list(kind, release, package_list)
+  def self.parse_list!(kind, release, package_list)
     package_names = package_list.map { |pl| pl[:name] }
     existing_packages = Package.where(:kind => kind,
                                       :release => release).
                                       where("name in (?)", package_names)
 
 
-    new_packages = create_missing_packages(existing_packages, package_list)
+    # we might not know about every package submitted.
+    # Let's check!
+
+    if existing_packages.size < package_names.size
+      new_packages = create_missing_packages(existing_packages, package_list)
+    else
+      new_packages = []
+    end
 
     existing_packages + new_packages
   end
