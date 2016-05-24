@@ -87,7 +87,11 @@
                       <p><%= link_to vuln.title, vuln_path(vuln) %></p>
 
                       <% if vuln.patched_versions.present? %>
-                        <p class="upgrade_to"> Upgrade to <%= versions_in_english(vuln.upgrade_to) %></p>
+                        <% if vuln.upgrade_to.present? %>
+                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(vuln.upgrade_to) %></p>
+                        <% else %>
+                          <p class="upgrade_to"> No patches for your release exist right now. </p>
+                        <% end %>
                         <% if vuln.remaining_versions.present? %>
                           <p class="remaining_versions">Other patched versions include: <%= versions_in_english(vuln.remaining_versions) %></p>
                         <% end %>
