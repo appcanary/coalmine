@@ -14,6 +14,13 @@ class ServersController < ApplicationController
 
   def show
     server
+    respond_to do |format|
+      format.html
+      format.csv do
+        apps = @server.apps.map { |a| App.find(current_user, @server.uuid, a.uuid) }
+        send_data *ServerExporter.new(@server, apps).to_csv
+      end
+    end
   end
 
   def install
