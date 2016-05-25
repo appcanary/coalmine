@@ -10,6 +10,24 @@ FactoryGirl.define do
     uuid { SecureRandom.uuid }
     path { "/var/www/fake/Gemfile.lock" }
     artifact_versions { [] }
+    factory :vulnerable_app do 
+      vulnerable true
+      attributes { 
+        {
+          "vulnerable_artifact_versions" => 5.times.map { FactoryGirl.build(:vulnerable_artifact_version).to_h }
+        }
+      }
+    end
+  end
+
+  factory :artifact_version do
+    attributes { {
+      "name" => Faker::Hacker.ingverb,
+      "kind" => ["Ruby", "Ubuntu"].sample } } 
+    factory :vulnerable_artifact_version do
+      # sigh ApiBase
+      vulnerability { 2.times.map { FactoryGirl.build(:vulnerability).to_h } }
+    end
   end
 
   factory :moniter do
@@ -31,17 +49,10 @@ FactoryGirl.define do
     attributes { {"artifact" => 5.times.map { FactoryGirl.build(:artifact).to_h } } }
   end
 
-  factory :artifact_versions do
-    vulnerability {
-    }
-
-    kind { ["Ruby", "Lol"].sample }
-  end
-
   factory :artifact do
     uuid { SecureRandom.uuid }
     description { Faker::Lorem.sentence }
-    kind { ["Ruby", "Lol"].sample }
+    kind { ["Ruby", "Ubuntu"].sample }
     name { Faker::Hacker.ingverb }
   end
 

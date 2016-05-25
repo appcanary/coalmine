@@ -21,7 +21,7 @@ class ServerExporter
       apps.each do |a|
         a.vulnerable_artifact_versions.each do |vav|
           vav.vulnerabilities.each do |vuln|
-            csv << [a.path, vav.name, vuln.cve_id, vuln.upgrade_to.join(", "), vuln.title]
+            csv << [a.path, vav.name, vuln.cve_id, vuln.upgrade_to.try(:join, ", "), vuln.title]
           end
         end
       end
