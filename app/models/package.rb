@@ -19,9 +19,13 @@
 
 # A package is unique across (name, platform, release, version)
 class Package < ActiveRecord::Base
-  has_many :pallets, :through => :package_set
+  has_many :packages_package_sets
+  has_many :package_sets, :through => :packages_package_sets
 
-  def vulnerable?
-    self.vulnerabilities.present?
+  def concerning_vulnerabilties
+    # TODO: what do we store exactly on Vulns,
+    # i.e. do we store name, platform, release?
+    etc = "..."
+    Vulnerability.where(etc)
   end
 end
