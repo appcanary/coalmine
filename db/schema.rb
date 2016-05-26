@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20160522191756) do
 
   create_table "packages", force: :cascade do |t|
     t.string   "name"
+    t.string   "source_name"
     t.string   "platform"
     t.string   "release"
     t.string   "version"
@@ -39,8 +40,8 @@ ActiveRecord::Schema.define(version: 20160522191756) do
     t.string   "filename"
     t.string   "checksum"
     t.string   "origin"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "packages_package_sets", force: :cascade do |t|
@@ -61,14 +62,16 @@ ActiveRecord::Schema.define(version: 20160522191756) do
     t.datetime "reported_at"
     t.text     "description"
     t.string   "criticality"
+    t.text     "patched_versions"
+    t.text     "unaffected_versions"
     t.string   "cve_id"
     t.string   "usn_id"
     t.string   "dsa_id"
     t.string   "rhsa_id"
     t.string   "cesa_id"
     t.string   "source"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   create_table "vulnerable_packages", force: :cascade do |t|

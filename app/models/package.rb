@@ -2,19 +2,20 @@
 #
 # Table name: packages
 #
-#  id         :integer          not null, primary key
-#  name       :string
-#  platform   :string
-#  release    :string
-#  version    :string
-#  artifact   :string
-#  epoch      :string
-#  arch       :string
-#  filename   :string
-#  checksum   :string
-#  origin     :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :integer          not null, primary key
+#  name        :string
+#  source_name :string
+#  platform    :string
+#  release     :string
+#  version     :string
+#  artifact    :string
+#  epoch       :string
+#  arch        :string
+#  filename    :string
+#  checksum    :string
+#  origin      :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 
 # A package is unique across (name, platform, release, version)

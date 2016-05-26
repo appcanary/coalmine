@@ -45,9 +45,8 @@ class PackageSetManager
   def delete(package_set_id)
     package_set = PackageSet.where(:account_id => @account.id).find(package_set_id)
 
-    ArchivePackageSet.archive(package_set)
+    # TODO: packagelog? archive?
     package_set.destroy
-    # package_set.update_column(:deleted_at, Time.now)
   end
 
   protected

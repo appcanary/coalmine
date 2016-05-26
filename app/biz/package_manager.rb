@@ -55,12 +55,8 @@ class PackageManager
     end
 
     possible_vulns = package.concerning_vulnerabilities
-    possible_vulns.each do |vuln|
-      if vuln.affects?(package)
-        vuln.packages << package
-      end
-    end
-
+    VulnerabilityManager.new.update_affecting_vulnerabilities!(possible_vulns, package)
+   
     return package
   end
 end
