@@ -11,7 +11,7 @@ class PackageManager
   # TODO needs to highlight that it creates packages
   def find_or_create(package_list)
     package_names = package_list.map { |pl| pl[:name] }
-    # todo: make sure this queries names AND versions
+    # TODO: make sure this queries names AND versions
     existing_packages = Package.where(:platform => @platform,
                                       :release => @release).
                                       where("name in (?)", package_names)

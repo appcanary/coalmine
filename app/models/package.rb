@@ -5,6 +5,7 @@
 #  id         :integer          not null, primary key
 #  name       :string
 #  platform   :string
+#  release    :string
 #  version    :string
 #  artifact   :string
 #  epoch      :string
@@ -16,6 +17,7 @@
 #  updated_at :datetime         not null
 #
 
+# A package is unique across (name, platform, release, version)
 class Package < ActiveRecord::Base
   has_many :pallets, :through => :package_set
 

@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20160522191756) do
   create_table "packages", force: :cascade do |t|
     t.string   "name"
     t.string   "platform"
+    t.string   "release"
     t.string   "version"
     t.string   "artifact"
     t.string   "epoch"

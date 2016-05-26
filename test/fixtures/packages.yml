@@ -5,6 +5,7 @@
 #  id         :integer          not null, primary key
 #  name       :string
 #  platform   :string
+#  release    :string
 #  version    :string
 #  artifact   :string
 #  epoch      :string

@@ -3,6 +3,7 @@ class CreatePackages < ActiveRecord::Migration
     create_table :packages do |t|
       t.string :name
       t.string :platform
+      t.string :release
       t.string :version
       t.string :artifact
       t.string :platform
