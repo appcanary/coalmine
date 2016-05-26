@@ -1,17 +1,18 @@
 class PackageManager
-  attr_accessor :kind, :release
+  attr_accessor :platform, :release
 
   # TODO: incorporate versions
 
-  def initialize(kind, release)
-    @kind = kind
+  def initialize(platform, release)
+    @platform = platform
     @release = release
   end
 
   # TODO needs to highlight that it creates packages
-  def parse_list!(package_list)
+  def find_or_create(package_list)
     package_names = package_list.map { |pl| pl[:name] }
-    existing_packages = Package.where(:kind => @kind,
+    # todo: make sure this queries names AND versions
+    existing_packages = Package.where(:platform => @platform,
                                       :release => @release).
                                       where("name in (?)", package_names)
 
@@ -38,14 +39,14 @@ class PackageManager
     # when i create a new package, when do I check to see if its vulnerable?
     new_packages.map do |pkg|
                              
-      p = Package.create(:kind => @kind,
+      p = Package.create(:platform => @platform,
                          :release => @release,
                          :name => pkg[:name],
                          :version => pkg[:version],
                          :origin => "user")
 
       possible_vulns = Vulnerability.where(:package_name => pkg[:name],
-                                           :package_kind => @kind)
+                                           :package_platform => @platform)
 
       # insert calc here
       if is_vuln(p, vuln)

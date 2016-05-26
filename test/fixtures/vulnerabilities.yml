@@ -2,21 +2,21 @@
 #
 # Table name: vulnerabilities
 #
-#  id           :integer          not null, primary key
-#  package_name :string
-#  package_kind :string
-#  title        :string
-#  reported_at  :datetime
-#  description  :text
-#  criticality  :string
-#  cve_id       :string
-#  usn_id       :string
-#  dsa_id       :string
-#  rhsa_id      :string
-#  cesa_id      :string
-#  source       :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id               :integer          not null, primary key
+#  package_name     :string
+#  package_platform :string
+#  title            :string
+#  reported_at      :datetime
+#  description      :text
+#  criticality      :string
+#  cve_id           :string
+#  usn_id           :string
+#  dsa_id           :string
+#  rhsa_id          :string
+#  cesa_id          :string
+#  source           :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

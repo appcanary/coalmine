@@ -3,7 +3,7 @@ class CreateVulnerabilities < ActiveRecord::Migration
     create_table :vulnerabilities do |t|
       # t.references :package, index: true, foreign_key: true
       t.string :package_name
-      t.string :package_kind
+      t.string :package_platform
       t.string :title
       t.datetime :reported_at
       t.text :description

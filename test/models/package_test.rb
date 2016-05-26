@@ -4,10 +4,9 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string
-#  kind       :string
+#  platform   :string
 #  version    :string
 #  artifact   :string
-#  platform   :string
 #  epoch      :string
 #  arch       :string
 #  filename   :string

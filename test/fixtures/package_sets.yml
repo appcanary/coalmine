@@ -6,7 +6,7 @@
 #  account_id :integer
 #  name       :string
 #  path       :string
-#  kind       :string
+#  platform   :string
 #  release    :string
 #  last_crc   :integer
 #  from_api   :boolean

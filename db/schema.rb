@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20160522191756) do
     t.integer  "account_id"
     t.string   "name"
     t.string   "path"
-    t.string   "kind"
+    t.string   "platform"
     t.string   "release"
     t.integer  "last_crc",   limit: 8
     t.boolean  "from_api"
@@ -30,10 +30,9 @@ ActiveRecord::Schema.define(version: 20160522191756) do
 
   create_table "packages", force: :cascade do |t|
     t.string   "name"
-    t.string   "kind"
+    t.string   "platform"
     t.string   "version"
     t.string   "artifact"
-    t.string   "platform"
     t.string   "epoch"
     t.string   "arch"
     t.string   "filename"
@@ -56,7 +55,7 @@ ActiveRecord::Schema.define(version: 20160522191756) do
 
   create_table "vulnerabilities", force: :cascade do |t|
     t.string   "package_name"
-    t.string   "package_kind"
+    t.string   "package_platform"
     t.string   "title"
     t.datetime "reported_at"
     t.text     "description"
@@ -67,8 +66,8 @@ ActiveRecord::Schema.define(version: 20160522191756) do
     t.string   "rhsa_id"
     t.string   "cesa_id"
     t.string   "source"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "vulnerable_packages", force: :cascade do |t|

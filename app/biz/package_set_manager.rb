@@ -6,7 +6,7 @@ class PackageSetManager
 
   def create(opt = {}, package_list)
     package_set = PackageSet.new(:account_id => @account.id,
-                        :kind => opt[:kind],
+                        :platform => opt[:platform],
                         :release => opt[:release],
                         :name => opt[:name],
                         :path => opt[:path],
@@ -18,17 +18,17 @@ class PackageSetManager
       return [package_set, package_set.errors]
     end
 
-    packages = PackageManager.new(kind, release).parse_list!(package_list)
+    packages = PackageManager.new(platform, release).find_or_create(package_list)
 
-    return set_packages(package_set, packages)
+    return assign_packages!(package_set, packages)
   end
 
-  def update_packages(package_set_id, package_list)
+  def update(package_set_id, package_list)
     package_set = PackageSet.where(:account_id => @account.id).find(package_set_id)
 
-    packages = PackageManager.new(package_set.kind, package_set.release).parse_list!(package_list)
+    packages = PackageManager.new(package_set.platform, package_set.release).find_or_create(package_list)
 
-    return set_packages(package_set, packages)
+    return assign_packages(package_set, packages)
   end
 
   def update_name(package_set_id, name)
@@ -48,15 +48,14 @@ class PackageSetManager
   end
 
   protected
-  def set_packages(package_set, packages)
+  def assign_packages!(package_set, packages)
     create_revision!(package_set, packages)
 
     # todo, optimize into single query obv
     # slash, that plays nicer with revisions?
-    package_set.package_sets = packages.map do |p| 
-      PackageSet.new(:package_id => p.id,
-                     :vulnerability => p.vulnerable?)
-    end
+ 
+    # TODO: double check the exact behaviour of this
+    package_set.packages = packages
 
     [package_set, package_set.errors]
   end
