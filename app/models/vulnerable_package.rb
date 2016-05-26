@@ -1,4 +1,15 @@
+# == Schema Information
+#
+# Table name: vulnerable_packages
+#
+#  id               :integer          not null, primary key
+#  package_id       :integer
+#  vulnerability_id :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#
+
 class VulnerablePackage < ActiveRecord::Base
-  belongs_to :package_id
-  belongs_to :vulnerability_id
+  belongs_to :package
+  belongs_to :vulnerability
 end

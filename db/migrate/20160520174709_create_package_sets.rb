@@ -1,6 +1,6 @@
-class CreatePallets < ActiveRecord::Migration
+class CreatePackageSets < ActiveRecord::Migration
   def change
-    create_table :pallets do |t|
+    create_table :package_sets do |t|
       t.references :account, index: true, foreign_key: true
       t.string :name
       t.string :path

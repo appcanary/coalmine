@@ -1,7 +1,7 @@
-class CreatePackageSets < ActiveRecord::Migration
+class CreatePackagesPackageSets < ActiveRecord::Migration
   def change
-    create_table :package_sets do |t|
-      t.references :pallet, index: true, foreign_key: true
+    create_table :packages_package_sets do |t|
+      t.references :package_set, index: true, foreign_key: true
       t.references :package, index: true, foreign_key: true
       t.boolean :vulnerable, null: false, default: false
 

@@ -1,7 +1,9 @@
 class CreateVulnerabilities < ActiveRecord::Migration
   def change
     create_table :vulnerabilities do |t|
-      t.references :package, index: true, foreign_key: true
+      # t.references :package, index: true, foreign_key: true
+      t.string :package_name
+      t.string :package_kind
       t.string :title
       t.datetime :reported_at
       t.text :description
