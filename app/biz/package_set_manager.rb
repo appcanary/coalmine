@@ -15,7 +15,7 @@ class PackageSetManager
 
     # TODO: wrap all of this logic in a transaction, obv
     unless package_set.save
-      return [package_set, package_set.errors]
+      raise "package set problem to be fixed later"
     end
 
     packages = PackageManager.new(platform, release).find_or_create(package_list)
@@ -34,9 +34,12 @@ class PackageSetManager
   def update_name(package_set_id, name)
     package_set = PackageSet.where(:account_id => @account.id).find(package_set_id)
     package_set.name = name
-    package_set.save
+    
+    unless package_set.save
+      raise "package set problem, insert msg here"
+    end
 
-    return [package_set, package_set.errors]
+    return package_set
   end
 
   def delete(package_set_id)
@@ -49,6 +52,7 @@ class PackageSetManager
 
   protected
   def assign_packages!(package_set, packages)
+    # TODO: packagelog? archive?
     create_revision!(package_set, packages)
 
     # todo, optimize into single query obv
@@ -57,7 +61,7 @@ class PackageSetManager
     # TODO: double check the exact behaviour of this
     package_set.packages = packages
 
-    [package_set, package_set.errors]
+    package_set
   end
 
   def create_revision!(package_set, packages)

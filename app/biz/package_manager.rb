@@ -8,7 +8,8 @@ class PackageManager
     @release = release
   end
 
-  # TODO needs to highlight that it creates packages
+  # TODO wrap in txn?
+  # TODO handle errors sanely
   def find_or_create(package_list)
     existing_packages = find_existing_packages(package_list)
 
@@ -26,11 +27,9 @@ class PackageManager
       return []
     end
 
-
     # TODO: calculate which package(name, version) we haven't seen yet
     # put it into new_packages
 
-    # when i create a new package, when do I check to see if its vulnerable?
     new_packages.map do |pkg|
       self.create(pkg)
     end
@@ -41,23 +40,27 @@ class PackageManager
     Package.where(:platform => @platform,
                   :release => @release).
                   where("name in (?)", package_names)
-
   end
 
+  # whenever we create a package, we check to see if it's vuln
   def create(pkg)
-    p = Package.create(:platform => @platform,
+    package = Package.new(:platform => @platform,
                        :release => @release,
                        :name => pkg[:name],
                        :version => pkg[:version],
                        :origin => "user")
 
-    possible_vulns = Vulnerability.where(:package_name => pkg[:name],
-                                         :package_platform => @platform)
-
-    # insert calc here
-    if is_vuln(p, vuln)
-      vuln.packages << p
+    unless package.save
+      raise "package problem, deal with this somehow later"
     end
 
+    possible_vulns = package.concerning_vulnerabilities
+    possible_vulns.each do |vuln|
+      if vuln.affects?(package)
+        vuln.packages << package
+      end
+    end
+
+    return package
   end
 end
