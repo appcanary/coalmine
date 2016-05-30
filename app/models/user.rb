@@ -136,9 +136,9 @@ class User < ActiveRecord::Base
       end
     else
       if discounted?
-        SubscriptionPlan.discount_plans.include? self.subscription_plan
+        DeprecatedSubscriptionPlan.discount_plans.include? self.subscription_plan
       else
-        SubscriptionPlan.all_plans.include? self.subscription_plan
+        DeprecatedSubscriptionPlan.all_plans.include? self.subscription_plan
       end
     end
   end

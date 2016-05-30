@@ -26,7 +26,7 @@ class BillingController < ApplicationController
           end
         end
 
-        if @user.subscription_plan == SubscriptionPlan::CANCEL
+        if @user.subscription_plan == DeprecatedSubscriptionPlan::CANCEL
           track_event @user, "Canceled subscription"
           Raven.capture_message("Subscription canceled by: #{@user.email}")
 

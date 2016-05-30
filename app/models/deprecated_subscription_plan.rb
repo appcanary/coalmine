@@ -1,4 +1,4 @@
-class SubscriptionPlan
+class DeprecatedSubscriptionPlan
   CANCEL = "Cancel subscription"
   AC_STARTER = "$29/month"
   AC_MIDDLE = "$99/month"

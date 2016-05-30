@@ -1,5 +1,5 @@
 <div class="col-sm-6">
-  <h2>Subscription</h2>
+  <h2>Billing</h2>
   <% if !@user.has_billing? %>
     <%= render :partial => "settings/credit_card_form" %>
   <% else %>
