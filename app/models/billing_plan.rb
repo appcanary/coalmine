@@ -7,7 +7,7 @@
 #  current_plan_value      :integer
 #  current_plan_unit_value :integer
 #  current_plan_limit      :integer
-#  current_plan_label      :integer
+#  current_plan_label      :string
 #  plan_values             :integer          default("{}"), is an Array
 #  plan_unit_values        :integer          default("{}"), is an Array
 #  plan_limits             :integer          default("{}"), is an Array
@@ -19,7 +19,6 @@
 #
 #  index_billing_plans_on_user_id  (user_id)
 #
-
 
 class BillingPlan < ActiveRecord::Base
   belongs_to :user
@@ -47,15 +46,24 @@ class BillingPlan < ActiveRecord::Base
       self.label = lb
     end
 
+    def value_in_currency
+      value / 100
+    end
+
     def text
-      "$#{self.value}/month #{label}".strip
+      "$#{self.value_in_currency}/month #{label}".strip
     end
 
     def ==(sub)
-      self.value == sub.value &&
-        self.unit_value == sub.unit_value &&
-        self.limit == sub.limit &&
-        self.label == sub.label
+      self.ident == sub.ident
+    end
+
+    def vars
+      [value, unit_value, limit, label]
+    end
+
+    def ident
+      @ident ||= Digest::MD5.hexdigest(vars.join)
     end
   end
 
@@ -86,19 +94,20 @@ class BillingPlan < ActiveRecord::Base
     sub
   end
 
+  def reset_current_subscription
+    self.current_plan_value = nil
+    self.current_plan_unit_value = nil
+    self.current_plan_limit = nil
+    self.current_plan_label = nil
+  end
+
   def self.default_subscriptions
-    [[2900, 5, "- Up to 5 servers"],
-     [9900, 15, "- Up to 15 servers"],
-     [29900, 50, "- Up to 50 servers"]].map do |v, lm, lb|
-       Subscription.new(v, default_unit_value, lm, lb)
+    BillingManager::DEFAULT_PLANS.map do |v, lm, lb|
+      Subscription.new(v, BillingManager::DEFAULT_UNIT_VALUE, lm, lb)
      end
   end
 
-  def self.default_unit_value
-    # $9 per server right
-    900
-  end
-
+  private
   def set_defaults
     unless self.subscriptions.present?
       self.subscriptions = BillingPlan.default_subscriptions

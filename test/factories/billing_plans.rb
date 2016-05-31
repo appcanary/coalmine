@@ -5,13 +5,13 @@
 #  id                      :integer          not null, primary key
 #  user_id                 :integer
 #  current_plan_value      :integer
-#  current_plan_label      :integer
-#  current_plan_limit      :integer
 #  current_plan_unit_value :integer
-#  plan_labels             :string           default("{}"), is an Array
+#  current_plan_limit      :integer
+#  current_plan_label      :string
 #  plan_values             :integer          default("{}"), is an Array
-#  plan_limits             :integer          default("{}"), is an Array
 #  plan_unit_values        :integer          default("{}"), is an Array
+#  plan_limits             :integer          default("{}"), is an Array
+#  plan_labels             :string           default("{}"), is an Array
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #

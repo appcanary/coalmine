@@ -3,6 +3,7 @@ class SettingsController < ApplicationController
     @show_stripe = true
     @user = current_user
     @agent_token = @user.agent_token
+    @billing_view = BillingManager.new(@user).to_view
   end
 
   def update

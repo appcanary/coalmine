@@ -5,7 +5,7 @@ class CreateBillingPlans < ActiveRecord::Migration
       t.integer :current_plan_value
       t.integer :current_plan_unit_value
       t.integer :current_plan_limit
-      t.integer :current_plan_label
+      t.string :current_plan_label
       t.integer :plan_values, array: true, default: []
       t.integer :plan_unit_values, array: true, default: []
       t.integer :plan_limits, array: true, default: []

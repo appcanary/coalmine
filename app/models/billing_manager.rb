@@ -1,14 +1,21 @@
-class Billing
-  def initialize(user)
-    @user = user
-  end
+class BillingManager
+  DEFAULT_PLANS = [[2900, 5, "- Up to 5 servers"],
+                   [9900, 15, "- Up to 15 servers"],
+                   [29900, 50, "- Up to 50 servers"]]
+  DEFAULT_UNIT_VALUE = 900
 
+  attr_accessor :user, :billing_plan
   def self.add_customer(stripe_token, user)
     self.new(user).add_customer(stripe_token)
   end
 
   def self.find_customer(user)
     self.new(user).find_customer()
+  end
+
+  def initialize(user)
+    self.user = user
+    self.billing_plan = user.billing_plan || user.build_billing_plan
   end
 
   def find_customer
@@ -23,6 +30,7 @@ class Billing
         :email => @user.email
       )
     end
+    
     return customer
   end
 
@@ -64,5 +72,33 @@ class Billing
       Raven.capture_exception(e)
       @user.stripe_errors << "Something went wrong with this transaction. We're looking into it."
     end
+  end
+
+  def validate_subscription(sub_id)
+    if sub_id == BillingView::CANCEL
+      return :cancel
+    else
+      billing_plan.subscriptions.select { |s| s.ident == sub_id }.first
+    end
+  end
+
+  def set_subscription(stripe_customer_id, sub)
+    @user.stripe_customer_id = stripe_customer_id
+    change_subscription!(sub)
+  end
+
+  def change_subscription!(sub)
+    @user.billing_plan.current_subscription = sub
+    @user
+  end
+
+  def cancel_subscription!
+    @user.stripe_customer_id = nil
+    @user.billing_plan.reset_current_subscription
+    @user
+  end
+
+  def to_view
+    BillingView.new(self.billing_plan, self.user.has_billing?)
   end
 end

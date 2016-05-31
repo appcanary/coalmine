@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20160530195217) do
     t.integer  "current_plan_value"
     t.integer  "current_plan_unit_value"
     t.integer  "current_plan_limit"
-    t.integer  "current_plan_label"
+    t.string   "current_plan_label"
     t.integer  "plan_values",             default: [],              array: true
     t.integer  "plan_unit_values",        default: [],              array: true
     t.integer  "plan_limits",             default: [],              array: true

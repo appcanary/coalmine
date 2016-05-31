@@ -20,7 +20,8 @@
       <p>(We're giving you a 20% discount, because you're special)</p>
     <% end %>
 
-    <%= f.select :subscription_plan, DeprecatedSubscriptionPlan.select_ac_plans(current_user.has_billing?, current_user.discounted?), { disabled: DeprecatedSubscriptionPlan.disabled_ac_plan(current_user.servers_count, current_user.discounted?) } %>
+    <%= f.select :subscription_plan, @billing_view.select_plans, { selected: @billing_view.selected_plan } %>
+    <%# <%= f.select :subscription_plan, @billing_view.select_plans, { disabled: DeprecatedSubscriptionPlan.disabled_ac_plan(current_user.servers_count, current_user.discounted?) } %>
   </div>
 
   <span class="payment-errors alert alert-danger" style="display: none; width: 350px;"></span>

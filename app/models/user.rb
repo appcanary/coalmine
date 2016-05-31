@@ -48,10 +48,10 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
-  validate :correct_subscription_plan?
+  # validate :correct_subscription_plan?
   validate :absence_of_stripe_errors
 
-  has_one :billing_plan
+  has_one :billing_plan, autosave: true
 
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count
 
@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
 
   def stripe_customer
     if stripe_customer_id
-      Billing.find_customer(self)
+      BillingManager.find_customer(self)
     end
   end
 
