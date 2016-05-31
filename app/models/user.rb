@@ -50,6 +50,9 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
   validate :correct_subscription_plan?
   validate :absence_of_stripe_errors
+
+  has_one :billing_plan
+
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count
 
   def self.all_from_api(order = "created_at DESC")
@@ -83,6 +86,10 @@ class User < ActiveRecord::Base
 
   def active_servers_count
     @active_servers_count ||= api_info["active-server-count"]
+  end
+
+  def monitors_count
+    @monitors_count ||= api_info["monitored-app-count"]
   end
 
   def api_calls_count

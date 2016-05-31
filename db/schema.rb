@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160425184916) do
+ActiveRecord::Schema.define(version: 20160530195217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,21 +22,40 @@ ActiveRecord::Schema.define(version: 20160425184916) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "billing_plans", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "current_plan_value"
+    t.integer  "current_plan_unit_value"
+    t.integer  "current_plan_limit"
+    t.integer  "current_plan_label"
+    t.integer  "plan_values",             default: [],              array: true
+    t.integer  "plan_unit_values",        default: [],              array: true
+    t.integer  "plan_limits",             default: [],              array: true
+    t.string   "plan_labels",             default: [],              array: true
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "billing_plans", ["user_id"], name: "index_billing_plans_on_user_id", using: :btree
+
   create_table "is_it_vuln_results", force: :cascade do |t|
-    t.string   "ident",      null: false
+    t.string   "ident",       null: false
     t.text     "result"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "pre_user_id"
   end
 
   add_index "is_it_vuln_results", ["ident"], name: "index_is_it_vuln_results_on_ident", using: :btree
+  add_index "is_it_vuln_results", ["pre_user_id"], name: "index_is_it_vuln_results_on_pre_user_id", using: :btree
 
   create_table "pre_users", force: :cascade do |t|
     t.string   "email"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.string   "preferred_platform"
     t.boolean  "from_isitvuln",      default: false
+    t.string   "source",             default: "unassigned", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -78,4 +97,5 @@ ActiveRecord::Schema.define(version: 20160425184916) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", using: :btree
 
+  add_foreign_key "is_it_vuln_results", "pre_users"
 end
