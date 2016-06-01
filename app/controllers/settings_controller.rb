@@ -1,14 +1,9 @@
 class SettingsController < ApplicationController
+  before_action :set_vars
   def show
-    @show_stripe = true
-    @user = current_user
-    @agent_token = @user.agent_token
-    @billing_view = BillingManager.new(@user).to_view
   end
 
   def update
-    @user = current_user
-
     respond_to do |format|
       if UserManager.update(@user, user_params)
         format.html { redirect_to dashboard_path, notice: 'User settings updated!' }
@@ -16,6 +11,13 @@ class SettingsController < ApplicationController
         format.html { render :show }
       end
     end
+  end
+
+  def set_vars
+    @show_stripe = true
+    @user = current_user
+    @agent_token = @user.agent_token
+    @billing_view = BillingManager.new(@user).to_view
   end
 
   def user_params
