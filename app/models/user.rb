@@ -48,7 +48,6 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
-  # validate :correct_subscription_plan?
   validate :absence_of_stripe_errors
 
   # autosave: true is important for making sure
@@ -127,31 +126,6 @@ class User < ActiveRecord::Base
   def discounted?
     beta_signup_source.present?
   end
-
-  def correct_subscription_plan?
-    unless valid_subscription?
-      self.errors.add(:subscription_plan, "is not valid.")
-    end
-  end
-
-  def valid_subscription?
-    if self.subscription_plan.nil?
-      # can't reset subscription plan
-      # if we have a cc
-      if has_billing?
-        false
-      else
-        true
-      end
-    else
-      if discounted?
-        DeprecatedSubscriptionPlan.discount_plans.include? self.subscription_plan
-      else
-        DeprecatedSubscriptionPlan.all_plans.include? self.subscription_plan
-      end
-    end
-  end
-
 
   # def delete_api_user!
   #   canary.delete_user

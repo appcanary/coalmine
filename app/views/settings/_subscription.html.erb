@@ -1,8 +1,6 @@
 <div class="col-sm-6">
   <h2>Billing</h2>
-  <% if !@user.has_billing? %>
-    <%= render :partial => "settings/credit_card_form" %>
-  <% else %>
+  <% if @user.has_billing? %>
     <h5>Credit card on file</h5>
 
     <% @user.payment_info.each do |card| %>
@@ -17,7 +15,6 @@
 
       </dl>
     <% end %>
-
-    <%= render :partial => "settings/subscription_form" %>
   <% end %>
+  <%= render :partial => "settings/credit_card_form" %>
 </div>
