@@ -23,49 +23,23 @@ class BillingControllerTest < ActionController::TestCase
     test "should perform the stripe song and dance" do
       VCR.use_cassette("new_stripe_customer") do
         token = create_token
-        put :update, user: { stripe_token: token.id, subscription_plan: DeprecatedSubscriptionPlan::AC_STARTER }
+        user.build_billing_plan
+        put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscriptions.first.ident }
         assert_equal true, user.stripe_customer_id.present?
         assert_redirected_to dashboard_path
       end
     end
 
     test "should delete customer id if sub is cancelled" do
-      user.subscription_plan = DeprecatedSubscriptionPlan::AC_STARTER
+      user.build_billing_plan
+      user.billing_plan.current_subscription = user.billing_plan.subscriptions.first
       user.stripe_customer_id = "test"
       user.save!
 
-      put :update, user: { subscription_plan: DeprecatedSubscriptionPlan::CANCEL }
+      put :update, user: { subscription_plan: BillingView::CANCEL }
 
       assert user.stripe_customer_id.blank?
       assert user.subscription_plan.blank?
-      assert_redirected_to dashboard_path
-    end
-
-    test "should not allow discount plans if user is not from beta" do
-
-      # prevent caring about servers_count api call
-      user.stubs(:servers_count).with(anything).returns(3)
-
-      put :update, user: { subscription_plan: DeprecatedSubscriptionPlan::AC_DISCOUNT_STARTER }
-
-      user.reload
-      assert user.stripe_customer_id.blank?
-      assert user.subscription_plan.blank?
-      assert_response :success
-      assert_template :show
-    end
-
-    test "should allow discount plans if user is from beta" do
-      user.beta_signup_source = "test"
-
-      VCR.use_cassette("new_stripe_customer") do
-        token = create_token
-        put :update, user: { stripe_token: token.id, subscription_plan: DeprecatedSubscriptionPlan::AC_DISCOUNT_STARTER }
-      end
-
-      user.reload
-      assert user.stripe_customer_id.present?
-      assert_equal DeprecatedSubscriptionPlan::AC_DISCOUNT_STARTER, user.subscription_plan
       assert_redirected_to dashboard_path
     end
 
@@ -74,7 +48,8 @@ class BillingControllerTest < ActionController::TestCase
       
       VCR.use_cassette("bad_stripe_card") do
         token = create_declined_token
-        put :update, user: { stripe_token: token.id, subscription_plan: DeprecatedSubscriptionPlan::AC_STARTER }
+        user.build_billing_plan
+        put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscriptions.first.ident }
 
         assert_equal false, user.stripe_customer_id.present?
         assert_equal true, user.errors.present?

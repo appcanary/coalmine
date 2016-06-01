@@ -22,7 +22,7 @@ class BillingManager
     customer = Stripe::Customer.retrieve(@user.stripe_customer_id)
   end
 
-  def add_customer(stripe_token)
+  def add_customer(stripe_token, sub)
     customer = nil
     stripe_wrapper do 
       customer = Stripe::Customer.create(
@@ -30,8 +30,12 @@ class BillingManager
         :email => @user.email
       )
     end
-    
-    return customer
+
+    if customer
+      return set_subscription!(customer.id, sub)
+    else
+      return @user
+    end
   end
 
   def stripe_wrapper(&block)
@@ -78,17 +82,21 @@ class BillingManager
     if sub_id == BillingView::CANCEL
       return :cancel
     else
-      billing_plan.subscriptions.select { |s| s.ident == sub_id }.first
+      self.billing_plan.subscriptions.find { |s| s.ident == sub_id }
     end
   end
 
-  def set_subscription(stripe_customer_id, sub)
+  def set_subscription!(stripe_customer_id, sub)
     @user.stripe_customer_id = stripe_customer_id
     change_subscription!(sub)
   end
 
   def change_subscription!(sub)
-    @user.billing_plan.current_subscription = sub
+    if @user.has_billing?
+      @user.billing_plan.current_subscription = sub
+    else
+      @user.errors.add(:base, "Sorry, we can't change your subscription without any payment information.")
+    end
     @user
   end
 

@@ -22,21 +22,40 @@
 
 class BillingPlan < ActiveRecord::Base
   belongs_to :user
+ 
   # perhaps the only reasonable uses of these methods
+  # the 'subscriptions' ivar won't get saved unless
+  # we explicitly serialize it.
   after_initialize :set_defaults
   before_save :serialize_subscriptions
 
   attr_accessor :subscriptions
 
-  # Subscriptions hold the basic values
-  # for how we calculate how we invoice people.
+  # Subscriptions are abstractions over the four 
+  # variables we keep track of to calculate how much
+  # we invoice people for.
   #
-  # To keep the data model "simple", instead of
-  # a global table, we just serialize all the defaults
-  # into the current_plan_* fields. 
+  # A user may have one subscription at a given time,
+  # but they are provided with a list of options.
+  #
+  # They are charged one 'value' per month, for up to
+  # a 'limit' or units. If they exceed that limit, they
+  # are charged a 'unit_value' for every unit in excess.
+  # Finally, we provide a label for describing the
+  # subscription.
+  #
+  # At first I thought of modelling this as a normal database
+  # table - SubscriptionPlans. I settled on this weird 
+  # serialization format because at the time it seemed "simpler":
+  # a "quick" hack that lets us set a list of custom subscriptions 
+  # for any given user, tho now I am not so sure.
   #
   # In principle, this should make grandfathering people
-  # straightforward.
+  # straightforward - all the information is stored in this
+  # one database row.
+  #
+  # On the plus side, ripping this out into its own table in
+  # the future should be straightforward.
   class Subscription
     attr_accessor :value, :unit_value, :limit, :label
     def initialize(v, uv, lm, lb)
@@ -54,16 +73,18 @@ class BillingPlan < ActiveRecord::Base
       "$#{self.value_in_currency}/month #{label}".strip
     end
 
-    def ==(sub)
-      self.ident == sub.ident
-    end
-
     def vars
       [value, unit_value, limit, label]
     end
 
     def ident
       @ident ||= Digest::MD5.hexdigest(vars.join)
+    end
+
+    # used for all sorts of comparisons,
+    # what simpler way than the md5 hsh?
+    def ==(sub)
+      self.ident == sub.ident
     end
   end
 
@@ -84,9 +105,9 @@ class BillingPlan < ActiveRecord::Base
     self.current_plan_limit = sub.limit
     self.current_plan_label = sub.label
 
-    # maybe we should validate this
-    # instead of letting these be changed wily nily
-    # but for now:
+    # if this subscription doesn't already exist in our
+    # list of subscrpitions, then let's add it.
+    # maybe this should be validated instead but eh:
 
     unless subscriptions.include?(sub)
       subscriptions << sub
@@ -109,6 +130,9 @@ class BillingPlan < ActiveRecord::Base
 
   private
   def set_defaults
+    # calling #subscriptions will deserialize the
+    # existing fields. if it returns an empty value,
+    # then let's load the default subscriptions.
     unless self.subscriptions.present?
       self.subscriptions = BillingPlan.default_subscriptions
     end
@@ -118,6 +142,7 @@ class BillingPlan < ActiveRecord::Base
     end
   end
 
+  # deserialize subscriptions from our silly little format
   def load_subscriptions
     self.plan_values.each_with_index.map do |pv, index|
       Subscription.new(pv, plan_unit_values[index], plan_limits[index], plan_labels[index])

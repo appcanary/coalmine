@@ -51,6 +51,8 @@ class User < ActiveRecord::Base
   # validate :correct_subscription_plan?
   validate :absence_of_stripe_errors
 
+  # autosave: true is important for making sure
+  # this association gets persisted by user.save calls
   has_one :billing_plan, autosave: true
 
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count
