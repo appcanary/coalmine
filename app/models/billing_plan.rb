@@ -46,13 +46,20 @@ class BillingPlan < ActiveRecord::Base
     end
   end
 
-  # deserialize subscriptions from our silly little format
   def load_subscriptions
     SubscriptionPlan.where(:id => available_subscription_plans)
   end
 
+  # Serialize the default subscriptions to the database on save.
+  # If avail_subs is empty (init or deleted) then we should populate
+  # with the defaults.
+  #
+  # however, if we directly change the avail_sub_plans we don't want
+  # our intentional change to be overwritten.
   def serialize_subscriptions
-    self.available_subscription_plans = self.subscription_plans.map(&:id)
+    unless available_subscription_plans_changed?
+      self.available_subscription_plans = self.subscription_plans.map(&:id)
+    end
   end
 
 end

@@ -1,68 +1,121 @@
-%section
-  .col-sm-6
-    %h1
+<section>
+  <div class="col-sm-6">
+    <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" class="active"><a href="#">Users</a></li>
+      <li role="presentation"><%= link_to "Subscription Plans", admin_subscription_plans_path %></li>
+    </ul>
+    <h1>
       All the users.
-%section
-  .col-sm-12
-    %table.table
-      %thead
-        %th
-          Users
-        %th
-          Server Count
-        %th
-          Recent Heartbeats
-      %tbody
-        %tr
-          %td
-            = @user_count
-          %td
-            = @servers_count
-          %td
-            = @recent_heartbeats
+    </h1>
+  </div>
+</section>
 
-%section
-  .col-sm-12
-    = link_to "New user", new_admin_user_path, :class => "btn btn-default"
-    %table.table
-      %thead
-        %th
+<section>
+  <div class="col-sm-12">
+    <table class="table">
+      <thead>
+        <th>
+          Users
+        </th>
+        <th>
+          Server Count
+        </th>
+        <th>
+          Recent Heartbeats
+        </th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <%= @user_count %>
+          </td>
+          <td>
+            <%= @servers_count %>
+          </td>
+          <td>
+            <%= @recent_heartbeats %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="col-sm-12">
+    <%= link_to "New user", new_admin_user_path, :class => "btn btn-default" %>
+    <table class="table">
+      <thead>
+        <th>
           email
-        %th
+        </th>
+        <th>
           source
-        %th
+        </th>
+        <th>
           created at
-        %th
+        </th>
+        <th>
           servers
-        %th
+        </th>
+        <th>
           beating?
-        %th
+        </th>
+        <th>
           api count
-        %th
+        </th>
+        <th>
           last login at
-        %th
-        %th
-      %tbody
-        - @users.each do |user|
-          %tr
-            %td
-              = user.email
-            %td
-              = user.beta_signup_source
-            %td
-              = user.created_at.strftime("%y/%m/%d %H:%M")
-            %td
-              = user.servers_count
-            %td
-              = user.active_servers_count
-            %td
-              = user.api_calls_count
-            %td
-              = user.last_login_at.try(:strftime, "%y/%m/%d %H:%M")
-            %td
-              = link_to "edit", [:admin, user]
-            %td
-              - if user != current_user
-                = link_to "impersonate", impersonate_admin_user_path(user), :method => :post
-              - else
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+      </thead>
+      <tbody>
+        <%- @users.each do |user| %>
+          <tr>
+            <td>
+              <%= user.email %>
+            </td>
+            <td>
+              <%= user.beta_signup_source %>
+            </td>
+
+            <td>
+              <%= user.created_at.strftime("%y/%m/%d %H:%M") %>
+            </td>
+
+            <td>
+              <%= user.servers_count %>
+            </td>
+
+            <td>
+              <%= user.active_servers_count %>
+            </td>
+
+            <td>
+              <%= user.api_calls_count %>
+            </td>
+
+            <td>
+              <%= user.last_login_at.try(:strftime, "%y/%m/%d %H:%M") %>
+            </td>
+
+            <td>
+              <%= link_to "edit", [:admin, user] %>
+            </td>
+
+            <td>
+              <% if user != current_user %>
+                <%= link_to "impersonate", impersonate_admin_user_path(user), :method => :post %>
+              <% else %>
                 (that's you!)
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

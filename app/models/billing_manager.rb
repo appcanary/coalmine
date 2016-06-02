@@ -106,6 +106,11 @@ class BillingManager
     @user
   end
 
+  def set_available_subscriptions!(ids)
+    @user.billing_plan.available_subscription_plans = ids
+    @user
+  end
+
   def to_view
     BillingView.new(self.billing_plan, self.user.has_billing?)
   end
