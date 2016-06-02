@@ -15,7 +15,7 @@ class BillingView
   end
 
   def select_plans
-    plans = self.billing_plan.subscriptions.map { |s| [s.text, s.ident] }
+    plans = self.billing_plan.subscription_plans.map { |s| [s.text, s.id] }
 
     if self.show_cancel
       [CANCEL] + plans
@@ -25,11 +25,13 @@ class BillingView
   end
 
   def selected_plan
-    cs = self.billing_plan.current_subscription
-    [cs.text, cs.ident]
+    cs = self.billing_plan.subscription_plan
+    if cs
+      [cs.text, cs.id]
+    end
   end
 
   def disabled_plans
-    
+
   end
 end

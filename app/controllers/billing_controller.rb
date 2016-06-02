@@ -14,7 +14,7 @@ class BillingController < ApplicationController
     if params[:user]
       sub_plan = params[:user][:subscription_plan]
       case sub = @billing_manager.validate_subscription(sub_plan)
-      when BillingPlan::Subscription
+      when SubscriptionPlan
         if stripe_params[:stripe_token]
           @user = @billing_manager.add_customer(params[:stripe_token], sub)
 

@@ -82,7 +82,7 @@ class BillingManager
     if sub_id == BillingView::CANCEL
       return :cancel
     else
-      self.billing_plan.subscriptions.find { |s| s.ident == sub_id }
+      self.billing_plan.subscription_plans.find_by_id(sub_id)
     end
   end
 
@@ -93,7 +93,7 @@ class BillingManager
 
   def change_subscription!(sub)
     if @user.has_billing?
-      @user.billing_plan.current_subscription = sub
+      @user.billing_plan.subscription_plan = sub
     else
       @user.errors.add(:base, "Sorry, we can't change your subscription without any payment information.")
     end
@@ -102,7 +102,7 @@ class BillingManager
 
   def cancel_subscription!
     @user.stripe_customer_id = nil
-    @user.billing_plan.reset_current_subscription
+    @user.billing_plan.reset_subscription
     @user
   end
 

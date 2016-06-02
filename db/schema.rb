@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160530195217) do
+ActiveRecord::Schema.define(version: 20160602134913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,18 +24,14 @@ ActiveRecord::Schema.define(version: 20160530195217) do
 
   create_table "billing_plans", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "current_plan_value"
-    t.integer  "current_plan_unit_value"
-    t.integer  "current_plan_limit"
-    t.string   "current_plan_label"
-    t.integer  "plan_values",             default: [],              array: true
-    t.integer  "plan_unit_values",        default: [],              array: true
-    t.integer  "plan_limits",             default: [],              array: true
-    t.string   "plan_labels",             default: [],              array: true
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.integer  "subscription_plan_id"
+    t.integer  "available_subscription_plans", default: [],              array: true
+    t.datetime "started_at"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
+  add_index "billing_plans", ["subscription_plan_id"], name: "index_billing_plans_on_subscription_plan_id", using: :btree
   add_index "billing_plans", ["user_id"], name: "index_billing_plans_on_user_id", using: :btree
 
   create_table "is_it_vuln_results", force: :cascade do |t|
@@ -57,6 +53,18 @@ ActiveRecord::Schema.define(version: 20160530195217) do
     t.boolean  "from_isitvuln",      default: false
     t.string   "source",             default: "unassigned", null: false
   end
+
+  create_table "subscription_plans", force: :cascade do |t|
+    t.integer  "value"
+    t.integer  "unit_value"
+    t.integer  "limit"
+    t.string   "label"
+    t.boolean  "default",    default: false, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "subscription_plans", ["default"], name: "index_subscription_plans_on_default", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                                                     null: false

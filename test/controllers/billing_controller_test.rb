@@ -24,7 +24,7 @@ class BillingControllerTest < ActionController::TestCase
       VCR.use_cassette("new_stripe_customer") do
         token = create_token
         user.build_billing_plan
-        put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscriptions.first.ident }
+        put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscription_plans.first.id }
         assert_equal true, user.stripe_customer_id.present?
         assert_redirected_to dashboard_path
       end
@@ -32,7 +32,7 @@ class BillingControllerTest < ActionController::TestCase
 
     test "should delete customer id if sub is cancelled" do
       user.build_billing_plan
-      user.billing_plan.current_subscription = user.billing_plan.subscriptions.first
+      user.billing_plan.subscription_plan = user.billing_plan.subscription_plans.first
       user.stripe_customer_id = "test"
       user.save!
 
@@ -49,7 +49,7 @@ class BillingControllerTest < ActionController::TestCase
       VCR.use_cassette("bad_stripe_card") do
         token = create_declined_token
         user.build_billing_plan
-        put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscriptions.first.ident }
+        put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscription_plans.first.id }
 
         assert_equal false, user.stripe_customer_id.present?
         assert_equal true, user.errors.present?

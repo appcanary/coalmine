@@ -2,22 +2,18 @@
 #
 # Table name: billing_plans
 #
-#  id                      :integer          not null, primary key
-#  user_id                 :integer
-#  current_plan_value      :integer
-#  current_plan_unit_value :integer
-#  current_plan_limit      :integer
-#  current_plan_label      :string
-#  plan_values             :integer          default("{}"), is an Array
-#  plan_unit_values        :integer          default("{}"), is an Array
-#  plan_limits             :integer          default("{}"), is an Array
-#  plan_labels             :string           default("{}"), is an Array
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  id                           :integer          not null, primary key
+#  user_id                      :integer
+#  subscription_plan_id         :integer
+#  available_subscription_plans :integer          default("{}"), is an Array
+#  started_at                   :datetime
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
 #
 # Indexes
 #
-#  index_billing_plans_on_user_id  (user_id)
+#  index_billing_plans_on_subscription_plan_id  (subscription_plan_id)
+#  index_billing_plans_on_user_id               (user_id)
 #
 
 FactoryGirl.define do
