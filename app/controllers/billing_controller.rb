@@ -53,6 +53,9 @@ class BillingController < ApplicationController
         format.html { redirect_to dashboard_path, notice: notice }
       else
         @billing_view = BillingManager.new(@user).to_view
+        @servers_count = @user.servers_count
+        @monitors_count = @user.monitors_count
+
         format.html { render :show }
       end
     end

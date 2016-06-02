@@ -2,10 +2,15 @@ require 'test_helper'
 
 class BillingControllerTest < ActionController::TestCase
 
+  before do
+    Rake::Task['db:seed_subscriptions'].invoke
+  end
   let(:user) { FactoryGirl.create(:user) }
   describe "Logged in" do
     before do
       login_user(user)
+      user.stubs(:servers_count).returns(2)
+      user.stubs(:monitors_count).returns(3)
     end
 
     test "should not perform stripe song and dance absent subscription plan" do
@@ -43,9 +48,10 @@ class BillingControllerTest < ActionController::TestCase
       assert_redirected_to dashboard_path
     end
 
+    # TODO: test if you can submit a sub that goes past your current limit
+    # (hint: yes)
+
     test "should pop out an error when given a bad card" do
-      user.stubs(:servers_count).with(anything).returns(3)
-      
       VCR.use_cassette("bad_stripe_card") do
         token = create_declined_token
         user.build_billing_plan
@@ -66,8 +72,6 @@ class BillingControllerTest < ActionController::TestCase
         assert false
       end
     end
-
-
   end
 
 
