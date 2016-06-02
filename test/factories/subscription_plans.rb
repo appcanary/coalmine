@@ -19,10 +19,9 @@
 FactoryGirl.define do
   factory :subscription_plan do
     value 1
-unit_value 1
-limit 1
-label "MyString"
-default false
+    unit_value 1
+    limit 1
+    label "MyString"
+    default false
   end
-
 end

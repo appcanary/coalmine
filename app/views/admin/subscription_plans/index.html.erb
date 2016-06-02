@@ -1,0 +1,53 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Admin Subscription Plans</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+        label
+      </th>
+      <th>
+        value
+      </th>
+      <th>
+        unit value
+      </th>
+      <th>
+        limit
+      </th>
+
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @admin_subscription_plans.each do |asp| %>
+      <tr>
+        <td>
+          <%= asp.label %>
+        </td>
+
+        <td>
+          <%= asp.value %>
+        </td>
+
+        <td>
+          <%= asp.unit_value %>
+        </td>
+
+        <td>
+          <%= asp.limit %>
+        </td>
+
+        <td><%= link_to 'Edit', admin_subscription_plan_path(asp) %></td>
+        <td><%= link_to 'Destroy', admin_subscription_plan_path(asp), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Subscription plan', new_admin_subscription_plan_path %>
