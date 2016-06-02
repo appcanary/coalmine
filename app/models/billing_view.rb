@@ -31,7 +31,17 @@ class BillingView
     end
   end
 
-  def disabled_plans
-
+  def disabled_plans(servers_count, monitors_count)
+    total = servers_count + monitors_count
+    billing_plan.subscription_plans.select { |s| s.limit < total }.map(&:id)
   end
+
+  def calculate_cost(servers_count, monitors_count)
+    if cur_sub = billing_plan.subscription_plan
+      cur_sub.cost(servers_count + monitors_count)
+    else
+      0
+    end
+  end
+
 end

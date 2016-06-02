@@ -13,15 +13,18 @@
   <% end %>
 
   <div class="form-group">
-    <p>You currently have <%= current_user.servers_count %> servers.</p>
+    <p>You currently have <%= current_user.servers_count %> servers and <%= current_user.monitors_count %> monitors.</p>
+
+    <% if current_user.has_billing? %>
+      <p>Your monthly bill will be: <%= number_to_currency @billing_view.calculate_cost(@servers_count, @monitors_count) %></p>
+    <% end %>
 
     <label>Available plans:</label><br/>
     <% if current_user.discounted? %>
-      <p>(We're giving you a 20% discount, because you're special)</p>
+      <p>(we're giving you a 20% discount, because you're special)</p>
     <% end %>
 
-    <%= f.select :subscription_plan, @billing_view.select_plans, { selected: @billing_view.selected_plan, disabled: @billing_view.disabled_plans } %>
-    <%# <%= f.select :subscription_plan, @billing_view.select_plans, { disabled: DeprecatedSubscriptionPlan.disabled_ac_plan(current_user.servers_count, current_user.discounted?) } %>
+    <%= f.select :subscription_plan, @billing_view.select_plans, { selected: @billing_view.selected_plan, disabled: @billing_view.disabled_plans(@monitors_count, @servers_count) } %>
   </div>
 
   <span class="payment-errors alert alert-danger" style="display: none; width: 350px;"></span>

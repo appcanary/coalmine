@@ -18,6 +18,8 @@ class SettingsController < ApplicationController
     @user = current_user
     @agent_token = @user.agent_token
     @billing_view = BillingManager.new(@user).to_view
+    @servers_count = @user.servers_count
+    @monitors_count = @user.monitors_count
   end
 
   def user_params

@@ -19,7 +19,16 @@
 require 'test_helper'
 
 class SubscriptionPlanTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "that we calculate the monthly cost correctly" do
+
+    sub = SubscriptionPlan.new(:value => 1000,
+                               :unit_value => 100,
+                               :limit => 10)
+
+    assert_equal sub.cost(0), 10
+    assert_equal sub.cost(1), 10
+    assert_equal sub.cost(10), 10
+    assert_equal sub.cost(11), 11
+    assert_equal sub.cost(20), 20
+  end
 end

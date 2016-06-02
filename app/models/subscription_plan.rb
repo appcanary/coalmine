@@ -26,4 +26,9 @@ class SubscriptionPlan < ActiveRecord::Base
   def text
     "$#{self.value_in_currency}/month #{label}".strip
   end
+
+  def cost(app_count)
+    app_cost = (([app_count, limit].max - limit) * unit_value) 
+    (value + app_cost).to_f / 100
+  end
 end
