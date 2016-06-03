@@ -6,6 +6,9 @@ class SettingsControllerTest < ActionController::TestCase
   it "user should be able to change their password" do
     login_user(user)
     User.any_instance.stubs(:agent_token).returns("1234")
+    User.any_instance.stubs(:monitors_count).returns(2)
+    User.any_instance.stubs(:servers_count).returns(3)
+
     new_pw = "12345678"
 
     assert_not_nil @controller.send(:login, user.email, TestValues::PASSWORD)
@@ -86,7 +89,8 @@ class SettingsControllerTest < ActionController::TestCase
 
    it "users changing their email should fail gracefully" do
     login_user(user)
-    User.any_instance.stubs(:agent_token).returns("1234")
+    User.any_instance.stubs(:monitors_count).returns(2)
+    User.any_instance.stubs(:servers_count).returns(3)
 
     new_email = "new@example.com"
 

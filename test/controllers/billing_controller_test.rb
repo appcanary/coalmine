@@ -2,15 +2,14 @@ require 'test_helper'
 
 class BillingControllerTest < ActionController::TestCase
 
-  before do
-    Rake::Task['db:seed_subscriptions'].invoke
-  end
   let(:user) { FactoryGirl.create(:user) }
+  let(:subscription_plan) { FactoryGirl.create(:subscription_plan, :default => true)}
   describe "Logged in" do
     before do
       login_user(user)
       user.stubs(:servers_count).returns(2)
       user.stubs(:monitors_count).returns(3)
+      subscription_plan
     end
 
     test "should not perform stripe song and dance absent subscription plan" do
