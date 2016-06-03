@@ -37,7 +37,7 @@
 
 <%= form_for(@user, :url => [:admin, @user]) do |f| %>
   <h4>This user can see the following plans:</h4>
-  <%= select_tag :available_subscriptions, options_for_select(@all_plans.map { |sp| [sp.text, sp.id]}, @billing_view.select_plans.map(&:last)), :multiple => true, :class => "form-group" %>
+  <%= select_tag :available_subscriptions, options_for_select(@all_plans.map { |sp| ["#{sp.text} (#{sp.comment})", sp.id]}, @billing_view.select_plans.map(&:last)), :multiple => true, :class => "form-group" %>
 
    <div class="form-group">
     <%= f.submit "Save plans", :class => "btn btn-black" %>

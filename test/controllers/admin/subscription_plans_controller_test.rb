@@ -65,7 +65,7 @@ class Admin::SubscriptionPlansControllerTest < ActionController::TestCase
 
     test "should create admin_subscription_plan" do
       assert_difference('SubscriptionPlan.count') do
-        post :create, admin_subscription_plan: {  }
+        post :create, subscription_plan: { :value => 100 }
       end
 
       assert_redirected_to admin_subscription_plan_path(assigns(:admin_subscription_plan))
@@ -77,7 +77,7 @@ class Admin::SubscriptionPlansControllerTest < ActionController::TestCase
     end
 
     test "should update admin_subscription_plan" do
-      patch :update, id: @admin_subscription_plan, admin_subscription_plan: {  }
+      patch :update, id: @admin_subscription_plan, subscription_plan: { :value => 200  }
       assert_redirected_to admin_subscription_plan_path(assigns(:admin_subscription_plan))
     end
 

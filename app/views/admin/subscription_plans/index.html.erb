@@ -18,6 +18,10 @@
         limit
       </th>
 
+      <th>
+        comment
+      </th>
+
       <th colspan="2"></th>
     </tr>
   </thead>
@@ -40,6 +44,11 @@
         <td>
           <%= asp.limit %>
         </td>
+
+        <td>
+          <%= asp.comment%>
+        </td>
+
 
         <td><%= link_to 'Edit', admin_subscription_plan_path(asp) %></td>
         <td><%= link_to 'Destroy', admin_subscription_plan_path(asp), method: :delete, data: { confirm: 'Are you sure?' } %></td>
