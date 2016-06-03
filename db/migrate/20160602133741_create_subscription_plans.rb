@@ -5,7 +5,9 @@ class CreateSubscriptionPlans < ActiveRecord::Migration
       t.integer :unit_value
       t.integer :limit
       t.string :label
+      t.string :comment
       t.boolean :default, :default => false, :null => false, :index => true
+      t.boolean :discount, :default => false, :null => false, :index => true
 
       t.timestamps null: false
     end

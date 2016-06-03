@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160602134913) do
+ActiveRecord::Schema.define(version: 20160603150414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,12 +59,15 @@ ActiveRecord::Schema.define(version: 20160602134913) do
     t.integer  "unit_value"
     t.integer  "limit"
     t.string   "label"
+    t.string   "comment"
     t.boolean  "default",    default: false, null: false
+    t.boolean  "discount",   default: false, null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
 
   add_index "subscription_plans", ["default"], name: "index_subscription_plans_on_default", using: :btree
+  add_index "subscription_plans", ["discount"], name: "index_subscription_plans_on_discount", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                                                     null: false

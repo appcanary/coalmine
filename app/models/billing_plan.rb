@@ -42,7 +42,11 @@ class BillingPlan < ActiveRecord::Base
     # existing fields. if it returns an empty value,
     # then let's load the default subscriptions.
     unless self.subscription_plans.present?
-      self.subscription_plans = SubscriptionPlan.default_plans
+      if self.user.discounted?
+        self.subscription_plans = SubscriptionPlan.default_discount
+      else
+        self.subscription_plans = SubscriptionPlan.default_plans
+      end
     end
   end
 
