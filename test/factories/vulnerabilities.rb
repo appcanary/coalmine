@@ -21,30 +21,12 @@
 #  updated_at          :datetime         not null
 #
 
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+require File.join(Rails.root, "test/factories", 'factory_helper')
 
-one:
-  package_id: 
-  title: MyString
-  reported_at: 2016-05-19 22:31:26
-  description: MyText
-  criticality: MyString
-  cve_id: MyString
-  usn_id: MyString
-  dsa_id: MyString
-  rhsa_id: MyString
-  cesa_id: MyString
-  source: MyString
+FactoryGirl.define do
+  factory :vulnerability do
+    package_name { Faker::Hacker.ingverb }
+    package_platform { FactoryHelper.rand_platform }
 
-two:
-  package_id: 
-  title: MyString
-  reported_at: 2016-05-19 22:31:26
-  description: MyText
-  criticality: MyString
-  cve_id: MyString
-  usn_id: MyString
-  dsa_id: MyString
-  rhsa_id: MyString
-  cesa_id: MyString
-  source: MyString
+  end
+end

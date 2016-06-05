@@ -23,23 +23,35 @@ class PackageManager
 
   def create_missing_packages(existing_packages, package_list)
     # if these two lists are the same size, our job here is done
-    if existing_packages.size == package_list.size
+    if existing_packages.count == package_list.count
       return []
     end
+    
+    existing_set = existing_packages.select("name, version").pluck(:name, :version).to_set
 
-    # TODO: calculate which package(name, version) we haven't seen yet
-    # put it into new_packages
+    submitted_set = package_list.map { |p| [p[:name], p[:version]]}.to_set
 
-    new_packages.map do |pkg|
-      self.create(pkg)
+    new_packages = submitted_set - existing_set
+
+    new_packages.map do |name, version|
+      self.create(:name => name,
+                 :version => version)
     end
   end
 
   def find_existing_packages(package_list)
     # TODO: make sure this queries names AND versions
-    Package.where(:platform => @platform,
-                  :release => @release).
-                  where("name in (?)", package_names)
+    query = Package.where(:platform => @platform,
+                          :release => @release)
+    clauses = []
+    values = []
+    package_list.each do |pkg|
+      clauses << "(name = ? AND version = ?)"
+      values << pkg[:name]
+      values << pkg[:version][:number]
+    end
+
+    query.where(clauses.join(" OR "), *values)
   end
 
   # whenever we create a package, we check to see if it's vuln

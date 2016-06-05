@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: package_sets
+# Table name: bundles
 #
 #  id         :integer          not null, primary key
 #  account_id :integer
@@ -16,6 +16,7 @@
 #
 
 class Bundle < ActiveRecord::Base
+  belongs_to :account
   has_many :bundled_packages
-  has_many :packages, :through => :packages_package_sets
+  has_many :packages, :through => :bundled_packages
 end

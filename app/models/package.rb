@@ -20,13 +20,13 @@
 
 # A package is unique across (name, platform, release, version)
 class Package < ActiveRecord::Base
-  has_many :packages_package_sets
-  has_many :package_sets, :through => :packages_package_sets
+  has_many :bundled_packages
+  has_many :bundles, :through => :bundled_packages
 
-  def concerning_vulnerabilties
+  def concerning_vulnerabilities
     # TODO: what do we store exactly on Vulns,
     # i.e. do we store name, platform, release?
-    etc = "..."
-    Vulnerability.where(etc)
+    Vulnerability.where(:package_name => name,
+                        :package_platform => platform)
   end
 end

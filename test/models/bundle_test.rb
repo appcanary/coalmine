@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: package_sets
+# Table name: bundles
 #
 #  id         :integer          not null, primary key
 #  account_id :integer
@@ -17,7 +17,7 @@
 
 require 'test_helper'
 
-class PackageSetTest < ActiveSupport::TestCase
+class BundleTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

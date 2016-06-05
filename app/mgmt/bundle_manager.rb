@@ -4,10 +4,16 @@ class BundleManager
     @account = account
   end
 
+
+  # don't we need a kind alongside platform?
+  # platform alone seems insufficient
+  # the (keys (group-by :platform (Version/all-with db :platform)))
+  # returned shows a lot of variance
   def create(opt = {}, package_list)
+    platform, release = opt[:platform], opt[:release]
     bundle = Bundle.new(:account_id => @account.id,
-                        :platform => opt[:platform],
-                        :release => opt[:release],
+                        :platform => platform,
+                        :release => release,
                         :name => opt[:name],
                         :path => opt[:path],
                         :last_crc => opt[:last_crc],
@@ -28,7 +34,7 @@ class BundleManager
 
     packages = PackageManager.new(bundle.platform, bundle.release).find_or_create(package_list)
 
-    return assign_packages(bundle, packages)
+    return assign_packages!(bundle, packages)
   end
 
   def update_name(bundle_id, name)

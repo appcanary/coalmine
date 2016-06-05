@@ -17,25 +17,19 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
+require File.join(Rails.root, "test/factories", 'factory_helper')
 
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+FactoryGirl.define do
+  factory :package do
+    name { Faker::Hacker.ingverb }
+    version { FactoryHelper.rand_version_str }
+    factory :ubuntu_package do
+      platform "ubuntu"
+      release "utopic"
+    end
 
-one:
-  version: MyString
-  artifact: MyString
-  platform: MyString
-  epoch: MyString
-  arch: MyString
-  filename: MyString
-  checksum: MyString
-  origin: MyString
-
-two:
-  version: MyString
-  artifact: MyString
-  platform: MyString
-  epoch: MyString
-  arch: MyString
-  filename: MyString
-  checksum: MyString
-  origin: MyString
+    factory :rubygem_package do
+      platform "ruby"
+    end
+  end
+end
