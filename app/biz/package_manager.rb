@@ -56,7 +56,6 @@ class PackageManager
 
     possible_vulns = package.concerning_vulnerabilities
     VulnerabilityManager.new.update_affecting_vulnerabilities!(possible_vulns, package)
-   
     return package
   end
 end

@@ -15,7 +15,7 @@
 #  updated_at :datetime         not null
 #
 
-class PackageSet < ActiveRecord::Base
-  has_many :packages_package_sets
+class Bundle < ActiveRecord::Base
+  has_many :bundled_packages
   has_many :packages, :through => :packages_package_sets
 end

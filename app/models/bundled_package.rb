@@ -10,7 +10,7 @@
 #  updated_at     :datetime         not null
 #
 
-class PackagesPackageSet < ActiveRecord::Base
+class BundledPackage < ActiveRecord::Base
   belongs_to :package
-  belongs_to :package_set
+  belongs_to :bundle
 end

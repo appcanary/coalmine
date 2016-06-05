@@ -11,9 +11,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160522191756) do
+ActiveRecord::Schema.define(version: 20160604200811) do
 
-  create_table "package_sets", force: :cascade do |t|
+  create_table "bundle_patches", force: :cascade do |t|
+    t.integer  "bundle_id_id"
+    t.integer  "vulnerable_package_id_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "bundle_patches", ["bundle_id_id"], name: "index_bundle_patches_on_bundle_id_id"
+  add_index "bundle_patches", ["vulnerable_package_id_id"], name: "index_bundle_patches_on_vulnerable_package_id_id"
+
+  create_table "bundle_vulnerabilities", force: :cascade do |t|
+    t.integer  "bundle_id_id"
+    t.integer  "vulnerable_package_id_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "bundle_vulnerabilities", ["bundle_id_id"], name: "index_bundle_vulnerabilities_on_bundle_id_id"
+  add_index "bundle_vulnerabilities", ["vulnerable_package_id_id"], name: "index_bundle_vulnerabilities_on_vulnerable_package_id_id"
+
+  create_table "bundled_package_sets", force: :cascade do |t|
+    t.integer  "package_set_id"
+    t.integer  "package_id"
+    t.boolean  "vulnerable",     default: false, null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "bundled_package_sets", ["package_id"], name: "index_bundled_package_sets_on_package_id"
+  add_index "bundled_package_sets", ["package_set_id"], name: "index_bundled_package_sets_on_package_set_id"
+
+  create_table "bundles", force: :cascade do |t|
     t.integer  "account_id"
     t.string   "name"
     t.string   "path"
@@ -26,7 +57,7 @@ ActiveRecord::Schema.define(version: 20160522191756) do
     t.datetime "updated_at",           null: false
   end
 
-  add_index "package_sets", ["account_id"], name: "index_package_sets_on_account_id"
+  add_index "bundles", ["account_id"], name: "index_bundles_on_account_id"
 
   create_table "packages", force: :cascade do |t|
     t.string   "name"
@@ -43,17 +74,6 @@ ActiveRecord::Schema.define(version: 20160522191756) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
-
-  create_table "packages_package_sets", force: :cascade do |t|
-    t.integer  "package_set_id"
-    t.integer  "package_id"
-    t.boolean  "vulnerable",     default: false, null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-  end
-
-  add_index "packages_package_sets", ["package_id"], name: "index_packages_package_sets_on_package_id"
-  add_index "packages_package_sets", ["package_set_id"], name: "index_packages_package_sets_on_package_set_id"
 
   create_table "vulnerabilities", force: :cascade do |t|
     t.string   "package_name"

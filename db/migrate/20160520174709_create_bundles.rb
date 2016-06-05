@@ -1,6 +1,6 @@
-class CreatePackageSets < ActiveRecord::Migration
+class CreateBundles < ActiveRecord::Migration
   def change
-    create_table :package_sets do |t|
+    create_table :bundles do |t|
       t.references :account, index: true, foreign_key: true
       t.string :name
       t.string :path

@@ -1,6 +1,6 @@
-class CreatePackagesPackageSets < ActiveRecord::Migration
+class CreateBundledPackages < ActiveRecord::Migration
   def change
-    create_table :packages_package_sets do |t|
+    create_table :bundled_package_sets do |t|
       t.references :package_set, index: true, foreign_key: true
       t.references :package, index: true, foreign_key: true
       t.boolean :vulnerable, null: false, default: false
