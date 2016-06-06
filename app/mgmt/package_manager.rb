@@ -11,14 +11,21 @@ class PackageManager
   # TODO wrap in txn?
   # TODO handle errors sanely
   def find_or_create(package_list)
-    existing_packages = find_existing_packages(package_list)
+    existing_pkg_query = find_existing_packages(package_list)
 
     # we might not know about every package submitted.
     # Let's check!
 
-    new_packages = create_missing_packages(existing_packages, package_list)
+    new_packages = create_missing_packages(existing_pkg_query, package_list)
 
-    existing_packages + new_packages
+    # this is an ActiveRecord_Relation; it gets
+    # lazily evaluated from the database.
+    # by the time we get here, the missing packages
+    # have been added, so when this gets evaluated
+    # the query behind it should return all relevant packages
+    # thereby negating the need to add new_packages above
+    # to this list.
+    existing_pkg_query
   end
 
   def create_missing_packages(existing_packages, package_list)
@@ -48,7 +55,7 @@ class PackageManager
     package_list.each do |pkg|
       clauses << "(name = ? AND version = ?)"
       values << pkg[:name]
-      values << pkg[:version][:number]
+      values << pkg[:version]
     end
 
     query.where(clauses.join(" OR "), *values)

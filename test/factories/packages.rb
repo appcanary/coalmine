@@ -28,7 +28,7 @@ FactoryGirl.define do
       release "utopic"
     end
 
-    factory :rubygem_package do
+    factory :ruby_package do
       platform "ruby"
     end
   end
