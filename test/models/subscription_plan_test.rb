@@ -28,10 +28,10 @@ class SubscriptionPlanTest < ActiveSupport::TestCase
                                :unit_value => 100,
                                :limit => 10)
 
-    assert_equal sub.cost(0), 10
-    assert_equal sub.cost(1), 10
-    assert_equal sub.cost(10), 10
-    assert_equal sub.cost(11), 11
-    assert_equal sub.cost(20), 20
+    assert_equal sub.cost(0), 1000
+    assert_equal sub.cost(1), 1000
+    assert_equal sub.cost(10), 1000
+    assert_equal sub.cost(11), 1100
+    assert_equal sub.cost(20), 2000
   end
 end

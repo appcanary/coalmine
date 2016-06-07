@@ -38,7 +38,7 @@ class BillingPresenter
 
   def calculate_cost(servers_count, monitors_count)
     if cur_sub = billing_plan.subscription_plan
-      cur_sub.cost(servers_count + monitors_count)
+      cur_sub.cost(servers_count + monitors_count).to_f / 100
     else
       0
     end

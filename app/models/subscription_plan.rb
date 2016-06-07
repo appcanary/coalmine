@@ -33,6 +33,6 @@ class SubscriptionPlan < ActiveRecord::Base
 
   def cost(app_count)
     app_cost = (([app_count, limit].max - limit) * unit_value) 
-    (value + app_cost).to_f / 100
+    value + app_cost
   end
 end
