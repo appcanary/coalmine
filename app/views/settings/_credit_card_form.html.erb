@@ -15,7 +15,7 @@
   <div class="form-group">
     <p>You currently have <%= current_user.servers_count %> servers and <%= current_user.monitors_count %> monitors.</p>
 
-    <p>Your monthly bill will be: <%= number_to_currency @billing_presenter.calculate_cost(@servers_count, @monitors_count) %></p>
+    <p>Your monthly bill is: <%= number_to_currency @billing_presenter.calculate_cost(@servers_count, @monitors_count) %></p>
 
     <label>Available plans:</label><br/>
     <% if current_user.discounted? %>
