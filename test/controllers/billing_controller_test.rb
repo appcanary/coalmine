@@ -40,7 +40,7 @@ class BillingControllerTest < ActionController::TestCase
       user.stripe_customer_id = "test"
       user.save!
 
-      put :update, user: { subscription_plan: BillingView::CANCEL }
+      put :update, user: { subscription_plan: BillingPresenter::CANCEL }
 
       assert user.stripe_customer_id.blank?
       assert user.subscription_plan.blank?

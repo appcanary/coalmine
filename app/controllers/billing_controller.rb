@@ -2,7 +2,7 @@ class BillingController < ApplicationController
   def show
     @show_stripe = true
     @user = current_user
-    @billing_view = BillingManager.new(@user).to_view
+    @billing_presenter = BillingManager.new(@user).to_presenter
   end
 
   def update
@@ -52,7 +52,7 @@ class BillingController < ApplicationController
       if @user.save
         format.html { redirect_to dashboard_path, notice: notice }
       else
-        @billing_view = BillingManager.new(@user).to_view
+        @billing_presenter = BillingManager.new(@user).to_presenter
         @servers_count = @user.servers_count
         @monitors_count = @user.monitors_count
 

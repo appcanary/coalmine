@@ -20,7 +20,7 @@ class Admin::UsersController < AdminController
 
   def show
     @billing_manager = BillingManager.new(@user)
-    @billing_view = @billing_manager.to_view
+    @billing_presenter = @billing_manager.to_presenter
     @all_plans = SubscriptionPlan.all
   end
 

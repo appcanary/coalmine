@@ -3,7 +3,7 @@
 # with the html/form renderer - rather than saddling
 # BillingPlan or BillingManager with this responsibility
 
-class BillingView
+class BillingPresenter
   CANCEL = "Cancel subscription"
 
   attr_accessor :user, :billing_plan, :show_cancel

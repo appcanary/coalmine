@@ -79,7 +79,7 @@ class BillingManager
   end
 
   def validate_subscription(sub_id)
-    if sub_id == BillingView::CANCEL
+    if sub_id == BillingPresenter::CANCEL
       return :cancel
     else
       self.billing_plan.subscription_plans.find_by_id(sub_id)
@@ -111,7 +111,7 @@ class BillingManager
     @user
   end
 
-  def to_view
-    BillingView.new(self.billing_plan, self.user.has_billing?)
+  def to_presenter
+    BillingPresenter.new(self.billing_plan, self.user.has_billing?)
   end
 end
