@@ -20,9 +20,16 @@
 require File.join(Rails.root, "test/factories", 'factory_helper')
 
 FactoryGirl.define do
+
+  sequence :name do |n|
+    "#{Faker::Hacker.ingverb}##{n}"
+  end
+
   factory :package do
-    name { Faker::Hacker.ingverb }
+    name { generate(:name) }
     version { FactoryHelper.rand_version_str }
+    platform { ["ubuntu", "ruby"].sample }
+
     factory :ubuntu_package do
       platform "ubuntu"
       release "utopic"
