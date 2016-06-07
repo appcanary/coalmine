@@ -78,12 +78,12 @@ class BillingManager
     end
   end
 
-  def validate_subscription(sub_id)
-    if sub_id == BillingPresenter::CANCEL
-      return :cancel
-    else
-      self.billing_plan.subscription_plans.find_by_id(sub_id)
-    end
+  def cancel_subscription?(param)
+    param == BillingPresenter::CANCEL
+  end
+
+  def valid_subscription?(sub_id)
+    self.billing_plan.subscription_plans.find_by_id(sub_id)
   end
 
   def set_subscription!(stripe_customer_id, sub)

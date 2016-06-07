@@ -13,9 +13,18 @@ class BillingController < ApplicationController
 
     if params[:user]
       sub_plan = params[:user][:subscription_plan]
-      case sub = @billing_manager.validate_subscription(sub_plan)
-      when SubscriptionPlan
-        if stripe_params[:stripe_token]
+
+      if @billing_manager.cancel_subscription?(sub_plan)
+        @user = @billing_manager.cancel_subscription!
+        notice = "You've successfully canceled your subscription. Sorry to see you go!" 
+
+        track_event @user, "Canceled subscription"
+        Raven.capture_message("Subscription canceled by: #{@user.email}")
+
+      elsif (sub = @billing_manager.valid_subscription?(sub_plan))
+        if stripe_params[:stripe_token].blank?
+          @user = @billing_manager.change_subscription!(sub)
+        else
           @user = @billing_manager.add_customer(params[:stripe_token], sub)
 
           # if these are stripe errors, the validation
@@ -28,22 +37,11 @@ class BillingController < ApplicationController
 
             Raven.capture_message("Subscription added by: #{@user.email}")
           end
-
-        else
-          @user = @billing_manager.change_subscription!(sub)
         end
-
-      when :cancel
-        @user = @billing_manager.cancel_subscription!
-        notice = "You've successfully canceled your subscription. Sorry to see you go!" 
-
-        track_event @user, "Canceled subscription"
-        Raven.capture_message("Subscription canceled by: #{@user.email}")
 
       else
         notice = "Sorry, something seems to have gone wrong. Please try again, or contact support@appcanary.com"
       end
-
     else
       notice = "Were you trying to change a setting? You may have missed a field."
     end
