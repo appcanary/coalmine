@@ -8,6 +8,7 @@ class SettingsControllerTest < ActionController::TestCase
     User.any_instance.stubs(:agent_token).returns("1234")
     User.any_instance.stubs(:monitors_count).returns(2)
     User.any_instance.stubs(:servers_count).returns(3)
+    User.any_instance.stubs(:active_servers_count).returns(2)
 
     new_pw = "12345678"
 
@@ -91,6 +92,7 @@ class SettingsControllerTest < ActionController::TestCase
     login_user(user)
     User.any_instance.stubs(:monitors_count).returns(2)
     User.any_instance.stubs(:servers_count).returns(3)
+    User.any_instance.stubs(:active_servers_count).returns(2)
 
     new_email = "new@example.com"
 

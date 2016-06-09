@@ -38,7 +38,7 @@ class BillingPlan < ActiveRecord::Base
 
   def monthly_cost
     if cur_sub = self.subscription_plan
-      cur_sub.cost(user.servers_count + user.monitors_count)
+      cur_sub.cost(user.active_servers_count + user.monitors_count)
     else
       0
     end

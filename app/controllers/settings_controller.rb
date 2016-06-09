@@ -19,6 +19,7 @@ class SettingsController < ApplicationController
     @agent_token = @user.agent_token
     @billing_manager = BillingManager.new(@user)
     @billing_presenter = @billing_manager.to_presenter
+    @active_servers_count = @user.active_servers_count
     @servers_count = @user.servers_count
     @monitors_count = @user.monitors_count
   end

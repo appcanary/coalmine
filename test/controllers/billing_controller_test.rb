@@ -8,6 +8,7 @@ class BillingControllerTest < ActionController::TestCase
     before do
       login_user(user)
       user.stubs(:servers_count).returns(2)
+      user.stubs(:active_servers_count).returns(1)
       user.stubs(:monitors_count).returns(3)
       subscription_plan
     end

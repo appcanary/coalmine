@@ -34,8 +34,8 @@ class BillingPresenter
     end
   end
 
-  def disabled_plans(servers_count, monitors_count)
-    total = servers_count + monitors_count
+  def disabled_plans(active_servers_count, monitors_count)
+    total = active_servers_count + monitors_count
     billing_plan.subscription_plans.select { |s| (s.limit < total) && (s.limit != 0) }.map(&:id)
   end
 

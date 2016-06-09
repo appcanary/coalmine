@@ -52,6 +52,7 @@ class BillingController < ApplicationController
       else
         @billing_presenter = BillingManager.new(@user).to_presenter
         @servers_count = @user.servers_count
+        @active_servers_count = @user.active_servers_count
         @monitors_count = @user.monitors_count
 
         format.html { render :show }
