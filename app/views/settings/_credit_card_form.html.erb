@@ -13,15 +13,14 @@
   <% end %>
 
   <div class="form-group">
-    <p>You currently have <%= current_user.servers_count %> servers and <%= current_user.monitors_count %> monitors.</p>
+    <p>You currently have <%= @servers_count %> servers and <%= @monitors_count %> monitors.</p>
 
-    <p>Your monthly bill is: <%= number_to_currency @billing_presenter.calculate_cost(@servers_count, @monitors_count) %></p>
+    <p>Your monthly bill is: <%= number_to_currency current_user.monthly_cost.to_f / 100 %></p>
 
     <label>Available plans:</label><br/>
     <% if current_user.discounted? %>
       <p>(we're giving you a 20% discount, because you're special)</p>
     <% end %>
-
     <%= f.select :subscription_plan, @billing_presenter.select_plans, { selected: @billing_presenter.selected_plan, disabled: @billing_presenter.disabled_plans(@monitors_count, @servers_count) } %>
   </div>
 

@@ -33,15 +33,7 @@ class BillingPresenter
 
   def disabled_plans(servers_count, monitors_count)
     total = servers_count + monitors_count
-    billing_plan.subscription_plans.select { |s| s.limit < total }.map(&:id)
-  end
-
-  def calculate_cost(servers_count, monitors_count)
-    if cur_sub = billing_plan.subscription_plan
-      cur_sub.cost(servers_count + monitors_count).to_f / 100
-    else
-      0
-    end
+    billing_plan.subscription_plans.select { |s| (s.limit < total) && (s.limit != 0) }.map(&:id)
   end
 
 end
