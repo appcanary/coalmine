@@ -78,5 +78,7 @@ Rails.application.routes.draw do
     resources :users do
       post "impersonate", on: :member
     end
+
+    resources :subscription_plans
   end
 end

@@ -13,48 +13,56 @@
   <% end %>
 
   <div class="form-group">
-    <p>You currently have <%= current_user.servers_count %> servers.</p>
+    <p>You currently have <%= @servers_count %> servers and <%= @monitors_count %> monitors.</p>
+
+    <p>Your monthly bill is: <%= @billing_presenter.monthly_cost_in_dollars %></p>
 
     <label>Available plans:</label><br/>
     <% if current_user.discounted? %>
-      <p>(We're giving you a 20% discount, because you're special)</p>
+      <p>(we're giving you a 20% discount, because you're special)</p>
     <% end %>
-
-    <%= f.select :subscription_plan, SubscriptionPlan.select_ac_plans(current_user.has_billing?, current_user.discounted?), { disabled: SubscriptionPlan.disabled_ac_plan(current_user.servers_count, current_user.discounted?) } %>
+    <%= f.select :subscription_plan, @billing_presenter.select_plans, { selected: @billing_presenter.selected_plan, disabled: @billing_presenter.disabled_plans(@monitors_count, @servers_count) } %>
   </div>
 
   <span class="payment-errors alert alert-danger" style="display: none; width: 350px;"></span>
-  <div class="card-wrapper" style="width: 350px; margin-bottom: 20px;"></div>
 
-  <div class="form-group cc-number">
-    <label>Card Number</label>
-    <input type="text" class="text form-control" size="20" maxlength="20" name="number" data-stripe="number"/>
-  </div>
+  <% unless @user.has_billing? %>
+    <div class="card-wrapper" style="width: 350px; margin-bottom: 20px;"></div>
 
-  <div class="form-group cc-name">
-    <label>Name (as appears on card)</label>
-    <input type="text" class="text form-control" size="20" maxlength="255" name="name" data-stripe="name"/>
-  </div>
-
-  <div class="form-group" style="width: 350px">
-    <div class="cc-mm col-sm-4" style="padding-left: 0px;">
-      <label>
-        Expiry
-      </label>
-      <br/>
-      <input type="text" class="text form-control" size="7" maxlength="7" name="expiry"/ style="display: inline">
+    <div class="form-group cc-number">
+      <label>Card Number</label>
+      <input type="text" class="text form-control" size="20" maxlength="20" name="number" data-stripe="number"/>
     </div>
 
-    <div class="cc-cvc  col-sm-6" style="padding-left: 0px;">
-      <label>
-        CVC
-      </label>
-      <br/>
-      <input type="text" class="text form-control" size="4" maxlength="4" name="cvc" data-stripe="cvc"/>
+    <div class="form-group cc-name">
+      <label>Name (as appears on card)</label>
+      <input type="text" class="text form-control" size="20" maxlength="255" name="name" data-stripe="name"/>
     </div>
-  </div>
 
-  <div class="form-group buttons col-sm-12" style="padding-left: 0px">
-    <button type="submit" class="btn btn-default submit">Add Credit Card</button>
-  </div>
+    <div class="form-group" style="width: 350px">
+      <div class="cc-mm col-sm-4" style="padding-left: 0px;">
+        <label>
+          Expiry
+        </label>
+        <br/>
+        <input type="text" class="text form-control" size="7" maxlength="7" name="expiry"/ style="display: inline">
+      </div>
+
+      <div class="cc-cvc  col-sm-6" style="padding-left: 0px;">
+        <label>
+          CVC
+        </label>
+        <br/>
+        <input type="text" class="text form-control" size="4" maxlength="4" name="cvc" data-stripe="cvc"/>
+      </div>
+    </div>
+
+    <div class="form-group buttons col-sm-12" style="padding-left: 0px">
+      <button type="submit" class="btn btn-default submit">Add Credit Card</button>
+    </div>
+  <% else %>
+    <div class="form-group buttons col-sm-12" style="padding-left: 0px">
+      <button type="submit" class="btn btn-default submit">Change Subscription</button>
+    </div>
+  <% end %>
 <% end %>

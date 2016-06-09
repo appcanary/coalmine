@@ -33,6 +33,7 @@
 #  marketing_email_consent         :boolean          default("true"), not null
 #  daily_email_consent             :boolean          default("false"), not null
 #  datomic_id                      :integer
+#  invoiced_manually               :boolean          default("false")
 #
 # Indexes
 #
@@ -48,8 +49,12 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }, :if => :password
   validates_confirmation_of :password, :if => :password
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
-  validate :correct_subscription_plan?
   validate :absence_of_stripe_errors
+
+  # autosave: true is important for making sure
+  # this association gets persisted by user.save calls
+  has_one :billing_plan, autosave: true
+
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count
 
   def self.all_from_api(order = "created_at DESC")
@@ -85,6 +90,10 @@ class User < ActiveRecord::Base
     @active_servers_count ||= api_info["active-server-count"]
   end
 
+  def monitors_count
+    @monitors_count ||= api_info["monitored-app-count"]
+  end
+
   def api_calls_count
     @api_calls_count ||= api_info["api-calls-count"]
   end
@@ -99,16 +108,16 @@ class User < ActiveRecord::Base
 
   def stripe_customer
     if stripe_customer_id
-      Billing.find_customer(self)
+      BillingManager.find_customer(self)
     end
   end
 
   def has_billing?
-    stripe_customer_id.present?
+    invoiced_manually? || stripe_customer_id.present?
   end
 
   def payment_info
-    if has_billing?
+    if stripe_customer_id.present?
       stripe_customer.sources
     else 
       []
@@ -118,31 +127,6 @@ class User < ActiveRecord::Base
   def discounted?
     beta_signup_source.present?
   end
-
-  def correct_subscription_plan?
-    unless valid_subscription?
-      self.errors.add(:subscription_plan, "is not valid.")
-    end
-  end
-
-  def valid_subscription?
-    if self.subscription_plan.nil?
-      # can't reset subscription plan
-      # if we have a cc
-      if has_billing?
-        false
-      else
-        true
-      end
-    else
-      if discounted?
-        SubscriptionPlan.discount_plans.include? self.subscription_plan
-      else
-        SubscriptionPlan.all_plans.include? self.subscription_plan
-      end
-    end
-  end
-
 
   # def delete_api_user!
   #   canary.delete_user

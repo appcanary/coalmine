@@ -3,9 +3,13 @@ require 'test_helper'
 class BillingControllerTest < ActionController::TestCase
 
   let(:user) { FactoryGirl.create(:user) }
+  let(:subscription_plan) { FactoryGirl.create(:subscription_plan, :default => true)}
   describe "Logged in" do
     before do
       login_user(user)
+      user.stubs(:servers_count).returns(2)
+      user.stubs(:monitors_count).returns(3)
+      subscription_plan
     end
 
     test "should not perform stripe song and dance absent subscription plan" do
@@ -23,58 +27,34 @@ class BillingControllerTest < ActionController::TestCase
     test "should perform the stripe song and dance" do
       VCR.use_cassette("new_stripe_customer") do
         token = create_token
-        put :update, user: { stripe_token: token.id, subscription_plan: SubscriptionPlan::AC_STARTER }
+        user.build_billing_plan
+        put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscription_plans.first.id }
         assert_equal true, user.stripe_customer_id.present?
         assert_redirected_to dashboard_path
       end
     end
 
     test "should delete customer id if sub is cancelled" do
-      user.subscription_plan = SubscriptionPlan::AC_STARTER
+      user.build_billing_plan
+      user.billing_plan.subscription_plan = user.billing_plan.subscription_plans.first
       user.stripe_customer_id = "test"
       user.save!
 
-      put :update, user: { subscription_plan: SubscriptionPlan::CANCEL }
+      put :update, user: { subscription_plan: BillingPresenter::CANCEL }
 
       assert user.stripe_customer_id.blank?
       assert user.subscription_plan.blank?
       assert_redirected_to dashboard_path
     end
 
-    test "should not allow discount plans if user is not from beta" do
-
-      # prevent caring about servers_count api call
-      user.stubs(:servers_count).with(anything).returns(3)
-
-      put :update, user: { subscription_plan: SubscriptionPlan::AC_DISCOUNT_STARTER }
-
-      user.reload
-      assert user.stripe_customer_id.blank?
-      assert user.subscription_plan.blank?
-      assert_response :success
-      assert_template :show
-    end
-
-    test "should allow discount plans if user is from beta" do
-      user.beta_signup_source = "test"
-
-      VCR.use_cassette("new_stripe_customer") do
-        token = create_token
-        put :update, user: { stripe_token: token.id, subscription_plan: SubscriptionPlan::AC_DISCOUNT_STARTER }
-      end
-
-      user.reload
-      assert user.stripe_customer_id.present?
-      assert_equal SubscriptionPlan::AC_DISCOUNT_STARTER, user.subscription_plan
-      assert_redirected_to dashboard_path
-    end
+    # TODO: test if you can submit a sub that goes past your current limit
+    # (hint: yes)
 
     test "should pop out an error when given a bad card" do
-      user.stubs(:servers_count).with(anything).returns(3)
-      
       VCR.use_cassette("bad_stripe_card") do
         token = create_declined_token
-        put :update, user: { stripe_token: token.id, subscription_plan: SubscriptionPlan::AC_STARTER }
+        user.build_billing_plan
+        put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscription_plans.first.id }
 
         assert_equal false, user.stripe_customer_id.present?
         assert_equal true, user.errors.present?
@@ -91,8 +71,6 @@ class BillingControllerTest < ActionController::TestCase
         assert false
       end
     end
-
-
   end
 
 

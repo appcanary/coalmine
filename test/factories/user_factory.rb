@@ -33,6 +33,7 @@
 #  marketing_email_consent         :boolean          default("true"), not null
 #  daily_email_consent             :boolean          default("false"), not null
 #  datomic_id                      :integer
+#  invoiced_manually               :boolean          default("false")
 #
 # Indexes
 #

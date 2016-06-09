@@ -7,6 +7,7 @@ class Admin::UsersController < AdminController
     @user_count = User.count
     @servers_count = Backend.servers_count
     @recent_heartbeats = Backend.recent_heartbeats
+    @total_revenue = BillingPlan.where("subscription_plan_id is not null").map(&:monthly_cost).reduce(&:+)
   end
 
   def new
@@ -19,6 +20,9 @@ class Admin::UsersController < AdminController
   end
 
   def show
+    @billing_manager = BillingManager.new(@user)
+    @billing_presenter = @billing_manager.to_presenter
+    @all_plans = SubscriptionPlan.all
   end
 
   def create
@@ -38,8 +42,17 @@ class Admin::UsersController < AdminController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    if sub_ids = subscription_params[:available_subscriptions]
+      @billing_manager = BillingManager.new(@user)
+      @user = @billing_manager.set_available_subscriptions!(sub_ids)
+    end
+
+    if params[:user]
+      @user.assign_attributes(user_params)
+    end
+
     respond_to do |format|
-      if @user.update(user_params)
+      if @user.save
         format.html { redirect_to admin_users_path, notice: 'User was successfully updated.' }
         # format.json { render json: @user, status: :ok, location: @user }
       else
@@ -65,6 +78,10 @@ class Admin::UsersController < AdminController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation, :onboarded)
+  end
+
+  def subscription_params
+    params.permit(:available_subscriptions => [])
   end
 
 end

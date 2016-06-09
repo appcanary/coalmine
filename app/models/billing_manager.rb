@@ -1,8 +1,10 @@
-class Billing
-  def initialize(user)
-    @user = user
-  end
+class BillingManager
+  DEFAULT_PLANS = [[2900, 5, "- Up to 5 servers"],
+                   [9900, 15, "- Up to 15 servers"],
+                   [29900, 50, "- Up to 50 servers"]]
+  DEFAULT_UNIT_VALUE = 900
 
+  attr_accessor :user, :billing_plan
   def self.add_customer(stripe_token, user)
     self.new(user).add_customer(stripe_token)
   end
@@ -11,11 +13,16 @@ class Billing
     self.new(user).find_customer()
   end
 
+  def initialize(user)
+    self.user = user
+    self.billing_plan = user.billing_plan || user.build_billing_plan
+  end
+
   def find_customer
     customer = Stripe::Customer.retrieve(@user.stripe_customer_id)
   end
 
-  def add_customer(stripe_token)
+  def add_customer(stripe_token, sub)
     customer = nil
     stripe_wrapper do 
       customer = Stripe::Customer.create(
@@ -23,7 +30,12 @@ class Billing
         :email => @user.email
       )
     end
-    return customer
+
+    if customer
+      return set_subscription!(customer.id, sub)
+    else
+      return @user
+    end
   end
 
   def stripe_wrapper(&block)
@@ -64,5 +76,42 @@ class Billing
       Raven.capture_exception(e)
       @user.stripe_errors << "Something went wrong with this transaction. We're looking into it."
     end
+  end
+
+  def cancel_subscription?(param)
+    param == BillingPresenter::CANCEL
+  end
+
+  def valid_subscription?(sub_id)
+    self.billing_plan.subscription_plans.find_by_id(sub_id)
+  end
+
+  def set_subscription!(stripe_customer_id, sub)
+    @user.stripe_customer_id = stripe_customer_id
+    change_subscription!(sub)
+  end
+
+  def change_subscription!(sub)
+    if @user.has_billing?
+      @user.billing_plan.subscription_plan = sub
+    else
+      @user.errors.add(:base, "Sorry, we can't change your subscription without any payment information.")
+    end
+    @user
+  end
+
+  def cancel_subscription!
+    @user.stripe_customer_id = nil
+    @user.billing_plan.reset_subscription
+    @user
+  end
+
+  def set_available_subscriptions!(ids)
+    @user.billing_plan.available_subscription_plans = ids
+    @user
+  end
+
+  def to_presenter
+    BillingPresenter.new(self.billing_plan, self.user.has_billing?)
   end
 end

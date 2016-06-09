@@ -8,6 +8,7 @@
 #  updated_at         :datetime         not null
 #  preferred_platform :string
 #  from_isitvuln      :boolean          default("false")
+#  source             :string           default("unassigned"), not null
 #
 
 FactoryGirl.define do

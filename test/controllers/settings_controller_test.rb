@@ -5,6 +5,10 @@ class SettingsControllerTest < ActionController::TestCase
 
   it "user should be able to change their password" do
     login_user(user)
+    User.any_instance.stubs(:agent_token).returns("1234")
+    User.any_instance.stubs(:monitors_count).returns(2)
+    User.any_instance.stubs(:servers_count).returns(3)
+
     new_pw = "12345678"
 
     assert_not_nil @controller.send(:login, user.email, TestValues::PASSWORD)
@@ -22,6 +26,7 @@ class SettingsControllerTest < ActionController::TestCase
     new_email = "new@example.com"
 
     client = mock
+    client.stubs(:get).with("users/me").returns('{"id":17592186873228,"name":"","email":"whatever@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
     client.expects(:put).with("users/me", anything).returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
     CanaryClient.stubs(:new).with(anything).returns(client)
 
@@ -34,7 +39,7 @@ class SettingsControllerTest < ActionController::TestCase
   describe "Intercom" do
     before do
       client = mock
-      client.stubs(:get).with("user/me").returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
+      client.stubs(:get).with("users/me").returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
       CanaryClient.stubs(:new).with(anything).returns(client)
     end
 
@@ -84,6 +89,8 @@ class SettingsControllerTest < ActionController::TestCase
 
    it "users changing their email should fail gracefully" do
     login_user(user)
+    User.any_instance.stubs(:monitors_count).returns(2)
+    User.any_instance.stubs(:servers_count).returns(3)
 
     new_email = "new@example.com"
 

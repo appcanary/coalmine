@@ -37,7 +37,7 @@ class GreatReviewController < ApplicationController
     @user = current_user
 
     if stripe_token = stripe_params[:stripe_token]
-      customer = Billing.add_customer(stripe_token, @user)
+      customer = BillingManager.add_customer(stripe_token, @user)
       if customer
         # hack to get strong params to shut up
         # about empty params

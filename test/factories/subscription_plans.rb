@@ -19,28 +19,12 @@
 #  index_subscription_plans_on_discount  (discount)
 #
 
-class SubscriptionPlan < ActiveRecord::Base
-  scope :default_plans, -> { where(:default => true) }
-  scope :default_discount, -> { where(:discount => true) }
-
-  def value_in_currency
-    value / 100
-  end
-
-  def unit_value_in_currency
-    unit_value / 100
-  end
-
-  def text
-    if limit == 0
-      "$#{self.unit_value_in_currency}/server/month #{label}".strip
-    else
-      "$#{self.value_in_currency}/month #{label}".strip
-    end
-  end
-
-  def cost(app_count)
-    app_cost = (([app_count, limit].max - limit) * unit_value) 
-    value + app_cost
+FactoryGirl.define do
+  factory :subscription_plan do
+    value 1
+    unit_value 1
+    limit 1
+    label "MyString"
+    default false
   end
 end

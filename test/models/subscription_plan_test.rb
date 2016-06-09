@@ -19,28 +19,19 @@
 #  index_subscription_plans_on_discount  (discount)
 #
 
-class SubscriptionPlan < ActiveRecord::Base
-  scope :default_plans, -> { where(:default => true) }
-  scope :default_discount, -> { where(:discount => true) }
+require 'test_helper'
 
-  def value_in_currency
-    value / 100
-  end
+class SubscriptionPlanTest < ActiveSupport::TestCase
+  test "that we calculate the monthly cost correctly" do
 
-  def unit_value_in_currency
-    unit_value / 100
-  end
+    sub = SubscriptionPlan.new(:value => 1000,
+                               :unit_value => 100,
+                               :limit => 10)
 
-  def text
-    if limit == 0
-      "$#{self.unit_value_in_currency}/server/month #{label}".strip
-    else
-      "$#{self.value_in_currency}/month #{label}".strip
-    end
-  end
-
-  def cost(app_count)
-    app_cost = (([app_count, limit].max - limit) * unit_value) 
-    value + app_cost
+    assert_equal sub.cost(0), 1000
+    assert_equal sub.cost(1), 1000
+    assert_equal sub.cost(10), 1000
+    assert_equal sub.cost(11), 1100
+    assert_equal sub.cost(20), 2000
   end
 end
