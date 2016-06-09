@@ -23,6 +23,9 @@
         <th>
           Recent Heartbeats
         </th>
+        <th>
+          Monthly revenue
+        </th>
       </thead>
       <tbody>
         <tr>
@@ -34,6 +37,9 @@
           </td>
           <td>
             <%= @recent_heartbeats %>
+          </td>
+          <td>
+            <%= number_to_currency @total_revenue.to_f / 100 %>
           </td>
         </tr>
       </tbody>
