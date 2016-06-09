@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 20160609161242) do
     t.boolean  "marketing_email_consent",                   default: true,  null: false
     t.boolean  "daily_email_consent",                       default: false, null: false
     t.integer  "datomic_id",                      limit: 8
-    t.boolean  "invoiced"
+    t.boolean  "invoiced_manually",                         default: false
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree
