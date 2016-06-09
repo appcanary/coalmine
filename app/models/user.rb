@@ -33,6 +33,7 @@
 #  marketing_email_consent         :boolean          default("true"), not null
 #  daily_email_consent             :boolean          default("false"), not null
 #  datomic_id                      :integer
+#  invoiced                        :boolean
 #
 # Indexes
 #
@@ -112,11 +113,11 @@ class User < ActiveRecord::Base
   end
 
   def has_billing?
-    stripe_customer_id.present?
+    invoiced? || stripe_customer_id.present?
   end
 
   def payment_info
-    if has_billing?
+    if stripe_customer_id.present?
       stripe_customer.sources
     else 
       []

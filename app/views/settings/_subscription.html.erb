@@ -1,9 +1,13 @@
 <div class="col-sm-6">
   <h2>Billing</h2>
   <% if @user.has_billing? %>
-    <h5>Credit card on file</h5>
+    <% if @user.invoiced? %>
+      <h5>You're being invoiced directly</h5>
+    <% else %>
 
-    <% @user.payment_info.each do |card| %>
+      <h5>Credit card on file</h5>
+
+      <% @user.payment_info.each do |card| %>
       <dl>
 
         <dt>Last four digits:</dt>
@@ -14,7 +18,9 @@
 
 
       </dl>
+      <% end %>
     <% end %>
   <% end %>
+
   <%= render :partial => "settings/credit_card_form" %>
 </div>
