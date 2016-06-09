@@ -27,8 +27,16 @@ class SubscriptionPlan < ActiveRecord::Base
     value / 100
   end
 
+  def unit_value_in_currency
+    unit_value / 100
+  end
+
   def text
-    "$#{self.value_in_currency}/month #{label}".strip
+    if limit == 0
+      "$#{self.unit_value_in_currency}/server/month #{label}".strip
+    else
+      "$#{self.value_in_currency}/month #{label}".strip
+    end
   end
 
   def cost(app_count)
