@@ -7,7 +7,7 @@ class Admin::UsersController < AdminController
     @user_count = User.count
     @servers_count = Backend.servers_count
     @recent_heartbeats = Backend.recent_heartbeats
-    @total_revenue = @users.select(&:has_billing?).map(&:monthly_cost).reduce(&:+)
+    @total_revenue = BillingPlan.where("subscription_plan_id is not null").map(&:monthly_cost).reduce(&:+)
   end
 
   def new

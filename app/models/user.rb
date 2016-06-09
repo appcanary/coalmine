@@ -128,14 +128,6 @@ class User < ActiveRecord::Base
     beta_signup_source.present?
   end
 
-  def monthly_cost
-    if cur_sub = self.billing_plan.subscription_plan
-      cur_sub.cost(servers_count + monitors_count)
-    else
-      0
-    end
-  end
-
   # def delete_api_user!
   #   canary.delete_user
   # end

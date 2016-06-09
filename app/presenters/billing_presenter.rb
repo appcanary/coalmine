@@ -4,9 +4,12 @@
 # BillingPlan or BillingManager with this responsibility
 
 class BillingPresenter
+  include ActionView::Helpers::NumberHelper
+
   CANCEL = "Cancel subscription"
 
   attr_accessor :user, :billing_plan, :show_cancel
+  delegate :monthly_cost, :to => :billing_plan
 
   def initialize(billing_plan, show_cancel)
     self.billing_plan = billing_plan
@@ -34,6 +37,10 @@ class BillingPresenter
   def disabled_plans(servers_count, monitors_count)
     total = servers_count + monitors_count
     billing_plan.subscription_plans.select { |s| (s.limit < total) && (s.limit != 0) }.map(&:id)
+  end
+
+  def monthly_cost_in_dollars
+    number_to_currency(billing_plan.monthly_cost.to_f / 100)
   end
 
 end

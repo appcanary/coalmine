@@ -36,6 +36,15 @@ class BillingPlan < ActiveRecord::Base
     self.subscription_plan = nil
   end
 
+  def monthly_cost
+    if cur_sub = self.subscription_plan
+      cur_sub.cost(user.servers_count + user.monitors_count)
+    else
+      0
+    end
+  end
+
+
   private
   def set_defaults
     # calling #subscriptions will deserialize the

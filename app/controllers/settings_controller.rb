@@ -17,7 +17,8 @@ class SettingsController < ApplicationController
     @show_stripe = true
     @user = current_user
     @agent_token = @user.agent_token
-    @billing_presenter = BillingManager.new(@user).to_presenter
+    @billing_manager = BillingManager.new(@user)
+    @billing_presenter = @billing_manager.to_presenter
     @servers_count = @user.servers_count
     @monitors_count = @user.monitors_count
   end
