@@ -48,7 +48,7 @@ class PackageManagerTest < ActiveSupport::TestCase
       assert_equal pkg2.id, list.first.id
     end
 
-    it "should know how to create only packages that we don't already have" do
+    it "should create new packages only when appropriate" do
       p1, p2, p3, _ = FactoryGirl.create_list(:ubuntu_package, 10)
       
       assert_equal 10, Package.count
@@ -88,7 +88,10 @@ class PackageManagerTest < ActiveSupport::TestCase
       @pm.create(:name => "fakemcfake",
                  :version => "1.0.1")
 
-      assert_equal 1, Package.count
+      @pm.create(:name => "fakemcfake",
+                 :version => "1.0.3")
+
+      assert_equal 2, Package.count
       assert_equal 1, vuln.packages.count
     end
   end

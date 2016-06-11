@@ -36,7 +36,7 @@ FactoryGirl.define do
     end
 
     factory :ruby_package do
-      platform "ruby"
+      platform Platforms::Ruby
     end
   end
 end

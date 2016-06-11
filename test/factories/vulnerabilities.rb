@@ -24,8 +24,17 @@
 require File.join(Rails.root, "test/factories", 'factory_helper')
 
 FactoryGirl.define do
+  sequence :cve_id do |n|
+    "CVE-9999-$04d" % n
+  end
+
   factory :vulnerability do
     package_name { Faker::Hacker.ingverb }
     package_platform { FactoryHelper.rand_platform }
+    cve_id { generate(:cve_id) }
+
+    factory :ruby_vulnerability do
+      package_platform Platforms::Ruby
+    end
   end
 end
