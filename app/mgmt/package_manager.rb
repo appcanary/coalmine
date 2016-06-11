@@ -16,7 +16,7 @@ class PackageManager
     # we might not know about every package submitted.
     # Let's check!
 
-    new_packages = create_missing_packages(existing_pkg_query, package_list)
+    create_missing_packages(existing_pkg_query, package_list)
 
     # this is an ActiveRecord_Relation; it gets
     # lazily evaluated from the database.
@@ -28,13 +28,13 @@ class PackageManager
     existing_pkg_query
   end
 
-  def create_missing_packages(existing_packages, package_list)
+  def create_missing_packages(existing_packages_query, package_list)
     # if these two lists are the same size, our job here is done
-    if existing_packages.count == package_list.count
+    if existing_packages_query.count == package_list.count
       return []
     end
     
-    existing_set = existing_packages.select("name, version").pluck(:name, :version).to_set
+    existing_set = existing_packages_query.select("name, version").pluck(:name, :version).to_set
 
     submitted_set = package_list.map { |p| [p[:name], p[:version]]}.to_set
 

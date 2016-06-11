@@ -73,5 +73,23 @@ class PackageManagerTest < ActiveSupport::TestCase
       assert_equal 12, Package.count
       assert_equal 2, list.count
     end
+
+    it "should create packages and update relevant vulns" do
+      pkg_name = "fakemcfake"
+      vuln = FactoryGirl.create(:vulnerability, 
+                         :package_name => pkg_name,
+                         :package_platform => Platforms::Ruby,
+                         :patched_versions => ["> 1.0.2"])
+
+      assert_equal 0, Package.count
+      assert_equal 0, vuln.packages.count
+      @pm = PackageManager.new(Platforms::Ruby, nil)
+
+      @pm.create(:name => "fakemcfake",
+                 :version => "1.0.1")
+
+      assert_equal 1, Package.count
+      assert_equal 1, vuln.packages.count
+    end
   end
 end

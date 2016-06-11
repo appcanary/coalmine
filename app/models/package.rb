@@ -29,4 +29,38 @@ class Package < ActiveRecord::Base
     Vulnerability.where(:package_name => name,
                         :package_platform => platform)
   end
+
+  def same_name?(pkg_name)
+    if self.platform == Platforms::Debian
+      self.source_name == pkg_name
+    else
+      self.name == pkg_name
+    end
+  end
+
+  def affected?(unaffected_versions)
+    unaffected_versions.any? do |v|
+      !same_version?(v)
+    end
+  end
+
+  def needs_patch?(patched_versions)
+    patched_versions.any? do |v|
+      !same_version?(v)
+    end
+  end
+
+  def same_version?(other_version)
+    comparator.matches?(other_version)
+  end
+
+  def comparator
+    @comparator ||= 
+      case self.platform
+      when Platforms::Ruby
+        RubyComparator.new(self.version)
+      else
+        nil
+      end
+  end
 end

@@ -27,6 +27,5 @@ FactoryGirl.define do
   factory :vulnerability do
     package_name { Faker::Hacker.ingverb }
     package_platform { FactoryHelper.rand_platform }
-
   end
 end
