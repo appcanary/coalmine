@@ -127,14 +127,14 @@ img {
 
   
   .customer { 
-    @include span-columns(2 of 12);
+    @include span-columns(1 of 7);
     
 
     .brand {
       img {
         display: block;
         width: initial;
-        max-width: 80%;
+        max-width: 90%;
         margin-top: 20px;
         margin-left: auto;
         margin-right: auto;
