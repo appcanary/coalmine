@@ -20,7 +20,7 @@ class BillingController < ApplicationController
         if stripe_params[:stripe_token].blank?
           @user = @billing_manager.change_subscription!(sub)
         else
-          @user = @billing_manager.add_customer(params[:stripe_token], sub)
+          @user = @billing_manager.add_customer(stripe_params[:stripe_token], sub)
 
           # if these are stripe errors, the validation
           # on user.save below will trigger them to
