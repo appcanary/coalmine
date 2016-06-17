@@ -28,6 +28,12 @@ class PackageManager
     existing_pkg_query
   end
 
+  # given an Arel query and a list of packages, determines
+  # which packages we have not seen yet and creates them.
+  #
+  # assumes that existing_packages_query was built from
+  # the items in package_list.
+
   def create_missing_packages(existing_packages_query, package_list)
     # if these two lists are the same size, our job here is done
     if existing_packages_query.count == package_list.count

@@ -84,6 +84,8 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.datetime "updated_at",  null: false
   end
 
+  add_index "packages", ["name", "version", "platform", "release"], name: "index_packages_on_name_and_version_and_platform_and_release", using: :btree
+
   create_table "vulnerabilities", force: :cascade do |t|
     t.string   "package_name"
     t.string   "package_platform"

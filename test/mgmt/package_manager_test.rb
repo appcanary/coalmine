@@ -55,23 +55,20 @@ class PackageManagerTest < ActiveSupport::TestCase
 
       @pm = PackageManager.new(p1.platform, p1.release)
 
-      # build a query pointing to only two packages
-      package_list = [p1, p2].map { |p| {name: p.name, version: p.version}}
-      existing_query = @pm.find_existing_packages(package_list)
-
-      # add two packages: one that already exists, one we already have
-      # a copy of, and a brand new one
-      package_list = package_list +  [{name: p1.name, version: p1.version},
-                                      {name: p3.name, version: p3.version},
+      # build a query pointing to only two packages that already exist,
+      # tho it has multiple instances of each
+      package_list = [p1, p2, p1].map { |p| {name: p.name, version: p.version}}
+      package_list = package_list +  [{name: "fakeMcFakerson", version: "1.2.3"},
                                       {name: "fakeMcFakerson", version: "1.2.3"}]
+
+      existing_query = @pm.find_existing_packages(package_list)
 
       list = @pm.create_missing_packages(existing_query, package_list)
 
-      # TODO: decide if this is OK behaviour; the names supplied in
-      # package_list are not *supposed* to change, but if they do,
-      # there is no validation
-      assert_equal 12, Package.count
-      assert_equal 2, list.count
+      # even tho we have duplicates, it only creates it once / don't raise
+      # validation errors
+      assert_equal 11, Package.count
+      assert_equal 1, list.count
     end
 
     it "should create packages and update relevant vulns" do

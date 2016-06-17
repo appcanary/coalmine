@@ -22,6 +22,9 @@
 class Package < ActiveRecord::Base
   has_many :bundled_packages
   has_many :bundles, :through => :bundled_packages
+  has_many :vulnerable_packages
+
+  validates_uniqueness_of :version, scope: [:platform, :release, :name]
 
   def concerning_vulnerabilities
     # TODO: what do we store exactly on Vulns,
@@ -55,12 +58,6 @@ class Package < ActiveRecord::Base
   end
 
   def comparator
-    @comparator ||= 
-      case self.platform
-      when Platforms::Ruby
-        RubyComparator.new(self.version)
-      else
-        nil
-      end
+    @comparator ||= Platforms.comparator_for(self.platform).new(self.version)
   end
 end
