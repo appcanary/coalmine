@@ -1,14 +1,9 @@
 class BillingController < ApplicationController
+  before_action :set_vars
   def show
-    @show_stripe = true
-    @user = current_user
-    @billing_presenter = BillingManager.new(@user).to_presenter
   end
 
   def update
-    @show_stripe = true
-    @user = current_user
-    @billing_manager = BillingManager.new(@user)
     notice = "You've successfully changed your billing settings. Thanks!" 
 
     if params[:user]
@@ -65,4 +60,14 @@ class BillingController < ApplicationController
     params.require(:user).permit(:stripe_token, :subscription_plan)
   end
 
+  def set_vars
+    @show_stripe = true
+    @user = current_user
+    @agent_token = @user.agent_token
+    @billing_manager = BillingManager.new(@user)
+    @billing_presenter = @billing_manager.to_presenter
+    @active_servers_count = @user.active_servers_count
+    @servers_count = @user.servers_count
+    @monitors_count = @user.monitors_count
+  end
 end

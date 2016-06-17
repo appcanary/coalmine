@@ -7,10 +7,16 @@ class BillingControllerTest < ActionController::TestCase
   describe "Logged in" do
     before do
       login_user(user)
+      user.stubs(:agent_token).returns("12345")
       user.stubs(:servers_count).returns(2)
       user.stubs(:active_servers_count).returns(1)
       user.stubs(:monitors_count).returns(3)
       subscription_plan
+    end
+
+    it "should show us the darn page" do
+      get :show
+      assert_response :success
     end
 
     test "should not perform stripe song and dance absent subscription plan" do
