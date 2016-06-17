@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: bundle_vulnerabilities
+# Table name: log_bundle_patches
 #
 #  id                    :integer          not null, primary key
 #  bundle_id             :integer
@@ -9,7 +9,7 @@
 #  updated_at            :datetime         not null
 #
 
-class BundleVulnerability < ActiveRecord::Base
+class LogBundlePatch < ActiveRecord::Base
   belongs_to :bundle
   belongs_to :vulnerable_package
 end

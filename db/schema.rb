@@ -22,26 +22,6 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "bundle_patches", force: :cascade do |t|
-    t.integer  "bundle_id"
-    t.integer  "vulnerable_package_id"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-  end
-
-  add_index "bundle_patches", ["bundle_id"], name: "index_bundle_patches_on_bundle_id", using: :btree
-  add_index "bundle_patches", ["vulnerable_package_id"], name: "index_bundle_patches_on_vulnerable_package_id", using: :btree
-
-  create_table "bundle_vulnerabilities", force: :cascade do |t|
-    t.integer  "bundle_id"
-    t.integer  "vulnerable_package_id"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-  end
-
-  add_index "bundle_vulnerabilities", ["bundle_id"], name: "index_bundle_vulnerabilities_on_bundle_id", using: :btree
-  add_index "bundle_vulnerabilities", ["vulnerable_package_id"], name: "index_bundle_vulnerabilities_on_vulnerable_package_id", using: :btree
-
   create_table "bundled_packages", force: :cascade do |t|
     t.integer  "bundle_id"
     t.integer  "package_id"
@@ -67,6 +47,26 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   end
 
   add_index "bundles", ["account_id"], name: "index_bundles_on_account_id", using: :btree
+
+  create_table "log_bundle_patches", force: :cascade do |t|
+    t.integer  "bundle_id"
+    t.integer  "vulnerable_package_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "log_bundle_patches", ["bundle_id"], name: "index_log_bundle_patches_on_bundle_id", using: :btree
+  add_index "log_bundle_patches", ["vulnerable_package_id"], name: "index_log_bundle_patches_on_vulnerable_package_id", using: :btree
+
+  create_table "log_bundle_vulnerabilities", force: :cascade do |t|
+    t.integer  "bundle_id"
+    t.integer  "vulnerable_package_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "log_bundle_vulnerabilities", ["bundle_id"], name: "index_log_bundle_vulnerabilities_on_bundle_id", using: :btree
+  add_index "log_bundle_vulnerabilities", ["vulnerable_package_id"], name: "index_log_bundle_vulnerabilities_on_vulnerable_package_id", using: :btree
 
   create_table "packages", force: :cascade do |t|
     t.string   "name"
@@ -115,13 +115,13 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "vulnerable_packages", ["package_id"], name: "index_vulnerable_packages_on_package_id", using: :btree
   add_index "vulnerable_packages", ["vulnerability_id"], name: "index_vulnerable_packages_on_vulnerability_id", using: :btree
 
-  add_foreign_key "bundle_patches", "bundles"
-  add_foreign_key "bundle_patches", "vulnerable_packages"
-  add_foreign_key "bundle_vulnerabilities", "bundles"
-  add_foreign_key "bundle_vulnerabilities", "vulnerable_packages"
   add_foreign_key "bundled_packages", "bundles"
   add_foreign_key "bundled_packages", "packages"
   add_foreign_key "bundles", "accounts"
+  add_foreign_key "log_bundle_patches", "bundles"
+  add_foreign_key "log_bundle_patches", "vulnerable_packages"
+  add_foreign_key "log_bundle_vulnerabilities", "bundles"
+  add_foreign_key "log_bundle_vulnerabilities", "vulnerable_packages"
   add_foreign_key "vulnerable_packages", "packages"
   add_foreign_key "vulnerable_packages", "vulnerabilities"
 end
