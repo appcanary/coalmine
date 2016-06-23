@@ -10,6 +10,7 @@
           <li><h2>Add a server</h2></li>
           <li><a href="#howitworks">How does it work?</a></li>
           <li><h5>How to install:</h5></li>
+          <li><a href="#ansible">Using Ansible</a></li>
           <li><a href="#chef">Using Chef</a></li>
           <li><a href="#puppet">Using Puppet</a></li>
           <li><a href="#bash">Using Bash</a></li>
@@ -49,6 +50,7 @@
 
     <h4>How do you provision your servers?</h4>
 
+    <%= eui_button "#{image_tag "icon-ansible.png", :style => "width: 15px"} Using Ansible".html_safe, href: "#ansible" %>
     <%= eui_button "#{image_tag "icon-chef.png", :style => "width: 15px"} Using Chef".html_safe, href: "#chef" %>
     <%= eui_button "#{image_tag "icon-puppet.png", :style => "width: 15px"} Using Puppet".html_safe, href: "#puppet" %>
     <%= eui_button "<span style='font-family: monospace'>#!</span> Using the shell".html_safe, href: "#bash" %>
@@ -75,12 +77,18 @@
     <!-- <br/> -->
     <h2>How to install:</h2>
     <br/>
+    <a name="ansible" class="anchor-offset"></a>
+    <%= render :partial => "ansible" %>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     <a name="chef" class="anchor-offset"></a>
     <%= render :partial => "chef" %>
-    <br>
-    <br>
-    <br>
-    <br>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     <a name="puppet" class="anchor-offset"></a>
     <%= render :partial => "puppet" %>
     <br/>
