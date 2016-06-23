@@ -165,7 +165,7 @@ fi
 
 echo -n "Importing packagecloud gpg key... "
 # import the gpg key
-curl https://packagecloud.io/gpg.key 2> /dev/null | apt-key add - &>/dev/null
+curl -L https://packagecloud.io/appcanary/agent/gpgkey 2> /dev/null | apt-key add - &>/dev/null
 echo "done."
 
 echo -n "Running apt-get update... "
