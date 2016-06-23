@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
+
   get 'welcome' => "onboarding#welcome", :as => :onboarding
 
 
@@ -68,6 +69,8 @@ Rails.application.routes.draw do
     get "install", on: :collection
     get "deb", on: :collection
     get "rpm", on: :collection
+
+    delete "destroy_inactive" => "servers#destroy_inactive", :as => :destroy_inactive, :on => :collection
   end
 
   resources :monitors, :only => [:show, :destroy]

@@ -2,4 +2,14 @@
   .toolbar {
     padding-bottom: 1em;
   }
+
+
+  .page-header {
+    border-bottom: none;
+    margin-bottom: 0px;
+  }
+
+  .monitors-section, .servers-section {
+    @extend .section;
+  }
 }
