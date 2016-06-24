@@ -1,8 +1,9 @@
-class CreateBundleVulnerabilities < ActiveRecord::Migration
+class CreateLogBundleVulnerabilities < ActiveRecord::Migration
   def change
     create_table :log_bundle_vulnerabilities do |t|
       t.references :bundle, index: true, foreign_key: true
       t.references :package, index: true, foreign_key: true
+      t.references :bundled_package, index: true, foreign_key: true
       t.references :vulnerability, index: true, foreign_key: true
       t.references :vulnerable_package, index: true, foreign_key: true
 
