@@ -65,6 +65,7 @@ class BundleManager
  
     # TODO: double check the exact behaviour of this
     bundle.packages = packages
+    LogBundleVulnerability.record_vulnerable_bundle!(bundle.id)
 
     bundle
   end

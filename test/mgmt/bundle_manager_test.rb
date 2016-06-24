@@ -80,4 +80,37 @@ class BundlerManagerTest < ActiveSupport::TestCase
     @bm.delete(bundle.id)
     assert_equal 0, Bundle.count
   end
+
+  it "if a bundle's packages are vulnerable, ensure we add a LogBundleVulnerability" do
+    pkgs = FactoryGirl.create_list(:ruby_package, 5)
+    vuln_pkg = pkgs.first
+
+    vuln = VulnerabilityManager.new.create(:package_name => vuln_pkg.name,
+                                           :package_platform => vuln_pkg.platform,
+                                           :patched_versions => ["> #{vuln_pkg.version}"])
+
+    assert_equal 1, VulnerablePackage.count
+    assert_equal 0, BundledPackage.count
+    assert_equal 0, LogBundleVulnerability.count
+
+    @bm = BundleManager.new(account)
+
+    bundle = @bm.create({:platform => @platform}, 
+                        pkgs.map { |p| {name: p.name, version: p.version}})
+
+    assert_equal 1, bundle.vulnerable_packages.count
+    assert_equal 1, LogBundleVulnerability.count
+
+    new_pkgs = FactoryGirl.create_list(:ruby_package, 3)
+    updated_pkgs = [vuln_pkg] + new_pkgs
+
+    @bm.update(bundle.id, 
+               updated_pkgs.map { |p| {name: p.name, version: p.version}})
+
+    # the vulnerability has not changed, so only one LogBundleVuln
+    assert_equal 1, bundle.vulnerable_packages.count
+    assert_equal 1, LogBundleVulnerability.count
+
+
+  end
 end
