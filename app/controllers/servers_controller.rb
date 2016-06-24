@@ -51,6 +51,16 @@ class ServersController < ApplicationController
     end
   end
 
+  def destroy_inactive
+    @servers = Server.find_all(current_user)
+    @silent_servers, @active_servers = @servers.partition(&:gone_silent?)
+
+    @silent_servers.each(&:destroy)
+
+    flash[:notice] = "All of your inactive servers were deleted."
+    redirect_to dashboard_path
+  end
+
   def edit
     server
   end

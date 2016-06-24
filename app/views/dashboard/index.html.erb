@@ -1,48 +1,56 @@
 <div id="dashboard">
   <section>
     <div class="col-sm-12">
-      <p>
-        At a glance: <%= at_a_glance(@monitors, @active_servers, @silent_servers) %>
-    </p>
-  </div>
+      <p> At a glance: <%= at_a_glance(@monitors, @active_servers, @silent_servers) %> </p>
+    </div>
+  </section>
+
+
+
+  <% if @monitors.present? %>
+    <div class="monitors-section">
+      <h1 class="page-header">Monitors</h1>
+      <table class="table servers">
+        <% @monitors.each do |monitor| %>
+          <%= render :partial => "monitors/list", :locals => { :monitor => monitor } %>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
+
+  <% if @active_servers.present? || @silent_servers.present? %>
+    <div class="servers-section">
+      <h1 class="page-header">Servers</h1>
+
+      <% if @active_servers.present? %>
+        <table class="table servers">
+          <% @active_servers.each do |server| %>
+            <tr class="server">
+              <%= render :partial => "servers/list", :locals => { :server => server } %>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+
+      <% if @silent_servers.present? %>
+        <h4>Inactive servers 
+          <%= link_to("Delete all inactive", destroy_inactive_servers_path, :method => :delete, :class => "btn btn-warning", :data => {:confirm => "Are you sure you want to delete all inactive servers?"})%>
+        </h4>
+        <p>
+          <strong> Psst! We haven't heard from these servers in a while:</strong>
+          <br/>
+        </p>
+
+        <table class="table servers">
+          <% @silent_servers.each do |server| %>
+            <tr class="server">
+              <%= render :partial => "servers/list", :locals => { :server => server } %>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
+
+  <% end %>
+
 </div>
-
-<% if @monitors.present? %>
-  <div class="monitors">
-    <h3>Monitors</h3>
-    <table class="table servers">
-      <% @monitors.each do |monitor| %>
-        <%= render :partial => "monitors/list", :locals => { :monitor => monitor } %>
-      <% end %>
-    </table>
-  </div>
-<% end %>
-
-<% if @active_servers.present? || @silent_servers.present? %>
-  <h3>Servers</h3>
-
-  <% if @active_servers.present? %>
-    <table class="table servers">
-      <% @active_servers.each do |server| %>
-        <tr class="server">
-          <%= render :partial => "servers/list", :locals => { :server => server } %>
-        </tr>
-      <% end %>
-    </table>
-  <% end %>
-
-  <% if @silent_servers.present? %>
-    <p>
-      <strong> Psst! We haven't heard from these servers in a while:</strong>
-    </p>
-
-    <table class="table servers">
-      <% @silent_servers.each do |server| %>
-        <tr class="server">
-          <%= render :partial => "servers/list", :locals => { :server => server } %>
-        </tr>
-      <% end %>
-    </table>
-  <% end %>
-
-<% end %>
