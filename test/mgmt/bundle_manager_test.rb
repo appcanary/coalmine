@@ -102,6 +102,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
     assert_equal 1, LogBundleVulnerability.count
 
     new_pkgs = FactoryGirl.create_list(:ruby_package, 3)
+    # 
     updated_pkgs = [vuln_pkg] + new_pkgs
 
     @bm.update(bundle.id, 
