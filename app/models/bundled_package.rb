@@ -5,7 +5,7 @@
 #  id         :integer          not null, primary key
 #  bundle_id  :integer
 #  package_id :integer
-#  vulnerable :boolean          default("f"), not null
+#  vulnerable :boolean          default("false"), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

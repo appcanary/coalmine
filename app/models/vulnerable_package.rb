@@ -12,4 +12,6 @@
 class VulnerablePackage < ActiveRecord::Base
   belongs_to :package
   belongs_to :vulnerability
+
+  has_many :bundled_packages
 end

@@ -9,8 +9,8 @@
 #  reported_at         :datetime
 #  description         :text
 #  criticality         :string
-#  patched_versions    :text
-#  unaffected_versions :text
+#  patched_versions    :text             default("{}"), is an Array
+#  unaffected_versions :text             default("{}"), is an Array
 #  cve_id              :string
 #  usn_id              :string
 #  dsa_id              :string

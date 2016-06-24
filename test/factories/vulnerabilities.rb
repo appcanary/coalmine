@@ -9,8 +9,8 @@
 #  reported_at         :datetime
 #  description         :text
 #  criticality         :string
-#  patched_versions    :text
-#  unaffected_versions :text
+#  patched_versions    :text             default("{}"), is an Array
+#  unaffected_versions :text             default("{}"), is an Array
 #  cve_id              :string
 #  usn_id              :string
 #  dsa_id              :string
@@ -24,9 +24,22 @@
 require File.join(Rails.root, "test/factories", 'factory_helper')
 
 FactoryGirl.define do
-  factory :vulnerability do
-    package_name { Faker::Hacker.ingverb }
-    package_platform { FactoryHelper.rand_platform }
 
+  sequence :package_name do |n|
+    "#{Faker::Hacker.ingverb}##{n}"
+  end
+
+  sequence :cve_id do |n|
+    "CVE-9999-$04d" % n
+  end
+
+  factory :vulnerability do
+    package_name { generate(:package_name) }
+    package_platform { FactoryHelper.rand_platform }
+    cve_id { generate(:cve_id) }
+
+    factory :ruby_vulnerability do
+      package_platform Platforms::Ruby
+    end
   end
 end

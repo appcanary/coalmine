@@ -7,7 +7,9 @@ require 'bundler/lockfile_parser'
 class GemfileParser
   def self.parse(lockfile)
     lf = Bundler::LockfileParser.new(lockfile)
-    lf.specs.map {|a| {name: a.name, kind: "rubygem", version:  {number: a.version.version, platform: a.platform.to_s}}}
+    # old version; what do we do about the platform?
+    # lf.specs.map {|a| {name: a.name, kind: "rubygem", version:  {number: a.version.version, platform: a.platform.to_s}}}
+    lf.specs.map {|a| {name: a.name, kind: "rubygem", version: a.version.version, platform: a.platform.to_s}}
   end
 end
 

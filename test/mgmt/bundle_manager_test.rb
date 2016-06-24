@@ -4,7 +4,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
   let(:account) { FactoryGirl.create(:account) }
 
   setup do
-    lockfile = File.read(File.join(Rails.root, "test/fixtures/gemcanary.gemfile.lock"))
+    lockfile = hydrate("gemcanary.gemfile.lock")
     @package_list = GemfileParser.parse(lockfile)
     @platform = "ruby"
   end

@@ -16,5 +16,7 @@ class CreatePackages < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_index :packages, [:name, :version, :platform, :release]
   end
 end

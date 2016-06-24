@@ -11,23 +11,36 @@ class PackageManager
   # TODO wrap in txn?
   # TODO handle errors sanely
   def find_or_create(package_list)
-    existing_packages = find_existing_packages(package_list)
+    existing_pkg_query = find_existing_packages(package_list)
 
     # we might not know about every package submitted.
     # Let's check!
 
-    new_packages = create_missing_packages(existing_packages, package_list)
+    create_missing_packages(existing_pkg_query, package_list)
 
-    existing_packages + new_packages
+    # this is an ActiveRecord_Relation; it gets
+    # lazily evaluated from the database.
+    # by the time we get here, the missing packages
+    # have been added, so when this gets evaluated
+    # the query behind it should return all relevant packages
+    # thereby negating the need to add new_packages above
+    # to this list.
+    existing_pkg_query
   end
 
-  def create_missing_packages(existing_packages, package_list)
+  # given an Arel query and a list of packages, determines
+  # which packages we have not seen yet and creates them.
+  #
+  # assumes that existing_packages_query was built from
+  # the items in package_list.
+
+  def create_missing_packages(existing_packages_query, package_list)
     # if these two lists are the same size, our job here is done
-    if existing_packages.count == package_list.count
+    if existing_packages_query.count == package_list.count
       return []
     end
     
-    existing_set = existing_packages.select("name, version").pluck(:name, :version).to_set
+    existing_set = existing_packages_query.select("name, version").pluck(:name, :version).to_set
 
     submitted_set = package_list.map { |p| [p[:name], p[:version]]}.to_set
 
@@ -40,7 +53,6 @@ class PackageManager
   end
 
   def find_existing_packages(package_list)
-    # TODO: make sure this queries names AND versions
     query = Package.where(:platform => @platform,
                           :release => @release)
     clauses = []
@@ -48,11 +60,19 @@ class PackageManager
     package_list.each do |pkg|
       clauses << "(name = ? AND version = ?)"
       values << pkg[:name]
-      values << pkg[:version][:number]
+      values << pkg[:version]
     end
 
     query.where(clauses.join(" OR "), *values)
   end
+
+  # def or(query, list)
+  #   clauses, values = list.reduce do |arr, item|
+  #     cs, vs = arr
+  #     andkeys = item.keys.map { |s| "#{s} = ?" }.join(" AND ")
+
+  #   end
+  # end
 
   # whenever we create a package, we check to see if it's vuln
   def create(pkg)
