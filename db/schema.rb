@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.datetime "updated_at",            null: false
   end
 
-  add_index "log_bundle_vulnerabilities", ["bundle_id", "package_id", "bundled_package_id", "vulnerability_id", "vulnerable_package_id"], name: "index_of_five_kings", unique: true, using: :btree
+  add_index "log_bundle_vulnerabilities", ["bundle_id", "package_id", "bundled_package_id", "vulnerability_id", "vulnerable_package_id"], name: "index_of_five_kings_LBV", unique: true, using: :btree
   add_index "log_bundle_vulnerabilities", ["bundle_id"], name: "index_log_bundle_vulnerabilities_on_bundle_id", using: :btree
   add_index "log_bundle_vulnerabilities", ["bundled_package_id"], name: "index_log_bundle_vulnerabilities_on_bundled_package_id", using: :btree
   add_index "log_bundle_vulnerabilities", ["package_id"], name: "index_log_bundle_vulnerabilities_on_package_id", using: :btree
@@ -131,16 +131,6 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_foreign_key "bundled_packages", "bundles"
   add_foreign_key "bundled_packages", "packages"
   add_foreign_key "bundles", "accounts"
-  add_foreign_key "log_bundle_patches", "bundled_packages"
-  add_foreign_key "log_bundle_patches", "bundles"
-  add_foreign_key "log_bundle_patches", "packages"
-  add_foreign_key "log_bundle_patches", "vulnerabilities"
-  add_foreign_key "log_bundle_patches", "vulnerable_packages"
-  add_foreign_key "log_bundle_vulnerabilities", "bundled_packages"
-  add_foreign_key "log_bundle_vulnerabilities", "bundles"
-  add_foreign_key "log_bundle_vulnerabilities", "packages"
-  add_foreign_key "log_bundle_vulnerabilities", "vulnerabilities"
-  add_foreign_key "log_bundle_vulnerabilities", "vulnerable_packages"
   add_foreign_key "vulnerable_packages", "packages"
   add_foreign_key "vulnerable_packages", "vulnerabilities"
 end
