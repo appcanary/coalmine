@@ -71,7 +71,7 @@ class BundleManager
     #
     # behaviour is tested in bundle_test.rb
     bundle.packages = packages
-    LogBundleVulnerability.record_vulnerable_bundle!(bundle.id)
+    LogBundleVulnerability.record_bundle_vulnerabilities!(bundle.id)
 
     bundle
   end
