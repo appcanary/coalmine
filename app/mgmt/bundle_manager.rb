@@ -63,13 +63,13 @@ class BundleManager
     # todo, optimize into single query obv
     # slash, that plays nicer with revisions?
  
-    # TODO: double check/test the exact behaviour of this
-    #
     # basically, this will diff existing BundledPackages
     # and only delete the ones *not in the new set*
     # thereby guaranteeing that two given BundledPackage
     # for the same package but different BP ids will represent
     # different "generations". 
+    #
+    # behaviour is tested in bundle_test.rb
     bundle.packages = packages
     LogBundleVulnerability.record_vulnerable_bundle!(bundle.id)
 

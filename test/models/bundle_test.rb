@@ -47,4 +47,35 @@ class BundleTest < ActiveSupport::TestCase
     assert_equal 3, VulnerablePackage.count
     assert_equal 2, b.vulnerable_packages.count
   end
+
+  test "whether the packages= association performs a diff" do
+    # purpose of this test is to ensure that the underlying
+    # join association (BundlePackage)'s ids remain "stable"
+    # if we update the parent association with some of the
+    # same packages.
+    bundle = FactoryGirl.create(:bundle, :platform => Platforms::Ruby)
+    
+    alpha_pkg_set = FactoryGirl.create_list(:ruby_package, 10)
+    beta_pkg_set = FactoryGirl.create_list(:ruby_package, 8)
+    beta_pkg_set = [alpha_pkg_set[0], 
+                    alpha_pkg_set[1]] + beta_pkg_set
+
+    # two sets of packages, where the beta set contains the 
+    # first two packages from the alpha set
+
+    assert_equal 0, BundledPackage.count
+    bundle.packages = alpha_pkg_set
+
+    first_two_ids = bundle.bundled_packages.limit(2).order("id ASC").map(&:id)
+    last_id = bundle.bundled_packages.last.id
+
+    # assign the beta set to packages
+    bundle.packages = beta_pkg_set
+
+    # bundled packages has for sure changed
+    assert_not_equal last_id, bundle.packages.last.id
+
+    # but the first two remain the same, since they were unchanged.
+    assert_equal first_two_ids, bundle.bundled_packages.limit(2).order("id ASC").map(&:id)
+  end
 end
