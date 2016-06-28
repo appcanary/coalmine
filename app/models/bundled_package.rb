@@ -10,12 +10,15 @@
 #  updated_at :datetime         not null
 #
 
+
+# TODO: enforce uniqueness constraint
+
 class BundledPackage < ActiveRecord::Base
   belongs_to :package
   belongs_to :bundle
 
   scope :select_log_join_vulns, -> { 
-    select('bundle_id, 
+    select('"bundled_packages".bundle_id, 
            "bundled_packages".id bundled_package_id, 
            "bundled_packages".package_id, 
            "vulnerable_packages".id vulnerable_package_id, 
