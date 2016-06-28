@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
   # this association gets persisted by user.save calls
   has_one :billing_plan, autosave: true
 
-  attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count
+  attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
 
   def self.all_from_api(order = "created_at DESC")
     api_users = Backend.all_users.reduce({}) do |hsh, usr|
@@ -67,6 +67,7 @@ class User < ActiveRecord::Base
       u.servers_count = api_users[u.datomic_id]["server-count"]
       u.active_servers_count = api_users[u.datomic_id]["active-server-count"]
       u.api_calls_count = api_users[u.datomic_id]["api-calls-count"]
+      u.monitors_count = api_users[u.datomic_id]["monitored-app-count"]
     end
   end
 

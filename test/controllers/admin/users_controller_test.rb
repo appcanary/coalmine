@@ -55,7 +55,8 @@ class Admin::UsersControllerTest < ActionController::TestCase
       Backend.stubs(:all_users).returns([{"id" => 12345,
                                           "active-server-count" => 15,
                                           "server-count" => 22,
-                                          "api-calls-count" => 100}])
+                                          "api-calls-count" => 100,
+                                          "monitored-app-count" => 12}])
       get :index
       assert_response :success
     end

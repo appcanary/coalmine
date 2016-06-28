@@ -75,7 +75,16 @@ $( document ).ready(function() {
           beating?
         </th>
         <th>
-          api count
+          checks
+        </th>
+        <th>
+          monitors
+        </th>
+        <th>
+          paying?
+        </th>
+        <th>
+          revenue
         </th>
         <th>
           last login at
@@ -109,6 +118,18 @@ $( document ).ready(function() {
 
             <td>
               <%= user.api_calls_count %>
+            </td>
+
+            <td>
+              <%= user.monitors_count %>
+            </td>
+
+            <td>
+              <%= user.has_billing? %>
+            </td>
+
+            <td>
+              <%= BillingManager.new(user).to_presenter.monthly_cost_in_dollars %>
             </td>
 
             <td>
