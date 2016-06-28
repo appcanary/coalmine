@@ -1,3 +1,10 @@
+<script>
+$( document ).ready(function() {
+  $('#users').DataTable( {
+    "paging":   false,
+  });
+});
+</script>
 <section>
   <div class="col-sm-6">
     <ul class="nav nav-pills" role="tablist">
@@ -50,7 +57,7 @@
 <section>
   <div class="col-sm-12">
     <%= link_to "New user", new_admin_user_path, :class => "btn btn-default" %>
-    <table class="table">
+    <table class="table" id="users">
       <thead>
         <th>
           email
@@ -68,7 +75,16 @@
           beating?
         </th>
         <th>
-          api count
+          checks
+        </th>
+        <th>
+          monitors
+        </th>
+        <th>
+          paying?
+        </th>
+        <th>
+          revenue
         </th>
         <th>
           last login at
@@ -102,6 +118,18 @@
 
             <td>
               <%= user.api_calls_count %>
+            </td>
+
+            <td>
+              <%= user.monitors_count %>
+            </td>
+
+            <td>
+              <%= user.has_billing? %>
+            </td>
+
+            <td>
+              <%= BillingManager.new(user).to_presenter.monthly_cost_in_dollars %>
             </td>
 
             <td>
