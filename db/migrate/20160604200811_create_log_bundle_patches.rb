@@ -9,5 +9,7 @@ class CreateLogBundlePatches < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_index :log_bundle_patches, [:bundle_id, :package_id, :bundled_package_id, :vulnerability_id, :vulnerable_package_id], unique: true, name: "index_of_five_kings_LBP"
   end
 end
