@@ -73,7 +73,7 @@ Rails.application.routes.draw do
     delete "destroy_inactive" => "servers#destroy_inactive", :as => :destroy_inactive, :on => :collection
   end
 
-  resources :monitors, :only => [:show, :destroy]
+  resources :monitors, :only => [:new, :show, :destroy, :create]
   resources :vulns, :only => [:show]
 
   namespace :admin do

@@ -9,7 +9,9 @@
 
   <% if @monitors.present? %>
     <div class="monitors-section">
-      <h1 class="page-header">Monitors</h1>
+      <h1 class="page-header">Monitors 
+          <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Monitor'.html_safe, new_monitor_path, :class => "btn btn-default")%>
+      </h1>
       <table class="table servers">
         <% @monitors.each do |monitor| %>
           <%= render :partial => "monitors/list", :locals => { :monitor => monitor } %>
@@ -50,7 +52,11 @@
         </table>
       <% end %>
     </div>
-
+  <% else %>
+    <div class="servers-section">
+      <h3 class="page-header">You're not monitoring any servers. <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Server'.html_safe, new_server_path, :class => "btn btn-default")%>
+      </h3>
+    </div>
   <% end %>
 
 </div>
