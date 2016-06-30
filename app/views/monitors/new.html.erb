@@ -7,9 +7,8 @@
         </div>
 
         <ul class="nav nav-pills nav-stacked">
-          <li><h2>Add a monitor</h2></li>
-          <li><a href="#puppet">Drag and drop</a></li>
-          <li><a href="#puppet">Using the API</a></li>
+          <li><h2>Monitors</h2></li>
+          <li><%= link_to 'Using the API', docs_path(:anchor => "create-monitor") %></li>
         </ul>
       </div>
     </div>
@@ -18,9 +17,10 @@
   <div class="col-sm-7">
     <section>
       <div class="form">
-        <h2>Create a new monitor:</h2>
 
         <div class="col-sm-8">
+          <h2>Create a new monitor:</h2>
+          <a name="righthere" class="anchor-offset"></a>
           <%= form_for Moniter.new, :url => monitors_path, :method => :post do |f| %>
             <% if @monitor.errors.present? %>
               <div class="error_explanation" role="alert">

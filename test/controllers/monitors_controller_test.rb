@@ -25,6 +25,37 @@ class MonitorsControllerTest < ActionController::TestCase
       delete :destroy, :id => "1234"
       assert_response :redirect
     end
+
+    it "should show the new page" do
+      get :new
+      assert_response :success
+    end
+
+    it "should allow new monitors to be created" do
+      VCR.use_cassette("monitor_create") do
+        post :create, {:moniter => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
+                                    :platform_release => "ruby"}}
+        assert_redirected_to dashboard_path
+      end
+    end
+
+    it "should present an error when given bad input" do
+      post :create, {:moniter => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
+                                  :platform_release => "rubyLOL"}}
+
+      assert_response :success
+      assert_not_nil assigns(:monitor).errors
+    end
+
+    it "should present an error when given a bad file" do
+      VCR.use_cassette("monitor_create_error") do 
+        post :create, {:moniter => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile"), nil, false),
+                                    :platform_release => "ruby"}}
+
+        assert_response :success
+        assert_not_nil assigns(:monitor).errors
+      end
+    end
   end
 
   describe "while unauthenticated" do

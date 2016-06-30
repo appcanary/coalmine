@@ -23,7 +23,6 @@ class MonitorsController < ApplicationController
       begin
         Moniter.create(current_user, file, pr, name)
       rescue CanaryClient::ClientError => e
-        binding.pry
         @monitor.errors = e.body["errors"].map { |e| e["title"]["message"] || e["title"]}
       end
     end
