@@ -50,6 +50,7 @@ group :test do
   gem 'mocha', '~> 1.1.0'
   gem 'webmock', '~> 1.21.0'
   gem 'vcr', '~> 2.9.3'
+  gem 'database_cleaner', '~> 1.5.3'
 end
 
 group :development do
