@@ -5,11 +5,11 @@
 #  id         :integer          not null, primary key
 #  bundle_id  :integer
 #  package_id :integer
-#  vulnerable :boolean          default("false"), not null
+#  valid_at   :datetime         not null
+#  expired_at :datetime         default("infinity"), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-
 
 # TODO: enforce uniqueness constraint
 

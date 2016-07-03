@@ -22,16 +22,35 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "bundled_package_archives", force: :cascade do |t|
+    t.integer  "bundled_package_id"
+    t.integer  "bundle_id"
+    t.integer  "package_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.datetime "valid_at",           null: false
+    t.datetime "expired_at",         null: false
+  end
+
+  add_index "bundled_package_archives", ["bundle_id"], name: "index_bundled_package_archives_on_bundle_id", using: :btree
+  add_index "bundled_package_archives", ["bundled_package_id"], name: "index_bundled_package_archives_on_bundled_package_id", using: :btree
+  add_index "bundled_package_archives", ["expired_at"], name: "index_bundled_package_archives_on_expired_at", using: :btree
+  add_index "bundled_package_archives", ["package_id"], name: "index_bundled_package_archives_on_package_id", using: :btree
+  add_index "bundled_package_archives", ["valid_at"], name: "index_bundled_package_archives_on_valid_at", using: :btree
+
   create_table "bundled_packages", force: :cascade do |t|
     t.integer  "bundle_id"
     t.integer  "package_id"
-    t.boolean  "vulnerable", default: false, null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.datetime "valid_at",   default: "now()",    null: false
+    t.datetime "expired_at", default: 'Infinity', null: false
   end
 
   add_index "bundled_packages", ["bundle_id"], name: "index_bundled_packages_on_bundle_id", using: :btree
+  add_index "bundled_packages", ["expired_at"], name: "index_bundled_packages_on_expired_at", using: :btree
   add_index "bundled_packages", ["package_id"], name: "index_bundled_packages_on_package_id", using: :btree
+  add_index "bundled_packages", ["valid_at"], name: "index_bundled_packages_on_valid_at", using: :btree
 
   create_table "bundles", force: :cascade do |t|
     t.integer  "account_id"
