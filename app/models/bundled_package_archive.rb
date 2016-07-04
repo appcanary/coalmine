@@ -19,12 +19,12 @@ class BundledPackageArchive < ActiveRecord::Base
   belongs_to :package
   belongs_to :bundle
 
-  scope :as_of_archive, ->(time) {
+  scope :select_valid_as_of, ->(time) {
     select("bundled_package_id as id, bundle_id, package_id, created_at, updated_at, valid_at, expired_at").where("valid_at <= ? and valid_at >= ?", time, time)
   }
 
   def self.as_of(time)
-    q1 = BundledPackageArchive.as_of_archive(time)
+    q1 = BundledPackageArchive.select_valid_as_of(time)
 
     q2 = BundledPackage.where("valid_at <= ? and expired_at = ?", time, 'Infinity')
 
@@ -32,9 +32,11 @@ class BundledPackageArchive < ActiveRecord::Base
   end
 
   def self.revisions
-    # lol subquery allows us to use #count properly
-    # if we just select distinct directly, Arel #count
+    # lol doing this as a subquery allows us to 
+    # use #count properly, given we're selecting distinct
+    # columns. If not in a subquery, Arel's #count
     # will wrap the query in a way that is not valid SQL
+    # https://github.com/rails/rails/issues/5554
     self.from("(select DISTINCT(valid_at, expired_at), valid_at, expired_at from bundled_package_archives) as bundled_package_archives").order(:valid_at)
   end
 
