@@ -1,8 +1,8 @@
 class CreateBundledPackages < ActiveRecord::Migration
   def change
     create_table :bundled_packages do |t|
-      t.references :bundle, index: true, foreign_key: true
-      t.references :package, index: true, foreign_key: true
+      t.references :bundle, index: true, foreign_key: true, null: false
+      t.references :package, index: true, foreign_key: true, null: false
 
       t.timestamps null: false
       t.datetime :valid_at, null: false, index: true
@@ -10,9 +10,9 @@ class CreateBundledPackages < ActiveRecord::Migration
     end
 
     create_table :bundled_package_archives do |t|
-      t.references :bundled_package, index: true
-      t.references :bundle, index: true
-      t.references :package, index: true
+      t.references :bundled_package, index: true, null: false
+      t.references :bundle, index: true, null: false
+      t.references :package, index: true, null: false
 
       t.timestamps null: false
       t.datetime :valid_at, null: false, index: true

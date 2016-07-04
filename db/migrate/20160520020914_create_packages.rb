@@ -1,9 +1,9 @@
 class CreatePackages < ActiveRecord::Migration
   def change
     create_table :packages do |t|
-      t.string :name
+      t.string :name, null: false
       t.string :source_name
-      t.string :platform
+      t.string :platform, null: false
       t.string :release
       t.string :version
       t.string :artifact

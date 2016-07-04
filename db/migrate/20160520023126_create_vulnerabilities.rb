@@ -1,8 +1,8 @@
 class CreateVulnerabilities < ActiveRecord::Migration
   def change
     create_table :vulnerabilities do |t|
-      t.string :package_name
-      t.string :package_platform
+      t.string :package_name, null: false
+      t.string :package_platform, null: false
       t.string :title
       t.datetime :reported_at
       t.text :description

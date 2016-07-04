@@ -23,9 +23,9 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   end
 
   create_table "bundled_package_archives", force: :cascade do |t|
-    t.integer  "bundled_package_id"
-    t.integer  "bundle_id"
-    t.integer  "package_id"
+    t.integer  "bundled_package_id", null: false
+    t.integer  "bundle_id",          null: false
+    t.integer  "package_id",         null: false
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.datetime "valid_at",           null: false
@@ -39,8 +39,8 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "bundled_package_archives", ["valid_at"], name: "index_bundled_package_archives_on_valid_at", using: :btree
 
   create_table "bundled_packages", force: :cascade do |t|
-    t.integer  "bundle_id"
-    t.integer  "package_id"
+    t.integer  "bundle_id",                       null: false
+    t.integer  "package_id",                      null: false
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.datetime "valid_at",   default: "now()",    null: false
@@ -53,10 +53,10 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "bundled_packages", ["valid_at"], name: "index_bundled_packages_on_valid_at", using: :btree
 
   create_table "bundles", force: :cascade do |t|
-    t.integer  "account_id"
+    t.integer  "account_id",           null: false
     t.string   "name"
     t.string   "path"
-    t.string   "platform"
+    t.string   "platform",             null: false
     t.string   "release"
     t.integer  "last_crc",   limit: 8
     t.boolean  "from_api"
@@ -68,11 +68,11 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "bundles", ["account_id"], name: "index_bundles_on_account_id", using: :btree
 
   create_table "log_bundle_patches", force: :cascade do |t|
-    t.integer  "bundle_id"
-    t.integer  "package_id"
-    t.integer  "bundled_package_id"
-    t.integer  "vulnerability_id"
-    t.integer  "vulnerable_package_id"
+    t.integer  "bundle_id",             null: false
+    t.integer  "package_id",            null: false
+    t.integer  "bundled_package_id",    null: false
+    t.integer  "vulnerability_id",      null: false
+    t.integer  "vulnerable_package_id", null: false
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
@@ -85,11 +85,11 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "log_bundle_patches", ["vulnerable_package_id"], name: "index_log_bundle_patches_on_vulnerable_package_id", using: :btree
 
   create_table "log_bundle_vulnerabilities", force: :cascade do |t|
-    t.integer  "bundle_id"
-    t.integer  "package_id"
-    t.integer  "bundled_package_id"
-    t.integer  "vulnerability_id"
-    t.integer  "vulnerable_package_id"
+    t.integer  "bundle_id",             null: false
+    t.integer  "package_id",            null: false
+    t.integer  "bundled_package_id",    null: false
+    t.integer  "vulnerability_id",      null: false
+    t.integer  "vulnerable_package_id", null: false
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "log_bundle_vulnerabilities", ["vulnerable_package_id"], name: "index_log_bundle_vulnerabilities_on_vulnerable_package_id", using: :btree
 
   create_table "packages", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",        null: false
     t.string   "source_name"
     t.string   "platform"
     t.string   "release"
@@ -120,8 +120,8 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "packages", ["name", "version", "platform", "release"], name: "index_packages_on_name_and_version_and_platform_and_release", using: :btree
 
   create_table "vulnerabilities", force: :cascade do |t|
-    t.string   "package_name"
-    t.string   "package_platform"
+    t.string   "package_name",                     null: false
+    t.string   "package_platform",                 null: false
     t.string   "title"
     t.datetime "reported_at"
     t.text     "description"
@@ -139,8 +139,8 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   end
 
   create_table "vulnerable_packages", force: :cascade do |t|
-    t.integer  "package_id"
-    t.integer  "vulnerability_id"
+    t.integer  "package_id",       null: false
+    t.integer  "vulnerability_id", null: false
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
