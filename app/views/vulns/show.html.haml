@@ -32,7 +32,7 @@
       %dt Description:
       %dd
         - @vuln.description.each_line do |str|
-          = str
+          = str.html_safe
           <br/>
 
       - if @vuln.criticality_name
