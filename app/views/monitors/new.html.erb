@@ -18,8 +18,8 @@
     <section>
       <div class="form">
 
-        <div class="col-sm-8">
-          <h2>Create a new monitor:</h2>
+        <h2>Create a new monitor:</h2>
+        <div class="col-sm-6">
           <a name="righthere" class="anchor-offset"></a>
           <%= form_for Moniter.new, :url => monitors_path, :method => :post do |f| %>
             <% if @monitor.errors.present? %>
@@ -53,6 +53,23 @@
           <% end %>
         </div>
       </div>
+      <div class="col-sm-5 col-sm-offset-1">
+        <h4>File type options</h4>
+        <p>When selecting a platform, upload the corresponding file:</p>
+        <dl class="sublist">
+          <dt>ruby</dt>
+          <dd>Your <code>Gemfile.lock</code></dd>
+
+          <dt>ubuntu</dt>
+          <dd><code>/var/lib/dpkg/status</code></dd>
+          <dt>debian</dt>
+          <dd><code>/var/lib/dpkg/status</code></dd>
+          <dt>centos</dt>
+          <dd>The output of: <code>rpm -qa</code></dd>
+        </dl>
+
+      </div>
     </section>
+
   </div>
 </section>
