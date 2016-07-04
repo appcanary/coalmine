@@ -1,0 +1,75 @@
+<section id="newmonitors" style="padding-top: 10px;">
+  <div class="fixed-side-menu">
+    <div class="outer-wrapper">
+      <div class="inner-wrapper">
+        <div style="margin-top: 20px;">
+          <%= image_tag "canary-egg.medium.png", :style => "width: 150px" %>
+        </div>
+
+        <ul class="nav nav-pills nav-stacked">
+          <li><h2>Monitors</h2></li>
+          <li><%= link_to 'Using the API', docs_path(:anchor => "create-monitor") %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-7">
+    <section>
+      <div class="form">
+
+        <h2>Create a new monitor:</h2>
+        <div class="col-sm-6">
+          <a name="righthere" class="anchor-offset"></a>
+          <%= form_for Moniter.new, :url => monitors_path, :method => :post do |f| %>
+            <% if @monitor.errors.present? %>
+              <div class="error_explanation" role="alert">
+                <h4>Oops. We encountered an error:</h4>
+
+                <ul>
+                  <% @monitor.errors.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <%= f.label :name %>
+            <div class="form-group">
+              <%= f.text_field :name, :class => "form-control" %>
+            </div>
+
+            <%= f.label :platform, "Platform & release" %>
+            <div class="form-group">
+              <%= f.select :platform_release, options_for_select(Platforms.select_platform_release), {}, :class => "form-control" %>
+            </div>
+
+            <%= f.label :file %>
+            <div class="form-group">
+              <%= f.file_field :file, :class => "form-control" %>
+            </div>
+
+            <%= f.submit "Create Monitor", :class => "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-sm-5 col-sm-offset-1">
+        <h4>File type options</h4>
+        <p>When selecting a platform, upload the corresponding file:</p>
+        <dl class="sublist">
+          <dt>ruby</dt>
+          <dd>Your <code>Gemfile.lock</code></dd>
+
+          <dt>ubuntu</dt>
+          <dd><code>/var/lib/dpkg/status</code></dd>
+          <dt>debian</dt>
+          <dd><code>/var/lib/dpkg/status</code></dd>
+          <dt>centos</dt>
+          <dd>The output of: <code>rpm -qa</code></dd>
+        </dl>
+
+      </div>
+    </section>
+
+  </div>
+</section>

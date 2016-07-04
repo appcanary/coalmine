@@ -14,7 +14,7 @@ class IsItVulnControllerTest < ActionController::TestCase
   test "should work when you submit" do
     VCR.use_cassette("isitvuln_submit") do
       @request.accept = 'application/json'
-      post :submit, {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "Gemfile.lock"), nil, false)}
+      post :submit, {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false)}
     end
 
     r = JSON.load(response.body)
