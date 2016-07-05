@@ -20,6 +20,7 @@ FactoryGirl.define do
   factory :bundle do
     association :account
     name { Faker::App.name }
+    platform { Platforms::Ruby }
     factory :bundle_with_packages do
       platform  { FactoryHelper.rand_platform }
       release "release"
