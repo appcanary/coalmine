@@ -43,7 +43,7 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
 
     # we've had 3 prev revisions times 5 packages
     assert_equal 15, BundledPackageArchive.count
-    assert_equal 3, BundledPackageArchive.revisions.count
+    assert_equal 3, BundledPackageArchive.revisions(bundle.id).count
 
     fetched_rev = BundledPackageArchive.as_of(reference_t).where(:bundle_id => bundle.id)
     assert_equal Set.new(second_rev.map(&:id)), Set.new(fetched_rev.pluck(:id))
