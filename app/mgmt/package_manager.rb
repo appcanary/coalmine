@@ -53,6 +53,8 @@ class PackageManager
   end
 
   def find_existing_packages(package_list)
+    return [] if package_list.empty?
+
     query = Package.where(:platform => @platform,
                           :release => @release)
     clauses = []

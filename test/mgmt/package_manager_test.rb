@@ -57,7 +57,7 @@ class PackageManagerTest < ActiveSupport::TestCase
 
       # build a query pointing to only two packages that already exist,
       # tho it has multiple instances of each
-      package_list = [p1, p2, p1].map { |p| {name: p.name, version: p.version}}
+      package_list = [p1, p2, p1].map(&:to_simple_h)
       package_list = package_list +  [{name: "fakeMcFakerson", version: "1.2.3"},
                                       {name: "fakeMcFakerson", version: "1.2.3"}]
 
@@ -90,6 +90,11 @@ class PackageManagerTest < ActiveSupport::TestCase
 
       assert_equal 2, Package.count
       assert_equal 1, vuln.packages.count
+    end
+
+    it "should return an empty list when given an empty list" do
+      @pm = PackageManager.new(Platforms::Ruby, nil)
+      assert_equal [], @pm.find_or_create([])
     end
   end
 end
