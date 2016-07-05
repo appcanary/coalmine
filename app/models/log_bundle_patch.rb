@@ -49,6 +49,8 @@ class LogBundlePatch < ActiveRecord::Base
   end
 
   def self.record_bundle_patches!(bundle_id)
+    # has not been patched
+    # and does not current exist in the bundle
      lbv = LogBundleVulnerability.where(
        'NOT EXISTS 
        (SELECT 1 FROM "log_bundle_patches" lbp WHERE

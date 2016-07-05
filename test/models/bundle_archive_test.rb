@@ -3,7 +3,7 @@ require 'test_helper'
 class BundledPackageArchiveTest < ActiveSupport::TestCase
   self.use_transactional_fixtures = false
 
-  before :each do
+  after :each do
     DatabaseCleaner.clean
   end
 

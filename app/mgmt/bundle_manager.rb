@@ -57,13 +57,8 @@ class BundleManager
 
   protected
   def assign_packages!(bundle, packages)
-    # TODO: packagelog? archive?
-    create_revision!(bundle, packages)
-
-    # todo, optimize into single query obv
-    # slash, that plays nicer with revisions?
- 
-    # basically, this will diff existing BundledPackages
+    # TODO: transaction
+    # this will diff existing BundledPackages
     # and only delete the ones *not in the new set*
     # thereby guaranteeing that two given BundledPackage
     # for the same package but different BP ids will represent
@@ -71,13 +66,11 @@ class BundleManager
     #
     # behaviour is tested in bundle_test.rb
     bundle.packages = packages
+
+    # A bundle has changed! Time to record any logs
     LogBundleVulnerability.record_bundle_vulnerabilities!(bundle.id)
+    LogBundlePatch.record_bundle_patches!(bundle.id)
 
     bundle
   end
-
-  def create_revision!(bundle, packages)
-    # eh tbd
-  end
-
 end
