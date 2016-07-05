@@ -20,7 +20,7 @@ class BundledPackageArchive < ActiveRecord::Base
   belongs_to :bundle
 
   scope :select_valid_as_of, ->(time) {
-    select("bundled_package_id as id, bundle_id, package_id, created_at, updated_at, valid_at, expired_at").where("valid_at <= ? and valid_at >= ?", time, time)
+    select("bundled_package_id as id, bundle_id, package_id, created_at, updated_at, valid_at, expired_at").where("valid_at <= ? and expired_at > ?", time, time)
   }
 
   def self.as_of(time)

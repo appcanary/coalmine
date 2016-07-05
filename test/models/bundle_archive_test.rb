@@ -25,7 +25,8 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
     bundle = FactoryGirl.create(:bundle)
 
     # initial revision
-    bundle.packages = FactoryGirl.create_list(:ruby_package, 5)
+    first_rev = FactoryGirl.create_list(:ruby_package, 5)
+    bundle.packages = first_rev
     assert_equal 0, BundledPackageArchive.count
 
     # second revision
@@ -46,7 +47,14 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
     assert_equal 3, BundledPackageArchive.revisions(bundle.id).count
 
     fetched_rev = BundledPackageArchive.as_of(reference_t).where(:bundle_id => bundle.id)
-    assert_equal Set.new(second_rev.map(&:id)), Set.new(fetched_rev.pluck(:id))
+    assert_equal Set.new(second_rev.map(&:id)), Set.new(fetched_rev.map(&:id))
 
+    # okay. Now let's give it a rando date
+    # the following should only fetch us the first five packages
+    # since the timestamp is set to before the validity of second_rev
+    new_ref_t = Time.at(reference_t.to_f - 0.001)
+
+    fetched_rev_2 = BundledPackageArchive.as_of(new_ref_t).where(:bundle_id => bundle.id)
+    assert_equal Set.new(first_rev.map(&:id)), Set.new(fetched_rev_2.map(&:id))
   end
 end
