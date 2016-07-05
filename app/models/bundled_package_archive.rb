@@ -31,17 +31,17 @@ class BundledPackageArchive < ActiveRecord::Base
     BundledPackage.from("(#{q1.to_sql} UNION #{q2.to_sql}) AS bundled_packages")
   end
 
-  def self.revisions
+  def self.revisions(bundle_id)
     # lol doing this as a subquery allows us to 
     # use #count properly, given we're selecting distinct
     # columns. If not in a subquery, Arel's #count
     # will wrap the query in a way that is not valid SQL
     # https://github.com/rails/rails/issues/5554
-    self.from("(select DISTINCT(valid_at, expired_at), valid_at, expired_at from bundled_package_archives) as bundled_package_archives").order(:valid_at)
+    self.from("(select DISTINCT(valid_at, expired_at), bundle_id, valid_at, expired_at from bundled_package_archives) as bundled_package_archives").where(:bundle_id => bundle_id).order(:valid_at)
   end
 
-  def self.prev_revision
-    t = revisions.last.valid_at
-    BundledPackage.from("(#{self.as_of_archive(t).to_sql}) AS bundled_packages")
+  def self.prev_revision(bundle_id)
+    t = revisions(bundle_id).last.valid_at
+    BundledPackage.from("(#{self.as_of_archive(t).to_sql}) AS bundled_packages").where(:bundle_id => bundle_id)
   end
 end
