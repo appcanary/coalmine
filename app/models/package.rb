@@ -60,4 +60,8 @@ class Package < ActiveRecord::Base
   def comparator
     @comparator ||= Platforms.comparator_for(self.platform).new(self.version)
   end
+
+  def to_simple_h
+    {name: name, version: version}
+  end
 end
