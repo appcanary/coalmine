@@ -11,27 +11,35 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
     bundle = FactoryGirl.create(:bundle_with_packages)
     new_packages = FactoryGirl.create_list(:package, 5)
 
-    old_pbundles = bundle.bundled_packages.to_a
+    old_pbundles = bundle.bundled_packages.reload.to_a
     assert_equal 0, BundledPackageArchive.count
+
+    assert_equal Float::INFINITY, bundle.bundled_packages.first.expired_at
 
     # let's archive some bundled packages
     bundle.packages = new_packages
 
     assert_equal old_pbundles.count, BundledPackageArchive.count
     assert_equal false, BundledPackageArchive.where(:expired_at => Float::INFINITY).present?
+
+    # the old pbundles should be the entire content of BPA
+    bpa_arr = BundledPackageArchive.all.map { |bpa| [bpa.bundled_package_id, bpa.bundle_id, bpa.package_id, bpa.valid_at] }
+    bp_arr = old_pbundles.map { |bp| [bp.id, bp.bundle_id, bp.package_id, bp.valid_at] }
+
+    assert_equal Set.new(bp_arr), Set.new(bpa_arr)
   end
 
   test "retrieving the bundle as it was 2 revisions ago" do
     bundle = FactoryGirl.create(:bundle)
 
     # initial revision
-    first_rev = FactoryGirl.create_list(:ruby_package, 5)
-    bundle.packages = first_rev
+    bundle.packages = FactoryGirl.create_list(:ruby_package, 5)
+    first_rev = bundle.bundled_packages.reload.to_a
     assert_equal 0, BundledPackageArchive.count
 
     # second revision
     bundle.packages = FactoryGirl.create_list(:ruby_package, 5)
-    second_rev = bundle.bundled_packages.to_a
+    second_rev = bundle.bundled_packages.reload.to_a
     assert_equal 5, BundledPackageArchive.count
 
     reference_t = second_rev.first.valid_at
