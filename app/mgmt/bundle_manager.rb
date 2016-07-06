@@ -21,7 +21,7 @@ class BundleManager
 
     # TODO: wrap all of this logic in a transaction, obv
     unless bundle.save
-      raise "package set problem to be fixed later"
+      raise "problem with bundle to be fixed later"
     end
 
     packages = PackageManager.new(platform, release).find_or_create(package_list)
@@ -51,7 +51,6 @@ class BundleManager
   def delete(bundle_id)
     bundle = Bundle.where(:account_id => @account.id).find(bundle_id)
 
-    # TODO: packagelog? archive?
     bundle.destroy
   end
 
@@ -68,8 +67,7 @@ class BundleManager
     bundle.packages = packages
 
     # A bundle has changed! Time to record any logs
-    LogBundleVulnerability.record_bundle_vulnerabilities!(bundle.id)
-    LogBundlePatch.record_bundle_patches!(bundle.id)
+    ReportManager.new(bundle.id).on_bundle_change
 
     bundle
   end

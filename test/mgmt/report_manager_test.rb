@@ -14,7 +14,7 @@
 
 require 'test_helper'
 
-class LogBundleVulnerabilityTest < ActiveSupport::TestCase
+class ReportManagerTest < ActiveSupport::TestCase
   self.use_transactional_fixtures = false
 
   after :each do
