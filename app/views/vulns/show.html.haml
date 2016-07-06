@@ -52,8 +52,8 @@
         - else
           No patches exist right now
 
-        %dt Unaffected Versions:
-        %dd
+      %dt Unaffected Versions:
+      %dd
         - if @vuln.unaffected_versions.present?
           %pre{style: "border: none;"}
             - @vuln.unaffected_versions.each do |vers|
