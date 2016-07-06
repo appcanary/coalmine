@@ -3,12 +3,15 @@
 - else
   .topbar
   %section
-    .col-sm-6
-      %h1 More information:
+    .col-sm-12
+      %h1 #{@vuln.title}
 %section
   .col-sm-12
     %dl.vulnerability
-      - if @vuln.artifacts.present?
+      - if @vuln.source_aritfact_name.present?
+        %dt Source Package:
+        %dd= @vuln.source_artifact_name
+      - elsif @vuln.artifacts.present?
         - if @vuln.artifacts.count > 1
           %dt Packages:
         - else
@@ -48,4 +51,14 @@
               <br/>
         - else
           No patches exist right now
+
+        %dt Unaffected Versions:
+        %dd
+        - if @vuln.unaffected_versions.present?
+          %pre{style: "border: none;"}
+            - @vuln.unaffected_versions.each do |vers|
+              = vers
+              <br/>
+        - else
+          No unaffected exist right now
 
