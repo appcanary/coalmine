@@ -1,6 +1,6 @@
 class CreateBundles < ActiveRecord::Migration
   def change
-    create_table :bundles do |t|
+    ArchiveMigrator.new(self).create_table :bundles do |t|
       t.references :account, index: true, foreign_key: true, null: false
       t.string :name
       t.string :path

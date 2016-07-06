@@ -1,6 +1,6 @@
 class CreatePackages < ActiveRecord::Migration
   def change
-    create_table :packages do |t|
+    ArchiveMigrator.new(self).create_table(:packages) do |t|
       t.string :name, null: false
       t.string :source_name
       t.string :platform, null: false

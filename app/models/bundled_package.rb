@@ -3,12 +3,12 @@
 # Table name: bundled_packages
 #
 #  id         :integer          not null, primary key
-#  bundle_id  :integer
-#  package_id :integer
-#  valid_at   :datetime         not null
-#  expired_at :datetime         default("infinity"), not null
+#  bundle_id  :integer          not null
+#  package_id :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  valid_at   :datetime         not null
+#  expired_at :datetime         default("infinity"), not null
 #
 
 # TODO: enforce uniqueness constraint

@@ -3,18 +3,19 @@
 # Table name: bundles
 #
 #  id         :integer          not null, primary key
-#  account_id :integer
+#  account_id :integer          not null
 #  name       :string
 #  path       :string
-#  platform   :string
+#  platform   :string           not null
 #  release    :string
 #  last_crc   :integer
 #  from_api   :boolean
 #  deleted_at :datetime
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  valid_at   :datetime         not null
+#  expired_at :datetime         default("infinity"), not null
 #
-
 
 FactoryGirl.define do
   factory :bundle do

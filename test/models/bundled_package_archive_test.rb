@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: bundled_package_archives
+#
+#  id                 :integer          not null, primary key
+#  bundled_package_id :integer          not null
+#  bundle_id          :integer          not null
+#  package_id         :integer          not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  valid_at           :datetime         not null
+#  expired_at         :datetime         not null
+#
+
 require 'test_helper'
 
 class BundledPackageArchiveTest < ActiveSupport::TestCase

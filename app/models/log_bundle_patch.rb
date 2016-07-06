@@ -3,11 +3,11 @@
 # Table name: log_bundle_patches
 #
 #  id                    :integer          not null, primary key
-#  bundle_id             :integer
-#  package_id            :integer
-#  bundled_package_id    :integer
-#  vulnerability_id      :integer
-#  vulnerable_package_id :integer
+#  bundle_id             :integer          not null
+#  package_id            :integer          not null
+#  bundled_package_id    :integer          not null
+#  vulnerability_id      :integer          not null
+#  vulnerable_package_id :integer          not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #

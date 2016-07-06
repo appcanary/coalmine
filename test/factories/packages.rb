@@ -3,7 +3,7 @@
 # Table name: packages
 #
 #  id          :integer          not null, primary key
-#  name        :string
+#  name        :string           not null
 #  source_name :string
 #  platform    :string
 #  release     :string
@@ -16,7 +16,10 @@
 #  origin      :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  valid_at    :datetime         not null
+#  expired_at  :datetime         default("infinity"), not null
 #
+
 require File.join(Rails.root, "test/factories", 'factory_helper')
 
 FactoryGirl.define do

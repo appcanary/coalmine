@@ -1,15 +1,15 @@
 # == Schema Information
 #
-# Table name: bundled_packages_archive
+# Table name: bundled_package_archives
 #
 #  id                 :integer          not null, primary key
-#  bundled_package_id :integer
-#  bundle_id          :integer
-#  package_id         :integer
-#  valid_at           :datetime         not null
-#  expired_at         :datetime         not null
+#  bundled_package_id :integer          not null
+#  bundle_id          :integer          not null
+#  package_id         :integer          not null
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  valid_at           :datetime         not null
+#  expired_at         :datetime         not null
 #
 
 # TODO: enforce uniqueness constraint

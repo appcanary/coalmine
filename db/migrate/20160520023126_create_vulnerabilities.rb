@@ -1,6 +1,6 @@
 class CreateVulnerabilities < ActiveRecord::Migration
   def change
-    create_table :vulnerabilities do |t|
+    ArchiveMigrator.new(self).create_table :vulnerabilities do |t|
       t.string :package_name, null: false
       t.string :package_platform, null: false
       t.string :title
