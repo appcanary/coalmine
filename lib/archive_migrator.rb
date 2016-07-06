@@ -1,6 +1,6 @@
 class ArchiveMigrator
   class TableBuilder
-    attr_accessor :arguments
+    attr_accessor :arguments, :is_archive
     def initialize
       self.arguments = []
     end
@@ -48,56 +48,67 @@ class ArchiveMigrator
 
   def create_table(table_name)
     singular_table_name = table_name.to_s.singularize.to_sym
-    archive_table_name = "#{singular_table_name}_archives"
+    archive_table_name = "#{singular_table_name}_archives".to_sym
+    
     table_builder = TableBuilder.new
 
     # collect schema from migration
     yield table_builder
-    build_first_table(table_name, table_builder.deep_clone)
 
+    # we now know what the table will look like.
+    archive_table_builder = build_archive_schema(table_builder, singular_table_name)
+
+    construct_table!(table_name, table_builder)
+    construct_table!(archive_table_name, archive_table_builder)
+
+    construct_trigger!(table_name, archive_table_name, archive_table_builder, table_builder)
+  end
+
+  def build_archive_schema(tb, singular_table_name)
     # the archive table needs to refer back to the orig table
-    arch_table_builder = table_builder.deep_clone
+    arch_table_builder = tb.deep_clone
     arch_table_builder.add_argument(:references, singular_table_name, index: true, null: false)
-
-    build_archive_table(archive_table_name, singular_table_name, arch_table_builder.deep_clone)
-
-    build_trigger(table_name, archive_table_name, arch_table_builder, table_builder)
+    arch_table_builder.is_archive = true
+    arch_table_builder
   end
 
-  def build_first_table(table_name, table_builder)
-    # output what we received
-    migration.create_table table_name do |t|
-      table_builder.arguments.each do |type, args|
-        t.send(type, *args.clone)
+  def construct_table!(table_name, table_builder)
+    builder = table_builder.deep_clone
+
+    self.migration.create_table(table_name) do |t|
+ 
+      if builder.is_archive
+        builder.arguments.each do |type, args|
+          new_args = filter_fks(args)
+          t.send(type, *new_args)
+        end
+
+      else
+        builder.arguments.each do |type, args|
+          t.send(type, *args)
+        end
       end
 
-      # but add our archive columns
+      # --- we've inputted the schema provided
+      # from the migration. now we add our archive columns
       t.datetime :valid_at, null: false, index: true
-      t.datetime :expired_at, null: false, index: true, default: 'infinity'
-    end
 
-    # ya can't a column value default to a function output using AR::Migration
-    # for Reasons, so let's alter it using SQL
-    migration.execute "ALTER TABLE #{table_name} ALTER COLUMN valid_at SET DEFAULT CURRENT_TIMESTAMP"
-
-  end
-
-  def build_archive_table(archive_table_name, singular_table_name, table_builder)
-    # now we recreate our schema above, but into an _archives table
-
-    migration.create_table archive_table_name.to_sym do |t|
-
-      # dupe the schema we received above
-      table_builder.arguments.each do |type, args|
-        new_args = filter_fks(args)
-        t.send(type, *new_args)
+      if builder.is_archive
+        t.datetime :expired_at, null: false, index: true
+      else
+        t.datetime :expired_at, null: false, index: true, default: 'infinity'
       end
-      t.datetime :valid_at, null: false, index: true
-      t.datetime :expired_at, null: false, index:true
+
+    end
+
+    unless builder.is_archive
+      # ya can't have column value default to a function output using AR::Migration
+      # for Reasons, so let's alter it using SQL
+      migration.execute "ALTER TABLE #{table_name} ALTER COLUMN valid_at SET DEFAULT CURRENT_TIMESTAMP"
     end
   end
 
-  def build_trigger(table_name, archive_table_name, arch_table_builder, orig_table_builder)
+  def construct_trigger!(table_name, archive_table_name, arch_table_builder, orig_table_builder)
     orig_table_cols = orig_table_builder.columns.map{|s| "OLD."+s}.join(", ")
     arch_table_cols = arch_table_builder.columns.join(", ")
 
