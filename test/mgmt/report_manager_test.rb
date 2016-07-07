@@ -130,11 +130,14 @@ class ReportManagerTest < ActiveSupport::TestCase
     second_log = LogBundleVulnerability.last
 
     assert_equal vuln_2.id, second_log.vulnerability_id
+    
+    # the bundle wasn't changed, so to confirm:
+    assert_equal 1, LogBundlePatch.count
 
 
     # ###############
     # SCENARIO THREE:
-    # A bundle gets updated with a vulnerable package
+    # An existing bundle gets updated with a vulnerable package
     # ###############
 
 

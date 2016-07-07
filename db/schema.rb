@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.integer  "bundled_package_id",    null: false
     t.integer  "vulnerability_id",      null: false
     t.integer  "vulnerable_package_id", null: false
+    t.datetime "occurred_at",           null: false
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
@@ -115,6 +116,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.integer  "bundled_package_id",    null: false
     t.integer  "vulnerability_id",      null: false
     t.integer  "vulnerable_package_id", null: false
+    t.datetime "occurred_at"
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end

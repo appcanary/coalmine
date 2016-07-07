@@ -6,6 +6,7 @@ class CreateLogBundlePatches < ActiveRecord::Migration
       t.references :bundled_package, index: true, null: false
       t.references :vulnerability, index: true, null: false
       t.references :vulnerable_package, index: true, null: false
+      t.datetime :occurred_at, null: false
 
       t.timestamps null: false
     end
