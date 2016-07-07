@@ -24,7 +24,8 @@ class BundledPackage < ActiveRecord::Base
            "bundled_packages".id bundled_package_id, 
            "bundled_packages".package_id, 
            "vulnerable_packages".id vulnerable_package_id, 
-           "vulnerable_packages".vulnerability_id').
+           "vulnerable_packages".vulnerability_id,
+           "bundled_packages".valid_at occurred_at').
            joins_vulns
              }
 
