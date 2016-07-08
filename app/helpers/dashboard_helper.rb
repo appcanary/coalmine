@@ -36,6 +36,8 @@ module DashboardHelper
                     ["centos.png", "CentOS"]
                   when "ubuntu"
                     ["ubuntu.png", "Ubuntu"]
+                  when "amzn"
+                    ["amzn.png", "Amazon Linux"]
                   end
 
     content_tag(:span) do 
