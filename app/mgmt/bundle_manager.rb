@@ -1,7 +1,7 @@
 class BundleManager
   attr_accessor :account
   def initialize(account)
-    @account = account
+    self.account = account
   end
 
 
