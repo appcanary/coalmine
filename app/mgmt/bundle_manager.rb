@@ -19,22 +19,27 @@ class BundleManager
                         :last_crc => opt[:last_crc],
                         :from_api => opt[:from_api])
 
-    # TODO: wrap all of this logic in a transaction, obv
-    unless bundle.save
-      raise "problem with bundle to be fixed later"
+    bundle.transaction do
+      unless bundle.save
+        raise "problem with bundle to be fixed later"
+      end
+
+      packages = PackageManager.new(platform, release).find_or_create(package_list)
+      bundle = assign_packages!(bundle, packages)
     end
 
-    packages = PackageManager.new(platform, release).find_or_create(package_list)
-
-    return assign_packages!(bundle, packages)
+    bundle
   end
 
   def update(bundle_id, package_list)
     bundle = Bundle.where(:account_id => @account.id).find(bundle_id)
 
-    packages = PackageManager.new(bundle.platform, bundle.release).find_or_create(package_list)
+    bundle.transaction do
+      packages = PackageManager.new(bundle.platform, bundle.release).find_or_create(package_list)
+      bundle = assign_packages!(bundle, packages)
+    end
 
-    return assign_packages!(bundle, packages)
+    bundle
   end
 
   def update_name(bundle_id, name)
@@ -56,7 +61,6 @@ class BundleManager
 
   protected
   def assign_packages!(bundle, packages)
-    # TODO: transaction
     # this will diff existing BundledPackages
     # and only delete the ones *not in the new set*
     # thereby guaranteeing that two given BundledPackage

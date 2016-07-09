@@ -48,7 +48,7 @@ class PackageManager
 
     new_packages.map do |name, version|
       self.create(:name => name,
-                 :version => version)
+                  :version => version)
     end
   end
 
@@ -71,17 +71,19 @@ class PackageManager
   # whenever we create a package, we check to see if it's vuln
   def create(pkg)
     package = Package.new(:platform => @platform,
-                       :release => @release,
-                       :name => pkg[:name],
-                       :version => pkg[:version],
-                       :origin => "user")
+                          :release => @release,
+                          :name => pkg[:name],
+                          :version => pkg[:version],
+                          :origin => "user")
 
-    unless package.save
-      raise "package problem, deal with this somehow later"
+    package.transaction(requires_new: true) do
+      unless package.save
+        raise "package problem, deal with this somehow later"
+      end
+
+      possible_vulns = package.concerning_vulnerabilities
+      VulnerabilityManager.new.update_affecting_vulnerabilities!(possible_vulns, package)
     end
-
-    possible_vulns = package.concerning_vulnerabilities
-    VulnerabilityManager.new.update_affecting_vulnerabilities!(possible_vulns, package)
     return package
   end
 end

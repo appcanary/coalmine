@@ -83,15 +83,6 @@ class LogBundlePatch < ActiveRecord::Base
                  :occurred_at => lbp.occurred_at)
     end
 
-
-# 
-#     lbv = LogBundleVulnerability.unpatched_vuln_logs.where(
-#       'NOT EXISTS
-#        (SELECT 1 from "bundled_packages" bp WHERE 
-#          bp.bundle_id = "log_bundle_vulnerabilities".bundle_id AND
-#          bp.package_id = "log_bundle_vulnerabilities".package_id AND
-#          bp.id = "log_bundle_vulnerabilities".bundled_package_id)').
-#       where('"log_bundle_vulnerabilities".vulnerability_id = ?', vuln_id)
   end
 
   def self.record_bundle_patches!(bundle_id)
