@@ -59,20 +59,6 @@ class ReportManagerTest < ActiveSupport::TestCase
     assert_equal 1, bundle.vulnerable_packages.count
     assert_equal 1, LogBundleVulnerability.count
 
-    # -----
-    # So what happens if we receive an update on the bundle?
-    # The user throws in a bunch of new packages *but does not update*
-    # the vulnerable one.
-
-    pkgs_set_2 = FactoryGirl.create_list(:ruby_package, 3)
-    vuln_pkgs_set_2 = [vuln_pkg_1] + pkgs_set_2
-
-    @bm.update(bundle.id, vuln_pkgs_set_2.map(&:to_simple_h))
-
-    # the vulnerability has not changed, therefore only one LogBundleVuln
-    assert_equal 1, bundle.vulnerable_packages.count
-    assert_equal 1, LogBundleVulnerability.count
-    assert_equal 0, LogBundlePatch.count
 
     # let's assert that the LBV is recording the right things
     log = LogBundleVulnerability.first
@@ -84,11 +70,31 @@ class ReportManagerTest < ActiveSupport::TestCase
     assert_equal vuln_1.id, log.vulnerability_id
     assert_equal VulnerablePackage.where(:package_id => vuln_pkg_1.id).pluck(:id)[0], log.vulnerable_package_id
 
-    # ------
-    # We now know that if we update the bundle with the same
-    # package twice, we don't get multiple logs.
+
+    # ############
+    # SCENARIO TWO
+    # A bundle with a vulnerable package is updated, but the vuln package
+    # is kept in the bundle.
+    # ############
+
+    pkgs_set_2 = FactoryGirl.create_list(:ruby_package, 3)
+    vuln_pkgs_set_2 = [vuln_pkg_1] + pkgs_set_2
+
+    @bm.update(bundle.id, vuln_pkgs_set_2.map(&:to_simple_h))
+
+    # the vulnerability has not changed, therefore only one LogBundleVuln
+    assert_equal 1, bundle.vulnerable_packages.count
+    assert_equal 1, LogBundleVulnerability.count
+    assert_equal 0, LogBundlePatch.count
+
+    # ##############
+    # SCENARIO THREE
     #
-    # What if we reset the bundle and re-add the offending package?
+    # A bundle with a vulnerable package is updated to have zero packages,
+    # i.e. all packages are removed, and the problem is patched.
+    #
+    # The vulnerable package is then readded.
+    #
     # From the perspective of the bundle, this is a new package.
     # From the perspective of the LBV, this should be a new warning -
     # you're vulnerable again!
@@ -103,14 +109,10 @@ class ReportManagerTest < ActiveSupport::TestCase
     # we now see another LBV.
     assert_equal 2, LogBundleVulnerability.count
     assert_equal vuln_pkg_1.id, LogBundleVulnerability.last.package_id
- 
 
-    # fabulous. This section was a separate test but I see no reason
-    # not to include it in this scenario.
-    
 
     # #############
-    # SCENARIO TWO: 
+    # SCENARIO FOUR: 
     # A vulnerability that affects a package already in the bundle
     # gets created.
     # #############
@@ -120,8 +122,8 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     # mark it as vuln
     vuln_2 = VulnerabilityManager.new.create(:package_name => vuln_pkg_2.name,
-                                               :package_platform => vuln_pkg_2.platform,
-                                               :patched_versions => ["> #{vuln_pkg_2.version}"])
+                                             :package_platform => vuln_pkg_2.platform,
+                                             :patched_versions => ["> #{vuln_pkg_2.version}"])
 
     # did we create another LBV?
     assert_equal 2, VulnerablePackage.count
@@ -131,12 +133,12 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     assert_equal vuln_2.id, second_log.vulnerability_id
     
-    # the bundle wasn't changed, so to confirm:
+    # the bundle wasn't changed, and so nothing was patched
     assert_equal 1, LogBundlePatch.count
 
 
-    # ###############
-    # SCENARIO THREE:
+    # #############
+    # SCENARIO FIVE
     # An existing bundle gets updated with a vulnerable package
     # ###############
 
@@ -153,5 +155,61 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     assert_equal 4, LogBundleVulnerability.where(:bundle_id => bundle.id).count
     assert_equal 3, LogBundlePatch.where(:bundle_id => bundle.id).count
+  end
+
+  test "when a vuln gets edited and now affects a different set of packages, both LBV and LBP are generated" do
+    pkg1_name = "fakemctest"
+    pkg2_name = "fakemctest2"
+  
+    pkg1_set = 10.times.map do |i|
+      FactoryGirl.create(:ruby_package,
+                         :name => pkg1_name,
+                         :version => "1.0.#{i}")
+
+    end
+
+    pkg2_set = 10.times.map do |i|
+      FactoryGirl.create(:ruby_package,
+                         :name => pkg2_name,
+                         :version => "2.0.#{i}")
+
+    end
+
+
+    vuln1 = VulnerabilityManager.new.create(:package_name => pkg1_name,
+                                           :package_platform => Platforms::Ruby,
+                                           :patched_versions => ["> 1.0.1"])
+    vuln2 = VulnerabilityManager.new.create(:package_name => pkg2_name,
+                                            :package_platform => Platforms::Ruby,
+                                            :patched_versions => ["> 2.0.1"])
+    assert_equal 4, VulnerablePackage.count
+    
+    # version = 1.0.1
+    vuln_pkg1 = pkg1_set.second
+
+    # version = 2.0.2
+    notvuln_pkg2 = pkg2_set[2]
+
+
+    @bm = BundleManager.new(account)
+    bundle = @bm.create({:platform => @platform}, [vuln_pkg1.to_simple_h, notvuln_pkg2.to_simple_h])
+    
+    # one LBV thank you
+    assert_equal 1, LogBundleVulnerability.count
+    assert_equal 0, LogBundlePatch.count
+
+    # okay so now we have all this new info coming in and
+    # vuln_pkg1 is no longer vuln!
+
+    VulnerabilityManager.new.update(vuln1.id, :patched_versions => ["> 1.0.0"])
+    assert_equal 1, LogBundlePatch.count
+    assert_equal 1, LogBundleVulnerability.count # just to double check
+
+    # whelp, and look at that, notvuln_pkg2 is now vulnerable!
+    VulnerabilityManager.new.update(vuln2.id, :patched_versions => ["> 2.0.2"])
+    
+    assert_equal 2, LogBundleVulnerability.count
+    assert_equal 1, LogBundlePatch.count # just to double check
+
   end
 end

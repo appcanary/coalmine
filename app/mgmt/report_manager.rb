@@ -6,6 +6,7 @@ class ReportManager
 
   def on_vulnerability_change(vuln_id)
     LogBundleVulnerability.record_vulnerability!(vuln_id)
+    LogBundlePatch.record_vulnerability_change!(vuln_id)
   end
 
   def on_bundle_change

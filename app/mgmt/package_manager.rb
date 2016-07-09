@@ -68,14 +68,6 @@ class PackageManager
     query.where(clauses.join(" OR "), *values)
   end
 
-  # def or(query, list)
-  #   clauses, values = list.reduce do |arr, item|
-  #     cs, vs = arr
-  #     andkeys = item.keys.map { |s| "#{s} = ?" }.join(" AND ")
-
-  #   end
-  # end
-
   # whenever we create a package, we check to see if it's vuln
   def create(pkg)
     package = Package.new(:platform => @platform,

@@ -26,8 +26,8 @@ class BundledPackage < ActiveRecord::Base
            "vulnerable_packages".id vulnerable_package_id, 
            "vulnerable_packages".vulnerability_id,
            "bundled_packages".valid_at occurred_at').
-           joins_vulns
-             }
+           joins_vulns 
+  }
 
   scope :joins_vulns, -> {
     joins('INNER JOIN "vulnerable_packages" ON

@@ -26,7 +26,6 @@ class LogBundlePatch < ActiveRecord::Base
   # 2. Vulnerability that affects a package in bundle gets deleted
   # 3. Vulnerability that affects a package is edited, & package no longer affected
   
-  # untested; waiting for VulnMger#update
   def self.record_vulnerability_change!(vuln_id)
 
 
@@ -54,6 +53,36 @@ class LogBundlePatch < ActiveRecord::Base
     # Therefore, this should only affect thigns in current bundles.
     # Specifically, we're only concerned with packages in current bundles
     # that used to be affected by this vuln but now aren't.
+    
+    lbp = BundledPackage.
+      select('"bundled_packages".bundle_id, 
+           "bundled_packages".id bundled_package_id, 
+           "bundled_packages".package_id, 
+           "vulnerable_package_archives".id vulnerable_package_id, 
+           "vulnerable_package_archives".vulnerability_id,
+           "vulnerable_package_archives".expired_at occurred_at').
+           joins('INNER JOIN "vulnerable_package_archives" ON "vulnerable_package_archives".package_id = "bundled_packages".package_id').
+           where('"bundled_packages".valid_at < "vulnerable_package_archives".expired_at').
+           where('"vulnerable_package_archives".vulnerability_id = ?', vuln_id).
+           where('NOT EXISTS
+            (SELECT 1 from "log_bundle_patches" lbp WHERE 
+            lbp.bundle_id = "bundled_packages".bundle_id AND
+            lbp.package_id = "bundled_packages".package_id AND
+            lbp.bundled_package_id = "bundled_packages".id AND
+            lbp.vulnerability_id = "vulnerable_package_archives".vulnerability_id AND
+            lbp.vulnerable_package_id = "vulnerable_package_archives".id AND
+            lbp.occurred_at = "vulnerable_package_archives".expired_at)')
+
+
+    lbp.each do |lbp|
+     self.create(:bundle_id => lbp.bundle_id,
+                 :package_id => lbp.package_id,
+                 :bundled_package_id => lbp.bundled_package_id,
+                 :vulnerability_id => lbp.vulnerability_id,
+                 :vulnerable_package_id => lbp.vulnerable_package_id,
+                 :occurred_at => lbp.occurred_at)
+    end
+
 
 # 
 #     lbv = LogBundleVulnerability.unpatched_vuln_logs.where(
@@ -72,7 +101,7 @@ class LogBundlePatch < ActiveRecord::Base
     # that existed while the bundled package was present in a bundle) that
     # are not present in the list of vulnerable packages in the current
     # bundle, that have not already been logged in the LBP.
-    lbv = BundledPackageArchive.select_valid_log_joins_vulns.
+    lbp = BundledPackageArchive.select_valid_log_joins_vulns.
       where(:bundle_id => bundle_id).
       where("bundled_package_id NOT IN 
             (#{BundledPackage.select("id").joins_vulns.where(:bundle_id => bundle_id).to_sql})").
@@ -86,13 +115,13 @@ class LogBundlePatch < ActiveRecord::Base
             lbp.occurred_at = "bundled_package_archives".expired_at)')
 
 
-    lbv.each do |lbv|
-     self.create(:bundle_id => lbv.bundle_id,
-                 :package_id => lbv.package_id,
-                 :bundled_package_id => lbv.bundled_package_id,
-                 :vulnerability_id => lbv.vulnerability_id,
-                 :vulnerable_package_id => lbv.vulnerable_package_id,
-                 :occurred_at => lbv.occurred_at)
+    lbp.each do |lbp|
+     self.create(:bundle_id => lbp.bundle_id,
+                 :package_id => lbp.package_id,
+                 :bundled_package_id => lbp.bundled_package_id,
+                 :vulnerability_id => lbp.vulnerability_id,
+                 :vulnerable_package_id => lbp.vulnerable_package_id,
+                 :occurred_at => lbp.occurred_at)
     end
   end
 end
