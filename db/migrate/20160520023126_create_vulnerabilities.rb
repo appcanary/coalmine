@@ -10,6 +10,7 @@ class CreateVulnerabilities < ActiveRecord::Migration
       t.text :patched_versions, array: true, :default => []
       t.text :unaffected_versions, array: true, :default => []
       t.string :cve_id
+      t.string :osvdb_id
       t.string :usn_id
       t.string :dsa_id
       t.string :rhsa_id
