@@ -44,7 +44,7 @@ class Platforms
     if @all_platforms.include?(platform)
       pr_releases = Releases.for(platform)
       # if we care about releases, check against them
-      if pr_releases.present? && pr.include?(release)
+      if pr_releases.present? && pr_releases.include?(release)
         return {platform: platform, release: release}
       else
         return {platform: platform}
