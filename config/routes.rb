@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 
-  get "/404", :to => "errors#error_not_found", :as => :not_found
-  get "/422", :to => "errors#error_unacceptable", :as => :unacceptable
-  get "/500", :to => "errors#error_internal_error", :as => :internal_error
+  match "/404", :to => "errors#error_not_found", :as => :not_found, :via => :all
+  match "/422", :to => "errors#error_unacceptable", :as => :unacceptable, :via => :all
+  match "/500", :to => "errors#error_internal_error", :as => :internal_error, :via => :all
 
 
   # routing for isitvulnerable.com
