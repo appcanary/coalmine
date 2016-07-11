@@ -40,7 +40,7 @@ class CanaryClient
     opts = {:token => @user_token, 
             :data => data, 
             :headers => headers}.merge(config)
-    Response.new(client.request(verb, url, opts))
+    Response.new(client.request(verb, URI.escape(url), opts))
   end
 
 
