@@ -10,4 +10,13 @@ class Platforms
       nil
     end
   end
+
+  def self.parser_for(platform)
+    case platform
+    when Ruby
+      GemfileParser
+    else
+      nil
+    end
+  end
 end

@@ -7,10 +7,15 @@ class Checker
     self.release = environ[:release]
   end
 
-  def check(package_list)
-    packages = PackageManager.new(platform, release).find_or_create(package_list)
+   # TODO: validation, natch
 
-    # replace with intermediate model?
-    LogBundleVulnerability.from("(#{Package.fetch_vulnerabilities(packages).to_sql}) as log_bundle_vulnerabilities")
+  def check(package_file)
+    parser = Platforms.parser_for(platform)
+    package_list = parser.parse(package_file)
+
+    package_query = PackageManager.new(platform, release).find_or_create(package_list)
+
+
+    vuln_query = package_query.includes(:vulnerabilities).references(:vulnerabilities).where("vulnerabilities.id IS NOT NULL")
   end
 end

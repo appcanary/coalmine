@@ -25,14 +25,9 @@ class Package < ActiveRecord::Base
   has_many :bundled_packages
   has_many :bundles, :through => :bundled_packages
   has_many :vulnerable_packages
+  has_many :vulnerabilities, :through => :vulnerable_packages
 
   validates_uniqueness_of :version, scope: [:platform, :release, :name]
-
-  scope :fetch_vulnerabilities, ->(package_query) {
-    select("packages.id package_id, vulnerable_packages.vulnerability_id").
-    joins("INNER JOIN vulnerable_packages ON vulnerable_packages.package_id = packages.id").
-    where("packages.id IN (#{package_query.select("id").to_sql})")
-  }
 
   def concerning_vulnerabilities
     # TODO: what do we store exactly on Vulns,

@@ -16,4 +16,8 @@ class VulnerablePackage < ActiveRecord::Base
   belongs_to :vulnerability
 
   has_many :bundled_packages
+
+  scope :where_package_in, ->(pquery) {
+    where("package_id IN (#{pquery.select("id").to_sql})").includes(:package, :vulnerability)
+  }
 end
