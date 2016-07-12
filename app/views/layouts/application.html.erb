@@ -26,11 +26,12 @@
     <% if current_user %>
       <%= render :partial => "layouts/navbar" %>
     <% end %>
+
     <div id="main" class="container">
-      <% if flash_messages %>
-        <section style>
+      <% if flash.present? %>
+        <section>
           <div class="flashes">
-            <%= flash_messages %>
+            <% flash_messages %>
           </div>
         </section>
       <% end %>

@@ -1,5 +1,5 @@
 class AdminController < ApplicationController
-  skip_before_filter :require_login
+  skip_before_filter :require_login, :show_trial_alert
   before_filter :require_admin_login
   
   def require_admin_login
