@@ -132,6 +132,10 @@ class User < ActiveRecord::Base
   # def delete_api_user!
   #   canary.delete_user
   # end
+  
+  def trial_remaining
+    14 - (Time.zone.now - created_at).to_i / 1.day
+  end
 
   protected
   def canary

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  before_filter :require_login, :set_raven_context
+  before_filter :require_login, :set_raven_context, :show_trial_alert
 
   # custom error handling
 
@@ -41,6 +41,17 @@ class ApplicationController < ActionController::Base
     render "errors/internal_error", :layout => 'launchrock', :status => 500
   end
 
+  def show_trial_alert
+    if current_user && !current_user.has_billing? && !current_user.is_admin?
+      if current_user.trial_remaining < 0
+        flash.now[:error] = "Your trial has expired :( Please add a <a href='#{billing_path}'>add a credit card</a> to continue service.".html_safe
+      elsif current_user.trial_remaining < 7
+        flash.now[:notice] = "Hey! You have #{current_user.trial_remaining} remaining days on your trial. Don't forget to <a href='#{billing_path}'>add a credit card!</a>".html_safe
+      elsif current_user.trial_remaining < 14
+        flash.now[:notice] = "Hey! You have #{current_user.trial_remaining} remaining days on your trial. Don't forget to <a href='#{billing_path}'>add a credit card!</a>".html_safe
+      end
+    end
+  end
 
   private
   def track_event(user, event)
