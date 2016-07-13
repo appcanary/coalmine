@@ -12,6 +12,7 @@
 #  patched_versions    :text             default("{}"), is an Array
 #  unaffected_versions :text             default("{}"), is an Array
 #  cve_id              :string
+#  osvdb_id            :string
 #  usn_id              :string
 #  dsa_id              :string
 #  rhsa_id             :string

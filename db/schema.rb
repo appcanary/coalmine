@@ -183,6 +183,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.text     "patched_versions",    default: [],                      array: true
     t.text     "unaffected_versions", default: [],                      array: true
     t.string   "cve_id"
+    t.string   "osvdb_id"
     t.string   "usn_id"
     t.string   "dsa_id"
     t.string   "rhsa_id"
@@ -208,6 +209,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.text     "patched_versions",    default: [],              array: true
     t.text     "unaffected_versions", default: [],              array: true
     t.string   "cve_id"
+    t.string   "osvdb_id"
     t.string   "usn_id"
     t.string   "dsa_id"
     t.string   "rhsa_id"
