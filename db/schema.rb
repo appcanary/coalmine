@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160604200811) do
+ActiveRecord::Schema.define(version: 20160713165015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,29 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "advisory_queues", force: :cascade do |t|
+    t.string   "advisory_id",                      null: false
+    t.string   "package_names",       default: [], null: false, array: true
+    t.string   "package_platform",                 null: false
+    t.string   "title"
+    t.datetime "reported_at"
+    t.text     "description"
+    t.string   "criticality"
+    t.text     "patched_versions",    default: [], null: false, array: true
+    t.text     "unaffected_versions", default: [], null: false, array: true
+    t.string   "cve_id"
+    t.string   "cve_ids",             default: [], null: false, array: true
+    t.string   "osvdb_id"
+    t.string   "usn_id"
+    t.string   "dsa_id"
+    t.string   "rhsa_id"
+    t.string   "cesa_id"
+    t.string   "source"
+    t.datetime "created_at",                       null: false
+  end
+
+  add_index "advisory_queues", ["advisory_id"], name: "index_advisory_queues_on_advisory_id", using: :btree
 
   create_table "bundle_archives", force: :cascade do |t|
     t.integer  "bundle_id",            null: false
@@ -183,6 +206,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.text     "patched_versions",    default: [],         null: false, array: true
     t.text     "unaffected_versions", default: [],         null: false, array: true
     t.string   "cve_id"
+    t.string   "cve_ids",             default: [],         null: false, array: true
     t.string   "osvdb_id"
     t.string   "usn_id"
     t.string   "dsa_id"
@@ -209,6 +233,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.text     "patched_versions",    default: [], null: false, array: true
     t.text     "unaffected_versions", default: [], null: false, array: true
     t.string   "cve_id"
+    t.string   "cve_ids",             default: [], null: false, array: true
     t.string   "osvdb_id"
     t.string   "usn_id"
     t.string   "dsa_id"

@@ -1,7 +1,9 @@
-class CreateVulnerabilities < ActiveRecord::Migration
+class CreateAdvisoryQueues < ActiveRecord::Migration
   def change
-    ArchiveMigrator.new(self).create_table :vulnerabilities do |t|
-      t.string :package_name, null: false
+    create_table :advisory_queues do |t|
+
+      t.string :advisory_id, null: false, index: true
+      t.string :package_names, array:true, :default => [], null: false
       t.string :package_platform, null: false
       t.string :title
       t.datetime :reported_at
@@ -9,7 +11,7 @@ class CreateVulnerabilities < ActiveRecord::Migration
       t.string :criticality
       t.text :patched_versions, array: true, :default => [], null: false
       t.text :unaffected_versions, array: true, :default => [], null: false
-      
+
       # todo delete this
       t.string :cve_id
 
@@ -21,7 +23,7 @@ class CreateVulnerabilities < ActiveRecord::Migration
       t.string :cesa_id
       t.string :source
 
-      t.timestamps null: false
+      t.datetime :created_at, null: false
     end
   end
 end
