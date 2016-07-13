@@ -22,29 +22,6 @@ ActiveRecord::Schema.define(version: 20160713165015) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "advisory_queues", force: :cascade do |t|
-    t.string   "advisory_id",                      null: false
-    t.string   "package_names",       default: [], null: false, array: true
-    t.string   "package_platform",                 null: false
-    t.string   "title"
-    t.datetime "reported_at"
-    t.text     "description"
-    t.string   "criticality"
-    t.text     "patched_versions",    default: [], null: false, array: true
-    t.text     "unaffected_versions", default: [], null: false, array: true
-    t.string   "cve_id"
-    t.string   "cve_ids",             default: [], null: false, array: true
-    t.string   "osvdb_id"
-    t.string   "usn_id"
-    t.string   "dsa_id"
-    t.string   "rhsa_id"
-    t.string   "cesa_id"
-    t.string   "source"
-    t.datetime "created_at",                       null: false
-  end
-
-  add_index "advisory_queues", ["advisory_id"], name: "index_advisory_queues_on_advisory_id", using: :btree
-
   create_table "bundle_archives", force: :cascade do |t|
     t.integer  "bundle_id",            null: false
     t.integer  "account_id",           null: false
@@ -195,6 +172,28 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   add_index "packages", ["expired_at"], name: "index_packages_on_expired_at", using: :btree
   add_index "packages", ["name", "version", "platform", "release"], name: "index_packages_on_name_and_version_and_platform_and_release", using: :btree
   add_index "packages", ["valid_at"], name: "index_packages_on_valid_at", using: :btree
+
+  create_table "queued_advisories", force: :cascade do |t|
+    t.string   "advisory_id",                      null: false
+    t.string   "package_names",       default: [], null: false, array: true
+    t.string   "package_platform",                 null: false
+    t.string   "title"
+    t.datetime "reported_at"
+    t.text     "description"
+    t.string   "criticality"
+    t.text     "patched_versions",    default: [], null: false, array: true
+    t.text     "unaffected_versions", default: [], null: false, array: true
+    t.string   "cve_ids",             default: [], null: false, array: true
+    t.string   "osvdb_id"
+    t.string   "usn_id"
+    t.string   "dsa_id"
+    t.string   "rhsa_id"
+    t.string   "cesa_id"
+    t.string   "importer"
+    t.datetime "created_at",                       null: false
+  end
+
+  add_index "queued_advisories", ["advisory_id"], name: "index_queued_advisories_on_advisory_id", using: :btree
 
   create_table "vulnerabilities", force: :cascade do |t|
     t.string   "package_name",                             null: false
