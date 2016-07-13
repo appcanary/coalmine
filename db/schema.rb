@@ -180,8 +180,8 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.datetime "reported_at"
     t.text     "description"
     t.string   "criticality"
-    t.text     "patched_versions",    default: [],                      array: true
-    t.text     "unaffected_versions", default: [],                      array: true
+    t.text     "patched_versions",    default: [],         null: false, array: true
+    t.text     "unaffected_versions", default: [],         null: false, array: true
     t.string   "cve_id"
     t.string   "osvdb_id"
     t.string   "usn_id"
@@ -206,8 +206,8 @@ ActiveRecord::Schema.define(version: 20160604200811) do
     t.datetime "reported_at"
     t.text     "description"
     t.string   "criticality"
-    t.text     "patched_versions",    default: [],              array: true
-    t.text     "unaffected_versions", default: [],              array: true
+    t.text     "patched_versions",    default: [], null: false, array: true
+    t.text     "unaffected_versions", default: [], null: false, array: true
     t.string   "cve_id"
     t.string   "osvdb_id"
     t.string   "usn_id"

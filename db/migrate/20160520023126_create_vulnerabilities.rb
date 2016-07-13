@@ -7,8 +7,8 @@ class CreateVulnerabilities < ActiveRecord::Migration
       t.datetime :reported_at
       t.text :description
       t.string :criticality
-      t.text :patched_versions, array: true, :default => []
-      t.text :unaffected_versions, array: true, :default => []
+      t.text :patched_versions, array: true, :default => [], null: false
+      t.text :unaffected_versions, array: true, :default => [], null: false
       t.string :cve_id
       t.string :osvdb_id
       t.string :usn_id
