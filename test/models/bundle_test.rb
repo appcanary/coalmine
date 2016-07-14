@@ -33,7 +33,7 @@ class BundleTest < ActiveSupport::TestCase
        version: p.version}
     end
 
-    b = BundleManager.new(b.account).update(b.id, bundled_package_list)
+    b, error = BundleManager.new(b.account).update(b.id, bundled_package_list)
     assert_equal 0, b.vulnerable_packages.count
 
     # and mark some of them as vuln

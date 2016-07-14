@@ -11,7 +11,7 @@ class PackageManagerTest < ActiveSupport::TestCase
 
       assert_equal 1, Package.count
 
-      @pm = PackageManager.new("ruby", nil)
+      @pm = PackageMaker.new("ruby", nil)
       packages = @pm.find_or_create(package_list)
       assert_equal 2, packages.count
       assert_equal 2, Package.count
@@ -26,7 +26,7 @@ class PackageManagerTest < ActiveSupport::TestCase
                                        :name => pkg1.name,
                                        :version => pkg1.version)
 
-      @pm = PackageManager.new(pkg1.platform, pkg1.release)
+      @pm = PackageMaker.new(pkg1.platform, pkg1.release)
       list = @pm.find_existing_packages([{:name => pkg1.name,
                                           :version => pkg1.version},
                                           {:name => pkg2.name,
@@ -53,7 +53,7 @@ class PackageManagerTest < ActiveSupport::TestCase
       
       assert_equal 10, Package.count
 
-      @pm = PackageManager.new(p1.platform, p1.release)
+      @pm = PackageMaker.new(p1.platform, p1.release)
 
       # build a query pointing to only two packages that already exist,
       # tho it has multiple instances of each
@@ -80,7 +80,7 @@ class PackageManagerTest < ActiveSupport::TestCase
 
       assert_equal 0, Package.count
       assert_equal 0, vuln.packages.count
-      @pm = PackageManager.new(Platforms::Ruby, nil)
+      @pm = PackageMaker.new(Platforms::Ruby, nil)
 
       @pm.create(:name => "fakemcfake",
                  :version => "1.0.1")
@@ -93,7 +93,7 @@ class PackageManagerTest < ActiveSupport::TestCase
     end
 
     it "should return an empty list when given an empty list" do
-      @pm = PackageManager.new(Platforms::Ruby, nil)
+      @pm = PackageMaker.new(Platforms::Ruby, nil)
       assert_equal [], @pm.find_or_create([])
     end
   end

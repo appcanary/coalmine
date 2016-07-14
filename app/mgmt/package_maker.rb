@@ -1,14 +1,11 @@
-class PackageManager
+class PackageMaker < ServiceMaker
   attr_accessor :platform, :release
-
-  # TODO: incorporate versions
 
   def initialize(platform, release)
     @platform = platform
     @release = release
   end
 
-  # TODO wrap in txn?
   # TODO handle errors sanely
   def find_or_create(package_list)
     existing_pkg_query = find_existing_packages(package_list)
@@ -37,7 +34,7 @@ class PackageManager
   def create_missing_packages(existing_packages_query, package_list)
     # if these two lists are the same size, our job here is done
     if existing_packages_query.count == package_list.count
-      return []
+      return Package.none
     end
     
     existing_set = existing_packages_query.select("name, version").pluck(:name, :version).to_set
@@ -76,14 +73,12 @@ class PackageManager
                           :version => pkg[:version],
                           :origin => "user")
 
-    package.transaction(requires_new: true) do
-      unless package.save
-        raise "package problem, deal with this somehow later"
-      end
+    # current assumption: if there's something wrong with a package, 
+    # abort whole txn
+    package.save!
 
-      possible_vulns = package.concerning_vulnerabilities
-      VulnerabilityManager.new.update_affecting_vulnerabilities!(possible_vulns, package)
-    end
+    possible_vulns = package.concerning_vulnerabilities
+    VulnerabilityMaker.new.add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     return package
   end
 end

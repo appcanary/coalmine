@@ -39,7 +39,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     vuln_pkg_set_1 = FactoryGirl.create_list(:ruby_package, 5)
     vuln_pkg_1 = vuln_pkg_set_1.first
 
-    vuln_1 = VulnerabilityManager.new.create(:package_name => vuln_pkg_1.name,
+    vuln_1, error = VulnerabilityManager.new.create(:package_name => vuln_pkg_1.name,
                                            :package_platform => vuln_pkg_1.platform,
                                            :patched_versions => ["> #{vuln_pkg_1.version}"])
 
@@ -52,7 +52,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     # and assign packages
     @bm = BundleManager.new(account)
 
-    bundle = @bm.create({:platform => @platform}, vuln_pkg_set_1.map(&:to_simple_h))
+    bundle, errors = @bm.create({:platform => @platform}, vuln_pkg_set_1.map(&:to_simple_h))
 
     # Creating the bundle with a vuln should trigger a log:
 
@@ -121,7 +121,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     vuln_pkg_2 = vuln_pkgs_set_2.last
 
     # mark it as vuln
-    vuln_2 = VulnerabilityManager.new.create(:package_name => vuln_pkg_2.name,
+    vuln_2, error = VulnerabilityManager.new.create(:package_name => vuln_pkg_2.name,
                                              :package_platform => vuln_pkg_2.platform,
                                              :patched_versions => ["> #{vuln_pkg_2.version}"])
 
@@ -176,10 +176,10 @@ class ReportManagerTest < ActiveSupport::TestCase
     end
 
 
-    vuln1 = VulnerabilityManager.new.create(:package_name => pkg1_name,
+    vuln1, error = VulnerabilityManager.new.create(:package_name => pkg1_name,
                                            :package_platform => Platforms::Ruby,
                                            :patched_versions => ["> 1.0.1"])
-    vuln2 = VulnerabilityManager.new.create(:package_name => pkg2_name,
+    vuln2, error = VulnerabilityManager.new.create(:package_name => pkg2_name,
                                             :package_platform => Platforms::Ruby,
                                             :patched_versions => ["> 2.0.1"])
     assert_equal 4, VulnerablePackage.count
@@ -192,7 +192,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
 
     @bm = BundleManager.new(account)
-    bundle = @bm.create({:platform => @platform}, [vuln_pkg1.to_simple_h, notvuln_pkg2.to_simple_h])
+    bundle, error = @bm.create({:platform => @platform}, [vuln_pkg1.to_simple_h, notvuln_pkg2.to_simple_h])
     
     # one LBV thank you
     assert_equal 1, LogBundleVulnerability.count

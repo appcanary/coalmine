@@ -1,15 +1,14 @@
-class BundleManager
+class BundleManager < ServiceManager
   attr_accessor :account
   def initialize(account)
     self.account = account
   end
 
-
   # don't we need a kind alongside platform?
   # platform alone seems insufficient
   # the (keys (group-by :platform (Version/all-with db :platform)))
   # returned shows a lot of variance
-  def create(opt = {}, package_list)
+  def create(opt, package_list)
     platform, release = opt[:platform], opt[:release]
     bundle = Bundle.new(:account_id => @account.id,
                         :platform => platform,
@@ -19,44 +18,55 @@ class BundleManager
                         :last_crc => opt[:last_crc],
                         :from_api => opt[:from_api])
 
-    bundle.transaction do
-      unless bundle.save
-        raise "problem with bundle to be fixed later"
-      end
+    begin
+      bundle.transaction do
+        bundle.save!
 
-      packages = PackageManager.new(platform, release).find_or_create(package_list)
-      bundle = assign_packages!(bundle, packages)
+        packages = PackageMaker.new(platform, release).find_or_create(package_list)
+        bundle = assign_packages!(bundle, packages)
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      # needs testing
+      return Result.new(bundle, e)
     end
 
-    bundle
+    Result.new(bundle)
   end
 
   def update(bundle_id, package_list)
     bundle = Bundle.where(:account_id => @account.id).find(bundle_id)
 
-    bundle.transaction do
-      packages = PackageManager.new(bundle.platform, bundle.release).find_or_create(package_list)
-      bundle = assign_packages!(bundle, packages)
+    begin
+      bundle.transaction do
+        packages = PackageMaker.new(bundle.platform, bundle.release).find_or_create(package_list)
+        bundle = assign_packages!(bundle, packages)
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      return Result.new(bundle, e)
     end
 
-    bundle
+    Result.new(bundle)
   end
 
   def update_name(bundle_id, name)
     bundle = Bundle.where(:account_id => @account.id).find(bundle_id)
     bundle.name = name
     
-    unless bundle.save
-      raise "package set problem, insert msg here"
+    if bundle.save
+      Result.new(bundle)
+    else
+      Result.new(bundle, bundle.errors)
     end
-
-    return bundle
   end
 
   def delete(bundle_id)
     bundle = Bundle.where(:account_id => @account.id).find(bundle_id)
 
-    bundle.destroy
+    if bundle.destroy
+      Result.new(bundle)
+    else
+      Result.new(bundle, bundle.errors)
+    end
   end
 
   protected

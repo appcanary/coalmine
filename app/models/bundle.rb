@@ -22,6 +22,8 @@ class Bundle < ActiveRecord::Base
   has_many :bundled_packages
   has_many :packages, :through => :bundled_packages
 
+  validates :account, presence: true
+
   def vulnerable_packages
     VulnerablePackage.where('"bundled_packages".bundle_id = ?', self.id).joins('inner join bundled_packages on "bundled_packages".package_id ="vulnerable_packages".package_id')
   end
