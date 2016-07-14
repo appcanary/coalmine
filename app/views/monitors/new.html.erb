@@ -18,7 +18,11 @@
     <section>
       <div class="form">
 
-        <h2>Create a new monitor:</h2>
+       <h2>Create a new monitor:</h2>
+       <p>A monitor lets you register a set of packages for us to keep a watch on.</p>
+
+       <p>You'll be able to see the vulnerabilities that affect you in the <%= link_to "dashboard", dashboard_path %>, and we will email you updates whenever any of the packages listed have a known vulnerability.</p>
+
         <div class="col-sm-6">
           <a name="righthere" class="anchor-offset"></a>
           <%= form_for Moniter.new, :url => monitors_path, :method => :post do |f| %>
@@ -66,6 +70,9 @@
           <dd><code>/var/lib/dpkg/status</code></dd>
           <dt>centos</dt>
           <dd>The output of: <code>rpm -qa</code></dd>
+          <dt>amazon linux</dt>
+          <dd>The output of: <code>rpm -qa</code></dd>
+
         </dl>
 
       </div>
