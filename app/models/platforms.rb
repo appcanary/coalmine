@@ -3,23 +3,27 @@ class Platforms
   Ubuntu = "ubuntu"
   Ruby = "ruby"
   CentOS = "centos"
+  Amazon = "amzn"
 
   @all_platforms = [
     Debian,
     Ubuntu,
     CentOS,
-    Ruby
+    Ruby,
+    Amazon
   ]
 
   class Releases
     UbuntuReleases = ["16.04", "15.10", "15.04", "14.04", "12.04"]
     DebianReleases = ["8", "7", "6", "5"]
     CentOSReleases = ["7"]
+    AmazonReleases = ["2016.03"]
 
     @platform_to_release = {
       Debian => DebianReleases,
       Ubuntu => UbuntuReleases,
-      CentOS => CentOSReleases
+      CentOS => CentOSReleases,
+      Amazon => AmazonReleases
     }
 
     def self.for(platform)
@@ -30,7 +34,7 @@ class Platforms
   def self.select_platform_release
     arr = [Ruby.titleize]
 
-    arr += [Ubuntu, CentOS, Debian].map do |plt|
+    arr += [Ubuntu, CentOS, Debian, Amazon].map do |plt|
       Releases.for(plt).map { |r| "#{plt.titleize} - #{r}" }
     end.flatten
 
