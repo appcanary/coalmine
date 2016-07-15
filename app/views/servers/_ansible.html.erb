@@ -17,12 +17,12 @@
           <br>
           <h4>Usage</h4>
           <p>Add the following role to monitor your system packages only:</p>
-<pre>
+<pre class="auth_token">
 - { role: appcanary.agent,
     api_key: "<%= @agent_token %>" }
 </pre>
           <p>If you want to additionally monitor applications, you can add Gemfiles to the monitored_files variable:
-<pre>
+<pre class="auth_token">
 - { role: appcanary.agent,
     api_key: " <%= @agent_token %>",
     monitored_files: ["/path/to/my/Gemfile.lock" "/path/to/another/Gemfile.lock"] }
