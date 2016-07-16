@@ -5,6 +5,8 @@ require 'bundler/lockfile_parser'
 # ENV["HOME"]="/tmp/"
 
 # TODO: handle errors?
+# test
+# should return a value object
 class GemfileParser
   def self.parse(lockfile)
     lf = Bundler::LockfileParser.new(lockfile)

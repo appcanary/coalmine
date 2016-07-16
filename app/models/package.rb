@@ -26,6 +26,7 @@ class Package < ActiveRecord::Base
   has_many :bundles, :through => :bundled_packages
   has_many :vulnerable_packages
   has_many :vulnerabilities, :through => :vulnerable_packages
+  has_many :advisories, :through => :vulnerabilities
 
   validates_uniqueness_of :version, scope: [:platform, :release, :name]
 

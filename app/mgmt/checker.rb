@@ -9,13 +9,21 @@ class Checker
 
    # TODO: validation, natch
 
-  def check(package_list)
-    # parser = Platforms.parser_for(platform)
-    # package_list = parser.parse(package_file)
+  def check(package_file)
+    parser = Platforms.parser_for(platform)
+    package_list = parser.parse(package_file)
 
-    package_query = PackageMaker.new(platform, release).find_or_create(package_list)
+    package_query = nil
+    Package.transaction do
+      package_query = PackageMaker.new(platform, release).find_or_create(package_list)
+    end
 
 
-    vuln_query = package_query.includes(:vulnerabilities).references(:vulnerabilities).where("vulnerabilities.id IS NOT NULL")
+    # TODO
+    # either denormalize or find a way to make this
+    # query not be terrible and N+1, re: advisories
+    vuln_query = package_query.includes(:vulnerabilities, :advisories).references(:vulnerabilities).where("vulnerabilities.id IS NOT NULL")
+
+    vuln_query
   end
 end
