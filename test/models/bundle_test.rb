@@ -40,7 +40,7 @@ class BundleTest < ActiveSupport::TestCase
     # two of them in the bundle, and one outside
     (bundled_packages.sample(2) + other_packages.sample(1)).each do |vp|
       FactoryGirl.create(:vulnerability, 
-                         :package_name => vp.name,
+                         :package_names => [vp.name],
                          :package_platform => vp.platform,
                          :patched_versions => ["> #{vp.version}"],
                          :packages => [vp])

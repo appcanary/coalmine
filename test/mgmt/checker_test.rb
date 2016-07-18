@@ -16,17 +16,17 @@ class CheckerTest < ActiveSupport::TestCase
     vuln_pkg1 = vuln_pkg_set.first
     vuln_pkg2 = vuln_pkg_set.second
 
-    vuln = VulnerabilityManager.new.create(:package_name => vuln_pkg1.name,
+    vuln = VulnerabilityManager.new.create(:package_names => [vuln_pkg1.name],
                                            :package_platform => vuln_pkg1.platform,
                                            :patched_versions => ["> #{vuln_pkg1.version}"])
 
-    vuln2 = VulnerabilityManager.new.create(:package_name => vuln_pkg1.name,
+    vuln2 = VulnerabilityManager.new.create(:package_names => [vuln_pkg1.name],
                                             :package_platform => vuln_pkg1.platform,
                                             :patched_versions => ["> #{vuln_pkg1.version}"])
 
 
 
-    vuln3 = VulnerabilityManager.new.create(:package_name => vuln_pkg2.name,
+    vuln3 = VulnerabilityManager.new.create(:package_names => [vuln_pkg2.name],
                                             :package_platform => vuln_pkg2.platform,
                                             :patched_versions => ["> #{vuln_pkg2.version}"])
 

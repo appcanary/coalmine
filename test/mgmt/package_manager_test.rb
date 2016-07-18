@@ -74,7 +74,7 @@ class PackageManagerTest < ActiveSupport::TestCase
     it "should create packages and update relevant vulns" do
       pkg_name = "fakemcfake"
       vuln = FactoryGirl.create(:vulnerability, 
-                         :package_name => pkg_name,
+                         :package_names => [pkg_name],
                          :package_platform => Platforms::Ruby,
                          :patched_versions => ["> 1.0.2"])
 
@@ -105,7 +105,7 @@ class PackageManagerTest < ActiveSupport::TestCase
     v1.save
 
     p1 = FactoryGirl.create(:ruby_package, 
-                            :name => v1.package_name,
+                            :name => v1.package_names.first,
                             :version => "1.0.0")
 
 

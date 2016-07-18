@@ -39,7 +39,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     vuln_pkg_set_1 = FactoryGirl.create_list(:ruby_package, 5)
     vuln_pkg_1 = vuln_pkg_set_1.first
 
-    vuln_1, error = VulnerabilityManager.new.create(:package_name => vuln_pkg_1.name,
+    vuln_1, error = VulnerabilityManager.new.create(:package_names => [vuln_pkg_1.name],
                                            :package_platform => vuln_pkg_1.platform,
                                            :patched_versions => ["> #{vuln_pkg_1.version}"])
 
@@ -121,7 +121,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     vuln_pkg_2 = vuln_pkgs_set_2.last
 
     # mark it as vuln
-    vuln_2, error = VulnerabilityManager.new.create(:package_name => vuln_pkg_2.name,
+    vuln_2, error = VulnerabilityManager.new.create(:package_names => [vuln_pkg_2.name],
                                              :package_platform => vuln_pkg_2.platform,
                                              :patched_versions => ["> #{vuln_pkg_2.version}"])
 
@@ -176,10 +176,10 @@ class ReportManagerTest < ActiveSupport::TestCase
     end
 
 
-    vuln1, error = VulnerabilityManager.new.create(:package_name => pkg1_name,
+    vuln1, error = VulnerabilityManager.new.create(:package_names => [pkg1_name],
                                            :package_platform => Platforms::Ruby,
                                            :patched_versions => ["> 1.0.1"])
-    vuln2, error = VulnerabilityManager.new.create(:package_name => pkg2_name,
+    vuln2, error = VulnerabilityManager.new.create(:package_names => [pkg2_name],
                                             :package_platform => Platforms::Ruby,
                                             :patched_versions => ["> 2.0.1"])
     assert_equal 4, VulnerablePackage.count

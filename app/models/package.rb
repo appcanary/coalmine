@@ -33,17 +33,19 @@ class Package < ActiveRecord::Base
   def concerning_vulnerabilities
     # TODO: what do we store exactly on Vulns,
     # i.e. do we store name, platform, release?
-    Vulnerability.where(:package_name => name,
-                        :package_platform => platform)
+    Vulnerability.where("? = ANY(package_names)", name).where(:package_platform => platform)
   end
 
-  def same_name?(pkg_name)
+  def same_name?(pkg_names)
     if self.platform == Platforms::Debian
-      self.source_name == pkg_name
+      pkg_names.include?(self.source_name)
     else
-      self.name == pkg_name
+      pkg_names.include?(self.name)
     end
   end
+
+  # TODO: needs to account for fact patched and unaffected versions
+  # can refer to many different packages now
 
   def affected?(unaffected_versions)
     unaffected_versions.any? do |v|

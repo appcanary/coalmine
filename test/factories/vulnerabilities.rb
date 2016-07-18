@@ -37,7 +37,7 @@ FactoryGirl.define do
   end
 
   factory :vulnerability do
-    package_name { generate(:package_name) }
+    package_names { [generate(:package_name)] }
     package_platform { FactoryHelper.rand_platform }
     # cve_id { generate(:cve_id) }
 

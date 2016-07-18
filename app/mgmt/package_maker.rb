@@ -10,7 +10,6 @@ class PackageMaker < ServiceMaker
     @release = release
   end
 
-  # TODO handle errors sanely
   def find_or_create(package_list)
     existing_pkg_query = find_existing_packages(package_list)
 

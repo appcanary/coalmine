@@ -24,8 +24,8 @@ ActiveRecord::Schema.define(version: 20160713165015) do
 
   create_table "advisories", force: :cascade do |t|
     t.string   "identifier",                               null: false
-    t.string   "package_names",       default: [],         null: false, array: true
     t.string   "package_platform",                         null: false
+    t.string   "package_names",       default: [],         null: false, array: true
     t.string   "os_arches",           default: [],         null: false, array: true
     t.string   "os_releases",         default: [],         null: false, array: true
     t.string   "title"
@@ -54,8 +54,8 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   create_table "advisory_archives", force: :cascade do |t|
     t.integer  "advisory_id",                      null: false
     t.string   "identifier",                       null: false
-    t.string   "package_names",       default: [], null: false, array: true
     t.string   "package_platform",                 null: false
+    t.string   "package_names",       default: [], null: false, array: true
     t.string   "os_arches",           default: [], null: false, array: true
     t.string   "os_releases",         default: [], null: false, array: true
     t.string   "title"
@@ -81,6 +81,14 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   add_index "advisory_archives", ["expired_at"], name: "index_advisory_archives_on_expired_at", using: :btree
   add_index "advisory_archives", ["identifier"], name: "index_advisory_archives_on_identifier", using: :btree
   add_index "advisory_archives", ["valid_at"], name: "index_advisory_archives_on_valid_at", using: :btree
+
+  create_table "advisory_vulnerabilities", force: :cascade do |t|
+    t.integer "advisory_id",      null: false
+    t.integer "vulnerability_id", null: false
+  end
+
+  add_index "advisory_vulnerabilities", ["advisory_id"], name: "index_advisory_vulnerabilities_on_advisory_id", using: :btree
+  add_index "advisory_vulnerabilities", ["vulnerability_id"], name: "index_advisory_vulnerabilities_on_vulnerability_id", using: :btree
 
   create_table "bundle_archives", force: :cascade do |t|
     t.integer  "bundle_id",            null: false
@@ -258,40 +266,58 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   add_index "queued_advisories", ["identifier"], name: "index_queued_advisories_on_identifier", using: :btree
 
   create_table "vulnerabilities", force: :cascade do |t|
-    t.integer  "advisory_id"
-    t.string   "package_name",                             null: false
     t.string   "package_platform",                         null: false
+    t.string   "package_names",       default: [],         null: false, array: true
+    t.string   "os_arches",           default: [],         null: false, array: true
+    t.string   "os_releases",         default: [],         null: false, array: true
+    t.string   "title"
+    t.text     "description"
+    t.string   "criticality"
     t.text     "patched_versions",    default: [],         null: false, array: true
     t.text     "unaffected_versions", default: [],         null: false, array: true
+    t.string   "cve_ids",             default: [],         null: false, array: true
+    t.string   "osvdb_id"
+    t.string   "usn_id"
+    t.string   "dsa_id"
+    t.string   "rhsa_id"
+    t.string   "cesa_id"
+    t.string   "source"
+    t.datetime "reported_at"
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
     t.datetime "valid_at",            default: "now()",    null: false
     t.datetime "expired_at",          default: 'Infinity', null: false
   end
 
-  add_index "vulnerabilities", ["advisory_id"], name: "index_vulnerabilities_on_advisory_id", using: :btree
   add_index "vulnerabilities", ["expired_at"], name: "index_vulnerabilities_on_expired_at", using: :btree
-  add_index "vulnerabilities", ["package_name"], name: "index_vulnerabilities_on_package_name", using: :btree
-  add_index "vulnerabilities", ["package_platform"], name: "index_vulnerabilities_on_package_platform", using: :btree
   add_index "vulnerabilities", ["valid_at"], name: "index_vulnerabilities_on_valid_at", using: :btree
 
   create_table "vulnerability_archives", force: :cascade do |t|
     t.integer  "vulnerability_id",                 null: false
-    t.integer  "advisory_id"
-    t.string   "package_name",                     null: false
     t.string   "package_platform",                 null: false
+    t.string   "package_names",       default: [], null: false, array: true
+    t.string   "os_arches",           default: [], null: false, array: true
+    t.string   "os_releases",         default: [], null: false, array: true
+    t.string   "title"
+    t.text     "description"
+    t.string   "criticality"
     t.text     "patched_versions",    default: [], null: false, array: true
     t.text     "unaffected_versions", default: [], null: false, array: true
+    t.string   "cve_ids",             default: [], null: false, array: true
+    t.string   "osvdb_id"
+    t.string   "usn_id"
+    t.string   "dsa_id"
+    t.string   "rhsa_id"
+    t.string   "cesa_id"
+    t.string   "source"
+    t.datetime "reported_at"
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.datetime "valid_at",                         null: false
     t.datetime "expired_at",                       null: false
   end
 
-  add_index "vulnerability_archives", ["advisory_id"], name: "index_vulnerability_archives_on_advisory_id", using: :btree
   add_index "vulnerability_archives", ["expired_at"], name: "index_vulnerability_archives_on_expired_at", using: :btree
-  add_index "vulnerability_archives", ["package_name"], name: "index_vulnerability_archives_on_package_name", using: :btree
-  add_index "vulnerability_archives", ["package_platform"], name: "index_vulnerability_archives_on_package_platform", using: :btree
   add_index "vulnerability_archives", ["valid_at"], name: "index_vulnerability_archives_on_valid_at", using: :btree
   add_index "vulnerability_archives", ["vulnerability_id"], name: "index_vulnerability_archives_on_vulnerability_id", using: :btree
 
@@ -328,7 +354,6 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   add_foreign_key "bundled_packages", "bundles"
   add_foreign_key "bundled_packages", "packages"
   add_foreign_key "bundles", "accounts"
-  add_foreign_key "vulnerabilities", "advisories"
   add_foreign_key "vulnerable_packages", "packages"
   add_foreign_key "vulnerable_packages", "vulnerabilities"
 end
