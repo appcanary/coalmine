@@ -81,7 +81,7 @@ class BundleManager < ServiceManager
     bundle.packages = packages
 
     # A bundle has changed! Time to record any logs
-    ReportManager.new(bundle.id).on_bundle_change
+    ReportMaker.new(bundle.id).on_bundle_change
 
     bundle
   end

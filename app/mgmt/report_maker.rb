@@ -1,4 +1,4 @@
-class ReportManager
+class ReportMaker < ServiceMaker
   attr_accessor :bundle_id
   def initialize(bundle_id = nil)
     self.bundle_id = bundle_id

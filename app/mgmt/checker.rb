@@ -24,6 +24,6 @@ class Checker
     # query not be terrible and N+1, re: advisories
     vuln_query = package_query.includes(:vulnerabilities, :advisories).references(:vulnerabilities).where("vulnerabilities.id IS NOT NULL")
 
-    vuln_query
+    # Result.new(vuln_query)
   end
 end

@@ -7,6 +7,8 @@ class CheckerTest < ActiveSupport::TestCase
     lockfile = hydrate("gemcanary.gemfile.lock")
     @package_list = GemfileParser.parse(lockfile)
     @platform = "ruby"
+    passthru_parser = Class.new do def self.parse(list) list; end; end
+    Platforms.stubs(:parser_for).with(@platform).returns(passthru_parser) 
   end
 
   it "should return LBV-subset of vulns when asked" do

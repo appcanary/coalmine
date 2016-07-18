@@ -97,4 +97,28 @@ class PackageManagerTest < ActiveSupport::TestCase
       assert_equal [], @pm.find_or_create([])
     end
   end
+
+   test "when a package gets created, the vulns that affect it get updated" do
+    v1, v2, _ = FactoryGirl.create_list(:ruby_vulnerability, 5)
+
+    v1.patched_versions = ["> 1.0.1"]
+    v1.save
+
+    p1 = FactoryGirl.create(:ruby_package, 
+                            :name => v1.package_name,
+                            :version => "1.0.0")
+
+
+    assert_equal 0, VulnerablePackage.count
+    assert_equal 1, Package.count
+    ActiveRecord::Base.transaction do
+      PackageMaker.new("irrelephant", "nope").add_package_to_affecting_vulnerabilities!(Vulnerability.all, p1)
+    end
+
+    v1.reload
+    assert_equal 1, VulnerablePackage.count
+    assert v1.packages.include?(p1)
+  end
+
+
 end

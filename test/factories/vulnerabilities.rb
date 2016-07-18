@@ -39,7 +39,7 @@ FactoryGirl.define do
   factory :vulnerability do
     package_name { generate(:package_name) }
     package_platform { FactoryHelper.rand_platform }
-    cve_id { generate(:cve_id) }
+    # cve_id { generate(:cve_id) }
 
     factory :ruby_vulnerability do
       package_platform Platforms::Ruby

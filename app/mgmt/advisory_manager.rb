@@ -21,13 +21,13 @@ class AdvisoryManager < ServiceManager
       package_name = adv.package_names.pop
 
       vuln_mger = VulnerabilityManager.new
-      v, e = vuln_mger.create({:advisory_id => adv.id,
+      v, error = vuln_mger.create({:advisory_id => adv.id,
                                :package_name => package_name,
                                :package_platform => adv.package_platform,
                                :patched_versions => adv.patched_versions,
                                :unaffected_versions => adv.unaffected_versions})
 
-      if e
+      if error
         raise ArgumentError.new("Vuln error: #{error}")
       end
     end

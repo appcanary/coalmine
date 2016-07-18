@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   add_index "queued_advisories", ["identifier"], name: "index_queued_advisories_on_identifier", using: :btree
 
   create_table "vulnerabilities", force: :cascade do |t|
-    t.integer  "advisory_id",                              null: false
+    t.integer  "advisory_id"
     t.string   "package_name",                             null: false
     t.string   "package_platform",                         null: false
     t.text     "patched_versions",    default: [],         null: false, array: true
@@ -277,7 +277,7 @@ ActiveRecord::Schema.define(version: 20160713165015) do
 
   create_table "vulnerability_archives", force: :cascade do |t|
     t.integer  "vulnerability_id",                 null: false
-    t.integer  "advisory_id",                      null: false
+    t.integer  "advisory_id"
     t.string   "package_name",                     null: false
     t.string   "package_platform",                 null: false
     t.text     "patched_versions",    default: [], null: false, array: true

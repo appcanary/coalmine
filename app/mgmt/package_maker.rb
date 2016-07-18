@@ -82,7 +82,25 @@ class PackageMaker < ServiceMaker
     package.save!
 
     possible_vulns = package.concerning_vulnerabilities
-    VulnerabilityMaker.new.add_package_to_affecting_vulnerabilities!(possible_vulns, package)
+    add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     return package
+  end
+
+
+  # gets called only when new packages are created.
+
+  # this doesn't have to trigger a report because:
+  # a report will be triggered when the package gets
+  # assigned to a bundle. 
+  #
+  # there should not be a scenario where this method
+  # gets called, on packages that are in a bundle
+  # without triggering the bundle update report
+  def add_package_to_affecting_vulnerabilities!(possible_vulns, package)
+    possible_vulns.select do |vuln|
+      if vuln.affects?(package)
+        vuln.packages << package
+      end
+    end
   end
 end
