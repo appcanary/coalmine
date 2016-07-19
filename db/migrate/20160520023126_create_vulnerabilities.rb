@@ -29,9 +29,9 @@ class CreateVulnerabilities < ActiveRecord::Migration
     end
 
 
-    create_table :advisory_vulnerabilities do |t|
-      t.references :advisory, null: false, index: true
-      t.references :vulnerability, null: false, index: true
+    ArchiveMigrator.new(self).create_table :advisory_vulnerabilities do |t|
+      t.references :advisory, null: false, index: {name: "idx_adv_vuln_adv"}
+      t.references :vulnerability, null: false, index: {name: "idx_adv_vuln_vuln"}
     end
 
   end

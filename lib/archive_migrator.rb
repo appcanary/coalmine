@@ -46,7 +46,7 @@ class ArchiveMigrator
     self.migration = migration
   end
 
-  def create_table(table_name)
+  def create_table(table_name, opt = {})
     singular_table_name = table_name.to_s.singularize.to_sym
     archive_table_name = "#{singular_table_name}_archives".to_sym
     
@@ -58,8 +58,8 @@ class ArchiveMigrator
     # we now know what the table will look like.
     archive_table_builder = build_archive_schema(table_builder, singular_table_name)
 
-    construct_table!(table_name, table_builder)
-    construct_table!(archive_table_name, archive_table_builder)
+    construct_table!(table_name, table_builder, opt)
+    construct_table!(archive_table_name, archive_table_builder, opt)
 
     construct_trigger!(table_name, archive_table_name, archive_table_builder, table_builder)
   end
@@ -67,19 +67,20 @@ class ArchiveMigrator
   def build_archive_schema(tb, singular_table_name)
     # the archive table needs to refer back to the orig table
     arch_table_builder = tb.deep_clone
-    arch_table_builder.add_argument(:references, singular_table_name, index: true, null: false)
+    # custom index name cos some auto table names overflow the 64 char limit
+    arch_table_builder.add_argument(:references, singular_table_name, index: {name: "idx_#{singular_table_name}_id"}, null: false)
     arch_table_builder.is_archive = true
     arch_table_builder
   end
 
-  def construct_table!(table_name, table_builder)
+  def construct_table!(table_name, table_builder, opt)
     builder = table_builder.deep_clone
 
-    self.migration.create_table(table_name) do |t|
+    self.migration.create_table(table_name, opt) do |t|
  
       if builder.is_archive
         builder.arguments.each do |type, args|
-          new_args = filter_fks(args)
+          new_args = filter_args_for_archive(args)
           t.send(type, *new_args)
         end
 
@@ -137,12 +138,18 @@ class ArchiveMigrator
   # this is an archive table. We can't have FK constraints,
   # since it's possible their links might break. Gotta filter
   # those out.
+  #
+  # also sometimes index names are too long, so we need to
+  # be able to take custom index names and add our own suffix
 
-  def filter_fks(args)
+  def filter_args_for_archive(args)
     args.map { |rg|
       if rg.is_a? Hash
         new_rg = rg.dup
         new_rg.delete(:foreign_key)
+        if (new_rg[:index].is_a? Hash) && new_rg[:index][:name]
+          new_rg[:index][:name] = new_rg[:index][:name] + "_ar"
+        end
         new_rg
       else
         rg
