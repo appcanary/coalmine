@@ -98,7 +98,8 @@ class PackageMaker < ServiceMaker
   def add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     possible_vulns.select do |vuln|
       if vuln.affects?(package)
-        vuln.packages << package
+        VulnerablePackage.create!(:vulnerability_id => vuln.vulnerability_id,
+                                  :package_id => package.id)
       end
     end
   end

@@ -1,3 +1,4 @@
+require File.join(Rails.root, "app/parsers", 'rpm_parser')
 class Platforms
   Debian = "debian"
   Ruby = "ruby"
@@ -19,7 +20,7 @@ class Platforms
     when Ruby
       GemfileParser
     when CentOS
-      RPMParser
+      RPM::Parser
     else
       nil
     end

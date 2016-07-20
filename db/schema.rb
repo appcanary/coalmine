@@ -26,13 +26,13 @@ ActiveRecord::Schema.define(version: 20160713165015) do
     t.string   "identifier",                               null: false
     t.string   "package_platform",                         null: false
     t.string   "package_names",       default: [],         null: false, array: true
-    t.string   "os_arches",           default: [],         null: false, array: true
-    t.string   "os_releases",         default: [],         null: false, array: true
+    t.string   "affected_arches",     default: [],         null: false, array: true
+    t.string   "affected_releases",   default: [],         null: false, array: true
+    t.text     "patched_versions",    default: [],         null: false, array: true
+    t.text     "unaffected_versions", default: [],         null: false, array: true
     t.string   "title"
     t.text     "description"
     t.string   "criticality"
-    t.text     "patched_versions",    default: [],         null: false, array: true
-    t.text     "unaffected_versions", default: [],         null: false, array: true
     t.string   "cve_ids",             default: [],         null: false, array: true
     t.string   "osvdb_id"
     t.string   "usn_id"
@@ -56,13 +56,13 @@ ActiveRecord::Schema.define(version: 20160713165015) do
     t.string   "identifier",                       null: false
     t.string   "package_platform",                 null: false
     t.string   "package_names",       default: [], null: false, array: true
-    t.string   "os_arches",           default: [], null: false, array: true
-    t.string   "os_releases",         default: [], null: false, array: true
+    t.string   "affected_arches",     default: [], null: false, array: true
+    t.string   "affected_releases",   default: [], null: false, array: true
+    t.text     "patched_versions",    default: [], null: false, array: true
+    t.text     "unaffected_versions", default: [], null: false, array: true
     t.string   "title"
     t.text     "description"
     t.string   "criticality"
-    t.text     "patched_versions",    default: [], null: false, array: true
-    t.text     "unaffected_versions", default: [], null: false, array: true
     t.string   "cve_ids",             default: [], null: false, array: true
     t.string   "osvdb_id"
     t.string   "usn_id"
@@ -261,15 +261,15 @@ ActiveRecord::Schema.define(version: 20160713165015) do
 
   create_table "queued_advisories", force: :cascade do |t|
     t.string   "identifier",                       null: false
-    t.string   "package_names",       default: [], null: false, array: true
     t.string   "package_platform",                 null: false
-    t.string   "os_arches",           default: [], null: false, array: true
-    t.string   "os_releases",         default: [], null: false, array: true
+    t.string   "package_names",       default: [], null: false, array: true
+    t.string   "affected_arches",     default: [], null: false, array: true
+    t.string   "affected_releases",   default: [], null: false, array: true
+    t.text     "patched_versions",    default: [], null: false, array: true
+    t.text     "unaffected_versions", default: [], null: false, array: true
     t.string   "title"
     t.text     "description"
     t.string   "criticality"
-    t.text     "patched_versions",    default: [], null: false, array: true
-    t.text     "unaffected_versions", default: [], null: false, array: true
     t.string   "cve_ids",             default: [], null: false, array: true
     t.string   "osvdb_id"
     t.string   "usn_id"
@@ -286,13 +286,13 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   create_table "vulnerabilities", force: :cascade do |t|
     t.string   "package_platform",                         null: false
     t.string   "package_names",       default: [],         null: false, array: true
-    t.string   "os_arches",           default: [],         null: false, array: true
-    t.string   "os_releases",         default: [],         null: false, array: true
+    t.string   "affected_arches",     default: [],         null: false, array: true
+    t.string   "affected_releases",   default: [],         null: false, array: true
+    t.jsonb    "patched_versions",    default: {},         null: false
+    t.jsonb    "unaffected_versions", default: {},         null: false
     t.string   "title"
     t.text     "description"
     t.string   "criticality"
-    t.text     "patched_versions",    default: [],         null: false, array: true
-    t.text     "unaffected_versions", default: [],         null: false, array: true
     t.string   "cve_ids",             default: [],         null: false, array: true
     t.string   "osvdb_id"
     t.string   "usn_id"
@@ -314,13 +314,13 @@ ActiveRecord::Schema.define(version: 20160713165015) do
     t.integer  "vulnerability_id",                 null: false
     t.string   "package_platform",                 null: false
     t.string   "package_names",       default: [], null: false, array: true
-    t.string   "os_arches",           default: [], null: false, array: true
-    t.string   "os_releases",         default: [], null: false, array: true
+    t.string   "affected_arches",     default: [], null: false, array: true
+    t.string   "affected_releases",   default: [], null: false, array: true
+    t.jsonb    "patched_versions",    default: {}, null: false
+    t.jsonb    "unaffected_versions", default: {}, null: false
     t.string   "title"
     t.text     "description"
     t.string   "criticality"
-    t.text     "patched_versions",    default: [], null: false, array: true
-    t.text     "unaffected_versions", default: [], null: false, array: true
     t.string   "cve_ids",             default: [], null: false, array: true
     t.string   "osvdb_id"
     t.string   "usn_id"
@@ -338,6 +338,42 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   add_index "vulnerability_archives", ["expired_at"], name: "index_vulnerability_archives_on_expired_at", using: :btree
   add_index "vulnerability_archives", ["valid_at"], name: "index_vulnerability_archives_on_valid_at", using: :btree
   add_index "vulnerability_archives", ["vulnerability_id"], name: "idx_vulnerability_id_ar", using: :btree
+
+  create_table "vulnerable_dependencies", force: :cascade do |t|
+    t.integer  "vulnerability_id",                         null: false
+    t.string   "package_platform",                         null: false
+    t.string   "package_name",                             null: false
+    t.string   "affected_arches"
+    t.string   "affected_releases"
+    t.text     "patched_versions",    default: [],         null: false, array: true
+    t.text     "unaffected_versions", default: [],         null: false, array: true
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.datetime "valid_at",            default: "now()",    null: false
+    t.datetime "expired_at",          default: 'Infinity', null: false
+  end
+
+  add_index "vulnerable_dependencies", ["expired_at"], name: "index_vulnerable_dependencies_on_expired_at", using: :btree
+  add_index "vulnerable_dependencies", ["valid_at"], name: "index_vulnerable_dependencies_on_valid_at", using: :btree
+
+  create_table "vulnerable_dependency_archives", force: :cascade do |t|
+    t.integer  "vulnerable_dependency_id",              null: false
+    t.integer  "vulnerability_id",                      null: false
+    t.string   "package_platform",                      null: false
+    t.string   "package_name",                          null: false
+    t.string   "affected_arches"
+    t.string   "affected_releases"
+    t.text     "patched_versions",         default: [], null: false, array: true
+    t.text     "unaffected_versions",      default: [], null: false, array: true
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.datetime "valid_at",                              null: false
+    t.datetime "expired_at",                            null: false
+  end
+
+  add_index "vulnerable_dependency_archives", ["expired_at"], name: "index_vulnerable_dependency_archives_on_expired_at", using: :btree
+  add_index "vulnerable_dependency_archives", ["valid_at"], name: "index_vulnerable_dependency_archives_on_valid_at", using: :btree
+  add_index "vulnerable_dependency_archives", ["vulnerable_dependency_id"], name: "idx_vulnerable_dependency_id_ar", using: :btree
 
   create_table "vulnerable_package_archives", force: :cascade do |t|
     t.integer  "vulnerable_package_id", null: false
