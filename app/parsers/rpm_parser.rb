@@ -19,13 +19,14 @@
 # like, the RPMComparator does some related stuff right
 # Do we trust the user's release input into bundle or 
 # package manager or what is written on the package itself?
+require 'rpm'
 module RPM
   module Parser
     def self.parse(file)
       file.each_line.reject { |str|
         str =~ /gpg-pubkey-[a-z0-9]+-[a-z0-9]+/
       }.map { |str|
-        Nevra.new(str.strip)
+        RPM::Nevra.new(str.strip)
       }
     end
   end

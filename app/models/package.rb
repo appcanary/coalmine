@@ -21,6 +21,7 @@
 #
 
 # A package is unique across (name, platform, release, version)
+# todo: track if submitted from users?
 class Package < ActiveRecord::Base
   has_many :bundled_packages
   has_many :bundles, :through => :bundled_packages
@@ -35,7 +36,6 @@ class Package < ActiveRecord::Base
     # i.e. do we store name, platform, release?
     VulnerableDependency.where(:package_name => name, 
                                :package_platform => platform)
-    # Vulnerability.where("? = ANY(package_names)", name).where(:package_platform => platform)
   end
 
   def same_name?(pkg_name)
@@ -45,6 +45,9 @@ class Package < ActiveRecord::Base
       self.name == pkg_name 
     end
   end
+
+  # go over the semantics of this exactly,
+  # potentially rename to not_affected?
 
   def affected?(unaffected_versions)
     unaffected_versions.any? do |v|

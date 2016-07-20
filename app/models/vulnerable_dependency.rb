@@ -6,8 +6,8 @@
 #  vulnerability_id    :integer          not null
 #  package_platform    :string           not null
 #  package_name        :string           not null
-#  affected_arches     :string
-#  affected_releases   :string
+#  affected_arches     :string           default("{}"), not null, is an Array
+#  affected_releases   :string           default("{}"), not null, is an Array
 #  patched_versions    :text             default("{}"), not null, is an Array
 #  unaffected_versions :text             default("{}"), not null, is an Array
 #  created_at          :datetime         not null
@@ -20,11 +20,11 @@ class VulnerableDependency < ActiveRecord::Base
   belongs_to :vulnerability
   # TODO VALIDATIONS
   
+  # TODO BROKEN
   def concerns?(package)
     (package.platform == self.package_platform) && 
       package.same_name?(self.package_name)
   end
-
 
   def affects?(package)
     (package.affected?(unaffected_versions) ||

@@ -31,7 +31,7 @@ class Advisory < ActiveRecord::Base
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
 
-  def vuln_attr
+  def to_vuln_attributes
     valid_attr = Vulnerability.attribute_names
     self.attributes.keep_if { |k, _| valid_attr.include?(k) }
   end

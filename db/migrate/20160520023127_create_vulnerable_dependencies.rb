@@ -5,8 +5,8 @@ class CreateVulnerableDependencies < ActiveRecord::Migration
       t.string :package_platform, null: false
       t.string :package_name, null: false
 
-      t.string :affected_arches
-      t.string :affected_releases
+      t.string :affected_arches, array: true, :default => [], null: false
+      t.string :affected_releases, array: true, :default => [], null: false
 
       t.text :patched_versions, array: true, :default => [], null: false
       t.text :unaffected_versions, array: true, :default => [], null: false

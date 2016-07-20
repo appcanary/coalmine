@@ -2,13 +2,13 @@ class CreateVulnerabilities < ActiveRecord::Migration
   def change
     ArchiveMigrator.new(self).create_table :vulnerabilities do |t|
       t.string :package_platform, null: false
-      t.string :package_names, array:true, :default => [], null: false
+      # t.string :package_names, array:true, :default => [], null: false
 
-      t.string :affected_arches, array: true, :default => [], null: false
-      t.string :affected_releases, array: true, :default => [], null: false
+      # t.string :affected_arches, array: true, :default => [], null: false
+      # t.string :affected_releases, array: true, :default => [], null: false
 
-      t.jsonb :patched_versions, :default => {}, null: false
-      t.jsonb :unaffected_versions, :default => {}, null: false
+      # t.jsonb :patched_versions, :default => {}, null: false
+      # t.jsonb :unaffected_versions, :default => {}, null: false
 
       t.string :title
       t.text :description

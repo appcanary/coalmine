@@ -2,6 +2,7 @@
 # 1. test
 # 2. abstract
 # 3. idempotent import
+require 'rpm'
 class AdvisoryManager < ServiceManager
   def import!(queuedimport)
     case queuedimport.source
@@ -19,21 +20,25 @@ class AdvisoryManager < ServiceManager
 
     vuln = nil
     Advisory.transaction do
-    adv = Advisory.create!(qi.advisory_attributes)
-    hsh = adv.vuln_attr
+      adv = Advisory.create!(qi.advisory_attributes)
+      hsh = adv.to_vuln_attributes
 
-    package_name = adv.package_names.pop
-    hsh = hsh.merge({ 
-      "patched_versions" => {package_name => adv.patched_versions},
-      "unaffected_versions" => {package_name => adv.unaffected_versions}})
+      vds = adv.package_names.map do |name|
+        {
+          :package_platform => adv.package_platform,
+          :package_name => name,
+          :patched_versions => adv.patched_versions,
+          :unaffected_versions => adv.unaffected_versions
+        }
+      end
 
-    vuln_mger = VulnerabilityManager.new
-    vuln, error = vuln_mger.create(hsh)
+      vuln_mger = VulnerabilityManager.new
+      vuln, error = vuln_mger.create(adv.to_vuln_attributes, vds)
 
-    if error
-      raise ArgumentError.new("Vuln error: #{error}")
-    end
-    adv.vulnerabilities << vuln
+      if error
+        raise ArgumentError.new("Vuln error: #{error}")
+      end
+      adv.vulnerabilities << vuln
     end
     vuln
   end
@@ -42,10 +47,7 @@ class AdvisoryManager < ServiceManager
     vmger = VulnerabilityManager.new
 
     adv = Advisory.create!(qi.advisory_attributes)
-    cesa_create_vulns(adv)
-  end
-
-  def cesa_create_vulns(adv)
+    
     vuln_mger = VulnerabilityManager.new
 
     packages = adv.patched_versions.map do |pv|
@@ -53,21 +55,28 @@ class AdvisoryManager < ServiceManager
     end.group_by(&:name)
 
 
-    hsh = adv.vuln_attr
-    hsh["package_names"] = packages.keys
-    hsh["patched_versions"] = {}
+    hsh = adv.to_vuln_attributes
 
-    packages.each do |name, pkgs|
-      hsh["patched_versions"][name] = pkgs.map(&:filename)
+    vds = packages.each_pair.map do |name, pkgs|
+      {
+        :package_platform => adv.package_platform,
+        :package_name => name,
+        :affected_releases => adv.affected_releases,
+        :affected_arches => adv.affected_arches,
+        :patched_versions => pkgs.map(&:filename)
+      }
     end
 
-    vuln, error = vuln_mger.create(hsh)
+    vuln = nil
+    Advisory.transaction do
+      vuln, error = vuln_mger.create(hsh, vds)
 
-    if error
-      raise ArgumentError.new("Vuln error: #{error}")
+      if error
+        raise ArgumentError.new("Vuln error: #{error}")
+      end
+
+      adv.vulnerabilities << vuln
     end
-
-    adv.vulnerabilities << vuln
     vuln
   end
 
