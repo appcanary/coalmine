@@ -36,7 +36,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     # let's create some packages
     # and mark one of them as being vulnerable
-    vuln_pkg_set_1 = FactoryGirl.create_list(:ruby_package, 5)
+    vuln_pkg_set_1 = FactoryGirl.create_list(:package, 5, :ruby)
     vuln_pkg_1 = vuln_pkg_set_1.first
 
     vuln_1, error = VulnerabilityManager.new.create(:package_names => [vuln_pkg_1.name],
@@ -77,7 +77,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     # is kept in the bundle.
     # ############
 
-    pkgs_set_2 = FactoryGirl.create_list(:ruby_package, 3)
+    pkgs_set_2 = FactoryGirl.create_list(:package, 3, :ruby)
     vuln_pkgs_set_2 = [vuln_pkg_1] + pkgs_set_2
 
     @bm.update(bundle.id, vuln_pkgs_set_2.map(&:to_simple_h))
@@ -143,8 +143,8 @@ class ReportManagerTest < ActiveSupport::TestCase
     # ###############
 
 
-    vuln_pkg_3 = FactoryGirl.create(:ruby_package)
-    vuln_3 = FactoryGirl.create(:ruby_vulnerability, :packages => [vuln_pkg_3])
+    vuln_pkg_3 = FactoryGirl.create(:package, :ruby)
+    vuln_3 = FactoryGirl.create(:vulnerability, :deps => [vuln_pkg_3], :packages => [vuln_plg_3])
 
     assert_equal 3, VulnerablePackage.count
 
@@ -162,14 +162,14 @@ class ReportManagerTest < ActiveSupport::TestCase
     pkg2_name = "fakemctest2"
   
     pkg1_set = 10.times.map do |i|
-      FactoryGirl.create(:ruby_package,
+      FactoryGirl.create(:package, :ruby,
                          :name => pkg1_name,
                          :version => "1.0.#{i}")
 
     end
 
     pkg2_set = 10.times.map do |i|
-      FactoryGirl.create(:ruby_package,
+      FactoryGirl.create(:package, :ruby,
                          :name => pkg2_name,
                          :version => "2.0.#{i}")
 

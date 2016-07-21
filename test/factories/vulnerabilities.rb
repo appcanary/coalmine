@@ -25,31 +25,35 @@ require File.join(Rails.root, "test/factories", 'factory_helper')
 
 FactoryGirl.define do
 
-  sequence :package_name do |n|
-    "#{Faker::Hacker.ingverb}##{n}"
-  end
-
   sequence :cve_id do |n|
-    "CVE-9999-$04d" % n
+    "CVE-9999-%04d" % n
   end
 
   factory :vulnerable_dependency do
-    package_name
-    package_platform
-    patched_versions { [] }
+    package_platform { dep.platform }
+    package_name { dep.name }
+   
+    patched_versions { ["> #{dep.version}"] }
+    unaffected_versions { [] }
+
+    transient do
+      dep { build(:package, :ruby) }
+    end
   end
 
   factory :vulnerability do
-    package_names { [generate(:package_name)] }
-    package_platform { FactoryHelper.rand_platform }
-    # cve_id { generate(:cve_id) }
-    # after(:create) do |v, f|
-    #   v.package_names.each do |pname|
-    #   create(:vulnerable_dependency, v.package_names.count vulnerability_id: v.id, 
-    # end
+    package_platform { deps.first.platform }
+    cve_ids { [generate(:cve_id)] }
 
-    factory :ruby_vulnerability do
-      package_platform Platforms::Ruby
+    transient do
+      platform_type { :ruby }
+      deps { 2.times.map { build(:package, platform_type) } }
+    end
+
+    after(:create) do |v, f|
+      f.deps.each do |dep|
+        create(:vulnerable_dependency, :dep => dep, :vulnerability => v)
+      end
     end
 
   end

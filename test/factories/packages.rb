@@ -33,12 +33,12 @@ FactoryGirl.define do
     version { FactoryHelper.rand_version_str }
     platform { ["ubuntu", "ruby"].sample }
 
-    factory :ubuntu_package do
+    trait :ubuntu do
       platform "ubuntu"
       release "utopic"
     end
 
-    factory :ruby_package do
+    trait :ruby do
       platform Platforms::Ruby
     end
   end

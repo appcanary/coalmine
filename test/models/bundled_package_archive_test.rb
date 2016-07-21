@@ -47,22 +47,22 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
     bundle = FactoryGirl.create(:bundle)
 
     # initial revision
-    bundle.packages = FactoryGirl.create_list(:ruby_package, 5)
+    bundle.packages = FactoryGirl.create_list(:package, 5, :ruby)
     first_rev = bundle.bundled_packages.reload.to_a
     assert_equal 0, BundledPackageArchive.count
 
     # second revision
-    bundle.packages = FactoryGirl.create_list(:ruby_package, 5)
+    bundle.packages = FactoryGirl.create_list(:package, 5, :ruby)
     second_rev = bundle.bundled_packages.reload.to_a
     assert_equal 5, BundledPackageArchive.count
 
     reference_t = second_rev.first.valid_at
 
     # 3rd revision includes some packages from 2nd
-    bundle.packages = bundle.packages + FactoryGirl.create_list(:ruby_package, 5)
+    bundle.packages = bundle.packages + FactoryGirl.create_list(:package, 5, :ruby)
 
     # 4th revision
-    bundle.packages = FactoryGirl.create_list(:ruby_package, 5)
+    bundle.packages = FactoryGirl.create_list(:package, 5, :ruby)
 
     # we've had 3 prev revisions times 5 packages
     assert_equal 15, BundledPackageArchive.count

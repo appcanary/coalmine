@@ -12,23 +12,27 @@ class CheckerTest < ActiveSupport::TestCase
   end
 
   it "should return LBV-subset of vulns when asked" do
-    vuln_pkg_set = FactoryGirl.create_list(:ruby_package, 5)
+    vuln_pkg_set = FactoryGirl.create_list(:package, 5, :ruby)
     vuln_pkg1 = vuln_pkg_set.first
     vuln_pkg2 = vuln_pkg_set.second
 
-    vuln = VulnerabilityManager.new.create(:package_names => [vuln_pkg1.name],
-                                           :package_platform => vuln_pkg1.platform,
-                                           :patched_versions => ["> #{vuln_pkg1.version}"])
+    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg1])
+    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg1])
+    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg2])
 
-    vuln2 = VulnerabilityManager.new.create(:package_names => [vuln_pkg1.name],
-                                            :package_platform => vuln_pkg1.platform,
-                                            :patched_versions => ["> #{vuln_pkg1.version}"])
+    # vuln = VulnerabilityManager.new.create(:package_names => [vuln_pkg1.name],
+    #                                        :package_platform => vuln_pkg1.platform,
+    #                                        :patched_versions => ["> #{vuln_pkg1.version}"])
+
+    # vuln2 = VulnerabilityManager.new.create(:package_names => [vuln_pkg1.name],
+    #                                         :package_platform => vuln_pkg1.platform,
+    #                                         :patched_versions => ["> #{vuln_pkg1.version}"])
 
 
 
-    vuln3 = VulnerabilityManager.new.create(:package_names => [vuln_pkg2.name],
-                                            :package_platform => vuln_pkg2.platform,
-                                            :patched_versions => ["> #{vuln_pkg2.version}"])
+    # vuln3 = VulnerabilityManager.new.create(:package_names => [vuln_pkg2.name],
+    #                                         :package_platform => vuln_pkg2.platform,
+    #                                         :patched_versions => ["> #{vuln_pkg2.version}"])
 
 
     @checker = Checker.new(account, {platform: @platform})

@@ -22,8 +22,8 @@ require 'test_helper'
 class BundleTest < ActiveSupport::TestCase
   it "should accurately find relevant vuln pkgs" do
     # let's populate some packages
-    bundled_packages = FactoryGirl.create_list(:ruby_package, 6)
-    other_packages = FactoryGirl.create_list(:ruby_package, 6)
+    bundled_packages = FactoryGirl.create_list(:package, 6, :ruby)
+    other_packages = FactoryGirl.create_list(:package, 6, :ruby)
 
     # create a bundle and populate some of the packages 
     b = FactoryGirl.create(:bundle, :platform => Platforms::Ruby)
@@ -57,8 +57,8 @@ class BundleTest < ActiveSupport::TestCase
     # same packages.
     bundle = FactoryGirl.create(:bundle, :platform => Platforms::Ruby)
     
-    alpha_pkg_set = FactoryGirl.create_list(:ruby_package, 10)
-    beta_pkg_set = FactoryGirl.create_list(:ruby_package, 8)
+    alpha_pkg_set = FactoryGirl.create_list(:package, 10, :ruby)
+    beta_pkg_set = FactoryGirl.create_list(:package, 8, :ruby)
     beta_pkg_set = [alpha_pkg_set[0], 
                     alpha_pkg_set[1]] + beta_pkg_set
 

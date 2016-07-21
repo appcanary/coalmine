@@ -3,7 +3,7 @@ require 'test_helper'
 class PackageManagerTest < ActiveSupport::TestCase
   describe "a package is the tuple (platform, release, name, version)" do
     it "we should find or create packages accordingly" do
-      p1 = FactoryGirl.create(:ruby_package)
+      p1 = FactoryGirl.create(:package, :ruby)
       p2 = {:name => "foobarbaz", :kind => "rubygem", 
             :version => "1.0.0", :platform => "ruby"}
 
@@ -21,8 +21,8 @@ class PackageManagerTest < ActiveSupport::TestCase
 
 
     it "should find just the relevant packages" do
-      pkg1, pkg2, _ = FactoryGirl.create_list(:ubuntu_package, 10)
-      mislead_pkg = FactoryGirl.create(:ruby_package, 
+      pkg1, pkg2, _ = FactoryGirl.create_list(:package, 10, :ubuntu)
+      mislead_pkg = FactoryGirl.create(:package, :ruby,
                                        :name => pkg1.name,
                                        :version => pkg1.version)
 
@@ -49,7 +49,7 @@ class PackageManagerTest < ActiveSupport::TestCase
     end
 
     it "should create new packages only when appropriate" do
-      p1, p2, p3, _ = FactoryGirl.create_list(:ubuntu_package, 10)
+      p1, p2, p3, _ = FactoryGirl.create_list(:package, 10, :ubuntu)
       
       assert_equal 10, Package.count
 
@@ -73,10 +73,9 @@ class PackageManagerTest < ActiveSupport::TestCase
 
     it "should create packages and update relevant vulns" do
       pkg_name = "fakemcfake"
+      pkg = FactoryGirl.build(:package, :ruby, :name => pkg_name, :version => "1.0.2")
       vuln = FactoryGirl.create(:vulnerability, 
-                         :package_names => [pkg_name],
-                         :package_platform => Platforms::Ruby,
-                         :patched_versions => ["> 1.0.2"])
+                         :deps => [pkg])
 
       assert_equal 0, Package.count
       assert_equal 0, vuln.packages.count
@@ -99,20 +98,21 @@ class PackageManagerTest < ActiveSupport::TestCase
   end
 
    test "when a package gets created, the vulns that affect it get updated" do
-    v1, v2, _ = FactoryGirl.create_list(:ruby_vulnerability, 5)
+    v1, v2, _ = FactoryGirl.create_list(:vulnerability, 5)
 
-    v1.patched_versions = ["> 1.0.1"]
-    v1.save
+    pkg_name = v1.vulnerable_dependencies.first.package_name
 
-    p1 = FactoryGirl.create(:ruby_package, 
-                            :name => v1.package_names.first,
-                            :version => "1.0.0")
+    # create a vuln package; auto gen package versions
+    # guaranteed to be >=1.0.0
+    p1 = FactoryGirl.create(:package, :ruby,
+                            :name => pkg_name,
+                            :version => "0.0.1")
 
 
     assert_equal 0, VulnerablePackage.count
     assert_equal 1, Package.count
     ActiveRecord::Base.transaction do
-      PackageMaker.new("irrelephant", "nope").add_package_to_affecting_vulnerabilities!(Vulnerability.all, p1)
+      PackageMaker.new("irrelephant", "nope").add_package_to_affecting_vulnerabilities!(VulnerableDependency.all, p1)
     end
 
     v1.reload
