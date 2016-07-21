@@ -16,24 +16,9 @@ class CheckerTest < ActiveSupport::TestCase
     vuln_pkg1 = vuln_pkg_set.first
     vuln_pkg2 = vuln_pkg_set.second
 
-    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg1])
-    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg1])
-    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg2])
-
-    # vuln = VulnerabilityManager.new.create(:package_names => [vuln_pkg1.name],
-    #                                        :package_platform => vuln_pkg1.platform,
-    #                                        :patched_versions => ["> #{vuln_pkg1.version}"])
-
-    # vuln2 = VulnerabilityManager.new.create(:package_names => [vuln_pkg1.name],
-    #                                         :package_platform => vuln_pkg1.platform,
-    #                                         :patched_versions => ["> #{vuln_pkg1.version}"])
-
-
-
-    # vuln3 = VulnerabilityManager.new.create(:package_names => [vuln_pkg2.name],
-    #                                         :package_platform => vuln_pkg2.platform,
-    #                                         :patched_versions => ["> #{vuln_pkg2.version}"])
-
+    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg1], :packages => [vuln_pkg1])
+    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg1], :packages => [vuln_pkg1])
+    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg2], :packages => [vuln_pkg2])
 
     @checker = Checker.new(account, {platform: @platform})
 
@@ -42,6 +27,5 @@ class CheckerTest < ActiveSupport::TestCase
     assert_equal 2, packages.count
     assert_equal 2, packages.first.vulnerabilities.count
     assert_equal 1, packages.second.vulnerabilities.count
-
   end
 end

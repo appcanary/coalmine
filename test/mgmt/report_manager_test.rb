@@ -39,9 +39,11 @@ class ReportManagerTest < ActiveSupport::TestCase
     vuln_pkg_set_1 = FactoryGirl.create_list(:package, 5, :ruby)
     vuln_pkg_1 = vuln_pkg_set_1.first
 
-    vuln_1, error = VulnerabilityManager.new.create(:package_names => [vuln_pkg_1.name],
-                                           :package_platform => vuln_pkg_1.platform,
-                                           :patched_versions => ["> #{vuln_pkg_1.version}"])
+    vm = VulnerabilityManager.new(vuln_pkg_1.platform)
+
+    vuln_1, error = vm.create({},
+                              [{:package_name => vuln_pkg_1.name,
+                                :patched_versions => ["> #{vuln_pkg_1.version}"]}])
 
     # making sure everything looks legit
     assert_equal 1, VulnerablePackage.count
@@ -121,9 +123,10 @@ class ReportManagerTest < ActiveSupport::TestCase
     vuln_pkg_2 = vuln_pkgs_set_2.last
 
     # mark it as vuln
-    vuln_2, error = VulnerabilityManager.new.create(:package_names => [vuln_pkg_2.name],
-                                             :package_platform => vuln_pkg_2.platform,
-                                             :patched_versions => ["> #{vuln_pkg_2.version}"])
+    vm = VulnerabilityManager.new(vuln_pkg_2.platform)
+    vuln_2, error = vm.create({},
+                              [{:package_name => vuln_pkg_2.name,
+                                :patched_versions => ["> #{vuln_pkg_2.version}"]}])
 
     # did we create another LBV?
     assert_equal 2, VulnerablePackage.count
@@ -144,7 +147,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
 
     vuln_pkg_3 = FactoryGirl.create(:package, :ruby)
-    vuln_3 = FactoryGirl.create(:vulnerability, :deps => [vuln_pkg_3], :packages => [vuln_plg_3])
+    vuln_3 = FactoryGirl.create(:vulnerability, :deps => [vuln_pkg_3], :packages => [vuln_pkg_3])
 
     assert_equal 3, VulnerablePackage.count
 
@@ -175,13 +178,14 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     end
 
+    vm = VulnerabilityManager.new(Platforms::Ruby)
 
-    vuln1, error = VulnerabilityManager.new.create(:package_names => [pkg1_name],
-                                           :package_platform => Platforms::Ruby,
-                                           :patched_versions => ["> 1.0.1"])
-    vuln2, error = VulnerabilityManager.new.create(:package_names => [pkg2_name],
-                                            :package_platform => Platforms::Ruby,
-                                            :patched_versions => ["> 2.0.1"])
+    vuln1, error = vm.create({},
+                             [{:package_name => pkg1_name,
+                               :patched_versions => ["> 1.0.1"]}])
+    vuln2, error = vm.create({},
+                             [{:package_name => pkg2_name,
+                               :patched_versions => ["> 2.0.1"]}])
     assert_equal 4, VulnerablePackage.count
     
     # version = 1.0.1
@@ -201,12 +205,13 @@ class ReportManagerTest < ActiveSupport::TestCase
     # okay so now we have all this new info coming in and
     # vuln_pkg1 is no longer vuln!
 
-    VulnerabilityManager.new.update(vuln1.id, :patched_versions => ["> 1.0.0"])
+    VulnerabilityManager.new(vuln1.package_platform).update(vuln1.id, {}, [{:package_name => vuln_pkg1.name,
+                                                                            :patched_versions => ["> 1.0.0"]}])
     assert_equal 1, LogBundlePatch.count
     assert_equal 1, LogBundleVulnerability.count # just to double check
 
     # whelp, and look at that, notvuln_pkg2 is now vulnerable!
-    VulnerabilityManager.new.update(vuln2.id, :patched_versions => ["> 2.0.2"])
+    VulnerabilityManager.new(vuln2.package_platform).update(vuln2.id, {}, [{:package_name => notvuln_pkg2.name, :patched_versions => ["> 2.0.2"]}])
     
     assert_equal 2, LogBundleVulnerability.count
     assert_equal 1, LogBundlePatch.count # just to double check
