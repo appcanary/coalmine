@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160713165015) do
+ActiveRecord::Schema.define(version: 20160604200811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   end
 
   create_table "advisories", force: :cascade do |t|
+    t.integer  "queued_advisory_id",                       null: false
     t.string   "identifier",                               null: false
     t.string   "package_platform",                         null: false
     t.string   "package_names",       default: [],         null: false, array: true
@@ -49,10 +50,12 @@ ActiveRecord::Schema.define(version: 20160713165015) do
 
   add_index "advisories", ["expired_at"], name: "index_advisories_on_expired_at", using: :btree
   add_index "advisories", ["identifier"], name: "index_advisories_on_identifier", using: :btree
+  add_index "advisories", ["queued_advisory_id"], name: "index_advisories_on_queued_advisory_id", using: :btree
   add_index "advisories", ["valid_at"], name: "index_advisories_on_valid_at", using: :btree
 
   create_table "advisory_archives", force: :cascade do |t|
     t.integer  "advisory_id",                      null: false
+    t.integer  "queued_advisory_id",               null: false
     t.string   "identifier",                       null: false
     t.string   "package_platform",                 null: false
     t.string   "package_names",       default: [], null: false, array: true
@@ -80,6 +83,7 @@ ActiveRecord::Schema.define(version: 20160713165015) do
   add_index "advisory_archives", ["advisory_id"], name: "idx_advisory_id_ar", using: :btree
   add_index "advisory_archives", ["expired_at"], name: "index_advisory_archives_on_expired_at", using: :btree
   add_index "advisory_archives", ["identifier"], name: "index_advisory_archives_on_identifier", using: :btree
+  add_index "advisory_archives", ["queued_advisory_id"], name: "index_advisory_archives_on_queued_advisory_id", using: :btree
   add_index "advisory_archives", ["valid_at"], name: "index_advisory_archives_on_valid_at", using: :btree
 
   create_table "advisory_vulnerabilities", force: :cascade do |t|

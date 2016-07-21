@@ -1,10 +1,18 @@
 # TODO
 # 1. test
-# 2. abstract
+# 2. abstract?
 # 3. idempotent import
 require 'rpm'
 class AdvisoryManager < ServiceManager
-  def import!(queuedimport)
+  def self.import!
+    # dumb case for now: get all the ones we ain't imported yet
+    mger = self.new
+    QueuedAdvisory.where("id not in (select queued_advisory_id from advisories)").find_each do |qa|
+      mger.create(qa)
+    end
+  end
+
+  def create(queuedimport)
     case queuedimport.source
     when "rubysec"
       import_rubysec(queuedimport)
@@ -16,11 +24,9 @@ class AdvisoryManager < ServiceManager
   end
 
   def import_rubysec(qi)
-    vmger = VulnerabilityManager.new
-
     vuln = nil
     Advisory.transaction do
-      adv = Advisory.create!(qi.advisory_attributes)
+      adv = Advisory.create!(qi.to_advisory_attributes)
       hsh = adv.to_vuln_attributes
 
       vds = adv.package_names.map do |name|
@@ -43,9 +49,7 @@ class AdvisoryManager < ServiceManager
   end
 
   def import_cesa(qi)
-    vmger = VulnerabilityManager.new
-
-    adv = Advisory.create!(qi.advisory_attributes)
+    adv = Advisory.create!(qi.to_advisory_attributes)
     
     vuln_mger = VulnerabilityManager.new(adv.package_platform)
 

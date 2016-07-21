@@ -28,6 +28,7 @@
 #
 
 class Advisory < ActiveRecord::Base
+  belongs_to :queued_advisory
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
 

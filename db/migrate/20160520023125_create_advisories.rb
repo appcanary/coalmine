@@ -1,6 +1,7 @@
 class CreateAdvisories < ActiveRecord::Migration
   def change
     ArchiveMigrator.new(self).create_table :advisories do |t|
+      t.references :queued_advisory, null: false, index: true
       t.string :identifier, null: false, index: true
 
       t.string :package_platform, null: false

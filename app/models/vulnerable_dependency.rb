@@ -18,7 +18,6 @@
 
 class VulnerableDependency < ActiveRecord::Base
   belongs_to :vulnerability
-  # TODO VALIDATIONS
   
   # TODO BROKEN
   def concerns?(package)

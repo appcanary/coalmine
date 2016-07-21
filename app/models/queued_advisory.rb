@@ -25,7 +25,7 @@
 #
 
 class QueuedAdvisory < ActiveRecord::Base
-  def advisory_attributes
-    self.attributes.except("id")
+  def to_advisory_attributes
+    self.attributes.except("id").merge(:queued_advisory_id => self.id)
   end
 end
