@@ -25,14 +25,13 @@ class AdvisoryManager < ServiceManager
 
       vds = adv.package_names.map do |name|
         {
-          :package_platform => adv.package_platform,
           :package_name => name,
           :patched_versions => adv.patched_versions,
           :unaffected_versions => adv.unaffected_versions
         }
       end
 
-      vuln_mger = VulnerabilityManager.new
+      vuln_mger = VulnerabilityManager.new(adv.package_platform)
       vuln, error = vuln_mger.create(adv.to_vuln_attributes, vds)
 
       if error
@@ -48,7 +47,7 @@ class AdvisoryManager < ServiceManager
 
     adv = Advisory.create!(qi.advisory_attributes)
     
-    vuln_mger = VulnerabilityManager.new
+    vuln_mger = VulnerabilityManager.new(adv.package_platform)
 
     packages = adv.patched_versions.map do |pv|
       RPM::Nevra.new(pv)
@@ -59,7 +58,6 @@ class AdvisoryManager < ServiceManager
 
     vds = packages.each_pair.map do |name, pkgs|
       {
-        :package_platform => adv.package_platform,
         :package_name => name,
         :affected_releases => adv.affected_releases,
         :affected_arches => adv.affected_arches,

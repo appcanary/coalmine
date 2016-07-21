@@ -27,7 +27,8 @@ class VulnerableDependency < ActiveRecord::Base
   end
 
   def affects?(package)
-    (package.affected?(unaffected_versions) ||
-     package.needs_patch?(patched_versions))
+    concerns?(package) && 
+      (package.affected?(unaffected_versions) ||
+       package.needs_patch?(patched_versions))
   end
 end
