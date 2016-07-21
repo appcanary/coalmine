@@ -30,5 +30,13 @@ module RPM
        release: release,
        arch: arch}
     end
+
+    def to_package
+      Package.new(name: name,
+                  epoch: epoch,
+                  version: version,
+                  version_release: release,
+                  arch: arch)
+    end
   end
 end

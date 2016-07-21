@@ -18,7 +18,6 @@ class Checker
       package_query = PackageMaker.new(platform, release).find_or_create(package_list)
     end
 
-
     # TODO
     # either denormalize or find a way to make this
     # query not be terrible and N+1, re: advisories

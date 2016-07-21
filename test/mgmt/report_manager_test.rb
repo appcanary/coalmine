@@ -54,7 +54,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     # and assign packages
     @bm = BundleManager.new(account)
 
-    bundle, errors = @bm.create({:platform => @platform}, vuln_pkg_set_1.map(&:to_simple_h))
+    bundle, errors = @bm.create({:platform => @platform}, vuln_pkg_set_1)
 
     # Creating the bundle with a vuln should trigger a log:
 
@@ -82,7 +82,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     pkgs_set_2 = FactoryGirl.create_list(:package, 3, :ruby)
     vuln_pkgs_set_2 = [vuln_pkg_1] + pkgs_set_2
 
-    @bm.update(bundle.id, vuln_pkgs_set_2.map(&:to_simple_h))
+    @bm.update(bundle.id, vuln_pkgs_set_2)
 
     # the vulnerability has not changed, therefore only one LogBundleVuln
     assert_equal 1, bundle.vulnerable_packages.count
@@ -106,7 +106,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     assert_equal 0, bundle.packages.count
     assert_equal 1, LogBundlePatch.count
 
-    @bm.update(bundle.id, vuln_pkgs_set_2.map(&:to_simple_h))
+    @bm.update(bundle.id, vuln_pkgs_set_2)
 
     # we now see another LBV.
     assert_equal 2, LogBundleVulnerability.count
@@ -151,7 +151,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     assert_equal 3, VulnerablePackage.count
 
-    @bm.update(bundle.id, [vuln_pkg_3].map(&:to_simple_h))
+    @bm.update(bundle.id, [vuln_pkg_3])
 
     # we've created another LBV,
     # and we wiped out two vuln packages: vuln_pkg_1 and vuln_pkg_2
@@ -196,7 +196,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
 
     @bm = BundleManager.new(account)
-    bundle, error = @bm.create({:platform => @platform}, [vuln_pkg1.to_simple_h, notvuln_pkg2.to_simple_h])
+    bundle, error = @bm.create({:platform => @platform}, [vuln_pkg1, notvuln_pkg2])
     
     # one LBV thank you
     assert_equal 1, LogBundleVulnerability.count

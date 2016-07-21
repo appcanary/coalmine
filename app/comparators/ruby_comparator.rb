@@ -1,7 +1,7 @@
 class RubyComparator
   attr_accessor :version
-  def initialize(version)
-    @version = Gem::Version.create(version)
+  def initialize(pkg)
+    @version = Gem::Version.create(pkg.version)
   end
 
   def matches?(requirement)

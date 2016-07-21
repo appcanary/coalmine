@@ -219,22 +219,22 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "log_bundle_vulnerabilities", ["vulnerable_package_id"], name: "index_log_bundle_vulnerabilities_on_vulnerable_package_id", using: :btree
 
   create_table "package_archives", force: :cascade do |t|
-    t.integer  "package_id",  null: false
-    t.string   "name",        null: false
+    t.integer  "package_id",      null: false
+    t.string   "name",            null: false
     t.string   "source_name"
     t.string   "platform"
     t.string   "release"
     t.string   "version"
-    t.string   "artifact"
+    t.string   "version_release"
     t.string   "epoch"
     t.string   "arch"
     t.string   "filename"
     t.string   "checksum"
     t.string   "origin"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.datetime "valid_at",    null: false
-    t.datetime "expired_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.datetime "valid_at",        null: false
+    t.datetime "expired_at",      null: false
   end
 
   add_index "package_archives", ["expired_at"], name: "index_package_archives_on_expired_at", using: :btree
@@ -242,21 +242,21 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "package_archives", ["valid_at"], name: "index_package_archives_on_valid_at", using: :btree
 
   create_table "packages", force: :cascade do |t|
-    t.string   "name",                             null: false
+    t.string   "name",                                 null: false
     t.string   "source_name"
     t.string   "platform"
     t.string   "release"
     t.string   "version"
-    t.string   "artifact"
+    t.string   "version_release"
     t.string   "epoch"
     t.string   "arch"
     t.string   "filename"
     t.string   "checksum"
     t.string   "origin"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.datetime "valid_at",    default: "now()",    null: false
-    t.datetime "expired_at",  default: 'Infinity', null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.datetime "valid_at",        default: "now()",    null: false
+    t.datetime "expired_at",      default: 'Infinity', null: false
   end
 
   add_index "packages", ["expired_at"], name: "index_packages_on_expired_at", using: :btree

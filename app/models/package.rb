@@ -31,6 +31,13 @@ class Package < ActiveRecord::Base
 
   validates_uniqueness_of :version, scope: [:platform, :release, :name]
 
+  scope :pluck_relevant_unique_fields, ->(platform) { 
+    uniquely_id_cols = relevant_columns(platform)
+    select_str = uniquely_id_cols.map(&:to_s).join(", ")
+
+    select(select_str).pluck(*uniquely_id_cols)
+  }
+
   def concerning_vulnerabilities
     # TODO: what do we store exactly on Vulns,
     # i.e. do we store name, platform, release?
@@ -49,29 +56,57 @@ class Package < ActiveRecord::Base
   # go over the semantics of this exactly,
   # potentially rename to not_affected?
 
-  def affected?(unaffected_versions)
+  def not_affected?(unaffected_versions)
     unaffected_versions.any? do |v|
-      !same_version?(v)
+      version_matches?(v)
     end
   end
 
-  # TODO: has this been tested?
-  def needs_patch?(patched_versions)
+  def been_patched?(patched_versions)
     patched_versions.any? do |v|
-      !same_version?(v)
+      version_matches?(v)
     end
   end
 
-  # todo: better name for this
-  def same_version?(other_version)
+  def version_matches?(other_version)
     comparator.matches?(other_version)
   end
 
   def comparator
-    @comparator ||= Platforms.comparator_for(self.platform).new(self.version)
+    @comparator ||= Platforms.comparator_for(self.platform).new(self)
   end
 
   def to_simple_h
     {name: name, version: version}
+  end
+
+  # move to presenter/values object
+  def to_relevant_h
+    hsh = {}
+    Package.relevant_columns(platform).each do |k|
+      hsh[k] = self[k]
+    end
+    hsh
+  end
+
+  def to_relevant_values
+    Package.relevant_columns(platform).map do |k|
+      self[k]
+    end
+  end
+  
+  def self.to_relevant_clauses(platform)
+    self.relevant_columns(platform).map { |k|
+      "#{k} = ?"
+    }.join("AND ")
+  end
+
+  def self.relevant_columns(platform)
+    case platform
+    when Platforms::CentOS
+      [:name, :version, :epoch, :version_release, :arch]
+    else
+      [:name, :version]
+    end
   end
 end

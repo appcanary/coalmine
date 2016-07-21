@@ -40,41 +40,48 @@ class PackageMaker < ServiceMaker
       return Package.none
     end
     
-    existing_set = existing_packages_query.select("name, version").pluck(:name, :version).to_set
+    # TODO: it'd be nice to save the filenames on centos pkgs n'est pas?
+    existing_set = existing_packages_query.pluck_relevant_unique_fields(@platform).to_set
 
-    submitted_set = package_list.map { |p| [p[:name], p[:version]]}.to_set
+    submitted_set = package_list.map(&:to_relevant_values).to_set
 
     new_packages = submitted_set - existing_set
 
-    new_packages.map do |name, version|
-      self.create(:name => name,
-                  :version => version)
+    fields = Package.relevant_columns(@platform)
+    new_packages.map do |pkg|
+      # rebuild an attributes hash from set
+      hsh = fields.each_with_index.reduce({}) do |h, (k, i)|
+        h[k] = pkg[i]
+        h
+      end
+      self.create(hsh)
     end
   end
 
   def find_existing_packages(package_list)
-    return [] if package_list.empty?
+    return Package.none if package_list.empty?
 
     query = Package.where(:platform => @platform,
                           :release => @release)
     clauses = []
     values = []
+    clause_str = "(#{Package.to_relevant_clauses(@platform)})"
+
     package_list.each do |pkg|
-      clauses << "(name = ? AND version = ?)"
-      values << pkg[:name]
-      values << pkg[:version]
+      clauses << clause_str
+      pkg.to_relevant_values.each do |val|
+        values << val
+      end
     end
 
     query.where(clauses.join(" OR "), *values)
   end
 
   # whenever we create a package, we check to see if it's vuln
-  def create(pkg)
-    package = Package.new(:platform => @platform,
-                          :release => @release,
-                          :name => pkg[:name],
-                          :version => pkg[:version],
-                          :origin => "user")
+  def create(hsh)
+    package = Package.new(hsh.merge(:platform => @platform,
+                                    :release => @release,
+                                    :origin=>"user"))
 
     # current assumption: if there's something wrong with a package, 
     # abort whole txn

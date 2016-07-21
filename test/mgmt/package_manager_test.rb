@@ -4,7 +4,7 @@ class PackageManagerTest < ActiveSupport::TestCase
   describe "a package is the tuple (platform, release, name, version)" do
     it "we should find or create packages accordingly" do
       p1 = FactoryGirl.create(:package, :ruby)
-      p2 = {:name => "foobarbaz", :kind => "rubygem", 
+      p2 = {:name => "foobarbaz", 
             :version => "1.0.0", :platform => "ruby"}
 
       package_list = [p2, {:name => p1.name, :version => p1.version}]
@@ -12,7 +12,7 @@ class PackageManagerTest < ActiveSupport::TestCase
       assert_equal 1, Package.count
 
       @pm = PackageMaker.new("ruby", nil)
-      packages = @pm.find_or_create(package_list)
+      packages = @pm.find_or_create(package_list.map { |h| Package.new(h)})
       assert_equal 2, packages.count
       assert_equal 2, Package.count
 
@@ -25,24 +25,25 @@ class PackageManagerTest < ActiveSupport::TestCase
       mislead_pkg = FactoryGirl.create(:package, :ruby,
                                        :name => pkg1.name,
                                        :version => pkg1.version)
-
+      plist = [{:name => pkg1.name,
+                :version => pkg1.version},
+                {:name => pkg2.name,
+                 :version => pkg2.version,
+                 :platform => pkg2.platform}].map { |h| Package.new(h) }
       @pm = PackageMaker.new(pkg1.platform, pkg1.release)
-      list = @pm.find_existing_packages([{:name => pkg1.name,
-                                          :version => pkg1.version},
-                                          {:name => pkg2.name,
-                                           :version => pkg2.version,
-                                           :platform => pkg2.platform}])
-
+      list = @pm.find_existing_packages(plist)
 
       assert_equal 2, list.count
 
       assert_equal pkg1.id, list.first.id
       assert_equal pkg2.id, list.second.id
 
-      list = @pm.find_existing_packages([{:name => pkg1.name + "lol",
-                                          :version => pkg1.version },
-                                          {:name => pkg2.name,
-                                           :version => pkg2.version}])
+      plist2 = [{:name => pkg1.name + "lol",
+                 :version => pkg1.version },
+                 {:name => pkg2.name,
+                  :version => pkg2.version}].map { |h| Package.new(h) }
+
+      list = @pm.find_existing_packages(plist2)
 
       assert_equal 1, list.count
       assert_equal pkg2.id, list.first.id
@@ -57,9 +58,9 @@ class PackageManagerTest < ActiveSupport::TestCase
 
       # build a query pointing to only two packages that already exist,
       # tho it has multiple instances of each
-      package_list = [p1, p2, p1].map(&:to_simple_h)
+      package_list = [p1, p2, p1]
       package_list = package_list +  [{name: "fakeMcFakerson", version: "1.2.3"},
-                                      {name: "fakeMcFakerson", version: "1.2.3"}]
+                                      {name: "fakeMcFakerson", version: "1.2.3"}].map { |h| Package.new(h) }
 
       existing_query = @pm.find_existing_packages(package_list)
 

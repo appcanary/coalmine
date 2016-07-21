@@ -19,7 +19,6 @@
 class VulnerableDependency < ActiveRecord::Base
   belongs_to :vulnerability
   
-  # TODO BROKEN
   def concerns?(package)
     (package.platform == self.package_platform) && 
       package.same_name?(self.package_name)
@@ -27,7 +26,7 @@ class VulnerableDependency < ActiveRecord::Base
 
   def affects?(package)
     concerns?(package) && 
-      (package.affected?(unaffected_versions) ||
-       package.needs_patch?(patched_versions))
+      (!package.not_affected?(unaffected_versions) &&
+       !package.been_patched?(patched_versions))
   end
 end

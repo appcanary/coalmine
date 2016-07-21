@@ -190,11 +190,29 @@ class RPMComparator
     end
   end
 
-  def initialize(version)
-    @version = version
+  # version we have for the package
+  def initialize(package)
+    @package = package
   end
 
-  def matches?(new)
-    RPM.vercmp(@version, new) <= 0
+  # version from an advisory
+  # vercmp returns 1 if str1 is newer than str2,
+  #                0 if they are identical
+  #               -1 if str1 is older than str2
+
+  # is the @version newer (-1) or identical (0) to the patch?
+  def matches?(patched_version)
+    binding.pry
+    RPM.vercmp(patched_version, package_to_evr) <= 0
+  end
+
+  def package_to_evr
+    pkg = @package
+
+    if pkg.epoch && pkg.epoch != "0"
+      "#{pkg.name}-#{pkg.epoch}:#{pkg.version}-#{pkg.version_release}"
+    else
+      "#{pkg.name}-#{pkg.version}-#{pkg.version_release}"
+    end
   end
 end

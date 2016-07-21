@@ -38,6 +38,11 @@ FactoryGirl.define do
       release "utopic"
     end
 
+    trait :centos do
+      platform "centos"
+      release "7"
+    end
+
     trait :ruby do
       platform Platforms::Ruby
     end

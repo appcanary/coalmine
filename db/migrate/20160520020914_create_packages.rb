@@ -6,7 +6,7 @@ class CreatePackages < ActiveRecord::Migration
       t.string :platform, null: false
       t.string :release
       t.string :version
-      t.string :artifact
+      t.string :version_release
       t.string :platform
       t.string :epoch
       t.string :arch
