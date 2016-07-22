@@ -28,7 +28,8 @@ class BundleTest < ActiveSupport::TestCase
     # create a bundle and populate some of the packages 
     b = FactoryGirl.create(:bundle, :platform => Platforms::Ruby)
     
-    b, error = BundleManager.new(b.account).update(b.id, bundled_packages)
+    bundled_package_list = bundled_packages.map { |p| PackageBuilder.from_package(p) }
+    b, error = BundleManager.new(b.account).update(b.id, bundled_package_list)
     assert_equal 0, b.vulnerable_packages.count
 
     # and mark some of them as vuln

@@ -19,6 +19,15 @@ module RPM
       end
     end
 
+    def to_evra
+      if epoch && epoch != "0"
+        "#{epoch}:#{version}-#{version_release}-#{arch}"
+      else
+        "#{version}-#{version_release}-#{arch}"
+      end
+    end
+
+
     def [](key)
       to_h[key]
     end

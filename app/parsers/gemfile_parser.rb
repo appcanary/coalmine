@@ -12,8 +12,8 @@ class GemfileParser
     lf = Bundler::LockfileParser.new(lockfile)
     # old version; what do we do about the platform?
     # lf.specs.map {|a| {name: a.name, kind: "rubygem", version:  {number: a.version.version, platform: a.platform.to_s}}}
-    lf.specs.map {|a| Package.new(name: a.name,  version: a.version.version, platform: a.platform.to_s) }
     # lf.specs.map {|a| {name: a.name, kind: "rubygem", version: a.version.version, platform: a.platform.to_s}}
+    lf.specs.map {|a| PackageBuilder::Rubygem.new(name: a.name,  version: a.version.version, platform: a.platform.to_s) }
   end
 end
 

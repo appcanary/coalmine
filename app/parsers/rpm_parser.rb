@@ -26,7 +26,7 @@ module RPM
       file.each_line.reject { |str|
         str =~ /gpg-pubkey-[a-z0-9]+-[a-z0-9]+/
       }.map { |str|
-        RPM::Nevra.new(str.strip).to_package
+        PackageBuilder::RPM.new(str)
       }
     end
   end

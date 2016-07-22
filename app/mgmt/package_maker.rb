@@ -40,21 +40,12 @@ class PackageMaker < ServiceMaker
       return Package.none
     end
     
-    # TODO: it'd be nice to save the filenames on centos pkgs n'est pas?
-    existing_set = existing_packages_query.pluck_relevant_unique_fields(@platform).to_set
+    existing_set = existing_packages_query.pluck_unique_fields
 
-    submitted_set = package_list.map(&:to_relevant_values).to_set
+    new_packages = diff_packages(existing_set, package_list)
 
-    new_packages = submitted_set - existing_set
-
-    fields = Package.relevant_columns(@platform)
     new_packages.map do |pkg|
-      # rebuild an attributes hash from set
-      hsh = fields.each_with_index.reduce({}) do |h, (k, i)|
-        h[k] = pkg[i]
-        h
-      end
-      self.create(hsh)
+      self.create(pkg.attributes)
     end
   end
 
@@ -63,18 +54,8 @@ class PackageMaker < ServiceMaker
 
     query = Package.where(:platform => @platform,
                           :release => @release)
-    clauses = []
-    values = []
-    clause_str = "(#{Package.to_relevant_clauses(@platform)})"
 
-    package_list.each do |pkg|
-      clauses << clause_str
-      pkg.to_relevant_values.each do |val|
-        values << val
-      end
-    end
-
-    query.where(clauses.join(" OR "), *values)
+    query.search_unique_fields(package_list.map(&:unique_values))
   end
 
   # whenever we create a package, we check to see if it's vuln
@@ -109,5 +90,26 @@ class PackageMaker < ServiceMaker
                                   :package_id => package.id)
       end
     end
+  end
+
+  # return items in submitted that are NOT
+  # in existing. Assumes existing is an array
+  # of arrays and submitted are PackageBuilders
+  def diff_packages(existing, submitted)
+    existing_set = existing.reduce({}) { |h, k|
+      h[k.hash] = true
+      h
+    }
+
+    submitted_set = {}
+    submitted.select { |k|
+      # not strictly necc but gets rid of dupes
+      if submitted_set[k.unique_values_hash]
+        false
+      else
+        submitted_set[k.unique_values_hash] = true
+        existing_set[k.unique_values.hash].nil?
+      end
+    }
   end
 end

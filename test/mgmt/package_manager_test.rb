@@ -12,7 +12,7 @@ class PackageManagerTest < ActiveSupport::TestCase
       assert_equal 1, Package.count
 
       @pm = PackageMaker.new("ruby", nil)
-      packages = @pm.find_or_create(package_list.map { |h| Package.new(h)})
+      packages = @pm.find_or_create(package_list.map { |h| PackageBuilder::Rubygem.new(h)})
       assert_equal 2, packages.count
       assert_equal 2, Package.count
 
@@ -21,18 +21,22 @@ class PackageManagerTest < ActiveSupport::TestCase
 
 
     it "should find just the relevant packages" do
-      pkg1, pkg2, _ = FactoryGirl.create_list(:package, 10, :ubuntu)
-      mislead_pkg = FactoryGirl.create(:package, :ruby,
+      pkg1, pkg2, _ = FactoryGirl.create_list(:package, 10, :ruby)
+      
+      # overlap with the same name and version, but diff platform
+      mislead_pkg = FactoryGirl.create(:package, :ubuntu,
                                        :name => pkg1.name,
                                        :version => pkg1.version)
       plist = [{:name => pkg1.name,
                 :version => pkg1.version},
                 {:name => pkg2.name,
                  :version => pkg2.version,
-                 :platform => pkg2.platform}].map { |h| Package.new(h) }
+                 :platform => pkg2.platform}].map { |h| PackageBuilder::Rubygem.new(h) }
+
       @pm = PackageMaker.new(pkg1.platform, pkg1.release)
       list = @pm.find_existing_packages(plist)
 
+      # only finds the two with the right platform
       assert_equal 2, list.count
 
       assert_equal pkg1.id, list.first.id
@@ -41,7 +45,7 @@ class PackageManagerTest < ActiveSupport::TestCase
       plist2 = [{:name => pkg1.name + "lol",
                  :version => pkg1.version },
                  {:name => pkg2.name,
-                  :version => pkg2.version}].map { |h| Package.new(h) }
+                  :version => pkg2.version}].map { |h| PackageBuilder::Rubygem.new(h) }
 
       list = @pm.find_existing_packages(plist2)
 
@@ -50,7 +54,7 @@ class PackageManagerTest < ActiveSupport::TestCase
     end
 
     it "should create new packages only when appropriate" do
-      p1, p2, p3, _ = FactoryGirl.create_list(:package, 10, :ubuntu)
+      p1, p2, p3, _ = FactoryGirl.create_list(:package, 10, :ruby)
       
       assert_equal 10, Package.count
 
@@ -58,9 +62,10 @@ class PackageManagerTest < ActiveSupport::TestCase
 
       # build a query pointing to only two packages that already exist,
       # tho it has multiple instances of each
-      package_list = [p1, p2, p1]
+      package_list = [p1, p2, p1].map(&:to_simple_h)
       package_list = package_list +  [{name: "fakeMcFakerson", version: "1.2.3"},
-                                      {name: "fakeMcFakerson", version: "1.2.3"}].map { |h| Package.new(h) }
+                                      {name: "fakeMcFakerson", version: "1.2.3"}]
+      package_list = package_list.map { |h| PackageBuilder::Rubygem.new(h) }
 
       existing_query = @pm.find_existing_packages(package_list)
 

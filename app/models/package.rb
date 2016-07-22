@@ -31,11 +31,16 @@ class Package < ActiveRecord::Base
 
   validates_uniqueness_of :version, scope: [:platform, :release, :name]
 
-  scope :pluck_relevant_unique_fields, ->(platform) { 
-    uniquely_id_cols = relevant_columns(platform)
-    select_str = uniquely_id_cols.map(&:to_s).join(", ")
+  scope :pluck_unique_fields, -> { 
+    select("name, version").pluck(:name, :version)
+  }
 
-    select(select_str).pluck(*uniquely_id_cols)
+  scope :search_unique_fields, ->(values) {
+    clauses = values.map do |vals|
+      '(name = ? AND version = ?)'
+    end
+
+    where(clauses.join(" OR "), *values.flatten)
   }
 
   def concerning_vulnerabilities
@@ -80,33 +85,4 @@ class Package < ActiveRecord::Base
     {name: name, version: version}
   end
 
-  # move to presenter/values object
-  def to_relevant_h
-    hsh = {}
-    Package.relevant_columns(platform).each do |k|
-      hsh[k] = self[k]
-    end
-    hsh
-  end
-
-  def to_relevant_values
-    Package.relevant_columns(platform).map do |k|
-      self[k]
-    end
-  end
-  
-  def self.to_relevant_clauses(platform)
-    self.relevant_columns(platform).map { |k|
-      "#{k} = ?"
-    }.join("AND ")
-  end
-
-  def self.relevant_columns(platform)
-    case platform
-    when Platforms::CentOS
-      [:name, :version, :epoch, :version_release, :arch]
-    else
-      [:name, :version]
-    end
-  end
 end
