@@ -56,27 +56,26 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
   end
 
   it "should correctly calculate vuln centos packages" do
-    name = "glusterfs"
+    name = "wpa_supplicant"
 
     vuln_dep = FactoryGirl.build(:vulnerable_dependency, 
                                  :package_platform => Platforms::CentOS, 
                                  :package_name => name, 
-                                 :patched_versions => ["glusterfs-3.7.1-16.0.1.el7.centos.src.rpm", "glusterfs-3.7.1-16.0.1.el7.centos.x86_64.rpm"],
+                                 :patched_versions =>  ["wpa_supplicant-2.0-17.el7_1.src.rpm", "wpa_supplicant-2.0-17.el7_1.x86_64.rpm"],
                                  :unaffected_versions => [])
 
     patched_pkg = FactoryGirl.build(:package, :centos,
                                     :name => name,
-                                    :version => "3.7.1")
+                                    :version => "3.7.1-17.el7.arch")
 
     vuln_pkg = FactoryGirl.build(:package, :centos,
                                  :name => name,
-                                 :version => "3.7.0")
+                                 :version => "3.7.0-11.el7.arch")
 
     diff_pkg = FactoryGirl.build(:package, :centos,
                                  :name => name+"lol",
-                                 :version => "3.7.0")
+                                 :version => "3.7.0-17.el7.arch")
 
-    binding.pry
     refute vuln_dep.affects?(patched_pkg), "patched should not be vuln"
     assert vuln_dep.affects?(vuln_pkg), "vuln pkg should be vuln"
     refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"

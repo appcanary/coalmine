@@ -2,6 +2,10 @@ module RPM
   class Nevra
     NEVRA_REGEXP = /^(.*)-(.*)-(.*)\.([^\.]*)$/
     attr_accessor :filename, :name, :epoch, :version, :release, :arch
+
+    def self.from_evra(str)
+      self.new("DISREGARD-#{str}")
+    end
     def initialize(str)
       self.filename = str
       str_sans_ext = str.gsub(/\.rpm$/, "")
@@ -21,15 +25,10 @@ module RPM
 
     def to_evra
       if epoch && epoch != "0"
-        "#{epoch}:#{version}-#{version_release}-#{arch}"
+        "#{epoch}:#{version}-#{release}.#{arch}"
       else
-        "#{version}-#{version_release}-#{arch}"
+        "#{version}-#{release}.#{arch}"
       end
-    end
-
-
-    def [](key)
-      to_h[key]
     end
 
     def to_h
@@ -40,12 +39,5 @@ module RPM
        arch: arch}
     end
 
-    def to_package
-      Package.new(name: name,
-                  epoch: epoch,
-                  version: version,
-                  version_release: release,
-                  arch: arch)
-    end
   end
 end

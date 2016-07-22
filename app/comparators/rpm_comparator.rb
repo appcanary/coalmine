@@ -202,17 +202,8 @@ class RPMComparator
 
   # is the @version newer (-1) or identical (0) to the patch?
   def matches?(patched_version)
-    binding.pry
-    RPM.vercmp(patched_version, package_to_evr) <= 0
-  end
-
-  def package_to_evr
-    pkg = @package
-
-    if pkg.epoch && pkg.epoch != "0"
-      "#{pkg.name}-#{pkg.epoch}:#{pkg.version}-#{pkg.version_release}"
-    else
-      "#{pkg.name}-#{pkg.version}-#{pkg.version_release}"
-    end
+    evr1 = ::RPM::Nevra.new(patched_version).to_h
+    evr2 = ::RPM::Nevra.from_evra(@package.version).to_h
+    RPM.yum_compareEVR(evr1, evr2) <= 0
   end
 end

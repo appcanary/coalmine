@@ -56,9 +56,9 @@ class PackageBuilder
       self.filename = filename
       self.nevra = ::RPM::Nevra.new(filename.strip)
 
-      self.name = nevra[:name]
+      self.name = nevra.name
       self.version = nevra.to_evra
-      self.arch = nera[:arch]
+      self.arch = nevra.arch
     end
 
     def attributes
