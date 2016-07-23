@@ -18,16 +18,28 @@
 
 class VulnerableDependency < ActiveRecord::Base
   belongs_to :vulnerability
+
+  validates :vulnerability_id, :presence => true
+  validates :package_platform, :presence => true
+  validates :package_name, :presence => true
   
   def concerns?(package)
     (package.platform == self.package_platform) && 
       package.same_name?(self.package_name)
   end
 
+  # N_A?  B_P?  Vuln?
+  # T     T     F
+  # T     F     F
+  # F     T     F
+  # F     F     T
+  #
+  # i.e. !(N_A? || B_P?)
+
   def affects?(package)
-    # a package is not affected if
-    # it's not in the unaffected_versions OR
-    # it's been patched
+    # a package is vulnerable if
+    # it's not in the unaffected_versions AND
+    # it's not been patched
     concerns?(package) && 
       !(package.not_affected?(unaffected_versions) ||
         package.been_patched?(patched_versions))
