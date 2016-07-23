@@ -43,6 +43,8 @@ class Package < ActiveRecord::Base
     where(clauses.join(" OR "), *values.flatten)
   }
 
+  # TODO: validate centos package format?
+
   def concerning_vulnerabilities
     # TODO: what do we store exactly on Vulns,
     # i.e. do we store name, platform, release?
@@ -58,14 +60,19 @@ class Package < ActiveRecord::Base
     end
   end
 
-  # go over the semantics of this exactly,
-  # potentially rename to not_affected?
+  # Given a list of unaffected versions,
+  # is our version greater than or equal any of 
+  # the "unaffected" constraints?
 
   def not_affected?(unaffected_versions)
     unaffected_versions.any? do |v|
       version_matches?(v)
     end
   end
+
+  # Given a list of version that have been patched,
+  # is our version greater than or equal to any of
+  # the "patched" contraints?
 
   def been_patched?(patched_versions)
     patched_versions.any? do |v|
@@ -78,7 +85,7 @@ class Package < ActiveRecord::Base
   end
 
   def comparator
-    @comparator ||= Platforms.comparator_for(self.platform).new(self)
+    @comparator ||= Platforms.comparator_for(self)
   end
 
   def to_simple_h
