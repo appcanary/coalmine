@@ -10,9 +10,16 @@ class RPMComparator
     # it feels like AskingForTrouble to use two different
     # EVR parsers. So, let's just use the one we use elsewhere.
     constraint_evr = ::RPM::Nevra.new(version_constraint)
-    current_evr = ::RPM::Nevra.from_package(@package)
 
-    (constraint_evr <=> current_evr) <= 0
+    # ignore packages that are not el7, since we only nominally
+    # support el7 packages. Should also check arch n'est pas?
+    if constraint_evr.release =~ /el7/
+      current_evr = ::RPM::Nevra.from_package(@package)
+
+      (constraint_evr <=> current_evr) <= 0
+    else
+      false
+    end
   end
 
 

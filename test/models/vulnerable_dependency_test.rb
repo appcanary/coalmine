@@ -79,8 +79,9 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     # release is lower
     vuln_pkg1 = build_cpkg(name, "6.6.1p1-23.el7_2.x86_64")
     vuln_pkg2 = build_cpkg(name, "6.6.1p1-25.el7_1.x86_64")
+    vuln_pkg3 = build_cpkg(name, "6.6.1p1-25.el7.x86_64")
     # version is lower
-    vuln_pkg3 = build_cpkg(name, "6.6.1p0-25.el7_2.x86_64")
+    vuln_pkg4 = build_cpkg(name, "6.6.1p0-25.el7_2.x86_64")
 
     diff_pkg = build_cpkg(name+"lol", vuln_pkg1.version)
 
@@ -91,6 +92,7 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     assert vuln_dep.affects?(vuln_pkg1), "vuln pkg should be vuln"
     assert vuln_dep.affects?(vuln_pkg2), "vuln pkg should be vuln"
     assert vuln_dep.affects?(vuln_pkg3), "vuln pkg should be vuln"
+    assert vuln_dep.affects?(vuln_pkg4), "vuln pkg should be vuln"
     refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"
   end
 
