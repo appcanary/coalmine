@@ -13,7 +13,15 @@
 
 class VulnerablePackage < ActiveRecord::Base
   belongs_to :package
+  belongs_to :vulnerable_dependency
+
+  # vulnerability link is purely for bookkeeping convenience
   belongs_to :vulnerability
 
   has_many :bundled_packages
+
+  def unique_hash
+    @unique_hash ||= self.attributes.except("id", "created_at", "updated_at", "valid_at", "expired_at")
+  end
+
 end

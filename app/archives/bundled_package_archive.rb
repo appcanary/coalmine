@@ -29,6 +29,7 @@ class BundledPackageArchive < ActiveRecord::Base
            "bundled_package_archives".bundled_package_id,
            "bundled_package_archives".expired_at occurred_at,
            "vulnerable_packages".id vulnerable_package_id, 
+           "vulnerable_packages".vulnerable_dependency_id vulnerable_dependency_id, 
            "vulnerable_packages".vulnerability_id').
            joins('INNER JOIN "vulnerable_packages" ON
             "vulnerable_packages".package_id = "bundled_package_archives".package_id')

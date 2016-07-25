@@ -84,9 +84,10 @@ class PackageMaker < ServiceMaker
   # gets called, on packages that are in a bundle
   # without triggering the bundle update report
   def add_package_to_affecting_vulnerabilities!(possible_vulns, package)
-    possible_vulns.select do |vuln|
-      if vuln.affects?(package)
-        VulnerablePackage.create!(:vulnerability_id => vuln.vulnerability_id,
+    possible_vulns.select do |vuln_dep|
+      if vuln_dep.affects?(package)
+        VulnerablePackage.create!(:vulnerability_id => vuln_dep.vulnerability_id,
+                                  :vulnerable_dependency_id => vuln_dep.id,
                                   :package_id => package.id)
       end
     end
@@ -97,18 +98,18 @@ class PackageMaker < ServiceMaker
   # of arrays and submitted are PackageBuilders
   def diff_packages(existing, submitted)
     existing_set = existing.reduce({}) { |h, k|
-      h[k.hash] = true
+      h[k] = true
       h
     }
 
     submitted_set = {}
     submitted.select { |k|
       # not strictly necc but gets rid of dupes
-      if submitted_set[k.unique_values_hash]
+      if submitted_set[k.unique_values]
         false
       else
-        submitted_set[k.unique_values_hash] = true
-        existing_set[k.unique_values.hash].nil?
+        submitted_set[k.unique_values] = true
+        existing_set[k.unique_values].nil?
       end
     }
   end

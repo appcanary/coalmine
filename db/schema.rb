@@ -183,39 +183,43 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "bundles", ["valid_at"], name: "index_bundles_on_valid_at", using: :btree
 
   create_table "log_bundle_patches", force: :cascade do |t|
-    t.integer  "bundle_id",             null: false
-    t.integer  "package_id",            null: false
-    t.integer  "bundled_package_id",    null: false
-    t.integer  "vulnerability_id",      null: false
-    t.integer  "vulnerable_package_id", null: false
-    t.datetime "occurred_at",           null: false
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.integer  "bundle_id",                null: false
+    t.integer  "package_id",               null: false
+    t.integer  "bundled_package_id",       null: false
+    t.integer  "vulnerability_id",         null: false
+    t.integer  "vulnerable_dependency_id", null: false
+    t.integer  "vulnerable_package_id",    null: false
+    t.datetime "occurred_at",              null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
-  add_index "log_bundle_patches", ["bundle_id", "package_id", "bundled_package_id", "vulnerability_id", "vulnerable_package_id"], name: "index_of_five_kings_LBP", unique: true, using: :btree
+  add_index "log_bundle_patches", ["bundle_id", "package_id", "bundled_package_id", "vulnerability_id", "vulnerable_dependency_id", "vulnerable_package_id"], name: "index_of_six_kings_LBP", unique: true, using: :btree
   add_index "log_bundle_patches", ["bundle_id"], name: "index_log_bundle_patches_on_bundle_id", using: :btree
   add_index "log_bundle_patches", ["bundled_package_id"], name: "index_log_bundle_patches_on_bundled_package_id", using: :btree
   add_index "log_bundle_patches", ["package_id"], name: "index_log_bundle_patches_on_package_id", using: :btree
   add_index "log_bundle_patches", ["vulnerability_id"], name: "index_log_bundle_patches_on_vulnerability_id", using: :btree
+  add_index "log_bundle_patches", ["vulnerable_dependency_id"], name: "index_log_bundle_patches_on_vulnerable_dependency_id", using: :btree
   add_index "log_bundle_patches", ["vulnerable_package_id"], name: "index_log_bundle_patches_on_vulnerable_package_id", using: :btree
 
   create_table "log_bundle_vulnerabilities", force: :cascade do |t|
-    t.integer  "bundle_id",             null: false
-    t.integer  "package_id",            null: false
-    t.integer  "bundled_package_id",    null: false
-    t.integer  "vulnerability_id",      null: false
-    t.integer  "vulnerable_package_id", null: false
-    t.datetime "occurred_at",           null: false
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.integer  "bundle_id",                null: false
+    t.integer  "package_id",               null: false
+    t.integer  "bundled_package_id",       null: false
+    t.integer  "vulnerability_id",         null: false
+    t.integer  "vulnerable_dependency_id", null: false
+    t.integer  "vulnerable_package_id",    null: false
+    t.datetime "occurred_at",              null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
-  add_index "log_bundle_vulnerabilities", ["bundle_id", "package_id", "bundled_package_id", "vulnerability_id", "vulnerable_package_id"], name: "index_of_five_kings_LBV", unique: true, using: :btree
+  add_index "log_bundle_vulnerabilities", ["bundle_id", "package_id", "bundled_package_id", "vulnerability_id", "vulnerable_dependency_id", "vulnerable_package_id"], name: "index_of_six_kings_LBV", unique: true, using: :btree
   add_index "log_bundle_vulnerabilities", ["bundle_id"], name: "index_log_bundle_vulnerabilities_on_bundle_id", using: :btree
   add_index "log_bundle_vulnerabilities", ["bundled_package_id"], name: "index_log_bundle_vulnerabilities_on_bundled_package_id", using: :btree
   add_index "log_bundle_vulnerabilities", ["package_id"], name: "index_log_bundle_vulnerabilities_on_package_id", using: :btree
   add_index "log_bundle_vulnerabilities", ["vulnerability_id"], name: "index_log_bundle_vulnerabilities_on_vulnerability_id", using: :btree
+  add_index "log_bundle_vulnerabilities", ["vulnerable_dependency_id"], name: "index_log_bundle_vulnerabilities_on_vulnerable_dependency_id", using: :btree
   add_index "log_bundle_vulnerabilities", ["vulnerable_package_id"], name: "index_log_bundle_vulnerabilities_on_vulnerable_package_id", using: :btree
 
   create_table "package_archives", force: :cascade do |t|
@@ -370,38 +374,43 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "vulnerable_dependency_archives", ["vulnerable_dependency_id"], name: "idx_vulnerable_dependency_id_ar", using: :btree
 
   create_table "vulnerable_package_archives", force: :cascade do |t|
-    t.integer  "vulnerable_package_id", null: false
-    t.integer  "package_id",            null: false
-    t.integer  "vulnerability_id",      null: false
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.datetime "valid_at",              null: false
-    t.datetime "expired_at",            null: false
+    t.integer  "vulnerable_package_id",    null: false
+    t.integer  "package_id",               null: false
+    t.integer  "vulnerable_dependency_id", null: false
+    t.integer  "vulnerability_id",         null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.datetime "valid_at",                 null: false
+    t.datetime "expired_at",               null: false
   end
 
   add_index "vulnerable_package_archives", ["expired_at"], name: "index_vulnerable_package_archives_on_expired_at", using: :btree
   add_index "vulnerable_package_archives", ["package_id"], name: "index_vulnerable_package_archives_on_package_id", using: :btree
   add_index "vulnerable_package_archives", ["valid_at"], name: "index_vulnerable_package_archives_on_valid_at", using: :btree
   add_index "vulnerable_package_archives", ["vulnerability_id"], name: "index_vulnerable_package_archives_on_vulnerability_id", using: :btree
+  add_index "vulnerable_package_archives", ["vulnerable_dependency_id"], name: "index_vulnerable_package_archives_on_vulnerable_dependency_id", using: :btree
   add_index "vulnerable_package_archives", ["vulnerable_package_id"], name: "idx_vulnerable_package_id_ar", using: :btree
 
   create_table "vulnerable_packages", force: :cascade do |t|
-    t.integer  "package_id",                            null: false
-    t.integer  "vulnerability_id",                      null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
-    t.datetime "valid_at",         default: "now()",    null: false
-    t.datetime "expired_at",       default: 'Infinity', null: false
+    t.integer  "package_id",                                    null: false
+    t.integer  "vulnerable_dependency_id",                      null: false
+    t.integer  "vulnerability_id",                              null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.datetime "valid_at",                 default: "now()",    null: false
+    t.datetime "expired_at",               default: 'Infinity', null: false
   end
 
   add_index "vulnerable_packages", ["expired_at"], name: "index_vulnerable_packages_on_expired_at", using: :btree
   add_index "vulnerable_packages", ["package_id"], name: "index_vulnerable_packages_on_package_id", using: :btree
   add_index "vulnerable_packages", ["valid_at"], name: "index_vulnerable_packages_on_valid_at", using: :btree
   add_index "vulnerable_packages", ["vulnerability_id"], name: "index_vulnerable_packages_on_vulnerability_id", using: :btree
+  add_index "vulnerable_packages", ["vulnerable_dependency_id"], name: "index_vulnerable_packages_on_vulnerable_dependency_id", using: :btree
 
   add_foreign_key "bundled_packages", "bundles"
   add_foreign_key "bundled_packages", "packages"
   add_foreign_key "bundles", "accounts"
   add_foreign_key "vulnerable_packages", "packages"
   add_foreign_key "vulnerable_packages", "vulnerabilities"
+  add_foreign_key "vulnerable_packages", "vulnerable_dependencies"
 end

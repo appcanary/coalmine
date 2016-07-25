@@ -71,6 +71,7 @@ class ReportManagerTest < ActiveSupport::TestCase
                                       :package_id => vuln_pkg_1.id).pluck(:id)[0], log.bundled_package_id
 
     assert_equal vuln_1.id, log.vulnerability_id
+    assert_equal vuln_1.vulnerable_dependencies.first.id, log.vulnerable_dependency_id
     assert_equal VulnerablePackage.where(:package_id => vuln_pkg_1.id).pluck(:id)[0], log.vulnerable_package_id
 
 
@@ -149,7 +150,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
 
     vuln_pkg_3 = FactoryGirl.create(:package, :ruby)
-    vuln_3 = FactoryGirl.create(:vulnerability, :deps => [vuln_pkg_3], :packages => [vuln_pkg_3])
+    vuln_3 = FactoryGirl.create(:vulnerability, :pkgs => [vuln_pkg_3])
 
     assert_equal 3, VulnerablePackage.count
 

@@ -36,8 +36,7 @@ class BundleTest < ActiveSupport::TestCase
     # two of them in the bundle, and one outside
     (bundled_packages.sample(2) + other_packages.sample(1)).each do |vp|
       FactoryGirl.create(:vulnerability, 
-                         :deps => [vp],
-                         :packages => [vp])
+                         :pkgs => [vp])
     end
 
     assert_equal 3, VulnerablePackage.count

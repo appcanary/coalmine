@@ -16,9 +16,9 @@ class CheckerTest < ActiveSupport::TestCase
     vuln_pkg1 = vuln_pkg_set.first
     vuln_pkg2 = vuln_pkg_set.second
 
-    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg1], :packages => [vuln_pkg1])
-    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg1], :packages => [vuln_pkg1])
-    FactoryGirl.create(:vulnerability, :deps => [vuln_pkg2], :packages => [vuln_pkg2])
+    FactoryGirl.create(:vulnerability, :ruby, :pkgs => [vuln_pkg1])
+    FactoryGirl.create(:vulnerability, :ruby, :pkgs => [vuln_pkg1])
+    FactoryGirl.create(:vulnerability, :ruby, :pkgs => [vuln_pkg2])
 
     @checker = Checker.new(account, {platform: @platform})
 

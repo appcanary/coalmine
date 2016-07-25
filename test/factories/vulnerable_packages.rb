@@ -13,8 +13,11 @@
 
 FactoryGirl.define do
   factory :vulnerable_package do
-    pkg_name = Faker::Hacker.ingverb
-    association :package, name: pkg_name
-    association :vulnerability, package_names: [pkg_name]
+    transient do
+      platform_type { :ruby }
+      dep { build(:package, platform_type) }
+    end
+    # pkg_name = Faker::Hacker.ingverb
+    package { dep }
   end
 end

@@ -1,6 +1,51 @@
 require 'test_helper'
 
 class PackageManagerTest < ActiveSupport::TestCase
+  test "whether diff_packages does the right thing" do
+    pm = PackageMaker.new(Platforms::Ruby, nil)
+
+    klass = Struct.new(:id, :foo, :bar) do
+      def unique_values
+        [foo, bar]
+      end
+    end
+
+    # we create an array of 5 existing objects
+
+    existing = 5.times.map do |i| 
+      [i + 1, i * i]
+    end
+
+    # which will look like this
+    # => [
+    # [1, 0], 
+    # [2, 1], 
+    # [3, 4], 
+    # [4, 9], 
+    # [5, 16]]
+
+    new =  [klass.new(2, 3, 4),
+            klass.new(3, 4, 9),
+            klass.new(4, 10, 10)]
+
+    diffed = pm.diff_packages(existing, new)
+    assert_equal 1, diffed.count
+    assert_equal 4, diffed[0].id, "should actually be object from existing"
+    # what if there's an empty array?
+    diffed2 = pm.diff_packages(existing, [])
+    assert_equal [], diffed2
+
+    diffed3 = pm.diff_packages([], new)
+    assert_equal new, diffed3
+
+    # what if there are no differences?
+    new2 = [klass.new(2, 3, 4),
+            klass.new(3, 4, 9)]
+    diffed4 = pm.diff_packages(existing, new2)
+
+    assert_equal [], diffed4
+  end
+
   # TODO: assert centos packages get created properly? i.e. EVR version constraint?
   describe "a package is the tuple (platform, release, name, version)" do
     it "we should find or create packages accordingly" do

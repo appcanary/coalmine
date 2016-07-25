@@ -32,13 +32,6 @@ class PackageBuilder
     [self.name, self.version]
   end
 
-  # enables set comparison against
-  # the plucked arrays from the db
-  def unique_values_hash
-    self.unique_values.hash
-  end
-
-
   class RPM < PackageBuilder
     attr_accessor :arch, :filename, :nevra
 

@@ -18,6 +18,7 @@
 
 class VulnerableDependency < ActiveRecord::Base
   belongs_to :vulnerability
+  has_many :vulnerable_packages, :dependent => :destroy
 
   validates :vulnerability_id, :presence => true
   validates :package_platform, :presence => true
@@ -43,5 +44,9 @@ class VulnerableDependency < ActiveRecord::Base
     concerns?(package) && 
       !(package.not_affected?(unaffected_versions) ||
         package.been_patched?(patched_versions))
+  end
+
+  def unique_hash
+    @unique_hash ||= self.attributes.except("id", "created_at", "updated_at", "valid_at", "expired_at")
   end
 end

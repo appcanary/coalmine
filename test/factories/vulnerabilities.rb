@@ -45,14 +45,24 @@ FactoryGirl.define do
     package_platform { deps.first.platform }
     cve_ids { [generate(:cve_id)] }
 
+    trait :ruby do
+      package_platform { Platforms::Ruby }
+    end
+
     transient do
       platform_type { :ruby }
       deps { 2.times.map { build(:package, platform_type) } }
+      pkgs { [] }
     end
 
     after(:create) do |v, f|
       f.deps.each do |dep|
         create(:vulnerable_dependency, :dep => dep, :vulnerability => v)
+      end
+
+      f.pkgs.each do |pkg|
+        vd = create(:vulnerable_dependency, :dep => pkg, :vulnerability => v)
+        create(:vulnerable_package, :dep => pkg, :vulnerable_dependency => vd, :vulnerability => v)
       end
     end
 

@@ -59,6 +59,7 @@ class LogBundlePatch < ActiveRecord::Base
            "bundled_packages".id bundled_package_id, 
            "bundled_packages".package_id, 
            "vulnerable_package_archives".id vulnerable_package_id, 
+           "vulnerable_package_archives".vulnerable_dependency_id,
            "vulnerable_package_archives".vulnerability_id,
            "vulnerable_package_archives".expired_at occurred_at').
            joins('INNER JOIN "vulnerable_package_archives" ON "vulnerable_package_archives".package_id = "bundled_packages".package_id').
@@ -70,6 +71,7 @@ class LogBundlePatch < ActiveRecord::Base
             lbp.package_id = "bundled_packages".package_id AND
             lbp.bundled_package_id = "bundled_packages".id AND
             lbp.vulnerability_id = "vulnerable_package_archives".vulnerability_id AND
+            lbp.vulnerable_dependency_id = "vulnerable_package_archives".vulnerable_dependency_id AND
             lbp.vulnerable_package_id = "vulnerable_package_archives".id AND
             lbp.occurred_at = "vulnerable_package_archives".expired_at)')
 
@@ -79,6 +81,7 @@ class LogBundlePatch < ActiveRecord::Base
                  :package_id => lbp.package_id,
                  :bundled_package_id => lbp.bundled_package_id,
                  :vulnerability_id => lbp.vulnerability_id,
+                 :vulnerable_dependency_id => lbp.vulnerable_dependency_id,
                  :vulnerable_package_id => lbp.vulnerable_package_id,
                  :occurred_at => lbp.occurred_at)
     end
@@ -102,6 +105,7 @@ class LogBundlePatch < ActiveRecord::Base
             lbp.package_id = "bundled_package_archives".package_id AND
             lbp.bundled_package_id = "bundled_package_archives".bundled_package_id AND
             lbp.vulnerability_id = "vulnerable_packages".vulnerability_id AND
+            lbp.vulnerable_dependency_id = "vulnerable_packages".vulnerable_dependency_id AND
             lbp.vulnerable_package_id = "vulnerable_packages".id AND
             lbp.occurred_at = "bundled_package_archives".expired_at)')
 
@@ -111,6 +115,7 @@ class LogBundlePatch < ActiveRecord::Base
                  :package_id => lbp.package_id,
                  :bundled_package_id => lbp.bundled_package_id,
                  :vulnerability_id => lbp.vulnerability_id,
+                 :vulnerable_dependency_id => lbp.vulnerable_dependency_id,
                  :vulnerable_package_id => lbp.vulnerable_package_id,
                  :occurred_at => lbp.occurred_at)
     end
