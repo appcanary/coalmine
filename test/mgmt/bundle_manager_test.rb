@@ -35,7 +35,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
     package_count = Package.count
     assert package_count > 0
 
-    bundle = @bm.update(bundle.id, @package_list)
+    bundle, error = @bm.update(bundle.id, @package_list)
     assert_equal @package_list.count, bundle.packages.count
 
     assert_equal package_count + @package_list.count, Package.count
@@ -59,7 +59,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
                                 :name => "wrong")
     
     @bm = BundleManager.new(account)
-    bundle = @bm.update_name(bundle.id, "right")
+    bundle, error = @bm.update_name(bundle.id, "right")
     bundle = Bundle.find(bundle.id)
 
     assert_equal "right", bundle.name

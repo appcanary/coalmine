@@ -1,0 +1,114 @@
+# == Schema Information
+#
+# Table name: vulnerabilities
+#
+#  id               :integer          not null, primary key
+#  package_platform :string           not null
+#  title            :string
+#  description      :text
+#  criticality      :string
+#  cve_ids          :string           default("{}"), not null, is an Array
+#  osvdb_id         :string
+#  usn_id           :string
+#  dsa_id           :string
+#  rhsa_id          :string
+#  cesa_id          :string
+#  source           :string
+#  reported_at      :datetime
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  valid_at         :datetime         not null
+#  expired_at       :datetime         default("infinity"), not null
+#
+
+require 'test_helper'
+
+class VulnerableDependencyTest < ActiveSupport::TestCase
+  it "should correctly calculate vuln ruby packages" do
+
+    name = "fakemcfake"
+    vuln_dep = FactoryGirl.build(:vulnerable_dependency, 
+                                 :package_platform => Platforms::Ruby, 
+                                 :package_name => name, 
+                                 :patched_versions => [">= 1.10"], 
+                                 :unaffected_versions => ["~> 1.9.2", "< 1.7.0"])
+
+    patched_pkg = build_rpkg(name, "1.10")
+
+    # less than 1.7.0
+    un_pkg1 = build_rpkg(name, "1.6.0")
+    # same minor version as 1.9.2
+    un_pkg2 = build_rpkg(name, "1.9.3")
+
+    # lower than 1.9.2
+    vuln_pkg1 = build_rpkg(name, "1.9.1")
+    vuln_pkg2 = build_rpkg(name, "1.8.0")
+
+    diff_pkg = build_rpkg(name+"lol", "1.9.1")
+
+
+
+    refute vuln_dep.affects?(patched_pkg), "patched should not be vuln"
+    refute vuln_dep.affects?(un_pkg1), "unaffected should not be vuln"
+    refute vuln_dep.affects?(un_pkg2), "unaffected should not be vuln"
+    assert vuln_dep.affects?(vuln_pkg1), "vuln pkg should be vuln"
+    assert vuln_dep.affects?(vuln_pkg2), "vuln pkg should be vuln"
+    refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"
+  end
+
+  # TODO: affected releases, affected arches?
+  it "should correctly calculate vuln centos packages" do
+    name = "openssh"
+
+    vuln_dep = FactoryGirl.build(:vulnerable_dependency, 
+                                 :package_platform => Platforms::CentOS, 
+                                 :package_name => name, 
+                                 :patched_versions =>  ["openssh-6.6.1p1-25.el7_2.src.rpm", "openssh-6.6.1p1-25.el7_2.x86_64.rpm"],
+                                 :unaffected_versions => [])
+
+    # exact same version
+    patched_pkg1 = build_cpkg(name, "openssh-6.6.1p1-25.el7_2.x86_64.rpm")
+    # higher version
+    patched_pkg2 = build_cpkg(name, "6.7.1p1-23.el7_2.x86_64")
+
+    # higher release
+    patched_pkg3 = build_cpkg(name, "6.6.1p1-26.el7_2.x86_64")
+    patched_pkg4 = build_cpkg(name, "6.6.1p1-25.el7_3.x86_64")
+
+
+    # release is lower
+    vuln_pkg1 = build_cpkg(name, "6.6.1p1-23.el7_2.x86_64")
+    vuln_pkg2 = build_cpkg(name, "6.6.1p1-25.el7_1.x86_64")
+    vuln_pkg3 = build_cpkg(name, "6.6.1p1-25.el7.x86_64")
+    # version is lower
+    vuln_pkg4 = build_cpkg(name, "6.6.1p0-25.el7_2.x86_64")
+
+    diff_pkg = build_cpkg(name+"lol", vuln_pkg1.version)
+
+    refute vuln_dep.affects?(patched_pkg1), "patched should not be vuln"
+    refute vuln_dep.affects?(patched_pkg2), "patched should not be vuln"
+    refute vuln_dep.affects?(patched_pkg3), "patched should not be vuln"
+    refute vuln_dep.affects?(patched_pkg4), "patched should not be vuln"
+    assert vuln_dep.affects?(vuln_pkg1), "vuln pkg should be vuln"
+    assert vuln_dep.affects?(vuln_pkg2), "vuln pkg should be vuln"
+    assert vuln_dep.affects?(vuln_pkg3), "vuln pkg should be vuln"
+    assert vuln_dep.affects?(vuln_pkg4), "vuln pkg should be vuln"
+    refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"
+  end
+
+  def build_cpkg(name, ver)
+    FactoryGirl.build(:package, :centos,
+                      :name => name,
+                      :version => ver)
+
+  end
+
+  def build_rpkg(name, ver)
+    FactoryGirl.build(:package, :ruby,
+                      :name => name,
+                      :version => ver)
+
+  end
+
+  
+end

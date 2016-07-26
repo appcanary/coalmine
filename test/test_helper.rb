@@ -3,8 +3,12 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require "minitest/spec"
 require "minitest/reporters"
+require 'mocha/mini_test'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+
+DatabaseCleaner.strategy = :truncation
+DatabaseCleaner.clean
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.

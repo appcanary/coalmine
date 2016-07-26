@@ -3,7 +3,7 @@
 # Table name: packages
 #
 #  id          :integer          not null, primary key
-#  name        :string
+#  name        :string           not null
 #  source_name :string
 #  platform    :string
 #  release     :string
@@ -16,7 +16,10 @@
 #  origin      :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  valid_at    :datetime         not null
+#  expired_at  :datetime         default("infinity"), not null
 #
+
 require File.join(Rails.root, "test/factories", 'factory_helper')
 
 FactoryGirl.define do
@@ -30,12 +33,17 @@ FactoryGirl.define do
     version { FactoryHelper.rand_version_str }
     platform { ["ubuntu", "ruby"].sample }
 
-    factory :ubuntu_package do
+    trait :ubuntu do
       platform "ubuntu"
       release "utopic"
     end
 
-    factory :ruby_package do
+    trait :centos do
+      platform "centos"
+      release "7"
+    end
+
+    trait :ruby do
       platform Platforms::Ruby
     end
   end
