@@ -49,4 +49,5 @@ class VulnerableDependency < ActiveRecord::Base
   def unique_hash
     @unique_hash ||= self.attributes.except("id", "created_at", "updated_at", "valid_at", "expired_at")
   end
+
 end

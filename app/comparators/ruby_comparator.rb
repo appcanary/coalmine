@@ -9,4 +9,14 @@ class RubyComparator
 
     gem_requirement === @version
   end
+
+  def vercmp(requirement)
+    patched_version = requirement.split(/\s+/).last
+
+    @version <=> Gem::Version.create(patched_version)
+  end
+
+  def earlier_version?(req)
+    vercmp(req) < 0
+  end
 end

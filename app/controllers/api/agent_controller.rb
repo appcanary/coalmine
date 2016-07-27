@@ -71,7 +71,20 @@ class Api::AgentController < ApiController
   end
 
   def show
-    # TODO return upgrade-tos
+    server = AgentServer.where(:uuid => params[:uuid]).take
+
+    bundle = server.system_bundle
+    if bundle.nil?
+      render :json => {}
+    else
+      # lol, put this query elsewhere
+      hash = bundle.vulnerable_packages.distinct_package.includes(:package, :vulnerable_dependency).reduce({}) do  |hash, vp|
+        hash[vp.name] = vp.upgrade_to.first
+        hash
+      end
+
+      render :json => hash
+    end
   end
 
   def fetch_pr_from_server(pr_params, server)

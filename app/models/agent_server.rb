@@ -22,4 +22,8 @@ class AgentServer < ActiveRecord::Base
   belongs_to :agent_release
   has_many :bundles
   has_many :heartbeats, :class_name => AgentHeartbeat
+
+  def system_bundle
+    self.bundles.where(:platform => Platforms::Ubuntu).first
+  end
 end

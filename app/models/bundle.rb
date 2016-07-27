@@ -21,6 +21,7 @@
 
 class Bundle < ActiveRecord::Base
   belongs_to :account
+  belongs_to :agent_server
   has_many :bundled_packages
   has_many :packages, :through => :bundled_packages
 

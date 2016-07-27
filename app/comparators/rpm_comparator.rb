@@ -1,6 +1,7 @@
 class RPMComparator
   def initialize(package)
     @package = package
+    @current_evr = ::RPM::Nevra.from_package(@package)
   end
 
   # is the current version identical, or more
@@ -14,9 +15,17 @@ class RPMComparator
     # ignore packages that are not el7, since we only nominally
     # support el7 packages. Should also check arch n'est pas?
     if constraint_evr.release =~ /el7/
-      current_evr = ::RPM::Nevra.from_package(@package)
 
-      (constraint_evr <=> current_evr) <= 0
+      (constraint_evr <=> @current_evr) <= 0
+    else
+      false
+    end
+  end
+
+  def earlier_version?(version_constraint)
+    constraint_evr = ::RPM::Nevra.new(version_constraint)
+    if constraint_evr.release =~ /el7/
+      (constraint_evr <=> @current_evr) < 0
     else
       false
     end

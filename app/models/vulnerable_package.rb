@@ -21,6 +21,12 @@ class VulnerablePackage < ActiveRecord::Base
 
   has_many :bundled_packages
 
+  delegate :name, :source_name, :platform, :release, :version, :upgrade_to, :to => :package
+
+  scope :distinct_package, -> { 
+    select("distinct(vulnerable_packages.package_id), vulnerable_packages.*")
+  }
+
   def unique_hash
     @unique_hash ||= self.attributes.except("id", "created_at", "updated_at", "valid_at", "expired_at")
   end

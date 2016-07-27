@@ -26,6 +26,7 @@ class Package < ActiveRecord::Base
   has_many :bundled_packages
   has_many :bundles, :through => :bundled_packages
   has_many :vulnerable_packages
+  has_many :vulnerable_dependencies, :through => :vulnerable_packages
   has_many :vulnerabilities, :through => :vulnerable_packages
   has_many :advisories, :through => :vulnerabilities
 
@@ -84,12 +85,33 @@ class Package < ActiveRecord::Base
     comparator.matches?(other_version)
   end
 
+  def earlier_version?(pv)
+    comparator.earlier_version?(pv)
+  end
+
   def comparator
     @comparator ||= Platforms.comparator_for(self)
   end
 
   def to_simple_h
     {name: name, version: version}
+  end
+
+  # (defmethod upgrade-to :artifact.kind/rubygem
+  # [vuln version]
+  # (let [patched-versions (:patched-versions vuln)
+  #       number (:number version)]
+  #   (filter (fn [version-patch]
+  #             (< (cmp-versions number (version-number version-patch)) 0))
+  #           patched-versions)))
+
+
+  def upgrade_to
+    self.vulnerable_dependencies.map do |vd|
+      vd.patched_versions.select do |pv|
+        earlier_version?(pv)
+      end
+    end.flatten
   end
 
 end
