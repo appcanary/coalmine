@@ -21,13 +21,19 @@
 # package manager or what is written on the package itself?
 require 'rpm'
 module RPM
+  include ResultObject
   module Parser
     def self.parse(file)
-      file.each_line.reject { |str|
-        str =~ /gpg-pubkey-[a-z0-9]+-[a-z0-9]+/
-      }.map { |str|
-        PackageBuilder::RPM.new(str)
-      }
+      begin
+        pkgs = file.each_line.reject { |str|
+          str =~ /gpg-pubkey-[a-z0-9]+-[a-z0-9]+/
+        }.map { |str|
+          PackageBuilder::RPM.new(str)
+        }
+        Result.new(pkgs, nil)
+      rescue Exception => e
+        Result.new(nil, e)
+      end
     end
   end
 end
