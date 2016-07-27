@@ -55,7 +55,8 @@ class ReportManagerTest < ActiveSupport::TestCase
     @bm = BundleManager.new(account)
 
     package_list = vuln_pkgs_set_1.map { |pkg| PackageBuilder.from_package(pkg) }
-    bundle, errors = @bm.create({:platform => @platform}, package_list)
+    pr, _ = PlatformRelease.validate(@platform)
+    bundle, errors = @bm.create(pr, {}, package_list)
 
     # Creating the bundle with a vuln should trigger a log:
 
@@ -85,7 +86,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     vuln_pkgs_set_2 = [vuln_pkg_1] + pkgs_set_2
 
     package_list2 = vuln_pkgs_set_2.map { |pkg| PackageBuilder.from_package(pkg) }
-    @bm.update(bundle.id, package_list2)
+    @bm.update_packages(bundle.id, package_list2)
 
     # the vulnerability has not changed, therefore only one LogBundleVuln
     assert_equal 1, bundle.vulnerable_packages.count
@@ -104,12 +105,12 @@ class ReportManagerTest < ActiveSupport::TestCase
     # From the perspective of the LBV, this should be a new warning -
     # you're vulnerable again!
   
-    @bm.update(bundle.id, [])
+    @bm.update_packages(bundle.id, [])
 
     assert_equal 0, bundle.packages.count
     assert_equal 1, LogBundlePatch.count
     package_list3 = vuln_pkgs_set_2.map { |pkg| PackageBuilder.from_package(pkg) }
-    @bm.update(bundle.id, package_list3)
+    @bm.update_packages(bundle.id, package_list3)
 
     # we now see another LBV.
     assert_equal 2, LogBundleVulnerability.count
@@ -154,7 +155,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     assert_equal 3, VulnerablePackage.count
 
-    @bm.update(bundle.id, [vuln_pkg_3].map { |pkg| PackageBuilder.from_package(pkg)})
+    @bm.update_packages(bundle.id, [vuln_pkg_3].map { |pkg| PackageBuilder.from_package(pkg)})
 
     # we've created another LBV,
     # and we wiped out two vuln packages: vuln_pkg_1 and vuln_pkg_2
@@ -200,7 +201,9 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     @bm = BundleManager.new(account)
     package_list = [vuln_pkg1, notvuln_pkg2].map { |p| PackageBuilder.from_package(p) }
-    bundle, error = @bm.create({:platform => @platform}, package_list)
+
+    pr, _ = PlatformRelease.validate(@platform)
+    bundle, error = @bm.create(pr, {}, package_list)
     
     # one LBV thank you
     assert_equal 1, LogBundleVulnerability.count

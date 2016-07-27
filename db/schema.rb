@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20160604200811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "accounts", force: :cascade do |t|
     t.string   "email"
@@ -112,23 +113,62 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "advisory_vulnerability_archives", ["valid_at"], name: "index_advisory_vulnerability_archives_on_valid_at", using: :btree
   add_index "advisory_vulnerability_archives", ["vulnerability_id"], name: "idx_adv_vuln_vuln_ar", using: :btree
 
+  create_table "agent_heartbeats", force: :cascade do |t|
+    t.integer  "agent_server_id"
+    t.text     "files"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "agent_heartbeats", ["agent_server_id"], name: "index_agent_heartbeats_on_agent_server_id", using: :btree
+
+  create_table "agent_releases", force: :cascade do |t|
+    t.string   "version"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "agent_releases", ["version"], name: "index_agent_releases_on_version", using: :btree
+
+  create_table "agent_servers", force: :cascade do |t|
+    t.integer  "account_id"
+    t.integer  "agent_release_id"
+    t.uuid     "uuid",             default: "uuid_generate_v4()"
+    t.string   "hostname"
+    t.string   "uname"
+    t.string   "name"
+    t.string   "ip"
+    t.string   "distro"
+    t.string   "release"
+    t.datetime "last_heartbeat"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
+  add_index "agent_servers", ["account_id"], name: "index_agent_servers_on_account_id", using: :btree
+  add_index "agent_servers", ["agent_release_id"], name: "index_agent_servers_on_agent_release_id", using: :btree
+  add_index "agent_servers", ["uuid"], name: "index_agent_servers_on_uuid", using: :btree
+
   create_table "bundle_archives", force: :cascade do |t|
-    t.integer  "bundle_id",            null: false
-    t.integer  "account_id",           null: false
+    t.integer  "bundle_id",                 null: false
+    t.integer  "account_id",                null: false
+    t.integer  "agent_server_id"
     t.string   "name"
     t.string   "path"
-    t.string   "platform",             null: false
+    t.string   "platform",                  null: false
     t.string   "release"
-    t.integer  "last_crc",   limit: 8
+    t.integer  "last_crc",        limit: 8
+    t.boolean  "being_watched"
     t.boolean  "from_api"
     t.datetime "deleted_at"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.datetime "valid_at",             null: false
-    t.datetime "expired_at",           null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.datetime "valid_at",                  null: false
+    t.datetime "expired_at",                null: false
   end
 
   add_index "bundle_archives", ["account_id"], name: "index_bundle_archives_on_account_id", using: :btree
+  add_index "bundle_archives", ["agent_server_id"], name: "index_bundle_archives_on_agent_server_id", using: :btree
   add_index "bundle_archives", ["bundle_id"], name: "idx_bundle_id_ar", using: :btree
   add_index "bundle_archives", ["expired_at"], name: "index_bundle_archives_on_expired_at", using: :btree
   add_index "bundle_archives", ["valid_at"], name: "index_bundle_archives_on_valid_at", using: :btree
@@ -164,21 +204,26 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "bundled_packages", ["valid_at"], name: "index_bundled_packages_on_valid_at", using: :btree
 
   create_table "bundles", force: :cascade do |t|
-    t.integer  "account_id",                                null: false
+    t.integer  "account_id",                                     null: false
+    t.integer  "agent_server_id"
     t.string   "name"
     t.string   "path"
-    t.string   "platform",                                  null: false
+    t.string   "platform",                                       null: false
     t.string   "release"
-    t.integer  "last_crc",   limit: 8
+    t.integer  "last_crc",        limit: 8
+    t.boolean  "being_watched"
     t.boolean  "from_api"
     t.datetime "deleted_at"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.datetime "valid_at",             default: "now()",    null: false
-    t.datetime "expired_at",           default: 'Infinity', null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.datetime "valid_at",                  default: "now()",    null: false
+    t.datetime "expired_at",                default: 'Infinity', null: false
   end
 
+  add_index "bundles", ["account_id", "agent_server_id", "path"], name: "index_bundles_on_account_id_and_agent_server_id_and_path", using: :btree
+  add_index "bundles", ["account_id", "agent_server_id"], name: "index_bundles_on_account_id_and_agent_server_id", using: :btree
   add_index "bundles", ["account_id"], name: "index_bundles_on_account_id", using: :btree
+  add_index "bundles", ["agent_server_id"], name: "index_bundles_on_agent_server_id", using: :btree
   add_index "bundles", ["expired_at"], name: "index_bundles_on_expired_at", using: :btree
   add_index "bundles", ["valid_at"], name: "index_bundles_on_valid_at", using: :btree
 
@@ -407,9 +452,13 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "vulnerable_packages", ["vulnerability_id"], name: "index_vulnerable_packages_on_vulnerability_id", using: :btree
   add_index "vulnerable_packages", ["vulnerable_dependency_id"], name: "index_vulnerable_packages_on_vulnerable_dependency_id", using: :btree
 
+  add_foreign_key "agent_heartbeats", "agent_servers"
+  add_foreign_key "agent_servers", "accounts"
+  add_foreign_key "agent_servers", "agent_releases"
   add_foreign_key "bundled_packages", "bundles"
   add_foreign_key "bundled_packages", "packages"
   add_foreign_key "bundles", "accounts"
+  add_foreign_key "bundles", "agent_servers"
   add_foreign_key "vulnerable_packages", "packages"
   add_foreign_key "vulnerable_packages", "vulnerabilities"
   add_foreign_key "vulnerable_packages", "vulnerable_dependencies"

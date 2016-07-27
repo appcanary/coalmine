@@ -1,16 +1,18 @@
 class BundleManager < ServiceManager
-  attr_accessor :account
-  def initialize(account)
-    self.account = account
+  attr_accessor :account_id, :server_id
+  def initialize(account, server = nil)
+    self.account_id = account.id
+    self.server_id = server && server.id
   end
 
   # don't we need a kind alongside platform?
   # platform alone seems insufficient
   # the (keys (group-by :platform (Version/all-with db :platform)))
   # returned shows a lot of variance
-  def create(opt, package_list)
-    platform, release = opt[:platform], opt[:release]
-    bundle = Bundle.new(:account_id => @account.id,
+  def create(pr, opt, package_list)
+    platform, release = pr.platform, pr.release
+    bundle = Bundle.new(:account_id => @account_id,
+                        :agent_server_id => @server_id,
                         :platform => platform,
                         :release => release,
                         :name => opt[:name],
@@ -33,8 +35,22 @@ class BundleManager < ServiceManager
     Result.new(bundle)
   end
 
-  def update(bundle_id, package_list)
-    bundle = Bundle.where(:account_id => @account.id).find(bundle_id)
+  # TODO: freak out if @server_id is null
+  def create_or_update(pr, opt, package_list)
+    bundle_id = Bundle.where(:account_id => @account_id, 
+                             :agent_server_id => @server_id, 
+                             :path => opt[:path]).pluck("id").first
+
+
+    if bundle_id
+      self.update_packages(bundle_id, package_list)
+    else
+      self.create(pr, opt, package_list)
+    end
+  end
+
+  def update_packages(bundle_id, package_list)
+    bundle = Bundle.where(:account_id => @account_id).find(bundle_id)
 
     begin
       bundle.transaction do
@@ -49,9 +65,9 @@ class BundleManager < ServiceManager
   end
 
   def update_name(bundle_id, name)
-    bundle = Bundle.where(:account_id => @account.id).find(bundle_id)
+    bundle = Bundle.where(:account_id => @account_id).find(bundle_id)
     bundle.name = name
-    
+
     if bundle.save
       Result.new(bundle)
     else
@@ -59,8 +75,29 @@ class BundleManager < ServiceManager
     end
   end
 
+  # do we care, really?
+  def update_on_heartbeat(path, attributes = {})
+    begin
+      bundle = Bundle.where(:account_id => @account_id, :path => path).take!
+
+      if bundle.being_watched != attributes[:"being-watched"]
+        bundle.being_watched = attributes[:"being-watched"]
+      end
+
+      if bundle.save
+        Result.new(bundle)
+      else
+        Result.new(bundle, bundle.errors)
+      end
+
+    rescue ActiveRecord::RecordNotFound => e
+      return Result.new(nil, e)
+    end
+
+  end
+
   def delete(bundle_id)
-    bundle = Bundle.where(:account_id => @account.id).find(bundle_id)
+    bundle = Bundle.where(:account_id => @account_id).find(bundle_id)
 
     if bundle.destroy
       Result.new(bundle)

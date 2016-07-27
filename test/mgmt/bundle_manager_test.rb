@@ -5,7 +5,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
 
   setup do
     lockfile = hydrate("gemcanary.gemfile.lock")
-    @package_list = GemfileParser.parse(lockfile)
+    @package_list, _ = GemfileParser.parse(lockfile)
     @platform = "ruby"
   end
 
@@ -16,7 +16,9 @@ class BundlerManagerTest < ActiveSupport::TestCase
 
     assert_equal 0, Bundle.count
     assert_equal 0, Package.count
-    bundle = @bm.create({:platform => @platform}, @package_list)
+
+    pr, _ = PlatformRelease.validate(@platform)
+    bundle = @bm.create(pr, {}, @package_list)
     assert_equal 1, Bundle.count
 
     bundle = Bundle.first
@@ -35,7 +37,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
     package_count = Package.count
     assert package_count > 0
 
-    bundle, error = @bm.update(bundle.id, @package_list)
+    bundle, error = @bm.update_packages(bundle.id, @package_list)
     assert_equal @package_list.count, bundle.packages.count
 
     assert_equal package_count + @package_list.count, Package.count
@@ -49,7 +51,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
 
     @bm = BundleManager.new(account)
     assert_raises ActiveRecord::RecordNotFound do
-      bundle = @bm.update(bundle.id, @package_list)
+      bundle = @bm.update_packages(bundle.id, @package_list)
     end
   end
 

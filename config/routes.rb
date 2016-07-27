@@ -5,6 +5,15 @@ Rails.application.routes.draw do
     scope :v3 do
       post "check" => 'check#create'
     end
+
+    scope :v1 do
+      scope :agent do
+        post "servers" => "agent#create"
+        put "servers/:uuid" => "agent#update"
+        get "servers/:uuid" => "agent#show"
+        post "heartbeat/:uuid" => "agent#heartbeat"
+      end
+    end
   end
 
 
