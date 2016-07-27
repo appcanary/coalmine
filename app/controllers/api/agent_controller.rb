@@ -12,10 +12,7 @@ class Api::AgentController < ApiController
     server.heartbeats.create!(:files => heartbeat_params[:files])
 
     agent_version = heartbeat_params[:"agent-version"]
-
-    if server.agent_release.nil? || server.agent_release.version != agent_version
-      server.agent_release = AgentRelease.where(:version => agent_version).first_or_create
-    end
+    server.agent_release = AgentRelease.where(:version => agent_version).first_or_create
 
     server.last_heartbeat = Time.now
     server.save!
@@ -35,22 +32,14 @@ class Api::AgentController < ApiController
       return
     end
 
-    platform = server.distro
-    release = server.release
-
-    case sendfile_params[:kind]
-    when "gemfile"
-      platform = "ruby"
-      release = nil
-    end
-
-    pr, err = PlatformRelease.validate(platform, release)
-
+    pr, err = fetch_pr_from_server(sendfile_params, server)
     # TODO: log or show error
     if err
+      log_faulty_request(server)
       render :text => "", :status => 400
       return
     end
+
 
     parser = Platforms.parser_for(pr.platform)
     file = Base64.decode64(sendfile_params[:contents])
@@ -59,6 +48,7 @@ class Api::AgentController < ApiController
 
     # TODO: log or show error?
     if err
+      log_faulty_request(server)
       render :text => "", :status => 400
       return
     end
@@ -67,11 +57,12 @@ class Api::AgentController < ApiController
                   path: sendfile_params[:path],
                   last_crc: sendfile_params[:crc]}
 
-    bm = BundleManager.new(Account.find(1), server)
+    bm = BundleManager.new(current_account, server)
     bundle, err = bm.create_or_update(pr, bundle_opt, package_list)
     
-    # TODO: again, show error?
     if err
+      log_faulty_request(server)
+
       render :text => "", :status => 400
       return
     end
@@ -81,6 +72,31 @@ class Api::AgentController < ApiController
 
   def show
     # TODO return upgrade-tos
+  end
+
+  def fetch_pr_from_server(pr_params, server)
+     platform = server.distro
+    release = server.release
+
+    case pr_params[:kind]
+    when "gemfile"
+      platform = "ruby"
+      release = nil
+    end
+
+    PlatformRelease.validate(platform, release)
+  end
+
+  def log_faulty_request(server)
+    AgentSentFile.create(account_id: current_account.id, 
+                         agent_server_id: server.id,
+                         request: request.raw_post)
+
+  end
+
+  # placeholder for real auth
+  def current_account
+    @current_account ||= Account.where(:id => 1).first_or_create
   end
 
   def create_params

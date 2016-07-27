@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160604200811) do
+ActiveRecord::Schema.define(version: 20160727190901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,6 +129,17 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   end
 
   add_index "agent_releases", ["version"], name: "index_agent_releases_on_version", using: :btree
+
+  create_table "agent_sent_files", force: :cascade do |t|
+    t.integer  "account_id"
+    t.integer  "agent_server_id"
+    t.text     "request"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "agent_sent_files", ["account_id"], name: "index_agent_sent_files_on_account_id", using: :btree
+  add_index "agent_sent_files", ["agent_server_id"], name: "index_agent_sent_files_on_agent_server_id", using: :btree
 
   create_table "agent_servers", force: :cascade do |t|
     t.integer  "account_id"
@@ -453,6 +464,8 @@ ActiveRecord::Schema.define(version: 20160604200811) do
   add_index "vulnerable_packages", ["vulnerable_dependency_id"], name: "index_vulnerable_packages_on_vulnerable_dependency_id", using: :btree
 
   add_foreign_key "agent_heartbeats", "agent_servers"
+  add_foreign_key "agent_sent_files", "accounts"
+  add_foreign_key "agent_sent_files", "agent_servers"
   add_foreign_key "agent_servers", "accounts"
   add_foreign_key "agent_servers", "agent_releases"
   add_foreign_key "bundled_packages", "bundles"
