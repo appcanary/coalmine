@@ -104,9 +104,8 @@ class Api::AgentController < ApiController
   end
 
   def log_faulty_request(server)
-    AgentSentFile.create(account_id: current_account.id, 
-                         agent_server_id: server.id,
-                         request: request.raw_post)
+    server.received_files.create(account_id: current_account.id, 
+                                 request: request.raw_post)
 
   end
 

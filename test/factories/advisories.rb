@@ -3,6 +3,7 @@
 # Table name: advisories
 #
 #  id                  :integer          not null, primary key
+#  queued_advisory_id  :integer          not null
 #  identifier          :string           not null
 #  package_platform    :string           not null
 #  package_names       :string           default("{}"), not null, is an Array

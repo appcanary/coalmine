@@ -22,7 +22,7 @@ class AgentServer < ActiveRecord::Base
   belongs_to :agent_release
   has_many :bundles
   has_many :heartbeats, :class_name => AgentHeartbeat
-  has_many :received_files, :class_name => AgentSentFile
+  has_many :received_files, :class_name => AgentReceivedFile
 
   def system_bundle
     self.bundles.where(:platform => Platforms::Ubuntu).first

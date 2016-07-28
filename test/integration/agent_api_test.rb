@@ -67,18 +67,18 @@ class AgentApiTest < ActionDispatch::IntegrationTest
 
 
     # okay. what happens when I resubmit this but I change the path?
-     put api_agent_server_update_path(server.uuid), 
+    put api_agent_server_update_path(server.uuid), 
       {contents: b64_file, crc: crc, kind: "gemfile", name: "", path: path + "LOL"}.to_json, 
       {"Content-Type": 'application/json'}
 
     assert_equal 2, server.bundles.count
   end
 
-  # TODO: make this exhaustive
+  # TODO: make this more exhaustive?
   it "should log requests when things look fishy" do
     server = FactoryGirl.create(:agent_server, :centos).reload
 
-    assert_equal 0, AgentSentFile.count
+    assert_equal 0, AgentReceivedFile.count
 
     gemfile_lock = hydrate("3219rails.gemfile.lock")
     crc = Zlib::crc32(gemfile_lock)
@@ -91,5 +91,11 @@ class AgentApiTest < ActionDispatch::IntegrationTest
 
     assert_response :bad_request
     assert_equal 1, server.received_files.count
+
+    put api_agent_server_update_path(server.uuid), 
+      {contents: "obviouslygarbage", crc: crc, kind: "gemfile", name: "", path: path}.to_json, 
+      {"Content-Type": 'application/json'}
+
+    assert_equal 2, server.received_files.count
   end
 end

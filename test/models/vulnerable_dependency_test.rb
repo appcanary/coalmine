@@ -1,24 +1,19 @@
 # == Schema Information
 #
-# Table name: vulnerabilities
+# Table name: vulnerable_dependencies
 #
-#  id               :integer          not null, primary key
-#  package_platform :string           not null
-#  title            :string
-#  description      :text
-#  criticality      :string
-#  cve_ids          :string           default("{}"), not null, is an Array
-#  osvdb_id         :string
-#  usn_id           :string
-#  dsa_id           :string
-#  rhsa_id          :string
-#  cesa_id          :string
-#  source           :string
-#  reported_at      :datetime
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  valid_at         :datetime         not null
-#  expired_at       :datetime         default("infinity"), not null
+#  id                  :integer          not null, primary key
+#  vulnerability_id    :integer          not null
+#  package_platform    :string           not null
+#  package_name        :string           not null
+#  affected_arches     :string           default("{}"), not null, is an Array
+#  affected_releases   :string           default("{}"), not null, is an Array
+#  patched_versions    :text             default("{}"), not null, is an Array
+#  unaffected_versions :text             default("{}"), not null, is an Array
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  valid_at            :datetime         not null
+#  expired_at          :datetime         default("infinity"), not null
 #
 
 require 'test_helper'
