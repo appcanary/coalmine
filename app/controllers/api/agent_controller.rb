@@ -9,13 +9,16 @@ class Api::AgentController < ApiController
     end
 
     # TODO: what do we need to update?
-    server.heartbeats.create!(:files => heartbeat_params[:files])
+    server.transaction do
+      server.last_heartbeat = Time.now
+      server.heartbeats.create!(:files => heartbeat_params[:files], :created_at => server.last_heartbeat)
 
-    agent_version = heartbeat_params[:"agent-version"]
-    server.agent_release = AgentRelease.where(:version => agent_version).first_or_create
+      agent_version = heartbeat_params[:"agent-version"]
+      server.agent_release = AgentRelease.where(:version => agent_version).first_or_create
 
-    server.last_heartbeat = Time.now
-    server.save!
+      server.last_heartbeat = Time.now
+      server.save!
+    end
 
     render json: {heartbeat: server.last_heartbeat}
   end
@@ -88,7 +91,7 @@ class Api::AgentController < ApiController
   end
 
   def fetch_pr_from_server(pr_params, server)
-     platform = server.distro
+    platform = server.distro
     release = server.release
 
     case pr_params[:kind]

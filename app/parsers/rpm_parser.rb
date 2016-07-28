@@ -21,8 +21,8 @@
 # package manager or what is written on the package itself?
 require 'rpm'
 module RPM
-  include ResultObject
   module Parser
+    include ResultObject
     def self.parse(file)
       begin
         pkgs = file.each_line.reject { |str|

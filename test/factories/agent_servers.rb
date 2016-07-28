@@ -17,14 +17,12 @@
 #  updated_at       :datetime         not null
 #
 
-class AgentServer < ActiveRecord::Base
-  belongs_to :account
-  belongs_to :agent_release
-  has_many :bundles
-  has_many :heartbeats, :class_name => AgentHeartbeat
-  has_many :received_files, :class_name => AgentSentFile
-
-  def system_bundle
-    self.bundles.where(:platform => Platforms::Ubuntu).first
+FactoryGirl.define do
+  factory :agent_server do
+    account
+    trait :centos do
+      distro "centos"
+      release "7"
+    end
   end
 end

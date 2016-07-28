@@ -8,10 +8,10 @@ Rails.application.routes.draw do
 
     scope :v1 do
       scope :agent do
-        post "servers" => "agent#create"
-        put "servers/:uuid" => "agent#update"
-        get "servers/:uuid" => "agent#show"
-        post "heartbeat/:uuid" => "agent#heartbeat"
+        post "servers" => "agent#create", :as => :agent_servers
+        put "servers/:uuid" => "agent#update", :as => :agent_server_update
+        get "servers/:uuid" => "agent#show", :as => :agent_server_upgrade
+        post "heartbeat/:uuid" => "agent#heartbeat", :as => :agent_server_heartbeat
       end
     end
   end
