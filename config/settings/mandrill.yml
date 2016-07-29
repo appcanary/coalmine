@@ -1,0 +1,11 @@
+development:
+  mandrill:
+    api_key: "5SJYsgnd9OBaUDIJaCR52g"
+
+test:
+  mandrill:
+    api_key: "LOLNOPE"
+
+production:
+  mandrill:
+    api_key: "this should be replaced by then"
