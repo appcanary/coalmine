@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160727190901) do
+ActiveRecord::Schema.define(version: 20160728213552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +238,18 @@ ActiveRecord::Schema.define(version: 20160727190901) do
   add_index "bundles", ["expired_at"], name: "index_bundles_on_expired_at", using: :btree
   add_index "bundles", ["valid_at"], name: "index_bundles_on_valid_at", using: :btree
 
+  create_table "email_messages", force: :cascade do |t|
+    t.integer  "account_id",              null: false
+    t.string   "recipients", default: [], null: false, array: true
+    t.string   "type",                    null: false
+    t.datetime "sent_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "email_messages", ["account_id"], name: "index_email_messages_on_account_id", using: :btree
+  add_index "email_messages", ["sent_at"], name: "index_email_messages_on_sent_at", using: :btree
+
   create_table "log_bundle_patches", force: :cascade do |t|
     t.integer  "bundle_id",                null: false
     t.integer  "package_id",               null: false
@@ -277,6 +289,18 @@ ActiveRecord::Schema.define(version: 20160727190901) do
   add_index "log_bundle_vulnerabilities", ["vulnerability_id"], name: "index_log_bundle_vulnerabilities_on_vulnerability_id", using: :btree
   add_index "log_bundle_vulnerabilities", ["vulnerable_dependency_id"], name: "index_log_bundle_vulnerabilities_on_vulnerable_dependency_id", using: :btree
   add_index "log_bundle_vulnerabilities", ["vulnerable_package_id"], name: "index_log_bundle_vulnerabilities_on_vulnerable_package_id", using: :btree
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer  "email_message_id",            null: false
+    t.integer  "log_bundle_vulnerability_id"
+    t.integer  "log_bundle_patch_id"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "notifications", ["email_message_id"], name: "index_notifications_on_email_message_id", using: :btree
+  add_index "notifications", ["log_bundle_patch_id"], name: "index_notifications_on_log_bundle_patch_id", using: :btree
+  add_index "notifications", ["log_bundle_vulnerability_id"], name: "index_notifications_on_log_bundle_vulnerability_id", using: :btree
 
   create_table "package_archives", force: :cascade do |t|
     t.integer  "package_id",      null: false
@@ -472,6 +496,10 @@ ActiveRecord::Schema.define(version: 20160727190901) do
   add_foreign_key "bundled_packages", "packages"
   add_foreign_key "bundles", "accounts"
   add_foreign_key "bundles", "agent_servers"
+  add_foreign_key "email_messages", "accounts"
+  add_foreign_key "notifications", "email_messages"
+  add_foreign_key "notifications", "log_bundle_patches"
+  add_foreign_key "notifications", "log_bundle_vulnerabilities"
   add_foreign_key "vulnerable_packages", "packages"
   add_foreign_key "vulnerable_packages", "vulnerabilities"
   add_foreign_key "vulnerable_packages", "vulnerable_dependencies"

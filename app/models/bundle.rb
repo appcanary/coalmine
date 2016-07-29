@@ -24,6 +24,7 @@ class Bundle < ActiveRecord::Base
   belongs_to :agent_server
   has_many :bundled_packages
   has_many :packages, :through => :bundled_packages
+  has_many :log_bundle_vulnerabilities
 
   validates :account, presence: true
 

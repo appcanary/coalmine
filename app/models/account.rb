@@ -9,4 +9,6 @@
 #
 
 class Account < ActiveRecord::Base
+  has_many :bundles
+  has_many :log_bundle_vulnerabilities, :through => :bundles
 end
