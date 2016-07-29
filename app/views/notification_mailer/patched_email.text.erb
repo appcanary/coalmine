@@ -1,0 +1,10 @@
+Herro,
+
+These are yr vulns, are you ready?
+
+<% @lbps.each do |lbv| %>
+  Inside: <%= lbv.bundle.path %>
+
+  Package: <%= lbv.package.name %>
+  Vuln: <%= lbv.vulnerability.title %>
+<% end %>

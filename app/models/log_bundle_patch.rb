@@ -16,6 +16,10 @@
 
 class LogBundlePatch < ActiveRecord::Base
   belongs_to :bundle
+  belongs_to :package
+  belongs_to :bundled_package
+  belongs_to :vulnerability
+  belongs_to :vulnerable_dependency
   belongs_to :vulnerable_package
 
   scope :unnotified_logs_by_account, -> {

@@ -17,7 +17,7 @@ class EmailManager < ServiceManager
       end
     end
 
-    send_new_emails(EmailVulnerable)
+    send_new_emails(EmailVulnerable, :vulnerable_email)
   end
 
   def self.queue_and_send_patched_emails!
@@ -38,13 +38,13 @@ class EmailManager < ServiceManager
       end
     end
 
-    send_new_emails(EmailPatch)
+    send_new_emails(EmailPatch, :patched_email)
   end
 
-  def self.send_new_emails(klass)
+  def self.send_new_emails(klass, sym)
     klass.transaction do
-      klass.unsent.find_each do |email|
-        ## TODO
+      klass.unsent.find_each do |msg|
+        NotificationMailer.send(sym, msg).deliver_now
       end
     end
   end
