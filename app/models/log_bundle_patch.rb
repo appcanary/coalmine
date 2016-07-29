@@ -18,6 +18,20 @@ class LogBundlePatch < ActiveRecord::Base
   belongs_to :bundle
   belongs_to :vulnerable_package
 
+  scope :unnotified_logs_by_account, -> {
+    select("accounts.id account_id, log_bundle_patch_id").
+    from('"accounts" 
+    INNER JOIN 
+      (SELECT bundles.account_id, log_bundle_patches.id log_bundle_patch_id 
+         FROM log_bundle_patches 
+         INNER JOIN "bundles" ON "bundles"."id" = "log_bundle_patches"."bundle_id" 
+          WHERE log_bundle_patches.id NOT IN 
+            (SELECT log_bundle_patch_id 
+             FROM notifications)) 
+    unnotified_vuln_bundles ON accounts.id = unnotified_vuln_bundles.account_id')
+  }
+
+
   # Every time a bundle is changed, note whether
   # the bundle is *no longer* vulnerable to a vuln
   # at that point in time.

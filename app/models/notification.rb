@@ -11,7 +11,7 @@
 #
 
 class Notification < ActiveRecord::Base
-  belongs_to :email_message, polymorphic: true
+  belongs_to :email_message
   belongs_to :log_bundle_vulnerability
   belongs_to :log_bundle_patch
 end

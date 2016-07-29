@@ -13,4 +13,6 @@
 
 class EmailMessage < ActiveRecord::Base
   belongs_to :account
+
+  scope :unsent, -> { where('sent_at is null') }
 end
