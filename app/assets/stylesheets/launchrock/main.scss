@@ -30,8 +30,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: darken($dark-yellow, 20%);
-  text-decoration: none;
+  color: $text-colour;
   &:hover {
     color: $text-colour;
     text-decoration: none;
@@ -219,6 +218,24 @@ img {
   form {
     text-align: center;
   }
+
+  .unit_illustration {
+    @include span-columns(5 of 12);
+  }
+
+  .unit_exposition {
+    @include span-columns(5 of 12);
+    @include shift(1);
+
+    h3 {
+      font-size: 2.1em;
+    }
+
+    .supported {
+      @include span-columns(6 of 12)
+    }
+  }
+
 }
 
 .mobile-pricing {
@@ -425,7 +442,7 @@ footer {
 }
 
 
-.about { 
+.team { 
 
   h2 {
     @include mobile-all {
@@ -471,9 +488,7 @@ footer {
       }
     }
     a {
-      &:hover {
-        text-decoration: none;
-      }
+      text-decoration: none;
     }
   }
   .full {
