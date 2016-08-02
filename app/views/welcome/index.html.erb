@@ -255,10 +255,54 @@
   </div>
 </div>
 
+<a name="about"></a>
+<div class="unit-container">
+  <div class="unit how">
+    <h2>About</h2>
+    <div class="unit_illustration":>
+      <!-- <h3>How it works</h3> -->
+      <%= image_tag "canary-map.medium.png" %>
+    </div>
+    <div class="unit_exposition">
+      <h3>How it works</h3>
+      <p>
+        We keep track of which versions of what packages are vulnerable to which security vulnerabilities, so you don't have to.</p>
+      <p>
+        We provide an <a href="https://github.com/appcanary/agent">open-source</a> agent and an API. We monitor the packages you have installed on your Linux system by hooking into the package manager (i.e. apt or yum). We also monitor the libraries used by your Ruby applications by monitoring their Gemfile.lock files.
+        <!-- We provide an <a href="https://github.com/appcanary/agent">open&#45;source</a> agent and an API. Our agent monitors the packages you have installed on a Linux system by hooking into the package manager (apt or yum). It also monitors the libraries used by Ruby applications by monitoring Gemfile.lock files. -->
+      </p>
+      <p>
+        <!-- We provide an <a href="https://github.com/appcanary/agent">open&#45;source</a> agent and an API. Our APIs support the same platforms as the agent. You can monitor a set of packages for vulnerabilities by uploading a file, either a Gemfile.lock for Ruby or <code>/var/lib/dpkg/status</code> for apt&#45;based systems, or the output of <code>rpm &#45;qa</code> for rpm&#45;based systems. -->
+      </p>
+      <p>
+        You can upload files directly to our API endpoint, or through a web
+        interface.
+      </p>
+      <h3>Platforms supported</h3>
+      <div class="supported">
+        <h4>System packages</h4>
+        <ul>
+          <li>Ubuntu - via apt</li>
+          <li>Debian - via apt</li>
+          <li>Centos 7 - via yum</li>
+          <li>Amazon Linux - via yum</li>
+        </ul>
+      </div>
+      <div class="supported">
+        <h4>Application libraries</h4>
+        <ul class="system">
+          <li>Ruby - via Gemfile.lock</li>
+          <li>More coming soon!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 <a name="team"></a>
 <div class="unit-container">
-    <div class="unit about">
-      <h2>About</h2>
+    <div class="unit team">
+      <h2>Team</h2>
       <div class="bio">
         <div class="unit_about phill">
           <div class="half">
@@ -274,7 +318,7 @@
             </a>
           </div>
           <div class="full">
-            <p>In 2012, Phill and Max started a security and web development consultancy together. In 2013, they cofounded <a href="http://rubysec.com">Rubysec</a>, an open-source project that catalogues all Ruby-related software vulnerabilities. <br/><br/>In 2015, they shuttered the consultancy to begin working on Appcanary. That summer they moved to Mountain View, California to participate in <a href="https://ycombinator.com" class="yc">Y Combinator</a>. </p>
+            <p>In 2012, Phill and Max started a security and web development consultancy together. In 2013, they cofounded <a href="http://rubysec.com">Rubysec</a>, an open-source project that catalogues all Ruby-related software vulnerabilities. <br/><br/>In 2015, they shuttered the consultancy to begin working on Appcanary. That summer they participated in <a href="https://ycombinator.com" class="yc">Y Combinator</a>.</p>
           </div>
         </div>
       </div>
