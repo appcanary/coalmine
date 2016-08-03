@@ -3,12 +3,14 @@ class NotificationMailer < ActionMailer::Base
   layout 'mailer'
 
   def vulnerable_email(msg)
-    @lbvs = LogBundleVulnerability.where("id in (#{msg.notifications.select("log_bundle_vulnerability_id").to_sql})").includes(:package, :vulnerable_dependency, :vulnerability)
+    @notifications = PackageReport.from_vuln_notifications(msg.notifications)
+    @notifications_by_vuln = @notifications.group_by(&:vulnerability)
     mail(to: "hello@appcanary.com", :subject => "Appcanary U R VULN LOL")
   end
 
   def patched_email(msg)
-    @lbps = LogBundlePatch.where("id in (#{msg.notifications.select("log_bundle_patch_id").to_sql})").includes(:package, :vulnerable_dependency, :vulnerability)
+    @notifications = PackageReport.from_patched_notifications(msg.notifications)
+    @notifications_by_vuln = @notifications.group_by(&:vulnerability)
     mail(to: "hello@appcanary.com", :subject => "Appcanary Patched!")
   end
 

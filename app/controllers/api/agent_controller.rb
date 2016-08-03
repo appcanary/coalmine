@@ -80,8 +80,7 @@ class Api::AgentController < ApiController
     if bundle.nil?
       render :json => {}
     else
-      # lol, put this query elsewhere
-      hash = bundle.vulnerable_packages.distinct_package.includes(:package, :vulnerable_dependency).reduce({}) do  |hash, vp|
+      hash = PackageReport.from_bundle(bundle).reduce({}) do  |hash, vp|
         hash[vp.name] = vp.upgrade_to.first
         hash
       end
