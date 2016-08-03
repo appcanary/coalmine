@@ -31,7 +31,7 @@ class LogBundlePatch < ActiveRecord::Base
          INNER JOIN "bundles" ON "bundles"."id" = "log_bundle_patches"."bundle_id" 
           WHERE log_bundle_patches.id NOT IN 
             (SELECT log_bundle_patch_id 
-             FROM notifications)) 
+             FROM notifications where log_bundle_patch_id is not null)) 
     unnotified_vuln_bundles ON accounts.id = unnotified_vuln_bundles.account_id')
   }
 

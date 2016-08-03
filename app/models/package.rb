@@ -93,8 +93,13 @@ class Package < ActiveRecord::Base
     @comparator ||= Platforms.comparator_for(self)
   end
 
+  # following two simplify testing
   def to_simple_h
     {name: name, version: version}
+  end
+
+  def to_pkg_builder
+    PackageBuilder.from_package(self)
   end
 
   # (defmethod upgrade-to :artifact.kind/rubygem

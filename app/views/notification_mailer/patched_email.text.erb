@@ -1,10 +1,15 @@
-Herro,
+Hello,
 
-These are yr vulns, are you ready?
+You've fixed the following vulnerabilities:
 
-<% @lbps.each do |lbv| %>
-  Inside: <%= lbv.bundle.path %>
+<% @notifications_by_vuln.each_pair do |vuln, pkgs| %>
+  Vulnerability: <%= vuln.title %>
+<% pkgs.each do |p| %>
+  in <%= p.package.name %>
+  on <%= p.bundle.path %>
+<%  end %>
+<%  end %>
 
-  Package: <%= lbv.package.name %>
-  Vuln: <%= lbv.vulnerability.title %>
-<% end %>
+For more information, please visit https://appcanary.com
+
+Regards,
