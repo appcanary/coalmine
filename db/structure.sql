@@ -499,6 +499,71 @@ ALTER SEQUENCE agent_servers_id_seq OWNED BY agent_servers.id;
 
 
 --
+-- Name: beta_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE beta_users (
+    id integer NOT NULL,
+    email character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: beta_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE beta_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: beta_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE beta_users_id_seq OWNED BY beta_users.id;
+
+
+--
+-- Name: billing_plans; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE billing_plans (
+    id integer NOT NULL,
+    user_id integer,
+    subscription_plan_id integer,
+    available_subscription_plans integer[] DEFAULT '{}'::integer[],
+    started_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: billing_plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE billing_plans_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: billing_plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE billing_plans_id_seq OWNED BY billing_plans.id;
+
+
+--
 -- Name: bundle_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -684,6 +749,38 @@ CREATE SEQUENCE email_messages_id_seq
 --
 
 ALTER SEQUENCE email_messages_id_seq OWNED BY email_messages.id;
+
+
+--
+-- Name: is_it_vuln_results; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE is_it_vuln_results (
+    id integer NOT NULL,
+    ident character varying NOT NULL,
+    result text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: is_it_vuln_results_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE is_it_vuln_results_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: is_it_vuln_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE is_it_vuln_results_id_seq OWNED BY is_it_vuln_results.id;
 
 
 --
@@ -881,6 +978,39 @@ ALTER SEQUENCE packages_id_seq OWNED BY packages.id;
 
 
 --
+-- Name: pre_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pre_users (
+    id integer NOT NULL,
+    email character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    preferred_platform character varying,
+    from_isitvuln boolean DEFAULT false
+);
+
+
+--
+-- Name: pre_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pre_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pre_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pre_users_id_seq OWNED BY pre_users.id;
+
+
+--
 -- Name: que_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -976,6 +1106,102 @@ ALTER SEQUENCE queued_advisories_id_seq OWNED BY queued_advisories.id;
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: subscription_plans; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE subscription_plans (
+    id integer NOT NULL,
+    value integer,
+    unit_value integer,
+    "limit" integer,
+    label character varying,
+    comment character varying,
+    "default" boolean DEFAULT false NOT NULL,
+    discount boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: subscription_plans_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE subscription_plans_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: subscription_plans_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE subscription_plans_id_seq OWNED BY subscription_plans.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    email character varying NOT NULL,
+    crypted_password character varying,
+    salt character varying,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    reset_password_token character varying,
+    reset_password_token_expires_at timestamp without time zone,
+    reset_password_email_sent_at timestamp without time zone,
+    activation_state character varying,
+    activation_token character varying,
+    activation_token_expires_at timestamp without time zone,
+    last_login_at timestamp without time zone,
+    last_logout_at timestamp without time zone,
+    last_activity_at timestamp without time zone,
+    last_login_from_ip_address character varying,
+    failed_logins_count integer DEFAULT 0,
+    lock_expires_at timestamp without time zone,
+    unlock_token character varying,
+    token character varying,
+    onboarded boolean DEFAULT false,
+    is_admin boolean DEFAULT false NOT NULL,
+    beta_signup_source character varying,
+    stripe_customer_id character varying,
+    name character varying,
+    subscription_plan character varying,
+    newsletter_email_consent boolean DEFAULT true NOT NULL,
+    api_beta boolean DEFAULT false NOT NULL,
+    marketing_email_consent boolean DEFAULT true NOT NULL,
+    daily_email_consent boolean DEFAULT false NOT NULL,
+    datomic_id bigint,
+    invoiced_manually boolean DEFAULT false
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
@@ -1284,6 +1510,20 @@ ALTER TABLE ONLY agent_servers ALTER COLUMN id SET DEFAULT nextval('agent_server
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY beta_users ALTER COLUMN id SET DEFAULT nextval('beta_users_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans ALTER COLUMN id SET DEFAULT nextval('billing_plans_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY bundle_archives ALTER COLUMN id SET DEFAULT nextval('bundle_archives_id_seq'::regclass);
 
 
@@ -1313,6 +1553,13 @@ ALTER TABLE ONLY bundles ALTER COLUMN id SET DEFAULT nextval('bundles_id_seq'::r
 --
 
 ALTER TABLE ONLY email_messages ALTER COLUMN id SET DEFAULT nextval('email_messages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY is_it_vuln_results ALTER COLUMN id SET DEFAULT nextval('is_it_vuln_results_id_seq'::regclass);
 
 
 --
@@ -1351,6 +1598,13 @@ ALTER TABLE ONLY packages ALTER COLUMN id SET DEFAULT nextval('packages_id_seq':
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pre_users ALTER COLUMN id SET DEFAULT nextval('pre_users_id_seq'::regclass);
+
+
+--
 -- Name: job_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1362,6 +1616,20 @@ ALTER TABLE ONLY que_jobs ALTER COLUMN job_id SET DEFAULT nextval('que_jobs_job_
 --
 
 ALTER TABLE ONLY queued_advisories ALTER COLUMN id SET DEFAULT nextval('queued_advisories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
@@ -1479,6 +1747,22 @@ ALTER TABLE ONLY agent_servers
 
 
 --
+-- Name: beta_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY beta_users
+    ADD CONSTRAINT beta_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: billing_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT billing_plans_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: bundle_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1516,6 +1800,14 @@ ALTER TABLE ONLY bundles
 
 ALTER TABLE ONLY email_messages
     ADD CONSTRAINT email_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: is_it_vuln_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY is_it_vuln_results
+    ADD CONSTRAINT is_it_vuln_results_pkey PRIMARY KEY (id);
 
 
 --
@@ -1559,6 +1851,14 @@ ALTER TABLE ONLY packages
 
 
 --
+-- Name: pre_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pre_users
+    ADD CONSTRAINT pre_users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: que_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1572,6 +1872,22 @@ ALTER TABLE ONLY que_jobs
 
 ALTER TABLE ONLY queued_advisories
     ADD CONSTRAINT queued_advisories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY subscription_plans
+    ADD CONSTRAINT subscription_plans_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
@@ -1840,6 +2156,20 @@ CREATE INDEX index_agent_servers_on_uuid ON agent_servers USING btree (uuid);
 
 
 --
+-- Name: index_billing_plans_on_subscription_plan_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_billing_plans_on_subscription_plan_id ON billing_plans USING btree (subscription_plan_id);
+
+
+--
+-- Name: index_billing_plans_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_billing_plans_on_user_id ON billing_plans USING btree (user_id);
+
+
+--
 -- Name: index_bundle_archives_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1977,6 +2307,13 @@ CREATE INDEX index_email_messages_on_account_id ON email_messages USING btree (a
 --
 
 CREATE INDEX index_email_messages_on_sent_at ON email_messages USING btree (sent_at);
+
+
+--
+-- Name: index_is_it_vuln_results_on_ident; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_is_it_vuln_results_on_ident ON is_it_vuln_results USING btree (ident);
 
 
 --
@@ -2138,6 +2475,55 @@ CREATE INDEX index_packages_on_valid_at ON packages USING btree (valid_at);
 --
 
 CREATE INDEX index_queued_advisories_on_identifier ON queued_advisories USING btree (identifier);
+
+
+--
+-- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_subscription_plans_on_default ON subscription_plans USING btree ("default");
+
+
+--
+-- Name: index_subscription_plans_on_discount; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_subscription_plans_on_discount ON subscription_plans USING btree (discount);
+
+
+--
+-- Name: index_users_on_activation_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_activation_token ON users USING btree (activation_token);
+
+
+--
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+
+
+--
+-- Name: index_users_on_last_logout_at_and_last_activity_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_last_logout_at_and_last_activity_at ON users USING btree (last_logout_at, last_activity_at);
+
+
+--
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
+
+
+--
+-- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
 
 
 --
@@ -2402,6 +2788,14 @@ ALTER TABLE ONLY agent_received_files
 
 
 --
+-- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
+
+
+--
 -- Name: fk_rails_d5389f475f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2415,6 +2809,14 @@ ALTER TABLE ONLY agent_heartbeats
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_e4107b65b3 FOREIGN KEY (email_message_id) REFERENCES email_messages(id);
+
+
+--
+-- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_f0b7c79393 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -2463,6 +2865,58 @@ ALTER TABLE ONLY vulnerable_packages
 
 SET search_path TO "$user",public;
 
+INSERT INTO schema_migrations (version) VALUES ('20150125001115');
+
+INSERT INTO schema_migrations (version) VALUES ('20150125165400');
+
+INSERT INTO schema_migrations (version) VALUES ('20150125165401');
+
+INSERT INTO schema_migrations (version) VALUES ('20150125165402');
+
+INSERT INTO schema_migrations (version) VALUES ('20150125165403');
+
+INSERT INTO schema_migrations (version) VALUES ('20150125165404');
+
+INSERT INTO schema_migrations (version) VALUES ('20150220222623');
+
+INSERT INTO schema_migrations (version) VALUES ('20150323004514');
+
+INSERT INTO schema_migrations (version) VALUES ('20150325030540');
+
+INSERT INTO schema_migrations (version) VALUES ('20150325052123');
+
+INSERT INTO schema_migrations (version) VALUES ('20150402202034');
+
+INSERT INTO schema_migrations (version) VALUES ('20150616174305');
+
+INSERT INTO schema_migrations (version) VALUES ('20150624000026');
+
+INSERT INTO schema_migrations (version) VALUES ('20150727222019');
+
+INSERT INTO schema_migrations (version) VALUES ('20150801170157');
+
+INSERT INTO schema_migrations (version) VALUES ('20150801174405');
+
+INSERT INTO schema_migrations (version) VALUES ('20150806003630');
+
+INSERT INTO schema_migrations (version) VALUES ('20150806023953');
+
+INSERT INTO schema_migrations (version) VALUES ('20150813172011');
+
+INSERT INTO schema_migrations (version) VALUES ('20151112220433');
+
+INSERT INTO schema_migrations (version) VALUES ('20151209151358');
+
+INSERT INTO schema_migrations (version) VALUES ('20151217113403');
+
+INSERT INTO schema_migrations (version) VALUES ('20160113220608');
+
+INSERT INTO schema_migrations (version) VALUES ('20160118221733');
+
+INSERT INTO schema_migrations (version) VALUES ('20160410015633');
+
+INSERT INTO schema_migrations (version) VALUES ('20160425184916');
+
 INSERT INTO schema_migrations (version) VALUES ('20160520020913');
 
 INSERT INTO schema_migrations (version) VALUES ('20160520020914');
@@ -2486,6 +2940,16 @@ INSERT INTO schema_migrations (version) VALUES ('20160520174709');
 INSERT INTO schema_migrations (version) VALUES ('20160520174805');
 
 INSERT INTO schema_migrations (version) VALUES ('20160522191756');
+
+INSERT INTO schema_migrations (version) VALUES ('20160530195216');
+
+INSERT INTO schema_migrations (version) VALUES ('20160530195217');
+
+INSERT INTO schema_migrations (version) VALUES ('20160602133740');
+
+INSERT INTO schema_migrations (version) VALUES ('20160602134913');
+
+INSERT INTO schema_migrations (version) VALUES ('20160603150414');
 
 INSERT INTO schema_migrations (version) VALUES ('20160604200640');
 

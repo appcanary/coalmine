@@ -20,8 +20,8 @@ Rails.application.config.assets.precompile += %w(*.svg *.eot *.woff *.woff2 *.tt
 # fontawesome-webfont.eot fontawesome-webfont.woff2 fontawesome-webfont.woff fontawesome-webfont.ttf fontawesome-webfont.svg
 
 # source maps!
-if Rails.env.development?
-  Rails.application.config.assets.configure do |env|
-    env.unregister_postprocessor 'application/javascript', Sprockets::SafetyColons
-  end
-end
+# if Rails.env.development?
+#   Rails.application.config.assets.configure do |env|
+#     env.unregister_postprocessor 'application/javascript', Sprockets::SafetyColons
+#   end
+# end

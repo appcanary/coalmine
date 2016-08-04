@@ -40,14 +40,14 @@ FactoryGirl.define do
   end
 
 
-  factory :vulnerability do
-    uuid { SecureRandom.uuid }
-    description { Faker::Hacker.say_something_smart }
-    title { Faker::Lorem.sentence }
+  # factory :vulnerability do
+  #   uuid { SecureRandom.uuid }
+  #   description { Faker::Hacker.say_something_smart }
+  #   title { Faker::Lorem.sentence }
 
-    # lol, ApiBase assumes this is all a parsed json hash
-    attributes { {"artifact" => 5.times.map { FactoryGirl.build(:artifact).to_h } } }
-  end
+  #   # lol, ApiBase assumes this is all a parsed json hash
+  #   attributes { {"artifact" => 5.times.map { FactoryGirl.build(:artifact).to_h } } }
+  # end
 
   factory :artifact do
     uuid { SecureRandom.uuid }
