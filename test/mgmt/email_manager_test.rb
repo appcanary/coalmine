@@ -7,7 +7,7 @@ class EmailManagerTest < ActiveSupport::TestCase
     DatabaseCleaner.clean
   end
 
-  it "should generate vuln email messages" do
+  it "should generate email messages when appropriate" do
     assert_equal 0, LogBundleVulnerability.count
     assert_equal 0, EmailMessage.count
 
