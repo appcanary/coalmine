@@ -23,6 +23,8 @@ module CanaryWeb
     # prevent fields with errors from being wrapped with a div
     config.action_view.field_error_proc = Proc.new { |html_tag, instance| html_tag.html_safe }
 
+    config.active_record.schema_format = :sql
+
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     config.autoload_paths << Rails.root.join('lib')

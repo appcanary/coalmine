@@ -84,4 +84,20 @@ Rails.application.routes.draw do
 
     resources :subscription_plans
   end
+
+  namespace :api do
+    scope :v3 do
+      post "check" => 'check#create'
+    end
+
+    scope :v1 do
+      scope :agent do
+        post "servers" => "agent#create", :as => :agent_servers
+        put "servers/:uuid" => "agent#update", :as => :agent_server_update
+        get "servers/:uuid" => "agent#show", :as => :agent_server_upgrade
+        post "heartbeat/:uuid" => "agent#heartbeat", :as => :agent_server_heartbeat
+      end
+    end
+  end
+
 end

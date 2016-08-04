@@ -104,5 +104,4 @@ class ApplicationController < ActionController::Base
     Raven.extra_context(params: params.to_hash, url: request.url)
   end
 
-
 end

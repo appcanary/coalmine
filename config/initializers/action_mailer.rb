@@ -9,4 +9,3 @@ Rails.application.config.action_mailer.smtp_settings = {
   :authentication => 'login',
   :domain => "appcanary.com"
 }
-

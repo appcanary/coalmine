@@ -4,4 +4,8 @@ development:
 
 test:
   mandrill:
-    api_key: "lolnope"
+    api_key: "LOLNOPE"
+
+production:
+  mandrill:
+    api_key: "this should be replaced by then"

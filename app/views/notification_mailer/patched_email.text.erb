@@ -1,0 +1,15 @@
+Hello,
+
+You've fixed the following vulnerabilities:
+
+<% @notifications_by_vuln.each_pair do |vuln, pkgs| %>
+  Vulnerability: <%= vuln.title %>
+<% pkgs.each do |p| %>
+  in <%= p.package.name %>
+  on <%= p.bundle.path %>
+<%  end %>
+<%  end %>
+
+For more information, please visit https://appcanary.com
+
+Regards,

@@ -25,4 +25,3 @@ if Rails.env.development?
     env.unregister_postprocessor 'application/javascript', Sprockets::SafetyColons
   end
 end
-

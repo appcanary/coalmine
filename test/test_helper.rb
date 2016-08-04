@@ -5,6 +5,7 @@ require 'minitest/mock'
 require "minitest/reporters"
 require 'webmock/minitest'
 require 'vcr'
+require "minitest/spec"
 require 'mocha/mini_test'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
@@ -15,6 +16,10 @@ class ActiveSupport::TestCase
 
   include Sorcery::TestHelpers::Rails::Controller
   # Add more helper methods to be used by all tests here...
+
+  def hydrate(name)
+    File.read(File.join(Rails.root, "test/fixtures/#{name}"))
+  end
 end
 
 module TestValues
@@ -26,3 +31,6 @@ VCR.configure do |c|
   c.hook_into :webmock
   # c.default_cassette_options = { :record => :all }
 end
+
+DatabaseCleaner.strategy = :truncation
+DatabaseCleaner.clean
