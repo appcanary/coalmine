@@ -9,6 +9,12 @@
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #
+# Indexes
+#
+#  index_notifications_on_email_message_id             (email_message_id)
+#  index_notifications_on_log_bundle_patch_id          (log_bundle_patch_id)
+#  index_notifications_on_log_bundle_vulnerability_id  (log_bundle_vulnerability_id)
+#
 
 class Notification < ActiveRecord::Base
   belongs_to :email_message

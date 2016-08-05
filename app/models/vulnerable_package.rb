@@ -11,6 +11,14 @@
 #  valid_at                 :datetime         not null
 #  expired_at               :datetime         default("infinity"), not null
 #
+# Indexes
+#
+#  index_vulnerable_packages_on_expired_at                (expired_at)
+#  index_vulnerable_packages_on_package_id                (package_id)
+#  index_vulnerable_packages_on_valid_at                  (valid_at)
+#  index_vulnerable_packages_on_vulnerability_id          (vulnerability_id)
+#  index_vulnerable_packages_on_vulnerable_dependency_id  (vulnerable_dependency_id)
+#
 
 class VulnerablePackage < ActiveRecord::Base
   belongs_to :package

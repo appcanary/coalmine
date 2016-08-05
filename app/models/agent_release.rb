@@ -7,6 +7,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_agent_releases_on_version  (version)
+#
 
 class AgentRelease < ActiveRecord::Base
   has_many :agent_servers

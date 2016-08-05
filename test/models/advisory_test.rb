@@ -27,6 +27,13 @@
 #  valid_at            :datetime         not null
 #  expired_at          :datetime         default("infinity"), not null
 #
+# Indexes
+#
+#  index_advisories_on_expired_at          (expired_at)
+#  index_advisories_on_identifier          (identifier)
+#  index_advisories_on_queued_advisory_id  (queued_advisory_id)
+#  index_advisories_on_valid_at            (valid_at)
+#
 
 require 'test_helper'
 

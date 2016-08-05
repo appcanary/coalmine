@@ -19,6 +19,12 @@
 #  valid_at        :datetime         not null
 #  expired_at      :datetime         default("infinity"), not null
 #
+# Indexes
+#
+#  index_packages_on_expired_at                                 (expired_at)
+#  index_packages_on_name_and_version_and_platform_and_release  (name,version,platform,release)
+#  index_packages_on_valid_at                                   (valid_at)
+#
 
 require File.join(Rails.root, "test/factories", 'factory_helper')
 

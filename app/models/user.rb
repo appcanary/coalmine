@@ -34,9 +34,11 @@
 #  daily_email_consent             :boolean          default("false"), not null
 #  datomic_id                      :integer
 #  invoiced_manually               :boolean          default("false")
+#  account_id                      :integer          not null
 #
 # Indexes
 #
+#  index_users_on_account_id                           (account_id)
 #  index_users_on_activation_token                     (activation_token)
 #  index_users_on_email                                (email) UNIQUE
 #  index_users_on_last_logout_at_and_last_activity_at  (last_logout_at,last_activity_at)

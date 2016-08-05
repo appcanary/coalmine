@@ -15,6 +15,11 @@
 #  valid_at            :datetime         not null
 #  expired_at          :datetime         default("infinity"), not null
 #
+# Indexes
+#
+#  index_vulnerable_dependencies_on_expired_at  (expired_at)
+#  index_vulnerable_dependencies_on_valid_at    (valid_at)
+#
 
 require 'test_helper'
 

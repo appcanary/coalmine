@@ -9,6 +9,11 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
+# Indexes
+#
+#  index_agent_received_files_on_account_id       (account_id)
+#  index_agent_received_files_on_agent_server_id  (agent_server_id)
+#
 
 class AgentReceivedFile < ActiveRecord::Base
   belongs_to :account

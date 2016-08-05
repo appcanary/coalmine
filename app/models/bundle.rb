@@ -18,6 +18,15 @@
 #  valid_at        :datetime         not null
 #  expired_at      :datetime         default("infinity"), not null
 #
+# Indexes
+#
+#  index_bundles_on_account_id                               (account_id)
+#  index_bundles_on_account_id_and_agent_server_id           (account_id,agent_server_id)
+#  index_bundles_on_account_id_and_agent_server_id_and_path  (account_id,agent_server_id,path)
+#  index_bundles_on_agent_server_id                          (agent_server_id)
+#  index_bundles_on_expired_at                               (expired_at)
+#  index_bundles_on_valid_at                                 (valid_at)
+#
 
 class Bundle < ActiveRecord::Base
   belongs_to :account

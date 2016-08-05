@@ -13,6 +13,16 @@
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
 #
+# Indexes
+#
+#  index_log_bundle_patches_on_bundle_id                 (bundle_id)
+#  index_log_bundle_patches_on_bundled_package_id        (bundled_package_id)
+#  index_log_bundle_patches_on_package_id                (package_id)
+#  index_log_bundle_patches_on_vulnerability_id          (vulnerability_id)
+#  index_log_bundle_patches_on_vulnerable_dependency_id  (vulnerable_dependency_id)
+#  index_log_bundle_patches_on_vulnerable_package_id     (vulnerable_package_id)
+#  index_of_six_kings_LBP                                (bundle_id,package_id,bundled_package_id,vulnerability_id,vulnerable_dependency_id,vulnerable_package_id) UNIQUE
+#
 
 class LogBundlePatch < ActiveRecord::Base
   belongs_to :bundle

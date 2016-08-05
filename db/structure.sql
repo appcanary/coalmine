@@ -1181,7 +1181,8 @@ CREATE TABLE users (
     marketing_email_consent boolean DEFAULT true NOT NULL,
     daily_email_consent boolean DEFAULT false NOT NULL,
     datomic_id bigint,
-    invoiced_manually boolean DEFAULT false
+    invoiced_manually boolean DEFAULT false,
+    account_id integer NOT NULL
 );
 
 
@@ -2492,6 +2493,13 @@ CREATE INDEX index_subscription_plans_on_discount ON subscription_plans USING bt
 
 
 --
+-- Name: index_users_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_account_id ON users USING btree (account_id);
+
+
+--
 -- Name: index_users_on_activation_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2748,6 +2756,14 @@ ALTER TABLE ONLY vulnerable_packages
 
 
 --
+-- Name: fk_rails_61ac11da2b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT fk_rails_61ac11da2b FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
 -- Name: fk_rails_6c7c501d37; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2962,4 +2978,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160728213358');
 INSERT INTO schema_migrations (version) VALUES ('20160728213552');
 
 INSERT INTO schema_migrations (version) VALUES ('20160804141716');
+
+INSERT INTO schema_migrations (version) VALUES ('20160805151822');
 

@@ -23,6 +23,10 @@
 #  reported_at         :datetime
 #  created_at          :datetime         not null
 #
+# Indexes
+#
+#  index_queued_advisories_on_identifier  (identifier)
+#
 
 class QueuedAdvisory < ActiveRecord::Base
   def to_advisory_attributes

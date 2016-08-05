@@ -10,6 +10,11 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_email_messages_on_account_id  (account_id)
+#  index_email_messages_on_sent_at     (sent_at)
+#
 
 class EmailMessage < ActiveRecord::Base
   belongs_to :account

@@ -16,6 +16,12 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
+# Indexes
+#
+#  index_agent_servers_on_account_id        (account_id)
+#  index_agent_servers_on_agent_release_id  (agent_release_id)
+#  index_agent_servers_on_uuid              (uuid)
+#
 
 class AgentServer < ActiveRecord::Base
   belongs_to :account
