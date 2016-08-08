@@ -1,32 +1,29 @@
+# TODO: convert to using result, error
 class UserManager
   attr_accessor :user
-
   def self.sign_up(user)
     self.new(user).create!
   end
 
   def initialize(user)
-    @client = CanaryClient.new(user.token)
     @user = user
   end
 
   def create!
+
+    account = Account.new(:email => @user.email)
+    if !account.valid?
+      @user.errors.add(:email, "email has already been taken")
+      return false
+    end
+
     if !@user.valid?
       return false
     else
-      # password checks out, lets fetch our token
-      begin
-        backend_user = @client.post('users', {email: user.email, name: ''})
-        @user.token = backend_user['web-token']
-        @user.datomic_id = backend_user['id']
-
-        return @user.save
-      rescue Faraday::Error => e
-        Rails.logger.error "Failed to connect to Canary backend: \n" + e.to_s
-        @user.errors.add(:base, "Hrm. Seems like our backend is down. Please try again.")
-
-        Raven.capture_exception(e)
-        return false
+      User.transaction do
+        account.save!
+        @user.account = account
+        @user.save!
       end
     end
   end
@@ -41,16 +38,6 @@ class UserManager
 
     if !@user.valid?
       return false
-    end
-
-    if email = params[:email]
-      begin
-        resp = @client.put('users/me', {email: email})
-      rescue Faraday::Error => e
-        @user.errors.add(:email, "Something went wrong. Please try again.")
-        Raven.capture_exception(e)
-        return false
-      end
     end
 
     begin

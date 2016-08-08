@@ -169,7 +169,7 @@ SET default_with_oids = false;
 
 CREATE TABLE accounts (
     id integer NOT NULL,
-    email character varying,
+    email character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2021,6 +2021,13 @@ CREATE INDEX idx_vulnerable_dependency_id_ar ON vulnerable_dependency_archives U
 --
 
 CREATE INDEX idx_vulnerable_package_id_ar ON vulnerable_package_archives USING btree (vulnerable_package_id);
+
+
+--
+-- Name: index_accounts_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_accounts_on_email ON accounts USING btree (email);
 
 
 --

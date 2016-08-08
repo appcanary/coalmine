@@ -57,6 +57,8 @@ class User < ActiveRecord::Base
   # this association gets persisted by user.save calls
   has_one :billing_plan, autosave: true
 
+  belongs_to :account
+
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
 
   def self.all_from_api(order = "created_at DESC")
