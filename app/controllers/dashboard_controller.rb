@@ -1,9 +1,9 @@
 class DashboardController < ApplicationController
   def index
-    @servers = Server.find_all(current_user)
-    @monitors = Moniter.find_all(current_user)
+    @servers = AgentServer.belonging_to(current_user)
+    @api_bundles = Bundle.belonging_to(current_user).via_api
 
-    wizard = OnboardWizard.new(current_user, @servers, @monitors)
+    wizard = OnboardWizard.new(current_user, @servers, @api_bundles)
 
     # TODO: in the future, keep track of whether ppl
     # have seen a given page before, be more intelligent

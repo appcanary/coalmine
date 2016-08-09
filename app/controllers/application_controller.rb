@@ -87,16 +87,6 @@ class ApplicationController < ActionController::Base
   end
 
 
-  # TODO: test
-  unless Rails.env.test?
-    before_filter :set_onboarded
-    def set_onboarded
-      if current_user
-        @onboarded = current_user.servers.present?
-      end
-    end
-  end
-
   def set_raven_context
     Raven.user_context(id: session[:user_id],
                        datomic_id: current_user.try(:datomic_id),
