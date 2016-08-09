@@ -48,8 +48,9 @@
 
 FactoryGirl.define do
   factory :user do
+    association :account, strategy: :build
     sequence :email do |n|
-      "alice#{n}@example.com"
+      "ursula#{n}@example.com"
     end
 
     after(:build) do |u|

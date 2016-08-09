@@ -10,19 +10,14 @@ class UserManager
   end
 
   def create!
-
-    account = Account.new(:email => @user.email)
-    if !account.valid?
-      @user.errors.add(:email, "email has already been taken")
-      return false
-    end
+    # todo: figure out how to best propagate errors
+    # account.email is harder to show proper errors in ui
+    @user.account = Account.new(:email => @user.email)
 
     if !@user.valid?
       return false
     else
       User.transaction do
-        account.save!
-        @user.account = account
         @user.save!
       end
     end
@@ -36,10 +31,14 @@ class UserManager
 
     @user.assign_attributes(params)
 
+    if @user.email_changed?
+      @user.account.email = @user.email
+    end
+
     if !@user.valid?
       return false
     end
-
+   
     begin
       intercom_email_sync!(user)
     rescue Exception => e

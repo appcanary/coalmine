@@ -29,7 +29,6 @@ class UserManagerTest < ActiveSupport::TestCase
       assert_equal @user.new_record?, false
     end
 
-    # TODO: make same check when updating email
     it "shouldn't let you create a new user whose email is used by an existing account" do
       email = "fake@example.com"
       FactoryGirl.create(:account, :email => email)
@@ -38,7 +37,21 @@ class UserManagerTest < ActiveSupport::TestCase
       assert_equal false, UserManager.sign_up(@user)
 
       assert @user.errors.present?
+    end
 
+    it "should for now auto update the account email when you change user email" do
+      email_str = "test@example.com"
+
+      acc = FactoryGirl.create(:account)
+      user = FactoryGirl.create(:user, :account => acc)
+      
+      ret = UserManager.update(user, {:email => email_str})
+
+      acc.reload
+      user.reload
+      
+      assert_equal email_str, user.email
+      assert_equal email_str, acc.email
     end
   end
 
