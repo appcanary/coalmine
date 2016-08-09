@@ -473,7 +473,7 @@ CREATE TABLE agent_servers (
     ip character varying,
     distro character varying,
     release character varying,
-    last_heartbeat timestamp without time zone,
+    last_heartbeat_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );

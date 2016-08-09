@@ -11,7 +11,7 @@ class CreateAgentServers < ActiveRecord::Migration
       t.string :ip
       t.string :distro
       t.string :release
-      t.datetime :last_heartbeat
+      t.datetime :last_heartbeat_at
 
       t.timestamps null: false
     end

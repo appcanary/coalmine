@@ -2,19 +2,19 @@
 #
 # Table name: agent_servers
 #
-#  id               :integer          not null, primary key
-#  account_id       :integer
-#  agent_release_id :integer
-#  uuid             :uuid
-#  hostname         :string
-#  uname            :string
-#  name             :string
-#  ip               :string
-#  distro           :string
-#  release          :string
-#  last_heartbeat   :datetime
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id                :integer          not null, primary key
+#  account_id        :integer
+#  agent_release_id  :integer
+#  uuid              :uuid
+#  hostname          :string
+#  uname             :string
+#  name              :string
+#  ip                :string
+#  distro            :string
+#  release           :string
+#  last_heartbeat_at :datetime
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #
