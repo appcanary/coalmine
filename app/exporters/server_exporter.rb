@@ -13,20 +13,20 @@ class ServerExporter
       csv << [server.display_name,
               server.last_heartbeat_at,
               "#{server.distro} / #{server.release}",
-              server.vulnerable]
+              server.vulnerable?]
 
       csv << [""]
 
       csv << ["Path", "Package", "CVE", "Upgrade to", "Title"]
       apps.each do |a|
-        a.vulnerable_artifact_versions.each do |vav|
-          vav.vulnerabilities.each do |vuln|
-            csv << [a.path, vav.name, vuln.cve_id, vuln.upgrade_to.try(:join, ", "), vuln.title]
+        a.vulnerable_packages.each do |vp|
+          vp.vulnerabilities.each do |vuln|
+            csv << [a.path, vp.name, vuln.cve_id, vuln.upgrade_to.try(:join, ", "), vuln.title]
           end
         end
       end
     end
 
-    [output, {filename: "server-#{server.display_name}-#{Date.today}.csv"}]
+    [output, {filename: "appcanary-server-#{server.display_name}-#{Date.today}.csv"}]
   end
 end

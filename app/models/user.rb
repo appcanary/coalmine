@@ -57,11 +57,16 @@ class User < ActiveRecord::Base
   # this association gets persisted by user.save calls
   has_one :billing_plan, autosave: true
 
+  # ---- parent account association
   belongs_to :account, autosave: true
   validates_presence_of :account
   validates_associated :account
 
+  has_many :agent_servers, :through => :account
   delegate :token, :to => :account
+
+  has_many :bundles, :through => :account
+
 
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
 

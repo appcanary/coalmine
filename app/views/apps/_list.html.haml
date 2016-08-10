@@ -1,7 +1,7 @@
 %td
   %section
     .status
-      -if app.vulnerable
+      -if app.vulnerable?
         %span.fa.fa-exclamation-triangle.warn
       -else
         %span.fa.fa-check-circle.okay

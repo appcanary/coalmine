@@ -36,6 +36,10 @@ class AgentServer < ActiveRecord::Base
     where(:account_id => user.account_id)
   }
 
+  def display_name
+    name.blank? ? hostname : name
+  end
+
   def gone_silent?
     last_heartbeat_at < 2.hours.ago
   end

@@ -41,7 +41,7 @@
                 </div>
                 <div class="kind">
                   kind:
-                  <span class="data"><%= artifact.kind %></span>
+                  <span class="data"><%= artifact.platform %></span>
                 </div>
               </td>
               <td class="vulnerabilities">
@@ -89,8 +89,8 @@
           <% @artifacts.each do |artifact| %>
             <tr class="artifact">
               <td class="name"><%= artifact.name %></td>
-              <td class="kind"><%= artifact.kind %></td>
-              <td class="version"><%= artifact.number %></td>
+              <td class="kind"><%= artifact.platform %></td>
+              <td class="version"><%= artifact.version %></td>
             </tr>
           <% end %>
         <% end %>

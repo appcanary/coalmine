@@ -40,12 +40,12 @@
 
 <section>
   <div class="server-apps">
-    <% if @server.apps.present? %>
+    <% if @server.bundles.present? %>
       <span class="tabletitle"><h4>Apps and dependencies</h4> <%= link_to "Export to CSV", server_path(@server, format: "csv"), class: "btn btn-default" %></span>
       <table class="table apps">
-        <% @server.apps.each do |app| %>
+        <% @server.bundles.each do |bundle| %>
           <tr>
-            <%= render :partial => "apps/list", :locals => { :app => app } %>
+            <%= render :partial => "apps/list", :locals => { :app => bundle } %>
           </tr>
         <% end %>
       </table>

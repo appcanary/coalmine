@@ -7,10 +7,10 @@ class AppsController < ApplicationController
   end
 
   def show
-    @server = Server.find(current_user, params[:server_id])
-    @app = App.find(current_user, params[:server_id], params[:id])
+    @server = current_user.agent_servers.find(params[:server_id])
+    @app = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
 
-    @artifacts = @app.artifact_versions
-    @vuln_artifacts = @app.vulnerable_artifact_versions
+    @artifacts = @app.packages
+    @vuln_artifacts = @app.vulnerable_packages
   end
 end

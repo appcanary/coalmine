@@ -2,8 +2,6 @@ class ServersController < ApplicationController
   skip_before_filter :require_login, :only => [:deb, :rpm, :install]
   def new
     @agent_token = current_user.token
-    # @artifacts_count = Backend.artifacts_count
-    # @vulnerabilities_count = Backend.vulnerabilities_count
   end
 
   def onboarding
@@ -13,12 +11,11 @@ class ServersController < ApplicationController
   end
 
   def show
-    server
     respond_to do |format|
       format.html
       format.csv do
-        apps = @server.apps.map { |a| App.find(current_user, @server.uuid, a.uuid) }
-        send_data *ServerExporter.new(@server, apps).to_csv
+        apps = server.bundles
+        send_data *ServerExporter.new(server, apps).to_csv
       end
     end
   end
@@ -51,8 +48,9 @@ class ServersController < ApplicationController
     end
   end
 
+  # TODO lol what happens to bundles?
   def destroy_inactive
-    @servers = Server.find_all(current_user)
+    @servers = current_user.agent_servers
     @silent_servers, @active_servers = @servers.partition(&:gone_silent?)
 
     @silent_servers.each(&:destroy)
@@ -78,7 +76,7 @@ class ServersController < ApplicationController
   protected
 
   def server
-    @server ||= Server.find(current_user, params[:id])
+    @server ||= current_user.agent_servers.find(params[:id])
   end
 
   def server_params
