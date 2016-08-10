@@ -13,10 +13,15 @@
 #
 
 class Account < ActiveRecord::Base
+  has_secure_token :token
+
+  has_many :agent_servers
+
   has_many :bundles
   has_many :log_bundle_vulnerabilities, :through => :bundles
 
   has_many :users
 
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
+
 end

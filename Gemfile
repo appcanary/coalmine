@@ -31,7 +31,7 @@ gem 'pretender'
 # model stuff
 gem 'httparty'
 gem 'active_model_serializers', '~> 0.10.0'
-
+gem 'has_secure_token'
 
 # gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

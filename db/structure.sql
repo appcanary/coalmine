@@ -170,6 +170,7 @@ SET default_with_oids = false;
 CREATE TABLE accounts (
     id integer NOT NULL,
     email character varying NOT NULL,
+    token character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2028,6 +2029,13 @@ CREATE INDEX idx_vulnerable_package_id_ar ON vulnerable_package_archives USING b
 --
 
 CREATE UNIQUE INDEX index_accounts_on_email ON accounts USING btree (email);
+
+
+--
+-- Name: index_accounts_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_accounts_on_token ON accounts USING btree (token);
 
 
 --

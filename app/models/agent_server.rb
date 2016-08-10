@@ -25,6 +25,8 @@
 
 class AgentServer < ActiveRecord::Base
   belongs_to :account
+  validates :account, :presence => true
+
   belongs_to :agent_release
   has_many :bundles
   has_many :heartbeats, :class_name => AgentHeartbeat
@@ -36,6 +38,10 @@ class AgentServer < ActiveRecord::Base
 
   def gone_silent?
     last_heartbeat_at < 2.hours.ago
+  end
+
+  def vulnerable?
+    bundles.any?(&:vulnerable?)
   end
 
   def system_bundle

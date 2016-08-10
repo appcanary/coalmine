@@ -47,6 +47,11 @@ class Bundle < ActiveRecord::Base
 
   scope :via_api, -> { where("agent_server_id is null") }
 
+  def vulnerable?
+    self.vulnerable_packages.any?
+  end
+
+  # TODO convert to has many?
   def vulnerable_packages
     VulnerablePackage.where('"bundled_packages".bundle_id = ?', self.id).joins('inner join bundled_packages on "bundled_packages".package_id ="vulnerable_packages".package_id')
   end

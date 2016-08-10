@@ -61,6 +61,8 @@ class User < ActiveRecord::Base
   validates_presence_of :account
   validates_associated :account
 
+  delegate :token, :to => :account
+
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
 
   def self.all_from_api(order = "created_at DESC")

@@ -1,6 +1,8 @@
 class Api::AgentController < ApiController
+  # TODO: test current_account scoping, i.e. unauth access?
+
   def heartbeat
-    server = AgentServer.where(:uuid => params[:uuid]).includes(:agent_release).take
+    server = current_account.agent_servers.where(:uuid => params[:uuid]).includes(:agent_release).take
 
     # TODO log this?
     unless server
@@ -23,12 +25,12 @@ class Api::AgentController < ApiController
   end
 
   def create
-    server = AgentServer.create!(create_params).reload
+    server = current_account.agent_servers.create!(create_params).reload
     render :json => {uuid: server.uuid}
   end
 
   def update
-    server = AgentServer.where(:uuid => params[:uuid]).take
+    server = current_account.agent_servers.where(:uuid => params[:uuid]).take
     unless server
       render :text => "", :status => 404
       return
@@ -73,7 +75,7 @@ class Api::AgentController < ApiController
   end
 
   def show
-    server = AgentServer.where(:uuid => params[:uuid]).take
+    server = current_account.agent_servers.where(:uuid => params[:uuid]).take
 
     bundle = server.system_bundle
     if bundle.nil?
@@ -105,11 +107,6 @@ class Api::AgentController < ApiController
     server.received_files.create(account_id: current_account.id, 
                                  request: request.raw_post)
 
-  end
-
-  # placeholder for real auth
-  def current_account
-    @current_account ||= Account.where(:id => 1).first_or_create
   end
 
   def create_params
