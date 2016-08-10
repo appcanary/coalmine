@@ -11,6 +11,6 @@ class AppsController < ApplicationController
     @app = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
 
     @artifacts = @app.packages
-    @vuln_artifacts = @app.vulnerable_packages
+    @vuln_artifacts = PackageReport.from_bundle(@app)
   end
 end

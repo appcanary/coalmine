@@ -37,7 +37,7 @@
                 </div>
                 <div class="version">
                   version
-                  <span class="data"><%= artifact.number %></span>
+                  <span class="data"><%= artifact.version %></span>
                 </div>
                 <div class="kind">
                   kind:
@@ -46,17 +46,17 @@
               </td>
               <td class="vulnerabilities">
                 <ul>
-                  <% artifact.vulnerabilities.each do |vuln| %>
+                  <% artifact.vulnerable_dependencies.each do |vuln| %>
                     <li class="vulnerability">
-                      <p><%= link_to vuln.title, vuln_path(vuln) %></p>
+                      <p><%= link_to vuln.vulnerability_title, vuln_path(vuln.vulnerability) %></p>
 
                       <% if vuln.patched_versions.present? %>
-                        <% if vuln.upgrade_to.present? %>
-                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(vuln.upgrade_to) %></p>
+                        <% if artifact.package.upgrade_to.present? %>
+                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(artifact.package.upgrade_to) %></p>
                         <% else %>
                           <p class="upgrade_to"> No patches for your release exist right now. </p>
                         <% end %>
-                        <% if vuln.remaining_versions.present? %>
+                        <% if false # vuln.remaining_versions.present? %>
                           <p class="remaining_versions">Other patched versions include: <%= versions_in_english(vuln.remaining_versions) %></p>
                         <% end %>
                       <% else %>

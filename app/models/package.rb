@@ -118,7 +118,7 @@ class Package < ActiveRecord::Base
 
 
   def upgrade_to
-    self.vulnerable_dependencies.map do |vd|
+    @upgrade_to ||= self.vulnerable_dependencies.map do |vd|
       vd.patched_versions.select do |pv|
         earlier_version?(pv)
       end

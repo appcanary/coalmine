@@ -28,6 +28,8 @@ class VulnerableDependency < ActiveRecord::Base
   validates :vulnerability_id, :presence => true
   validates :package_platform, :presence => true
   validates :package_name, :presence => true
+
+  delegate :title, :to => :vulnerability, :prefix => true
   
   def concerns?(package)
     (package.platform == self.package_platform) && 

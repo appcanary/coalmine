@@ -19,13 +19,15 @@ class PackageReport < ActiveRecord::Base
    scope :from_bundle, -> (bundle) {
      inner_q = bundle.vulnerable_packages.distinct_package
 
-     from("(#{inner_q.to_sql}) AS package_reports").includes(:package, :vulnerable_dependency)
+     from("(#{inner_q.to_sql}) AS package_reports").includes(:package, :vulnerable_dependency, :vulnerability)
    }
 
    scope :from_packages, -> (package_query) {
      from("(#{package_query.to_sql}) AS package_reports").includes(:package, :vulnerable_dependency)
    }
 
+
+   delegate :name, :version, :platform, :vulnerabilities, :vulnerable_dependencies, :to => :package
 
 
    #----- handle tableless ActiveRecord
