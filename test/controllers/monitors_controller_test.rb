@@ -15,15 +15,16 @@ class MonitorsControllerTest < ActionController::TestCase
     end
 
     it "should show the show page" do
+      FactoryGirl.create(:bundle, :account_id => user.account_id, :id => "1234")
       get :show, :id => "1234"
       assert_response :success
     end
 
     it "should redirect to dashboard on destroy" do
-      Moniter.expects(:destroy).with(user, "1234").returns(true)
-
+      FactoryGirl.create(:bundle, :account_id => user.account_id, :id => "1234")
       delete :destroy, :id => "1234"
       assert_response :redirect
+      assert_equal 0, Bundle.count
     end
 
     it "should show the new page" do
@@ -33,27 +34,27 @@ class MonitorsControllerTest < ActionController::TestCase
 
     it "should allow new monitors to be created" do
       VCR.use_cassette("monitor_create") do
-        post :create, {:moniter => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
-                                    :platform_release => "ruby"}}
+        post :create, {:monitor => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
+                                    :platform_release_str => "ruby"}}
         assert_redirected_to dashboard_path
       end
     end
 
     it "should present an error when given bad input" do
-      post :create, {:moniter => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
-                                  :platform_release => "rubyLOL"}}
+      post :create, {:monitor => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
+                                  :platform_release_str => "rubyLOL"}}
 
       assert_response :success
-      assert_not_nil assigns(:monitor).errors
+      assert_equal false, assigns(:form).valid?
     end
 
     it "should present an error when given a bad file" do
       VCR.use_cassette("monitor_create_error") do 
-        post :create, {:moniter => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile"), nil, false),
-                                    :platform_release => "ruby"}}
+        post :create, {:monitor => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile"), nil, false),
+                                    :platform_release_str => "ruby"}}
 
         assert_response :success
-        assert_not_nil assigns(:monitor).errors
+        assert_equal false, assigns(:form).valid?
       end
     end
   end

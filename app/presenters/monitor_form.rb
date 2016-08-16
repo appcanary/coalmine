@@ -30,6 +30,7 @@ class MonitorForm < Reform::Form
   # depends on pr validation
   # validations should be idempotent
   validate :file do
+    next if errors.present?
 
     if file.nil?
       errors.add(:file, "is empty")
