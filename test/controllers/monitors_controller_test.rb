@@ -33,11 +33,9 @@ class MonitorsControllerTest < ActionController::TestCase
     end
 
     it "should allow new monitors to be created" do
-      VCR.use_cassette("monitor_create") do
-        post :create, {:monitor => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
-                                    :platform_release_str => "ruby"}}
-        assert_redirected_to dashboard_path
-      end
+      post :create, {:monitor => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
+                                  :platform_release_str => "ruby"}}
+      assert_redirected_to dashboard_path
     end
 
     it "should present an error when given bad input" do
@@ -49,13 +47,11 @@ class MonitorsControllerTest < ActionController::TestCase
     end
 
     it "should present an error when given a bad file" do
-      VCR.use_cassette("monitor_create_error") do 
-        post :create, {:monitor => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile"), nil, false),
-                                    :platform_release_str => "ruby"}}
+      post :create, {:monitor => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile"), nil, false),
+                                  :platform_release_str => "ruby"}}
 
-        assert_response :success
-        assert_equal false, assigns(:form).valid?
-      end
+      assert_response :success
+      assert_equal false, assigns(:form).valid?
     end
   end
 
