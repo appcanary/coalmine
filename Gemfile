@@ -24,6 +24,9 @@ gem "neat"
 gem "htmlentities"
 gem 'haml', '~> 4.0.6'
 
+gem 'reform'
+gem 'reform-rails'
+
 # auth
 gem 'sorcery'
 gem 'pretender'

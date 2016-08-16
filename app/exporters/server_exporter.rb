@@ -1,3 +1,4 @@
+# TODO: merge into serializers folder?
 require 'csv'
 class ServerExporter
   attr_accessor :server, :apps

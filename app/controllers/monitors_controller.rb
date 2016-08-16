@@ -1,36 +1,31 @@
 class MonitorsController < ApplicationController
   def show
-    @monitor = monitor
+    @form = MonitorForm.new(Bundle.new)
     @vuln_artifacts = @monitor.vulnerable_versions
     @artifacts = []
   end
 
   def new
-    @monitor = Moniter.new
+    @form = MonitorForm.new(Bundle.new)
   end
 
   def create
-    @monitor = Moniter.new
+    @form = MonitorForm.new(Bundle.new)
 
-    pr = Platforms.select_opt_to_h(monitor_params[:platform_release])
-    file = monitor_params[:file]
+    if @form.validate(params[:monitor])
+      
+      @bm = BundleManager.new(current_user.account)
+      @bundle, error = @bm.create(@form.platform_release, {name: @form.name}, @form.package_list)
 
-    if error = invalid_params?(pr, file)
-      @monitor.errors = error
-    else
-      name = monitor_params[:name]
-
-      begin
-        Moniter.create(current_user, file, pr, name)
-      rescue CanaryClient::ClientError => e
-        @monitor.errors = e.body["errors"].map { |e| e["title"]["message"] || e["title"]}
+      if error
+        @form.errors.add(:base, error.message)
       end
     end
 
-    if @monitor.errors.present?
-      render :new
-    else
+    if @form.valid?
       redirect_to dashboard_path
+    else
+      render :new
     end
   end
 

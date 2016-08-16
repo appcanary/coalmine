@@ -1,5 +1,6 @@
 require File.join(Rails.root, "app/parsers", 'rpm_parser')
 class Platforms
+  # TODO cleanup old platforms code
   Debian = "debian"
   Ubuntu = "ubuntu"
   Ruby = "ruby"

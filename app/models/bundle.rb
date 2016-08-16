@@ -47,6 +47,8 @@ class Bundle < ActiveRecord::Base
 
   scope :via_api, -> { where("agent_server_id is null") }
 
+  # TODO: default bundle name?
+
   def vulnerable?
     self.vulnerable_packages.any?
   end

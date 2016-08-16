@@ -105,6 +105,12 @@ GEM
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
+    declarative (0.0.8)
+      uber (>= 0.0.15)
+    disposable (0.3.2)
+      declarative (>= 0.0.8, < 1.0.0)
+      representable (>= 2.4.0, <= 3.1.0)
+      uber
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
@@ -231,6 +237,16 @@ GEM
     rake (11.2.2)
     rdoc (4.2.0)
     redis (3.2.1)
+    reform (2.2.1)
+      disposable (>= 0.3.0, < 0.4.0)
+      representable (>= 2.4.0, < 3.1.0)
+      uber (~> 0.0.11)
+    reform-rails (0.1.5)
+      activemodel (>= 3.2)
+      reform (>= 2.2.0.rc1)
+    representable (3.0.0)
+      declarative (~> 0.0.5)
+      uber (~> 0.0.15)
     request_store (1.1.0)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -279,6 +295,7 @@ GEM
     tilt (2.0.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    uber (0.0.15)
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -339,6 +356,8 @@ DEPENDENCIES
   que (~> 0.11.6)
   rails (= 4.2.6)
   redis
+  reform
+  reform-rails
   request_store (~> 1.1.0)
   rollout
   ruby_identicon (= 0.0.4)

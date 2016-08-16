@@ -29,7 +29,7 @@ module DashboardHelper
   end
 
   def monitor_kind_label(monitor)
-    icon, label = case monitor.kind
+    icon, label = case monitor.platform
                   when "ruby"
                     ["ruby.png", "Ruby"]
                   when "centos"
