@@ -47,7 +47,11 @@ class Bundle < ActiveRecord::Base
 
   scope :via_api, -> { where("agent_server_id is null") }
 
-  # TODO: default bundle name?
+  after_initialize :init
+
+  def init
+    self.name ||= "#{[platform, release].compact.join("-")}-#{Time.now.strftime("%Y-%m-%d")}"
+  end
 
   def vulnerable?
     self.vulnerable_packages.any?

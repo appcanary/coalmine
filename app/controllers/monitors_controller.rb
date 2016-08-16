@@ -1,8 +1,10 @@
 class MonitorsController < ApplicationController
   def show
     @form = MonitorForm.new(Bundle.new)
-    @vuln_artifacts = @monitor.vulnerable_versions
-    @artifacts = []
+    @bundle = current_user.bundles.via_api.find(params[:id])
+
+    @artifacts = @bundle.packages
+    @vuln_artifacts = PackageReport.from_bundle(@bundle)
   end
 
   def new
@@ -31,37 +33,10 @@ class MonitorsController < ApplicationController
 
 
   def destroy
-    if Moniter.destroy(current_user, params[:id])
-      redirect_to dashboard_path, notice: "OK. Your monitor was deleted. "
-    else
-      redirect_to dashboard_path, notice: "Sorry, something went wrong. Please try again."
-    end
+    @bundle = current_user.bundles.via_api.find(params[:id])
+
+    @bundle.destroy
+    redirect_to dashboard_path, notice: "OK. Your monitor was deleted."
   end
 
-  protected
-  def monitor
-    Moniter.find(current_user, params[:id])
-  end
-
-  def monitor_params
-    params.require(:moniter).permit(:name, :platform_release, :file)
-  end
-
-  def invalid_params?(pr, file)
-    errors = []
-
-    if pr.blank?
-      errors << "Invalid platform selection. Please try again."
-    end
-
-    if file.blank?
-      errors << "Are you sure you uploaded a file? Try again!"
-    end
-
-    if errors.present?
-      return errors
-    else
-      return false
-    end
-  end
 end

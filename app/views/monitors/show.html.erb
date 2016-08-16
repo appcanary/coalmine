@@ -1,7 +1,7 @@
 <section>
   <div class="heading">
     <h3>
-      <span><%= link_to "dashboard", dashboard_path %> / monitors / <span class="name"><%= @monitor.name %></span></span>
+      <span><%= link_to "dashboard", dashboard_path %> / monitors / <span class="name"><%= @bundle.name %></span></span>
     </h3>
   </div>
 </section>
@@ -25,13 +25,13 @@
       <tbody>
         <tr>
           <td> 
-            <%= @monitor.name %>
+            <%= @bundle.name %>
           </td>
           <td>
-            <%= monitor_kind_label(@monitor) %>
+            <%= monitor_kind_label(@bundle) %>
           </td>
           <td>
-            <%= "#{time_ago_in_words @monitor.created_at} ago" %>
+            <%= "#{time_ago_in_words @bundle.created_at} ago" %>
           </td>
         </tr>
       </tbody>
@@ -73,26 +73,26 @@
                 </div>
                 <div class="version">
                   version
-                  <span class="data"><%= artifact.number %></span>
+                  <span class="data"><%= artifact.version %></span>
                 </div>
                 <div class="kind">
                   kind:
-                  <span class="data"><%= artifact.kind %></span>
+                  <span class="data"><%= artifact.platform %></span>
                 </div>
               </td>
               <td class="vulnerabilities">
                 <ul>
-                  <% artifact.vulnerabilities.each do |vuln| %>
+                  <% artifact.vulnerable_dependencies.each do |vuln| %>
                     <li class="vulnerability">
-                      <p><%= link_to vuln.title, vuln_path(vuln) %></p>
+                      <p><%= link_to vuln.vulnerability_title, vuln_path(vuln.vulnerability) %></p>
 
                       <% if vuln.patched_versions.present? %>
-                        <% if vuln.upgrade_to.present? %>
-                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(vuln.upgrade_to) %></p>
+                        <% if artifact.package.upgrade_to.present? %>
+                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(artifact.package.upgrade_to) %></p>
                         <% else %>
                           <p class="upgrade_to"> No patches for your release exist right now. </p>
                         <% end %>
-                        <% if vuln.remaining_versions.present? %>
+                        <% if false #vuln.remaining_versions.present? %>
                           <p class="remaining_versions">Other patched versions include: <%= versions_in_english(vuln.remaining_versions) %></p>
                         <% end %>
                       <% else %>

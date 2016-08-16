@@ -67,6 +67,8 @@ class BundlerManagerTest < ActiveSupport::TestCase
     assert_equal "right", bundle.name
   end
 
+  # TODO: lol, test with bundled packages, adoy
+
   it "should delete and archive the bundle" do
     bundle = FactoryGirl.create(:bundle, 
                                 :account_id => account.id, 
