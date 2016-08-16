@@ -36,6 +36,19 @@ class AgentServer < ActiveRecord::Base
     where(:account_id => user.account_id)
   }
 
+  def register_heartbeat!(params)
+    self.transaction do
+      self.last_heartbeat_at = Time.now
+      self.heartbeats.create!(:files => params[:files],
+                              :created_at => self.last_heartbeat_at)
+
+
+      agent_version = params[:"agent-version"]
+      self.agent_release = AgentRelease.where(:version => agent_version).first_or_create
+      self.save!
+    end
+  end
+
   def display_name
     name.blank? ? hostname : name
   end

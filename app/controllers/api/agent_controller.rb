@@ -1,6 +1,4 @@
 class Api::AgentController < ApiController
-  # TODO: test current_account scoping, i.e. unauth access?
-
   def heartbeat
     server = current_account.agent_servers.where(:uuid => params[:uuid]).includes(:agent_release).take
 
@@ -10,16 +8,7 @@ class Api::AgentController < ApiController
       return
     end
 
-    # TODO: what do we need to update?
-    server.transaction do
-      server.last_heartbeat_at = Time.now
-      server.heartbeats.create!(:files => heartbeat_params[:files], :created_at => server.last_heartbeat_at)
-
-      agent_version = heartbeat_params[:"agent-version"]
-      server.agent_release = AgentRelease.where(:version => agent_version).first_or_create
-
-      server.save!
-    end
+    server.register_heartbeat!
 
     render json: {heartbeat: server.last_heartbeat_at}
   end
