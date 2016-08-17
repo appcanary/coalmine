@@ -22,10 +22,10 @@ class UserSessionsControllerTest < ActionController::TestCase
       post :create, {:user => {:email => user.email, :password => TestValues::PASSWORD}}, :type => :json
       assert assigns(:current_user)
       json_hsh = JSON.parse(response.body)
-      assert json_hsh["user"]
-      assert json_hsh["user"]["email"]
+      assert json_hsh
+      assert json_hsh["email"]
       assert_nil json_hsh["crypted_password"]
-      assert_nil json_hsh["user"]["crypted_password"]
+      assert_nil json_hsh["crypted_password"]
     end
 
     it "should fail bad login via json" do
