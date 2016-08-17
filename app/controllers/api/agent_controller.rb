@@ -8,7 +8,7 @@ class Api::AgentController < ApiController
       return
     end
 
-    server.register_heartbeat!
+    server.register_heartbeat!(params)
 
     render json: {heartbeat: server.last_heartbeat_at}
   end
