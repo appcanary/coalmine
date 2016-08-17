@@ -11,6 +11,7 @@ class ServersController < ApplicationController
   end
 
   def show
+    @server = server
     respond_to do |format|
       format.html
       format.csv do

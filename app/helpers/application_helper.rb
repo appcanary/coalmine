@@ -102,4 +102,12 @@ module ApplicationHelper
       yield
     end
   end
+
+  def time_ago_in_words_or_never(time)
+    if time
+      "#{time_ago_in_words time} ago"
+    else
+      "never"
+    end
+  end
 end
