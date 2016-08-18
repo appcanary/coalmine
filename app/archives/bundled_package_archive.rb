@@ -19,10 +19,6 @@ class BundledPackageArchive < ActiveRecord::Base
   belongs_to :package
   belongs_to :bundle
 
-  scope :select_as_bp, -> { 
-    select("bundled_package_id as id, bundled_package_archives.bundle_id, bundled_package_archives.package_id, bundled_package_archives.created_at, bundled_package_archives.updated_at, bundled_package_archives.valid_at, bundled_package_archives.expired_at ")
-  }
-
   scope :select_log_joins_vulns, -> {
     select('"bundled_package_archives".bundle_id, 
            "bundled_package_archives".package_id, 
@@ -53,6 +49,12 @@ class BundledPackageArchive < ActiveRecord::Base
 
     BundledPackage.from("(#{q1.to_sql} UNION #{q2.to_sql}) AS bundled_packages")
   end
+
+  # ---- unused, maybe for future use of revisions
+  scope :select_as_bp, -> { 
+    select("bundled_package_id as id, bundled_package_archives.bundle_id, bundled_package_archives.package_id, bundled_package_archives.created_at, bundled_package_archives.updated_at, bundled_package_archives.valid_at, bundled_package_archives.expired_at ")
+  }
+
 
   def self.revisions(bundle_id)
     # lol doing this as a subquery allows us to 
