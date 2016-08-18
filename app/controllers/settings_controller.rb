@@ -16,12 +16,14 @@ class SettingsController < ApplicationController
   def set_vars
     @show_stripe = true
     @user = current_user
-    @agent_token = @user.agent_token
+    @agent_token = @user.token
     @billing_manager = BillingManager.new(@user)
     @billing_presenter = @billing_manager.to_presenter
-    @active_servers_count = @user.active_servers_count
-    @servers_count = @user.servers_count
-    @monitors_count = @user.monitors_count
+
+    servers = AgentServer.belonging_to(current_user)
+    @servers_count = servers.count
+    @active_servers_count = servers.reject(&:gone_silent?).count
+    @monitors_count = Bundle.belonging_to(current_user).via_api.count
   end
 
   def user_params

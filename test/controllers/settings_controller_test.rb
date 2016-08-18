@@ -5,17 +5,13 @@ class SettingsControllerTest < ActionController::TestCase
 
   it "user should be able to change their password" do
     login_user(user)
-    User.any_instance.stubs(:agent_token).returns("1234")
-    User.any_instance.stubs(:monitors_count).returns(2)
-    User.any_instance.stubs(:servers_count).returns(3)
-    User.any_instance.stubs(:active_servers_count).returns(2)
 
     new_pw = "12345678"
 
     assert_not_nil @controller.send(:login, user.email, TestValues::PASSWORD)
 
     put :update, :user => { :password => new_pw,
-                             :password_confirmation => new_pw}
+                            :password_confirmation => new_pw}
 
     assert_nil  @controller.send(:login, user.email, TestValues::PASSWORD)
     assert_not_nil  @controller.send(:login, user.email, new_pw)
@@ -26,11 +22,6 @@ class SettingsControllerTest < ActionController::TestCase
 
     new_email = "new@example.com"
 
-    client = mock
-    client.stubs(:get).with("users/me").returns('{"id":17592186873228,"name":"","email":"whatever@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
-    client.expects(:put).with("users/me", anything).returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
-    CanaryClient.stubs(:new).with(anything).returns(client)
-
     put :update, :user => { :email => new_email }
 
     user.reload
@@ -38,12 +29,6 @@ class SettingsControllerTest < ActionController::TestCase
   end
 
   describe "Intercom" do
-    before do
-      client = mock
-      client.stubs(:get).with("users/me").returns('{"id":17592186873228,"name":"","email":"new@example.com","web-token":"142knb7121o0n0cvu7ho0uet0ah25leo9iokea3eki7o3ngarlu9","agent-token":"1itfk3sfeudtj1tj0vmkkcbemalgjv4bi3rrkl84he86h78rrnmk"}')
-      CanaryClient.stubs(:new).with(anything).returns(client)
-    end
-
 
     it "should let users unsubscribe" do
       login_user(user)
@@ -85,33 +70,6 @@ class SettingsControllerTest < ActionController::TestCase
       put :update, :user => { :daily_email_consent => false,
                                :newsletter_email_consent => true}
     end
-  end
-
-
-   it "users changing their email should fail gracefully" do
-    login_user(user)
-    User.any_instance.stubs(:monitors_count).returns(2)
-    User.any_instance.stubs(:servers_count).returns(3)
-    User.any_instance.stubs(:active_servers_count).returns(2)
-
-    new_email = "new@example.com"
-
-    client = mock
-    client.expects(:get).with("users/me").returns({"agent-token": "test"})
-    client.expects(:put).with("users/me", anything).raises(Faraday::Error, "lol nope")
-    Server.stubs(:find_all).with(anything).returns([])
-
-    # client.expects(:update_user).with(anything).raises(Faraday::Error, "lol nope")
-    # client.expects(:me).with(anything).returns({"agent-token": "test"})
-    # client.stubs(:servers).returns({})
-    CanaryClient.stubs(:new).with(anything).returns(client)
-
-    put :update, :user => { :email => new_email }
-
-    assert user.errors["email"].present?
-
-    user.reload
-    assert_not_equal user.email, new_email
   end
 
 end
