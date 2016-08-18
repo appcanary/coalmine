@@ -54,7 +54,11 @@ class AgentServer < ActiveRecord::Base
   end
 
   def gone_silent?
-    last_heartbeat_at < 2.hours.ago
+    if last_heartbeat_at
+      last_heartbeat_at < 2.hours.ago
+    else
+      true
+    end
   end
 
   def vulnerable?
