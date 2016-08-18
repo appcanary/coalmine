@@ -63,10 +63,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
 
     it "should let them create users" do
       # TODO: find a way to share this with other users test
-      client = mock
-      client.expects(:post).with("users", anything).returns({'web-token' => 'a token'})
-      CanaryClient.stubs(:new).with(anything).returns(client)
-
+      
       assert_difference('User.count') do
         post :create, :user => { 
           :email => Faker::Internet.email,
