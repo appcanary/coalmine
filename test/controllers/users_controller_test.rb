@@ -19,10 +19,6 @@ class UsersControllerTest < ActionController::TestCase
 
 
     it "should register new users and log them in" do
-      client = mock
-      client.expects(:post).with("users", anything).returns({'web-token' => 'a token'})
-      CanaryClient.stubs(:new).with(anything).returns(client)
-
       assert_difference('User.count') do
         post :create, :user => { :email => Faker::Internet.email,
           :password => TestValues::PASSWORD,
@@ -33,10 +29,6 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     it "should register new BETA users and log them in" do
-      client = mock
-      client.expects(:post).with("users", anything).returns({'web-token' => 'a token'})
-      CanaryClient.stubs(:new).with(anything).returns(client)
-
       assert_difference('User.count') do
         post :create, :source => "betasource", :user => { :email => Faker::Internet.email,
           :password => TestValues::PASSWORD,
