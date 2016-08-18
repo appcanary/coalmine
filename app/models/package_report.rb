@@ -7,23 +7,27 @@ class PackageReport < ActiveRecord::Base
   scope :from_patched_notifications, ->(notifications) {
     inner_q = LogBundlePatch.where("id in (#{notifications.select("log_bundle_patch_id").to_sql})")
 
-    from("(#{inner_q.to_sql}) AS package_reports").includes(:package, :vulnerable_dependency, :vulnerability)
+    from_as(inner_q).includes(:package, :vulnerable_dependency, :vulnerability)
   }
 
    scope :from_vuln_notifications, ->(notifications) {
     inner_q = LogBundleVulnerability.where("id in (#{notifications.select("log_bundle_vulnerability_id").to_sql})")
 
-    from("(#{inner_q.to_sql}) AS package_reports").includes(:package, :vulnerable_dependency, :vulnerability)
+    from_as(inner_q).includes(:package, :vulnerable_dependency, :vulnerability)
   }
 
    scope :from_bundle, -> (bundle) {
-     inner_q = bundle.vulnerable_packages.distinct_package
+     inner_q = bundle.vulnerable_packages.distinct_package.select("bundled_packages.bundle_id")
 
-     from("(#{inner_q.to_sql}) AS package_reports").includes(:package, :vulnerable_dependency, :vulnerability)
+     from_as(inner_q).includes(:package, :vulnerable_dependency, :vulnerability, :bundle)
    }
 
    scope :from_packages, -> (package_query) {
-     from("(#{package_query.to_sql}) AS package_reports").includes(:package, :vulnerable_dependency)
+     from_as(package_query).includes(:package, :vulnerable_dependency)
+   }
+
+   scope :from_as, -> (q) {
+     from("(#{q.to_sql}) AS package_reports")
    }
 
 

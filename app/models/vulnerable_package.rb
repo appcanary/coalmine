@@ -28,6 +28,7 @@ class VulnerablePackage < ActiveRecord::Base
   belongs_to :vulnerability
 
   has_many :bundled_packages
+  has_many :bundles, :through => :bundled_packages
 
   delegate :name, :source_name, :platform, :release, :version, :upgrade_to, :to => :package
 
