@@ -1,10 +1,10 @@
 # TODO: merge into serializers folder?
 require 'csv'
 class ServerExporter
-  attr_accessor :server, :apps
-  def initialize(server, apps)
+  attr_accessor :server, :vulns
+  def initialize(server, vulns)
     self.server = server
-    self.apps = apps
+    self.vulns = vulns
   end
 
   def to_csv
@@ -19,12 +19,9 @@ class ServerExporter
       csv << [""]
 
       csv << ["Path", "Package", "CVE", "Upgrade to", "Title"]
-      apps.each do |a|
-        a.vulnerable_packages.each do |vp|
-          vp.vulnerabilities.each do |vuln|
-            csv << [a.path, vp.name, vuln.cve_id, vuln.upgrade_to.try(:join, ", "), vuln.title]
-          end
-        end
+      
+      vulns.each do |vp|
+        csv << [vp.bundle.path, vp.package.name, vp.vulnerability.cve_ids.join(", "), vp.package.upgrade_to.join(", "), vp.vulnerability.title]
       end
     end
 

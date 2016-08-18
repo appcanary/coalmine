@@ -34,9 +34,6 @@ FactoryGirl.define do
     name { Faker::App.name }
     platform { Platforms::Ruby }
     factory :bundle_with_packages do
-      platform  { FactoryHelper.rand_platform }
-      release "release"
-
       transient do
         packages_count 5
       end

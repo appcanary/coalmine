@@ -20,13 +20,14 @@ class ServersControllerTest < ActionController::TestCase
       assert_response :success
     end
 
-    it "should export as a cvs" do
+    it "should export as a csv" do
       require 'csv'
-      
-      vuln_app = FactoryGirl.build(:vulnerable_app)
-      vuln_server = FactoryGirl.build(:server, :attributes => {"apps" =>  [vuln_app]})
-      Server.stubs(:find).with(anything, anything).returns(vuln_server)
-      App.stubs(:find).with(anything, anything, anything).returns(vuln_app)
+
+      bundle = FactoryGirl.create(:bundle_with_packages, :account => user.account)
+      vulnp = bundle.packages.first
+      vuln = FactoryGirl.create(:vulnerability, pkgs: [vulnp])
+
+      vuln_server = FactoryGirl.create(:agent_server, :centos, :account => user.account, :bundles => [bundle], :id => 1234)
 
       get :show, :id => "1234", :format => "csv"
       assert_equal "text/csv", response.content_type
@@ -38,8 +39,8 @@ class ServersControllerTest < ActionController::TestCase
       assert_equal vuln_server.name, file[1][0]
 
       # we list one line per vulnerability
-      assert_equal vuln_app.vulnerable_artifact_versions.map(&:vulnerability).flatten.count, file[4..-1].count
-
+      assert_equal vuln.cve_ids.first, file[4][2]
+      assert_equal vulnp.name, file[4][1]
     end
 
     it "should show the new page" do

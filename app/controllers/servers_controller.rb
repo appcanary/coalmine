@@ -15,8 +15,8 @@ class ServersController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        apps = server.bundles
-        send_data *ServerExporter.new(server, apps).to_csv
+        vuln_reports = server.bundles.map { |b| PackageReport.from_bundle(b) }.flatten
+        send_data *ServerExporter.new(server, vuln_reports).to_csv
       end
     end
   end

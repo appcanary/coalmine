@@ -25,6 +25,7 @@
 
 FactoryGirl.define do
   factory :agent_server do
+    name { Faker::Hacker.ingverb }
     account
     trait :centos do
       distro "centos"
