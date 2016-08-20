@@ -1,6 +1,5 @@
 # TODO
 # handle arch and epoch
-# instead of hash should have version values object
 # maybe optimize query
 class PackageMaker < ServiceMaker
   attr_accessor :platform, :release

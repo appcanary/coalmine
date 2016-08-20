@@ -22,8 +22,10 @@ class PackageReport < ActiveRecord::Base
      from_as(inner_q).includes(:package, :vulnerable_dependency, :vulnerability, :bundle)
    }
 
+   # TODO: has this been tested? hrm.
    scope :from_packages, -> (package_query) {
-     from_as(package_query).includes(:package, :vulnerable_dependency)
+     inner_q = package_query.joins(:vulnerable_packages).select("packages.id package_id, packages.name, packages.version, vulnerable_packages.id vulnerable_package_id, vulnerable_packages.vulnerability_id, vulnerable_packages.vulnerable_dependency_id")
+     from_as(inner_q).includes(:package, :vulnerable_dependency, :vulnerability)
    }
 
    scope :from_as, -> (q) {

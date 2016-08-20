@@ -9,37 +9,42 @@ class IsItVulnController < ApplicationController
   end
 
   def submit
-    begin
-      all_artifacts = handle_file_upload(params[:file])
-      result = IsItVulnResult.create(result: all_artifacts)
-    rescue EmptyFileError
-      error = 'Hey, you have to upload a file for this to work!'
-    rescue ArgumentError
-      error = 'Sorry. Are you sure that was a Gemfile.lock? Please try again.'
-    rescue Exception
-      error = "Something went wrong. Please try again."
+
+    @form = IsItVulnForm.new(Object.new)
+
+    if @form.validate(params)
+      result = IsItVulnResult.create(result: @form.package_list)
     end
 
-    respond_to do |format|
+     respond_to do |format|
       format.json { 
-        if error
-          render json: {error: error}, status: 400
-        else
+        if @form.valid?
           render json: {id: result.ident}
+        else
+          render json: {error: @form.errors.full_messages.first}, status: 400
         end
       }
     end
   end
 
   def results
+    PackageBuilder
     @preuser = PreUser.new
 
-    result = IsItVulnResult.where(ident: params[:ident]).first
-    if result.nil?
+    ivr = IsItVulnResult.where(ident: params[:ident]).first
+
+    if ivr.result.nil?
       redirect_to vuln_root_path, flash: {error: "Are you sure you uploaded a file?"}
     else
-      all_artifacts = result.result
-      @vuln_artifacts = all_artifacts.select(&:is_vulnerable?)
+      package_query = nil
+      package_list = ivr.result
+
+      Package.transaction do
+        package_query = PackageMaker.new(Platforms::Ruby, nil).find_or_create(package_list)
+      end
+
+      @vuln_artifacts = PackageReport.from_packages(package_query)
+      @vuln_artifacts = @vuln_artifacts.group_by(&:package)
 
       @is_vuln = @vuln_artifacts.present?
     end
@@ -49,7 +54,14 @@ class IsItVulnController < ApplicationController
   def sample_results
     @preuser = PreUser.new
 
-    @vuln_artifacts = Testvuln.artifact_versions
+    package_list = IsItVulnResult.sample_package_list
+    package_query = nil
+    Package.transaction do
+      package_query = PackageMaker.new(Platforms::Ruby, nil).find_or_create(package_list)
+    end
+
+    @vuln_artifacts = PackageReport.from_packages(package_query)
+    @vuln_artifacts = @vuln_artifacts.group_by(&:package)
 
     @is_vuln = @vuln_artifacts.present?
     render :results

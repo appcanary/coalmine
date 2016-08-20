@@ -20,4 +20,15 @@ class IsItVulnResult < ActiveRecord::Base
 
   serialize :result
 
+  def self.sample_package_list
+    @sample_packages ||= 
+      [{:version=>"3.2.19", :name=>"actionpack"},
+       {:version=>"3.2.19", :name=>"activesupport"},
+       {:version=>"2.2.1", :name=>"jquery-rails"},
+       {:version=>"1.5.11", :name=>"nokogiri"},
+       {:version=>"1.4.5", :name=>"rack"},
+       {:version=>"2.2.6", :name=>"twitter-bootstrap-rails"}].map { |pkg|
+         PackageBuilder::Rubygem.new(pkg)
+       }
+  end
 end

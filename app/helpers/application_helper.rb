@@ -79,9 +79,11 @@ module ApplicationHelper
     versions.sort { |a, b| a.gsub(/\D/, '') <=> b.gsub(/\D/, '')}
   end
 
-  def upgrade_to(vuln)
-    if vuln.patched_versions.present?
-      versions = vuln.patched_versions.sort { |a, b| a.gsub(/\D/, '') <=> b.gsub(/\D/, '')}.map { |pv|  "<code>#{h pv}</code>" }.join("<br/>").html_safe
+  def display_upgrade_to(package, pr)
+    patches = package.upgrade_to_given(pr.vulnerable_dependency)
+
+    if patches.present?
+      patches.map { |pv|  "<code>#{h pv}</code>" }.join("<br/>").html_safe
     else
       "No patches exist right now"
     end

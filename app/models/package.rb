@@ -104,6 +104,7 @@ class Package < ActiveRecord::Base
     {name: name, version: version}
   end
 
+  # used solely for testing
   def to_pkg_builder
     PackageBuilder.from_package(self)
   end
@@ -117,12 +118,22 @@ class Package < ActiveRecord::Base
   #           patched-versions)))
 
 
+  # TODO needs test
   def upgrade_to
-    @upgrade_to ||= self.vulnerable_dependencies.map do |vd|
-      vd.patched_versions.select do |pv|
-        earlier_version?(pv)
+    @upgrade_to ||= calc_upgrade_to(self.vulnerable_dependencies)
+  end
+
+  def upgrade_to_given(vd)
+    calc_upgrade_to([vd])
+  end
+
+  def calc_upgrade_to(vds)
+    vds.map(&:patched_versions).reduce([]) do |arr, pv|
+      pv.each do |pv|
+        arr << pv if earlier_version?(pv)
       end
-    end.flatten
+      arr
+    end
   end
 
 end

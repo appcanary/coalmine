@@ -1,6 +1,7 @@
 class PackageBuilder
   attr_accessor :platform, :release, :name, :version
 
+  # used solely to build objects for testing
   def self.from_package(package)
     klass = case package.platform
             when Platforms::Ruby
