@@ -6,7 +6,6 @@ require 'bundler/lockfile_parser'
 
 # TODO: handle errors?
 # test
-# should return a value object
 class GemfileParser
   include ResultObject
   def self.parse(lockfile)
@@ -16,7 +15,7 @@ class GemfileParser
       # lf.specs.map {|a| {name: a.name, kind: "rubygem", version:  {number: a.version.version, platform: a.platform.to_s}}}
       # lf.specs.map {|a| {name: a.name, kind: "rubygem", version: a.version.version, platform: a.platform.to_s}}
 
-      pkgs = lf.specs.map {|a| PackageBuilder::Rubygem.new(name: a.name,  version: a.version.version, platform: a.platform.to_s) }
+      pkgs = lf.specs.map {|a| Parcel::Rubygem.new(name: a.name,  version: a.version.version, platform: a.platform.to_s) }
       Result.new(pkgs, nil)
     rescue Exception => e
       Result.new(nil, e)

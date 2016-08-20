@@ -28,7 +28,7 @@ class IsItVulnResult < ActiveRecord::Base
        {:version=>"1.5.11", :name=>"nokogiri"},
        {:version=>"1.4.5", :name=>"rack"},
        {:version=>"2.2.6", :name=>"twitter-bootstrap-rails"}].map { |pkg|
-         PackageBuilder::Rubygem.new(pkg)
+         Parcel::Rubygem.new(pkg)
        }
   end
 end

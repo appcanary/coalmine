@@ -106,7 +106,7 @@ class Package < ActiveRecord::Base
 
   # used solely for testing
   def to_pkg_builder
-    PackageBuilder.from_package(self)
+    Parcel.from_package(self)
   end
 
   # (defmethod upgrade-to :artifact.kind/rubygem

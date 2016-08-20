@@ -22,7 +22,7 @@ class CheckerTest < ActiveSupport::TestCase
 
     @checker = Checker.new(account, {platform: @platform})
 
-    packages = @checker.check(vuln_pkg_set.map { |p| PackageBuilder.from_package(p)})
+    packages = @checker.check(vuln_pkg_set.map { |p| Parcel.from_package(p)})
 
     assert_equal 2, packages.count
     assert_equal 2, packages.first.vulnerabilities.count

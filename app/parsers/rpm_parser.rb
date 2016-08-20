@@ -28,7 +28,7 @@ module RPM
         pkgs = file.each_line.reject { |str|
           str =~ /gpg-pubkey-[a-z0-9]+-[a-z0-9]+/
         }.map { |str|
-          PackageBuilder::RPM.new(str)
+          Parsel::RPM.new(str)
         }
         Result.new(pkgs, nil)
       rescue Exception => e

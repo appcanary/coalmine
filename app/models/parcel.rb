@@ -1,13 +1,13 @@
-class PackageBuilder
+class Parcel
   attr_accessor :platform, :release, :name, :version
 
   # used solely to build objects for testing
   def self.from_package(package)
     klass = case package.platform
             when Platforms::Ruby
-              PackageBuilder::Rubygem
+              Parcel::Rubygem
             when Platforms::CentOS
-              PackageBuilder::RPM
+              Parcel::RPM
             else
               raise "unknown platform"
             end
@@ -33,7 +33,7 @@ class PackageBuilder
     [self.name, self.version]
   end
 
-  class RPM < PackageBuilder
+  class RPM < Parcel
     attr_accessor :arch, :filename, :nevra
 
     def self.builder_from_package(pkg)
@@ -68,7 +68,7 @@ class PackageBuilder
 
   end
 
-  class Rubygem < PackageBuilder
+  class Rubygem < Parcel
     def initialize(hsh = nil)
       return if hsh.nil?
       self.name = hsh[:name]
@@ -76,7 +76,7 @@ class PackageBuilder
     end
   end
 
-  class Dpkg < PackageBuilder
+  class Dpkg < Parcel
     def initialize(hsh = nil)
       return if hsh.nil?
       self.name = hsh[:name]

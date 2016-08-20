@@ -94,7 +94,7 @@ class PackageMaker < ServiceMaker
 
   # return items in submitted that are NOT
   # in existing. Assumes existing is an array
-  # of arrays and submitted are PackageBuilders
+  # of arrays and submitted are 'Parcel's
   def diff_packages(existing, submitted)
     existing_set = existing.reduce({}) { |h, k|
       h[k] = true

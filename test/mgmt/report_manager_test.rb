@@ -54,7 +54,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     # and assign packages
     @bm = BundleManager.new(account)
 
-    package_list = vuln_pkgs_set_1.map { |pkg| PackageBuilder.from_package(pkg) }
+    package_list = vuln_pkgs_set_1.map { |pkg| Parcel.from_package(pkg) }
     pr, _ = PlatformRelease.validate(@platform)
     bundle, errors = @bm.create(pr, {}, package_list)
 
@@ -85,7 +85,7 @@ class ReportManagerTest < ActiveSupport::TestCase
     pkgs_set_2 = FactoryGirl.create_list(:package, 3, :ruby)
     vuln_pkgs_set_2 = [vuln_pkg_1] + pkgs_set_2
 
-    package_list2 = vuln_pkgs_set_2.map { |pkg| PackageBuilder.from_package(pkg) }
+    package_list2 = vuln_pkgs_set_2.map { |pkg| Parcel.from_package(pkg) }
     @bm.update_packages(bundle.id, package_list2)
 
     # the vulnerability has not changed, therefore only one LogBundleVuln
@@ -109,7 +109,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     assert_equal 0, bundle.packages.count
     assert_equal 1, LogBundlePatch.count
-    package_list3 = vuln_pkgs_set_2.map { |pkg| PackageBuilder.from_package(pkg) }
+    package_list3 = vuln_pkgs_set_2.map { |pkg| Parcel.from_package(pkg) }
     @bm.update_packages(bundle.id, package_list3)
 
     # we now see another LBV.
@@ -155,7 +155,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     assert_equal 3, VulnerablePackage.count
 
-    @bm.update_packages(bundle.id, [vuln_pkg_3].map { |pkg| PackageBuilder.from_package(pkg)})
+    @bm.update_packages(bundle.id, [vuln_pkg_3].map { |pkg| Parcel.from_package(pkg)})
 
     # we've created another LBV,
     # and we wiped out two vuln packages: vuln_pkg_1 and vuln_pkg_2
@@ -200,7 +200,7 @@ class ReportManagerTest < ActiveSupport::TestCase
 
 
     @bm = BundleManager.new(account)
-    package_list = [vuln_pkg1, notvuln_pkg2].map { |p| PackageBuilder.from_package(p) }
+    package_list = [vuln_pkg1, notvuln_pkg2].map { |p| Parcel.from_package(p) }
 
     pr, _ = PlatformRelease.validate(@platform)
     bundle, error = @bm.create(pr, {}, package_list)

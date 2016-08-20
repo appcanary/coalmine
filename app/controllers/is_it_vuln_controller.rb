@@ -28,7 +28,7 @@ class IsItVulnController < ApplicationController
   end
 
   def results
-    PackageBuilder
+    Parcel
     @preuser = PreUser.new
 
     ivr = IsItVulnResult.where(ident: params[:ident]).first

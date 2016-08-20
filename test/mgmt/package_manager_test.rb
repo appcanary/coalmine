@@ -58,7 +58,7 @@ class PackageManagerTest < ActiveSupport::TestCase
       assert_equal 1, Package.count
 
       @pm = PackageMaker.new("ruby", nil)
-      packages = @pm.find_or_create(package_list.map { |h| PackageBuilder::Rubygem.new(h)})
+      packages = @pm.find_or_create(package_list.map { |h| Parcel::Rubygem.new(h)})
       assert_equal 2, packages.count
       assert_equal 2, Package.count
 
@@ -77,7 +77,7 @@ class PackageManagerTest < ActiveSupport::TestCase
                 :version => pkg1.version},
                 {:name => pkg2.name,
                  :version => pkg2.version,
-                 :platform => pkg2.platform}].map { |h| PackageBuilder::Rubygem.new(h) }
+                 :platform => pkg2.platform}].map { |h| Parcel::Rubygem.new(h) }
 
       @pm = PackageMaker.new(pkg1.platform, pkg1.release)
       list = @pm.find_existing_packages(plist)
@@ -91,7 +91,7 @@ class PackageManagerTest < ActiveSupport::TestCase
       plist2 = [{:name => pkg1.name + "lol",
                  :version => pkg1.version },
                  {:name => pkg2.name,
-                  :version => pkg2.version}].map { |h| PackageBuilder::Rubygem.new(h) }
+                  :version => pkg2.version}].map { |h| Parcel::Rubygem.new(h) }
 
       list = @pm.find_existing_packages(plist2)
 
@@ -111,7 +111,7 @@ class PackageManagerTest < ActiveSupport::TestCase
       package_list = [p1, p2, p1].map(&:to_simple_h)
       package_list = package_list +  [{name: "fakeMcFakerson", version: "1.2.3"},
                                       {name: "fakeMcFakerson", version: "1.2.3"}]
-      package_list = package_list.map { |h| PackageBuilder::Rubygem.new(h) }
+      package_list = package_list.map { |h| Parcel::Rubygem.new(h) }
 
       existing_query = @pm.find_existing_packages(package_list)
 
