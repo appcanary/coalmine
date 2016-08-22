@@ -25,6 +25,7 @@ class VulnerablePackage < ActiveRecord::Base
   belongs_to :vulnerable_dependency
 
   # vulnerability link is purely for bookkeeping convenience
+  # TODO: carefully explain this relationship
   belongs_to :vulnerability
 
   has_many :bundled_packages
