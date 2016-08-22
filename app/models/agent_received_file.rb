@@ -15,6 +15,7 @@
 #  index_agent_received_files_on_agent_server_id  (agent_server_id)
 #
 
+# used for logging faulty files we've received via agents
 class AgentReceivedFile < ActiveRecord::Base
   belongs_to :account
   belongs_to :agent_server

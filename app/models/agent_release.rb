@@ -12,6 +12,7 @@
 #  index_agent_releases_on_version  (version)
 #
 
+# TODO: reevaluate if it should just be a string
 class AgentRelease < ActiveRecord::Base
   has_many :agent_servers
 end
