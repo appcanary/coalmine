@@ -63,61 +63,31 @@ class User < ActiveRecord::Base
   validates_associated :account
 
   has_many :agent_servers, :through => :account
-  delegate :token, :to => :account
-
   has_many :bundles, :through => :account
 
+  # TODO: eliminate token field from users table
+  delegate :token, :to => :account
 
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
-
-  def self.all_from_api(order = "created_at DESC")
-    api_users = Backend.all_users.reduce({}) do |hsh, usr|
-      hsh.tap { |h| h.store(usr["id"], usr) }
-    end
-
-    all_users = self.order(order)
-    all_users.each do |u|
-      u.servers_count = api_users[u.datomic_id]["server-count"]
-      u.active_servers_count = api_users[u.datomic_id]["active-server-count"]
-      u.api_calls_count = api_users[u.datomic_id]["api-calls-count"]
-      u.monitors_count = api_users[u.datomic_id]["monitored-app-count"]
-    end
-  end
 
   def stripe_errors
     @stripe_errors ||= []
   end
 
-  def servers
-    @servers ||= Server.find_all(self)
-  end
-
   def active_servers
-    servers.reject(&:gone_silent?)
-  end
-
-  def servers_count
-    @servers_count ||= api_info["server-count"]
+    @active_servers ||= self.agent_servers.reject(&:gone_silent?)
   end
 
   def active_servers_count
-    @active_servers_count ||= api_info["active-server-count"]
+    @active_servers_count ||= self.active_servers.count
   end
 
   def monitors_count
-    @monitors_count ||= api_info["monitored-app-count"]
+    @monitors_count ||= self.bundles.reject { |b| b.agent_server_id.nil? }.count
   end
 
   def api_calls_count
-    @api_calls_count ||= api_info["api-calls-count"]
-  end
-
-  def api_info
-    @api_info ||= canary.get('users/me')
-  end
-
-  def agent_token
-    api_info["agent-token"]
+    @api_calls_count ||= 0 #api_info["api-calls-count"]
   end
 
   def stripe_customer
@@ -142,19 +112,11 @@ class User < ActiveRecord::Base
     beta_signup_source.present?
   end
 
-  # def delete_api_user!
-  #   canary.delete_user
-  # end
-  
   def trial_remaining
     14 - (Time.zone.now - created_at).to_i / 1.day
   end
 
   protected
-  def canary
-    @canary ||= CanaryClient.new(self.token)
-  end
-
   def absence_of_stripe_errors
     if @stripe_errors.present?
       @stripe_errors.each do |e|

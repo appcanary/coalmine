@@ -48,15 +48,8 @@ class Admin::UsersControllerTest < ActionController::TestCase
     end
 
     it "should let them see stuff" do
-      Backend.stubs(:servers_count).returns(1)
-      Backend.stubs(:recent_heartbeats).returns(1)
-      Backend.stubs(:without_heartbeats).returns([])
       User.any_instance.stubs(:datomic_id).returns(12345)
-      Backend.stubs(:all_users).returns([{"id" => 12345,
-                                          "active-server-count" => 15,
-                                          "server-count" => 22,
-                                          "api-calls-count" => 100,
-                                          "monitored-app-count" => 12}])
+      
       get :index
       assert_response :success
     end

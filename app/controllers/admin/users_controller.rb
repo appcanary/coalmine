@@ -2,12 +2,12 @@ class Admin::UsersController < AdminController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
 
   def index
-    @users = User.all_from_api("created_at DESC")
+    @users = User.all;#includes(:account, :agent_servers, :bundles).all
 
     @user_count = User.count
-    @servers_count = Backend.servers_count
-    @recent_heartbeats = Backend.recent_heartbeats
-    @total_revenue = BillingPlan.where("subscription_plan_id is not null").map(&:monthly_cost).reduce(&:+)
+    @servers_count = AgentServer.count
+    @recent_heartbeats = AgentServer.where("last_heartbeat_at > ?", 2.hours.ago).count
+    @total_revenue = BillingPlan.includes(:subscription_plan).where("subscription_plan_id is not null").map(&:monthly_cost).reduce(&:+)
   end
 
   def new
