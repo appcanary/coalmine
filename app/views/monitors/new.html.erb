@@ -26,12 +26,12 @@
         <div class="col-sm-6">
           <a name="righthere" class="anchor-offset"></a>
           <%= form_for @form, :url => monitors_path, :method => :post do |f| %>
-            <% if @errors.present? %>
+            <% if @form.errors.present? %>
               <div class="error_explanation" role="alert">
                 <h4>Oops. We encountered an error:</h4>
 
                 <ul>
-                  <% @errors.full_messages.each do |message| %>
+                  <% @form.errors.full_messages.each do |message| %>
                     <li><%= message %></li>
                   <% end %>
                 </ul>

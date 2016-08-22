@@ -5,6 +5,8 @@ class BundleManager < ServiceManager
     self.server_id = server && server.id
   end
 
+  # TODO: throw exception if package_list is empty
+
   # don't we need a kind alongside platform?
   # platform alone seems insufficient
   # the (keys (group-by :platform (Version/all-with db :platform)))

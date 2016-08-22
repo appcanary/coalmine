@@ -20,7 +20,7 @@ class MonitorForm < Reform::Form
     val, err = PlatformRelease.validate(platform, release)
 
     if err
-      errors.add(:platform_release, "is invalid")
+      errors.add(:platform_release_str, "is invalid")
     else
       self.platform_release = val
     end
@@ -33,7 +33,6 @@ class MonitorForm < Reform::Form
 
     if file.nil?
       errors.add(:file, "is empty")
-      next
     else
 
       parser = Platforms.parser_for(self.platform_release.platform)
@@ -42,6 +41,8 @@ class MonitorForm < Reform::Form
 
       if err
         errors.add(:file, err.message)
+      elsif pl.empty?
+        errors.add(:file, "has no listed packages. Are you sure it's valid?")
       else
         self.package_list = pl
       end

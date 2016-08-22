@@ -24,7 +24,7 @@ class MonitorsController < ApplicationController
       end
     end
 
-    if @form.valid?
+    if @form.errors.empty?
       redirect_to dashboard_path
     else
       render :new
