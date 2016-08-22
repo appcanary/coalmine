@@ -1,3 +1,9 @@
+# WHY IS THIS NOT A PORO?
+# AR::Base includes a bunch of Arel methods
+# that are great for composing certain kinds of queries
+# and doing this hack was waaaay faster than figuring out how to
+# properly use the Arel library. 
+# TODO: remove AR::Base dependency, call Arel directly
 class PackageReport < ActiveRecord::Base
   belongs_to :bundle
   belongs_to :package
@@ -24,7 +30,7 @@ class PackageReport < ActiveRecord::Base
 
    # TODO: has this been tested? hrm.
    scope :from_packages, -> (package_query) {
-     inner_q = package_query.joins(:vulnerable_packages).select("packages.id package_id, packages.name, packages.version, vulnerable_packages.id vulnerable_package_id, vulnerable_packages.vulnerability_id, vulnerable_packages.vulnerable_dependency_id")
+     inner_q = package_query.joins(:vulnerable_packages).select("packages.id package_id, vulnerable_packages.id vulnerable_package_id, vulnerable_packages.vulnerability_id, vulnerable_packages.vulnerable_dependency_id")
      from_as(inner_q).includes(:package, :vulnerable_dependency, :vulnerability)
    }
 
