@@ -1,3 +1,4 @@
+# TODO: convert to a Form
 class Api::AgentController < ApiController
   def heartbeat
     server = current_account.agent_servers.where(:uuid => params[:uuid]).includes(:agent_release).take
@@ -70,7 +71,7 @@ class Api::AgentController < ApiController
     if bundle.nil?
       render :json => {}
     else
-      hash = PackageReport.from_bundle(bundle).reduce({}) do  |hash, vp|
+      hash = VulnQuery.from_bundle(bundle).reduce({}) do  |hash, vp|
         hash[vp.name] = vp.upgrade_to.first
         hash
       end

@@ -79,8 +79,8 @@ module ApplicationHelper
     versions.sort { |a, b| a.gsub(/\D/, '') <=> b.gsub(/\D/, '')}
   end
 
-  def display_upgrade_to(package, pr)
-    patches = package.upgrade_to_given(pr.vulnerable_dependency)
+  def display_upgrade_to(package, vd)
+    patches = package.upgrade_to_given(vd)
 
     if patches.present?
       patches.map { |pv|  "<code>#{h pv}</code>" }.join("<br/>").html_safe

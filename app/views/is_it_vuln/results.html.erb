@@ -51,7 +51,7 @@
         <h2>Please consult the following and update where appropriate.</h2>
         <br/>
         <br/>
-        <% @package_reports_by_pkg.each do |package, pkg_reports| %>
+        <% @vuln_packages.each do |package| %>
           <div>
             <h1><%= link_to package.name, "https://rubygems.org/gems/#{package.name}", :target => "_blank" %></h1> <h3><code class="bad"><%= package.version%></code></h3>
 
@@ -65,8 +65,8 @@
                 </th>
               </thead>
               <tbody>
-                <% pkg_reports.each do |pr| %>
-                  <% v = pr.vulnerability %>
+                <% package.vulnerable_dependencies.each do |vd| %>
+                  <% v = vd.vulnerability %>
                   <tr>
                     <td class="advisory">
                       <%= link_to v.title, vuln_path(v), :target => "_blank" %>

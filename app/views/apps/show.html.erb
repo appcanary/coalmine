@@ -4,7 +4,7 @@
   <ul class="nav nav-tabs">
     <li class="active" role="presentation">
       <a href="#vuln"  data-toggle="tab">
-        <% if @vuln_artifacts.empty? %>
+        <% if @vuln_packages.empty? %>
           <span class="fa fa-check-circle okay"></span>
         <% else %>
           <span class="fa fa-exclamation-triangle warn"></span>
@@ -13,7 +13,7 @@
       </a>
     </li>
     <li role="presentation">
-      <a href="#allartifacts" data-toggle="tab">
+      <a href="#allpackages" data-toggle="tab">
         all packages
       </a>
     </li>
@@ -22,37 +22,37 @@
 
   <div class="tab-content">
     <div id="vuln" role="tabpanel" class="tab-pane active">
-      <table id="vulnerable_artifacts" class="artifacts vulnerable">
+      <table id="vulnerable_packages" class="artifacts vulnerable">
 
-        <% if @vuln_artifacts.empty? %>
+        <% if @vuln_packages.empty? %>
           <tr>
             <td class="empty_message">No vulnerable packages found for this app!</td>
           </tr>
         <% else %>
-          <% @vuln_artifacts.each do |artifact| %>
-            <tr class="artifact">
+          <% @vuln_packages.each do |package| %>
+            <tr class="package">
               <td class="info">
                 <div class="title data">
-                  <%= artifact.name %>
+                  <%= package.name %>
                 </div>
                 <div class="version">
                   version
-                  <span class="data"><%= artifact.version %></span>
+                  <span class="data"><%= package.version %></span>
                 </div>
                 <div class="kind">
                   kind:
-                  <span class="data"><%= artifact.platform %></span>
+                  <span class="data"><%= package.platform %></span>
                 </div>
               </td>
               <td class="vulnerabilities">
                 <ul>
-                  <% artifact.vulnerable_dependencies.each do |vuln| %>
+                  <% package.vulnerable_dependencies.each do |vuln| %>
                     <li class="vulnerability">
                       <p><%= link_to vuln.vulnerability_title, vuln_path(vuln.vulnerability) %></p>
 
                       <% if vuln.patched_versions.present? %>
-                        <% if artifact.package.upgrade_to.present? %>
-                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(artifact.package.upgrade_to) %></p>
+                        <% if package.upgrade_to.present? %>
+                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(package.upgrade_to) %></p>
                         <% else %>
                           <p class="upgrade_to"> No patches for your release exist right now. </p>
                         <% end %>
@@ -72,9 +72,9 @@
       </table>
     </div>
 
-    <div id="allartifacts" role="tabpanel" class="tab-pane">
-      <table id="all_artifacts" class="artifacts all">
-        <% if @artifacts.empty? %>
+    <div id="allpackages" role="tabpanel" class="tab-pane">
+      <table id="all_packages" class="artifacts all">
+        <% if @packages.empty? %>
           <tr>
             <td class="empty_message">
               No packages found for this app!
@@ -86,11 +86,11 @@
             <th>kind</th>
             <th>version</th>
           </tr>
-          <% @artifacts.each do |artifact| %>
-            <tr class="artifact">
-              <td class="name"><%= artifact.name %></td>
-              <td class="kind"><%= artifact.platform %></td>
-              <td class="version"><%= artifact.version %></td>
+          <% @packages.each do |package| %>
+            <tr class="package">
+              <td class="name"><%= package.name %></td>
+              <td class="kind"><%= package.platform %></td>
+              <td class="version"><%= package.version %></td>
             </tr>
           <% end %>
         <% end %>

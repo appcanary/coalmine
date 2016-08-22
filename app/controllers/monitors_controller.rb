@@ -4,7 +4,7 @@ class MonitorsController < ApplicationController
     @bundle = current_user.bundles.via_api.find(params[:id])
 
     @artifacts = @bundle.packages
-    @vuln_artifacts = PackageReport.from_bundle(@bundle)
+    @vuln_packages = VulnQuery.from_bundle(@bundle)
   end
 
   def new

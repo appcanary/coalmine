@@ -8,9 +8,9 @@ class AppsController < ApplicationController
 
   def show
     @server = current_user.agent_servers.find(params[:server_id])
-    @app = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
+    @bundle = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
 
-    @artifacts = @app.packages
-    @vuln_artifacts = PackageReport.from_bundle(@app)
+    @packages = @bundle.packages
+    @vuln_packages = VulnQuery.from_bundle(@bundle)
   end
 end

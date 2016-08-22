@@ -39,8 +39,7 @@ class IsItVulnController < ApplicationController
         package_query = PackageMaker.new(Platforms::Ruby, nil).find_or_create(package_list)
       end
 
-      @package_reports = PackageReport.from_packages(package_query)
-      @package_reports_by_pkg = @package_reports.group_by(&:package)
+      @vuln_packages = VulnQuery.from_packages(package_query)
 
       @is_vuln = @package_reports.present?
     end
@@ -56,8 +55,7 @@ class IsItVulnController < ApplicationController
       package_query = PackageMaker.new(Platforms::Ruby, nil).find_or_create(package_list)
     end
 
-    @package_reports = PackageReport.from_packages(package_query)
-    @package_reports_by_pkg = @package_reports.group_by(&:package)
+    @vuln_packages = VulnQuery.from_packages(package_query)
 
     @is_vuln = @package_reports.present?
     render :results
