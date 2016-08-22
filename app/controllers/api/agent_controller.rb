@@ -40,7 +40,7 @@ class Api::AgentController < ApiController
     package_list, err = parser.parse(file)
 
     # TODO: log or show error?
-    if err
+    if err || package_list.empty?
       log_faulty_request(server)
       render :text => "", :status => 400
       return
