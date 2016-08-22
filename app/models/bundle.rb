@@ -31,7 +31,7 @@
 class Bundle < ActiveRecord::Base
   belongs_to :account
   belongs_to :agent_server
-  has_many :bundled_packages
+  has_many :bundled_packages, :dependent => :destroy
   has_many :packages, :through => :bundled_packages
   has_many :log_bundle_vulnerabilities
 
