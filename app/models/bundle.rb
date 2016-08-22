@@ -47,10 +47,12 @@ class Bundle < ActiveRecord::Base
 
   scope :via_api, -> { where("agent_server_id is null") }
 
-  after_initialize :init
+  before_create :set_default_name
 
-  def init
-    self.name ||= "#{[platform, release].compact.join("-")}-#{Time.now.strftime("%Y-%m-%d")}"
+  def set_default_name
+    if name.blank?
+      self.name = "#{[platform, release].compact.join("-")}-#{Time.now.strftime("%Y-%m-%d")}"
+    end
   end
 
   def vulnerable?

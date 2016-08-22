@@ -18,7 +18,9 @@ class IsItVulnForm < Reform::Form
     pl, err = parser.parse(file_contents)
 
     if err
-      errors.add(:base, 'Sorry. Are you sure that was a Gemfile.lock? Please try again.')
+      errors.add(:file, err.message)
+    elsif pl.empty?
+      errors.add(:file, "has no listed packages. Are you sure it's valid?")
     else
       self.package_list = pl
     end

@@ -1,7 +1,4 @@
 class IsItVulnController < ApplicationController
-  class EmptyFileError < StandardError
-  end
-
   skip_before_filter :require_login
   layout 'isitvuln'
   def index
@@ -18,7 +15,7 @@ class IsItVulnController < ApplicationController
 
      respond_to do |format|
       format.json { 
-        if @form.valid?
+        if @form.errors.blank?
           render json: {id: result.ident}
         else
           render json: {error: @form.errors.full_messages.first}, status: 400
@@ -28,7 +25,6 @@ class IsItVulnController < ApplicationController
   end
 
   def results
-    Parcel
     @preuser = PreUser.new
 
     ivr = IsItVulnResult.where(ident: params[:ident]).first
@@ -43,10 +39,10 @@ class IsItVulnController < ApplicationController
         package_query = PackageMaker.new(Platforms::Ruby, nil).find_or_create(package_list)
       end
 
-      @vuln_artifacts = PackageReport.from_packages(package_query)
-      @vuln_artifacts = @vuln_artifacts.group_by(&:package)
+      @package_reports = PackageReport.from_packages(package_query)
+      @package_reports_by_pkg = @package_reports.group_by(&:package)
 
-      @is_vuln = @vuln_artifacts.present?
+      @is_vuln = @package_reports.present?
     end
   end
 
@@ -60,23 +56,10 @@ class IsItVulnController < ApplicationController
       package_query = PackageMaker.new(Platforms::Ruby, nil).find_or_create(package_list)
     end
 
-    @vuln_artifacts = PackageReport.from_packages(package_query)
-    @vuln_artifacts = @vuln_artifacts.group_by(&:package)
+    @package_reports = PackageReport.from_packages(package_query)
+    @package_reports_by_pkg = @package_reports.group_by(&:package)
 
-    @is_vuln = @vuln_artifacts.present?
+    @is_vuln = @package_reports.present?
     render :results
-  end
-
-
-  protected
-  def handle_file_upload(file)
-    raise EmptyFileError if file.blank?
-
-    file_contents = file.read
-    all_artifacts = Backend.upload_gemfile(file_contents)
-
-    raise ArgumentError if all_artifacts.blank?
-
-    all_artifacts
   end
 end

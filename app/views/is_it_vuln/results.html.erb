@@ -51,7 +51,7 @@
         <h2>Please consult the following and update where appropriate.</h2>
         <br/>
         <br/>
-        <% @vuln_artifacts.each do |package, pkg_reports| %>
+        <% @package_reports_by_pkg.each do |package, pkg_reports| %>
           <div>
             <h1><%= link_to package.name, "https://rubygems.org/gems/#{package.name}", :target => "_blank" %></h1> <h3><code class="bad"><%= package.version%></code></h3>
 
@@ -72,8 +72,7 @@
                       <%= link_to v.title, vuln_path(v), :target => "_blank" %>
                     </td>
                     <td class="patch">
-                      <%= display_upgrade_to(package, pr)
-  %>
+                      <%= display_upgrade_to(package, pr) %>
                     </td>
                   </tr>
                 <% end %>
