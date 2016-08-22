@@ -4,11 +4,6 @@ class MonitorsControllerTest < ActionController::TestCase
   let(:user) { FactoryGirl.create(:user) }
   let(:monitor) { FactoryGirl.build(:moniter) }
 
-  before(:suite) do
-    Moniter.stubs(:find).with(anything, anything).returns(monitor)
-  end
-
-
   describe "while authenticated" do
     setup do
       login_user(user)

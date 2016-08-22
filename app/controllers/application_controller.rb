@@ -8,9 +8,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_filter :require_login, :set_raven_context, :show_trial_alert
 
-  # custom error handling
-
-  rescue_from CanaryClient::NotFoundError, :with => :error_not_found
 
   # nominally meant for the ErrorsController,
   # Rails tries hard to prevent you from calling another
