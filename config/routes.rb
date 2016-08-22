@@ -88,6 +88,7 @@ Rails.application.routes.draw do
   namespace :api do
     scope :v3 do
       post "check" => 'check#create'
+      get "status" => 'status#status'
     end
 
     scope :v1 do

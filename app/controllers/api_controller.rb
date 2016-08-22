@@ -11,6 +11,8 @@ class ApiController < ApplicationController
     @current_account || render_unauthorized
   end
 
+  # TODO: standardize with json api
+  # TODO: actually make work
   def render_unauthorized
     render json: {errors: [{title: "Unauthorized"}]}, status: 401
   end
