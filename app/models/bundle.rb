@@ -36,6 +36,7 @@ class Bundle < ActiveRecord::Base
   has_many :log_bundle_vulnerabilities
 
   validates :account, presence: true
+  validates :name, uniqueness: { scope: :account_id }
 
   scope :belonging_to, -> (user) {
     where(:account_id => user.account_id)
@@ -47,7 +48,7 @@ class Bundle < ActiveRecord::Base
 
   scope :via_api, -> { where("agent_server_id is null") }
 
-  before_create :set_default_name
+  before_validation :set_default_name
 
   def set_default_name
     if name.blank?

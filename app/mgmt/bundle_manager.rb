@@ -37,8 +37,9 @@ class BundleManager < ServiceManager
     Result.new(bundle)
   end
 
-  # TODO: freak out if @server_id is null
   def create_or_update(pr, opt, package_list)
+    raise ArgumentError.new("Server id can't be nil") if @server_id.nil? 
+
     bundle_id = Bundle.where(:account_id => @account_id, 
                              :agent_server_id => @server_id, 
                              :path => opt[:path]).pluck("id").first
