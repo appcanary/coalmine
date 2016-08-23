@@ -1,6 +1,7 @@
-class CheckForm < Reform::Form
+class ApiForm < Reform::Form
   attr_accessor :package_list, :platform_release
 
+  property :name, :virtual => true
   property :platform, :virtual => true
   property :release, :virtual => true
   property :file, :virtual => true
