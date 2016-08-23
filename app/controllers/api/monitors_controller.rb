@@ -1,5 +1,5 @@
 class Api::MonitorsController < ApiController
- 
+ # TODO: test
   def index
     @bundles = current_account.bundles.via_api
 
@@ -7,7 +7,7 @@ class Api::MonitorsController < ApiController
   end
 
   def create
-    @form = ApiForm.new(Bundle.new)
+    @form = ApiMonitorForm.new(Bundle.new)
 
     if @form.validate(params)
       
@@ -27,7 +27,7 @@ class Api::MonitorsController < ApiController
   end
 
   def update
-    @form = ApiForm.new(Bundle.new)
+    @form = ApiMonitorForm.new(Bundle.new)
 
     @bundle = current_account.bundles.via_api.where(:name => params[:name]).take
 

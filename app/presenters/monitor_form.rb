@@ -15,6 +15,8 @@ class MonitorForm < Reform::Form
     @file_contents ||= file.read
   end
 
+  validates :name, :presence => true
+
   validate :platform_release do
     platform, release = split_platform_release
     val, err = PlatformRelease.validate(platform, release)

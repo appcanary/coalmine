@@ -36,7 +36,7 @@ class Bundle < ActiveRecord::Base
   has_many :log_bundle_vulnerabilities
 
   validates :account, presence: true
-  validates :name, uniqueness: { scope: :account_id }
+  validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }
 
   scope :belonging_to, -> (user) {
     where(:account_id => user.account_id)
@@ -47,14 +47,6 @@ class Bundle < ActiveRecord::Base
   }
 
   scope :via_api, -> { where("agent_server_id is null") }
-
-  before_validation :set_default_name
-
-  def set_default_name
-    if name.blank?
-      self.name = "#{[platform, release].compact.join("-")}-#{Time.now.strftime("%Y-%m-%d")}"
-    end
-  end
 
   def vulnerable?
     self.vulnerable_packages.any?
