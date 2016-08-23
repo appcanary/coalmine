@@ -89,6 +89,11 @@ Rails.application.routes.draw do
     scope :v3 do
       post "check" => 'check#create'
       get "status" => 'status#status'
+
+      post "monitors(/:name)" => "monitors#create"
+      put "monitors/:name" => "monitors#update"
+      get "monitors/:name" => "monitors#show"
+      get "monitors" => "monitors#index"
     end
 
     scope :v1 do
