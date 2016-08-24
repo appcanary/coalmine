@@ -7,19 +7,18 @@
 
 class VulnQuery
   def self.from_patched_notifications(notifications) 
-    LogBundlePatch.where("id in (#{notifications.select("log_bundle_patch_id").to_sql})").includes(:package, :vulnerable_dependency, :vulnerability)
+    LogBundlePatch.where("id in (#{notifications.select("log_bundle_patch_id").to_sql})").includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
   end
 
   def self.from_vuln_notifications(notifications)
-    LogBundleVulnerability.where("id in (#{notifications.select("log_bundle_vulnerability_id").to_sql})").includes(:package, :vulnerable_dependency, :vulnerability)
+    LogBundleVulnerability.where("id in (#{notifications.select("log_bundle_vulnerability_id").to_sql})").includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
   end
 
   def self.from_bundle(bundle)
     bundle.packages.joins(:vulnerable_packages).distinct("packages.id").includes(:vulnerabilities, :vulnerable_dependencies)
   end
 
-  # TODO: has this been tested? hrm.
   def self.from_packages(package_query)
-    package_query.joins(:vulnerable_packages).includes(:vulnerabilities, :vulnerable_dependencies)
+    package_query.joins(:vulnerable_packages).distinct("packages.id").includes(:vulnerabilities, :vulnerable_dependencies)
   end
 end
