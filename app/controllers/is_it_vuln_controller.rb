@@ -41,7 +41,7 @@ class IsItVulnController < ApplicationController
 
       @vuln_packages = VulnQuery.from_packages(package_query)
 
-      @is_vuln = @package_reports.present?
+      @is_vuln = @vuln_packages.present?
     end
   end
 
@@ -57,7 +57,7 @@ class IsItVulnController < ApplicationController
 
     @vuln_packages = VulnQuery.from_packages(package_query)
 
-    @is_vuln = @package_reports.present?
+    @is_vuln = @vuln_packages.present?
     render :results
   end
 end
