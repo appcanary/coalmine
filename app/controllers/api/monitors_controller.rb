@@ -40,7 +40,7 @@ class Api::MonitorsController < ApiController
       end
     end
 
-    if bundle.nil?
+    if @bundle.nil?
       render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
     elsif @form.errors.empty?
       render json: @bundle, adapter: :json_api

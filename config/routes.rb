@@ -92,7 +92,7 @@ Rails.application.routes.draw do
 
       post "monitors(/:name)" => "monitors#create"
       put "monitors/:name" => "monitors#update"
-      get "monitors/:name" => "monitors#show"
+      get "monitors/:name" => "monitors#show", :as => "monitor"
       get "monitors" => "monitors#index"
     end
 
