@@ -1,5 +1,4 @@
 class Api::CheckController < ApiController
-  # TODO: test
   def create
     @form = ApiForm.new(Bundle.new)
 
