@@ -12,6 +12,9 @@ class Api::CheckController < ApiController
 
       vuln_packages = VulnQuery.from_packages(package_query)
       resp = PackageVulnerabilityResponse.new(vuln_packages)
+ 
+      register_api_call!
+
       render json: resp
     else
       render json: errors_to_h(@form.errors), adapter: :json_api, status: :bad_request

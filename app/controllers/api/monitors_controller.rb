@@ -19,6 +19,8 @@ class Api::MonitorsController < ApiController
     end
 
     if @form.errors.empty?
+      register_api_call!
+
       render json: @bundle, adapter: :json_api
     else
       render json: errors_to_h(@form.errors), adapter: :json_api, status: :bad_request
@@ -40,10 +42,11 @@ class Api::MonitorsController < ApiController
 
     if @bundle.nil?
       render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
-    elsif @form.errors.empty?
-      render json: @bundle, adapter: :json_api
-    else
+    elsif @form.errors.present?
       render json: errors_to_h(@form.errors), adapter: :json_api, status: :bad_request
+    else
+      register_api_call!
+      render json: @bundle, adapter: :json_api
     end
   end
 
@@ -51,6 +54,7 @@ class Api::MonitorsController < ApiController
     @bundle = current_account.bundles.via_api.where(:name => params[:name]).take
 
     if @bundle
+      register_api_call!
       render json: @bundle, adapter: :json_api, serializer: BundleWithVulnsSerializer, include: ["vulnerable_packages", "vulnerabilities"]
     else
       render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
@@ -64,6 +68,7 @@ class Api::MonitorsController < ApiController
     if @bundle.nil?
       render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
     elsif @bundle.destroy
+      register_api_call!
       render :nothing => true, :status => 204
     else
       render json: {errors: [{title: "Monitor deletion failed."}]}, adapter: :json_api, status: 500

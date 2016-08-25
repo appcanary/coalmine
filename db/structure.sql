@@ -785,6 +785,38 @@ ALTER SEQUENCE is_it_vuln_results_id_seq OWNED BY is_it_vuln_results.id;
 
 
 --
+-- Name: log_api_calls; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE log_api_calls (
+    id integer NOT NULL,
+    account_id integer,
+    action character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: log_api_calls_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE log_api_calls_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: log_api_calls_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE log_api_calls_id_seq OWNED BY log_api_calls.id;
+
+
+--
 -- Name: log_bundle_patches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1568,6 +1600,13 @@ ALTER TABLE ONLY is_it_vuln_results ALTER COLUMN id SET DEFAULT nextval('is_it_v
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY log_api_calls ALTER COLUMN id SET DEFAULT nextval('log_api_calls_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY log_bundle_patches ALTER COLUMN id SET DEFAULT nextval('log_bundle_patches_id_seq'::regclass);
 
 
@@ -1810,6 +1849,14 @@ ALTER TABLE ONLY email_messages
 
 ALTER TABLE ONLY is_it_vuln_results
     ADD CONSTRAINT is_it_vuln_results_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: log_api_calls_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY log_api_calls
+    ADD CONSTRAINT log_api_calls_pkey PRIMARY KEY (id);
 
 
 --
@@ -2330,6 +2377,13 @@ CREATE INDEX index_email_messages_on_sent_at ON email_messages USING btree (sent
 --
 
 CREATE INDEX index_is_it_vuln_results_on_ident ON is_it_vuln_results USING btree (ident);
+
+
+--
+-- Name: index_log_api_calls_on_action; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_log_api_calls_on_action ON log_api_calls USING btree (action);
 
 
 --
@@ -2999,4 +3053,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160804141716');
 INSERT INTO schema_migrations (version) VALUES ('20160805151822');
 
 INSERT INTO schema_migrations (version) VALUES ('20160809220154');
+
+INSERT INTO schema_migrations (version) VALUES ('20160825182745');
 

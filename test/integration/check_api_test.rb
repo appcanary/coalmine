@@ -4,10 +4,13 @@ class CheckApiTest < ActionDispatch::IntegrationTest
   let(:account) {  FactoryGirl.create(:account) }
   describe "while authenticated" do
     it "should tell you if you're not vulnerable" do
+      assert_equal 0, account.log_api_calls.where(:action => "check/create").count
       post api_check_path, {platform: Platforms::Ruby, file: gemfilelock},
         {authorization: %{Token token="#{account.token}"}}
 
       assert_response :success
+      assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+      
       json = json_body
       assert json.key?("data")
       assert json["data"].empty?
@@ -18,10 +21,13 @@ class CheckApiTest < ActionDispatch::IntegrationTest
       pkg = FactoryGirl.create(:package, :ruby, :name => "actionmailer", :version => "4.2.0")
       vuln = FactoryGirl.create(:vulnerability, :pkgs => [pkg])
 
+      assert_equal 0, account.log_api_calls.where(:action => "check/create").count
       post api_check_path, {platform: Platforms::Ruby, file: gemfilelock},
         {authorization: %{Token token="#{account.token}"}}
 
       assert_response :success
+      
+      assert_equal 1, account.log_api_calls.where(:action => "check/create").count
 
       json = json_body
       assert json.key?("data")
@@ -43,6 +49,8 @@ class CheckApiTest < ActionDispatch::IntegrationTest
 
 
       assert_response :bad_request
+      assert_equal 0, account.log_api_calls.where(:action => "check/create").count
+
       json = json_body
       assert_not json.key?("data")
       assert_equal "Platform is invalid", json["errors"].first["title"]
@@ -50,6 +58,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
 
       post api_check_path, {platform: Platforms::Ruby, file: gemfile},
         {authorization: %{Token token="#{account.token}"}}
+      assert_equal 0, account.log_api_calls.where(:action => "check/create").count
 
       assert_response :bad_request
       json = json_body

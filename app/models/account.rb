@@ -19,8 +19,11 @@ class Account < ActiveRecord::Base
 
   has_many :bundles
   has_many :log_bundle_vulnerabilities, :through => :bundles
+  has_many :log_bundle_patches, :through => :bundles
+  has_many :log_api_calls
 
   has_many :users
+
 
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
 

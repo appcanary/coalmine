@@ -31,4 +31,8 @@ class ApiController < ApplicationController
   def current_account
     @current_account
   end
+
+  def register_api_call!
+    current_account.log_api_calls.create!(:action => "#{controller_name}/#{action_name}")
+  end
 end
