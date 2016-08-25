@@ -5,7 +5,10 @@ class BundleManager < ServiceManager
     self.server_id = server && server.id
   end
 
-  # TODO: throw exception if package_list is empty
+  # TODO: throw exception if package_list is empty?
+  # TODO: i feel like this - or some other class - 
+  # should be responsible for *finding* the right bundle
+  # scoped by account or server
 
   # don't we need a kind alongside platform?
   # platform alone seems insufficient
