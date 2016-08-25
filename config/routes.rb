@@ -94,6 +94,7 @@ Rails.application.routes.draw do
       put "monitors/:name" => "monitors#update"
       get "monitors/:name" => "monitors#show", :as => "monitor"
       get "monitors" => "monitors#index"
+      delete "monitors/:name" => "monitors#destroy"
     end
 
     scope :v1 do

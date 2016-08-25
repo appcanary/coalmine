@@ -1,5 +1,4 @@
 class Api::MonitorsController < ApiController
- # TODO: test
   def index
     @bundles = current_account.bundles.via_api
 
@@ -27,13 +26,12 @@ class Api::MonitorsController < ApiController
   end
 
   def update
-    @form = ApiMonitorForm.new(Bundle.new)
-
     @bundle = current_account.bundles.via_api.where(:name => params[:name]).take
+    @form = ApiMonitorForm.new(@bundle || Bundle.new)
 
     if @bundle && @form.validate(params)
       @bm = BundleManager.new(current_account)
-      @bundle, error = @bm.update_packages(bundle.id, @form.package_list)
+      @bundle, error = @bm.update_packages(@bundle.id, @form.package_list)
 
       if error
         @form.errors.add(:base, error.message)
@@ -61,7 +59,7 @@ class Api::MonitorsController < ApiController
 
 
   def destroy
-    @bundle = current_user.bundles.via_api.find(params[:id])
+    @bundle = current_account.bundles.via_api.where(:name => params[:name]).take
 
     if @bundle.nil?
       render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found

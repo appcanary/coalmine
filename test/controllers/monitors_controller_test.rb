@@ -29,7 +29,8 @@ class MonitorsControllerTest < ActionController::TestCase
 
     it "should allow new monitors to be created" do
       post :create, {:monitor => {:file => Rack::Test::UploadedFile.new(File.join(Rails.root, "test/data", "Gemfile.lock"), nil, false),
-                                  :platform_release_str => "ruby"}}
+                                  :platform_release_str => "ruby",
+                                  :name => "foo"}}
       assert_redirected_to dashboard_path
     end
 

@@ -1,7 +1,7 @@
 class Api::CheckController < ApiController
   # TODO: test
   def create
-    @form = ApiForm.new(Object.new)
+    @form = ApiForm.new(Bundle.new)
 
     if @form.validate(params)
       package_query = nil

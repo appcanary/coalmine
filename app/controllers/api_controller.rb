@@ -4,7 +4,7 @@ class ApiController < ApplicationController
   before_action :require_token
 
   def require_token
-    @current_account = authenticate_or_request_with_http_token do |token, options|
+    @current_account = authenticate_with_http_token do |token, options|
       Account.find_by(token: token)
     end
 

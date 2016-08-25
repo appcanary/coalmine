@@ -2,8 +2,8 @@ class ApiForm < Reform::Form
   attr_accessor :package_list, :platform_release
 
   property :name, :virtual => true
-  property :platform, :virtual => true
-  property :release, :virtual => true
+  property :platform
+  property :release
   property :file, :virtual => true
 
   def file_contents
