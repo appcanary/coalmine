@@ -72,7 +72,7 @@ module ApplicationHelper
   end
 
   def versions_in_english(versions)
-    versions.map { |pv| "<code>#{pv}</code>" }.join(" or ").html_safe
+    versions.map { |pv| "<code>#{h pv}</code>" }.join(" or ").html_safe
   end
 
   def sort_versions(versions)
