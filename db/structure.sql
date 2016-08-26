@@ -70,6 +70,21 @@ CREATE FUNCTION archive_advisory_vulnerabilities() RETURNS trigger
 
 
 --
+-- Name: archive_agent_servers(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION archive_agent_servers() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         INSERT INTO agent_server_archives(agent_server_id, account_id, agent_release_id, uuid, hostname, uname, name, ip, distro, release, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.account_id, OLD.agent_release_id, OLD.uuid, OLD.hostname, OLD.uname, OLD.name, OLD.ip, OLD.distro, OLD.release, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         RETURN OLD;
+       END;
+       $$;
+
+
+--
 -- Name: archive_bundled_packages(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -460,6 +475,48 @@ ALTER SEQUENCE agent_releases_id_seq OWNED BY agent_releases.id;
 
 
 --
+-- Name: agent_server_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE agent_server_archives (
+    id integer NOT NULL,
+    agent_server_id integer NOT NULL,
+    account_id integer,
+    agent_release_id integer,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    hostname character varying,
+    uname character varying,
+    name character varying,
+    ip character varying,
+    distro character varying,
+    release character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    valid_at timestamp without time zone NOT NULL,
+    expired_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: agent_server_archives_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE agent_server_archives_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: agent_server_archives_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE agent_server_archives_id_seq OWNED BY agent_server_archives.id;
+
+
+--
 -- Name: agent_servers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -474,9 +531,10 @@ CREATE TABLE agent_servers (
     ip character varying,
     distro character varying,
     release character varying,
-    last_heartbeat_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    valid_at timestamp without time zone DEFAULT now() NOT NULL,
+    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL
 );
 
 
@@ -1537,6 +1595,13 @@ ALTER TABLE ONLY agent_releases ALTER COLUMN id SET DEFAULT nextval('agent_relea
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY agent_server_archives ALTER COLUMN id SET DEFAULT nextval('agent_server_archives_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY agent_servers ALTER COLUMN id SET DEFAULT nextval('agent_servers_id_seq'::regclass);
 
 
@@ -1777,6 +1842,14 @@ ALTER TABLE ONLY agent_received_files
 
 ALTER TABLE ONLY agent_releases
     ADD CONSTRAINT agent_releases_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: agent_server_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY agent_server_archives
+    ADD CONSTRAINT agent_server_archives_pkey PRIMARY KEY (id);
 
 
 --
@@ -2030,6 +2103,13 @@ CREATE INDEX idx_advisory_vulnerability_id_ar ON advisory_vulnerability_archives
 
 
 --
+-- Name: idx_agent_server_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX idx_agent_server_id_ar ON agent_server_archives USING btree (agent_server_id);
+
+
+--
 -- Name: idx_bundle_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2177,6 +2257,13 @@ CREATE INDEX index_agent_heartbeats_on_agent_server_id ON agent_heartbeats USING
 
 
 --
+-- Name: index_agent_heartbeats_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_agent_heartbeats_on_created_at ON agent_heartbeats USING btree (created_at);
+
+
+--
 -- Name: index_agent_received_files_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2198,6 +2285,41 @@ CREATE INDEX index_agent_releases_on_version ON agent_releases USING btree (vers
 
 
 --
+-- Name: index_agent_server_archives_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_agent_server_archives_on_account_id ON agent_server_archives USING btree (account_id);
+
+
+--
+-- Name: index_agent_server_archives_on_agent_release_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_agent_server_archives_on_agent_release_id ON agent_server_archives USING btree (agent_release_id);
+
+
+--
+-- Name: index_agent_server_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_agent_server_archives_on_expired_at ON agent_server_archives USING btree (expired_at);
+
+
+--
+-- Name: index_agent_server_archives_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_agent_server_archives_on_uuid ON agent_server_archives USING btree (uuid);
+
+
+--
+-- Name: index_agent_server_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_agent_server_archives_on_valid_at ON agent_server_archives USING btree (valid_at);
+
+
+--
 -- Name: index_agent_servers_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2212,10 +2334,24 @@ CREATE INDEX index_agent_servers_on_agent_release_id ON agent_servers USING btre
 
 
 --
+-- Name: index_agent_servers_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_agent_servers_on_expired_at ON agent_servers USING btree (expired_at);
+
+
+--
 -- Name: index_agent_servers_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_agent_servers_on_uuid ON agent_servers USING btree (uuid);
+
+
+--
+-- Name: index_agent_servers_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_agent_servers_on_valid_at ON agent_servers USING btree (valid_at);
 
 
 --
@@ -2751,6 +2887,13 @@ CREATE TRIGGER trigger_advisory_vulnerability_archives AFTER DELETE OR UPDATE ON
 
 
 --
+-- Name: trigger_agent_server_archives; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_agent_server_archives AFTER DELETE OR UPDATE ON agent_servers FOR EACH ROW EXECUTE PROCEDURE archive_agent_servers();
+
+
+--
 -- Name: trigger_bundle_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -2857,14 +3000,6 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
--- Name: fk_rails_8a94ac142c; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY bundles
-    ADD CONSTRAINT fk_rails_8a94ac142c FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
-
-
---
 -- Name: fk_rails_a1b81c819c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2873,35 +3008,11 @@ ALTER TABLE ONLY agent_received_files
 
 
 --
--- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
-
-
---
--- Name: fk_rails_d5389f475f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY agent_heartbeats
-    ADD CONSTRAINT fk_rails_d5389f475f FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
-
-
---
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_e4107b65b3 FOREIGN KEY (email_message_id) REFERENCES email_messages(id);
-
-
---
--- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_f0b7c79393 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --

@@ -11,6 +11,9 @@ class Api::AgentController < ApiController
 
     server.register_heartbeat!(params)
 
+    # needs to fetch the newly created heartbeat
+    server.reload
+
     render json: {heartbeat: server.last_heartbeat_at}
   end
 

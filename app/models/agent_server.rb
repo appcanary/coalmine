@@ -24,6 +24,7 @@
 #
 
 class AgentServer < ActiveRecord::Base
+  default_scope { includes(:last_heartbeat) }
   belongs_to :account
   validates :account, :presence => true
 
@@ -32,19 +33,22 @@ class AgentServer < ActiveRecord::Base
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
 
+  has_one :last_heartbeat, -> { order(created_at: :desc) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
+
   scope :belonging_to, -> (user) {
     where(:account_id => user.account_id)
   }
 
+  def last_heartbeat_at
+    last_heartbeat.try(:created_at)
+  end
+
   def register_heartbeat!(params)
     self.transaction do
-      self.last_heartbeat_at = Time.now
-      self.heartbeats.create!(:files => params[:files],
-                              :created_at => self.last_heartbeat_at)
-
+      self.heartbeats.create!(:files => params[:files])
 
       agent_version = params[:"agent-version"]
-      self.agent_release = AgentRelease.where(:version => agent_version).first_or_create
+      self.agent_release = AgentRelease.where(:version => agent_version).first_or_create!
       self.save!
     end
   end

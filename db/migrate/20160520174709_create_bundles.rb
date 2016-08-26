@@ -2,7 +2,7 @@ class CreateBundles < ActiveRecord::Migration
   def change
     ArchiveMigrator.new(self).create_table :bundles do |t|
       t.references :account, index: true, foreign_key: true, null: false
-      t.references :agent_server, index: true, foreign_key: true
+      t.references :agent_server, index: true
       t.string :name
       t.string :path
       t.string :platform, null: false

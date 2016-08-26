@@ -6,7 +6,7 @@ class Admin::UsersController < AdminController
 
     @user_count = User.count
     @servers_count = AgentServer.count
-    @recent_heartbeats = AgentServer.where("last_heartbeat_at > ?", 2.hours.ago).count
+    @recent_heartbeats = AgentHeartbeat.where("created_at > ?", 2.hours.ago).count
     @total_revenue = BillingPlan.includes(:subscription_plan).where("subscription_plan_id is not null").map(&:monthly_cost).reduce(&:+)
   end
 
