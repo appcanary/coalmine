@@ -40,6 +40,34 @@
 </section>
 
 
+  <table class="table">
+    <thead>
+      event
+    </thead>
+    <thead>
+      date
+    </thead>
+    <% @lbvs.each do |v| %>
+      <tr>
+        <td>
+          vulnerable! 
+          <%= v.package.display_name %>
+        </td>
+        <td>
+          <%= v.created_at %>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <td>
+        created
+      </td>
+      <td>
+        <%= @bundle.created_at %>
+      </td>
+    </tr>
+  </table>
+
 
 
 <div class="app">

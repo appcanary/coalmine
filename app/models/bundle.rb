@@ -34,6 +34,7 @@ class Bundle < ActiveRecord::Base
   has_many :bundled_packages, :dependent => :destroy
   has_many :packages, :through => :bundled_packages
   has_many :log_bundle_vulnerabilities
+  has_many :log_bundle_patches
 
   validates :account, presence: true
   validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }

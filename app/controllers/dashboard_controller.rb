@@ -5,6 +5,7 @@ class DashboardController < ApplicationController
 
     wizard = OnboardWizard.new(current_user, @servers, @api_bundles)
 
+
     # TODO: in the future, keep track of whether ppl
     # have seen a given page before, be more intelligent
     if wizard.new_user?
@@ -16,5 +17,13 @@ class DashboardController < ApplicationController
     end
 
     @silent_servers, @active_servers = @servers.partition(&:gone_silent?)
+  end
+
+  def history
+
+    @lbvs = current_user.account.log_bundle_vulnerabilities.includes(:vulnerability, :bundle).order("created_at DESC")
+    @lbps = current_user.account.log_bundle_patches.includes(:vulnerability, :bundle).order("created_at DESC")
+
+    @messages = current_user.account.email_messages
   end
 end

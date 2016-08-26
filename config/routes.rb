@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
+  get 'history' => "dashboard#history", :as => :history
 
   get 'welcome' => "onboarding#welcome", :as => :onboarding
 

@@ -1,0 +1,93 @@
+<section>
+  <div class="col-md-6">
+    <h2>recent emails</h2>
+    <table class="table">
+      <th>
+        kind
+      </th>
+      <th>
+        notification count
+      </th>
+      <th>
+      </th>
+
+      <% @messages.each do |m| %>
+        <tr>
+          <td>
+            <%= m.type %> 
+          </td>
+          <td>
+            <%= m.notifications.count %>
+          </td>
+          <td>
+            <%= m.created_at %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</section>
+
+
+
+<section>
+  <div class="col-md-6">
+    <h2>recent vulns</h2>
+    <table class="table">
+      <th>
+        bundle id
+      </th>
+      <th>
+        vuln title
+      </th>
+      <th>
+      </th>
+
+      <% @lbvs.each do |v| %>
+        <tr>
+          <td>
+            <%= v.bundle.id %> 
+          </td>
+          <td>
+            <%= v.vulnerability.title %>
+          </td>
+          <td>
+            <%= v.created_at %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+
+
+  <div class="col-md-6">
+    <h2>recent patches</h2>
+    <table class="table">
+      <th>
+        bundle id
+      </th>
+      <th>
+        vuln title
+      </th>
+      <th>
+      </th>
+
+      <% @lbps.each do |v| %>
+        <tr>
+          <td>
+            <%= v.bundle.id %> 
+          </td>
+          <td>
+            <%= v.vulnerability.title %>
+          </td>
+          <td>
+            <%= v.created_at %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</section>
+
+
+
