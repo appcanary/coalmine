@@ -2,25 +2,28 @@
 #
 # Table name: agent_servers
 #
-#  id                :integer          not null, primary key
-#  account_id        :integer
-#  agent_release_id  :integer
-#  uuid              :uuid
-#  hostname          :string
-#  uname             :string
-#  name              :string
-#  ip                :string
-#  distro            :string
-#  release           :string
-#  last_heartbeat_at :datetime
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id               :integer          not null, primary key
+#  account_id       :integer
+#  agent_release_id :integer
+#  uuid             :uuid
+#  hostname         :string
+#  uname            :string
+#  name             :string
+#  ip               :string
+#  distro           :string
+#  release          :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  valid_at         :datetime         not null
+#  expired_at       :datetime         default("infinity"), not null
 #
 # Indexes
 #
 #  index_agent_servers_on_account_id        (account_id)
 #  index_agent_servers_on_agent_release_id  (agent_release_id)
+#  index_agent_servers_on_expired_at        (expired_at)
 #  index_agent_servers_on_uuid              (uuid)
+#  index_agent_servers_on_valid_at          (valid_at)
 #
 
 FactoryGirl.define do

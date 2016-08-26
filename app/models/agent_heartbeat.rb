@@ -11,6 +11,7 @@
 # Indexes
 #
 #  index_agent_heartbeats_on_agent_server_id  (agent_server_id)
+#  index_agent_heartbeats_on_created_at       (created_at)
 #
 
 class AgentHeartbeat < ActiveRecord::Base

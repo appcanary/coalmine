@@ -99,16 +99,6 @@ class Package < ActiveRecord::Base
     @comparator ||= Platforms.comparator_for(self)
   end
 
-  # following two simplify testing
-  def to_simple_h
-    {name: name, version: version}
-  end
-
-  # used solely for testing
-  def to_pkg_builder
-    Parcel.from_package(self)
-  end
-
   # (defmethod upgrade-to :artifact.kind/rubygem
   # [vuln version]
   # (let [patched-versions (:patched-versions vuln)
@@ -134,6 +124,22 @@ class Package < ActiveRecord::Base
       end
       arr
     end
+  end
+
+
+  # ----- view stuff
+  def display_name
+    "#{name} #{version}"
+  end
+
+  # ----- helps w/testing
+  def to_simple_h
+    {name: name, version: version}
+  end
+
+  # used solely for testing
+  def to_pkg_builder
+    Parcel.from_package(self)
   end
 
 end

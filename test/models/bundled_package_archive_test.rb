@@ -11,6 +11,14 @@
 #  valid_at           :datetime         not null
 #  expired_at         :datetime         not null
 #
+# Indexes
+#
+#  idx_bundled_package_id_ar                     (bundled_package_id)
+#  index_bundled_package_archives_on_bundle_id   (bundle_id)
+#  index_bundled_package_archives_on_expired_at  (expired_at)
+#  index_bundled_package_archives_on_package_id  (package_id)
+#  index_bundled_package_archives_on_valid_at    (valid_at)
+#
 
 require 'test_helper'
 
