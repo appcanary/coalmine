@@ -2,28 +2,27 @@
 #
 # Table name: queued_advisories
 #
-#  id                  :integer          not null, primary key
-#  identifier          :string           not null
-#  package_platform    :string           not null
-#  package_names       :string           default("{}"), not null, is an Array
-#  affected_arches     :string           default("{}"), not null, is an Array
-#  affected_releases   :string           default("{}"), not null, is an Array
-#  patched_versions    :text             default("{}"), not null, is an Array
-#  unaffected_versions :text             default("{}"), not null, is an Array
-#  title               :string
-#  description         :text
-#  criticality         :string
-#  cve_ids             :string           default("{}"), not null, is an Array
-#  osvdb_id            :string
-#  usn_id              :string
-#  dsa_id              :string
-#  rhsa_id             :string
-#  cesa_id             :string
-#  alas_id             :string
-#  debianbug           :string
-#  source              :string
-#  reported_at         :datetime
-#  created_at          :datetime         not null
+#  id               :integer          not null, primary key
+#  identifier       :string           not null
+#  package_platform :string           not null
+#  package_names    :string           default("{}"), not null, is an Array
+#  patched          :jsonb            default("[]"), not null
+#  affected         :jsonb            default("[]"), not null
+#  unaffected       :jsonb            default("[]"), not null
+#  title            :string
+#  description      :text
+#  criticality      :string
+#  cve_ids          :string           default("{}"), not null, is an Array
+#  osvdb_id         :string
+#  usn_id           :string
+#  dsa_id           :string
+#  rhsa_id          :string
+#  cesa_id          :string
+#  alas_id          :string
+#  debianbug        :string
+#  source           :string
+#  reported_at      :datetime
+#  created_at       :datetime         not null
 #
 # Indexes
 #

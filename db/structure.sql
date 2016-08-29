@@ -2,12 +2,16 @@
 -- PostgreSQL database dump
 --
 
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET row_security = off;
 
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
@@ -179,7 +183,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE accounts (
@@ -211,7 +215,7 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 
 
 --
--- Name: advisories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: advisories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE advisories (
@@ -262,7 +266,7 @@ ALTER SEQUENCE advisories_id_seq OWNED BY advisories.id;
 
 
 --
--- Name: advisory_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: advisory_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE advisory_archives (
@@ -314,7 +318,7 @@ ALTER SEQUENCE advisory_archives_id_seq OWNED BY advisory_archives.id;
 
 
 --
--- Name: advisory_vulnerabilities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: advisory_vulnerabilities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE advisory_vulnerabilities (
@@ -346,7 +350,7 @@ ALTER SEQUENCE advisory_vulnerabilities_id_seq OWNED BY advisory_vulnerabilities
 
 
 --
--- Name: advisory_vulnerability_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: advisory_vulnerability_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE advisory_vulnerability_archives (
@@ -379,7 +383,7 @@ ALTER SEQUENCE advisory_vulnerability_archives_id_seq OWNED BY advisory_vulnerab
 
 
 --
--- Name: agent_heartbeats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_heartbeats; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE agent_heartbeats (
@@ -411,7 +415,7 @@ ALTER SEQUENCE agent_heartbeats_id_seq OWNED BY agent_heartbeats.id;
 
 
 --
--- Name: agent_received_files; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_received_files; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE agent_received_files (
@@ -444,7 +448,7 @@ ALTER SEQUENCE agent_received_files_id_seq OWNED BY agent_received_files.id;
 
 
 --
--- Name: agent_releases; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_releases; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE agent_releases (
@@ -475,7 +479,7 @@ ALTER SEQUENCE agent_releases_id_seq OWNED BY agent_releases.id;
 
 
 --
--- Name: agent_server_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_server_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE agent_server_archives (
@@ -517,7 +521,7 @@ ALTER SEQUENCE agent_server_archives_id_seq OWNED BY agent_server_archives.id;
 
 
 --
--- Name: agent_servers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_servers; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE agent_servers (
@@ -558,7 +562,7 @@ ALTER SEQUENCE agent_servers_id_seq OWNED BY agent_servers.id;
 
 
 --
--- Name: beta_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: beta_users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE beta_users (
@@ -589,7 +593,7 @@ ALTER SEQUENCE beta_users_id_seq OWNED BY beta_users.id;
 
 
 --
--- Name: billing_plans; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: billing_plans; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE billing_plans (
@@ -623,7 +627,7 @@ ALTER SEQUENCE billing_plans_id_seq OWNED BY billing_plans.id;
 
 
 --
--- Name: bundle_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: bundle_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE bundle_archives (
@@ -666,7 +670,7 @@ ALTER SEQUENCE bundle_archives_id_seq OWNED BY bundle_archives.id;
 
 
 --
--- Name: bundled_package_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: bundled_package_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE bundled_package_archives (
@@ -701,7 +705,7 @@ ALTER SEQUENCE bundled_package_archives_id_seq OWNED BY bundled_package_archives
 
 
 --
--- Name: bundled_packages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: bundled_packages; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE bundled_packages (
@@ -735,7 +739,7 @@ ALTER SEQUENCE bundled_packages_id_seq OWNED BY bundled_packages.id;
 
 
 --
--- Name: bundles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: bundles; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE bundles (
@@ -777,7 +781,7 @@ ALTER SEQUENCE bundles_id_seq OWNED BY bundles.id;
 
 
 --
--- Name: email_messages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: email_messages; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE email_messages (
@@ -811,7 +815,7 @@ ALTER SEQUENCE email_messages_id_seq OWNED BY email_messages.id;
 
 
 --
--- Name: is_it_vuln_results; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: is_it_vuln_results; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE is_it_vuln_results (
@@ -843,7 +847,7 @@ ALTER SEQUENCE is_it_vuln_results_id_seq OWNED BY is_it_vuln_results.id;
 
 
 --
--- Name: log_api_calls; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: log_api_calls; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE log_api_calls (
@@ -875,7 +879,7 @@ ALTER SEQUENCE log_api_calls_id_seq OWNED BY log_api_calls.id;
 
 
 --
--- Name: log_bundle_patches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: log_bundle_patches; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE log_bundle_patches (
@@ -912,7 +916,7 @@ ALTER SEQUENCE log_bundle_patches_id_seq OWNED BY log_bundle_patches.id;
 
 
 --
--- Name: log_bundle_vulnerabilities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: log_bundle_vulnerabilities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE log_bundle_vulnerabilities (
@@ -949,7 +953,7 @@ ALTER SEQUENCE log_bundle_vulnerabilities_id_seq OWNED BY log_bundle_vulnerabili
 
 
 --
--- Name: notifications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE notifications (
@@ -982,7 +986,7 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 
 
 --
--- Name: package_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: package_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE package_archives (
@@ -1026,7 +1030,7 @@ ALTER SEQUENCE package_archives_id_seq OWNED BY package_archives.id;
 
 
 --
--- Name: packages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: packages; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE packages (
@@ -1069,7 +1073,7 @@ ALTER SEQUENCE packages_id_seq OWNED BY packages.id;
 
 
 --
--- Name: pre_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pre_users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE pre_users (
@@ -1102,7 +1106,7 @@ ALTER SEQUENCE pre_users_id_seq OWNED BY pre_users.id;
 
 
 --
--- Name: que_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: que_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE que_jobs (
@@ -1144,7 +1148,7 @@ ALTER SEQUENCE que_jobs_job_id_seq OWNED BY que_jobs.job_id;
 
 
 --
--- Name: queued_advisories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: queued_advisories; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE queued_advisories (
@@ -1152,10 +1156,9 @@ CREATE TABLE queued_advisories (
     identifier character varying NOT NULL,
     package_platform character varying NOT NULL,
     package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    affected_arches character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    affected_releases character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
-    unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,
+    patched jsonb DEFAULT '[]'::jsonb NOT NULL,
+    affected jsonb DEFAULT '[]'::jsonb NOT NULL,
+    unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
     title character varying,
     description text,
     criticality character varying,
@@ -1165,6 +1168,8 @@ CREATE TABLE queued_advisories (
     dsa_id character varying,
     rhsa_id character varying,
     cesa_id character varying,
+    alas_id character varying,
+    debianbug character varying,
     source character varying,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL
@@ -1191,7 +1196,7 @@ ALTER SEQUENCE queued_advisories_id_seq OWNED BY queued_advisories.id;
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE schema_migrations (
@@ -1200,7 +1205,7 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: subscription_plans; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: subscription_plans; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE subscription_plans (
@@ -1237,7 +1242,7 @@ ALTER SEQUENCE subscription_plans_id_seq OWNED BY subscription_plans.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE users (
@@ -1297,7 +1302,7 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 
 --
--- Name: vulnerabilities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerabilities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vulnerabilities (
@@ -1341,7 +1346,7 @@ ALTER SEQUENCE vulnerabilities_id_seq OWNED BY vulnerabilities.id;
 
 
 --
--- Name: vulnerability_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerability_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vulnerability_archives (
@@ -1386,7 +1391,7 @@ ALTER SEQUENCE vulnerability_archives_id_seq OWNED BY vulnerability_archives.id;
 
 
 --
--- Name: vulnerable_dependencies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerable_dependencies; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vulnerable_dependencies (
@@ -1425,7 +1430,7 @@ ALTER SEQUENCE vulnerable_dependencies_id_seq OWNED BY vulnerable_dependencies.i
 
 
 --
--- Name: vulnerable_dependency_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerable_dependency_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vulnerable_dependency_archives (
@@ -1465,7 +1470,7 @@ ALTER SEQUENCE vulnerable_dependency_archives_id_seq OWNED BY vulnerable_depende
 
 
 --
--- Name: vulnerable_package_archives; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerable_package_archives; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vulnerable_package_archives (
@@ -1501,7 +1506,7 @@ ALTER SEQUENCE vulnerable_package_archives_id_seq OWNED BY vulnerable_package_ar
 
 
 --
--- Name: vulnerable_packages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerable_packages; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE vulnerable_packages (
@@ -1781,7 +1786,7 @@ ALTER TABLE ONLY vulnerable_packages ALTER COLUMN id SET DEFAULT nextval('vulner
 
 
 --
--- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY accounts
@@ -1789,7 +1794,7 @@ ALTER TABLE ONLY accounts
 
 
 --
--- Name: advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisories
@@ -1797,7 +1802,7 @@ ALTER TABLE ONLY advisories
 
 
 --
--- Name: advisory_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: advisory_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_archives
@@ -1805,7 +1810,7 @@ ALTER TABLE ONLY advisory_archives
 
 
 --
--- Name: advisory_vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: advisory_vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_vulnerabilities
@@ -1813,7 +1818,7 @@ ALTER TABLE ONLY advisory_vulnerabilities
 
 
 --
--- Name: advisory_vulnerability_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: advisory_vulnerability_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_vulnerability_archives
@@ -1821,7 +1826,7 @@ ALTER TABLE ONLY advisory_vulnerability_archives
 
 
 --
--- Name: agent_heartbeats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_heartbeats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_heartbeats
@@ -1829,7 +1834,7 @@ ALTER TABLE ONLY agent_heartbeats
 
 
 --
--- Name: agent_received_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_received_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_received_files
@@ -1837,7 +1842,7 @@ ALTER TABLE ONLY agent_received_files
 
 
 --
--- Name: agent_releases_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_releases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_releases
@@ -1845,7 +1850,7 @@ ALTER TABLE ONLY agent_releases
 
 
 --
--- Name: agent_server_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_server_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_server_archives
@@ -1853,7 +1858,7 @@ ALTER TABLE ONLY agent_server_archives
 
 
 --
--- Name: agent_servers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: agent_servers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_servers
@@ -1861,7 +1866,7 @@ ALTER TABLE ONLY agent_servers
 
 
 --
--- Name: beta_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: beta_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY beta_users
@@ -1869,7 +1874,7 @@ ALTER TABLE ONLY beta_users
 
 
 --
--- Name: billing_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: billing_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY billing_plans
@@ -1877,7 +1882,7 @@ ALTER TABLE ONLY billing_plans
 
 
 --
--- Name: bundle_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: bundle_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundle_archives
@@ -1885,7 +1890,7 @@ ALTER TABLE ONLY bundle_archives
 
 
 --
--- Name: bundled_package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: bundled_package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_package_archives
@@ -1893,7 +1898,7 @@ ALTER TABLE ONLY bundled_package_archives
 
 
 --
--- Name: bundled_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: bundled_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_packages
@@ -1901,7 +1906,7 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
--- Name: bundles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: bundles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundles
@@ -1909,7 +1914,7 @@ ALTER TABLE ONLY bundles
 
 
 --
--- Name: email_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: email_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_messages
@@ -1917,7 +1922,7 @@ ALTER TABLE ONLY email_messages
 
 
 --
--- Name: is_it_vuln_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: is_it_vuln_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY is_it_vuln_results
@@ -1925,7 +1930,7 @@ ALTER TABLE ONLY is_it_vuln_results
 
 
 --
--- Name: log_api_calls_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: log_api_calls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_api_calls
@@ -1933,7 +1938,7 @@ ALTER TABLE ONLY log_api_calls
 
 
 --
--- Name: log_bundle_patches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: log_bundle_patches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_bundle_patches
@@ -1941,7 +1946,7 @@ ALTER TABLE ONLY log_bundle_patches
 
 
 --
--- Name: log_bundle_vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: log_bundle_vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_bundle_vulnerabilities
@@ -1949,7 +1954,7 @@ ALTER TABLE ONLY log_bundle_vulnerabilities
 
 
 --
--- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -1957,7 +1962,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY package_archives
@@ -1965,7 +1970,7 @@ ALTER TABLE ONLY package_archives
 
 
 --
--- Name: packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY packages
@@ -1973,7 +1978,7 @@ ALTER TABLE ONLY packages
 
 
 --
--- Name: pre_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pre_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pre_users
@@ -1981,7 +1986,7 @@ ALTER TABLE ONLY pre_users
 
 
 --
--- Name: que_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: que_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY que_jobs
@@ -1989,7 +1994,7 @@ ALTER TABLE ONLY que_jobs
 
 
 --
--- Name: queued_advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: queued_advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY queued_advisories
@@ -1997,7 +2002,7 @@ ALTER TABLE ONLY queued_advisories
 
 
 --
--- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subscription_plans
@@ -2005,7 +2010,7 @@ ALTER TABLE ONLY subscription_plans
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -2013,7 +2018,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerabilities
@@ -2021,7 +2026,7 @@ ALTER TABLE ONLY vulnerabilities
 
 
 --
--- Name: vulnerability_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerability_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerability_archives
@@ -2029,7 +2034,7 @@ ALTER TABLE ONLY vulnerability_archives
 
 
 --
--- Name: vulnerable_dependencies_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerable_dependencies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_dependencies
@@ -2037,7 +2042,7 @@ ALTER TABLE ONLY vulnerable_dependencies
 
 
 --
--- Name: vulnerable_dependency_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerable_dependency_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_dependency_archives
@@ -2045,7 +2050,7 @@ ALTER TABLE ONLY vulnerable_dependency_archives
 
 
 --
--- Name: vulnerable_package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerable_package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_package_archives
@@ -2053,7 +2058,7 @@ ALTER TABLE ONLY vulnerable_package_archives
 
 
 --
--- Name: vulnerable_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: vulnerable_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_packages
@@ -2061,812 +2066,812 @@ ALTER TABLE ONLY vulnerable_packages
 
 
 --
--- Name: idx_adv_vuln_adv; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_adv_vuln_adv; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_adv_vuln_adv ON advisory_vulnerabilities USING btree (advisory_id);
 
 
 --
--- Name: idx_adv_vuln_adv_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_adv_vuln_adv_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_adv_vuln_adv_ar ON advisory_vulnerability_archives USING btree (advisory_id);
 
 
 --
--- Name: idx_adv_vuln_vuln; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_adv_vuln_vuln; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_adv_vuln_vuln ON advisory_vulnerabilities USING btree (vulnerability_id);
 
 
 --
--- Name: idx_adv_vuln_vuln_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_adv_vuln_vuln_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_adv_vuln_vuln_ar ON advisory_vulnerability_archives USING btree (vulnerability_id);
 
 
 --
--- Name: idx_advisory_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_advisory_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_advisory_id_ar ON advisory_archives USING btree (advisory_id);
 
 
 --
--- Name: idx_advisory_vulnerability_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_advisory_vulnerability_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_advisory_vulnerability_id_ar ON advisory_vulnerability_archives USING btree (advisory_vulnerability_id);
 
 
 --
--- Name: idx_agent_server_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_agent_server_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_agent_server_id_ar ON agent_server_archives USING btree (agent_server_id);
 
 
 --
--- Name: idx_bundle_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_bundle_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_bundle_id_ar ON bundle_archives USING btree (bundle_id);
 
 
 --
--- Name: idx_bundled_package_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_bundled_package_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_bundled_package_id_ar ON bundled_package_archives USING btree (bundled_package_id);
 
 
 --
--- Name: idx_package_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_package_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_package_id_ar ON package_archives USING btree (package_id);
 
 
 --
--- Name: idx_vulnerability_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_vulnerability_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_vulnerability_id_ar ON vulnerability_archives USING btree (vulnerability_id);
 
 
 --
--- Name: idx_vulnerable_dependency_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_vulnerable_dependency_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_vulnerable_dependency_id_ar ON vulnerable_dependency_archives USING btree (vulnerable_dependency_id);
 
 
 --
--- Name: idx_vulnerable_package_id_ar; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: idx_vulnerable_package_id_ar; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_vulnerable_package_id_ar ON vulnerable_package_archives USING btree (vulnerable_package_id);
 
 
 --
--- Name: index_accounts_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_accounts_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_accounts_on_email ON accounts USING btree (email);
 
 
 --
--- Name: index_accounts_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_accounts_on_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_accounts_on_token ON accounts USING btree (token);
 
 
 --
--- Name: index_advisories_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisories_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisories_on_expired_at ON advisories USING btree (expired_at);
 
 
 --
--- Name: index_advisories_on_identifier; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisories_on_identifier; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisories_on_identifier ON advisories USING btree (identifier);
 
 
 --
--- Name: index_advisories_on_queued_advisory_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisories_on_queued_advisory_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisories_on_queued_advisory_id ON advisories USING btree (queued_advisory_id);
 
 
 --
--- Name: index_advisories_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisories_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisories_on_valid_at ON advisories USING btree (valid_at);
 
 
 --
--- Name: index_advisory_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisory_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisory_archives_on_expired_at ON advisory_archives USING btree (expired_at);
 
 
 --
--- Name: index_advisory_archives_on_identifier; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisory_archives_on_identifier; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisory_archives_on_identifier ON advisory_archives USING btree (identifier);
 
 
 --
--- Name: index_advisory_archives_on_queued_advisory_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisory_archives_on_queued_advisory_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisory_archives_on_queued_advisory_id ON advisory_archives USING btree (queued_advisory_id);
 
 
 --
--- Name: index_advisory_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisory_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisory_archives_on_valid_at ON advisory_archives USING btree (valid_at);
 
 
 --
--- Name: index_advisory_vulnerabilities_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisory_vulnerabilities_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisory_vulnerabilities_on_expired_at ON advisory_vulnerabilities USING btree (expired_at);
 
 
 --
--- Name: index_advisory_vulnerabilities_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisory_vulnerabilities_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisory_vulnerabilities_on_valid_at ON advisory_vulnerabilities USING btree (valid_at);
 
 
 --
--- Name: index_advisory_vulnerability_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisory_vulnerability_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisory_vulnerability_archives_on_expired_at ON advisory_vulnerability_archives USING btree (expired_at);
 
 
 --
--- Name: index_advisory_vulnerability_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_advisory_vulnerability_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_advisory_vulnerability_archives_on_valid_at ON advisory_vulnerability_archives USING btree (valid_at);
 
 
 --
--- Name: index_agent_heartbeats_on_agent_server_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_heartbeats_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_heartbeats_on_agent_server_id ON agent_heartbeats USING btree (agent_server_id);
 
 
 --
--- Name: index_agent_heartbeats_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_heartbeats_on_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_heartbeats_on_created_at ON agent_heartbeats USING btree (created_at);
 
 
 --
--- Name: index_agent_received_files_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_received_files_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_received_files_on_account_id ON agent_received_files USING btree (account_id);
 
 
 --
--- Name: index_agent_received_files_on_agent_server_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_received_files_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_received_files_on_agent_server_id ON agent_received_files USING btree (agent_server_id);
 
 
 --
--- Name: index_agent_releases_on_version; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_releases_on_version; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_releases_on_version ON agent_releases USING btree (version);
 
 
 --
--- Name: index_agent_server_archives_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_server_archives_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_server_archives_on_account_id ON agent_server_archives USING btree (account_id);
 
 
 --
--- Name: index_agent_server_archives_on_agent_release_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_server_archives_on_agent_release_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_server_archives_on_agent_release_id ON agent_server_archives USING btree (agent_release_id);
 
 
 --
--- Name: index_agent_server_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_server_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_server_archives_on_expired_at ON agent_server_archives USING btree (expired_at);
 
 
 --
--- Name: index_agent_server_archives_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_server_archives_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_server_archives_on_uuid ON agent_server_archives USING btree (uuid);
 
 
 --
--- Name: index_agent_server_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_server_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_server_archives_on_valid_at ON agent_server_archives USING btree (valid_at);
 
 
 --
--- Name: index_agent_servers_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_servers_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_servers_on_account_id ON agent_servers USING btree (account_id);
 
 
 --
--- Name: index_agent_servers_on_agent_release_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_servers_on_agent_release_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_servers_on_agent_release_id ON agent_servers USING btree (agent_release_id);
 
 
 --
--- Name: index_agent_servers_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_servers_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_servers_on_expired_at ON agent_servers USING btree (expired_at);
 
 
 --
--- Name: index_agent_servers_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_servers_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_servers_on_uuid ON agent_servers USING btree (uuid);
 
 
 --
--- Name: index_agent_servers_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_agent_servers_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_agent_servers_on_valid_at ON agent_servers USING btree (valid_at);
 
 
 --
--- Name: index_billing_plans_on_subscription_plan_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_billing_plans_on_subscription_plan_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_billing_plans_on_subscription_plan_id ON billing_plans USING btree (subscription_plan_id);
 
 
 --
--- Name: index_billing_plans_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_billing_plans_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_billing_plans_on_user_id ON billing_plans USING btree (user_id);
 
 
 --
--- Name: index_bundle_archives_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundle_archives_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundle_archives_on_account_id ON bundle_archives USING btree (account_id);
 
 
 --
--- Name: index_bundle_archives_on_agent_server_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundle_archives_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundle_archives_on_agent_server_id ON bundle_archives USING btree (agent_server_id);
 
 
 --
--- Name: index_bundle_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundle_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundle_archives_on_expired_at ON bundle_archives USING btree (expired_at);
 
 
 --
--- Name: index_bundle_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundle_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundle_archives_on_valid_at ON bundle_archives USING btree (valid_at);
 
 
 --
--- Name: index_bundled_package_archives_on_bundle_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundled_package_archives_on_bundle_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundled_package_archives_on_bundle_id ON bundled_package_archives USING btree (bundle_id);
 
 
 --
--- Name: index_bundled_package_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundled_package_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundled_package_archives_on_expired_at ON bundled_package_archives USING btree (expired_at);
 
 
 --
--- Name: index_bundled_package_archives_on_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundled_package_archives_on_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundled_package_archives_on_package_id ON bundled_package_archives USING btree (package_id);
 
 
 --
--- Name: index_bundled_package_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundled_package_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundled_package_archives_on_valid_at ON bundled_package_archives USING btree (valid_at);
 
 
 --
--- Name: index_bundled_packages_on_bundle_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundled_packages_on_bundle_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundled_packages_on_bundle_id ON bundled_packages USING btree (bundle_id);
 
 
 --
--- Name: index_bundled_packages_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundled_packages_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundled_packages_on_expired_at ON bundled_packages USING btree (expired_at);
 
 
 --
--- Name: index_bundled_packages_on_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundled_packages_on_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundled_packages_on_package_id ON bundled_packages USING btree (package_id);
 
 
 --
--- Name: index_bundled_packages_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundled_packages_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundled_packages_on_valid_at ON bundled_packages USING btree (valid_at);
 
 
 --
--- Name: index_bundles_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundles_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundles_on_account_id ON bundles USING btree (account_id);
 
 
 --
--- Name: index_bundles_on_account_id_and_agent_server_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundles_on_account_id_and_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundles_on_account_id_and_agent_server_id ON bundles USING btree (account_id, agent_server_id);
 
 
 --
--- Name: index_bundles_on_account_id_and_agent_server_id_and_path; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundles_on_account_id_and_agent_server_id_and_path; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundles_on_account_id_and_agent_server_id_and_path ON bundles USING btree (account_id, agent_server_id, path);
 
 
 --
--- Name: index_bundles_on_agent_server_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundles_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundles_on_agent_server_id ON bundles USING btree (agent_server_id);
 
 
 --
--- Name: index_bundles_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundles_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundles_on_expired_at ON bundles USING btree (expired_at);
 
 
 --
--- Name: index_bundles_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_bundles_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_bundles_on_valid_at ON bundles USING btree (valid_at);
 
 
 --
--- Name: index_email_messages_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_email_messages_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_email_messages_on_account_id ON email_messages USING btree (account_id);
 
 
 --
--- Name: index_email_messages_on_sent_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_email_messages_on_sent_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_email_messages_on_sent_at ON email_messages USING btree (sent_at);
 
 
 --
--- Name: index_is_it_vuln_results_on_ident; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_is_it_vuln_results_on_ident; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_is_it_vuln_results_on_ident ON is_it_vuln_results USING btree (ident);
 
 
 --
--- Name: index_log_api_calls_on_action; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_api_calls_on_action; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_api_calls_on_action ON log_api_calls USING btree (action);
 
 
 --
--- Name: index_log_bundle_patches_on_bundle_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_patches_on_bundle_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_patches_on_bundle_id ON log_bundle_patches USING btree (bundle_id);
 
 
 --
--- Name: index_log_bundle_patches_on_bundled_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_patches_on_bundled_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_patches_on_bundled_package_id ON log_bundle_patches USING btree (bundled_package_id);
 
 
 --
--- Name: index_log_bundle_patches_on_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_patches_on_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_patches_on_package_id ON log_bundle_patches USING btree (package_id);
 
 
 --
--- Name: index_log_bundle_patches_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_patches_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_patches_on_vulnerability_id ON log_bundle_patches USING btree (vulnerability_id);
 
 
 --
--- Name: index_log_bundle_patches_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_patches_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_patches_on_vulnerable_dependency_id ON log_bundle_patches USING btree (vulnerable_dependency_id);
 
 
 --
--- Name: index_log_bundle_patches_on_vulnerable_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_patches_on_vulnerable_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_patches_on_vulnerable_package_id ON log_bundle_patches USING btree (vulnerable_package_id);
 
 
 --
--- Name: index_log_bundle_vulnerabilities_on_bundle_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_vulnerabilities_on_bundle_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_vulnerabilities_on_bundle_id ON log_bundle_vulnerabilities USING btree (bundle_id);
 
 
 --
--- Name: index_log_bundle_vulnerabilities_on_bundled_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_vulnerabilities_on_bundled_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_vulnerabilities_on_bundled_package_id ON log_bundle_vulnerabilities USING btree (bundled_package_id);
 
 
 --
--- Name: index_log_bundle_vulnerabilities_on_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_vulnerabilities_on_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_vulnerabilities_on_package_id ON log_bundle_vulnerabilities USING btree (package_id);
 
 
 --
--- Name: index_log_bundle_vulnerabilities_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_vulnerabilities_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_vulnerabilities_on_vulnerability_id ON log_bundle_vulnerabilities USING btree (vulnerability_id);
 
 
 --
--- Name: index_log_bundle_vulnerabilities_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_vulnerabilities_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_vulnerabilities_on_vulnerable_dependency_id ON log_bundle_vulnerabilities USING btree (vulnerable_dependency_id);
 
 
 --
--- Name: index_log_bundle_vulnerabilities_on_vulnerable_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_log_bundle_vulnerabilities_on_vulnerable_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_log_bundle_vulnerabilities_on_vulnerable_package_id ON log_bundle_vulnerabilities USING btree (vulnerable_package_id);
 
 
 --
--- Name: index_notifications_on_email_message_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notifications_on_email_message_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notifications_on_email_message_id ON notifications USING btree (email_message_id);
 
 
 --
--- Name: index_notifications_on_log_bundle_patch_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notifications_on_log_bundle_patch_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notifications_on_log_bundle_patch_id ON notifications USING btree (log_bundle_patch_id);
 
 
 --
--- Name: index_notifications_on_log_bundle_vulnerability_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notifications_on_log_bundle_vulnerability_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notifications_on_log_bundle_vulnerability_id ON notifications USING btree (log_bundle_vulnerability_id);
 
 
 --
--- Name: index_of_six_kings_LBP; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_of_six_kings_LBP; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX "index_of_six_kings_LBP" ON log_bundle_patches USING btree (bundle_id, package_id, bundled_package_id, vulnerability_id, vulnerable_dependency_id, vulnerable_package_id);
 
 
 --
--- Name: index_of_six_kings_LBV; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_of_six_kings_LBV; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX "index_of_six_kings_LBV" ON log_bundle_vulnerabilities USING btree (bundle_id, package_id, bundled_package_id, vulnerability_id, vulnerable_dependency_id, vulnerable_package_id);
 
 
 --
--- Name: index_package_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_package_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_package_archives_on_expired_at ON package_archives USING btree (expired_at);
 
 
 --
--- Name: index_package_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_package_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_package_archives_on_valid_at ON package_archives USING btree (valid_at);
 
 
 --
--- Name: index_packages_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_packages_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_packages_on_expired_at ON packages USING btree (expired_at);
 
 
 --
--- Name: index_packages_on_name_and_version_and_platform_and_release; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_packages_on_name_and_version_and_platform_and_release; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_packages_on_name_and_version_and_platform_and_release ON packages USING btree (name, version, platform, release);
 
 
 --
--- Name: index_packages_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_packages_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_packages_on_valid_at ON packages USING btree (valid_at);
 
 
 --
--- Name: index_queued_advisories_on_identifier; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_queued_advisories_on_identifier; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_queued_advisories_on_identifier ON queued_advisories USING btree (identifier);
 
 
 --
--- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_subscription_plans_on_default ON subscription_plans USING btree ("default");
 
 
 --
--- Name: index_subscription_plans_on_discount; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_subscription_plans_on_discount; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_subscription_plans_on_discount ON subscription_plans USING btree (discount);
 
 
 --
--- Name: index_users_on_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_users_on_account_id ON users USING btree (account_id);
 
 
 --
--- Name: index_users_on_activation_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_activation_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_users_on_activation_token ON users USING btree (activation_token);
 
 
 --
--- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
--- Name: index_users_on_last_logout_at_and_last_activity_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_last_logout_at_and_last_activity_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_users_on_last_logout_at_and_last_activity_at ON users USING btree (last_logout_at, last_activity_at);
 
 
 --
--- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
 
 
 --
--- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
 
 
 --
--- Name: index_vulnerabilities_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerabilities_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerabilities_on_expired_at ON vulnerabilities USING btree (expired_at);
 
 
 --
--- Name: index_vulnerabilities_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerabilities_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerabilities_on_valid_at ON vulnerabilities USING btree (valid_at);
 
 
 --
--- Name: index_vulnerability_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerability_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerability_archives_on_expired_at ON vulnerability_archives USING btree (expired_at);
 
 
 --
--- Name: index_vulnerability_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerability_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerability_archives_on_valid_at ON vulnerability_archives USING btree (valid_at);
 
 
 --
--- Name: index_vulnerable_dependencies_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_dependencies_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_dependencies_on_expired_at ON vulnerable_dependencies USING btree (expired_at);
 
 
 --
--- Name: index_vulnerable_dependencies_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_dependencies_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_dependencies_on_valid_at ON vulnerable_dependencies USING btree (valid_at);
 
 
 --
--- Name: index_vulnerable_dependency_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_dependency_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_dependency_archives_on_expired_at ON vulnerable_dependency_archives USING btree (expired_at);
 
 
 --
--- Name: index_vulnerable_dependency_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_dependency_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_dependency_archives_on_valid_at ON vulnerable_dependency_archives USING btree (valid_at);
 
 
 --
--- Name: index_vulnerable_package_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_package_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_package_archives_on_expired_at ON vulnerable_package_archives USING btree (expired_at);
 
 
 --
--- Name: index_vulnerable_package_archives_on_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_package_archives_on_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_package_archives_on_package_id ON vulnerable_package_archives USING btree (package_id);
 
 
 --
--- Name: index_vulnerable_package_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_package_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_package_archives_on_valid_at ON vulnerable_package_archives USING btree (valid_at);
 
 
 --
--- Name: index_vulnerable_package_archives_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_package_archives_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_package_archives_on_vulnerability_id ON vulnerable_package_archives USING btree (vulnerability_id);
 
 
 --
--- Name: index_vulnerable_package_archives_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_package_archives_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_package_archives_on_vulnerable_dependency_id ON vulnerable_package_archives USING btree (vulnerable_dependency_id);
 
 
 --
--- Name: index_vulnerable_packages_on_expired_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_packages_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_packages_on_expired_at ON vulnerable_packages USING btree (expired_at);
 
 
 --
--- Name: index_vulnerable_packages_on_package_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_packages_on_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_packages_on_package_id ON vulnerable_packages USING btree (package_id);
 
 
 --
--- Name: index_vulnerable_packages_on_valid_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_packages_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_packages_on_valid_at ON vulnerable_packages USING btree (valid_at);
 
 
 --
--- Name: index_vulnerable_packages_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_packages_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_packages_on_vulnerability_id ON vulnerable_packages USING btree (vulnerability_id);
 
 
 --
--- Name: index_vulnerable_packages_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_vulnerable_packages_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_packages_on_vulnerable_dependency_id ON vulnerable_packages USING btree (vulnerable_dependency_id);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
@@ -3059,7 +3064,7 @@ ALTER TABLE ONLY vulnerable_packages
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user",public;
+SET search_path TO "$user", public;
 
 INSERT INTO schema_migrations (version) VALUES ('20150125001115');
 
