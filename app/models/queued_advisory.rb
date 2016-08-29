@@ -30,6 +30,21 @@
 #
 
 class QueuedAdvisory < ActiveRecord::Base
+
+  scope :most_recent_advisory_per, ->(source) {
+    select("q1.*").from("queued_advisories q1 inner join 
+                        (select identifier, MAX(created_at) as created_at from queued_advisories inner_q group by identifier) q2 
+                        on q1.identifier = q2.identifier AND q1.created_at = q2.created_at").
+                        where("q1.source = ?", source)
+  }
+
+  scope :most_recent_advisory_for, ->(identifier, source) {
+    where(:identifier => identifier, :source => source).order("created_at DESC").limit(1)
+  }
+
+  def relevant_attributes
+    self.attributes.except("id", "created_at")
+  end
   def to_advisory_attributes
     self.attributes.except("id").merge(:queued_advisory_id => self.id)
   end
