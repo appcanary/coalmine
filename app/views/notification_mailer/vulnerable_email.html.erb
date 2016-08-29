@@ -19,29 +19,25 @@
                         <br>
                         <% @notifications_by_vuln.each_pair do |vuln, pkgs| %>
 
-                          <h2 clas="null">
-                            <span style="font-size:13px; line-height:1.3em">
-                              <%= link_to vuln.title, vuln_url(vuln.id) %>
-                            </span>
-                          </h2>
+                          <h2>
+                            <%= link_to vuln.title, vuln_url(vuln.id) %> </h2>
                           <% pkgs.each do |p| %>
-                            <p> in <strong><%= p.bundle.path %></strong></p>
-                            <p>Package: <%= p.package.name %></p>
-                            <p>Your version: <%= p.package.version %></p>	
-                            <p>Upgrade to: <%= versions_in_english(p.package.upgrade_to) %></p>
+                            <p> in <strong><%= link_to_bundle p.bundle %></strong></p>
+                            <p>Package: <code><%= p.package.name %></code></p>
+                            <p>Your version: <code><%= p.package.version %></code></p>	
+                            <%= email_display_upgrade_to(p.package) %>
                           <% end %>
+                          <h3>Description:</h3>
                           <p><%= vuln.description %></p>
 
-                          <h3 class="null">What now?</h3>
+                          <h3>What now?</h3>
                           This issue may not affect you. But you should update the apps to the versions listed above.
 
-                          <p><a href="{{ vulnLink }}" target="_blank">More information.</a></p>
                           <hr/>
+                          <br/>
                         <% end %>
 
-
-
-                        <h4 class="null">Questions? Concerns? Reply to this message, and we'll help you out.</h4>
+                        <h4>Questions? Concerns? Reply to this message, and we'll help you out.</h4>
 
                       </td>
                     </tr>

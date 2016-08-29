@@ -105,11 +105,44 @@ module ApplicationHelper
     end
   end
 
+  def email_display_upgrade_to(package)
+    patches = sort_versions(package.upgrade_to)
+    main_ver = patches[0]
+    remaining_patches = patches[1..-1]
+
+    str = nil
+
+    if main_ver
+      str = "<p>Upgrade to: <code>#{h main_ver}</code></p>"
+      if remaining_patches.present?
+        str += "<p>Other safe versions: #{remaining_patches.map { |pv| "<code>#{h pv}</code>" }.join(", ")}"
+      end
+    else
+      str = "<p>Upgrade to: No patches exist right now.</p>"
+    end
+
+    str.html_safe
+    
+  end
+
   def time_ago_in_words_or_never(time)
     if time
       "#{time_ago_in_words time} ago"
     else
       "never"
     end
+  end
+
+  def link_to_bundle(bundle)
+    if bundle.agent_server_id
+      link_to bundle.display_name, server_app_url(bundle, server_id: bundle.agent_server_id)
+    else
+      link_to bundle.display_name, monitors_url(bundle)
+    end
+  end
+
+  def render_vuln_description(vuln)
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(escape_html: true), autolink: true, tables: true, no_intra_emphasis: true, fenced_code_blocks: true)
+    markdown.render(vuln.description).html_safe
   end
 end

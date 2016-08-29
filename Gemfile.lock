@@ -154,6 +154,10 @@ GEM
       json (~> 1.8)
     jwt (1.2.1)
     kgio (2.9.3)
+    launchy (2.4.3)
+      addressable (~> 2.3)
+    letter_opener (1.4.1)
+      launchy (~> 2.2)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.4)
@@ -236,6 +240,7 @@ GEM
     raindrops (0.13.0)
     rake (11.2.2)
     rdoc (4.2.0)
+    redcarpet (3.3.4)
     redis (3.2.1)
     reform (2.2.1)
       disposable (>= 0.3.0, < 0.4.0)
@@ -345,6 +350,7 @@ DEPENDENCIES
   httparty
   intercom
   jquery-rails
+  letter_opener
   minitest-reporters
   minitest-spec-rails
   mocha (~> 1.1.0)
@@ -355,6 +361,7 @@ DEPENDENCIES
   pry-rails
   que (~> 0.11.6)
   rails (= 4.2.6)
+  redcarpet
   redis
   reform
   reform-rails

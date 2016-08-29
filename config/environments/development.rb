@@ -40,4 +40,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.que.mode = :off
+
+  # plugin for emails
+  config.action_mailer.delivery_method = :letter_opener
 end
