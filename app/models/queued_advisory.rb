@@ -19,6 +19,8 @@
 #  dsa_id              :string
 #  rhsa_id             :string
 #  cesa_id             :string
+#  alas_id             :string
+#  debianbug           :string
 #  source              :string
 #  reported_at         :datetime
 #  created_at          :datetime         not null

@@ -6,11 +6,9 @@ class CreateQueuedAdvisories < ActiveRecord::Migration
       t.string :package_platform, null: false
       t.string :package_names, array:true, :default => [], null: false
 
-      t.string :affected_arches, array: true, :default => [], null: false
-      t.string :affected_releases, array: true, :default => [], null: false
-
-      t.text :patched_versions, array: true, :default => [], null: false
-      t.text :unaffected_versions, array: true, :default => [], null: false
+      t.jsonb :patched, :default => [], null: false
+      t.jsonb :affected, :default => [], null: false
+      t.jsonb :unaffected, :default => [], null: false
 
       t.string :title
       t.text :description
@@ -22,6 +20,8 @@ class CreateQueuedAdvisories < ActiveRecord::Migration
       t.string :dsa_id
       t.string :rhsa_id
       t.string :cesa_id
+      t.string :alas_id
+      t.string :debianbug
       t.string :source
 
       t.datetime :reported_at
