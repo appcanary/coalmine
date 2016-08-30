@@ -50,6 +50,11 @@ class QueuedAdvisory < ActiveRecord::Base
     where(:source => CesaImporter::SOURCE)
   }
 
+  scope :from_alas, -> {
+    where(:source => AlasImporter::SOURCE)
+  }
+
+
 
   def relevant_attributes
     self.attributes.except("id", "created_at")
