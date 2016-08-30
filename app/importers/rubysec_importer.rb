@@ -1,7 +1,7 @@
 class RubysecImporter
   SOURCE = "rubysec"
   REPO_URL = "https://github.com/rubysec/ruby-advisory-db.git"
-  REPO_PATH = "tmp/importer/rubysec"
+  REPO_PATH = "tmp/importers/rubysec"
 
   def initialize(repo_path = nil, repo_url = nil)
     @repo_url = repo_url || REPO_URL

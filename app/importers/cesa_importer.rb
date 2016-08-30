@@ -1,7 +1,7 @@
 class CesaImporter
   SOURCE = "cesa"
   REPO_URL = "https://github.com/stevemeier/cefs.git"
-  REPO_PATH = "tmp/importer/cefs"
+  REPO_PATH = "tmp/importers/cefs"
 
   ERRATA_PATH =  "errata.latest.xml"
 
