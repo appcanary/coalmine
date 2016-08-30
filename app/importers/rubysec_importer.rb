@@ -1,46 +1,53 @@
-require 'fileutils'
 class RubysecImporter
   SOURCE = "rubysec"
   REPO_URL = "https://github.com/rubysec/ruby-advisory-db.git"
   REPO_PATH = "tmp/importer/rubysec"
 
-  # TODO: test, natch
+  def initialize(repo_path = nil, repo_url = nil)
+    @repo_url = repo_url || REPO_URL
+    @repo_path = repo_path || REPO_PATH
+  end
+
   def import!
-    git = GitHandler.new(self.class, REPO_URL, local_path)
+    git = GitHandler.new(self.class, @repo_url, local_path)
     git.fetch_and_update_repo!
 
-    all_advisories = load_advisories
+    raw_advisories = fetch_advisories
+    all_advisories = raw_advisories.map { |ra| parse(ra) }
     process_advisories(all_advisories)
   end
 
   def local_path
-    File.join(Rails.root, REPO_PATH)
+    File.join(Rails.root, @repo_path)
   end
 
   
-  def load_advisories
-    Dir[File.join(local_path, "gems", "/**/**yml")].map do |ymlf|
-      RubysecAdvisory.new(ymlf, YAML.load_file(ymlf))
-    end
+  def fetch_advisories
+    Dir[File.join(local_path, "gems", "/**/**yml")]  
+  end
+
+  def parse(ymlfile)
+    hsh = YAML.load_file(ymlfile)
+    RubysecAdvisory.new(ymlfile, hsh)
   end
 
   def process_advisories(all_advisories)
     all_advisories.each do |adv|
-      if qadv = QueuedAdvisory.most_recent_advisory_for(adv.identifier, SOURCE).first
-        new_attributes = adv.to_advisory_attributes
+      qadv = QueuedAdvisory.most_recent_advisory_for(adv.identifier, SOURCE).first
 
-        if has_changed?(qadv, new_attributes)
-          QueuedAdvisory.create!(new_attributes)
-        end
-        # else. do nothing.
-      else
+      if qadv.nil?
         # oh look, a new advisory!
         QueuedAdvisory.create!(adv.to_advisory_attributes)
+      else
+        if has_changed?(qadv, adv)
+          QueuedAdvisory.create!(adv.to_advisory_attributes)
+        end
       end
     end
   end
 
-  def has_changed?(existing_advisory, new_attributes)
+  def has_changed?(existing_advisory, adv)
+    new_attributes = adv.to_advisory_attributes
     relevant_attributes = existing_advisory.attributes.keep_if { |k, _| new_attributes.key?(k) }
     
     relevant_attributes != new_attributes
@@ -62,14 +69,20 @@ class RubysecImporter
       end
     end
 
+    # use the actual file path as an identifier
+    # will break when we switch away from OSVDB
     def identifier
       filepath.split("/")[-2..-1].join("/")
+    end
+
+    def to_constraint(c, n)
+      {"constraint" => c, "name" => n}
     end
 
     def generate_patched
       if patched_versions
         patched_versions.map do |pv|
-          {"constraint" => pv, "name" => gem}
+          to_constraint(pv, gem)
         end
       else
         []
@@ -78,8 +91,8 @@ class RubysecImporter
 
     def generate_unaffected
       if unaffected_versions
-        unaffected_versions.map do |pv|
-          {"constraint" => pv, "name" => gem}
+        unaffected_versions.map do |uv|
+          to_constraint(uv, gem)
         end
       else
         []
@@ -126,19 +139,20 @@ class RubysecImporter
     end
 
     def to_advisory_attributes
-      {
-        "identifier" => identifier,
-        "package_platform" => Platforms::Ruby,
-        "package_names" => [gem],
-        "patched" => generate_patched,
-        "unaffected" => generate_unaffected,
-        "title" => title,
-        "description" => description,
-        "cve_ids" => generate_cve_ids,
-        "osvdb_id" => generate_osvdb_id,
-        "reported_at" => generate_reported_at,
-        "criticality" => generate_criticality,
-        "source" => SOURCE
+      @advisory_attributes ||= 
+        {
+          "identifier" => identifier,
+          "package_platform" => Platforms::Ruby,
+          "package_names" => [gem],
+          "patched" => generate_patched,
+          "unaffected" => generate_unaffected,
+          "title" => title,
+          "description" => description,
+          "cve_ids" => generate_cve_ids,
+          "osvdb_id" => generate_osvdb_id,
+          "reported_at" => generate_reported_at,
+          "criticality" => generate_criticality,
+          "source" => SOURCE
       }
     end
   end

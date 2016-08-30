@@ -3,27 +3,36 @@ class CesaImporter
   REPO_URL = "https://github.com/stevemeier/cefs.git"
   REPO_PATH = "tmp/importer/cefs"
 
-  ERRATA_PATH = File.join(REPO_PATH, "errata.latest.xml")
+  ERRATA_PATH =  "errata.latest.xml"
+
+  def initialize(repo_path = nil, repo_url = nil)
+    @repo_url = repo_url || REPO_URL
+    @repo_path = repo_path || REPO_PATH
+  end
 
   def import!
-    git = GitHandler.new(self.class, REPO_URL, local_path)
+    git = GitHandler.new(self.class, @repo_url, local_path)
     git.fetch_and_update_repo!
 
-    errata_file = File.open(errata_path, "r")
-    document = Nokogiri::XML.parse(errata_file)
-
-    cesa_elements = fetch_cesa_elements(document)
-    all_advisories = load_advisories(cesa_elements)
+    raw_advisories = fetch_advisories
+    all_advisories = raw_advisories.map { |ra| parse(ra) }
 
     process_advisories(all_advisories)
   end
 
   def local_path
-    File.join(Rails.root, REPO_PATH)
+    File.join(Rails.root, @repo_path)
   end
 
   def errata_path
-    File.join(Rails.root, ERRATA_PATH)
+    File.join(Rails.root, @repo_path, ERRATA_PATH)
+  end
+
+  def fetch_advisories
+    errata_file = File.open(errata_path, "r")
+    document = Nokogiri::XML.parse(errata_file)
+
+    cesa_elements = fetch_cesa_elements(document)
   end
 
   def fetch_cesa_elements(document)
@@ -32,59 +41,58 @@ class CesaImporter
     }
   end
 
-  def load_advisories(cesa_elements)
-    cesa_elements.map do |cesa|
-      cesa_id = cesa.name
+  def parse(cesa)
+    cesa_id = cesa.name
 
-      attr = cesa.attributes
+    attr = cesa.attributes
 
-      issue_date = attr["issue_date"].value
+    issue_date = attr["issue_date"].value
 
-      if issue_date
-        issue_date = DateTime.parse(issue_date)
-      end
-
-      os_arches = cesa.xpath('os_arch').map(&:text)
-      os_releases = cesa.xpath('os_release').map(&:text)
-      packages = cesa.xpath('packages').map(&:text)
-      severity = attr["severity"].try(:value)
-      synopsis = attr["synopsis"].value
-  
-
-      CesaAdvisory.new({
-        "cesa_id" => cesa_id,
-        "issue_date" => issue_date,
-        "os_arches" => os_arches,
-        "os_releases" => os_releases,
-        "packages" => packages,
-        "severity" => severity,
-        "synopsis" => synopsis,
-      })
+    if issue_date
+      issue_date = DateTime.parse(issue_date)
     end
+
+    os_arches = cesa.xpath('os_arch').map(&:text)
+    os_releases = cesa.xpath('os_release').map(&:text)
+    packages = cesa.xpath('packages').map(&:text)
+    severity = attr["severity"].try(:value)
+    synopsis = attr["synopsis"].value
+
+
+    CesaAdvisory.new({
+      "cesa_id" => cesa_id,
+      "issue_date" => issue_date,
+      "os_arches" => os_arches,
+      "os_releases" => os_releases,
+      "packages" => packages,
+      "severity" => severity,
+      "synopsis" => synopsis,
+    })
   end
 
   def process_advisories(all_advisories)
     all_advisories.each do |adv|
-      if qadv = QueuedAdvisory.most_recent_advisory_for(adv.identifier, SOURCE).first
-        new_attributes = adv.to_advisory_attributes
+      qadv = QueuedAdvisory.most_recent_advisory_for(adv.identifier, SOURCE).first
 
-        if has_changed?(qadv, new_attributes)
-          QueuedAdvisory.create!(new_attributes)
-        end
-        # else. do nothing.
-      else
+      if qadv.nil?
         # oh look, a new advisory!
         QueuedAdvisory.create!(adv.to_advisory_attributes)
+      else
+        if has_changed?(qadv, adv)
+          QueuedAdvisory.create!(adv.to_advisory_attributes)
+        end
       end
     end
   end
 
-  def has_changed?(existing_advisory, new_attributes)
+  def has_changed?(existing_advisory, adv)
+    new_attributes = adv.to_advisory_attributes
     relevant_attributes = existing_advisory.attributes.keep_if { |k, _| new_attributes.key?(k) }
-    
+
     relevant_attributes != new_attributes
   end
 
+  # TODO: what about related urls?
   class CesaAdvisory
     ATTR = ['cesa_id', 'issue_date', 'synopsis', 'severity', 'os_arches', 'os_releases', 'packages']
     ATTR_LOOKUP = Hash[ ATTR.map { |attr| [attr, true] } ]
@@ -136,7 +144,7 @@ class CesaImporter
     end
 
     def to_advisory_attributes
-      {
+      @advisory_attributes ||= {
         "identifier" => identifier,
         "package_platform" => Platforms::CentOS,
         "patched" => generate_patched,

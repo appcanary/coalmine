@@ -42,6 +42,15 @@ class QueuedAdvisory < ActiveRecord::Base
     where(:identifier => identifier, :source => source).order("created_at DESC").limit(1)
   }
 
+  scope :from_rubysec, -> {
+    where(:source => RubysecImporter::SOURCE)
+  }
+
+  scope :from_cesa, -> {
+    where(:source => CesaImporter::SOURCE)
+  }
+
+
   def relevant_attributes
     self.attributes.except("id", "created_at")
   end
