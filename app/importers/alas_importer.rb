@@ -1,17 +1,11 @@
 require 'open-uri'
-class AlasImporter
+class AlasImporter < AdvisoryImporter
   SOURCE = "alas"
   URL = "https://alas.aws.amazon.com/index.html"
 
   def initialize(url = nil)
     @index_url = url || URL
     @base_url = File.dirname(url)
-  end
-
-  def import!
-    raw_advisories = fetch_advisories
-    all_advisories = raw_advisories.map { |ra| parse(ra) }
-    process_advisories(all_advisories)
   end
 
   def fetch_advisories
@@ -75,84 +69,5 @@ class AlasImporter
       # "affected_packages" => affected_packages,
       "new_packages" => new_packages,
     })
-  end
-
-  def process_advisories(all_advisories)
-    all_advisories.each do |adv|
-      qadv = QueuedAdvisory.most_recent_advisory_for(adv.identifier, SOURCE).first
-
-      if qadv.nil?
-        # oh look, a new advisory!
-        QueuedAdvisory.create!(adv.to_advisory_attributes)
-      else
-        if has_changed?(qadv, adv)
-          QueuedAdvisory.create!(adv.to_advisory_attributes)
-        end
-      end
-    end
-  end
-
-  def has_changed?(existing_advisory, adv)
-    new_attributes = adv.to_advisory_attributes
-    relevant_attributes = existing_advisory.attributes.keep_if { |k, _| new_attributes.key?(k) }
-
-    relevant_attributes != new_attributes
-  end
-
-
-  class AlasAdvisory
-    ATTR = ['alas_id', 'cve_ids', 'severity', 'released_at', 
-            'description', 'affected_packages', 'new_packages']
-    ATTR_LOOKUP = Hash[ ATTR.map { |attr| [attr, true] } ]
-    attr_accessor *ATTR.map(&:to_sym)
-
-    def initialize(hsh)
-      hsh.each_pair do |k, v|
-        if ATTR_LOOKUP[k]
-          self.send("#{k}=", v)
-        end
-      end
-    end
-
-    def identifier
-      alas_id
-    end
-
-    def reported_at
-      DateTime.parse(released_at).utc
-    end
-
-    def affected
-      # ??
-    end
-
-    def patched
-      new_packages.map { |p|
-        {"filename" => p}
-      }
-    end
-
-    def generate_criticality
-      if severity
-        severity.downcase
-      else
-        "unknown"
-      end
-    end
-
-    def to_advisory_attributes
-      @advisory_attributes ||=
-        {
-          "identifier" => alas_id,
-          "package_platform" => Platforms::Amazon,
-          "reported_at" => reported_at,
-          "criticality" => generate_criticality,
-          "cve_ids" => cve_ids,
-          "description" => description,
-          # "affected" => affected,
-          "patched" => patched,
-          "source" => SOURCE
-      }
-    end
   end
 end
