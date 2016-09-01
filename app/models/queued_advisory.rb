@@ -54,6 +54,11 @@ class QueuedAdvisory < ActiveRecord::Base
     where(:source => AlasImporter::SOURCE)
   }
 
+   scope :from_ubuntu, -> {
+    where(:source => UbuntuTrackerImporter::SOURCE)
+  }
+
+
 
 
   def relevant_attributes

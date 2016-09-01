@@ -1,4 +1,4 @@
-class UbuntuTrackerImporter
+class UbuntuTrackerImporter < AdvisoryImporter
   SOURCE = "ubuntu-tracker"
   REPO_URL = "https://launchpad.net/ubuntu-cve-tracker"
   REPO_PATH = "tmp/importers/ubuntu-cve-tracker"
@@ -10,18 +10,13 @@ class UbuntuTrackerImporter
     @repo_url = REPO_URL
   end
 
-  def import!
-    # bzr = BzrHandler.new(self.class, @repo_url, local_path)
-    # bzr.fetch_and_update_repo!
-
-    raw_advisories = fetch_advisories
-    all_advisories = raw_advisories[0..2].map { |ra| parse(ra) }
-
-    # process_advisories(all_advisories)
-  end
-
   def local_path
     File.join(Rails.root, @repo_path)
+  end
+
+  def update_local_store!
+    bzr = BzrHandler.new(self.class, @repo_url, local_path)
+    bzr.fetch_and_update_repo!
   end
 
   def fetch_advisories
@@ -64,7 +59,7 @@ class UbuntuTrackerImporter
         k, v = cur_line.split(":")
 
         if v.present?
-          hsh[k] = v.strip
+          hsh[k.downcase.underscore] = v.strip
           next
         end
       end
@@ -91,13 +86,13 @@ class UbuntuTrackerImporter
       end
 
       if values.present?
-        hsh[k] = values
+        hsh[k.downcase.underscore] = values
       else
-        hsh[k] = nil
+        hsh[k.downcase.underscore] = nil
       end
     end
 
-    hsh
+    UbuntuTrackerAdvisory.new(hsh)
   end
 
   def parse_patches_section(hsh, lines)
@@ -107,38 +102,16 @@ class UbuntuTrackerImporter
       if (matches = cur_line.match(PATCHES_REGEX))
         _, release, package, status, notes = matches.to_a
 
-        hsh["Patches"] ||= []
+        hsh["patches"] ||= []
         o = {"release" => release, 
              "package" => package, 
              "status" => status, 
              "notes" => notes}
-        hsh["Patches"] << o
+        hsh["patches"] << o
       end
     end
 
     hsh
   end
 
-  def patch_status_key(status)
-    case status
-    when "not-affected"
-      "unaffected"
-    when "needs-triage"
-      false
-    when "DNE"
-      false
-
-    # potentially useful category
-    when "ignored"
-      false
-    when "pending"
-      "affected"
-    when "deferred"
-      "affected"
-    when "needed"
-      "affected"
-    else
-      "patched"
-    end
-  end
 end
