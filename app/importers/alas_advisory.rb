@@ -1,6 +1,6 @@
-class AlasAdvisory < Advisory.new(:alas_id, :cve_ids, :severity, 
-                                  :released_at, :description, :affected_packages, 
-                                  :new_packages)
+class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity, 
+                                           :released_at, :description, :affected_packages, 
+                                           :new_packages)
 
   def identifier
     alas_id
