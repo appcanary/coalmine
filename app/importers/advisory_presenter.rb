@@ -1,3 +1,11 @@
+# the job of advisory presenters is to
+# intermediate between the raw parsed output
+# of our importer content, and the specific
+# structure we hold in our advisories.
+#
+# This way FooImporter dumps a hash into FooAdvisoryPresenter
+# and then FooAdvisoryPresenter creates its corresponding Advisory
+# Not totally unrelated from Form objects, really.
 class AdvisoryPresenter < Struct
   def initialize(hsh)
     super *members.map{|k| hsh[k.to_s] }

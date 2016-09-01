@@ -1,8 +1,17 @@
+# skeleton for all importers.
 class AdvisoryImporter
   def import!
+    update_local_store!
     raw_advisories = fetch_advisories
     all_advisories = raw_advisories.map { |ra| parse(ra) }
     process_advisories(all_advisories)
+  end
+
+  def update_local_store!
+    # not everyone needs to do this.
+    # benefit of breaking this out
+    # is so we can test these classes
+    # more readily.
   end
 
   def process_advisories(all_advisories)

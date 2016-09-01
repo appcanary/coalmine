@@ -18,10 +18,12 @@ class CesaImporter < AdvisoryImporter
     File.join(Rails.root, @repo_path, ERRATA_PATH)
   end
 
-  def fetch_advisories
+  def update_local_store!
     git = GitHandler.new(self.class, @repo_url, local_path)
     git.fetch_and_update_repo!
- 
+  end
+
+  def fetch_advisories
     errata_file = File.open(errata_path, "r")
     document = Nokogiri::XML.parse(errata_file)
 

@@ -12,10 +12,12 @@ class RubysecImporter < AdvisoryImporter
     File.join(Rails.root, @repo_path)
   end
 
-  def fetch_advisories
-     git = GitHandler.new(self.class, @repo_url, local_path)
+  def update_local_store!
+    git = GitHandler.new(self.class, @repo_url, local_path)
     git.fetch_and_update_repo!
+  end
 
+  def fetch_advisories
     Dir[File.join(local_path, "gems", "/**/**yml")]  
   end
 
