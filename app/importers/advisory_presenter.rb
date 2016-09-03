@@ -7,7 +7,9 @@
 # and then FooAdvisoryPresenter creates its corresponding Advisory
 # Not totally unrelated from Form objects, really.
 class AdvisoryPresenter < Struct
-  def initialize(hsh)
+  attr_accessor :source_text
+  def initialize(hsh, source_text = nil)
+    @source_text = source_text
     super *members.map{|k| hsh[k.to_s] }
   end
 

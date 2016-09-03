@@ -53,7 +53,6 @@ class CesaImporter < AdvisoryImporter
     severity = attr["severity"].try(:value)
     synopsis = attr["synopsis"].value
 
-
     CesaAdvisory.new({
       "cesa_id" => cesa_id,
       "issue_date" => issue_date,
@@ -62,7 +61,7 @@ class CesaImporter < AdvisoryImporter
       "packages" => packages,
       "severity" => severity,
       "synopsis" => synopsis,
-    })
+    }, cesa.to_s)
   end
 
 end

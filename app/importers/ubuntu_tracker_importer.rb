@@ -1,5 +1,5 @@
 class UbuntuTrackerImporter < AdvisoryImporter
-  SOURCE = "ubuntu-tracker"
+  SOURCE = "ubuntu-cve-tracker"
   REPO_URL = "https://launchpad.net/ubuntu-cve-tracker"
   REPO_PATH = "tmp/importers/ubuntu-cve-tracker"
 
@@ -24,7 +24,8 @@ class UbuntuTrackerImporter < AdvisoryImporter
   end
 
   def parse(cve_file)
-    lines = File.read(cve_file).lines
+    cve_text = File.read(cve_file)
+    lines = cve_text.lines
     hsh = {}
 
     still_parsing = true
@@ -92,7 +93,7 @@ class UbuntuTrackerImporter < AdvisoryImporter
       end
     end
 
-    UbuntuTrackerAdvisory.new(hsh)
+    UbuntuTrackerAdvisory.new(hsh, cve_text)
   end
 
   def parse_patches_section(hsh, lines)

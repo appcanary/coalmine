@@ -21,7 +21,7 @@ class DebianTrackerImporter < AdvisoryImporter
   end
 
   def parse(hsh)
-    DebianTrackerAdvisory.new(hsh)
+    DebianTrackerAdvisory.new(hsh, hsh)
   end
 
   # def process_advisories(all_advs)

@@ -68,6 +68,6 @@ class AlasImporter < AdvisoryImporter
       "description" => description,
       # "affected_packages" => affected_packages,
       "new_packages" => new_packages,
-    })
+    }, html)
   end
 end
