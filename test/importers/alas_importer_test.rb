@@ -24,6 +24,7 @@ class AlasImporterTest < ActiveSupport::TestCase
 
       # are we generating the patched json properly?
       assert new_attr["patched"].all? { |p| p["filename"].present? }
+      assert new_attr["source_text"].present?
     end
 
     # okay. does this dump into the db alright?

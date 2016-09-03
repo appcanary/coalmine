@@ -26,6 +26,7 @@ class CesaImporterTest < ActiveSupport::TestCase
 
       assert new_attr["patched"].all? { |p| p.key?("filename") }
       assert new_attr["affected"].all? { |p| p.key?("arch") && p.key?("release") }
+      assert new_attr["source_text"].present?
     end
 
 

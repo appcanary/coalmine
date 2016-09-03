@@ -43,6 +43,9 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
         ["needed", "active", "deferred", "pending", "released"].include?(hsh["status"])
       }
 
+
+      assert new_attr["source_text"].present?
+
       ubuntu_adv
     end
 

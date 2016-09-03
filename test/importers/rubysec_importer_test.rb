@@ -24,6 +24,7 @@ class RubysecImporterTest < ActiveSupport::TestCase
     assert new_attr["unaffected"].all? { |p| p.key?("constraint") }
 
     assert_equal "rubysec", new_attr["source"]
+    assert new_attr["source_text"].present?
 
     # okay. does this dump into the db alright?
 
