@@ -152,7 +152,7 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
       assert_response :not_found
 
       @bundle.reload
-      assert_equal old_pkgs, @bundle.packages
+      assert_equal old_pkgs, @bundle.packages.order(:id).to_a
 
       assert_equal "No monitor with that name was found", json_body["errors"].first["title"]
     end
