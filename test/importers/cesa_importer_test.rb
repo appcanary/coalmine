@@ -4,7 +4,7 @@ class CesaImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
     @importer = CesaImporter.new("test/data/cesa")
 
-    assert_equal 0, QueuedAdvisory.from_cesa.count
+    assert_equal 0, Advisory.from_cesa.count
 
     # there are four packages in our fixture
     raw_advisories = @importer.fetch_advisories
@@ -31,11 +31,11 @@ class CesaImporterTest < ActiveSupport::TestCase
     all_advisories = raw_advisories.map { |ra| @importer.parse(ra) }
     @importer.process_advisories(all_advisories)
 
-    assert_equal 4, QueuedAdvisory.from_cesa.count
+    assert_equal 4, Advisory.from_cesa.count
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)
-    assert_equal 4, QueuedAdvisory.from_cesa.count
+    assert_equal 4, Advisory.from_cesa.count
 
 
      # if we change an attribute tho we should get a more
@@ -46,6 +46,7 @@ class CesaImporterTest < ActiveSupport::TestCase
 
     @importer.process_advisories([new_cesaadv])
 
-    assert_equal 5, QueuedAdvisory.from_cesa.count
+    assert_equal 4, Advisory.from_cesa.count
+    assert_equal "new title omg", Advisory.from_cesa.order(:updated_at).last.title
   end
 end

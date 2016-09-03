@@ -4,7 +4,7 @@ class AlasImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
     @importer = AlasImporter.new(File.join(Rails.root, "test/data/alas/index.html"))
 
-    assert_equal 0, QueuedAdvisory.from_alas.count
+    assert_equal 0, Advisory.from_alas.count
     
     # there are four advisories in our fixture
     raw_advisories = @importer.fetch_advisories
@@ -27,11 +27,11 @@ class AlasImporterTest < ActiveSupport::TestCase
     all_advisories = raw_advisories.map { |ra| @importer.parse(ra) }
     @importer.process_advisories(all_advisories)
 
-    assert_equal 4, QueuedAdvisory.from_alas.count
+    assert_equal 4, Advisory.from_alas.count
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)
-    assert_equal 4, QueuedAdvisory.from_alas.count
+    assert_equal 4, Advisory.from_alas.count
 
 
     # if we change an attribute tho we should get a more
@@ -42,7 +42,7 @@ class AlasImporterTest < ActiveSupport::TestCase
 
     @importer.process_advisories([new_alas_adv])
 
-    assert_equal 5, QueuedAdvisory.from_alas.count
-
+    assert_equal 4, Advisory.from_alas.count
+    assert_equal "new description omg", Advisory.from_alas.order(:updated_at).last.description
   end
 end

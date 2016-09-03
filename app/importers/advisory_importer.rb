@@ -16,14 +16,14 @@ class AdvisoryImporter
 
   def process_advisories(all_advisories)
     all_advisories.each do |adv|
-      qadv = QueuedAdvisory.most_recent_advisory_for(adv.identifier, self.class::SOURCE).first
+      qadv = Advisory.most_recent_advisory_for(adv.identifier, self.class::SOURCE).first
 
       if qadv.nil?
         # oh look, a new advisory!
-        QueuedAdvisory.create!(adv.to_advisory_attributes)
+        Advisory.create!(adv.to_advisory_attributes)
       else
         if has_changed?(qadv, adv)
-          QueuedAdvisory.create!(adv.to_advisory_attributes)
+          qadv.update_attributes(adv.to_advisory_attributes)
         end
       end
     end

@@ -51,8 +51,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, queued_advisory_id, identifier, package_platform, package_names, affected_arches, affected_releases, patched_versions, unaffected_versions, title, description, criticality, cve_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.queued_advisory_id, OLD.identifier, OLD.package_platform, OLD.package_names, OLD.affected_arches, OLD.affected_releases, OLD.patched_versions, OLD.unaffected_versions, OLD.title, OLD.description, OLD.criticality, OLD.cve_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, package_platform, package_names, patched, affected, unaffected, title, description, criticality, related, cve_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, source, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.package_platform, OLD.package_names, OLD.patched, OLD.affected, OLD.unaffected, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.cve_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.source, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -220,24 +220,25 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 
 CREATE TABLE advisories (
     id integer NOT NULL,
-    queued_advisory_id integer NOT NULL,
     identifier character varying NOT NULL,
     package_platform character varying NOT NULL,
     package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    affected_arches character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    affected_releases character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
-    unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,
+    patched jsonb DEFAULT '[]'::jsonb NOT NULL,
+    affected jsonb DEFAULT '[]'::jsonb NOT NULL,
+    unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
     title character varying,
     description text,
     criticality character varying,
+    related jsonb DEFAULT '[]'::jsonb NOT NULL,
     cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     osvdb_id character varying,
     usn_id character varying,
     dsa_id character varying,
     rhsa_id character varying,
     cesa_id character varying,
+    source_text text,
     source character varying,
+    processed boolean,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -272,24 +273,25 @@ ALTER SEQUENCE advisories_id_seq OWNED BY advisories.id;
 CREATE TABLE advisory_archives (
     id integer NOT NULL,
     advisory_id integer NOT NULL,
-    queued_advisory_id integer NOT NULL,
     identifier character varying NOT NULL,
     package_platform character varying NOT NULL,
     package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    affected_arches character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    affected_releases character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
-    unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,
+    patched jsonb DEFAULT '[]'::jsonb NOT NULL,
+    affected jsonb DEFAULT '[]'::jsonb NOT NULL,
+    unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
     title character varying,
     description text,
     criticality character varying,
+    related jsonb DEFAULT '[]'::jsonb NOT NULL,
     cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     osvdb_id character varying,
     usn_id character varying,
     dsa_id character varying,
     rhsa_id character varying,
     cesa_id character varying,
+    source_text text,
     source character varying,
+    processed boolean,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -1148,54 +1150,6 @@ ALTER SEQUENCE que_jobs_job_id_seq OWNED BY que_jobs.job_id;
 
 
 --
--- Name: queued_advisories; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE queued_advisories (
-    id integer NOT NULL,
-    identifier character varying NOT NULL,
-    package_platform character varying NOT NULL,
-    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    patched jsonb DEFAULT '[]'::jsonb NOT NULL,
-    affected jsonb DEFAULT '[]'::jsonb NOT NULL,
-    unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
-    title character varying,
-    description text,
-    criticality character varying,
-    cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    osvdb_id character varying,
-    usn_id character varying,
-    dsa_id character varying,
-    rhsa_id character varying,
-    cesa_id character varying,
-    alas_id character varying,
-    debianbug character varying,
-    source character varying,
-    reported_at timestamp without time zone,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: queued_advisories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE queued_advisories_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: queued_advisories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE queued_advisories_id_seq OWNED BY queued_advisories.id;
-
-
---
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1726,13 +1680,6 @@ ALTER TABLE ONLY que_jobs ALTER COLUMN job_id SET DEFAULT nextval('que_jobs_job_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY queued_advisories ALTER COLUMN id SET DEFAULT nextval('queued_advisories_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
 
 
@@ -1994,14 +1941,6 @@ ALTER TABLE ONLY que_jobs
 
 
 --
--- Name: queued_advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY queued_advisories
-    ADD CONSTRAINT queued_advisories_pkey PRIMARY KEY (id);
-
-
---
 -- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2185,10 +2124,17 @@ CREATE INDEX index_advisories_on_identifier ON advisories USING btree (identifie
 
 
 --
--- Name: index_advisories_on_queued_advisory_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_advisories_on_processed; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_advisories_on_queued_advisory_id ON advisories USING btree (queued_advisory_id);
+CREATE INDEX index_advisories_on_processed ON advisories USING btree (processed);
+
+
+--
+-- Name: index_advisories_on_source; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_advisories_on_source ON advisories USING btree (source);
 
 
 --
@@ -2213,10 +2159,17 @@ CREATE INDEX index_advisory_archives_on_identifier ON advisory_archives USING bt
 
 
 --
--- Name: index_advisory_archives_on_queued_advisory_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_advisory_archives_on_processed; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_advisory_archives_on_queued_advisory_id ON advisory_archives USING btree (queued_advisory_id);
+CREATE INDEX index_advisory_archives_on_processed ON advisory_archives USING btree (processed);
+
+
+--
+-- Name: index_advisory_archives_on_source; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_advisory_archives_on_source ON advisory_archives USING btree (source);
 
 
 --
@@ -2682,13 +2635,6 @@ CREATE INDEX index_packages_on_valid_at ON packages USING btree (valid_at);
 
 
 --
--- Name: index_queued_advisories_on_identifier; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_queued_advisories_on_identifier ON queued_advisories USING btree (identifier);
-
-
---
 -- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3013,11 +2959,27 @@ ALTER TABLE ONLY agent_received_files
 
 
 --
+-- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
+
+
+--
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_e4107b65b3 FOREIGN KEY (email_message_id) REFERENCES email_messages(id);
+
+
+--
+-- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_f0b7c79393 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3122,8 +3084,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160520020913');
 
 INSERT INTO schema_migrations (version) VALUES ('20160520020914');
 
-INSERT INTO schema_migrations (version) VALUES ('20160520023124');
-
 INSERT INTO schema_migrations (version) VALUES ('20160520023125');
 
 INSERT INTO schema_migrations (version) VALUES ('20160520023126');
@@ -3147,8 +3107,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160530195216');
 INSERT INTO schema_migrations (version) VALUES ('20160530195217');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602133740');
-
-INSERT INTO schema_migrations (version) VALUES ('20160602133741');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602134913');
 

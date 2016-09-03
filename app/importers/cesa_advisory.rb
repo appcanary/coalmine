@@ -53,5 +53,4 @@ class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis,
   generate :reported_at do
     issue_date
   end
-
 end

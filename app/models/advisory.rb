@@ -36,12 +36,40 @@
 #
 
 class Advisory < ActiveRecord::Base
-  belongs_to :queued_advisory
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
+
+  scope :most_recent_advisory_for, ->(identifier, source) {
+    where(:identifier => identifier, :source => source).order("created_at DESC").limit(1)
+  }
+
+  scope :from_rubysec, -> {
+    where(:source => RubysecImporter::SOURCE)
+  }
+
+  scope :from_cesa, -> {
+    where(:source => CesaImporter::SOURCE)
+  }
+
+  scope :from_alas, -> {
+    where(:source => AlasImporter::SOURCE)
+  }
+
+  scope :from_ubuntu, -> {
+    where(:source => UbuntuTrackerImporter::SOURCE)
+  }
+
 
   def to_vuln_attributes
     valid_attr = Vulnerability.attribute_names
     self.attributes.keep_if { |k, _| valid_attr.include?(k) }
+  end
+
+  def to_advisory_attributes
+    self.attributes.except("id").merge(:advisory_id => self.id)
+  end
+
+  def relevant_attributes
+    self.attributes.except("id", "updated_at", "created_at", "valid_at", "expired_at")
   end
 end

@@ -4,7 +4,7 @@ class RubysecImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
     @importer = RubysecImporter.new("test/data/rubysec")
 
-    assert_equal 0, QueuedAdvisory.from_rubysec.count
+    assert_equal 0, Advisory.from_rubysec.count
     # there are three gems in our fixtures
 
     raw_advisories = @importer.fetch_advisories
@@ -30,11 +30,11 @@ class RubysecImporterTest < ActiveSupport::TestCase
     all_advisories = raw_advisories.map { |ra| @importer.parse(ra) }
     @importer.process_advisories(all_advisories)
 
-    assert_equal 3, QueuedAdvisory.from_rubysec.count
+    assert_equal 3, Advisory.from_rubysec.count
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)
-    assert_equal 3, QueuedAdvisory.from_rubysec.count
+    assert_equal 3, Advisory.from_rubysec.count
 
     # if we change an attribute tho we should get a more
     # recent version.
@@ -44,6 +44,7 @@ class RubysecImporterTest < ActiveSupport::TestCase
 
     @importer.process_advisories([new_rbadv])
 
-    assert_equal 4, QueuedAdvisory.from_rubysec.count
+    assert_equal 3, Advisory.from_rubysec.count
+    assert_equal "new title omg", Advisory.from_rubysec.order(:updated_at).last.title
   end
 end

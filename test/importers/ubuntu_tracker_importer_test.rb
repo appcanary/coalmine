@@ -4,6 +4,7 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
 
   it "should do the right thing" do
     @importer = UbuntuTrackerImporter.new("test/data/ubuntu-cve-tracker")
+    assert_equal 0, Advisory.from_ubuntu.count
 
     # we put away four advisories in our fixture
     raw_advisories = @importer.fetch_advisories
@@ -48,19 +49,20 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
     # does it dump into the db?
 
     @importer.process_advisories(all_advisories)
-    assert_equal 4, QueuedAdvisory.from_ubuntu.count
+    assert_equal 4, Advisory.from_ubuntu.count
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)
-    assert_equal 4, QueuedAdvisory.from_ubuntu.count
+    assert_equal 4, Advisory.from_ubuntu.count
 
 
     new_ub_adv = @importer.parse(raw_advisories.first)
-    new_ub_adv.priority = "Critical"
+    new_ub_adv.description = ["omg new description"]
 
     @importer.process_advisories([new_ub_adv])
 
-    assert_equal 5, QueuedAdvisory.from_ubuntu.count
+    assert_equal 4, Advisory.from_ubuntu.count
+    assert_equal "omg new description", Advisory.from_ubuntu.order(:updated_at).last.description
   end
 
 end
