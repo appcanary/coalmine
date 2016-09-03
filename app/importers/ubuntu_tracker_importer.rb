@@ -106,7 +106,7 @@ class UbuntuTrackerImporter < AdvisoryImporter
         o = {"release" => release, 
              "package" => package, 
              "status" => status, 
-             "notes" => notes}
+             "version" => notes}
         hsh["patches"] << o
       end
     end

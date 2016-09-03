@@ -17,13 +17,8 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
 
   def generate_criticality
     # ubuntu uses almost the same ones we do.
-    case priority
-    when "negligible"
-      "low"
-    else
-      # just in case
-      priority.downcase
-    end
+    # just in case
+    priority.downcase
   end
 
   def generate_package_info_fields

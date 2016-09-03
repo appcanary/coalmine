@@ -22,7 +22,7 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
 
       # are we generating patched/affected properly?
       assert new_attr["patched"].all? { |hsh|
-        ["release", "package", "notes"].all? { |k|
+        ["release", "package", "version"].all? { |k|
           hsh[k].present?
         } &&
         ["released", "pending"].include?(hsh["status"])
