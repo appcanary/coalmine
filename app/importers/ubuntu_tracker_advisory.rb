@@ -5,19 +5,26 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
     candidate
   end
 
-  def generate_reported_at
+  def source
+    UbuntuTrackerImporter::SOURCE
+  end
+
+  def package_platform
+    Platforms::Ubuntu
+  end
+
+  generate :reported_at do
     DateTime.parse(publicdate).utc
   end
 
-  def generate_description
+  generate :description do
     if description.present? && description.is_a?(Array)
       description.join(" ")
     end
   end
 
-  def generate_criticality
-    # ubuntu uses almost the same ones we do.
-    # just in case
+
+  generate :criticality do
     priority.downcase
   end
 
@@ -58,27 +65,15 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
     @package_info_fields = hsh
   end
 
-  def generate_patched
+  generate :patched do
     generate_package_info_fields["patched"]
   end
 
-  def generate_affected
+  generate :affected do
     generate_package_info_fields["affected"]
   end
 
-  def generate_unaffected
+  generate :unaffected do
     generate_package_info_fields["unaffected"]
-  end
-
-  def package_platform
-    Platforms::Ubuntu
-  end
-
-  def source
-    UbuntuTrackerImporter::SOURCE
-  end
-
-  def advisory_keys
-    ["identifier", "description", "criticality", "package_platform", "patched", "affected", "unaffected", "reported_at", "source"]
   end
 end

@@ -6,24 +6,6 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity,
     alas_id
   end
 
-  def generate_reported_at
-    DateTime.parse(released_at).utc
-  end
-
-  def patched
-    new_packages.map { |p|
-      {"filename" => p}
-    }
-  end
-
-  def generate_criticality
-    if severity
-      severity.downcase
-    else
-      "unknown"
-    end
-  end
-
   def package_platform
     Platforms::Amazon
   end
@@ -32,7 +14,30 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity,
     AlasImporter::SOURCE
   end
 
-  def advisory_keys
-    ["identifier", "package_platform", "reported_at", "criticality", "cve_ids", "description", "patched", "source"]
+  generate :description do
+    description
   end
+
+  generate :cve_ids do
+    cve_ids
+  end
+
+  generate :reported_at do
+    DateTime.parse(released_at).utc
+  end
+
+  generate :patched do
+    new_packages.map { |p|
+      {"filename" => p}
+    }
+  end
+
+  generate :criticality do
+    if severity
+      severity.downcase
+    else
+      "unknown"
+    end
+  end
+
 end

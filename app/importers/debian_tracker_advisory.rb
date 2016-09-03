@@ -10,7 +10,15 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
     "#{cve}-#{package_name}"
   end
 
-  def cve_ids
+  def package_platform
+    Platforms::Debian
+  end
+
+  def source 
+    DebianTrackerImporter::SOURCE
+  end
+
+  generate :cve_ids do
     [cve]
   end
 
@@ -95,7 +103,7 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
   # => "medium"
   #
   # (oh and then we normalize them, of course)
-  def generate_criticality
+  generate :criticality do
     urgencies = generate_package_info_fields["urgencies"].uniq
  
     most_urgent = nil
@@ -118,27 +126,16 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
   end
 
 
-  def generate_patched
+  generate :patched do
     generate_package_info_fields["patched"]
   end
 
-  def generate_affected
+  generate :affected do
     generate_package_info_fields["affected"]
   end
 
-  def generate_unaffected
+  generate :unaffected do
     generate_package_info_fields["unaffected"]
   end
  
-  def package_platform
-    Platforms::Debian
-  end
-
-  def source 
-    DebianTrackerImporter::SOURCE
-  end
-
-  def advisory_keys
-    ["identifier", "package_platform", "cve_ids", "patched", "affected", "criticality", "source"]
-  end
 end

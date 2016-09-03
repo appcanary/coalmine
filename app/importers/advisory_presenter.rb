@@ -6,24 +6,45 @@
 # This way FooImporter dumps a hash into FooAdvisoryPresenter
 # and then FooAdvisoryPresenter creates its corresponding Advisory
 # Not totally unrelated from Form objects, really.
+#
+# USAGE:
+#
+# class Subclassed < Advisory.new(:field1, :field2)
+#   # implement identifier, package_platform, source methods
+#   generate :outputted_field do
+#     values_here
+#   end
+# end
+#
+# s = Subclassed.new("field1" => 1, "field2" => 2)
+# s.to_advisory_attributes # => {"identifier" => "", "package_platform" => "", 
+#                          # "source" => "", "outputted_field" => values_here }
+
 class AdvisoryPresenter < Struct
-  attr_accessor :source_text
+
+  class << self
+    attr_accessor :generators
+    def generate(name, &block)
+      @generators ||= {}
+      @generators[name] = block
+    end
+  end
+
   def initialize(hsh, source_text = nil)
-    @source_text = source_text
+    @_source_text = source_text
     super *members.map{|k| hsh[k.to_s] }
   end
 
   def to_advisory_attributes
-    Hash[advisory_keys.map { |k| 
-      if self.respond_to?("generate_#{k}")
-        [k, send("generate_#{k}")] 
-      else
-        [k, send(k)]
-      end
-    }]
+    # take all the generated attributes
+    # and merge with the mandatory ones
+    self.class.generators.reduce({}) do |acc, (name, blk)|
+      acc[name.to_s] = self.instance_exec &blk
+      acc
+    end.merge({"identifier" => identifier,
+               "package_platform" => package_platform,
+               "source_text" => @_source_text,
+               "source" => source})
   end
 
-  def advisory_keys
-    raise NotImplementedError.new("this sould be subclassed")
-  end
 end

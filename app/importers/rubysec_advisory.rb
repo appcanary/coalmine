@@ -8,11 +8,20 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     filepath.split("/")[-2..-1].join("/")
   end
 
+  def source
+    RubysecImporter::SOURCE
+  end
+
+  def package_platform
+    Platforms::Ruby
+  end
+
+
   def to_constraint(c, n)
     {"constraint" => c, "name" => n}
   end
 
-  def generate_patched
+  generate :patched do
     if patched_versions
       patched_versions.map do |pv|
         to_constraint(pv, gem)
@@ -22,7 +31,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     end
   end
 
-  def generate_unaffected
+  generate :unaffected do
     if unaffected_versions
       unaffected_versions.map do |uv|
         to_constraint(uv, gem)
@@ -32,7 +41,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     end
   end
 
-  def generate_reported_at
+  generate :reported_at do
     # avoid timezone issues
     DateTime.parse date.iso8601
   end
@@ -41,7 +50,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     cvss_v2 || cvss_v3
   end
 
-  def generate_criticality
+  generate :criticality do
     case cvss_score
     when 0.0..3.3
       "low"
@@ -54,7 +63,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     end
   end
 
-  def generate_cve_ids
+  generate :cve_ids do
     if cve
       ["CVE-#{cve}"]
     else
@@ -62,7 +71,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     end
   end
 
-  def generate_osvdb_id
+  generate :osvdb_id do
     if osvdb
       "OSVDB-#{osvdb}"
     else
@@ -70,19 +79,16 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     end
   end
 
-  def source
-    RubysecImporter::SOURCE
-  end
-
-  def package_platform
-    Platforms::Ruby
-  end
-
-  def package_names
+ 
+  generate :package_names do
     [gem]
   end
 
-  def advisory_keys
-    ["identifier", "package_platform", "package_names", "patched", "unaffected", "title", "description", "cve_ids", "osvdb_id", "reported_at", "criticality", "source"]
+  generate :title do
+    title
+  end
+
+  generate :description do
+    description
   end
 end
