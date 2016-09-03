@@ -59,6 +59,9 @@ class Advisory < ActiveRecord::Base
     where(:source => UbuntuTrackerImporter::SOURCE)
   }
 
+   scope :from_debian, -> {
+    where(:source => DebianTrackerImporter::SOURCE)
+  }
 
   def to_vuln_attributes
     valid_attr = Vulnerability.attribute_names

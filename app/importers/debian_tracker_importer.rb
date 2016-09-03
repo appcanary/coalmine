@@ -23,25 +23,4 @@ class DebianTrackerImporter < AdvisoryImporter
   def parse(hsh)
     DebianTrackerAdvisory.new(hsh, hsh)
   end
-
-  # def process_advisories(all_advs)
-  #   all_advs.reduce({}) do |h, adv|
-  #     adv["releases"].each do |rel, attr|
-  #       h[attr["status"]] ||= []
-  #       h[attr["status"]] << adv
-  #     end
-
-  #     # urgs = adv["releases"].map { |n, a| a["urgency"] }
-  #     # first_ur = urgs.first
-
-  #     # not_same = adv["releases"].any? do |rel, attr|
-  #     #   attr["urgency"] != first_ur
-  #     # end
-  #     # if not_same
-  #     #   puts "not same: #{adv["package_name"]} #{adv["cve"]} #{urgs}"
-  #     # end
-  #     h
-  #   end
-
-  # end
 end

@@ -22,6 +22,10 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
     [cve]
   end
 
+  generate :description do
+    description
+  end
+
   def normalize_urgency(str)
     case str
     when "not yet assigned"
