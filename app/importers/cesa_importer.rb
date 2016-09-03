@@ -1,5 +1,5 @@
 class CesaImporter < AdvisoryImporter
-  SOURCE = "cesa"
+  SOURCE = "cefs"
   REPO_URL = "https://github.com/stevemeier/cefs.git"
   REPO_PATH = "tmp/importers/cefs"
 

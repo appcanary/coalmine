@@ -11,19 +11,22 @@ class CesaImporterTest < ActiveSupport::TestCase
     assert_equal 4, raw_advisories.size
 
     # check that we parse things correctly
-    cesaadv = @importer.parse(raw_advisories.first)
-    new_attr = cesaadv.to_advisory_attributes
+    all_advisories = raw_advisories.map do |ra|
+      cesaadv = @importer.parse(ra)
+      new_attr = cesaadv.to_advisory_attributes
 
-    
-    assert_equal "centos", new_attr["package_platform"]
-    assert_equal "CESA-2016:0043", new_attr["identifier"]
-    assert_equal "medium", new_attr["criticality"]
-    assert_equal "cesa", new_attr["source"]
 
-    # are we generating the patched/affected json properly?
-    
-    assert new_attr["patched"].all? { |p| p.key?("filename") }
-    assert new_attr["affected"].all? { |p| p.key?("arch") && p.key?("release") }
+      assert_equal "centos", new_attr["package_platform"]
+      assert new_attr["identifier"] =~ /CESA-2016:\d\d\d\d/
+
+      assert ["medium", "critical", "high"].include?(new_attr["criticality"])
+      assert_equal "cefs", new_attr["source"]
+
+      # are we generating the patched/affected json properly?
+
+      assert new_attr["patched"].all? { |p| p.key?("filename") }
+      assert new_attr["affected"].all? { |p| p.key?("arch") && p.key?("release") }
+    end
 
 
     # okay. does this dump into the db alright?

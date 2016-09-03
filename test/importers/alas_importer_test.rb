@@ -10,18 +10,21 @@ class AlasImporterTest < ActiveSupport::TestCase
     raw_advisories = @importer.fetch_advisories
     assert_equal 4, raw_advisories.size
 
-    # check that we parse things correctly?
-    alas_adv = @importer.parse(raw_advisories.first)
-    new_attr = alas_adv.to_advisory_attributes
+    all_advisories = raw_advisories.map do |ra|
+      alas_adv = @importer.parse(raw_advisories.first)
+      new_attr = alas_adv.to_advisory_attributes
 
-    assert_equal "amzn", new_attr["package_platform"]
-    assert_equal "ALAS-2016-669", new_attr["identifier"]
-    assert_equal "medium", new_attr["criticality"]
-    assert_equal ["CVE-2016-3157", "CVE-2016-2383", "CVE-2016-2550", "CVE-2016-2847"], new_attr["cve_ids"]
-    assert_equal "alas", new_attr["source"]
+      assert_equal "amzn", new_attr["package_platform"]
+      assert new_attr["identifier"] =~ /ALAS-201[4,6]-\d\d\d/
 
-    # are we generating the patched json properly?
-    assert new_attr["patched"].all? { |p| p.key?("filename") }
+      assert ["high", "low", "critical", "medium"].include? new_attr["criticality"]
+
+      assert new_attr["cve_ids"].all? { |cve| cve =~ /CVE-\d\d\d\d-\d\d\d\d/ }
+      assert_equal "alas", new_attr["source"]
+
+      # are we generating the patched json properly?
+      assert new_attr["patched"].all? { |p| p["filename"].present? }
+    end
 
     # okay. does this dump into the db alright?
     all_advisories = raw_advisories.map { |ra| @importer.parse(ra) }
