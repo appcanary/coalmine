@@ -156,8 +156,8 @@ CREATE FUNCTION archive_vulnerable_dependencies() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, package_platform, package_name, affected_arches, affected_releases, patched_versions, unaffected_versions, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.vulnerability_id, OLD.package_platform, OLD.package_name, OLD.affected_arches, OLD.affected_releases, OLD.patched_versions, OLD.unaffected_versions, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, package_platform, package_name, affected_release, affected_arch, patched, unaffected, pending, end_of_life, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.vulnerability_id, OLD.package_platform, OLD.package_name, OLD.affected_release, OLD.affected_arch, OLD.patched, OLD.unaffected, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -237,8 +237,8 @@ CREATE TABLE advisories (
     rhsa_id character varying,
     cesa_id character varying,
     source_text text,
-    source character varying,
-    processed boolean,
+    source character varying NOT NULL,
+    processed boolean DEFAULT false NOT NULL,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -290,8 +290,8 @@ CREATE TABLE advisory_archives (
     rhsa_id character varying,
     cesa_id character varying,
     source_text text,
-    source character varying,
-    processed boolean,
+    source character varying NOT NULL,
+    processed boolean DEFAULT false NOT NULL,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -1353,10 +1353,12 @@ CREATE TABLE vulnerable_dependencies (
     vulnerability_id integer NOT NULL,
     package_platform character varying NOT NULL,
     package_name character varying NOT NULL,
-    affected_arches character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    affected_releases character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
-    unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,
+    affected_release character varying,
+    affected_arch character varying,
+    patched text[] DEFAULT '{}'::text[] NOT NULL,
+    unaffected text[] DEFAULT '{}'::text[] NOT NULL,
+    pending boolean DEFAULT false NOT NULL,
+    end_of_life boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
@@ -1393,10 +1395,12 @@ CREATE TABLE vulnerable_dependency_archives (
     vulnerability_id integer NOT NULL,
     package_platform character varying NOT NULL,
     package_name character varying NOT NULL,
-    affected_arches character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    affected_releases character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
-    unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,
+    affected_release character varying,
+    affected_arch character varying,
+    patched text[] DEFAULT '{}'::text[] NOT NULL,
+    unaffected text[] DEFAULT '{}'::text[] NOT NULL,
+    pending boolean DEFAULT false NOT NULL,
+    end_of_life boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone NOT NULL,

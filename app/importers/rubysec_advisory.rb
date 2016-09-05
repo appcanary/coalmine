@@ -18,7 +18,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
 
 
   def to_constraint(c, n)
-    {"constraint" => c, "name" => n}
+    {"package" => n, "version" => c}
   end
 
   generate :patched do

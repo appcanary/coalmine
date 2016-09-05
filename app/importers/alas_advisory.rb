@@ -28,7 +28,7 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity,
 
   generate :patched do
     new_packages.map { |p|
-      {"filename" => p}
+      {"version" => p}
     }
   end
 

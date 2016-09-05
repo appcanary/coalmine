@@ -17,7 +17,7 @@ class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis,
 
   generate :patched do
     packages.map { |p|
-      {"filename" => p}
+      {"version" => p}
     }
   end
 
