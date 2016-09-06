@@ -21,13 +21,17 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     hsh = {"package_name" => gem }
     if patched_versions.present?
       hsh["patched_versions"] = patched_versions
+    else
+      hsh["patched_versions"] = []
     end
 
     if unaffected_versions.present?
       hsh["unaffected_versions"] = unaffected_versions
+    else
+      hsh["unaffected_versions"] = []
     end
 
-    hsh
+    [hsh]
   end
 
 

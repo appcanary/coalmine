@@ -24,6 +24,14 @@ class AlasImporterTest < ActiveSupport::TestCase
 
       # are we generating the patched json properly?
       assert new_attr["patched"].all? { |p| p["filename"].present? }
+ 
+      assert new_attr["constraints"].present?
+      assert new_attr["constraints"].all? { |p| 
+        ["package_name", "arch", "release", "patched_versions"].all? do |k|
+          v = p.fetch(k) 
+          !v.nil? && v != ""
+        end
+      }
       assert new_attr["source_text"].present?
     end
 

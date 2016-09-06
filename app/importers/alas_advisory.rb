@@ -28,8 +28,43 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity,
 
   generate :patched do
     new_packages.map { |p|
-      {"version" => p}
+      {"filename" => p}
     }
+  end
+
+  generate :affected do
+    affected_packages.each do |p|
+      {"package_name" => p }
+    end
+  end
+
+  generate :constraints do 
+    nevras_by_name = new_packages.map { |p|
+      nevra = RPM::Nevra.new(p)
+    }.group_by(&:name)
+
+    @packages_to_constraints = nevras_by_name.reduce([]) do |arr, (name, nevras)|
+      nevras.each do |nv|
+        arr <<
+        { "package_name" => name,
+          "arch" => nv.arch,
+          "release" => normalize_release(nv.release),
+          "patched_versions" => [nv.filename]
+        }
+      end
+      arr
+    end
+  end
+
+  #amazon doesn't really have releases?
+
+  def normalize_release(str)
+    case str
+    when /amzn1/
+      "amazn1"
+    else
+      str
+    end
   end
 
   generate :criticality do

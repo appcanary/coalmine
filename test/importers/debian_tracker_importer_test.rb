@@ -24,16 +24,37 @@ class DebianTrackerImporterTest < ActiveSupport::TestCase
 
       assert nattr["affected"].all? { |h|
         h["release"].present? &&
-          h["package"] == adv.package_name
+          h["package_name"] == adv.package_name
       }
 
       assert nattr["patched"].all? { |h|
         h["release"].present? &&
-          h["package"] == adv.package_name &&
-          h["version"].present?
+          h["package_name"] == adv.package_name &&
+          h["patched_versions"].present?
       }
 
+      assert nattr["constraints"].is_a? Array
+      assert nattr["constraints"].all? { |p| 
+        # must have
+        must = ["package_name", "release"].all? do |k|
+          v = p.fetch(k)
+          v.present?
+        end
 
+        # if present should not be empty
+        should = ["patched_versions",
+                  "end_of_life",
+                  "pending"].all? do |k|
+          if v = p[k] 
+            v.present?
+          else
+            true
+          end
+        end
+
+        must && should
+      }
+      
       assert nattr["source_text"].present?
       adv
     end

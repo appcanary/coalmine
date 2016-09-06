@@ -82,7 +82,6 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
         if patch == "0" && urg == "unimportant"
           hsh["unaffected"] << obj
         else
-          hsh["affected"] << obj
           hsh["patched"] << obj
         end
       when "open"
@@ -93,6 +92,23 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
     end
 
     @package_info_fields = hsh
+  end
+
+  generate :constraints do
+    patches = generate_package_info_fields["patched"].map do |p|
+      h = p.dup
+      if h["urgency"] =~ /end-if-life/
+        h["end_if_life"] = true
+      end
+
+      h.except("urgency")
+    end
+
+    affecteds = generate_package_info_fields["affected"].map do |a|
+      a.except("urgency")
+    end
+
+    patches + affecteds
   end
 
   # the urgency is set on a per release field. 
@@ -122,11 +138,14 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
 
   def attr_to_constraint(release, attr)
     patch = attr["fixed_version"]
+    urgency = attr["urgency"]
+    hsh = {"release" => release, "package_name" => package_name, "urgency" => urgency }
+
     if patch
-      {"release" => release, "package" => package_name, "version" => patch}
-    else
-      {"release" => release, "package" => package_name }
+      hsh["patched_versions"] = [patch]
     end
+
+    hsh
   end
 
 

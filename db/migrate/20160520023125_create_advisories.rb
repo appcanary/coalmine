@@ -9,6 +9,7 @@ class CreateAdvisories < ActiveRecord::Migration
       t.jsonb :patched, :default => [], null: false
       t.jsonb :affected, :default => [], null: false
       t.jsonb :unaffected, :default => [], null: false
+      t.jsonb :constraints, :default => [], null: false
 
 
       # t.string :affected_arches, array: true, :default => [], null: false

@@ -20,11 +20,24 @@ class RubysecImporterTest < ActiveSupport::TestCase
     assert_equal ["CVE-2016-6317"], new_attr["cve_ids"]
 
     # are we generating the pathed/unaffected json objects properly?
-    assert new_attr["patched"].all? { |p| p.key?("constraint") }
-    assert new_attr["unaffected"].all? { |p| p.key?("constraint") }
+    assert new_attr["patched"].all? { |p| p.key?("version") }
+    assert new_attr["unaffected"].all? { |p| p.key?("version") }
 
     assert_equal "rubysec", new_attr["source"]
     assert new_attr["source_text"].present?
+
+    assert new_attr["constraints"].present?
+
+    assert new_attr["constraints"].all? { |p| 
+      # must have
+      must = ["package_name", 
+              "patched_versions", 
+              "unaffected_versions"].all? do |k|
+                v = p.fetch(k)
+                !v.nil? && v != ""
+              end
+
+    }
 
     # okay. does this dump into the db alright?
 

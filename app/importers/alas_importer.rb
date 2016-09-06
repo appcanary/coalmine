@@ -5,7 +5,7 @@ class AlasImporter < AdvisoryImporter
 
   def initialize(url = nil)
     @index_url = url || URL
-    @base_url = File.dirname(url)
+    @base_url = File.dirname(@index_url)
   end
 
   def fetch_advisories
@@ -66,7 +66,7 @@ class AlasImporter < AdvisoryImporter
       "severity" => severity,
       "cve_ids" => cve_ids,
       "description" => description,
-      # "affected_packages" => affected_packages,
+      "affected_packages" => affected_packages,
       "new_packages" => new_packages,
     }, html)
   end

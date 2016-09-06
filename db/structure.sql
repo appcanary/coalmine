@@ -51,8 +51,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, package_platform, package_names, patched, affected, unaffected, title, description, criticality, related, cve_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, source, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.package_platform, OLD.package_names, OLD.patched, OLD.affected, OLD.unaffected, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.cve_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.source, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, package_platform, package_names, patched, affected, unaffected, constraints, title, description, criticality, related, cve_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, source, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.package_platform, OLD.package_names, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.cve_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.source, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -156,8 +156,8 @@ CREATE FUNCTION archive_vulnerable_dependencies() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, package_platform, package_name, affected_release, affected_arch, patched, unaffected, pending, end_of_life, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.vulnerability_id, OLD.package_platform, OLD.package_name, OLD.affected_release, OLD.affected_arch, OLD.patched, OLD.unaffected, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, package_platform, package_name, release, arch, patched_versions, unaffected_versions, pending, end_of_life, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.vulnerability_id, OLD.package_platform, OLD.package_name, OLD.release, OLD.arch, OLD.patched_versions, OLD.unaffected_versions, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -226,6 +226,7 @@ CREATE TABLE advisories (
     patched jsonb DEFAULT '[]'::jsonb NOT NULL,
     affected jsonb DEFAULT '[]'::jsonb NOT NULL,
     unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
+    constraints jsonb DEFAULT '[]'::jsonb NOT NULL,
     title character varying,
     description text,
     criticality character varying,
@@ -279,6 +280,7 @@ CREATE TABLE advisory_archives (
     patched jsonb DEFAULT '[]'::jsonb NOT NULL,
     affected jsonb DEFAULT '[]'::jsonb NOT NULL,
     unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
+    constraints jsonb DEFAULT '[]'::jsonb NOT NULL,
     title character varying,
     description text,
     criticality character varying,
@@ -1353,10 +1355,10 @@ CREATE TABLE vulnerable_dependencies (
     vulnerability_id integer NOT NULL,
     package_platform character varying NOT NULL,
     package_name character varying NOT NULL,
-    affected_release character varying,
-    affected_arch character varying,
-    patched text[] DEFAULT '{}'::text[] NOT NULL,
-    unaffected text[] DEFAULT '{}'::text[] NOT NULL,
+    release character varying,
+    arch character varying,
+    patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
+    unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,
     pending boolean DEFAULT false NOT NULL,
     end_of_life boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -1395,10 +1397,10 @@ CREATE TABLE vulnerable_dependency_archives (
     vulnerability_id integer NOT NULL,
     package_platform character varying NOT NULL,
     package_name character varying NOT NULL,
-    affected_release character varying,
-    affected_arch character varying,
-    patched text[] DEFAULT '{}'::text[] NOT NULL,
-    unaffected text[] DEFAULT '{}'::text[] NOT NULL,
+    release character varying,
+    arch character varying,
+    patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
+    unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,
     pending boolean DEFAULT false NOT NULL,
     end_of_life boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
