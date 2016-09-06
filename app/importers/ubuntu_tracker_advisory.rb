@@ -14,7 +14,11 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
   end
 
   generate :reported_at do
-    DateTime.parse(publicdate).utc
+    if publicdate && publicdate != "unknown"
+      DateTime.parse(publicdate).utc
+    else
+      nil
+    end
   end
 
   generate :description do
@@ -25,7 +29,38 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
 
 
   generate :criticality do
-    priority.downcase
+    if priority
+      priority.downcase
+    else
+      "unknown"
+    end
+  end
+
+  generate :constraints do
+    pat = generate_package_info_fields["patched"].map do |p|
+      h = p.dup
+      if h["status"] == "pending"
+        h["pending"] = true
+      end
+
+      if h["version"]
+        h["patched_versions"] = h["version"].split(",").map(&:strip)
+      end
+
+      h.except("status", "version")
+    end
+
+
+    aff = generate_package_info_fields["affected"].map do |a|
+      h = a.dup
+      if h["version"] =~ /end-of-life/
+        h["end_of_life"] = true
+      end
+       
+      h.except("status", "version")
+    end
+
+    pat + aff
   end
 
   def generate_package_info_fields
@@ -39,6 +74,8 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
     hsh["affected"] = []
     hsh["unaffected"] = []
 
+    self.patches ||= []
+
     patches.each do |obj|
       case obj["status"]
       when "needs-triage"
@@ -47,17 +84,17 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
         hsh["unaffected"] << obj
       when "DNE"
         hsh["unaffected"] << obj
+
       when "needed"
         hsh["affected"] << obj
       when "active"
         hsh["affected"] << obj
       when "deferred"
         hsh["affected"] << obj
+
       when "pending"
-        hsh["affected"] << obj
         hsh["patched"] << obj
       when "released"
-        hsh["affected"] << obj
         hsh["patched"] << obj
       end
     end

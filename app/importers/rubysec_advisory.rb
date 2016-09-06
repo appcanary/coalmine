@@ -16,6 +16,20 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     Platforms::Ruby
   end
 
+  # rubysec advisories are only ever about 1 package
+  generate :constraints do
+    hsh = {"package_name" => gem }
+    if patched_versions.present?
+      hsh["patched_versions"] = patched_versions
+    end
+
+    if unaffected_versions.present?
+      hsh["unaffected_versions"] = unaffected_versions
+    end
+
+    hsh
+  end
+
 
   def to_constraint(c, n)
     {"package" => n, "version" => c}

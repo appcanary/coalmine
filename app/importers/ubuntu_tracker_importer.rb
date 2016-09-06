@@ -76,6 +76,12 @@ class UbuntuTrackerImporter < AdvisoryImporter
       # so, let's lookahead
       next_line = lines.first
 
+      # is it empty? whelp, nothing left
+      # for us to do.
+      if next_line.nil?
+        next
+      end
+
       while next_line.starts_with?(" ")
         # pop the next_line from the lines 'stack'
         lines.shift 
@@ -105,7 +111,7 @@ class UbuntuTrackerImporter < AdvisoryImporter
 
         hsh["patches"] ||= []
         o = {"release" => release, 
-             "package" => package, 
+             "package_name" => package, 
              "status" => status, 
              "version" => notes}
         hsh["patches"] << o
