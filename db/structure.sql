@@ -141,8 +141,8 @@ CREATE FUNCTION archive_vulnerabilities() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerability_archives(vulnerability_id, package_platform, title, description, criticality, cve_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.package_platform, OLD.title, OLD.description, OLD.criticality, OLD.cve_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerability_archives(vulnerability_id, package_platform, title, description, criticality, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.package_platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -1267,7 +1267,7 @@ CREATE TABLE vulnerabilities (
     title character varying,
     description text,
     criticality character varying,
-    cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     osvdb_id character varying,
     usn_id character varying,
     dsa_id character varying,
@@ -1312,7 +1312,7 @@ CREATE TABLE vulnerability_archives (
     title character varying,
     description text,
     criticality character varying,
-    cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     osvdb_id character varying,
     usn_id character varying,
     dsa_id character varying,
