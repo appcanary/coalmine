@@ -2,20 +2,20 @@
 #
 # Table name: vulnerable_dependencies
 #
-#  id               :integer          not null, primary key
-#  vulnerability_id :integer          not null
-#  package_platform :string           not null
-#  package_name     :string           not null
-#  affected_release :string
-#  affected_arch    :string
-#  patched          :text             default("{}"), not null, is an Array
-#  unaffected       :text             default("{}"), not null, is an Array
-#  pending          :boolean          default("false"), not null
-#  end_of_life      :boolean          default("false"), not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  valid_at         :datetime         not null
-#  expired_at       :datetime         default("infinity"), not null
+#  id                  :integer          not null, primary key
+#  vulnerability_id    :integer          not null
+#  package_platform    :string           not null
+#  package_name        :string           not null
+#  release             :string
+#  arch                :string
+#  patched_versions    :text             default("{}"), not null, is an Array
+#  unaffected_versions :text             default("{}"), not null, is an Array
+#  pending             :boolean          default("false"), not null
+#  end_of_life         :boolean          default("false"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  valid_at            :datetime         not null
+#  expired_at          :datetime         default("infinity"), not null
 #
 # Indexes
 #
