@@ -57,7 +57,7 @@ class UbuntuTrackerImporter < AdvisoryImporter
 
       # a key doesn't begin with a space
       unless cur_line.starts_with?(" ")
-        k, v = cur_line.split(":")
+        k, v = cur_line.split(":", 2)
 
         if v.present?
           hsh[k.downcase.underscore] = v.strip
