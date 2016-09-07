@@ -51,8 +51,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, source, package_platform, patched, affected, unaffected, constraints, title, description, criticality, related, remediation, cve_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.source, OLD.package_platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.remediation, OLD.cve_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, package_platform, patched, affected, unaffected, constraints, title, description, criticality, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.package_platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -232,7 +232,7 @@ CREATE TABLE advisories (
     criticality character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     remediation text,
-    cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     osvdb_id character varying,
     usn_id character varying,
     dsa_id character varying,
@@ -286,7 +286,7 @@ CREATE TABLE advisory_archives (
     criticality character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     remediation text,
-    cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     osvdb_id character varying,
     usn_id character varying,
     dsa_id character varying,

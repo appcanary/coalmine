@@ -1,4 +1,4 @@
-class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity, 
+class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :reference_ids, :severity, 
                                            :released_at, :description, :affected_packages, 
                                            :remediation, :new_packages)
 
@@ -18,8 +18,8 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity,
     description
   end
 
-  generate :cve_ids do
-    cve_ids
+  generate :reference_ids do
+    reference_ids
   end
 
   generate :reported_at do

@@ -18,7 +18,7 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
     DebianTrackerImporter::SOURCE
   end
 
-  generate :cve_ids do
+  generate :reference_ids do
     [cve]
   end
 

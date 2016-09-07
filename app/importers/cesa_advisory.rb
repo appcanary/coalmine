@@ -14,6 +14,10 @@ class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis,
     CesaImporter::SOURCE
   end
 
+  generate :reference_ids do
+    [identifier.gsub("CESA", "RHSA")]
+  end
+
   generate :patched do
     packages.map { |p|
       {"filename" => p}

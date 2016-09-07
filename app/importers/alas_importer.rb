@@ -38,7 +38,7 @@ class AlasImporter < AdvisoryImporter
 
     severity = document.css("#severity").first.children[4].text.strip
 
-    cve_ids = document.css("#references a").map { |cve| 
+    reference_ids = document.css("#references a").map { |cve| 
       cve.text.gsub(/\p{Space}/, "")
     } 
  
@@ -66,7 +66,7 @@ class AlasImporter < AdvisoryImporter
       "alas_id" => alas_id,
       "released_at" => released_at,
       "severity" => severity,
-      "cve_ids" => cve_ids,
+      "reference_ids" => reference_ids,
       "description" => description,
       "affected_packages" => affected_packages,
       "new_packages" => new_packages,

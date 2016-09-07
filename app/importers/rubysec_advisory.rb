@@ -89,23 +89,25 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     end
   end
 
-  generate :cve_ids do
+  generate :reference_ids do
+    arr = []
     if cve
-      ["CVE-#{cve}"]
-    else
-      []
+      arr << "CVE-#{cve}"
     end
-  end
 
-  generate :osvdb_id do
     if osvdb
-      "OSVDB-#{osvdb}"
-    else
-      nil
+      arr << "OSVDB-#{osvdb}"
     end
+
+    if related
+      if related["cve"]
+        arr += related["cve"].map { |s| "CVE-#{s}" }
+      end
+    end
+    arr
   end
 
- 
+  
   generate :title do
     title
   end
@@ -115,7 +117,9 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
   end
 
   generate :related do
-    r = related || []
-    r += url
+    r = related || {}
+    r["url"] ||= []
+    r["url"] << url
+    r
   end
 end

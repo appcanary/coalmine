@@ -12,6 +12,10 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
     Platforms::Ubuntu
   end
 
+  generate :reference_ids do
+    [identifier]
+  end
+
   generate :reported_at do
     if publicdate && publicdate != "unknown"
       DateTime.parse(publicdate).utc
@@ -37,8 +41,14 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
 
   generate :related do
     rel = []
-    rel += references
-    rel += bugs
+    if references
+      rel += references
+    end
+
+    if bugs
+      rel += bugs
+    end
+
     rel.flatten.compact
   end
 

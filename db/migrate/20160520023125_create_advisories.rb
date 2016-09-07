@@ -16,7 +16,7 @@ class CreateAdvisories < ActiveRecord::Migration
       t.jsonb :related, :default => [], null: false
       t.text :remediation
 
-      t.string :cve_ids, array: true, :default => [], null: false
+      t.string :reference_ids, array: true, :default => [], null: false
       t.string :osvdb_id
       t.string :usn_id
       t.string :dsa_id

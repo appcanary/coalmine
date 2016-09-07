@@ -11,13 +11,14 @@ class RubysecImporterTest < ActiveSupport::TestCase
     assert_equal 3, raw_advisories.size
 
     # how well is parsing working?
+    # TODO: make this process multiple test samples
     rbadv = @importer.parse(raw_advisories.first)
     new_attr = rbadv.to_advisory_attributes
 
-    assert_equal "activerecord/CVE-2016-6317.yml", new_attr["identifier"]
+    assert_equal "CVE-2016-6317-activerecord", new_attr["identifier"]
 
     assert_equal "ruby", new_attr["package_platform"]
-    assert_equal ["CVE-2016-6317"], new_attr["cve_ids"]
+    assert_equal ["CVE-2016-6317"], new_attr["reference_ids"]
 
     # are we generating the pathed/unaffected json objects properly?
     assert new_attr["patched"].all? { |p| p.key?("version") }

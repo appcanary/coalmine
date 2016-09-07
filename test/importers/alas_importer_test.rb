@@ -19,7 +19,7 @@ class AlasImporterTest < ActiveSupport::TestCase
 
       assert ["high", "low", "critical", "medium"].include? new_attr["criticality"]
 
-      assert new_attr["cve_ids"].all? { |cve| cve =~ /(CVE|RHSA)-\d\d\d\d-\d\d\d\d/ }
+      assert new_attr["reference_ids"].all? { |cve| cve =~ /(CVE|RHSA)-\d\d\d\d-\d\d\d\d/ }
       assert_equal "alas", new_attr["source"]
 
       # are we generating the patched json properly?
