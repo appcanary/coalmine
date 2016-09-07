@@ -5,46 +5,64 @@
 require 'rpm'
 class AdvisoryManager
 
-  # todo add flag for end of lifed
+  # TODO: make sure that a single failure doesn't fuck
+  # the whole thing
   def import_rubysec
     @vm = VulnerabilityManager.new(Platforms::Ruby)
     Advisory.from_rubysec.unprocessed.find_each do |adv|
       # todo: check if vuln exists? or if this refers to a vuln
       # todo: track what adv a vuln came from
 
-      Advisory.transaction do
-        # rubysec has one vulndep per advisory, so this is easy
-        hsh = {}
-        adv.patched.each do |p|
-          pname = p["package"]
-          hsh[pname] ||= {"patched" => [], "unaffected" => []}
 
-          hsh[pname]["patched"] << p["version"]
-        end
-
-        adv.unaffected.each do |p|
-          pname = p["package"]
-          hsh[pname] ||= {"patched" => [], "unaffected" => []}
-
-          hsh[pname]["unaffected"] << p["version"]
-        end
-
-        vds = hsh.each_pair.map do |pname, h|
-          {"package_name" => pname, 
-           "unaffected" => h["unaffected"], 
-           "patched" => h["patched"]}
-        end
-
-        vuln, error = @vm.create(adv.to_vuln_attributes, vds)
-        if error.nil?
-          adv.update_column(:processed, true)
-        else
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
           raise ArgumentError.new("Vuln error: #{error}")
         end
       end
     end
   end
 
+  def import_cesa
+    @vm = VulnerabilityManager.new(Platforms::CentOS)
+    Advisory.from_cesa.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
+    end
+  end
+
+  def import_ubuntu
+    @vm = VulnerabilityManager.new(Platforms::Ubuntu)
+    Advisory.from_ubuntu.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
+    end
+  end
+
+
+=begin
   # def self.import!
   #   # dumb case for now: get all the ones we ain't imported yet
   #   mger = self.new
@@ -122,5 +140,6 @@ class AdvisoryManager
     end
     vuln
   end
+=end
 
 end
