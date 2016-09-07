@@ -5,7 +5,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
                                               :cvss_v3, :patched_versions, :unaffected_versions, 
                                               :related)
   def identifier
-    filepath.split("/")[-2..-1].join("/")
+    "#{cve_or_osvdb}-#{gem}"
   end
 
   def source
@@ -14,6 +14,14 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
 
   def package_platform
     Platforms::Ruby
+  end
+
+  def cve_or_osvdb
+    if cve
+      "CVE-#{cve}"
+    elsif 
+      "OSVDB-#{osvdb}"
+    end
   end
 
   # rubysec advisories are only ever about 1 package
@@ -36,7 +44,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
 
 
   def to_constraint(c, n)
-    {"package" => n, "version" => c}
+    {"package_name" => n, "version" => c}
   end
 
   generate :patched do
@@ -98,15 +106,16 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
   end
 
  
-  generate :package_names do
-    [gem]
-  end
-
   generate :title do
     title
   end
 
   generate :description do
     description
+  end
+
+  generate :related do
+    r = related || []
+    r += url
   end
 end

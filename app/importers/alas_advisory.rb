@@ -1,6 +1,6 @@
 class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity, 
                                            :released_at, :description, :affected_packages, 
-                                           :new_packages)
+                                           :remediation, :new_packages)
 
   def identifier
     alas_id
@@ -24,6 +24,10 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity,
 
   generate :reported_at do
     DateTime.parse(released_at).utc
+  end
+
+  generate :remediation do
+    remediation
   end
 
   generate :patched do
@@ -68,8 +72,15 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :cve_ids, :severity,
   end
 
   generate :criticality do
-    if severity
-      severity.downcase
+    case severity
+    when "Critical"
+      "critical"
+    when "Important"
+      "high"
+    when "Medium"
+      "medium"
+    when "Low"
+      "low"
     else
       "unknown"
     end

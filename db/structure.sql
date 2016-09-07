@@ -51,8 +51,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, package_platform, package_names, patched, affected, unaffected, constraints, title, description, criticality, related, cve_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, source, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.package_platform, OLD.package_names, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.cve_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.source, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, package_platform, patched, affected, unaffected, constraints, title, description, criticality, related, remediation, cve_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.package_platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.remediation, OLD.cve_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -221,8 +221,8 @@ ALTER SEQUENCE accounts_id_seq OWNED BY accounts.id;
 CREATE TABLE advisories (
     id integer NOT NULL,
     identifier character varying NOT NULL,
+    source character varying NOT NULL,
     package_platform character varying NOT NULL,
-    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     patched jsonb DEFAULT '[]'::jsonb NOT NULL,
     affected jsonb DEFAULT '[]'::jsonb NOT NULL,
     unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
@@ -231,6 +231,7 @@ CREATE TABLE advisories (
     description text,
     criticality character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
+    remediation text,
     cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     osvdb_id character varying,
     usn_id character varying,
@@ -238,7 +239,6 @@ CREATE TABLE advisories (
     rhsa_id character varying,
     cesa_id character varying,
     source_text text,
-    source character varying NOT NULL,
     processed boolean DEFAULT false NOT NULL,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
@@ -275,8 +275,8 @@ CREATE TABLE advisory_archives (
     id integer NOT NULL,
     advisory_id integer NOT NULL,
     identifier character varying NOT NULL,
+    source character varying NOT NULL,
     package_platform character varying NOT NULL,
-    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     patched jsonb DEFAULT '[]'::jsonb NOT NULL,
     affected jsonb DEFAULT '[]'::jsonb NOT NULL,
     unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
@@ -285,6 +285,7 @@ CREATE TABLE advisory_archives (
     description text,
     criticality character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
+    remediation text,
     cve_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     osvdb_id character varying,
     usn_id character varying,
@@ -292,7 +293,6 @@ CREATE TABLE advisory_archives (
     rhsa_id character varying,
     cesa_id character varying,
     source_text text,
-    source character varying NOT NULL,
     processed boolean DEFAULT false NOT NULL,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
@@ -2141,6 +2141,13 @@ CREATE INDEX index_advisories_on_processed ON advisories USING btree (processed)
 --
 
 CREATE INDEX index_advisories_on_source ON advisories USING btree (source);
+
+
+--
+-- Name: index_advisories_on_source_and_identifier; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_advisories_on_source_and_identifier ON advisories USING btree (source, identifier);
 
 
 --

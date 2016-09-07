@@ -52,6 +52,7 @@ class CesaImporter < AdvisoryImporter
     packages = cesa.xpath('packages').map(&:text)
     severity = attr["severity"].try(:value)
     synopsis = attr["synopsis"].value
+    references = attr["references"].value.split(" ")
 
     CesaAdvisory.new({
       "cesa_id" => cesa_id,
@@ -61,6 +62,7 @@ class CesaImporter < AdvisoryImporter
       "packages" => packages,
       "severity" => severity,
       "synopsis" => synopsis,
+      "references" => references,
     }, cesa.to_s)
   end
 

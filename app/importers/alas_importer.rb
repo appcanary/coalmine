@@ -44,6 +44,8 @@ class AlasImporter < AdvisoryImporter
  
     # [2..-1] to skip over <b>Issue Overview</b>
     description = document.css("#issue_overview").children[2..-1].inner_text.strip
+ 
+    remediation = document.css("#issue_correction i").map(&:text).join(", ")
 
     affected_packages = document.css("#affected_packages p").text.split(",")
 
@@ -68,6 +70,7 @@ class AlasImporter < AdvisoryImporter
       "description" => description,
       "affected_packages" => affected_packages,
       "new_packages" => new_packages,
+      "remediation" => remediation,
     }, html)
   end
 end

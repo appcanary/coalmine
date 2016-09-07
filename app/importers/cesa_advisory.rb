@@ -1,7 +1,6 @@
-# TODO: what about related urls?
 class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis, 
                                            :severity, :os_arches, :os_releases, 
-                                           :packages)
+                                           :references, :packages)
 
   def identifier
     @gen_cesa_id ||= cesa_id.gsub("--", ":")
@@ -84,5 +83,9 @@ class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis,
  
   generate :reported_at do
     issue_date
+  end
+
+  generate :related do
+    references
   end
 end

@@ -1,4 +1,3 @@
-# TODO: handle references, bugs, etc
 class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches)
 
   def identifier
@@ -34,6 +33,13 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
     else
       "unknown"
     end
+  end
+
+  generate :related do
+    rel = []
+    rel += references
+    rel += bugs
+    rel.flatten.compact
   end
 
   generate :constraints do

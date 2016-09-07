@@ -11,7 +11,7 @@ class AlasImporterTest < ActiveSupport::TestCase
     assert_equal 4, raw_advisories.size
 
     all_advisories = raw_advisories.map do |ra|
-      alas_adv = @importer.parse(raw_advisories.first)
+      alas_adv = @importer.parse(ra)
       new_attr = alas_adv.to_advisory_attributes
 
       assert_equal "amzn", new_attr["package_platform"]
@@ -19,7 +19,7 @@ class AlasImporterTest < ActiveSupport::TestCase
 
       assert ["high", "low", "critical", "medium"].include? new_attr["criticality"]
 
-      assert new_attr["cve_ids"].all? { |cve| cve =~ /CVE-\d\d\d\d-\d\d\d\d/ }
+      assert new_attr["cve_ids"].all? { |cve| cve =~ /(CVE|RHSA)-\d\d\d\d-\d\d\d\d/ }
       assert_equal "alas", new_attr["source"]
 
       # are we generating the patched json properly?
