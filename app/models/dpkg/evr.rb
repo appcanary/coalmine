@@ -1,39 +1,51 @@
 module Dpkg
   class Evr
-    attr_accessor :epoch, :version, :revision
-    def epoch
-      @epoch || 0
+    attr_reader :epoch, :version, :revision
+
+    def initialize(str)
+      epoch, version, revision = Dpkg::Version.parse(str)
+      @epoch = epoch || 0
+      @version = version
+      @revision = revision
     end
 
-    def self.parse(str)
-      str = str.strip
-      epoch, version, revision = nil
-
-      if str.blank?
-        raise ArgumentError.new("Empty version string: #{str}")
+    def <=>(b)
+      if self.epoch > b.epoch
+        return 1
       end
 
-      if str =~ /\s/
-        raise ArgumentError.new("Version string has embedded spaces: #{str}")
+      if self.epoch < b.epoch
+        return -1
       end
 
-      estr, vrstr = str.split(":", 2)
-      if vrstr.nil?
-        raise ArgumentError.new("Nothing after colon in version number: #{str}")
-      else
-        begin
-          epoch = Integer(estr, 10)
-        rescue ArgumentError
-          raise ArgumentError.new("Epoch in version is not a number: #{str}")
-        end
-
-        if epoch < 0
-          raise ArgumentError.new("Epoch in version is negative: #{str}")
-        end
+      rc = Dpkg::Version.verrevcmp(self.version, b.version)
+      if rc != 0
+        return rc;
       end
 
-      
-
+      return Dpkg::Version.verrevcmp(self.revision, b.revision)
     end
   end
+
+=begin
+version.c
+
+int
+dpkg_version_compare(const struct dpkg_version *a,
+                     const struct dpkg_version *b)
+{
+	int rc;
+
+	if (a->epoch > b->epoch)
+		return 1;
+	if (a->epoch < b->epoch)
+		return -1;
+
+	rc = verrevcmp(a->version, b->version);
+	if (rc)
+		return rc;
+
+	return verrevcmp(a->revision, b->revision);
+}
+=end
 end
