@@ -2,8 +2,12 @@ module Dpkg
   class Evr
     attr_reader :epoch, :version, :revision
 
-    def initialize(str)
+    def self.from_s(str)
       epoch, version, revision = Dpkg::Version.parse(str)
+      self.new(epoch, version, revision)
+    end
+
+    def initialize(epoch = nil, version = nil, revision = nil)
       @epoch = epoch || 0
       @version = version
       @revision = revision

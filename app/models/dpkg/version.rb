@@ -37,7 +37,7 @@ module Dpkg
       lstr, hyphen, rstr = vrstr.rpartition("-")
       # rpartition returns leftmost, match, rightmost
       # if no match, both match and leftmost are ""
-      if lstr.empty?
+      if hyphen.empty?
         version = rstr
       else
         version = lstr
@@ -52,7 +52,7 @@ module Dpkg
           raise ArgumentError.new("Invalid character in version number: #{str}")
         end
 
-        if revision && revision =~ /[^0-9a-zA-Z.\-+~:]/
+        if revision && revision =~ /[^0-9a-zA-Z.+~]/
           raise ArgumentError.new("Invalid character in revision number: #{str}")
         end
 
@@ -88,7 +88,9 @@ module Dpkg
       end
     end
 
-    def self.verrevcmp(stra = "", strb = "")
+    def self.verrevcmp(stra, strb)
+      stra ||= ""
+      strb ||= ""
       achars = stra.chars
       bchars = strb.chars
 
@@ -119,7 +121,7 @@ module Dpkg
         end
 
         while(is_digit?(a) && is_digit?(b)) 
-          if first_diff != 0
+          if first_diff == 0
             first_diff = a <=> b
           end
           a = achars.shift
