@@ -1,4 +1,8 @@
 =begin
+(defn parse-line [line]
+  (->> (str/split line #":" 2)
+       (mapv str/trim)))
+
 (defn parse-package-list
   [input {:keys [distro release] :as server}]
   (doall
@@ -17,7 +21,7 @@
                  (throw (ex-info "Unknown release or distro" {:distro distro
                                                               :release release
                                                               :server server})))
-               
+
                (when (= status "install ok installed")
                  {:name    pkg-name
                   :kind    distro
@@ -26,8 +30,23 @@
                             :platform release}}))))))
 
 =end
-class DpkgStatusParser
+module DpkgStatusParser
+  include ResultObject
   def self.parse(statusfile)
+    pkg_hshs = statusfile.split(/\n\n(?!\s)/).map do |package|
+      ppairs = package.split(/\n(?!\s)/).map do |line|
+        line.split(":", 2).map(&:strip)
+      end
 
+      Hash[ppairs]
+    end
+      
+    installed_pkgs = pkg_hshs.select do |hsh|
+      hsh["Status"] == "install ok installed"
+    end
+      
+    installed_pkgs.map do |hsh|
+      Parcel::Dpkg.new(hsh)
+    end
   end
 end
