@@ -38,7 +38,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
       assert json_pkg["relationships"].key?("vulnerabilities")
 
       assert_equal "vulnerabilities", json["included"].first["type"]
-      assert json["included"].first["attributes"].key?("cve-ids")
+      assert json["included"].first["attributes"].key?("related-ids")
 
       assert_equal true, json["meta"]["vulnerable"]
     end

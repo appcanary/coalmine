@@ -126,8 +126,8 @@ CREATE FUNCTION archive_packages() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO package_archives(package_id, name, source_name, platform, release, version, version_release, platform, epoch, arch, filename, checksum, origin, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.name, OLD.source_name, OLD.platform, OLD.release, OLD.version, OLD.version_release, OLD.platform, OLD.epoch, OLD.arch, OLD.filename, OLD.checksum, OLD.origin, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO package_archives(package_id, platform, release, name, version, source_name, source_version, epoch, arch, filename, checksum, origin, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.platform, OLD.release, OLD.name, OLD.version, OLD.source_name, OLD.source_version, OLD.epoch, OLD.arch, OLD.filename, OLD.checksum, OLD.origin, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -996,12 +996,12 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 CREATE TABLE package_archives (
     id integer NOT NULL,
     package_id integer NOT NULL,
-    name character varying NOT NULL,
-    source_name character varying,
-    platform character varying,
+    platform character varying NOT NULL,
     release character varying,
+    name character varying NOT NULL,
     version character varying,
-    version_release character varying,
+    source_name character varying,
+    source_version character varying,
     epoch character varying,
     arch character varying,
     filename character varying,
@@ -1039,12 +1039,12 @@ ALTER SEQUENCE package_archives_id_seq OWNED BY package_archives.id;
 
 CREATE TABLE packages (
     id integer NOT NULL,
-    name character varying NOT NULL,
-    source_name character varying,
-    platform character varying,
+    platform character varying NOT NULL,
     release character varying,
+    name character varying NOT NULL,
     version character varying,
-    version_release character varying,
+    source_name character varying,
+    source_version character varying,
     epoch character varying,
     arch character varying,
     filename character varying,

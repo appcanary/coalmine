@@ -7,7 +7,7 @@
 #  title            :string
 #  description      :text
 #  criticality      :string
-#  cve_ids          :string           default("{}"), not null, is an Array
+#  reference_ids    :string           default("{}"), not null, is an Array
 #  osvdb_id         :string
 #  usn_id           :string
 #  dsa_id           :string
@@ -48,7 +48,7 @@ FactoryGirl.define do
 
   factory :vulnerability do
     package_platform { deps.first.platform }
-    cve_ids { [generate(:cve_id)] }
+    reference_ids { [generate(:cve_id)] }
 
     trait :ruby do
       package_platform { Platforms::Ruby }

@@ -23,7 +23,7 @@ class ServerExporter
       bundle_and_pkgs.each do |bundle, packages|
         packages.each do |pkg|
           pkg.vulnerabilities.each do |vuln|
-            csv << [bundle.path, pkg.name, vuln.cve_ids.join(", "), pkg.upgrade_to.join(", "), vuln.title]
+            csv << [bundle.path, pkg.name, vuln.reference_ids.join(", "), pkg.upgrade_to.join(", "), vuln.title]
           end
         end
       end

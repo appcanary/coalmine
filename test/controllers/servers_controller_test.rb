@@ -35,7 +35,7 @@ class ServersControllerTest < ActionController::TestCase
       assert_equal vuln_server.name, file[1][0]
 
       # we list one line per vulnerability
-      assert_equal vuln.cve_ids.first, file[4][2]
+      assert_equal vuln.reference_ids.first, file[4][2]
       assert_equal vulnp.name, file[4][1]
     end
 
