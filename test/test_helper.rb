@@ -17,8 +17,8 @@ class ActiveSupport::TestCase
   include Sorcery::TestHelpers::Rails::Controller
   # Add more helper methods to be used by all tests here...
 
-  def hydrate(name)
-    File.read(File.join(Rails.root, "test/fixtures/#{name}"))
+  def hydrate(*paths)
+    File.read(File.join(Rails.root, "test/data/", *paths))
   end
 end
 

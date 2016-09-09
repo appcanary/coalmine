@@ -4,7 +4,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
   let(:account) { FactoryGirl.create(:account) }
 
   setup do
-    lockfile = hydrate("gemcanary.gemfile.lock")
+    lockfile = hydrate("parsers", "gemcanary.gemfile.lock")
     @package_list, _ = GemfileParser.parse(lockfile)
     @platform = "ruby"
   end
