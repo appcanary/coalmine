@@ -3,7 +3,7 @@ require 'test_helper'
 class UbuntuTrackerImporterTest < ActiveSupport::TestCase
 
   it "should do the right thing" do
-    @importer = UbuntuTrackerImporter.new("test/data/ubuntu-cve-tracker")
+    @importer = UbuntuTrackerImporter.new("test/data/importers/ubuntu-cve-tracker")
     assert_equal 0, Advisory.from_ubuntu.count
 
     # we put away four advisories in our fixture

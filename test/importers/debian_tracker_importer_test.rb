@@ -2,7 +2,7 @@ require 'test_helper'
 
 class DebianTrackerImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
-    @importer = DebianTrackerImporter.new("test/data/debian-tracker/sample.json")
+    @importer = DebianTrackerImporter.new("test/data/importers/debian-tracker/sample.json")
 
     assert_equal 0, Advisory.from_debian.count
 

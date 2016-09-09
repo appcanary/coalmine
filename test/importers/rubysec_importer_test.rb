@@ -2,7 +2,7 @@ require 'test_helper'
 
 class RubysecImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
-    @importer = RubysecImporter.new("test/data/rubysec")
+    @importer = RubysecImporter.new("test/data/importers/rubysec")
 
     assert_equal 0, Advisory.from_rubysec.count
     # there are three gems in our fixtures

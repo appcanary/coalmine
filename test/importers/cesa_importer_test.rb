@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CesaImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
-    @importer = CesaImporter.new("test/data/cesa")
+    @importer = CesaImporter.new("test/data/importers/cesa")
 
     assert_equal 0, Advisory.from_cesa.count
 

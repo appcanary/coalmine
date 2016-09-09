@@ -2,7 +2,7 @@ require 'test_helper'
 
 class AlasImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
-    @importer = AlasImporter.new(File.join(Rails.root, "test/data/alas/index.html"))
+    @importer = AlasImporter.new(File.join(Rails.root, "test/data/importers/alas/index.html"))
 
     assert_equal 0, Advisory.from_alas.count
     
