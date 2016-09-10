@@ -42,11 +42,11 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
   generate :related do
     rel = []
     if references
-      rel += references
+      rel << references
     end
 
     if bugs
-      rel += bugs
+      rel << bugs
     end
 
     rel.flatten.compact
