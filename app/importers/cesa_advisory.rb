@@ -48,9 +48,9 @@ class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis,
   def normalize_release(str)
     case str
     when /el7/
-      "el7"
+      "7"
     when /el6/
-      "el6"
+      "6"
     else
       "unknown"
     end
