@@ -10,10 +10,6 @@ class BundleManager < ServiceManager
   # should be responsible for *finding* the right bundle
   # scoped by account or server
 
-  # don't we need a kind alongside platform?
-  # platform alone seems insufficient
-  # the (keys (group-by :platform (Version/all-with db :platform)))
-  # returned shows a lot of variance
   def create(pr, opt, package_list)
     platform, release = pr.platform, pr.release
     bundle = Bundle.new(:account_id => @account_id,
