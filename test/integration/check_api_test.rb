@@ -38,7 +38,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
       assert json_pkg["relationships"].key?("vulnerabilities")
 
       assert_equal "vulnerabilities", json["included"].first["type"]
-      assert json["included"].first["attributes"].key?("related-ids")
+      assert json["included"].first["attributes"].key?("reference-ids")
 
       assert_equal true, json["meta"]["vulnerable"]
     end
@@ -82,7 +82,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
   end
 
   def gemfilelock
-    @gemfilelock ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/fixtures", "420rails.gemfile.lock")))
+    @gemfilelock ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "420rails.gemfile.lock")))
   end
 
   def gemfile

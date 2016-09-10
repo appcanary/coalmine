@@ -189,7 +189,7 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
   end
 
   def gemfilelock
-    @gemfilelock ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/fixtures", "420rails.gemfile.lock")))
+    @gemfilelock ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "420rails.gemfile.lock")))
   end
 
   def gemfile
