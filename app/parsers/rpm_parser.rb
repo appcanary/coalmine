@@ -14,7 +14,6 @@
 =end
 
 # TODO
-# test obv
 # does it make sense for this to be separate?
 # like, the RPMComparator does some related stuff right
 # Do we trust the user's release input into bundle or 
@@ -28,7 +27,7 @@ module RPM
         pkgs = file.each_line.reject { |str|
           str =~ /gpg-pubkey-[a-z0-9]+-[a-z0-9]+/
         }.map { |str|
-          Parsel::RPM.new(str)
+          Parcel::RPM.new(str)
         }
         Result.new(pkgs, nil)
       rescue Exception => e

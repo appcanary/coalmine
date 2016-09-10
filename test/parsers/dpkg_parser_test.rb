@@ -4,7 +4,7 @@ class DpkgParserTest < ActiveSupport::TestCase
   test "whether it loads things properly" do
     file = File.read(File.join(Rails.root, "test/data/parsers/debian-jessie-dpkg-status.txt"))
 
-    parcels = DpkgStatusParser.parse(file)
+    parcels, error = DpkgStatusParser.parse(file)
     assert_equal 512, parcels.count
 
     # smokescreen: none of these values are set
@@ -23,7 +23,7 @@ class DpkgParserTest < ActiveSupport::TestCase
 
     file2 = File.read(File.join(Rails.root, "test/data/parsers/ubuntu-trusty-dpkg-status.txt"))
 
-    parcels = DpkgStatusParser.parse(file2)
+    parcels, error = DpkgStatusParser.parse(file2)
     assert_equal 660, parcels.count
 
     # smokescreen: none of these values are set
