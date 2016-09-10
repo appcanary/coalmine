@@ -71,19 +71,19 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     # exact same version
     patched_pkg1 = build_cpkg(name, "openssh-6.6.1p1-25.el7_2.x86_64.rpm")
     # higher version
-    patched_pkg2 = build_cpkg(name, "6.7.1p1-23.el7_2.x86_64")
+    patched_pkg2 = build_cpkg(name, "openssh-6.7.1p1-23.el7_2.x86_64")
 
     # higher release
-    patched_pkg3 = build_cpkg(name, "6.6.1p1-26.el7_2.x86_64")
-    patched_pkg4 = build_cpkg(name, "6.6.1p1-25.el7_3.x86_64")
+    patched_pkg3 = build_cpkg(name, "openssh-6.6.1p1-26.el7_2.x86_64")
+    patched_pkg4 = build_cpkg(name, "openssh-6.6.1p1-25.el7_3.x86_64")
 
 
     # release is lower
-    vuln_pkg1 = build_cpkg(name, "6.6.1p1-23.el7_2.x86_64")
-    vuln_pkg2 = build_cpkg(name, "6.6.1p1-25.el7_1.x86_64")
-    vuln_pkg3 = build_cpkg(name, "6.6.1p1-25.el7.x86_64")
+    vuln_pkg1 = build_cpkg(name, "openssh-6.6.1p1-23.el7_2.x86_64")
+    vuln_pkg2 = build_cpkg(name, "openssh-6.6.1p1-25.el7_1.x86_64")
+    vuln_pkg3 = build_cpkg(name, "openssh-6.6.1p1-25.el7.x86_64")
     # version is lower
-    vuln_pkg4 = build_cpkg(name, "6.6.1p0-25.el7_2.x86_64")
+    vuln_pkg4 = build_cpkg(name, "openssh-6.6.1p0-25.el7_2.x86_64")
 
     diff_pkg = build_cpkg(name+"lol", vuln_pkg1.version)
 

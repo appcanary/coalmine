@@ -43,7 +43,7 @@ class Parcel
     def self.builder_from_package(pkg)
       builder = super
 
-      builder.arch = pkg.arg
+      builder.arch = pkg.arch
       builder.filename = pkg.filename
 
       builder
@@ -55,7 +55,7 @@ class Parcel
       self.nevra = ::RPM::Nevra.new(filename.strip)
 
       self.name = nevra.name
-      self.version = nevra.to_evra
+      self.version = filename
       self.arch = nevra.arch
     end
 

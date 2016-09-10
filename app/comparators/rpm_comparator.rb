@@ -1,7 +1,7 @@
 class RPMComparator
   def initialize(package)
     @package = package
-    @current_evr = ::RPM::Nevra.from_package(@package)
+    @current_evr = ::RPM::Nevra.new(@package.version)
   end
 
   # is the current version identical, or more
