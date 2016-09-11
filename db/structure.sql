@@ -156,8 +156,8 @@ CREATE FUNCTION archive_vulnerable_dependencies() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, package_platform, package_name, release, arch, patched_versions, unaffected_versions, pending, end_of_life, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.vulnerability_id, OLD.package_platform, OLD.package_name, OLD.release, OLD.arch, OLD.patched_versions, OLD.unaffected_versions, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, package_platform, release, package_name, arch, patched_versions, unaffected_versions, pending, end_of_life, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.vulnerability_id, OLD.package_platform, OLD.release, OLD.package_name, OLD.arch, OLD.patched_versions, OLD.unaffected_versions, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -1354,8 +1354,8 @@ CREATE TABLE vulnerable_dependencies (
     id integer NOT NULL,
     vulnerability_id integer NOT NULL,
     package_platform character varying NOT NULL,
-    package_name character varying NOT NULL,
     release character varying,
+    package_name character varying NOT NULL,
     arch character varying,
     patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
     unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,
@@ -1396,8 +1396,8 @@ CREATE TABLE vulnerable_dependency_archives (
     vulnerable_dependency_id integer NOT NULL,
     vulnerability_id integer NOT NULL,
     package_platform character varying NOT NULL,
-    package_name character varying NOT NULL,
     release character varying,
+    package_name character varying NOT NULL,
     arch character varying,
     patched_versions text[] DEFAULT '{}'::text[] NOT NULL,
     unaffected_versions text[] DEFAULT '{}'::text[] NOT NULL,

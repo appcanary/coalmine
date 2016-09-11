@@ -3,12 +3,9 @@ class CreateVulnerableDependencies < ActiveRecord::Migration
     ArchiveMigrator.new(self).create_table :vulnerable_dependencies do |t|
       t.references :vulnerability, null: false
       t.string :package_platform, null: false
-      t.string :package_name, null: false
       t.string :release
+      t.string :package_name, null: false
       t.string :arch
-
-      # t.string :affected_arches, array: true, :default => [], null: false
-      # t.string :affected_releases, array: true, :default => [], null: false
 
       t.text :patched_versions, array: true, :default => [], null: false
       t.text :unaffected_versions, array: true, :default => [], null: false
@@ -18,7 +15,5 @@ class CreateVulnerableDependencies < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-
-
   end
 end
