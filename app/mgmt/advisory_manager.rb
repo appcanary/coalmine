@@ -5,6 +5,18 @@
 require 'rpm'
 class AdvisoryManager
 
+  def everything
+    [CesaImporter, RubysecImporter, DebianTrackerImporter, UbuntuTrackerImporter, AlasImporter].each do |k|
+      k.new.import!
+    end
+
+    self.import_cesa
+    self.import_rubysec
+    self.import_ubuntu
+    self.import_debian
+    self.import_alas
+  end
+
   # TODO: make sure that a single failure doesn't fuck
   # the whole thing
   def import_rubysec
@@ -43,9 +55,46 @@ class AdvisoryManager
     end
   end
 
+  def import_alas
+    @vm = VulnerabilityManager.new(Platforms::Amazon)
+    Advisory.from_alas.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
+    end
+  end
+
+
   def import_ubuntu
-    @vm = VulnerabilityManager.new(Platforms::Ubuntu)
+    @vm = VulnerabilityManager.new(Platforms::Ubuntu, true)
     Advisory.from_ubuntu.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
+    end
+  end
+
+  def import_debian
+    @vm = VulnerabilityManager.new(Platforms::Debian, true)
+    Advisory.from_debian.unprocessed.find_each do |adv|
       # todo: check if vuln exists? or if this refers to a vuln
       # todo: track what adv a vuln came from
 
