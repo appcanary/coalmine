@@ -63,7 +63,7 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     name = "openssh"
 
     vuln_dep = FactoryGirl.build(:vulnerable_dependency, 
-                                 :package_platform => Platforms::CentOS, 
+                                 :package_platform => Platforms::CentOS,
                                  :package_name => name, 
                                  :patched_versions =>  ["openssh-6.6.1p1-25.el7_2.src.rpm", "openssh-6.6.1p1-25.el7_2.x86_64.rpm"],
                                  :unaffected_versions => [])
@@ -98,6 +98,21 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"
   end
 
+
+  it "should flag things as vulnerable when they match the same release" do
+    name = "openssl"
+
+    vuln_dep = FactoryGirl.build(:vulnerable_dependency,
+                                 package_platform: Platforms::Debian,
+                                 package_name: name,
+                                 release: "jessie",
+                                 patched_versions: [])
+
+    pkg = build_dpkg(name, "1.0.1t-1+deb8u2")
+
+    assert vuln_dep.affects?(pkg)
+  end
+
   def build_cpkg(name, ver)
     FactoryGirl.build(:package, :centos,
                       :name => name,
@@ -109,8 +124,14 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     FactoryGirl.build(:package, :ruby,
                       :name => name,
                       :version => ver)
-
   end
+
+  def build_dpkg(name, ver)
+    FactoryGirl.build(:package, :debian,
+                      :name => name,
+                      :version => ver)
+  end
+
 
   
 end

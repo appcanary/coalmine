@@ -44,9 +44,14 @@ FactoryGirl.define do
       release "utopic"
     end
 
+    trait :debian do
+      platform "debian"
+      release "jessie"
+    end
+
     trait :centos do
       platform "centos"
-      release "7"
+      release "el7"
     end
 
     trait :ruby do

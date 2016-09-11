@@ -15,8 +15,9 @@ class RPMComparator
     (constraint_evr <=> @current_evr) <= 0
   end
 
+  # current version is older than constraint
   def earlier_version?(version_constraint)
     constraint_evr = ::RPM::Nevra.new(version_constraint)
-    (constraint_evr <=> @current_evr) < 0
+    (@current_evr <=> constraint_evr) < 0
   end
 end

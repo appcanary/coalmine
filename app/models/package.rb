@@ -115,8 +115,8 @@ class Package < ActiveRecord::Base
 
   def calc_upgrade_to(vds)
     vds.map(&:patched_versions).reduce([]) do |arr, pv|
-      pv.each do |pv|
-        arr << pv if earlier_version?(pv)
+      pv.each do |v|
+        arr << v if earlier_version?(v)
       end
       arr
     end

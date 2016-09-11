@@ -112,6 +112,10 @@ class Platforms
               RubyComparator
             when CentOS
               RPMComparator
+            when Ubuntu
+              DpkgComparator
+            when Debian
+              DpkgComparator
             else
               raise "unknown platform for comparator"
             end
@@ -125,6 +129,10 @@ class Platforms
       GemfileParser
     when CentOS
       RPM::Parser
+    when Ubuntu
+      DpkgStatusParser
+    when Debian
+      DpkgStatusParser
     else
       nil
     end

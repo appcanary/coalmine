@@ -27,7 +27,7 @@ class ApiForm < Reform::Form
       next 
     end
 
-    parser = Platforms.parser_for(Platforms::Ruby)
+    parser = Platforms.parser_for(platform_release.platform)
 
     pl, err = parser.parse(file_contents)
 
