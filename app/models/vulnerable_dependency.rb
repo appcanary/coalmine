@@ -34,10 +34,18 @@ class VulnerableDependency < ActiveRecord::Base
   delegate :title, :to => :vulnerability, :prefix => true
   
   # strictly, is this a package from the same platform?
-  # TODO: needs to check release
+  # TODO: concerns belongs in package, BP & NA here
   def concerns?(package)
-    (package.platform == self.package_platform) && 
-      package.same_name?(self.package_name)
+    same_pr = (package.platform == self.package_platform) && 
+      (package.release == self.release)
+
+    return same_pr unless same_pr
+
+    if self.arch.present?
+      same_pr = same_pr && self.arch == package.arch
+    end
+
+    same_pr && package.same_name?(self.package_name)
   end
 
   # whether this package could be vulnerable

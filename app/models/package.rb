@@ -59,12 +59,8 @@ class Package < ActiveRecord::Base
                                :package_platform => platform)
   end
 
-  def same_name?(pkg_name)
-    if self.platform == Platforms::Debian
-      self.source_name == pkg_name
-    else
-      self.name == pkg_name 
-    end
+  def same_name?(dep_name)
+    self.source_name == dep_name || self.name == dep_name
   end
 
   # Given a list of unaffected versions,
