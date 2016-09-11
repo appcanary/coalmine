@@ -65,6 +65,7 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     vuln_dep = FactoryGirl.build(:vulnerable_dependency, 
                                  :package_platform => Platforms::CentOS,
                                  :package_name => name, 
+                                 :release => "7",
                                  :patched_versions =>  ["openssh-6.6.1p1-25.el7_2.src.rpm", "openssh-6.6.1p1-25.el7_2.x86_64.rpm"],
                                  :unaffected_versions => [])
 

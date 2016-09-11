@@ -51,7 +51,7 @@ FactoryGirl.define do
 
     trait :centos do
       platform "centos"
-      release "el7"
+      release "7"
     end
 
     trait :ruby do
