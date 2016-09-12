@@ -67,17 +67,6 @@ class VulnerableDependency < ActiveRecord::Base
         package.been_patched?(patched_versions))
   end
 
-  # TODO: with new value object format, we have to change how affects? works
-  # for rubysec, main difference is patched / unaffected now is array of value objects
-  # so main change is simply in the comparator.
-  #
-  # for UBUNTU things that matter:
-  # affected contains releases and package-names (which matters for concerns?)
-  # a package that is vulnerable BUT has no patch yet ends up in "affected"
-  # can't use unaffected cos ubuntu releases come out all the time
-  # 
-  #
-
   def unique_hash
     @unique_hash ||= self.attributes.except("id", "created_at", "updated_at", "valid_at", "expired_at")
   end
