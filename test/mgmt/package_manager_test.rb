@@ -46,7 +46,6 @@ class PackageManagerTest < ActiveSupport::TestCase
     assert_equal [], diffed4
   end
 
-  # TODO: assert centos packages get created properly? i.e. EVR version constraint?
   describe "a package is the tuple (platform, release, name, version)" do
     it "we should find or create packages accordingly" do
       p1 = FactoryGirl.create(:package, :ruby)

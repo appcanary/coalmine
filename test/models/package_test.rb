@@ -29,7 +29,39 @@
 require 'test_helper'
 
 class PackageTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "whether concerning_vulnerabilities works" do
+    package1 = FactoryGirl.build(:package, :debian,
+                                 :name => "openssh-client",
+                                 :source_name => "openssh",
+                                 :version => "2.0.0")
+
+
+    assert_equal 0, package1.concerning_vulnerabilities.count
+    package2 = FactoryGirl.build(:package, :debian,
+                                 :name => "openssh",
+                                 :version => "2.0.0")
+
+    assert_equal 0, package2.concerning_vulnerabilities.count
+
+    v = FactoryGirl.create(:vulnerability, :debian,
+                          :deps => [])
+    vd = FactoryGirl.create(:vulnerable_dependency,
+                            :vulnerability => v,
+                            :platform => Platforms::Debian,
+                            :release => "jessie",
+                            :package_name => "openssh",
+                            :patched_versions => ["1.0.0"])
+
+    vd2 = FactoryGirl.create(:vulnerable_dependency,
+                             :vulnerability => v,
+                             :platform => Platforms::Debian,
+                             :release => "jessie",
+                             :package_name => "openssh1",
+                             :patched_versions => ["1.0.0"])
+
+
+    assert_equal 1, package1.concerning_vulnerabilities.count
+    assert_equal 1, package2.concerning_vulnerabilities.count
+
+  end
 end

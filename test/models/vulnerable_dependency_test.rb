@@ -4,9 +4,9 @@
 #
 #  id                  :integer          not null, primary key
 #  vulnerability_id    :integer          not null
-#  package_platform    :string           not null
-#  package_name        :string           not null
+#  platform            :string           not null
 #  release             :string
+#  package_name        :string           not null
 #  arch                :string
 #  patched_versions    :text             default("{}"), not null, is an Array
 #  unaffected_versions :text             default("{}"), not null, is an Array
@@ -19,8 +19,12 @@
 #
 # Indexes
 #
-#  index_vulnerable_dependencies_on_expired_at  (expired_at)
-#  index_vulnerable_dependencies_on_valid_at    (valid_at)
+#  index_vulnerable_dependencies_on_expired_at                 (expired_at)
+#  index_vulnerable_dependencies_on_package_name               (package_name)
+#  index_vulnerable_dependencies_on_platform                   (platform)
+#  index_vulnerable_dependencies_on_platform_and_package_name  (platform,package_name)
+#  index_vulnerable_dependencies_on_valid_at                   (valid_at)
+#  index_vulnerable_dependencies_on_vulnerability_id           (vulnerability_id)
 #
 
 require 'test_helper'
