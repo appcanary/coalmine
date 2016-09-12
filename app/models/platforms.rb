@@ -122,7 +122,16 @@ class Platforms
       "5" => "lenny",
       "6" => "squeeze",
       "7" => "wheezy",
-      "8" => "jessie"
+      "8" => "jessie",
+      "slink"=> true,
+      "potato"=> true,
+      "woody"=> true,
+      "sarge"=> true,
+      "etch"=> true,
+      "lenny"=> true,
+      "squeeze"=> true,
+      "wheezy"=> true,
+      "jessie"=> true,
     } 
   }
 
