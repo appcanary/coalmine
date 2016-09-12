@@ -63,7 +63,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
 
       assert_equal 0, server.bundles.count
 
-      gemfile_lock = hydrate("3219rails.gemfile.lock")
+      gemfile_lock = hydrate("parsers", "3219rails.gemfile.lock")
       crc = Zlib::crc32(gemfile_lock)
       b64_file = Base64.encode64(gemfile_lock)
 
@@ -83,7 +83,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
 
       # let's submit some changes!
 
-      gemfile_lock = hydrate("420rails.gemfile.lock")
+      gemfile_lock = hydrate("parsers", "420rails.gemfile.lock")
       crc = Zlib::crc32(gemfile_lock)
       b64_file = Base64.encode64(gemfile_lock)
 
@@ -110,7 +110,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
 
       assert_equal 0, AgentReceivedFile.count
 
-      gemfile_lock = hydrate("3219rails.gemfile.lock")
+      gemfile_lock = hydrate("parsers", "3219rails.gemfile.lock")
       crc = Zlib::crc32(gemfile_lock)
       b64_file = Base64.encode64(gemfile_lock)
       path = "/Users/phillmv/code/c/newapi/Gemfile.lock"

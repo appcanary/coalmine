@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+    <head>
+        <title>ALAS-2016-668</title>
+        
+        <link rel='stylesheet' href='/static/latest.css' type='text/css' media='print, projection, screen' />
+        <link rel='stylesheet' href='/static/style.css' type='text/css' media='print, projection, screen' />
+        <link rel='icon' type='image/x-icon' href='/static/favicon.ico' />
+    </head>
+        <body>
+            
+                <div style='min-height: 523px;' class='nine columns content-with-nav' role='main'>
+                    <section>
+                        
+                            <div class='navigation' style='margin-top:4px;margin-bottom:10px;'>
+            <a href="/index.html">&#171; Amazon Linux AMI Security Center</a>
+        </div>
+        <div class='title'><h1 id='ALAS-2016-668'>ALAS-2016-668</h1></div>
+
+        <div class='text'>
+            <hr class='mid-pad'>
+            <span class='alas-info'><b>Amazon Linux AMI Security Advisory:</b> ALAS-2016-668</span>
+            <br />
+            <span class='alas-info'><b>Advisory Release Date:</b> 2016-03-16 16:30 Pacific</span>
+            <br />
+            <span class='alas-info'><b>Date Updated:</b> 2016-03-16 16:30 Pacific</span>
+            <br />
+
+            <div id='severity' class='alas-info'>
+                <b>Severity:</b>
+                
+                    <span class='date'>
+                        <span class='bulletin-type'>
+                            <i class='icon-warning-sign'>&#xf071;</i>
+                        </span>
+                    </span>
+
+                    Medium<br />
+                
+            </div>
+
+            <div id='references'>
+                <b>References:</b>
+                <a href='https://access.redhat.com/security/cve/CVE-2016-3115' target='_blank'>CVE-2016-3115&nbsp;<i class='icon-external-link'></i></a>
+                <br />
+            </div>
+
+            <hr class='mid-pad'>
+
+            
+            
+
+            <div id='issue_overview'>
+                <b>Issue Overview:</b>
+                <p>It was discovered that the OpenSSH server did not sanitize data received in requests to enable X11 forwarding. An authenticated client with restricted SSH access could possibly use this flaw to bypass intended restrictions.</p>
+            </div>
+
+            <div id='affected_packages' class='alas-info'>
+                
+                    <br />
+                
+                <b>Affected Packages:</b>
+                <br />
+                <p>openssh</p>
+            </div>
+
+            <div id='issue_correction'>
+                
+                    <br />
+                
+                <b>Issue Correction:</b>
+                
+                    <br />Run <i>yum update openssh</i> to update your system.
+                                    <br />
+            </div>
+
+            <div id='new_packages'>
+                
+                    <br />
+                
+                <b>New Packages:</b><pre>i686:<br />&nbsp;&nbsp;&nbsp; openssh-server-6.6.1p1-23.60.amzn1.i686<br />&nbsp;&nbsp;&nbsp; openssh-keycat-6.6.1p1-23.60.amzn1.i686<br />&nbsp;&nbsp;&nbsp; openssh-debuginfo-6.6.1p1-23.60.amzn1.i686<br />&nbsp;&nbsp;&nbsp; openssh-6.6.1p1-23.60.amzn1.i686<br />&nbsp;&nbsp;&nbsp; pam_ssh_agent_auth-0.9.3-9.23.60.amzn1.i686<br />&nbsp;&nbsp;&nbsp; openssh-ldap-6.6.1p1-23.60.amzn1.i686<br />&nbsp;&nbsp;&nbsp; openssh-clients-6.6.1p1-23.60.amzn1.i686<br /><br />src:<br />&nbsp;&nbsp;&nbsp; openssh-6.6.1p1-23.60.amzn1.src<br /><br />x86_64:<br />&nbsp;&nbsp;&nbsp; openssh-keycat-6.6.1p1-23.60.amzn1.x86_64<br />&nbsp;&nbsp;&nbsp; pam_ssh_agent_auth-0.9.3-9.23.60.amzn1.x86_64<br />&nbsp;&nbsp;&nbsp; openssh-clients-6.6.1p1-23.60.amzn1.x86_64<br />&nbsp;&nbsp;&nbsp; openssh-ldap-6.6.1p1-23.60.amzn1.x86_64<br />&nbsp;&nbsp;&nbsp; openssh-6.6.1p1-23.60.amzn1.x86_64<br />&nbsp;&nbsp;&nbsp; openssh-server-6.6.1p1-23.60.amzn1.x86_64<br />&nbsp;&nbsp;&nbsp; openssh-debuginfo-6.6.1p1-23.60.amzn1.x86_64<br /><br /></pre></div>
+        </div>
+                        
+                    </section>
+                </div>
+            
+        </body>
+    
+</html>

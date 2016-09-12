@@ -75,7 +75,7 @@ Rails.application.routes.draw do
   end
 
   resources :monitors, :only => [:new, :show, :destroy, :create]
-  resources :vulns, :only => [:show]
+  resources :vulns, :only => [:index, :show]
 
   namespace :admin do
     root to: "users#index"

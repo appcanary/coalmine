@@ -87,7 +87,31 @@ class Platforms
       "14.10"=>"utopic",
       "15.04"=>"vivid",
       "15.10"=>"wily",
-      "16.04"=>"xenial"
+      "16.04"=>"xenial",
+      "warty"=> true,
+      "hoary"=> true,
+      "breezy"=> true,
+      "drake"=> true,
+      "edgy"=> true,
+      "feisty"=> true,
+      "gusty"=> true,
+      "hardy"=> true,
+      "intrepid"=> true,
+      "jaunty"=> true,
+      "karmic"=> true,
+      "lucid"=> true,
+      "maverick"=> true,
+      "natty"=> true,
+      "precise"=> true,
+      "quantal"=> true,
+      "raring"=> true,
+      "saucy"=> true,
+      "trusty"=> true,
+      "utopic"=> true,
+      "vivid"=> true,
+      "wily"=> true,
+      "xenial" => true,
+
     },
     Debian => {
       "2.1" => "slink",
@@ -98,7 +122,16 @@ class Platforms
       "5" => "lenny",
       "6" => "squeeze",
       "7" => "wheezy",
-      "8" => "jessie"
+      "8" => "jessie",
+      "slink"=> true,
+      "potato"=> true,
+      "woody"=> true,
+      "sarge"=> true,
+      "etch"=> true,
+      "lenny"=> true,
+      "squeeze"=> true,
+      "wheezy"=> true,
+      "jessie"=> true,
     } 
   }
 
@@ -112,6 +145,10 @@ class Platforms
               RubyComparator
             when CentOS
               RPMComparator
+            when Ubuntu
+              DpkgComparator
+            when Debian
+              DpkgComparator
             else
               raise "unknown platform for comparator"
             end
@@ -125,6 +162,10 @@ class Platforms
       GemfileParser
     when CentOS
       RPM::Parser
+    when Ubuntu
+      DpkgStatusParser
+    when Debian
+      DpkgStatusParser
     else
       nil
     end

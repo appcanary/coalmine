@@ -54,6 +54,7 @@ class PackageMaker < ServiceMaker
     query = Package.where(:platform => @platform,
                           :release => @release)
 
+    # TODO: what about packages with diff arches?
     query.search_unique_fields(package_list.map(&:unique_values))
   end
 

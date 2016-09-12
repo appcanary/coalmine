@@ -1,0 +1,23 @@
+<table class="table">
+  <thead>
+    <th>
+      title
+    </th>
+    <th>
+      source
+    </th>
+  </thead>
+  <tbody>
+    <% @vulns.each do |v| %>
+      <tr>
+        <td>
+          <%= v.title %>
+        </td>
+
+        <td>
+          <%= v.source %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -8,6 +8,10 @@ class Parcel
               Parcel::Rubygem
             when Platforms::CentOS
               Parcel::RPM
+            when Platforms::Ubuntu
+              Parcel::Dpkg
+            when Platforms::Debian
+              Parcel::Dpkg
             else
               raise "unknown platform"
             end
@@ -39,7 +43,7 @@ class Parcel
     def self.builder_from_package(pkg)
       builder = super
 
-      builder.arch = pkg.arg
+      builder.arch = pkg.arch
       builder.filename = pkg.filename
 
       builder
@@ -51,7 +55,7 @@ class Parcel
       self.nevra = ::RPM::Nevra.new(filename.strip)
 
       self.name = nevra.name
-      self.version = nevra.to_evra
+      self.version = filename
       self.arch = nevra.arch
     end
 
@@ -77,10 +81,31 @@ class Parcel
   end
 
   class Dpkg < Parcel
+    attr_accessor :source_name, :source_version
     def initialize(hsh = nil)
       return if hsh.nil?
-      self.name = hsh[:name]
-      self.version = hsh[:version]
+
+      self.name = hsh["Package"]
+      self.version = hsh["Version"]
+
+      if src = hsh["Source"]
+        if src.index("(")
+          _, self.source_name, self.source_version = src.split(/(?<name>[^\s]+) \((?<version>[^\s]+)\)/)
+        else
+          self.source_name = src
+        end
+      end
+    end
+
+    def attributes
+      {
+        platform: platform,
+        release: release,
+        name: name,
+        version: version,
+        source_name: source_name,
+        source_version: source_version
+      }
     end
   end
 end

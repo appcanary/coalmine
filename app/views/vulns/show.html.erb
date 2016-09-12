@@ -21,16 +21,18 @@
       <dd><%= @vuln.vulnerable_dependencies.map(&:package_name).join(", ") %></dd>
 
       <dt>Kind:</dt>
-      <dd><%= @vuln.package_platform %></dd>
+      <dd><%= @vuln.platform %></dd>
 
       <dt>Title:</dt>
       <dd class="title"><%= @vuln.title %></dd>
 
-      <% if @vuln.cve_ids.present? %>
+      <% if @vuln.reference_ids.present? %>
         <dt>CVE(s):</dt>
         <dd>
-          <% @vuln.cve_ids.each do |cve| %>
-            <%= link_to(cve, "https://web.nvd.nist.gov/view/vuln/detail?vulnId=#{cve}", target: 'blank') %>
+          <% @vuln.reference_ids.each do |cve| %>
+            <% if cve =~ /CVE/ %>
+              <%= link_to(cve, "https://web.nvd.nist.gov/view/vuln/detail?vulnId=#{cve}", target: 'blank') %>
+            <% end %>
           <% end %>
         </dd>
       <% end %>

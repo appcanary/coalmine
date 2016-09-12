@@ -2,27 +2,28 @@
 #
 # Table name: vulnerabilities
 #
-#  id               :integer          not null, primary key
-#  package_platform :string           not null
-#  title            :string
-#  description      :text
-#  criticality      :string
-#  cve_ids          :string           default("{}"), not null, is an Array
-#  osvdb_id         :string
-#  usn_id           :string
-#  dsa_id           :string
-#  rhsa_id          :string
-#  cesa_id          :string
-#  source           :string
-#  reported_at      :datetime
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  valid_at         :datetime         not null
-#  expired_at       :datetime         default("infinity"), not null
+#  id            :integer          not null, primary key
+#  platform      :string           not null
+#  title         :string
+#  description   :text
+#  criticality   :string
+#  reference_ids :string           default("{}"), not null, is an Array
+#  osvdb_id      :string
+#  usn_id        :string
+#  dsa_id        :string
+#  rhsa_id       :string
+#  cesa_id       :string
+#  source        :string
+#  reported_at   :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  valid_at      :datetime         not null
+#  expired_at    :datetime         default("infinity"), not null
 #
 # Indexes
 #
 #  index_vulnerabilities_on_expired_at  (expired_at)
+#  index_vulnerabilities_on_platform    (platform)
 #  index_vulnerabilities_on_valid_at    (valid_at)
 #
 
@@ -35,8 +36,9 @@ FactoryGirl.define do
   end
 
   factory :vulnerable_dependency do
-    package_platform { dep.platform }
+    platform { dep.platform }
     package_name { dep.name }
+    release { dep.release }
    
     patched_versions { ["> #{dep.version}"] }
     unaffected_versions { [] }
@@ -47,12 +49,21 @@ FactoryGirl.define do
   end
 
   factory :vulnerability do
-    package_platform { deps.first.platform }
-    cve_ids { [generate(:cve_id)] }
+    platform { deps.first.platform }
+    reference_ids { [generate(:cve_id)] }
 
     trait :ruby do
-      package_platform { Platforms::Ruby }
+      platform { Platforms::Ruby }
     end
+
+    trait :debian do
+      platform { Platforms::Debian }
+    end
+
+    trait :ubuntu do
+      platform { Platforms::Ubuntu }
+    end
+
 
     transient do
       platform_type { :ruby }

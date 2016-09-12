@@ -2,22 +2,22 @@
 #
 # Table name: packages
 #
-#  id              :integer          not null, primary key
-#  name            :string           not null
-#  source_name     :string
-#  platform        :string
-#  release         :string
-#  version         :string
-#  version_release :string
-#  epoch           :string
-#  arch            :string
-#  filename        :string
-#  checksum        :string
-#  origin          :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  valid_at        :datetime         not null
-#  expired_at      :datetime         default("infinity"), not null
+#  id             :integer          not null, primary key
+#  platform       :string           not null
+#  release        :string
+#  name           :string           not null
+#  version        :string
+#  source_name    :string
+#  source_version :string
+#  epoch          :string
+#  arch           :string
+#  filename       :string
+#  checksum       :string
+#  origin         :string
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  valid_at       :datetime         not null
+#  expired_at     :datetime         default("infinity"), not null
 #
 # Indexes
 #
@@ -50,21 +50,20 @@ class Package < ActiveRecord::Base
     where(clauses.join(" OR "), *values.flatten)
   }
 
-  # TODO: validate centos package format?
-
+  
+  # find all vulnerable dependencies that *could* affect this package
+  # we perform a broad search at first and perform the exact package matching
+  # in ruby land
   def concerning_vulnerabilities
-    # TODO: what do we store exactly on Vulns,
-    # i.e. do we store name, platform, release?
-    VulnerableDependency.where(:package_name => name, 
-                               :package_platform => platform)
+    if self.source_name
+      VulnerableDependency.where(:platform => platform).where("package_name = ? OR package_name = ?", self.name, self.source_name)
+    else
+      VulnerableDependency.where(:platform => platform, :package_name => self.name)
+    end
   end
 
-  def same_name?(pkg_name)
-    if self.platform == Platforms::Debian
-      self.source_name == pkg_name
-    else
-      self.name == pkg_name 
-    end
+  def same_name?(dep_name)
+    self.source_name == dep_name || self.name == dep_name
   end
 
   # Given a list of unaffected versions,
@@ -119,8 +118,8 @@ class Package < ActiveRecord::Base
 
   def calc_upgrade_to(vds)
     vds.map(&:patched_versions).reduce([]) do |arr, pv|
-      pv.each do |pv|
-        arr << pv if earlier_version?(pv)
+      pv.each do |v|
+        arr << v if earlier_version?(v)
       end
       arr
     end

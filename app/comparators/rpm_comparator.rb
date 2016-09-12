@@ -1,7 +1,7 @@
 class RPMComparator
   def initialize(package)
     @package = package
-    @current_evr = ::RPM::Nevra.from_package(@package)
+    @current_evr = ::RPM::Nevra.new(@package.version)
   end
 
   # is the current version identical, or more
@@ -12,24 +12,12 @@ class RPMComparator
     # EVR parsers. So, let's just use the one we use elsewhere.
     constraint_evr = ::RPM::Nevra.new(version_constraint)
 
-    # ignore packages that are not el7, since we only nominally
-    # support el7 packages. Should also check arch n'est pas?
-    if constraint_evr.release =~ /el7/
-
-      (constraint_evr <=> @current_evr) <= 0
-    else
-      false
-    end
+    (constraint_evr <=> @current_evr) <= 0
   end
 
+  # current version is older than constraint
   def earlier_version?(version_constraint)
     constraint_evr = ::RPM::Nevra.new(version_constraint)
-    if constraint_evr.release =~ /el7/
-      (constraint_evr <=> @current_evr) < 0
-    else
-      false
-    end
+    (@current_evr <=> constraint_evr) < 0
   end
-
-
 end

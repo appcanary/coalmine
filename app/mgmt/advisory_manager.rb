@@ -3,14 +3,122 @@
 # 2. abstract?
 # 3. idempotent import
 require 'rpm'
-class AdvisoryManager < ServiceManager
-  def self.import!
-    # dumb case for now: get all the ones we ain't imported yet
-    mger = self.new
-    QueuedAdvisory.where("id not in (select queued_advisory_id from advisories)").find_each do |qa|
-      mger.create(qa)
+class AdvisoryManager
+
+  def everything
+    [CesaImporter, RubysecImporter, DebianTrackerImporter, UbuntuTrackerImporter, AlasImporter].each do |k|
+      k.new.import!
+    end
+
+    self.import_cesa
+    self.import_rubysec
+    self.import_ubuntu
+    self.import_debian
+    self.import_alas
+  end
+
+  # TODO: make sure that a single failure doesn't fuck
+  # the whole thing
+  def import_rubysec
+    @vm = VulnerabilityManager.new(Platforms::Ruby)
+    Advisory.from_rubysec.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
     end
   end
+
+  def import_cesa
+    @vm = VulnerabilityManager.new(Platforms::CentOS)
+    Advisory.from_cesa.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
+    end
+  end
+
+  def import_alas
+    @vm = VulnerabilityManager.new(Platforms::Amazon)
+    Advisory.from_alas.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
+    end
+  end
+
+
+  def import_ubuntu
+    @vm = VulnerabilityManager.new(Platforms::Ubuntu, true)
+    Advisory.from_ubuntu.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
+    end
+  end
+
+  def import_debian
+    @vm = VulnerabilityManager.new(Platforms::Debian, true)
+    Advisory.from_debian.unprocessed.find_each do |adv|
+      # todo: check if vuln exists? or if this refers to a vuln
+      # todo: track what adv a vuln came from
+
+
+      # create or update?
+      if adv.vulnerabilities.present?
+      else
+        vuln, error = @vm.create(adv)
+        if error.present?
+          raise ArgumentError.new("Vuln error: #{error}")
+        end
+      end
+    end
+  end
+
+
+=begin
+  # def self.import!
+  #   # dumb case for now: get all the ones we ain't imported yet
+  #   mger = self.new
+  #   QueuedAdvisory.where("id not in (select queued_advisory_id from advisories)").find_each do |qa|
+  #     mger.create(qa)
+  #   end
+  # end
 
   def create(queuedimport)
     case queuedimport.source
@@ -23,7 +131,7 @@ class AdvisoryManager < ServiceManager
     end
   end
 
-  def import_rubysec(qi)
+  def import_rubysecaaaaa(qi)
     vuln = nil
     Advisory.transaction do
       adv = Advisory.create!(qi.to_advisory_attributes)
@@ -81,5 +189,6 @@ class AdvisoryManager < ServiceManager
     end
     vuln
   end
+=end
 
 end

@@ -1,0 +1,121 @@
+<?xml version='1.0' standalone='yes'?>
+<opt>
+  <CESA-2016--0043 description="Not available" from="centos-announce@centos.org" issue_date="2016-01-14 23:31:46" notes="Not available" product="CentOS Linux" references="https://rhn.redhat.com/errata/RHSA-2016-0043.html http://lists.centos.org/pipermail/centos-announce/2016-January/021614.html" release="1" severity="Moderate" solution="Not available" synopsis="Moderate CentOS openssh Security Update" topic="Not available" type="Security Advisory">
+    <os_arch>x86_64</os_arch>
+    <os_arch>i686</os_arch>
+    <os_release>7</os_release>
+    <packages>openssh-6.6.1p1-23.el7_2.src.rpm</packages>
+    <packages>openssh-6.6.1p1-23.el7_2.x86_64.rpm</packages>
+    <packages>openssh-askpass-6.6.1p1-23.el7_2.x86_64.rpm</packages>
+    <packages>openssh-clients-6.6.1p1-23.el7_2.x86_64.rpm</packages>
+    <packages>openssh-keycat-6.6.1p1-23.el7_2.x86_64.rpm</packages>
+    <packages>openssh-ldap-6.6.1p1-23.el7_2.x86_64.rpm</packages>
+    <packages>openssh-server-6.6.1p1-23.el7_2.x86_64.rpm</packages>
+    <packages>openssh-server-sysvinit-6.6.1p1-23.el7_2.x86_64.rpm</packages>
+    <packages>pam_ssh_agent_auth-0.9.3-9.23.el7_2.i686.rpm</packages>
+    <packages>pam_ssh_agent_auth-0.9.3-9.23.el7_2.x86_64.rpm</packages>
+  </CESA-2016--0043>
+
+  <CESA-2016--0176 description="Not available" from="centos-announce@centos.org" issue_date="2016-02-17 01:37:20" notes="Not available" product="CentOS Linux" references="https://rhn.redhat.com/errata/RHSA-2016-0176.html http://lists.centos.org/pipermail/centos-announce/2016-February/021672.html" release="1" severity="Critical" solution="Not available" synopsis="Critical CentOS glibc Security Update" topic="Not available" type="Security Advisory">
+    <os_arch>x86_64</os_arch>
+    <os_arch>i686</os_arch>
+    <os_release>7</os_release>
+    <packages>glibc-2.17-106.el7_2.4.i686.rpm</packages>
+    <packages>glibc-2.17-106.el7_2.4.src.rpm</packages>
+    <packages>glibc-2.17-106.el7_2.4.x86_64.rpm</packages>
+    <packages>glibc-common-2.17-106.el7_2.4.x86_64.rpm</packages>
+    <packages>glibc-devel-2.17-106.el7_2.4.i686.rpm</packages>
+    <packages>glibc-devel-2.17-106.el7_2.4.x86_64.rpm</packages>
+    <packages>glibc-headers-2.17-106.el7_2.4.x86_64.rpm</packages>
+    <packages>glibc-static-2.17-106.el7_2.4.i686.rpm</packages>
+    <packages>glibc-static-2.17-106.el7_2.4.x86_64.rpm</packages>
+    <packages>glibc-utils-2.17-106.el7_2.4.x86_64.rpm</packages>
+    <packages>nscd-2.17-106.el7_2.4.x86_64.rpm</packages>
+  </CESA-2016--0176>
+
+  <CESA-2016--0301 description="Not available" from="centos-announce@centos.org" issue_date="2016-03-01 16:09:29" multirelease="1" notes="Not available" product="CentOS Linux" references="https://rhn.redhat.com/errata/RHSA-2016-0301.html http://lists.centos.org/pipermail/centos-announce/2016-March/021712.html http://lists.centos.org/pipermail/centos-announce/2016-March/021713.html" release="2" severity="Important" solution="Not available" synopsis="Important CentOS openssl Security Update" topic="Not available" type="Security Advisory">
+    <os_arch>i686</os_arch>
+    <os_arch>x86_64</os_arch>
+    <os_release>6</os_release>
+    <os_release>7</os_release>
+    <packages>openssl-1.0.1e-42.el6_7.4.i686.rpm</packages>
+    <packages>openssl-1.0.1e-42.el6_7.4.src.rpm</packages>
+    <packages>openssl-1.0.1e-42.el6_7.4.x86_64.rpm</packages>
+    <packages>openssl-1.0.1e-51.el7_2.4.src.rpm</packages>
+    <packages>openssl-1.0.1e-51.el7_2.4.x86_64.rpm</packages>
+    <packages>openssl-devel-1.0.1e-42.el6_7.4.i686.rpm</packages>
+    <packages>openssl-devel-1.0.1e-42.el6_7.4.x86_64.rpm</packages>
+    <packages>openssl-devel-1.0.1e-51.el7_2.4.i686.rpm</packages>
+    <packages>openssl-devel-1.0.1e-51.el7_2.4.x86_64.rpm</packages>
+    <packages>openssl-libs-1.0.1e-51.el7_2.4.i686.rpm</packages>
+    <packages>openssl-libs-1.0.1e-51.el7_2.4.x86_64.rpm</packages>
+    <packages>openssl-perl-1.0.1e-42.el6_7.4.i686.rpm</packages>
+    <packages>openssl-perl-1.0.1e-42.el6_7.4.x86_64.rpm</packages>
+    <packages>openssl-perl-1.0.1e-51.el7_2.4.x86_64.rpm</packages>
+    <packages>openssl-static-1.0.1e-42.el6_7.4.i686.rpm</packages>
+    <packages>openssl-static-1.0.1e-42.el6_7.4.x86_64.rpm</packages>
+    <packages>openssl-static-1.0.1e-51.el7_2.4.i686.rpm</packages>
+    <packages>openssl-static-1.0.1e-51.el7_2.4.x86_64.rpm</packages>
+  </CESA-2016--0301>
+
+  <CESA-2016--0459 description="Not available" from="centos-announce@centos.org" issue_date="2016-03-16 13:43:49" multirelease="1" notes="Not available" product="CentOS Linux" references="https://rhn.redhat.com/errata/RHSA-2016-0459.html http://lists.centos.org/pipermail/centos-announce/2016-March/021733.html http://lists.centos.org/pipermail/centos-announce/2016-March/021736.html http://lists.centos.org/pipermail/centos-announce/2016-March/021737.html" release="3" severity="Important" solution="Not available" synopsis="Important CentOS bind Security Update" topic="Not available" type="Security Advisory">
+    <os_arch>i386</os_arch>
+    <os_arch>i686</os_arch>
+    <os_arch>x86_64</os_arch>
+    <os_release>5</os_release>
+    <os_release>6</os_release>
+    <os_release>7</os_release>
+    <packages>bind-9.3.6-25.P1.el5_11.8.i386.rpm</packages>
+    <packages>bind-9.3.6-25.P1.el5_11.8.src.rpm</packages>
+    <packages>bind-9.3.6-25.P1.el5_11.8.x86_64.rpm</packages>
+    <packages>bind-9.8.2-0.37.rc1.el6_7.7.i686.rpm</packages>
+    <packages>bind-9.8.2-0.37.rc1.el6_7.7.src.rpm</packages>
+    <packages>bind-9.8.2-0.37.rc1.el6_7.7.x86_64.rpm</packages>
+    <packages>bind-9.9.4-29.el7_2.3.src.rpm</packages>
+    <packages>bind-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-chroot-9.3.6-25.P1.el5_11.8.i386.rpm</packages>
+    <packages>bind-chroot-9.3.6-25.P1.el5_11.8.x86_64.rpm</packages>
+    <packages>bind-chroot-9.8.2-0.37.rc1.el6_7.7.i686.rpm</packages>
+    <packages>bind-chroot-9.8.2-0.37.rc1.el6_7.7.x86_64.rpm</packages>
+    <packages>bind-chroot-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-devel-9.3.6-25.P1.el5_11.8.i386.rpm</packages>
+    <packages>bind-devel-9.3.6-25.P1.el5_11.8.x86_64.rpm</packages>
+    <packages>bind-devel-9.8.2-0.37.rc1.el6_7.7.i686.rpm</packages>
+    <packages>bind-devel-9.8.2-0.37.rc1.el6_7.7.x86_64.rpm</packages>
+    <packages>bind-devel-9.9.4-29.el7_2.3.i686.rpm</packages>
+    <packages>bind-devel-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-libbind-devel-9.3.6-25.P1.el5_11.8.i386.rpm</packages>
+    <packages>bind-libbind-devel-9.3.6-25.P1.el5_11.8.x86_64.rpm</packages>
+    <packages>bind-libs-9.3.6-25.P1.el5_11.8.i386.rpm</packages>
+    <packages>bind-libs-9.3.6-25.P1.el5_11.8.x86_64.rpm</packages>
+    <packages>bind-libs-9.8.2-0.37.rc1.el6_7.7.i686.rpm</packages>
+    <packages>bind-libs-9.8.2-0.37.rc1.el6_7.7.x86_64.rpm</packages>
+    <packages>bind-libs-9.9.4-29.el7_2.3.i686.rpm</packages>
+    <packages>bind-libs-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-libs-lite-9.9.4-29.el7_2.3.i686.rpm</packages>
+    <packages>bind-libs-lite-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-license-9.9.4-29.el7_2.3.noarch.rpm</packages>
+    <packages>bind-lite-devel-9.9.4-29.el7_2.3.i686.rpm</packages>
+    <packages>bind-lite-devel-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-pkcs11-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-pkcs11-devel-9.9.4-29.el7_2.3.i686.rpm</packages>
+    <packages>bind-pkcs11-devel-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-pkcs11-libs-9.9.4-29.el7_2.3.i686.rpm</packages>
+    <packages>bind-pkcs11-libs-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-pkcs11-utils-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-sdb-9.3.6-25.P1.el5_11.8.i386.rpm</packages>
+    <packages>bind-sdb-9.3.6-25.P1.el5_11.8.x86_64.rpm</packages>
+    <packages>bind-sdb-9.8.2-0.37.rc1.el6_7.7.i686.rpm</packages>
+    <packages>bind-sdb-9.8.2-0.37.rc1.el6_7.7.x86_64.rpm</packages>
+    <packages>bind-sdb-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-sdb-chroot-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>bind-utils-9.3.6-25.P1.el5_11.8.i386.rpm</packages>
+    <packages>bind-utils-9.3.6-25.P1.el5_11.8.x86_64.rpm</packages>
+    <packages>bind-utils-9.8.2-0.37.rc1.el6_7.7.i686.rpm</packages>
+    <packages>bind-utils-9.8.2-0.37.rc1.el6_7.7.x86_64.rpm</packages>
+    <packages>bind-utils-9.9.4-29.el7_2.3.x86_64.rpm</packages>
+    <packages>caching-nameserver-9.3.6-25.P1.el5_11.8.i386.rpm</packages>
+    <packages>caching-nameserver-9.3.6-25.P1.el5_11.8.x86_64.rpm</packages>
+  </CESA-2016--0459>
+
+</opt>
