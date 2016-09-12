@@ -3,7 +3,7 @@ class CreateAdvisories < ActiveRecord::Migration
     ArchiveMigrator.new(self).create_table :advisories do |t|
       t.string :identifier, null: false, index: true
       t.string :source, null: false, index: true
-      t.string :package_platform, null: false
+      t.string :platform, null: false
  
       t.jsonb :patched, :default => [], null: false
       t.jsonb :affected, :default => [], null: false

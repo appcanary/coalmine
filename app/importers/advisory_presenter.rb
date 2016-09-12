@@ -10,14 +10,14 @@
 # USAGE:
 #
 # class Subclassed < Advisory.new(:field1, :field2)
-#   # implement identifier, package_platform, source methods
+#   # implement identifier, platform, source methods
 #   generate :outputted_field do
 #     values_here
 #   end
 # end
 #
 # s = Subclassed.new("field1" => 1, "field2" => 2)
-# s.to_advisory_attributes # => {"identifier" => "", "package_platform" => "", 
+# s.to_advisory_attributes # => {"identifier" => "", "platform" => "", 
 #                          # "source" => "", "outputted_field" => values_here }
 
 class AdvisoryPresenter < Struct
@@ -42,7 +42,7 @@ class AdvisoryPresenter < Struct
       acc[name.to_s] = self.instance_exec &blk
       acc
     end.merge({"identifier" => identifier,
-               "package_platform" => package_platform,
+               "platform" => platform,
                "source_text" => @_source_text,
                "source" => source})
   end

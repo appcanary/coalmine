@@ -4,9 +4,9 @@
 #
 #  id                  :integer          not null, primary key
 #  vulnerability_id    :integer          not null
-#  package_platform    :string           not null
-#  package_name        :string           not null
+#  platform            :string           not null
 #  release             :string
+#  package_name        :string           not null
 #  arch                :string
 #  patched_versions    :text             default("{}"), not null, is an Array
 #  unaffected_versions :text             default("{}"), not null, is an Array
@@ -19,8 +19,12 @@
 #
 # Indexes
 #
-#  index_vulnerable_dependencies_on_expired_at  (expired_at)
-#  index_vulnerable_dependencies_on_valid_at    (valid_at)
+#  index_vulnerable_dependencies_on_expired_at                 (expired_at)
+#  index_vulnerable_dependencies_on_package_name               (package_name)
+#  index_vulnerable_dependencies_on_platform                   (platform)
+#  index_vulnerable_dependencies_on_platform_and_package_name  (platform,package_name)
+#  index_vulnerable_dependencies_on_valid_at                   (valid_at)
+#  index_vulnerable_dependencies_on_vulnerability_id           (vulnerability_id)
 #
 
 class VulnerableDependency < ActiveRecord::Base
@@ -28,15 +32,15 @@ class VulnerableDependency < ActiveRecord::Base
   has_many :vulnerable_packages, :dependent => :destroy
 
   validates :vulnerability_id, :presence => true
-  validates :package_platform, :presence => true
+  validates :platform, :presence => true
   validates :package_name, :presence => true
 
   delegate :title, :to => :vulnerability, :prefix => true
   
   # strictly, is this a package from the same platform?
-  # TODO: concerns belongs in package, BP & NA here
+  #
   def concerns?(package)
-    same_pr = (package.platform == self.package_platform) && 
+    same_pr = (package.platform == self.platform) && 
       (package.release == self.release)
 
     return same_pr unless same_pr

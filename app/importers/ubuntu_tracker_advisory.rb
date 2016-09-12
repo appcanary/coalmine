@@ -8,7 +8,7 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
     UbuntuTrackerImporter::SOURCE
   end
 
-  def package_platform
+  def platform
     Platforms::Ubuntu
   end
 

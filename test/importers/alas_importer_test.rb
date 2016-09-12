@@ -14,7 +14,7 @@ class AlasImporterTest < ActiveSupport::TestCase
       alas_adv = @importer.parse(ra)
       new_attr = alas_adv.to_advisory_attributes
 
-      assert_equal "amzn", new_attr["package_platform"]
+      assert_equal "amzn", new_attr["platform"]
       assert new_attr["identifier"] =~ /ALAS-201[4,6]-\d\d\d/
 
       assert ["high", "low", "critical", "medium"].include? new_attr["criticality"]

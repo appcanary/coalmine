@@ -13,7 +13,7 @@ class DebianTrackerImporterTest < ActiveSupport::TestCase
       adv = @importer.parse(ra)
       nattr = adv.to_advisory_attributes
 
-      assert_equal "debian", nattr["package_platform"]
+      assert_equal "debian", nattr["platform"]
       assert_equal "debian-tracker", nattr["source"]
 
       assert nattr["identifier"] =~ /CVE-\d\d\d\d-\d\d\d\d-[a-z]+/

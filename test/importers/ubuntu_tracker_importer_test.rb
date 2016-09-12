@@ -15,7 +15,7 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
       ubuntu_adv = @importer.parse(ra)
       new_attr = ubuntu_adv.to_advisory_attributes
 
-      assert_equal "ubuntu", new_attr["package_platform"]
+      assert_equal "ubuntu", new_attr["platform"]
       assert_equal "ubuntu-cve-tracker", new_attr["source"]
 
       assert new_attr["identifier"] =~ /CVE-\d\d\d\d-\d\d\d\d/

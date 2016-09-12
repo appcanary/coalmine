@@ -6,7 +6,7 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :reference_ids, :severity,
     alas_id
   end
 
-  def package_platform
+  def platform
     Platforms::Amazon
   end
 

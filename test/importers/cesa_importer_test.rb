@@ -16,7 +16,7 @@ class CesaImporterTest < ActiveSupport::TestCase
       new_attr = cesaadv.to_advisory_attributes
 
 
-      assert_equal "centos", new_attr["package_platform"]
+      assert_equal "centos", new_attr["platform"]
       assert new_attr["identifier"] =~ /CESA-2016:\d\d\d\d/
 
       assert ["medium", "critical", "high"].include?(new_attr["criticality"])

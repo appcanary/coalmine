@@ -7,7 +7,7 @@ FactoryGirl.define do
   factory :advisory do
     identifier
     trait :ruby do
-      package_platform { Platforms::Ruby }
+      platform { Platforms::Ruby }
       source "rubysec"
     end
   end

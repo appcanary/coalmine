@@ -30,7 +30,7 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
 
     name = "fakemcfake"
     vuln_dep = FactoryGirl.build(:vulnerable_dependency, 
-                                 :package_platform => Platforms::Ruby, 
+                                 :platform => Platforms::Ruby, 
                                  :package_name => name, 
                                  :patched_versions => [">= 1.10"], 
                                  :unaffected_versions => ["~> 1.9.2", "< 1.7.0"])
@@ -63,7 +63,7 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     name = "openssh"
 
     vuln_dep = FactoryGirl.build(:vulnerable_dependency, 
-                                 :package_platform => Platforms::CentOS,
+                                 :platform => Platforms::CentOS,
                                  :package_name => name, 
                                  :release => "7",
                                  :patched_versions =>  ["openssh-6.6.1p1-25.el7_2.src.rpm", "openssh-6.6.1p1-25.el7_2.x86_64.rpm"],
@@ -104,7 +104,7 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     name = "openssl"
 
     vuln_dep = FactoryGirl.build(:vulnerable_dependency,
-                                 package_platform: Platforms::Debian,
+                                 platform: Platforms::Debian,
                                  package_name: name,
                                  release: "jessie",
                                  patched_versions: [])

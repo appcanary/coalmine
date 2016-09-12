@@ -50,13 +50,16 @@ class Package < ActiveRecord::Base
     where(clauses.join(" OR "), *values.flatten)
   }
 
-  # TODO: validate centos package format?
-
+  
+  # find all vulnerable dependencies that *could* affect this package
+  # we perform a broad search at first and perform the exact package matching
+  # in ruby land
   def concerning_vulnerabilities
-    # TODO: what do we store exactly on Vulns,
-    # i.e. do we store name, platform, release?
-    VulnerableDependency.where(:package_name => name, 
-                               :package_platform => platform)
+    if self.source_name
+      VulnerableDependency.where(:platform => platform).where("package_name = ? OR package_name = ?", self.name, self.source_name)
+    else
+      VulnerableDependency.where(:platform => platform, :package_name => self.name)
+    end
   end
 
   def same_name?(dep_name)

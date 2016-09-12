@@ -21,7 +21,7 @@
       <dd><%= @vuln.vulnerable_dependencies.map(&:package_name).join(", ") %></dd>
 
       <dt>Kind:</dt>
-      <dd><%= @vuln.package_platform %></dd>
+      <dd><%= @vuln.platform %></dd>
 
       <dt>Title:</dt>
       <dd class="title"><%= @vuln.title %></dd>

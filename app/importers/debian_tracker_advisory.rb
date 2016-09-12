@@ -10,7 +10,7 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
     "#{cve}-#{package_name}"
   end
 
-  def package_platform
+  def platform
     Platforms::Debian
   end
 

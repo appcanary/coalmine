@@ -6,7 +6,7 @@ class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis,
     @gen_cesa_id ||= cesa_id.gsub("--", ":")
   end
 
-  def package_platform
+  def platform
     Platforms::CentOS
   end
 

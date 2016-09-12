@@ -35,7 +35,7 @@ FactoryGirl.define do
   end
 
   factory :vulnerable_dependency do
-    package_platform { dep.platform }
+    platform { dep.platform }
     package_name { dep.name }
    
     patched_versions { ["> #{dep.version}"] }
@@ -47,11 +47,11 @@ FactoryGirl.define do
   end
 
   factory :vulnerability do
-    package_platform { deps.first.platform }
+    platform { deps.first.platform }
     reference_ids { [generate(:cve_id)] }
 
     trait :ruby do
-      package_platform { Platforms::Ruby }
+      platform { Platforms::Ruby }
     end
 
     transient do

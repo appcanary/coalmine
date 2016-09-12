@@ -17,7 +17,7 @@ class RubysecImporterTest < ActiveSupport::TestCase
 
     assert_equal "CVE-2016-6317-activerecord", new_attr["identifier"]
 
-    assert_equal "ruby", new_attr["package_platform"]
+    assert_equal "ruby", new_attr["platform"]
     assert_equal ["CVE-2016-6317"], new_attr["reference_ids"]
 
     # are we generating the pathed/unaffected json objects properly?

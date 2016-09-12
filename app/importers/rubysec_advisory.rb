@@ -12,7 +12,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     RubysecImporter::SOURCE
   end
 
-  def package_platform
+  def platform
     Platforms::Ruby
   end
 

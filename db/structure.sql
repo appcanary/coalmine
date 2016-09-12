@@ -51,8 +51,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, source, package_platform, patched, affected, unaffected, constraints, title, description, criticality, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.source, OLD.package_platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -141,8 +141,8 @@ CREATE FUNCTION archive_vulnerabilities() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerability_archives(vulnerability_id, package_platform, title, description, criticality, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.package_platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -156,8 +156,8 @@ CREATE FUNCTION archive_vulnerable_dependencies() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, package_platform, release, package_name, arch, patched_versions, unaffected_versions, pending, end_of_life, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.vulnerability_id, OLD.package_platform, OLD.release, OLD.package_name, OLD.arch, OLD.patched_versions, OLD.unaffected_versions, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, platform, release, package_name, arch, patched_versions, unaffected_versions, pending, end_of_life, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.vulnerability_id, OLD.platform, OLD.release, OLD.package_name, OLD.arch, OLD.patched_versions, OLD.unaffected_versions, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -222,7 +222,7 @@ CREATE TABLE advisories (
     id integer NOT NULL,
     identifier character varying NOT NULL,
     source character varying NOT NULL,
-    package_platform character varying NOT NULL,
+    platform character varying NOT NULL,
     patched jsonb DEFAULT '[]'::jsonb NOT NULL,
     affected jsonb DEFAULT '[]'::jsonb NOT NULL,
     unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
@@ -276,7 +276,7 @@ CREATE TABLE advisory_archives (
     advisory_id integer NOT NULL,
     identifier character varying NOT NULL,
     source character varying NOT NULL,
-    package_platform character varying NOT NULL,
+    platform character varying NOT NULL,
     patched jsonb DEFAULT '[]'::jsonb NOT NULL,
     affected jsonb DEFAULT '[]'::jsonb NOT NULL,
     unaffected jsonb DEFAULT '[]'::jsonb NOT NULL,
@@ -1263,7 +1263,7 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 
 CREATE TABLE vulnerabilities (
     id integer NOT NULL,
-    package_platform character varying NOT NULL,
+    platform character varying NOT NULL,
     title character varying,
     description text,
     criticality character varying,
@@ -1308,7 +1308,7 @@ ALTER SEQUENCE vulnerabilities_id_seq OWNED BY vulnerabilities.id;
 CREATE TABLE vulnerability_archives (
     id integer NOT NULL,
     vulnerability_id integer NOT NULL,
-    package_platform character varying NOT NULL,
+    platform character varying NOT NULL,
     title character varying,
     description text,
     criticality character varying,
@@ -1353,7 +1353,7 @@ ALTER SEQUENCE vulnerability_archives_id_seq OWNED BY vulnerability_archives.id;
 CREATE TABLE vulnerable_dependencies (
     id integer NOT NULL,
     vulnerability_id integer NOT NULL,
-    package_platform character varying NOT NULL,
+    platform character varying NOT NULL,
     release character varying,
     package_name character varying NOT NULL,
     arch character varying,
@@ -1395,7 +1395,7 @@ CREATE TABLE vulnerable_dependency_archives (
     id integer NOT NULL,
     vulnerable_dependency_id integer NOT NULL,
     vulnerability_id integer NOT NULL,
-    package_platform character varying NOT NULL,
+    platform character varying NOT NULL,
     release character varying,
     package_name character varying NOT NULL,
     arch character varying,
@@ -2711,6 +2711,13 @@ CREATE INDEX index_vulnerabilities_on_expired_at ON vulnerabilities USING btree 
 
 
 --
+-- Name: index_vulnerabilities_on_platform; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerabilities_on_platform ON vulnerabilities USING btree (platform);
+
+
+--
 -- Name: index_vulnerabilities_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2722,6 +2729,13 @@ CREATE INDEX index_vulnerabilities_on_valid_at ON vulnerabilities USING btree (v
 --
 
 CREATE INDEX index_vulnerability_archives_on_expired_at ON vulnerability_archives USING btree (expired_at);
+
+
+--
+-- Name: index_vulnerability_archives_on_platform; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerability_archives_on_platform ON vulnerability_archives USING btree (platform);
 
 
 --
@@ -2739,10 +2753,38 @@ CREATE INDEX index_vulnerable_dependencies_on_expired_at ON vulnerable_dependenc
 
 
 --
+-- Name: index_vulnerable_dependencies_on_package_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerable_dependencies_on_package_name ON vulnerable_dependencies USING btree (package_name);
+
+
+--
+-- Name: index_vulnerable_dependencies_on_platform; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerable_dependencies_on_platform ON vulnerable_dependencies USING btree (platform);
+
+
+--
+-- Name: index_vulnerable_dependencies_on_platform_and_package_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerable_dependencies_on_platform_and_package_name ON vulnerable_dependencies USING btree (platform, package_name);
+
+
+--
 -- Name: index_vulnerable_dependencies_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_dependencies_on_valid_at ON vulnerable_dependencies USING btree (valid_at);
+
+
+--
+-- Name: index_vulnerable_dependencies_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerable_dependencies_on_vulnerability_id ON vulnerable_dependencies USING btree (vulnerability_id);
 
 
 --
@@ -2753,10 +2795,31 @@ CREATE INDEX index_vulnerable_dependency_archives_on_expired_at ON vulnerable_de
 
 
 --
+-- Name: index_vulnerable_dependency_archives_on_package_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerable_dependency_archives_on_package_name ON vulnerable_dependency_archives USING btree (package_name);
+
+
+--
+-- Name: index_vulnerable_dependency_archives_on_platform; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerable_dependency_archives_on_platform ON vulnerable_dependency_archives USING btree (platform);
+
+
+--
 -- Name: index_vulnerable_dependency_archives_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_vulnerable_dependency_archives_on_valid_at ON vulnerable_dependency_archives USING btree (valid_at);
+
+
+--
+-- Name: index_vulnerable_dependency_archives_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerable_dependency_archives_on_vulnerability_id ON vulnerable_dependency_archives USING btree (vulnerability_id);
 
 
 --
