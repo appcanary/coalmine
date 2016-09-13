@@ -16,6 +16,10 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
     [identifier]
   end
 
+  generate :title do
+    identifier
+  end
+
   generate :reported_at do
     if publicdate && publicdate != "unknown"
       DateTime.parse(publicdate).utc

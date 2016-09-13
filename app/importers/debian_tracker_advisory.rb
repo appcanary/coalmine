@@ -22,6 +22,10 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
     [cve]
   end
 
+  generate :title do
+    "#{cve} #{package_name}"
+  end
+
   generate :description do
     description
   end

@@ -14,6 +14,10 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :reference_ids, :severity,
     AlasImporter::SOURCE
   end
 
+  generate :title do
+    identifier
+  end
+
   generate :description do
     description
   end
