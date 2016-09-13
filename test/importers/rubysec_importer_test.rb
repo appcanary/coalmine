@@ -15,7 +15,7 @@ class RubysecImporterTest < ActiveSupport::TestCase
     rbadv = @importer.parse(raw_advisories.first)
     new_attr = rbadv.to_advisory_attributes
 
-    assert_equal "CVE-2016-6317-activerecord", new_attr["identifier"]
+    assert_equal "activerecord/CVE-2016-6317.yml", new_attr["identifier"]
 
     assert_equal "ruby", new_attr["platform"]
     assert_equal ["CVE-2016-6317"], new_attr["reference_ids"]
