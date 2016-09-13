@@ -221,13 +221,24 @@ class ReportManagerTest < ActiveSupport::TestCase
     # okay so now we have all this new info coming in and
     # vuln_pkg1 is no longer vuln!
 
-    VulnerabilityManager.new(vuln1.platform).update(vuln1.id, {}, [{:package_name => vuln_pkg1.name,
-                                                                            :patched_versions => ["> 1.0.0"]}])
+    adv = FactoryGirl.create(:advisory, :ruby,
+                             :constraints => 
+                              [{:package_name => vuln_pkg1.name, 
+                                :patched_versions => ["> 1.0.0"]}])
+
+
+    VulnerabilityManager.new(vuln1.platform).update(vuln1, adv)
     assert_equal 1, LogBundlePatch.count
     assert_equal 1, LogBundleVulnerability.count # just to double check
 
     # whelp, and look at that, notvuln_pkg2 is now vulnerable!
-    VulnerabilityManager.new(vuln2.platform).update(vuln2.id, {}, [{:package_name => notvuln_pkg2.name, :patched_versions => ["> 2.0.2"]}])
+    adv = FactoryGirl.create(:advisory, :ruby,
+                             :constraints => 
+                              [{:package_name => notvuln_pkg2.name, 
+                                :patched_versions => ["> 2.0.2"]}])
+
+
+    VulnerabilityManager.new(vuln2.platform).update(vuln2, adv)
     
     assert_equal 2, LogBundleVulnerability.count
     assert_equal 1, LogBundlePatch.count # just to double check
