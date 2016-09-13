@@ -19,7 +19,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
   def cve_or_osvdb
     if cve
       "CVE-#{cve}"
-    elsif 
+    elsif osvdb
       "OSVDB-#{osvdb}"
     end
   end

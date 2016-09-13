@@ -67,7 +67,7 @@ class Advisory < ActiveRecord::Base
     where(:source => UbuntuTrackerImporter::SOURCE)
   }
 
-   scope :from_debian, -> {
+  scope :from_debian, -> {
     where(:source => DebianTrackerImporter::SOURCE)
   }
 

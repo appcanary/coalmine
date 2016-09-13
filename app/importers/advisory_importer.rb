@@ -23,7 +23,9 @@ class AdvisoryImporter
         Advisory.create!(adv.to_advisory_attributes)
       else
         if has_changed?(qadv, adv)
-          qadv.update_attributes(adv.to_advisory_attributes)
+          new_attr = adv.to_advisory_attributes
+          new_attr["processed"] = false
+          qadv.update_attributes(new_attr)
         end
       end
     end
