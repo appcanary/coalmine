@@ -1,6 +1,7 @@
 require 'open-uri'
 class DebianTrackerImporter < AdvisoryImporter
   SOURCE = "debian-tracker"
+  PLATFORM = Platforms::Debian
   # URL = "https://security-tracker.debian.org/tracker/data/json"
   URL = File.join(Rails.root, "tmp/importers/debian-security-tracker.json")
 

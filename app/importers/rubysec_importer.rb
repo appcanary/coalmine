@@ -1,5 +1,6 @@
 class RubysecImporter < AdvisoryImporter
   SOURCE = "rubysec"
+  PLATFORM = Platforms::Ruby
   REPO_URL = "https://github.com/rubysec/ruby-advisory-db.git"
   REPO_PATH = "tmp/importers/rubysec"
 

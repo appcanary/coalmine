@@ -7,7 +7,7 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :reference_ids, :severity,
   end
 
   def platform
-    Platforms::Amazon
+    AlasImporter::PLATFORM
   end
 
   def source

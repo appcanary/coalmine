@@ -9,7 +9,7 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
   end
 
   def platform
-    Platforms::Ubuntu
+    UbuntuTrackerImporter::PLATFORM
   end
 
   generate :reference_ids do

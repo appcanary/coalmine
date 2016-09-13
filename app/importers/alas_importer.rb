@@ -1,6 +1,7 @@
 require 'open-uri'
 class AlasImporter < AdvisoryImporter
   SOURCE = "alas"
+  PLATFORM = Platforms::Amazon
   URL = "https://alas.aws.amazon.com/index.html"
 
   def initialize(url = nil)

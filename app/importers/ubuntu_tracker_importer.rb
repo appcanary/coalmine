@@ -1,5 +1,6 @@
 class UbuntuTrackerImporter < AdvisoryImporter
   SOURCE = "ubuntu-cve-tracker"
+  PLATFORM = Platforms::Ubuntu
   REPO_URL = "https://launchpad.net/ubuntu-cve-tracker"
   REPO_PATH = "tmp/importers/ubuntu-cve-tracker"
 

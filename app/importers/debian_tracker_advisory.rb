@@ -11,7 +11,7 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
   end
 
   def platform
-    Platforms::Debian
+    DebianTrackerImporter::PLATFORM
   end
 
   def source 

@@ -7,7 +7,7 @@ class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis,
   end
 
   def platform
-    Platforms::CentOS
+    CesaImporter::PLATFORM
   end
 
   def source

@@ -1,5 +1,6 @@
 class CesaImporter < AdvisoryImporter
   SOURCE = "cefs"
+  PLATFORM = Platforms::CentOS
   REPO_URL = "https://github.com/stevemeier/cefs.git"
   REPO_PATH = "tmp/importers/cefs"
 

@@ -13,7 +13,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
   end
 
   def platform
-    Platforms::Ruby
+    RubysecImporter::PLATFORM
   end
 
   def cve_or_osvdb
