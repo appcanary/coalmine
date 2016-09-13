@@ -5,7 +5,8 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
                                               :cvss_v3, :patched_versions, :unaffected_versions, 
                                               :related)
   def identifier
-    "#{cve_or_osvdb}-#{gem}"
+    # "#{cve_or_osvdb}-#{gem}"
+    filepath.split("/")[-2..-1].join("/")
   end
 
   def source
@@ -17,10 +18,11 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
   end
 
   def cve_or_osvdb
-    if cve
-      "CVE-#{cve}"
-    elsif osvdb
+    # privilege osvdb over cve
+    if osvdb
       "OSVDB-#{osvdb}"
+    elsif cve
+      "CVE-#{cve}"
     end
   end
 
