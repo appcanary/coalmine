@@ -35,7 +35,8 @@ class AdvisoryImporter
     new_attributes = adv.to_advisory_attributes
     relevant_attributes = existing_advisory.attributes.keep_if { |k, _| new_attributes.key?(k) }
 
-    relevant_attributes != new_attributes
+    # obviously, move this somewhere else
+    relevant_attributes.except("source_text") != new_attributes.except("source_text")
   end
 
 end

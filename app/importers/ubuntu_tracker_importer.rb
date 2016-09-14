@@ -21,7 +21,7 @@ class UbuntuTrackerImporter < AdvisoryImporter
   end
 
   def fetch_advisories
-    Dir[File.join(local_path, "{active,retired}", "/CVE*")]
+    Dir[File.join(local_path, "{retired,active}", "/CVE*")]
   end
 
   def parse(cve_file)
