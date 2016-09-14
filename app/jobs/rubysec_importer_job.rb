@@ -1,7 +1,8 @@
 class RubysecImporterJob < CronJob
-  INTERVAL = 1.hour.to_i
+  INTERVAL = 1.hour
 
   def run(args)
-    RubysecImporter.new.import!
+    ct = RubysecImporter.new.import!
+    log "Handled #{ct.size} advisories."
   end
 end

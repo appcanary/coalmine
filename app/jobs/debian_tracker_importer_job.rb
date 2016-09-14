@@ -1,7 +1,8 @@
 class DebianTrackerImporterJob < CronJob
-  INTERVAL = 1.hour.to_i
+  INTERVAL = 1.hour
 
   def run(args)
-    DebianTrackerImporter.new.import!
+    ct = DebianTrackerImporter.new.import!
+    log "Handled #{ct.size} advisories."
   end
 end

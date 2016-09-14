@@ -2,6 +2,7 @@ class CesaImporterJob < CronJob
   INTERVAL = 1.hour.to_i
 
   def run(args)
-    CesaImporter.new.import!
+    ct = CesaImporter.new.import!
+    log "Handled #{ct.size} advisories."
   end
 end

@@ -1,7 +1,8 @@
 class UbuntuTrackerImporterJob < CronJob
-  INTERVAL = 1.hour.to_i
+  INTERVAL = 1.hour
 
   def run(args)
-    UbuntuTrackerImporter.new.import!
+    ct = UbuntuTrackerImporter.new.import!
+    log "Handled #{ct.size} advisories."
   end
 end
