@@ -66,8 +66,6 @@ namespace :debug do
   end
 end
 
-
-
 # namespace :deploy do
 # 
 #   desc 'Restart application'
