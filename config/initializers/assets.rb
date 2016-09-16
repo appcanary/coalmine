@@ -6,22 +6,6 @@ Rails.application.config.assets.version = '1.2'
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path
 
-# let's ignore jsx and source map files, taken from
-# the upstream assets.precompile code:
-
-# loose_assets = lambda do |logical_path, filename|
-#   filename.start_with?(::Rails.root.join("app/assets").to_s) &&
-#     !%w(.js .css .jsx .map).include?(File.extname(logical_path))
-# end
-# 
-# Rails.application.config.assets.precompile = [loose_assets, /(?:\/|\\|\A)application\.(css|js)$/]
 Rails.application.config.assets.precompile += %w( application.css application.js launchrock.css launchrock.js greatreview.css isitvuln.js admin.js )
 Rails.application.config.assets.precompile += %w(*.svg *.eot *.woff *.woff2 *.ttf *.gif *.png *.ico)
 # fontawesome-webfont.eot fontawesome-webfont.woff2 fontawesome-webfont.woff fontawesome-webfont.ttf fontawesome-webfont.svg
-
-# source maps!
-# if Rails.env.development?
-#   Rails.application.config.assets.configure do |env|
-#     env.unregister_postprocessor 'application/javascript', Sprockets::SafetyColons
-#   end
-# end
