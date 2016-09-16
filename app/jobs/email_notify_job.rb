@@ -1,5 +1,4 @@
 class EmailNotifyJob < CronJob
-  @queue = 'vulnhandling'
   INTERVAL = 5.minutes
 
   def run(args)
