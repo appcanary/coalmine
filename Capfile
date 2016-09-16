@@ -6,7 +6,7 @@ require 'capistrano/deploy'
 # Includes tasks from other gems included in your Gemfile
 
 
-require 'capistrano/deploytags'
+# require 'capistrano/deploytags'
 
 require 'capistrano/rails/console'
 
