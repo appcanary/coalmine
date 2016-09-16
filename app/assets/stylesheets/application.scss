@@ -10,7 +10,7 @@ $link-color: #3798A5;
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @import 'vendor/emberui.scss';
-@import "font-awesome.css";
+@import "font-awesome";
 @import "internal/main";
 @import "internal/dashboard";
 @import 'internal/boxes';
@@ -23,5 +23,5 @@ $link-color: #3798A5;
 @import 'internal/docs';
 @import 'internal/admin';
 // for hljs
-@import 'vendor/github-gist.css';
+@import 'vendor/github-gist';
 
