@@ -28,7 +28,7 @@ set :deploy_to, '/var/www/canary-web'
 set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system config/settings/secrets}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets tmp/importers vendor/bundle public/system config/settings/secrets}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -39,7 +39,8 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
   task :restart do
-    invoke 'unicorn:reload'
+    execute "sudo systemctl reload coalmine-unicorn"
+    # invoke 'unicorn:reload'
   end
 
   task :seed do
