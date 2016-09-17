@@ -39,8 +39,9 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets tmp/importers vendor/bun
 after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
   task :restart do
-    execute "sudo systemctl reload coalmine-unicorn"
-    # invoke 'unicorn:reload'
+    on roles(:app) do
+      execute "sudo systemctl reload coalmine"
+    end
   end
 
   task :seed do
