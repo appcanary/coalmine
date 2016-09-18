@@ -40,7 +40,8 @@ after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
   task :restart do
     on roles(:app) do
-      execute "sudo systemctl reload coalmine"
+      execute "sudo systemctl reload-or-restart unicorn"
+      execute "sudo systemctl reload-or-restart que"
     end
   end
 
