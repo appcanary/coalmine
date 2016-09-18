@@ -16,7 +16,7 @@ class BzrHandler
         raise "#{klass_name} - something went wrong pulling: #{output}"
       end
     else
-      FileUtils.mkdir_p(local_path)
+      # bzr will fail if folder already exists, so no mkdir p
       output, process = Open3.capture2e("bzr branch #{repo_url} #{local_path}")
       unless process.success?
         raise "#{klass_name} - something went wrong cloning: #{output}"
