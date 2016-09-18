@@ -11,13 +11,13 @@ class BzrHandler
 
   def fetch_and_update_repo!
     if File.exists?(local_path)
-      output, proccess = Open3.capture2e("cd #{local_path} && bzr pull")
+      output, process = Open3.capture2e("cd #{local_path} && bzr pull")
       unless process.success?
         raise "#{klass_name} - something went wrong pulling: #{output}"
       end
     else
       FileUtils.mkdir_p(local_path)
-      output, proccess = Open3.capture2e("bzr branch #{repo_url} #{local_path}")
+      output, process = Open3.capture2e("bzr branch #{repo_url} #{local_path}")
       unless process.success?
         raise "#{klass_name} - something went wrong cloning: #{output}"
       end
