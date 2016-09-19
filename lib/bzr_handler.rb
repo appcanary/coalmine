@@ -14,6 +14,21 @@ class BzrHandler
       output, process = Open3.capture2e("cd #{local_path} && bzr pull")
       unless process.success?
         raise "#{klass_name} - something went wrong pulling: #{output}"
+
+        # sometimes bzr gets stuck?
+        # it's kind of annoying
+        if output =~ /Unable to obtain lock/
+          # tempted to just kill the folder
+          # but this might actually be cos
+          # there's another worker thread executing.
+          # FileUtils.rm_rf(local_path)
+        elsif output =~ /Not a branch:/
+          # sometimes the worker might die mid pull
+          # and leaves the checkout mid state
+          # and i don't think this error is recoverable
+          # so let's try again later
+          FileUtils.rm_rf(local_path)
+        end
       end
     else
       # bzr will fail if folder already exists, so no mkdir p

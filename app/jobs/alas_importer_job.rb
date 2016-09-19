@@ -2,7 +2,6 @@ class AlasImporterJob < CronJob
   INTERVAL = 1.hour
 
   def run(args)
-   ct = AlasImporter.new.import!
-   log "Handled #{ct.size} advisories."
+    AlasImporter.new.import!
   end
 end
