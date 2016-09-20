@@ -8,11 +8,13 @@
 #  description   :text
 #  criticality   :string
 #  reference_ids :string           default("{}"), not null, is an Array
+#  related       :jsonb            default("[]"), not null
 #  osvdb_id      :string
 #  usn_id        :string
 #  dsa_id        :string
 #  rhsa_id       :string
 #  cesa_id       :string
+#  edited        :boolean          default("false")
 #  source        :string
 #  reported_at   :datetime
 #  created_at    :datetime         not null
