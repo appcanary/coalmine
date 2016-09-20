@@ -1,5 +1,5 @@
 Rails.application.config.action_mailer.perform_deliveries = true
-Rails.application.config.action_mailer.default_options = {from: 'hello@appcanary.com'}
+Rails.application.config.action_mailer.default_options = {from: 'team@appcanary.com'}
 Rails.application.config.action_mailer.smtp_settings = {
   :address   => "smtp.mandrillapp.com",
   :port      => 587, # ports 587 and 2525 are also supported with STARTTLS

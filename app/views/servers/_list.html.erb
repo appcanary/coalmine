@@ -11,7 +11,7 @@
     </div>
     <div class="description">
       <span class="title">
-        <%= link_to server.name, server_path(server) %>
+        <%= link_to server.display_name, server_path(server) %>
       </span>
       <div class="last_updated info">
         <%= link_to "updated #{time_ago_in_words_or_never server.last_heartbeat_at} ago", server_path(server) %>
