@@ -4,6 +4,9 @@ require File.expand_path('../application', __FILE__)
 # Initialize the Rails application.
 Rails.application.initialize!
 Que.logger = Logger.new(File.join(Rails.root, "log/que.log"))
+Que.error_notifier = proc do |error, job|
+  Raven.capture_exception(error, :extra => { :job => job})
+end
 
 # make sure we enqueue some basic stuff
 # handle emails

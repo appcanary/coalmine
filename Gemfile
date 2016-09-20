@@ -82,7 +82,7 @@ gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'
 gem 'intercom'
 
 
-gem 'que', '~> 0.11.6'
+gem 'que', '~> 0.12.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
