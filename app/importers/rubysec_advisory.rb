@@ -41,7 +41,7 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
       hsh["unaffected_versions"] = []
     end
 
-    [hsh]
+    [DependencyConstraint.new(hsh)]
   end
 
 

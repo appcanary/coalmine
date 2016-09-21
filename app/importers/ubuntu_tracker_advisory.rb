@@ -67,7 +67,7 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
         h["patched_versions"] = h["version"].split(",").map(&:strip)
       end
 
-      h.except("status", "version")
+      DependencyConstraint.new(h.except("status", "version"))
     end
 
 
@@ -77,7 +77,7 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
         h["end_of_life"] = true
       end
        
-      h.except("status", "version")
+      DependencyConstraint.new(h.except("status", "version"))
     end
 
     pat + aff

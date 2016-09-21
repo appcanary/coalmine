@@ -1,11 +1,15 @@
 class DependencyConstraint
-  ATTR = [:release, :package_name, :patched_versions, 
+  ATTR = [:release, :package_name, :arch, :patched_versions, 
           :unaffected_versions, :end_of_life, :pending]
   ATTR_MAP = Hash[ATTR.map { |a| [a.to_s, true] }]
   attr_reader *ATTR
 
   def initialize(hsh)
     hsh.each do |k, v| 
+      if v.nil?
+        raise ArgumentError.new("Tried to assign nil to #{k}")
+      end
+
       if ATTR_MAP[k] 
         instance_variable_set("@#{k}", v)
       else

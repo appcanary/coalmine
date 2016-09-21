@@ -53,12 +53,13 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :reference_ids, :severity,
 
     @packages_to_constraints = nevras_by_name.reduce([]) do |arr, (name, nevras)|
       nevras.each do |nv|
-        arr <<
-        { "package_name" => name,
-          "arch" => nv.arch,
-          "release" => normalize_release(nv.release),
-          "patched_versions" => [nv.filename]
+        h = { "package_name" => name,
+              "arch" => nv.arch,
+              "release" => normalize_release(nv.release),
+              "patched_versions" => [nv.filename]
         }
+
+        arr << DependencyConstraint.new(h)
       end
       arr
     end
