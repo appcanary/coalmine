@@ -101,15 +101,20 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
   generate :constraints do
     patches = generate_package_info_fields["patched"].map do |p|
       h = p.dup
-      if h["urgency"] =~ /end-if-life/
-        h["end_if_life"] = true
+      if h["urgency"] =~ /end-of-life/
+        h["end_of_life"] = true
       end
 
-      h.except("urgency")
+      DependencyConstraint.new(h.except("urgency"))
     end
 
     affecteds = generate_package_info_fields["affected"].map do |a|
-      a.except("urgency")
+      h = a.dup
+      if h["urgency"] =~ /end-of-life/
+        h["end_of_life"] = true
+      end
+
+      DependencyConstraint.new(h.except("urgency"))
     end
 
     patches + affecteds

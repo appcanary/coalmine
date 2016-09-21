@@ -7,7 +7,7 @@ class DebianTrackerImporterTest < ActiveSupport::TestCase
     assert_equal 0, Advisory.from_debian.count
 
     raw_advisories = @importer.fetch_advisories
-    assert_equal 4, raw_advisories.size
+    assert_equal 5, raw_advisories.size
 
     all_advisories = raw_advisories.map do |ra|
       adv = @importer.parse(ra)
@@ -59,21 +59,26 @@ class DebianTrackerImporterTest < ActiveSupport::TestCase
       adv
     end
 
+    # the last one has constraints that are end_of_lifed
+    mediawiki = all_advisories.last
+    mediawiki_constraints = mediawiki.to_advisory_attributes["constraints"]
+    assert mediawiki_constraints.any? { |dc| dc["end_of_life"].present? }
+
     # does it dump into the db?
 
     @importer.process_advisories(all_advisories)
-    assert_equal 4, Advisory.from_debian.count
+    assert_equal 5, Advisory.from_debian.count
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)
-    assert_equal 4, Advisory.from_debian.count
+    assert_equal 5, Advisory.from_debian.count
 
     new_db_adv = @importer.parse(raw_advisories.first)
     new_db_adv.description = "omg new description"
 
     @importer.process_advisories([new_db_adv])
 
-    assert_equal 4, Advisory.from_debian.count
+    assert_equal 5, Advisory.from_debian.count
     assert_equal "omg new description", Advisory.from_debian.order(:updated_at).last.description
   end
 end
