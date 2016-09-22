@@ -119,6 +119,16 @@ class ReportManagerTest < ActiveSupport::TestCase
     assert_equal vuln_pkg_1.id, LogBundleVulnerability.last.package_id
 
 
+    # ############
+    # at this stage, all of the logs we've created have not
+    # been caused by upstream data changes. let's quickly
+    # make sure that that's been recording properly.
+    # ############
+    
+    assert_equal 0, LogBundleVulnerability.where(:supplementary => true).count
+    assert_equal 0, LogBundlePatch.where(:supplementary => true).count
+
+
     # #############
     # SCENARIO FOUR: 
     # A vulnerability that affects a package already in the bundle
@@ -143,6 +153,9 @@ class ReportManagerTest < ActiveSupport::TestCase
     second_log = LogBundleVulnerability.last
 
     assert_equal vuln_2.id, second_log.vulnerability_id
+
+    # this was caused by a change in upstream data, so:
+    assert second_log.supplementary?
     
     # the bundle wasn't changed, and so nothing was patched
     assert_equal 1, LogBundlePatch.count
@@ -166,6 +179,23 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     assert_equal 4, LogBundleVulnerability.where(:bundle_id => bundle.id).count
     assert_equal 3, LogBundlePatch.where(:bundle_id => bundle.id).count
+
+    # #############
+    # SCENARIO 6:
+    # An existing vulnerability gets edited, and a package that
+    # used to be vulnerable is now no longer.
+    # #############
+
+    vm = VulnerabilityManager.new(vuln_pkg_3.platform)
+    adv3 = FactoryGirl.create(:advisory, :ruby, :constraints => 
+                              [{:package_name => vuln_pkg_2.name,
+                                :unaffected_versions => ["~> #{vuln_pkg_3.version}"]}])
+
+    vm.update(vuln_3, adv3)
+    assert_equal 4, LogBundleVulnerability.where(:bundle_id => bundle.id).count
+    assert_equal 4, LogBundlePatch.where(:bundle_id => bundle.id).count
+
+    assert LogBundlePatch.where(:bundle_id => bundle.id).last.supplementary?
   end
 
   test "when a vuln gets edited and now affects a different set of packages, both LBV and LBP are generated" do

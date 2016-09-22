@@ -894,6 +894,7 @@ CREATE TABLE log_bundle_patches (
     vulnerability_id integer NOT NULL,
     vulnerable_dependency_id integer NOT NULL,
     vulnerable_package_id integer NOT NULL,
+    supplementary boolean DEFAULT false NOT NULL,
     occurred_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -931,6 +932,7 @@ CREATE TABLE log_bundle_vulnerabilities (
     vulnerability_id integer NOT NULL,
     vulnerable_dependency_id integer NOT NULL,
     vulnerable_package_id integer NOT NULL,
+    supplementary boolean DEFAULT false NOT NULL,
     occurred_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL

@@ -7,6 +7,7 @@ class CreateLogBundleVulnerabilities < ActiveRecord::Migration
       t.references :vulnerability, index: true, null: false
       t.references :vulnerable_dependency, index: true, null: false
       t.references :vulnerable_package, index: true, null: false
+      t.boolean :supplementary, null: false, default: false
       t.datetime :occurred_at, null: false
 
       t.timestamps null: false

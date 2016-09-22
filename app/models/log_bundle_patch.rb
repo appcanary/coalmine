@@ -9,6 +9,7 @@
 #  vulnerability_id         :integer          not null
 #  vulnerable_dependency_id :integer          not null
 #  vulnerable_package_id    :integer          not null
+#  supplementary            :boolean          default("false"), not null
 #  occurred_at              :datetime         not null
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
@@ -112,6 +113,7 @@ class LogBundlePatch < ActiveRecord::Base
                  :vulnerability_id => lbp.vulnerability_id,
                  :vulnerable_dependency_id => lbp.vulnerable_dependency_id,
                  :vulnerable_package_id => lbp.vulnerable_package_id,
+                 :supplementary => true,
                  :occurred_at => lbp.occurred_at)
     end
 
