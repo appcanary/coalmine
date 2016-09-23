@@ -3,6 +3,7 @@ class AdvisoryImporterTest < ActiveSupport::TestCase
   it "should update advisories if the source material updates" do
     # it's basically an abstract class, so let's pull in a sub
 
+    RubysecImporter.any_instance.stubs(:update_local_store!).returns(true)
     @importer = RubysecImporter.new("test/data/importers/rubysec")
     assert_equal 0, Advisory.from_rubysec.count
     @importer.import!
