@@ -18,10 +18,14 @@ class BzrHandler
         # sometimes bzr gets stuck?
         # it's kind of annoying
         if output =~ /Unable to obtain lock/
-          # tempted to just kill the folder
-          # but this might actually be cos
-          # there's another worker thread executing.
-          # FileUtils.rm_rf(local_path)
+
+          # sometimes overlapping processes will cause
+          # bzr to be stuck. if that's us, force a lock
+          # break and try again later
+          output, process = Open3.capture2e("cd #{local_path} && bzr break-lock --force")
+          unless process.success?
+            raise "#{klass_name} - something went wrong breaking lock: #{output}"
+          end
         elsif output =~ /Not a branch:/
           # sometimes the worker might die mid pull
           # and leaves the checkout mid state
