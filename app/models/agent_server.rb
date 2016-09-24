@@ -72,6 +72,7 @@ class AgentServer < ActiveRecord::Base
     bundles.any?(&:vulnerable?)
   end
 
+  # TODO: abstract for all OS'
   def system_bundle
     self.bundles.where(:platform => Platforms::Ubuntu).first
   end

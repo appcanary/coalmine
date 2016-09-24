@@ -1236,6 +1236,7 @@ CREATE TABLE users (
     daily_email_consent boolean DEFAULT false NOT NULL,
     datomic_id bigint,
     invoiced_manually boolean DEFAULT false,
+    agent_token character varying,
     account_id integer NOT NULL
 );
 
@@ -3190,6 +3191,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160530195217');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602133740');
 
+INSERT INTO schema_migrations (version) VALUES ('20160602133741');
+
 INSERT INTO schema_migrations (version) VALUES ('20160602134913');
 
 INSERT INTO schema_migrations (version) VALUES ('20160603150414');
@@ -3211,4 +3214,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160805151822');
 INSERT INTO schema_migrations (version) VALUES ('20160809220154');
 
 INSERT INTO schema_migrations (version) VALUES ('20160825182745');
+
+INSERT INTO schema_migrations (version) VALUES ('20160924162720');
+
+INSERT INTO schema_migrations (version) VALUES ('20160924205930');
 

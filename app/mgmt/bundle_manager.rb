@@ -77,6 +77,7 @@ class BundleManager < ServiceManager
     end
   end
 
+  # TODO: dead code
   # do we care, really?
   def update_on_heartbeat(path, attributes = {})
     begin

@@ -66,6 +66,7 @@ class User < ActiveRecord::Base
   has_many :bundles, :through => :account
 
   # TODO: eliminate token field from users table
+  # TODO: eliminate agent_token
   delegate :token, :to => :account
 
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
