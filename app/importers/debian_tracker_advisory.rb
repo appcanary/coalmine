@@ -33,7 +33,7 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
   def normalize_urgency(str)
     case str
     when "not yet assigned"
-      "unknown"
+      "pending"
     when "unimportant"
       "negligible"
     when "end-of-life"

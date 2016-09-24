@@ -36,8 +36,19 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
 
 
   generate :criticality do
-    if priority
-      priority.downcase
+    case priority
+    when /negligible/i
+      "negligible"
+    when /low/i
+      "low"
+    when /medium/i
+      "medium"
+    when /high/i
+      "high"
+    when /critical/i
+      "high"
+    when /untriaged/i
+      "pending"
     else
       "unknown"
     end

@@ -69,7 +69,7 @@ class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis,
   generate :criticality do
     case severity
     when "Critical"
-      "critical"
+      "high"
     when "Important"
       "high"
     when "Moderate"
