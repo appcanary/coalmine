@@ -28,6 +28,20 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
+
+
+--
 -- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -816,6 +830,37 @@ CREATE SEQUENCE email_messages_id_seq
 --
 
 ALTER SEQUENCE email_messages_id_seq OWNED BY email_messages.id;
+
+
+--
+-- Name: feature_flags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE feature_flags (
+    id integer NOT NULL,
+    data hstore,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: feature_flags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE feature_flags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feature_flags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE feature_flags_id_seq OWNED BY feature_flags.id;
 
 
 --
@@ -1630,6 +1675,13 @@ ALTER TABLE ONLY email_messages ALTER COLUMN id SET DEFAULT nextval('email_messa
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY feature_flags ALTER COLUMN id SET DEFAULT nextval('feature_flags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY is_it_vuln_results ALTER COLUMN id SET DEFAULT nextval('is_it_vuln_results_id_seq'::regclass);
 
 
@@ -1879,6 +1931,14 @@ ALTER TABLE ONLY bundles
 
 ALTER TABLE ONLY email_messages
     ADD CONSTRAINT email_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feature_flags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY feature_flags
+    ADD CONSTRAINT feature_flags_pkey PRIMARY KEY (id);
 
 
 --
@@ -2484,6 +2544,13 @@ CREATE INDEX index_email_messages_on_account_id ON email_messages USING btree (a
 --
 
 CREATE INDEX index_email_messages_on_sent_at ON email_messages USING btree (sent_at);
+
+
+--
+-- Name: index_feature_flags_on_data; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_feature_flags_on_data ON feature_flags USING btree (data);
 
 
 --
@@ -3218,4 +3285,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160825182745');
 INSERT INTO schema_migrations (version) VALUES ('20160924162720');
 
 INSERT INTO schema_migrations (version) VALUES ('20160924205930');
+
+INSERT INTO schema_migrations (version) VALUES ('20160924211127');
 

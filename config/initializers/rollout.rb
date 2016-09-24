@@ -1,4 +1,1 @@
-require 'redis'
-
-$redis   = Redis.new
-$rollout = Rollout.new($redis)
+$rollout = Rollout.new(RolloutPostgresStore.new(FeatureFlag, 'data'))

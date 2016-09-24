@@ -54,7 +54,10 @@ class EmailManager < ServiceManager
   def self.send_new_emails(klass, sym)
     klass.transaction do
       klass.unsent.find_each do |msg|
-        NotificationMailer.send(sym, msg).deliver_now
+        # uhm, should requeue if email fails no?
+        unless $rollout.active?(:skip_notifications)
+          NotificationMailer.send(sym, msg).deliver_now
+        end
         msg.update(sent_at: Time.now)
       end
     end

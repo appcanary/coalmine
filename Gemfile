@@ -6,8 +6,9 @@ gem 'rails', '4.2.6'
 # gem 'rails', '4.2.0'
 
 gem 'pg'
-gem 'redis'
+# gem 'redis'
 gem 'rollout'
+gem 'rollout_postgres_store'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby

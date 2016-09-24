@@ -237,7 +237,6 @@ GEM
     rake (11.2.2)
     rdoc (4.2.0)
     redcarpet (3.3.4)
-    redis (3.2.1)
     reform (2.2.1)
       disposable (>= 0.3.0, < 0.4.0)
       representable (>= 2.4.0, < 3.1.0)
@@ -253,7 +252,11 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    rollout (2.1.0)
+    rollout (2.3.0)
+    rollout_postgres_store (0.0.1)
+      activerecord (>= 4.0.0)
+      pg (>= 0.15.1)
+      rollout (>= 2.0.0)
     ruby-progressbar (1.7.1)
     ruby_identicon (0.0.4)
       chunky_png (~> 1.3.0)
@@ -352,11 +355,11 @@ DEPENDENCIES
   que (~> 0.12.0)
   rails (= 4.2.6)
   redcarpet
-  redis
   reform
   reform-rails
   request_store (~> 1.1.0)
   rollout
+  rollout_postgres_store
   ruby_identicon (= 0.0.4)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
