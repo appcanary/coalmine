@@ -13,12 +13,10 @@ class BzrHandler
     if File.exists?(local_path)
       output, process = Open3.capture2e("cd #{local_path} && bzr pull")
       unless process.success?
-        raise "#{klass_name} - something went wrong pulling: #{output}"
 
         # sometimes bzr gets stuck?
         # it's kind of annoying
         if output =~ /Unable to obtain lock/
-
           # sometimes overlapping processes will cause
           # bzr to be stuck. if that's us, force a lock
           # break and try again later
@@ -32,6 +30,8 @@ class BzrHandler
           # and i don't think this error is recoverable
           # so let's try again later
           FileUtils.rm_rf(local_path)
+        else
+          raise "#{klass_name} - something went wrong pulling: #{output}"
         end
       end
     else
