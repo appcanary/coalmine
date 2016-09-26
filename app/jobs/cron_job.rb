@@ -21,10 +21,16 @@ class CronJob < Jobber
     @time_range = @start_at...@end_at
 
     super
-    log "Done."
 
-    args['start_at'] = @end_at.to_f
-    args['end_at']   = @run_again_at.to_f
-    self.class.enqueue(args, run_at: @run_again_at)
+    # if we threw an error, don't reschedule
+    # job like normal; que will naturally retry
+    # in some intelligent fashion
+    unless @_error
+      log "Done."
+
+      args['start_at'] = @end_at.to_f
+      args['end_at']   = @run_again_at.to_f
+      self.class.enqueue(args, run_at: @run_again_at)
+    end
   end
 end
