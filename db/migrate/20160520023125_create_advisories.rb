@@ -13,6 +13,7 @@ class CreateAdvisories < ActiveRecord::Migration
       t.string :title
       t.text :description
       t.string :criticality
+      t.string :source_status
       t.jsonb :related, :default => [], null: false
       t.text :remediation
 

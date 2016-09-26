@@ -65,8 +65,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -244,6 +244,7 @@ CREATE TABLE advisories (
     title character varying,
     description text,
     criticality character varying,
+    source_status character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     remediation text,
     reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
@@ -298,6 +299,7 @@ CREATE TABLE advisory_archives (
     title character varying,
     description text,
     criticality character varying,
+    source_status character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     remediation text,
     reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
@@ -1281,8 +1283,8 @@ CREATE TABLE users (
     daily_email_consent boolean DEFAULT false NOT NULL,
     datomic_id bigint,
     invoiced_manually boolean DEFAULT false,
-    agent_token character varying,
-    account_id integer NOT NULL
+    account_id integer NOT NULL,
+    agent_token character varying
 );
 
 
@@ -3257,8 +3259,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160530195216');
 INSERT INTO schema_migrations (version) VALUES ('20160530195217');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602133740');
-
-INSERT INTO schema_migrations (version) VALUES ('20160602133741');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602134913');
 

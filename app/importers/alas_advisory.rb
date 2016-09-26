@@ -76,10 +76,14 @@ class AlasAdvisory < AdvisoryPresenter.new(:alas_id, :reference_ids, :severity,
     end
   end
 
+  generate :source_status do
+    severity
+  end
+
   generate :criticality do
     case severity
     when "Critical"
-      "high"
+      "critical"
     when "Important"
       "high"
     when "Medium"

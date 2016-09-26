@@ -91,6 +91,10 @@ class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve,
     end
   end
 
+  generate :source_status do
+    cvss_score
+  end
+
   generate :reference_ids do
     arr = []
     if cve

@@ -32,12 +32,8 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
 
   def normalize_urgency(str)
     case str
-    when "not yet assigned"
-      "pending"
     when "unimportant"
       "negligible"
-    when "end-of-life"
-      "end-of-life"
     when "low"
       "low"
     when "low*"
@@ -105,6 +101,10 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
         h["end_of_life"] = true
       end
 
+      if h["urgency"] == "not yet assigned"
+        h["pending"] = true
+      end
+
       DependencyConstraint.new(h.except("urgency"))
     end
 
@@ -112,6 +112,10 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
       h = a.dup
       if h["urgency"] =~ /end-of-life/
         h["end_of_life"] = true
+      end
+
+      if h["urgency"] == "not yet assigned"
+        h["pending"] = true
       end
 
       DependencyConstraint.new(h.except("urgency"))
@@ -133,8 +137,20 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
   #
   # (oh and then we normalize them, of course)
   generate :criticality do
+    normalize_urgency(most_urgent_urgency)
+  end
+
+  generate :source_status do
+    most_urgent_urgency
+  end
+
+  def most_urgent_urgency
+    if @most_urgent_urgency
+      return @most_urgent_urgency
+    end
+
     urgencies = generate_package_info_fields["urgencies"].uniq
- 
+
     most_urgent = nil
     if urgencies.size > 1
       most_urgent = urgencies.sort { |x,y| URGENCY_RANK[x] <=> URGENCY_RANK[y] }.last
@@ -142,7 +158,7 @@ class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope,
       most_urgent = urgencies.first
     end
 
-    normalize_urgency(most_urgent)
+    @most_urgent_urgency = most_urgent
   end
 
   def attr_to_constraint(release, attr)
