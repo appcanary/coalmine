@@ -1,4 +1,4 @@
-class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches)
+class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :publicdateatusn, :crd, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches)
 
   def identifier
     candidate
@@ -20,9 +20,27 @@ class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :re
     identifier
   end
 
+  # From: ubuntu-cve-tracker/README
+  # MITRE is the definitive CVE database, but NVD contains the same information,
+  # updates their database more frequently and also lists the PublicDate. Using
+  # the above schedule allows our database to stay up-to-date with the NVD, and
+  # ensure that our descriptions are also up to date. For CVEs where the
+  # PublicDate is wrong, we can override the value using the "CRD" field
+  # instead.
+
+  # Since we want to keep a record of what the PublicDate was when the USN
+  # published, USN publication should include the addition of the
+  # "PublicDateAtUSN" field, which duplicates PublicDate, in case it changes
+  # later. When answering the question "When did a CVE go public?" the scripts
+  # will use CRD over PublicDateAtUSN over PublicDate. Times should include the
+  # timezone; UTC is preferred. If no time is specified during coordination,
+  # 14:00:00 UTC is recommended.
+  # Eg: PublicDateAtUSN: 2009-03-27 23:45:00 UTC
+
   generate :reported_at do
-    if publicdate && publicdate != "unknown"
-      DateTime.parse(publicdate).utc
+    reported_at = crd || publicdateatusn || publicdate
+    if reported_at && reported_at != "unknown"
+      DateTime.parse(reported_at).utc
     else
       nil
     end
