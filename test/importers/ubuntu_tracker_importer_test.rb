@@ -6,13 +6,15 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
     @importer = UbuntuTrackerImporter.new("test/data/importers/ubuntu-cve-tracker")
     assert_equal 0, Advisory.from_ubuntu.count
 
-    # we put away four advisories in our fixture
+    # we put away all advisories in our fixture
     raw_advisories = @importer.fetch_advisories
-    assert_equal 6, raw_advisories.size
+    assert_equal 7, raw_advisories.size
 
-    # do we parse things correctly?
-    all_advisories = raw_advisories.map do |ra|
-      ubuntu_adv = @importer.parse(ra)
+    # parse the advisories
+    all_advisories = raw_advisories.map { |ra| @importer.parse(ra)}
+
+    # did we parse things correctly?
+    all_advisories.each do |ubuntu_adv|
       new_attr = ubuntu_adv.to_advisory_attributes
 
       assert_equal "ubuntu", new_attr["platform"]
@@ -74,18 +76,18 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
       }
 
       assert new_attr["source_text"].present?
-
-      ubuntu_adv
     end
 
     # does it dump into the db?
-
     @importer.process_advisories(all_advisories)
-    assert_equal 6, Advisory.from_ubuntu.count
+    assert_equal 7, Advisory.from_ubuntu.count
+
+    # Do we parse the correct reported_at date
+    assert_equal Date.new(2016,01,27), Advisory.where(:identifier => "CVE-2016-0755").first.reported_at
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)
-    assert_equal 6, Advisory.from_ubuntu.count
+    assert_equal 7, Advisory.from_ubuntu.count
 
 
     new_ub_adv = @importer.parse(raw_advisories.first)
@@ -93,7 +95,7 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
 
     @importer.process_advisories([new_ub_adv])
 
-    assert_equal 6, Advisory.from_ubuntu.count
+    assert_equal 7, Advisory.from_ubuntu.count
     assert_equal "omg new description", Advisory.from_ubuntu.order(:updated_at).last.description
   end
 
