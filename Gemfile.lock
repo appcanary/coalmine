@@ -173,6 +173,7 @@ GEM
       rails (~> 4.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
+    msgpack (1.0.0)
     multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -347,6 +348,7 @@ DEPENDENCIES
   minitest-reporters
   minitest-spec-rails
   mocha (~> 1.1.0)
+  msgpack
   neat
   pg
   pretender
