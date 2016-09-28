@@ -55,7 +55,7 @@ class CesaImporter < AdvisoryImporter
     synopsis = attr["synopsis"].value
     references = attr["references"].value.split(" ")
 
-    CesaAdvisory.new({
+    CesaAdapter.new({
       "cesa_id" => cesa_id,
       "issue_date" => issue_date,
       "os_arches" => os_arches,

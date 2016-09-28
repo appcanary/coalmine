@@ -25,6 +25,6 @@ class RubysecImporter < AdvisoryImporter
   def parse(ymlfile)
     hsh = YAML.load_file(ymlfile)
     everything = {"filepath" => ymlfile}.merge(hsh)
-    RubysecAdvisory.new(everything, everything)
+    RubysecAdapter.new(everything, everything)
   end
 end

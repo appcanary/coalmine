@@ -1,4 +1,4 @@
-class UbuntuTrackerAdvisory < AdvisoryPresenter.new(:candidate, :publicdate, :publicdateatusn, :crd, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches)
+class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publicdateatusn, :crd, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches)
 
   def identifier
     candidate

@@ -1,10 +1,10 @@
-# the job of advisory presenters is to
+# the job of advisory adapters is to
 # intermediate between the raw parsed output
 # of our importer content, and the specific
 # structure we hold in our advisories.
 #
-# This way FooImporter dumps a hash into FooAdvisoryPresenter
-# and then FooAdvisoryPresenter creates its corresponding Advisory
+# This way FooImporter dumps a hash into FooAdvisoryAdapter
+# and then FooAdvisoryAdapter creates its corresponding Advisory
 # Not totally unrelated from Form objects, really.
 #
 # USAGE:
@@ -20,7 +20,7 @@
 # s.to_advisory_attributes # => {"identifier" => "", "platform" => "", 
 #                          # "source" => "", "outputted_field" => values_here }
 
-class AdvisoryPresenter < Struct
+class AdvisoryAdapter < Struct
 
   class << self
     attr_accessor :generators

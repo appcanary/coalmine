@@ -1,9 +1,9 @@
 # TODO: what about related and url?
-class RubysecAdvisory < AdvisoryPresenter.new(:filepath, :gem, :cve, 
-                                              :osvdb, :url, :title, 
-                                              :date, :description, :cvss_v2, 
-                                              :cvss_v3, :patched_versions, :unaffected_versions, 
-                                              :related)
+class RubysecAdapter < AdvisoryAdapter.new(:filepath, :gem, :cve, 
+                                           :osvdb, :url, :title, 
+                                           :date, :description, :cvss_v2, 
+                                           :cvss_v3, :patched_versions, :unaffected_versions, 
+                                           :related)
   def identifier
     # "#{cve_or_osvdb}-#{gem}"
     filepath.split("/")[-2..-1].join("/")

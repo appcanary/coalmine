@@ -100,7 +100,7 @@ class UbuntuTrackerImporter < AdvisoryImporter
       end
     end
 
-    UbuntuTrackerAdvisory.new(hsh, cve_text)
+    UbuntuTrackerAdapter.new(hsh, cve_text)
   end
 
   def parse_patches_section(hsh, lines)

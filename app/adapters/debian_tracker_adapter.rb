@@ -1,4 +1,4 @@
-class DebianTrackerAdvisory < AdvisoryPresenter.new(:package_name, :cve, :scope, :debianbug, :description, :releases)
+class DebianTrackerAdapter < AdvisoryAdapter.new(:package_name, :cve, :scope, :debianbug, :description, :releases)
 
   URGENCIES = ["not yet assigned", "unimportant", "end-of-life", "low", "low*", "low**", "medium", "medium*", "medium**", "high", "high*", "high**"]
   URGENCY_RANK = URGENCIES.each_with_index.reduce({}) { |h, (n, i)| h[n] = i; h } 
