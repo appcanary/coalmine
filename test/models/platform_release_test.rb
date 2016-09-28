@@ -59,8 +59,15 @@ class PackageReleaseTest < ActiveSupport::TestCase
     assert_equal nil, err
 
     assert_equal "ubuntu", pr.platform
-    assert_equal "16.04", pr.release
-    assert_equal "xenial", pr.release_name
+    assert_equal "xenial", pr.release
+
+
+    pr, err = PlatformRelease.validate(Platforms::Ubuntu, "16.04.3")
+    assert_equal nil, err
+
+    assert_equal "ubuntu", pr.platform
+    assert_equal "xenial", pr.release
+
   end
 
    it "should work for debian" do
@@ -80,8 +87,7 @@ class PackageReleaseTest < ActiveSupport::TestCase
     assert_equal nil, err
 
     assert_equal "debian", pr.platform
-    assert_equal "8", pr.release
-    assert_equal "jessie", pr.release_name
+    assert_equal "jessie", pr.release
   end
 
 

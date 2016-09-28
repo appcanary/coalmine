@@ -5,7 +5,7 @@ class PlatformRelease
     include ActiveModel::Validations
     validate :correct_platform_and_release
 
-    attr_accessor :platform, :release, :release_name
+    attr_accessor :platform, :release
     def initialize(platform, release)
       self.platform = platform
       self.release = release
@@ -19,13 +19,22 @@ class PlatformRelease
         return
       end
 
+
+      if platform == Platforms::Ubuntu
+        # be weary of nil release values
+        if release
+          # filter out 14.04.3 down to 14.04
+          self.release = /^(\d+\.\d+)(\.\d+)?/.match(self.release)[1]
+        end
+      end
+
       if (rel_match = valid_releases[release]).blank?
         errors.add(:release, "is invalid")
       end
 
       # for ubuntu, debian
       if rel_match.is_a? String
-        self.release_name = rel_match
+        self.release = rel_match
       end
     end
   end
