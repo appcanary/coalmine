@@ -1,6 +1,6 @@
-class CesaAdvisory < AdvisoryPresenter.new(:cesa_id, :issue_date, :synopsis, 
-                                           :severity, :os_arches, :os_releases, 
-                                           :references, :packages)
+class CesaAdapter < AdvisoryAdapter.new(:cesa_id, :issue_date, :synopsis, 
+                                        :severity, :os_arches, :os_releases, 
+                                        :references, :packages)
 
   def identifier
     @gen_cesa_id ||= cesa_id.gsub("--", ":")

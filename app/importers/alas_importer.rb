@@ -63,7 +63,7 @@ class AlasImporter < AdvisoryImporter
     end
 
     # TODO: handle affected??
-    AlasAdvisory.new({
+    AlasAdapter.new({
       "alas_id" => alas_id,
       "released_at" => released_at,
       "severity" => severity,
