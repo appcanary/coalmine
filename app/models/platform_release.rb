@@ -24,7 +24,10 @@ class PlatformRelease
         # be weary of nil release values
         if release
           # filter out 14.04.3 down to 14.04
-          self.release = /^(\d+\.\d+)(\.\d+)?/.match(self.release)[1]
+          match = /^(\d+\.\d+)(\.\d+)?/.match(self.release)
+          if match
+            self.release = match[1]
+          end
         end
       end
 
