@@ -39,6 +39,11 @@
 #  index_advisories_on_valid_at               (valid_at)
 #
 
+
+# `constraints` is the column we actually use to compute what packages are
+# vulnerable. `patched`, `affected`, and `unaffected` all come from the advisory
+# sources, but are used to compute `constraints` by the importers.
+
 class Advisory < ActiveRecord::Base
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
@@ -65,6 +70,10 @@ class Advisory < ActiveRecord::Base
 
   scope :from_ubuntu, -> {
     where(:source => UbuntuTrackerImporter::SOURCE)
+  }
+
+  scope :from_usn, -> {
+    where(:source => UsnImporter::SOURCE)
   }
 
   scope :from_debian, -> {

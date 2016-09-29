@@ -101,10 +101,6 @@ class DebianTrackerAdapter < AdvisoryAdapter.new(:package_name, :cve, :scope, :d
         h["end_of_life"] = true
       end
 
-      if h["urgency"] == "not yet assigned"
-        h["pending"] = true
-      end
-
       DependencyConstraint.new(h.except("urgency"))
     end
 
@@ -112,10 +108,6 @@ class DebianTrackerAdapter < AdvisoryAdapter.new(:package_name, :cve, :scope, :d
       h = a.dup
       if h["urgency"] =~ /end-of-life/
         h["end_of_life"] = true
-      end
-
-      if h["urgency"] == "not yet assigned"
-        h["pending"] = true
       end
 
       DependencyConstraint.new(h.except("urgency"))

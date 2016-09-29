@@ -58,6 +58,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # external services
 gem 'sentry-raven', '~> 0.13.3'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
+gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'
+gem 'intercom'
 
 # deployment
 gem 'unicorn-rails'
@@ -76,12 +78,13 @@ gem 'binding_of_caller'
 gem 'faraday', '~> 0.9.1'
 gem 'faraday_middleware', '~> 0.9.1'
 
+#parsers
+gem "msgpack"
+
+
 #misc
 gem 'ruby_identicon', '0.0.4'
 gem 'request_store', '~> 1.1.0'
-gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'
-gem 'intercom'
-
 
 gem 'que', '~> 0.12.0'
 
