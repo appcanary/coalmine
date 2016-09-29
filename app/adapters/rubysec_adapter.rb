@@ -41,7 +41,7 @@ class RubysecAdapter < AdvisoryAdapter.new(:filepath, :gem, :cve,
       hsh["unaffected_versions"] = []
     end
 
-    [DependencyConstraint.new(hsh)]
+    [DependencyConstraint.parse(hsh)]
   end
 
 
@@ -92,7 +92,8 @@ class RubysecAdapter < AdvisoryAdapter.new(:filepath, :gem, :cve,
   end
 
   generate :source_status do
-    cvss_score
+    # nil guard, enforce string
+    cvss_score && cvss_score.to_s
   end
 
   generate :reference_ids do
@@ -124,8 +125,12 @@ class RubysecAdapter < AdvisoryAdapter.new(:filepath, :gem, :cve,
 
   generate :related do
     r = related || {}
-    r["url"] ||= []
-    r["url"] << url
-    r
+    arr = r["url"] || []
+    
+    unless arr.include?(url)
+      arr << url
+    end
+
+    arr
   end
 end
