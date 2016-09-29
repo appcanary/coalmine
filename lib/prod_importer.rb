@@ -26,7 +26,7 @@ class ProdImporter
 
     server_params["created_at"] = server_hsh["created-at"]
     rel = AgentRelease.where(:version => server_hsh["agent-version"]).first_or_create!
-    server_params["agent_server_id"] = rel.id
+    server_params["agent_release_id"] = rel.id
 
     server = @account.agent_servers.where(:uuid => server_params["uuid"]).first_or_create!(server_params)
   end
@@ -52,7 +52,8 @@ class ProdImporter
     end
 
     opt = {:path => app_hsh["path"],
-           :name => app_hsh["name"]}
+           :name => app_hsh["name"],
+           :created_at => app_hsh["created-at"]}
 
     # TODO: this script should be idempotent but
     # If we've seen this server before, skip it for now
@@ -92,7 +93,8 @@ class ProdImporter
     if bundle.nil?
       opt = {
         name: mon_hsh["name"],
-        from_api: true
+        from_api: true,
+        created_at: mon_hsh["created-at"]
       }
       bundle, error = bm.create(pr, opt, package_list)
       if error
