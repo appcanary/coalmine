@@ -98,15 +98,6 @@ class Package < ActiveRecord::Base
     @comparator ||= Platforms.comparator_for(self)
   end
 
-  # (defmethod upgrade-to :artifact.kind/rubygem
-  # [vuln version]
-  # (let [patched-versions (:patched-versions vuln)
-  #       number (:number version)]
-  #   (filter (fn [version-patch]
-  #             (< (cmp-versions number (version-number version-patch)) 0))
-  #           patched-versions)))
-
-
   # TODO needs test
   def upgrade_to
     @upgrade_to ||= calc_upgrade_to(self.vulnerable_dependencies)
@@ -138,9 +129,10 @@ class Package < ActiveRecord::Base
       # into Version objects. 
       #
       # 1. Let's flatten this array of arrays
-      # 2. sort the versions,
-      # 3. reject the ones that precede this version
-      all_versions = all_patches.flatten.map { |gr| gr.requirements.map(&:last) }.flatten.sort.select { |v| (this_version <=> v) < 0 } 
+      # 2. map it from G::R to G::V
+      # 3. flatten again & sort the versions,
+      # 4. reject the ones that precede this version
+      all_versions = all_patches.flatten.map { |gr| gr.requirements.map(&:last) }.flatten.sort.select { |v| this_version < v } 
 
 
       # now we find the lowest common denominator,
