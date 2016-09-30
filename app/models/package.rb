@@ -114,6 +114,11 @@ class Package < ActiveRecord::Base
       [all_patches.sort { |a,b| comparator.vercmp(a,b) }.last]
     else
 
+      # TODO:
+      #
+      # argh basically have to replicate vd.affects? but 
+      # with these adhoc objects. punt for now.
+      #
       # in an ideal world, we just check against all
       # the versions available in Rubygems proper.
       #
