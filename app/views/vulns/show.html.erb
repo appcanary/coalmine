@@ -106,7 +106,7 @@
       <% end %>
     </table>
 
-    <% if current_user.is_admin? %>
+    <% if current_user && current_user.is_admin? %>
       <h4>Packages we've seen:</h4>
       <table class="table">
         <th>Release</th>
