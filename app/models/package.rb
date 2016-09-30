@@ -117,14 +117,52 @@ class Package < ActiveRecord::Base
   end
 
   def calc_upgrade_to(vds)
-    vds.map(&:patched_versions).reduce([]) do |arr, pv|
-      pv.each do |v|
-        arr << v if earlier_version?(v)
-      end
-      arr
-    end
-  end
 
+    if self.platform != Platforms::Ruby
+      all_patches = vds.map(&:patched_versions).flatten
+      [all_patches.sort { |a,b| comparator.vercmp(a,b) }.last]
+    else
+
+      # in an ideal world, we just check against all
+      # the versions available in Rubygems proper.
+      #
+      # Instead, we hack it:
+
+      # load every patch requirement into its object
+      all_patches = vds.map { |vd|
+        vd.patched_versions.map { |pv|  Gem::Requirement.new(*pv.split(', ')) }
+      }
+
+      this_version = Gem::Version.new(self.version)
+      # Gem::Requirement cleanly converts requirements
+      # into Version objects. 
+      #
+      # 1. Let's flatten this array of arrays
+      # 2. sort the versions,
+      # 3. reject the ones that precede this version
+      all_versions = all_patches.flatten.map { |gr| gr.requirements.map(&:last) }.flatten.sort.select { |v| (this_version <=> v) < 0 } 
+
+
+      # now we find the lowest common denominator,
+      # by iterating through the list of sorted versions
+      # (yielded by the list of requirements)
+      # and finding the first version that matches any
+      # of the patched_versions in *every single one*
+      # of the vulnerable dependencies we find
+      lcd = all_versions.find do |v|
+        satisfies = all_patches.all? do |pvs|
+          pvs.any? { |gr|
+            gr === v
+          }
+        end
+      end
+
+
+      [lcd]
+
+    end
+
+  end
 
   # ----- view stuff
   def display_name

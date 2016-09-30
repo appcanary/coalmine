@@ -154,7 +154,7 @@ class Platforms
               raise "unknown platform for comparator"
             end
  
-    klass.new(package)
+    klass.new(package.version)
   end
 
   def self.parser_for(platform)
