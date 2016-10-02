@@ -47,4 +47,16 @@ class AdvisoryAdapter < Struct
                "source" => source})
   end
 
+  # list of keys for comparing against advisory models
+  # skip source_text for comparison, since it'll be
+  # serialized in weird ways by AR
+  def self.relevant_keys
+    @relevant_keys ||= 
+      self.generators.keys.map(&:to_s) + ["identifier", "platform", "source"]
+  end
+
+  def relevant_keys
+    self.class.relevant_keys
+  end
+
 end
