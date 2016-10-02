@@ -98,15 +98,6 @@ class Package < ActiveRecord::Base
     @comparator ||= Platforms.comparator_for(self)
   end
 
-  # (defmethod upgrade-to :artifact.kind/rubygem
-  # [vuln version]
-  # (let [patched-versions (:patched-versions vuln)
-  #       number (:number version)]
-  #   (filter (fn [version-patch]
-  #             (< (cmp-versions number (version-number version-patch)) 0))
-  #           patched-versions)))
-
-
   # TODO needs test
   def upgrade_to
     @upgrade_to ||= calc_upgrade_to(self.vulnerable_dependencies)
@@ -117,14 +108,58 @@ class Package < ActiveRecord::Base
   end
 
   def calc_upgrade_to(vds)
-    vds.map(&:patched_versions).reduce([]) do |arr, pv|
-      pv.each do |v|
-        arr << v if earlier_version?(v)
-      end
-      arr
-    end
-  end
 
+    if self.platform != Platforms::Ruby
+      all_patches = vds.map(&:patched_versions).flatten
+      [all_patches.sort { |a,b| comparator.vercmp(a,b) }.last]
+    else
+
+      # TODO:
+      #
+      # argh basically have to replicate vd.affects? but 
+      # with these adhoc objects. punt for now.
+      #
+      # in an ideal world, we just check against all
+      # the versions available in Rubygems proper.
+      #
+      # Instead, we hack it:
+
+      # load every patch requirement into its object
+      all_patches = vds.map { |vd|
+        vd.patched_versions.map { |pv|  Gem::Requirement.new(*pv.split(', ')) }
+      }
+
+      this_version = Gem::Version.new(self.version)
+      # Gem::Requirement cleanly converts requirements
+      # into Version objects. 
+      #
+      # 1. Let's flatten this array of arrays
+      # 2. map it from G::R to G::V
+      # 3. flatten again & sort the versions,
+      # 4. reject the ones that precede this version
+      all_versions = all_patches.flatten.map { |gr| gr.requirements.map(&:last) }.flatten.sort.select { |v| this_version < v } 
+
+
+      # now we find the lowest common denominator,
+      # by iterating through the list of sorted versions
+      # (yielded by the list of requirements)
+      # and finding the first version that matches any
+      # of the patched_versions in *every single one*
+      # of the vulnerable dependencies we find
+      lcd = all_versions.find do |v|
+        satisfies = all_patches.all? do |pvs|
+          pvs.any? { |gr|
+            gr === v
+          }
+        end
+      end
+
+
+      [lcd]
+
+    end
+
+  end
 
   # ----- view stuff
   def display_name

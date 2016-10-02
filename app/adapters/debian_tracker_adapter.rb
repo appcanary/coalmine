@@ -101,7 +101,7 @@ class DebianTrackerAdapter < AdvisoryAdapter.new(:package_name, :cve, :scope, :d
         h["end_of_life"] = true
       end
 
-      DependencyConstraint.new(h.except("urgency"))
+      DependencyConstraint.parse(h.except("urgency"))
     end
 
     affecteds = generate_package_info_fields["affected"].map do |a|
@@ -110,7 +110,7 @@ class DebianTrackerAdapter < AdvisoryAdapter.new(:package_name, :cve, :scope, :d
         h["end_of_life"] = true
       end
 
-      DependencyConstraint.new(h.except("urgency"))
+      DependencyConstraint.parse(h.except("urgency"))
     end
 
     patches + affecteds

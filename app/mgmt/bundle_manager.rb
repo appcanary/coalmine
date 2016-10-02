@@ -19,7 +19,8 @@ class BundleManager < ServiceManager
                         :name => opt[:name],
                         :path => opt[:path],
                         :last_crc => opt[:last_crc],
-                        :from_api => opt[:from_api])
+                        :from_api => opt[:from_api],
+                        :created_at => opt[:created_at])
 
     begin
       bundle.transaction do
@@ -40,7 +41,8 @@ class BundleManager < ServiceManager
     raise ArgumentError.new("Server id can't be nil") if @server_id.nil? 
 
     bundle_id = Bundle.where(:account_id => @account_id, 
-                             :agent_server_id => @server_id, 
+                             :agent_server_id => @server_id,
+                             :name => opt[:name],
                              :path => opt[:path]).pluck("id").first
 
 
@@ -120,8 +122,10 @@ class BundleManager < ServiceManager
     # behaviour is tested in bundle_test.rb
     bundle.packages = packages
 
-    # A bundle has changed! Time to record any logs
-    ReportMaker.new(bundle.id).on_bundle_change
+    unless $rollout.active?(:skip_reports_cos_dev)
+      # A bundle has changed! Time to record any logs
+      ReportMaker.new(bundle.id).on_bundle_change
+    end
 
     bundle
   end

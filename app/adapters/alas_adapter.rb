@@ -59,7 +59,7 @@ class AlasAdapter < AdvisoryAdapter.new(:alas_id, :reference_ids, :severity,
               "patched_versions" => [nv.filename]
         }
 
-        arr << DependencyConstraint.new(h)
+        arr << DependencyConstraint.parse(h)
       end
       arr
     end

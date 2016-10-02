@@ -37,7 +37,7 @@ class CesaAdapter < AdvisoryAdapter.new(:cesa_id, :issue_date, :synopsis,
               "patched_versions" => [nv.filename]
         }
 
-        arr << DependencyConstraint.new(h)
+        arr << DependencyConstraint.parse(h)
       end
       arr
     end

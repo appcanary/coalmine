@@ -3,7 +3,9 @@ class VulnsController < ApplicationController
   def index
     @vulns = Vulnerability.all
   end
+
   def show
-    @vuln = Vulnerability.find(params[:id])
+    @vulnmodel = Vulnerability.find(params[:id])
+    @vuln = VulnPresenter.new(@vulnmodel)
   end
 end

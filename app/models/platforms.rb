@@ -63,6 +63,7 @@ class Platforms
   ## new api platforms as follows:
   RELEASES = {
     Ruby => { nil => true },
+    Amazon => { "2016.03" => true },
     CentOS => { "7" => true },
     Ubuntu => {
       "4.10"=>"warty",
@@ -153,7 +154,7 @@ class Platforms
               raise "unknown platform for comparator"
             end
  
-    klass.new(package)
+    klass.new(package.version)
   end
 
   def self.parser_for(platform)

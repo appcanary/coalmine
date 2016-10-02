@@ -1,7 +1,6 @@
 class RPMComparator
-  def initialize(package)
-    @package = package
-    @current_evr = ::RPM::Nevra.new(@package.version)
+  def initialize(version_str)
+    @current_evr = ::RPM::Nevra.new(version_str)
   end
 
   # is the current version identical, or more
@@ -19,5 +18,9 @@ class RPMComparator
   def earlier_version?(version_constraint)
     constraint_evr = ::RPM::Nevra.new(version_constraint)
     (@current_evr <=> constraint_evr) < 0
+  end
+
+  def vercmp(a,b)
+    ::RPM::Nevra.new(a) <=> ::RPM::Nevra.new(b)
   end
 end

@@ -1,0 +1,96 @@
+<% if current_user  %>
+  <%= render :partial => 'shared/heading' %>
+<% else %>
+  <div class="topbar">
+    <section>
+      <div class="col-sm-12">
+        <h1><%= @vuln.title %></h1>
+      </div>
+    </section>
+  </div>
+<% end %>
+
+
+<section>
+<div>
+</div>
+</section>
+<section>
+  <div class="col-sm-12">
+    <dl class="vulnerability">
+      <dt>Package(s):</dt>
+
+      <dd><%= @vuln.dependency_names %></dd>
+
+      <dt>Kind:</dt>
+      <dd><%= @vuln.platform %></dd>
+
+      <dt>Title:</dt>
+      <dd class="title"><%= @vuln.title %></dd>
+
+      <% if @vuln.has_cves? %>
+        <dt>CVE(s):</dt>
+        <dd>
+          <% @vuln.cve_links.each do |cve| %>
+            <%= cve %>
+          <% end %>
+        </dd>
+      <% end %>
+
+      <dt>Description:</dt>
+      <dd>
+        <%= @vuln.description %>
+      </dd>
+
+      <dt>Criticality:</dt>
+      <dd><%= @vuln.criticality %></dd>
+
+      <dt>Constraints</dt>
+      <dd>
+      <% @vuln.vulnerable_dependencies.each do |vd| %>
+ <dt>dependency</dt>
+ <dd><code><%= vd.package_name %></code></dd>
+
+ <dt>patches</dt>
+ <dd>
+ <code><%= vd.patched_versions.join(",") %></code>
+ </dd>
+      <% end %>
+      </dd>
+
+      <dt>Patched Versions:</dt>
+      <dd>
+        <% @vuln.vulnerable_dependencies.each do |vd| %>
+          <% if vd.patched_versions.present? %>
+            <pre style="border: none;">
+<%= vd.package_name %>
+              <%- vd.patched_versions.each do |vers| %>
+<%= vers %>
+                <br/>
+              <%- end %>
+            </pre>
+          <% else %>
+            No patches exist right now
+          <% end %>
+        <% end %>
+      </dd>
+
+      <dt>Unaffected Versions:</dt>
+      <dd>
+       <% @vuln.vulnerable_dependencies.each do |vd| %>
+          <% if vd.unaffected_versions.present? %>
+            <pre style="border: none;">
+<%= vd.package_name %>
+              <%- vd.unaffected_versions.each do |vers| %>
+  <%= vers %>
+<br/>
+              <%- end %>
+            </pre>
+          <% else %>
+            No unaffected versions were reported.
+          <% end %>
+        <% end %>
+      </dd>
+    </dl>
+  </div>
+</section>

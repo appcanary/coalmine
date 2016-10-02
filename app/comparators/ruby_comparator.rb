@@ -1,7 +1,7 @@
 class RubyComparator
   attr_accessor :version
-  def initialize(pkg)
-    @version = Gem::Version.create(pkg.version)
+  def initialize(version_str)
+    @version = Gem::Version.create(version_str)
   end
 
   def matches?(requirement)
@@ -10,13 +10,20 @@ class RubyComparator
     gem_requirement === @version
   end
 
-  def vercmp(requirement)
+  # assumes both are requirements?
+  def vercmp(areq,breq)
+    a = areq.split(/\s+/).last
+    b = breq.split(/\s+/).last
+    Gem::Version.create(a) <=> Gem::Version.create(b)
+  end
+
+  def reqcmp(requirement)
     patched_version = requirement.split(/\s+/).last
 
     @version <=> Gem::Version.create(patched_version)
   end
 
   def earlier_version?(req)
-    vercmp(req) < 0
+    reqcmp(req) < 0
   end
 end

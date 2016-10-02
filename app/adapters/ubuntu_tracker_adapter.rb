@@ -97,7 +97,7 @@ class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publi
         h["patched_versions"] = h["version"].split(",").map(&:strip)
       end
 
-      DependencyConstraint.new(h.except("status", "version"))
+      DependencyConstraint.parse(h.except("status", "version"))
     end
 
 
@@ -107,7 +107,7 @@ class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publi
         h["end_of_life"] = true
       end
        
-      DependencyConstraint.new(h.except("status", "version"))
+      DependencyConstraint.parse(h.except("status", "version"))
     end
 
     pat + aff
