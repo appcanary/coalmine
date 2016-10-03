@@ -155,7 +155,10 @@ class Package < ActiveRecord::Base
       end
 
 
-      [lcd]
+      # Gem::Version().to_json causes
+      # infinite recursion for some reason?
+      # just call it to_s first
+      [lcd.to_s]
 
     end
 
