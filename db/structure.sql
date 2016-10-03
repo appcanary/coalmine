@@ -65,8 +65,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, processed, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.processed, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -254,7 +254,6 @@ CREATE TABLE advisories (
     rhsa_id character varying,
     cesa_id character varying,
     source_text text,
-    processed boolean DEFAULT false NOT NULL,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -309,7 +308,6 @@ CREATE TABLE advisory_archives (
     rhsa_id character varying,
     cesa_id character varying,
     source_text text,
-    processed boolean DEFAULT false NOT NULL,
     reported_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -335,6 +333,38 @@ CREATE SEQUENCE advisory_archives_id_seq
 --
 
 ALTER SEQUENCE advisory_archives_id_seq OWNED BY advisory_archives.id;
+
+
+--
+-- Name: advisory_import_states; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE advisory_import_states (
+    id integer NOT NULL,
+    advisory_id integer,
+    processed boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: advisory_import_states_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE advisory_import_states_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: advisory_import_states_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE advisory_import_states_id_seq OWNED BY advisory_import_states.id;
 
 
 --
@@ -1579,6 +1609,13 @@ ALTER TABLE ONLY advisory_archives ALTER COLUMN id SET DEFAULT nextval('advisory
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY advisory_import_states ALTER COLUMN id SET DEFAULT nextval('advisory_import_states_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY advisory_vulnerabilities ALTER COLUMN id SET DEFAULT nextval('advisory_vulnerabilities_id_seq'::regclass);
 
 
@@ -1821,6 +1858,14 @@ ALTER TABLE ONLY advisories
 
 ALTER TABLE ONLY advisory_archives
     ADD CONSTRAINT advisory_archives_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: advisory_import_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY advisory_import_states
+    ADD CONSTRAINT advisory_import_states_pkey PRIMARY KEY (id);
 
 
 --
@@ -2199,13 +2244,6 @@ CREATE INDEX index_advisories_on_identifier ON advisories USING btree (identifie
 
 
 --
--- Name: index_advisories_on_processed; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_advisories_on_processed ON advisories USING btree (processed);
-
-
---
 -- Name: index_advisories_on_source; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2241,13 +2279,6 @@ CREATE INDEX index_advisory_archives_on_identifier ON advisory_archives USING bt
 
 
 --
--- Name: index_advisory_archives_on_processed; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_advisory_archives_on_processed ON advisory_archives USING btree (processed);
-
-
---
 -- Name: index_advisory_archives_on_source; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2259,6 +2290,13 @@ CREATE INDEX index_advisory_archives_on_source ON advisory_archives USING btree 
 --
 
 CREATE INDEX index_advisory_archives_on_valid_at ON advisory_archives USING btree (valid_at);
+
+
+--
+-- Name: index_advisory_import_states_on_advisory_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_advisory_import_states_on_advisory_id ON advisory_import_states USING btree (advisory_id);
 
 
 --
@@ -3151,6 +3189,14 @@ ALTER TABLE ONLY vulnerable_packages
 
 
 --
+-- Name: fk_rails_fc4067142b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY advisory_import_states
+    ADD CONSTRAINT fk_rails_fc4067142b FOREIGN KEY (advisory_id) REFERENCES advisories(id);
+
+
+--
 -- Name: fk_rails_fca1b65201; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3287,4 +3333,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160924162720');
 INSERT INTO schema_migrations (version) VALUES ('20160924205930');
 
 INSERT INTO schema_migrations (version) VALUES ('20160924211127');
+
+INSERT INTO schema_migrations (version) VALUES ('20161003155244');
 

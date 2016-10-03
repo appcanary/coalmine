@@ -21,13 +21,17 @@ class AdvisoryImporter
 
       if old_adv.nil?
         # oh look, a new advisory!
-        Advisory.create!(new_adv.to_advisory_attributes)
+        created_adv = Advisory.create!(new_adv.to_advisory_attributes)
+
       else
         if has_changed?(old_adv, new_adv)
 
           new_attr = new_adv.to_advisory_attributes
-          new_attr["processed"] = false
-          old_adv.update_attributes(new_attr)
+
+          Advisory.transaction do
+            old_adv.advisory_import_state.processed = false
+            old_adv.update_attributes!(new_attr)
+          end
         end
       end
     end

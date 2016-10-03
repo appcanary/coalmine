@@ -47,13 +47,19 @@
 class Advisory < ActiveRecord::Base
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
+  has_one :advisory_import_state, autosave: true
+  validates :advisory_import_state, :presence => true
+  
+  before_validation do
+    self.build_advisory_import_state
+  end
 
   scope :most_recent_advisory_for, ->(identifier, source) {
     where(:identifier => identifier, :source => source).order("created_at DESC").limit(1)
   }
 
   scope :unprocessed, -> {
-    where(:processed => false)
+    joins(:advisory_import_state).where(advisory_import_states: { processed: false })
   }
 
   scope :from_rubysec, -> {

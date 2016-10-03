@@ -25,7 +25,6 @@ class CreateAdvisories < ActiveRecord::Migration
       t.string :cesa_id
  
       t.text :source_text
-      t.boolean :processed, default: false, null: false, index: true
 
       t.datetime :reported_at
       t.timestamps null: false

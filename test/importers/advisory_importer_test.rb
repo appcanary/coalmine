@@ -10,12 +10,12 @@ class AdvisoryImporterTest < ActiveSupport::TestCase
     assert_equal 3, Advisory.from_rubysec.count
 
     adv = Advisory.last
-    assert_equal false, adv.processed
+    assert_equal false, adv.advisory_import_state.processed
     assert_equal "Denial of service or RCE from libxml2 and libxslt", adv.title
 
 
     # at some other point it gets picked up and processed
-    adv.processed = true
+    adv.advisory_import_state.processed = true
     adv.save!
 
     # OK, so then the adv w/same identifier gets
@@ -28,7 +28,7 @@ class AdvisoryImporterTest < ActiveSupport::TestCase
     adv.reload
 
     # processed flag gets reset, so it'll be picked up 
-    assert_equal false, adv.processed
+    assert_equal false, adv.advisory_import_state.processed
     assert_equal "NEW TITLE", adv.title
     assert_equal "LOL EDITED", adv.description
 
