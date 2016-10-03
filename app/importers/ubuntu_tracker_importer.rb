@@ -100,6 +100,8 @@ class UbuntuTrackerImporter < AdvisoryImporter
       end
     end
 
+    hsh["filepath"] = cve_file
+
     UbuntuTrackerAdapter.new(hsh, cve_text)
   end
 

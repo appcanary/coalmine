@@ -1,7 +1,7 @@
-class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publicdateatusn, :crd, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches)
+class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publicdateatusn, :crd, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches, :filepath)
 
   def identifier
-    candidate
+    filepath.split("/")[-2..-1].join("/")
   end
 
   def source
@@ -13,11 +13,11 @@ class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publi
   end
 
   generate :reference_ids do
-    [identifier]
+    [candidate]
   end
 
   generate :title do
-    identifier
+    candidate
   end
 
   # From: ubuntu-cve-tracker/README
