@@ -14,6 +14,10 @@ class NotificationMailer < ActionMailer::Base
       recipient = msg.account.email
     else
       recipient = "hello@appcanary.com"
+
+      if PREPROD_EMAILS.include?(msg.account.email)
+        recipient = msg.account.email
+      end
       subject = "[#{Rails.env}] " + subject
     end
 
@@ -34,6 +38,10 @@ class NotificationMailer < ActionMailer::Base
       recipient = msg.account.email
     else
       recipient = "hello@appcanary.com"
+
+      if PREPROD_EMAILS.include?(msg.account.email)
+        recipient = msg.account.email
+      end
       subject = "[#{Rails.env}] " + subject
     end
 
