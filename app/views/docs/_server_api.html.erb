@@ -3,12 +3,12 @@
   <p>The <em>server</em> allows you to query information about servers that you register with our <a href="http://localhost:3000/servers/new">agents</a>.</p>
   <h2>List Servers</h2>
     <p>To list all of the servers you have registered:</p>
-    <h4><code>GET https://appcanary.com/api/v2/servers</code></h4>
+    <h4><code>GET https://appcanary.com/api/v3/servers</code></h4>
 
     <p>For example</p>
     
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
-      https://appcanary.com/api/v2/servers</pre>
+      https://appcanary.com/api/v3/servers</pre>
 
 
     <a name="list-monitors-response" class="anchor-offset"></a>
@@ -91,12 +91,12 @@
 <a name="show-server" class="anchor-offset"></a>
  <h2>Show Server</h2>
     <p>To show details about a specific server:</p>
-    <h4><code>GET https://appcanary.com/api/v2/servers/<strong>:uuid</strong></code></h4>
+    <h4><code>GET https://appcanary.com/api/v3/servers/<strong>:uuid</strong></code></h4>
 
     <p>For example</p>
 
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
-      https://appcanary.com/api/v2/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
+      https://appcanary.com/api/v3/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
 
     <h4>Required path parameters</h4>
     <%= render :partial => "server_uuid" %>
@@ -265,13 +265,13 @@
 <a name="delete-server" class="anchor-offset"></a>
     <h2>Delete Server</h2>
     <p>To delete a server:</p>
-    <h4><code>DELETE https://appcanary.com/api/v2/servers/<strong>:uuid</strong></code></h4>
+    <h4><code>DELETE https://appcanary.com/api/v3/servers/<strong>:uuid</strong></code></h4>
 
     <p>For example</p>
     
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
      -X DELETE \
-     https://appcanary.com/api/v2/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
+     https://appcanary.com/api/v3/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
 
 
     <h2>Delete Server Response</h2>

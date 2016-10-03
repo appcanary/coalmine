@@ -1,19 +1,19 @@
 <a name="check-endpoint" class="anchor-offset"></a>
 <h1>Check API</h1>
 <h2>Request</h2>
-<h4><code>POST https://appcanary.com/api/v2/check/:platform/:release</code></h4>
+<h4><code>POST https://appcanary.com/api/v3/check/:platform/:release</code></h4>
 
 <p>Check your dependencies for vulnerabilities. For example, with Ruby:</p>
 
 <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
- "https://appcanary.com/api/v2/check?platform=<strong>ruby</strong>" -X POST \
+ "https://appcanary.com/api/v3/check?platform=<strong>ruby</strong>" -X POST \
  -F <strong>file</strong>=@./Gemfile.lock
 </pre>
 
 <strong>or</strong>
 
 <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
- "https://appcanary.com/api/v2/check?platform=<strong>ubuntu</strong>&amp;release=<strong>14.04</strong>" -X POST \
+ "https://appcanary.com/api/v3/check?platform=<strong>ubuntu</strong>&amp;release=<strong>14.04</strong>" -X POST \
  -F <strong>file</strong>=@/var/lib/dpkg/status
 </pre>
 
@@ -35,59 +35,71 @@
 <a name="check-response" class="anchor-offset"></a>
 <h2>Response</h2>
 <p>Successful requests will have a <code>200 OK</code> response code containing <code>application/json</code> data.</p>
-<p>All successful responses will be wrapped in a <code>"data"</code> container object and contain a <code>"vulnerable"</code> boolean field. This container object <strong>shall always</strong> contain an array, whether it's empty or not. This schema is loosely based on the <a href="http://jsonapi.org/">jsonapi</a> spec.</p>
+<p>All successful responses will be wrapped in a <code>"data"</code> container object and will have a <code>"vulnerable"</code> boolean field wrapped inside a <code>"meta"</code> object. This container object <strong>shall always</strong> contain an array, whether it's empty or not. This schema follows the <a href="http://jsonapi.org/">jsonapi</a> spec.</p>
 <p>For example, if your dependency file does not have any known vulnerabilities, the response body will look like this:</p>
 <pre class="json">
 {
-  "vulnerable": false,
-  "data": []
+  "data": [],
+  "meta": {
+    "vulnerable": false
+  }
 }
 </pre>
     
 <h4>The response container object</h4>
 <% render :partial => "response_coll_container_fields" %>
 
-<p>However, if your app does have vulnerable dependencies, then the container object will consist of a series of <code>artifact-version</code> objects, and look like the following example response:</p>
+<p>However, if your app does have vulnerable dependencies, then the container object will consist of a series of <code>package</code> objects, and look like the following example response:</p>
 <pre class="json">
 {
-  "vulnerable": true,
   "data": [
     {
-      "type": "artifact-version",
+      "id": "37495",
+      "type": "packages",
       "attributes": {
         "name": "rack",
-        "kind": "rubygem",
-        "number": "1.6.0",
-        "vulnerabilities": [
-          {
-            "title": "Potential Denial of Service Vulnerability in Rack",
-            "description": "Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade.",
-            "criticality": "high",
-            "cve": [
-              "CVE-2015-3225"
-            ],
-            "osvdb": [],
-            "patched-versions": [
-              "~&lt; 1.5.4",
-              "~&lt; 1.4.6",
-              "&gt;= 1.6.2"
-            ],
-            "unaffected-versions": [],
-            "uuid": "55807540-053f-40f0-9266-a3d1ca6a5838",
-            "upgrade-to": [
-              "&gt;= 1.6.2"
-            ]
-          }
+        "platform": "ruby",
+        "release": null,
+        "version": "1.6.0",
+        "upgrade-to": [
+          "1.6.2"
+        ]
+      },
+      "relationships": {
+        "vulnerabilities": {
+          "data": [
+            {
+              "id": "2239",
+              "type": "vulnerabilities"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "id": "2239",
+      "type": "vulnerabilities",
+      "attributes": {
+        "title": "Potential Denial of Service Vulnerability in Rack\n",
+        "description": "Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade. \n",
+        "criticality": "unknown",
+        "reference-ids": [
+          "CVE-2015-3225"
         ]
       }
     }
-  ]
+  ],
+  "meta": {
+    "vulnerable": true
+  }
 }
 </pre>
-<h4>ArtifactVersion container object</h4>
+<h4>Package container object</h4>
 <%= render :partial => "artifact_version_container_fields" %>
 
-<h4>ArtifactVersion attributes object</h4>
+<h4>Package attributes object</h4>
 <%= render :partial => "artifact_version_fields" %>
 
 <h4>Vulnerability object</h4>

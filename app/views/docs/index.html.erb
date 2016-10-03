@@ -16,10 +16,10 @@
       <li><a href="#show-monitor">Show</a></li>
       <li><a href="#update-monitor">Update</a></li>
       <li><a href="#delete-monitor">Delete</a></li>
-<h4>Server API</h4>
-      <li><a href="#list-servers">List</a></li>
-      <li><a href="#show-server">Show</a></li>
-      <li><a href="#delete-server">Delete</a></li>
+<!-- <h4>Server API</h4> -->
+<!--       <li><a href="#list&#45;servers">List</a></li> -->
+<!--       <li><a href="#show&#45;server">Show</a></li> -->
+<!--       <li><a href="#delete&#45;server">Delete</a></li> -->
       <h4>In the event of failure</h4>
       <li><a href="#errors">Error Response</a></li>
       <li><a href="#feedback">Questions? Feedback?</a></li>
@@ -38,10 +38,10 @@
     <a name="authentication" class="anchor-offset"></a>
     
     <h2>Authentication</h2>
-    <h4><code>GET https://appcanary.com/api/v2/status</code></h4>
+    <h4><code>GET https://appcanary.com/api/v3/status</code></h4>
     <p>All communication with our APIs require your API key to be included as an <code>Authentication</code> header. These can be set in <code>curl</code> like so:</p>
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
-     https://appcanary.com/api/v2/status</pre>
+     https://appcanary.com/api/v3/status</pre>
 
     <p>The status endpoint shown above will respond appropriately if your request is authenticated and your account is in good standing.</p>
     <hr>
@@ -63,12 +63,12 @@
     <br/>
     <br/>
 
-    <%= render :partial => "server_api" %>
+    <%# <%= render :partial => "server_api" %>
 
-    <hr>
-    <br/>
-    <br/>
-    <br/>
+    <!-- <hr> -->
+    <!-- <br/> -->
+    <!-- <br/> -->
+    <!-- <br/> -->
 
     <a name="errors" class="anchor-offset"></a>
     <h2>Errors</h2>
@@ -78,13 +78,11 @@
 {
   "errors": [
     {
-      "title": "Validation error",
-      "details": {
-        "file": "missing-required-key"
-      }
+      "title": "Platform is invalid"
     }
   ]
-}</pre>
+}
+</pre>
 
     <p>When responding with an error, the API shall always omit the <code>data</code> container object and return instead an <code>errors</code> object, which shall always contain an array.</p>
 

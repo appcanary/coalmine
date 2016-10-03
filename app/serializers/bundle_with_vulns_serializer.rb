@@ -1,8 +1,8 @@
 class BundleWithVulnsSerializer < ActiveModel::Serializer
   type :monitors
-  attributes :name, :vulnerable, :updated_at, :created_at
+  attributes :name, :vulnerable, :created_at
 
-  has_many :vulnerable_packages, unless: -> { vulnerable_packages.empty? }
+  has_many :vulnerable_packages, unless: -> { vulnerable_packages.empty? }, :key => "packages", :serializer => PackageSerializer
   has_many :vulnerabilities, unless: -> { vulnerable_packages.empty? }
   
   def vulnerable_packages 

@@ -55,7 +55,7 @@ class Api::MonitorsController < ApiController
 
     if @bundle
       register_api_call!
-      render json: @bundle, adapter: :json_api, serializer: BundleWithVulnsSerializer, include: ["vulnerable_packages", "vulnerabilities"]
+      render json: @bundle, adapter: :json_api, serializer: BundleWithVulnsSerializer, include: ["packages", "vulnerabilities"]
     else
       render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
     end
