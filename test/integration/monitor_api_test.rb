@@ -103,6 +103,14 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
       assert_equal 2, json["included"].size
       assert_equal "packages", json["included"][0]["type"]
       assert_equal "vulnerabilities", json["included"][1]["type"]
+
+
+      # should also work using the bundle id
+      get api_monitor_path(name: @bundle.id), {},
+        {authorization: %{Token token="#{account.token}"}}
+
+      assert_response :success
+
     end
   end
 

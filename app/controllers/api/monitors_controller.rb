@@ -28,7 +28,8 @@ class Api::MonitorsController < ApiController
   end
 
   def update
-    @bundle = current_account.bundles.via_api.where(:name => params[:name]).take
+    @bundle = fetch_bundle
+
     @form = ApiMonitorForm.new(@bundle || Bundle.new)
 
     if @bundle && @form.validate(params)
@@ -51,7 +52,7 @@ class Api::MonitorsController < ApiController
   end
 
   def show
-    @bundle = current_account.bundles.via_api.where(:name => params[:name]).take
+    @bundle = fetch_bundle
 
     if @bundle
       register_api_call!
@@ -63,7 +64,7 @@ class Api::MonitorsController < ApiController
 
 
   def destroy
-    @bundle = current_account.bundles.via_api.where(:name => params[:name]).take
+    @bundle = fetch_bundle
 
     if @bundle.nil?
       render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
@@ -73,6 +74,11 @@ class Api::MonitorsController < ApiController
     else
       render json: {errors: [{title: "Monitor deletion failed."}]}, adapter: :json_api, status: 500
     end
+  end
+
+  def fetch_bundle
+    bundle = current_account.bundles.via_api.where(:name => params[:name]).take
+    bundle ||= current_account.bundles.via_api.where(:id => params[:name]).take
   end
 
 end
