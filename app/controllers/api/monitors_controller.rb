@@ -42,7 +42,7 @@ class Api::MonitorsController < ApiController
     end
 
     if @bundle.nil?
-      render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
+      render json: {errors: [{title: "No monitor with that name or id was found"}]}, adapter: :json_api, status: :not_found
     elsif @form.errors.present?
       render json: errors_to_h(@form.errors), adapter: :json_api, status: :bad_request
     else
@@ -58,7 +58,7 @@ class Api::MonitorsController < ApiController
       register_api_call!
       render json: @bundle, adapter: :json_api, serializer: BundleWithVulnsSerializer, include: ["packages", "vulnerabilities"]
     else
-      render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
+      render json: {errors: [{title: "No monitor with that name or id was found"}]}, adapter: :json_api, status: :not_found
     end
   end
 
@@ -67,7 +67,7 @@ class Api::MonitorsController < ApiController
     @bundle = fetch_bundle
 
     if @bundle.nil?
-      render json: {errors: [{title: "No monitor with that name was found"}]}, adapter: :json_api, status: :not_found
+      render json: {errors: [{title: "No monitor with that name or id was found"}]}, adapter: :json_api, status: :not_found
     elsif @bundle.destroy
       register_api_call!
       render :nothing => true, :status => 204

@@ -162,7 +162,7 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
       @bundle.reload
       assert_equal old_pkgs, @bundle.packages.order(:id).to_a
 
-      assert_equal "No monitor with that name was found", json_body["errors"].first["title"]
+      assert_equal "No monitor with that name or id was found", json_body["errors"].first["title"]
     end
 
     it "should not let you delete someone else's monitor" do
@@ -176,7 +176,7 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
 
       assert_response :not_found
       assert_equal 1, Bundle.count
-      assert_equal "No monitor with that name was found", json_body["errors"].first["title"]
+      assert_equal "No monitor with that name or id was found", json_body["errors"].first["title"]
     end
 
     it "should not let you see someone else's monitor" do
@@ -188,7 +188,7 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
         {authorization: %{Token token="#{new_account.token}"}}
 
       assert_response :not_found
-      assert_equal "No monitor with that name was found", json_body["errors"].first["title"]
+      assert_equal "No monitor with that name or id was found", json_body["errors"].first["title"]
     end
   end
 
