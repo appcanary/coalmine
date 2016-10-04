@@ -32,7 +32,7 @@ class AgentServer < ActiveRecord::Base
   validates :account, :presence => true
 
   belongs_to :agent_release
-  has_many :bundles
+  has_many :bundles, :dependent => :destroy
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
 

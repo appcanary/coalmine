@@ -21,54 +21,34 @@
 {
   "data": [
     {
-      "type": "server",
+      "id": "479",
+      "type": "servers",
       "attributes": {
-        "name": "server1",
-        "uuid": "55a5baeb-2ad4-4787-8784-a062d254900e",
-        "hostname": "server1",
-        "last-heartbeat-at": "2016-03-27T03:33:02.185Z",
-        "vulnerable": true,
-        "apps": [
-          {
-            "type": "app",
-            "attributes": {
-              "name": "",
-              "path": "/var/lib/dpkg/status",
-              "uuid": "55a5baec-3e5c-4cca-832c-06aaa36418f6",
-              "vulnerable": true
+        "name": "",
+        "uuid": "576af72e-f8ea-4fd6-a117-6fdf26a2eacc",
+        "hostname": "debian-jessie",
+        "last-heartbeat-at": null
+      },
+      "relationships": {
+        "monitors": {
+          "data": [
+            {
+              "id": "717",
+              "type": "monitors"
             }
-          },
-          {
-            "type": "app",
-            "attributes": {
-              "name": "",
-              "path": "/var/www/myapp/current/Gemfile.lock",
-              "uuid": "55a5baec-027d-4618-b8de-12638281f34c",
-              "vulnerable": true
-            }
-          }
-        ]
+          ]
+        }
       }
     },
+  ],
+  "included": [
     {
-      "type": "server",
+      "id": "717",
+      "type": "monitors",
       "attributes": {
-        "name": "server2",
-        "uuid": "560b0e75-1317-481c-98bb-15e6ae5978b6",
-        "hostname": "database",
-        "last-heartbeat-at": "2016-03-08T00:21:31.105Z",
+        "name": "my-server",
         "vulnerable": true,
-        "apps": [
-          {
-            "type": "app",
-            "attributes": {
-              "name": "",
-              "path": "/var/lib/dpkg/status",
-              "uuid": "560b0e77-0a26-41fd-bc35-38b5aac33709",
-              "vulnerable": true
-            }
-          }
-        ]
+        "created-at": "2016-10-03T20:33:08.889Z"
       }
     }
   ]
@@ -81,7 +61,7 @@
     <h4>Server object</h4>
     <%= render :partial => "server_fields" %>
 
-    <h4>App object </h4>
+    <h4>Monitor object </h4>
     <%= render :partial => "app_fields" %>
 
     <hr>
@@ -96,7 +76,7 @@
     <p>For example</p>
 
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
-      https://appcanary.com/api/v3/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
+      https://appcanary.com/api/v3/servers/<strong>576af72e-f8ea-4fd6-a117-6fdf26a2eacc</strong></pre>
 
     <h4>Required path parameters</h4>
     <%= render :partial => "server_uuid" %>
@@ -109,136 +89,90 @@
     <pre class="json">
 {
   "data": {
-    "type": "server",
+    "id": "479",
+    "type": "servers",
     "attributes": {
       "name": "",
-      "uuid": "56cb0a86-edff-45ef-a4b7-d5ae230f898c",
-      "hostname": "vagrant-ubuntu-trusty-64",
-      "last-heartbeat-at": "2016-02-22T13:18:43.084Z",
-      "vulnerable": true,
-      "apps": [
-        {
-          "type": "app",
-          "attributes": {
-            "name": "",
-            "path": "/var/lib/dpkg/status",
-            "uuid": "56cb0a88-a9b2-4bde-a614-ad74e27053b2",
-            "vulnerable": true,
-            "vulnerable-versions": [
-              {
-                "type": "artifact-version",
-                "attributes": {
-                  "name": "linux-image-3.13.0-55-generic",
-                  "kind": "ubuntu",
-                  "number": "3.13.0-55.92",
-                  "arch": null,
-                  "vulnerabilities": [
-                    {
-                      "description": "The Fix for CVE-2015-1328 introduced a regression into the Linux kernel's\noverlayfs file system. The removal of a directory that only exists on the\nlower layer results in a kernel panic.\n\nWe apologize for the inconvenience.\n\nOriginal advisory details:\n\n Philip Pettersson discovered a privilege escalation when using overlayfs\n mounts inside of user namespaces. A local user could exploit this flaw to\n gain administrative privileges on the system.\n\nAfter a standard system update you need to reboot your computer to make\nall the necessary changes.\n",
-                      "osvdb": [],
-                      "upgrade-to": [],
-                      "criticality": "unknown",
-                      "rhsa": [],
-                      "cve": [
-                        "http://bugs.launchpad.net/bugs/1465998"
-                      ],
-                      "title": "USN-2643-2: Linux kernel regression",
-                      "uuid": "55a20803-5a30-4b1d-b4c0-fd2ef4845235",
-                      "unaffected-versions": [
-                        "vivid linux-image-3.13.0-55-lowlatency",
-                        "natty linux-image-3.13.0-55-generic",
-                        "natty linux-image-3.13.0-55-powerpc64-smp",
-                        "quantal linux-image-3.13.0-55-powerpc-e500",
-                        "hardy linux-image-3.13.0-55-powerpc64-emb",
-                        "raring linux-image-3.13.0-55-powerpc-e500mc",
-                        "utopic linux-image-3.13.0-55-generic-lpae",
-                        "lucid linux-image-3.13.0-55-lowlatency",
-                        "vivid linux-image-3.13.0-55-powerpc-smp",
-                        "oneiric linux-image-3.13.0-55-powerpc-smp",
-                        "natty linux-image-3.13.0-55-powerpc-e500mc",
-                        "quantal linux-image-3.13.0-55-powerpc-smp",
-                        "quantal linux-image-3.13.0-55-powerpc-e500mc",
-                        "saucy linux-image-3.13.0-55-powerpc64-emb",
-                        "precise linux-image-3.13.0-55-generic",
-                        "lucid linux-image-3.13.0-55-powerpc-e500mc",
-                        "quantal linux-image-3.13.0-55-generic-lpae",
-                        "utopic linux-image-3.13.0-55-lowlatency",
-                        "hardy linux-image-3.13.0-55-powerpc64-smp",
-                        "oneiric linux-image-3.13.0-55-lowlatency",
-                        "raring linux-image-3.13.0-55-generic",
-                        "lucid linux-image-3.13.0-55-generic",
-                        "saucy linux-image-3.13.0-55-lowlatency",
-                        "natty linux-image-3.13.0-55-generic-lpae",
-                        "vivid linux-image-3.13.0-55-powerpc-e500mc",
-                        "precise linux-image-3.13.0-55-powerpc-smp",
-                        "vivid linux-image-3.13.0-55-powerpc-e500",
-                        "raring linux-image-3.13.0-55-powerpc64-emb",
-                        "utopic linux-image-3.13.0-55-powerpc64-smp",
-                        "lucid linux-image-3.13.0-55-generic-lpae",
-                        "vivid linux-image-3.13.0-55-powerpc64-emb",
-                        "saucy linux-image-3.13.0-55-powerpc-e500",
-                        "saucy linux-image-3.13.0-55-powerpc64-smp",
-                        "raring linux-image-3.13.0-55-generic-lpae",
-                        "natty linux-image-3.13.0-55-lowlatency",
-                        "oneiric linux-image-3.13.0-55-generic",
-                        "hardy linux-image-3.13.0-55-powerpc-e500",
-                        "precise linux-image-3.13.0-55-powerpc-e500mc",
-                        "vivid linux-image-3.13.0-55-powerpc64-smp",
-                        "precise linux-image-3.13.0-55-lowlatency",
-                        "quantal linux-image-3.13.0-55-generic",
-                        "raring linux-image-3.13.0-55-lowlatency",
-                        "natty linux-image-3.13.0-55-powerpc-smp",
-                        "raring linux-image-3.13.0-55-powerpc64-smp",
-                        "saucy linux-image-3.13.0-55-powerpc-smp",
-                        "utopic linux-image-3.13.0-55-powerpc64-emb",
-                        "precise linux-image-3.13.0-55-powerpc-e500",
-                        "saucy linux-image-3.13.0-55-powerpc-e500mc",
-                        "oneiric linux-image-3.13.0-55-powerpc-e500",
-                        "saucy linux-image-3.13.0-55-generic-lpae",
-                        "hardy linux-image-3.13.0-55-powerpc-e500mc",
-                        "precise linux-image-3.13.0-55-powerpc64-emb",
-                        "quantal linux-image-3.13.0-55-lowlatency",
-                        "hardy linux-image-3.13.0-55-lowlatency",
-                        "natty linux-image-3.13.0-55-powerpc-e500",
-                        "lucid linux-image-3.13.0-55-powerpc64-emb",
-                        "vivid linux-image-3.13.0-55-generic",
-                        "precise linux-image-3.13.0-55-generic-lpae",
-                        "precise linux-image-3.13.0-55-powerpc64-smp",
-                        "utopic linux-image-3.13.0-55-powerpc-e500",
-                        "quantal linux-image-3.13.0-55-powerpc64-smp",
-                        "hardy linux-image-3.13.0-55-powerpc-smp",
-                        "lucid linux-image-3.13.0-55-powerpc-smp",
-                        "lucid linux-image-3.13.0-55-powerpc64-smp",
-                        "lucid linux-image-3.13.0-55-powerpc-e500",
-                        "raring linux-image-3.13.0-55-powerpc-smp",
-                        "utopic linux-image-3.13.0-55-powerpc-smp",
-                        "utopic linux-image-3.13.0-55-powerpc-e500mc",
-                        "raring linux-image-3.13.0-55-powerpc-e500",
-                        "saucy linux-image-3.13.0-55-generic",
-                        "oneiric linux-image-3.13.0-55-powerpc-e500mc",
-                        "natty linux-image-3.13.0-55-powerpc64-emb",
-                        "utopic linux-image-3.13.0-55-generic",
-                        "hardy linux-image-3.13.0-55-generic",
-                        "oneiric linux-image-3.13.0-55-powerpc64-emb",
-                        "oneiric linux-image-3.13.0-55-generic-lpae",
-                        "quantal linux-image-3.13.0-55-powerpc64-emb",
-                        "hardy linux-image-3.13.0-55-generic-lpae",
-                        "vivid linux-image-3.13.0-55-generic-lpae",
-                        "oneiric linux-image-3.13.0-55-powerpc64-smp"
-                      ],
-                      "patched-versions": [
-                        "3.13.0-55.94"
-                      ]
-                    }
-                  ]
-                }
-              },
-            ]
-          }
-        }
-      ]
+      "uuid": "576af72e-f8ea-4fd6-a117-6fdf26a2eacc",
+      "hostname": "debian-jessie",
+      "last-heartbeat-at": null
+    },
+    "relationships": {
+      "monitors": {
+        "data": [
+          {
+            "id": "717",
+            "type": "monitors"
+          },
+        ]
+      }
     }
-  }
+  },
+  "included": [
+    {
+      "id": "717",
+      "type": "monitors",
+      "attributes": {
+        "name": "my-server",
+        "vulnerable": true,
+        "created-at": "2016-10-03T20:33:08.889Z"
+      },
+      "relationships": {
+        "packages": {
+          "data": [
+            {
+              "id": "37495",
+              "type": "packages"
+            }
+          ]
+        },
+        "vulnerabilities": {
+          "data": [
+            {
+              "id": "2239",
+              "type": "vulnerabilities"
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "id": "37495",
+      "type": "packages",
+      "attributes": {
+        "name": "rack",
+        "platform": "ruby",
+        "release": null,
+        "version": "1.6.0",
+        "upgrade-to": [
+          "1.6.2"
+        ]
+      },
+      "relationships": {
+        "vulnerabilities": {
+          "data": [
+            {
+              "id": "2239",
+              "type": "vulnerabilities"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "2239",
+      "type": "vulnerabilities",
+      "attributes": {
+        "title": "Potential Denial of Service Vulnerability in Rack\n",
+        "description": "Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade. \n",
+        "criticality": "unknown",
+        "reference-ids": [
+          "CVE-2015-3225"
+        ]
+      }
+    }
+  ]
 }
     </pre>
 
@@ -248,13 +182,13 @@
     <h4>Server object</h4>
     <%= render :partial => "server_fields" %>
 
-    <h4>App object </h4>
+    <h4>Monitor object </h4>
     <%= render :partial => "app_fields" %>
 
-    <h4>ArtifactVersion container object</h4>
+    <h4>Package container object</h4>
     <%= render :partial => "artifact_version_container_fields" %>
 
-    <h4>ArtifactVersion attributes object</h4>
+    <h4>Package attributes object</h4>
     <%= render :partial => "artifact_version_fields" %>
 
     <h4>Vulnerability object</h4>
@@ -271,7 +205,7 @@
     
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
      -X DELETE \
-     https://appcanary.com/api/v3/servers/<strong>56cb0a86-edff-45ef-a4b7-d5ae230f898c</strong></pre>
+     https://appcanary.com/api/v3/servers/<strong>576af72e-f8ea-4fd6-a117-6fdf26a2eacc</strong></pre>
 
 
     <h2>Delete Server Response</h2>

@@ -96,6 +96,10 @@ Rails.application.routes.draw do
       get "monitors/:name" => "monitors#show", :as => "monitor"
       get "monitors" => "monitors#index"
       delete "monitors/:name" => "monitors#destroy"
+
+      get "servers/:uuid" => "servers#show", :as => "server"
+      get "servers" => "servers#index"
+      delete "servers/:uuid" => "servers#destroy"
     end
 
     scope :v1 do
