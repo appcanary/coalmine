@@ -1,5 +1,5 @@
 class ApiV2MonitorResponseSerializer < ActiveModel::Serializer
-  attributes :data
+  attributes :data, :meta
 
   def data
     # if we're being called in a show action
@@ -17,6 +17,11 @@ class ApiV2MonitorResponseSerializer < ActiveModel::Serializer
     { "type" => "monitor",
       "attributes" => ApiV2MonitorSerializer.new(mon, instance_options)
     }
+  end
+
+  
+  def meta
+    {deprecated: "This endpoint is no longer supported."}
   end
 end
 

@@ -1,5 +1,5 @@
 class ApiV2CheckResponseSerializer < ActiveModel::Serializer
-  attributes :data, :vulnerable
+  attributes :data, :vulnerable, :meta
 
   def data
     object.map do |vuln_pkg|
@@ -15,5 +15,9 @@ class ApiV2CheckResponseSerializer < ActiveModel::Serializer
     else
       false
     end
+  end
+
+  def meta
+    {deprecated: "This endpoint is no longer supported."}
   end
 end
