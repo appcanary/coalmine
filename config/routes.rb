@@ -103,17 +103,17 @@ Rails.application.routes.draw do
     end
 
     scope :v2 do
-      post "check" => 'check#create'
+      post "check" => 'check#create', as: "v2_check"
       get "status" => 'status#status'
 
       post "monitors(/:name)" => "monitors#create"
       put "monitors/:name" => "monitors#update"
       get "monitors/:name" => "monitors#show", :as => "v2_monitor"
-      get "monitors" => "monitors#index"
+      get "monitors" => "monitors#index", :as => "v2_monitors"
       delete "monitors/:name" => "monitors#destroy"
 
       get "servers/:uuid" => "servers#show", :as => "v2_server"
-      get "servers" => "servers#index"
+      get "servers" => "servers#index", :as => "v2_servers"
       delete "servers/:uuid" => "servers#destroy"
     end
 

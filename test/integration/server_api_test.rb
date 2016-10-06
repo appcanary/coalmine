@@ -25,6 +25,16 @@ class ServerApiTest < ActionDispatch::IntegrationTest
         [@bundle1.id, @bundle2.id].include?(m["id"].to_i) &&
           m["attributes"]["vulnerable"] == false
       }
+
+      # quick v2 smokescreen test
+      get api_v2_servers_path, {}, auth_token(account)
+      assert_response :success
+
+      assert json_body["data"].all? { |s|
+        s["type"] == "server" &&
+          s["attributes"]["apps"].present? &&
+          s["attributes"]["vulnerable"] == false
+      }
     end
 
     it "should show an existing server" do
@@ -69,6 +79,13 @@ class ServerApiTest < ActionDispatch::IntegrationTest
       assert_response :not_found
       assert_equal "No server with that id was found", json_body["errors"].first["title"]
       
+      # quick v2 smokescreen test
+      get api_v2_server_path(:uuid => @server1.uuid), {}, auth_token(account)
+      assert_response :success
+
+      json = json_body
+      assert_equal "server", json["data"]["type"] = "server"
+      assert json["data"]["attributes"]["apps"].present?
     end
 
     it "should delete a server" do

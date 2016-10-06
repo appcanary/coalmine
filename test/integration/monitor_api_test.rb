@@ -18,6 +18,17 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
       assert_equal "monitors", json["data"]["type"]
       assert_equal "foo", json["data"]["attributes"]["name"]
       assert_equal false, json["data"]["attributes"]["vulnerable"]
+
+      # quick v2 smokesceen test
+      post api_v2_monitors_path(name: "foo2"), {platform: Platforms::Ruby, file: gemfilelock},
+        {authorization: %{Token token="#{account.token}"}}
+
+      assert_response :success
+      json = json_body
+      assert_equal "monitor", json["data"]["type"]
+      assert_equal false, json["data"]["attributes"]["vulnerable"]
+      assert json["data"]["attributes"]["created-at"]
+
     end
 
     it "should return errors when given bad params" do
@@ -110,6 +121,22 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
         {authorization: %{Token token="#{account.token}"}}
 
       assert_response :success
+
+
+
+      # quick v2 smokesceen test
+      get api_v2_monitor_path(name: @bundle.id), {},
+        {authorization: %{Token token="#{account.token}"}}
+      assert_response :success
+
+      json = json_body
+      assert_equal "monitor", json["data"]["type"]
+      assert_equal true, json["data"]["attributes"]["vulnerable"]
+      assert json["data"]["attributes"]["vulnerable-versions"].all? { |h|
+        h["attributes"]["name"].present? && h["attributes"]["number"].present? &&
+          !h["attributes"]["vulnerabilities"][0]["upgrade-to"].nil?
+      }
+
 
     end
   end

@@ -14,7 +14,7 @@ class Api::CheckController < ApiController
 
       vuln_packages = VulnQuery.from_packages(package_query)
 
-      resp = handle_api_response(request.path, vuln_packages)
+      resp = handle_api_response(vuln_packages)
 
       register_api_call!
 
@@ -24,8 +24,7 @@ class Api::CheckController < ApiController
     end
   end
 
-  def handle_api_response(path, vuln_packages)
-    # TODO TEST
+  def handle_api_response(vuln_packages)
     if v2_request?
       # when calling serializers directly,
       # have to force json here - has to do

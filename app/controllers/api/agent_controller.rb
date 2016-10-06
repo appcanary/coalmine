@@ -1,10 +1,19 @@
 # TODO: convert to a Form
 class Api::AgentController < ApiController
+  def sigh
+    @sigh ||= Logger.new(File.join(Rails.root, "log/agenttest.log"))
+  end
+
+  def loggit(str, uuid)
+    sigh.info("#{current_account.email}:#{uuid} - #{str}")
+  end
+  
   def heartbeat
     server = current_account.agent_servers.where(:uuid => params[:uuid]).includes(:agent_release).take
 
     # TODO log this?
     unless server
+      loggit("404 <3", params[:uuid])
       render :text => "", :status => 404
       return
     end
@@ -25,6 +34,7 @@ class Api::AgentController < ApiController
   def update
     server = current_account.agent_servers.where(:uuid => params[:uuid]).take
     unless server
+      loggit("404 PUT", params[:uuid])
       render :text => "", :status => 404
       return
     end
@@ -46,6 +56,7 @@ class Api::AgentController < ApiController
     # TODO: log or show error?
     if err || package_list.empty?
       log_faulty_request(server)
+      loggit("400 PUT", params[:uuid])
       render :text => "", :status => 400
       return
     end
@@ -60,6 +71,7 @@ class Api::AgentController < ApiController
     if err
       log_faulty_request(server)
 
+      loggit("400 PUT bundle", params[:uuid])
       render :text => "", :status => 400
       return
     end

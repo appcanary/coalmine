@@ -3,8 +3,12 @@
 # when rendering the index view.
 class AgentServerIndexSerializer < ActiveModel::Serializer
   type "servers"
-  attributes :name, :uuid, :hostname, :last_heartbeat_at
+  attributes :name, :uuid, :hostname, :vulnerable, :last_heartbeat_at
 
   has_many :bundles, :serializer => AgentBundlesIndexSerializer, unless: -> {object.bundles.empty? }, :key => "monitors"
+
+  def vulnerable
+    object.bundles.any?(&:vulnerable?)
+  end
 end
 

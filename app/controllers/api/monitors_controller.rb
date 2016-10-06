@@ -83,12 +83,9 @@ class Api::MonitorsController < ApiController
 
   def handle_api_response(bundle)
     if v2_request?
-      # TODO TEST
-      if action_name == "show"
-        resp = ApiV2MonitorResponseSerializer.new(bundle, :show_action => true)
-      else
-        resp = ApiV2MonitorResponseSerializer.new(bundle)
-      end
+      opt = {}
+      opt[:show_action] = (action_name == "show")
+      resp = ApiV2MonitorResponseSerializer.new(bundle, opt)
 
       render json: resp.to_json
     else

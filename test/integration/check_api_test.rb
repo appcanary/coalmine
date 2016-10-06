@@ -15,6 +15,14 @@ class CheckApiTest < ActionDispatch::IntegrationTest
       assert json.key?("data")
       assert json["data"].empty?
       assert_equal false, json["meta"]["vulnerable"]
+
+      # v2 smokescreen test
+      post api_v2_check_path, {platform: Platforms::Ruby, file: gemfilelock},
+        {authorization: %{Token token="#{account.token}"}}
+      assert_response :success
+
+      json = json_body
+      assert_equal false, json["vulnerable"]
     end
 
 
