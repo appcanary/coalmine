@@ -35,4 +35,8 @@ class ApiController < ApplicationController
   def register_api_call!
     current_account.log_api_calls.create!(:action => "#{controller_name}/#{action_name}")
   end
+
+  def v2_request?
+    request.path.index("/api/v2") == 0
+  end
 end

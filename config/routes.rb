@@ -102,6 +102,22 @@ Rails.application.routes.draw do
       delete "servers/:uuid" => "servers#destroy"
     end
 
+    scope :v2 do
+      post "check" => 'check#create'
+      get "status" => 'status#status'
+
+      post "monitors(/:name)" => "monitors#create"
+      put "monitors/:name" => "monitors#update"
+      get "monitors/:name" => "monitors#show", :as => "v2_monitor"
+      get "monitors" => "monitors#index"
+      delete "monitors/:name" => "monitors#destroy"
+
+      get "servers/:uuid" => "servers#show", :as => "v2_server"
+      get "servers" => "servers#index"
+      delete "servers/:uuid" => "servers#destroy"
+    end
+
+
     scope :v1 do
       scope :agent do
         post "servers" => "agent#create", :as => :agent_servers

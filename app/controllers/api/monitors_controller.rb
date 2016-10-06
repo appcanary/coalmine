@@ -2,7 +2,7 @@ class Api::MonitorsController < ApiController
   def index
     @bundles = current_account.bundles.via_api
 
-    render json: @bundles, adapter: :json_api
+    handle_api_response(@bundles)
   end
 
   def create
@@ -21,7 +21,7 @@ class Api::MonitorsController < ApiController
     if @form.errors.empty?
       register_api_call!
 
-      render json: @bundle, adapter: :json_api
+      handle_api_response(@bundle)
     else
       render json: errors_to_h(@form.errors), adapter: :json_api, status: :bad_request
     end
@@ -47,7 +47,7 @@ class Api::MonitorsController < ApiController
       render json: errors_to_h(@form.errors), adapter: :json_api, status: :bad_request
     else
       register_api_call!
-      render json: @bundle, adapter: :json_api
+      handle_api_response(@bundle)
     end
   end
 
@@ -56,7 +56,7 @@ class Api::MonitorsController < ApiController
 
     if @bundle
       register_api_call!
-      render json: @bundle, adapter: :json_api, serializer: BundleWithVulnsSerializer, include: ["packages", "vulnerabilities"]
+      handle_api_response(@bundle)
     else
       render json: {errors: [{title: "No monitor with that name or id was found"}]}, adapter: :json_api, status: :not_found
     end
@@ -79,6 +79,25 @@ class Api::MonitorsController < ApiController
   def fetch_bundle
     bundle = current_account.bundles.via_api.where(:name => params[:name]).take
     bundle ||= current_account.bundles.via_api.where(:id => params[:name]).take
+  end
+
+  def handle_api_response(bundle)
+    if v2_request?
+      # TODO TEST
+      if action_name == "show"
+        resp = ApiV2MonitorResponseSerializer.new(bundle, :show_action => true)
+      else
+        resp = ApiV2MonitorResponseSerializer.new(bundle)
+      end
+
+      render json: resp.to_json
+    else
+      if action_name == "show"
+        render json: bundle, adapter: :json_api, serializer: BundleWithVulnsSerializer, include: ["packages", "vulnerabilities"]
+      else
+        render json: bundle, adapter: :json_api
+      end
+    end
   end
 
 end
