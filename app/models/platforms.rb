@@ -59,6 +59,13 @@ class Platforms
     nil
   end
 
+  FULL_NAMES = {
+    Ruby => "Ruby",
+    Amazon => "Amazon",
+    CentOS => "CentOS",
+    Ubuntu => "Ubuntu",
+    Debian => "Debian"
+  }
 
   ## new api platforms as follows:
   RELEASES = {
@@ -135,6 +142,10 @@ class Platforms
       "jessie"=> true,
     } 
   }
+
+  def self.supported?(platform)
+    FULL_NAMES[platform]
+  end
 
   def self.releases_for(platform)
     RELEASES[platform]

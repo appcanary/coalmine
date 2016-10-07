@@ -145,4 +145,15 @@ module ApplicationHelper
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(escape_html: true), autolink: true, tables: true, no_intra_emphasis: true, fenced_code_blocks: true)
     markdown.render(vuln.description).html_safe
   end
+
+  def platform_icon(platform)
+    if label = Platforms.supported?(platform)
+      content_tag("span", :class => "platform-logo") do 
+        image_tag("icon-#{platform}.png", :style => "width: 13px") + 
+          " #{label}"
+      end
+    else
+      "Unsupported platform"
+    end
+  end
 end

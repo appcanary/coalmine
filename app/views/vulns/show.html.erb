@@ -1,6 +1,6 @@
 <section>
   <div class="col-sm-12">
-    <h1><%= @vuln.canary_id %> &mdash; <%= @vuln.title %></h1>
+    <h1><%= @vuln.title %></h1>
   </div>
 </section>
 <section>
@@ -10,7 +10,8 @@
       <tr>
         <td><label>Platform</label></td>
         <td>
-          <span class="platform-logo"><%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby</span>
+          <%= platform_icon(@vuln.platform) %>
+          <!-- <span class="platform&#45;logo"><%= image_tag "icon&#45;ruby.png", :style => "width: 13px" %> Ruby</span> -->
         </td>
       </tr>
 
