@@ -16,7 +16,7 @@
 
                       <p>Here's what changed:<br>
                         <br>
-                        <% @notifications_by_vuln.each_pair do |vuln, pkgs| %>
+                        <% @notifier.each_pair do |vuln, pkgs| %>
                           <br>
                           <strong><a href="{{ vulnLink }}"><%= vuln.title %></a></strong><br>
                           <% pkgs.each do |p| %>

@@ -17,7 +17,7 @@
                       <p>Here's what we found:
                         <br>
                         <br>
-                        <% @notifications_by_vuln.each_pair do |vuln, pkgs| %>
+                        <% @notifier.each_pair do |vuln, pkgs| %>
 
                           <h2>
                             <%= link_to vuln.title, vuln_url(vuln.id) %> </h2>
