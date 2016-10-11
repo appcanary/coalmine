@@ -2,13 +2,41 @@ Hello,
 
 You're affected by the following vulnerabilities:
 
-<% @notifier.each_pair do |vuln, pkgs| %>
-  Vulnerability: <%= vuln.title %>
-<% pkgs.each do |p| %>
-  in <%= p.package.name %> - <%= p.package.version %>
-  upgrade to: <%= p.package.upgrade_to %>
-  on <%= p.bundle.path %>
-<%  end %>
+<% @notifier.each_vuln do |vuln, pkgs| %>
+  Vulnerability: 
+  <%= vuln.title -%>
+
+  Criticality:
+  <%= vuln.criticality -%>
+
+  Description:
+  <% if vuln.description.present? %>
+  <%= vuln.description -%>
+  <% else %>
+  None available right now.
+  <% end %>
+
+  The following are affected:
+  <% pkgs.each do |log| %>
+    ---
+    <% if log.has_server? %>
+    Server:
+    <%= log.server.display_name %> (<%=  link_to log.server.display_name, server_app_url(log.bundle, server_id: log.server.id) %>)
+    <% else %>
+    Monitor:
+    <%= log.bundle.display_name %> (<%= link_to log.bundle.display_name, monitors_url(log.bundle) %>)
+    <% end %>
+    
+    Package: 
+    <%= log.package_name -%>
+    
+    Upgrade to: 
+    <%= log.upgrade_to.first -%>
+
+
+  <%  end %>
+
+####
 <%  end %>
 
 For more information, please visit https://appcanary.com

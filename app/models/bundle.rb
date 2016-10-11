@@ -61,4 +61,8 @@ class Bundle < ActiveRecord::Base
   def vulnerable_packages
     VulnerablePackage.where('"bundled_packages".bundle_id = ?', self.id).joins('inner join bundled_packages on "bundled_packages".package_id ="vulnerable_packages".package_id')
   end
+
+  def system_bundle?
+    Platforms::OPERATING_SYSTEMS.include?(self.platform)
+  end
 end

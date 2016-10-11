@@ -143,6 +143,13 @@ class Platforms
     } 
   }
 
+  OPERATING_SYSTEMS = [
+    Ubuntu,
+    Debian,
+    CentOS,
+    Amazon
+  ]
+
   def self.supported?(platform)
     FULL_NAMES[platform]
   end

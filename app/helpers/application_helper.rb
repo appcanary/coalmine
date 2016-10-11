@@ -133,6 +133,14 @@ module ApplicationHelper
     end
   end
 
+  def link_to_server_or_monitor(log)
+    if log.has_server?
+      link_to log.server.display_name, server_app_url(log.bundle, server_id: log.server.id)
+    else 
+      link_to log.bundle.display_name, monitors_url(log.bundle)
+    end
+  end
+
   def link_to_bundle(bundle)
     if bundle.agent_server_id
       link_to bundle.display_name, server_app_url(bundle, server_id: bundle.agent_server_id)

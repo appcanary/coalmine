@@ -2,12 +2,24 @@ Hello,
 
 You've fixed the following vulnerabilities:
 
-<% @notifier.each_pair do |vuln, pkgs| %>
-  Vulnerability: <%= vuln.title %>
-<% pkgs.each do |p| %>
-  in <%= p.package.name %>
-  on <%= p.bundle.path %>
-<%  end %>
+<% @notifier.each_vuln do |vuln, pkgs| %>
+  Vulnerability: 
+  <%= vuln.title %>
+
+  Is no longer present in:
+  <% pkgs.each do |log| %>
+
+  <% if log.has_server? %>
+  Server:
+  <%= log.server.display_name %> (<%=  link_to log.server.display_name, server_app_url(log.bundle, server_id: log.server.id) %>)
+  <% else %>
+  Monitor:
+  <%= log.bundle.display_name %> (<%= link_to log.bundle.display_name, monitors_url(log.bundle) %>)
+  ---
+  <% end %>
+  <%  end %>
+
+####
 <%  end %>
 
 For more information, please visit https://appcanary.com

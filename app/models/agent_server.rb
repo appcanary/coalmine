@@ -74,6 +74,6 @@ class AgentServer < ActiveRecord::Base
 
   # TODO: abstract for all OS'
   def system_bundle
-    self.bundles.where(:platform => Platforms::Ubuntu).first
+    self.bundles.where(:platform => Platforms::OPERATING_SYSTEMS).first
   end
 end
