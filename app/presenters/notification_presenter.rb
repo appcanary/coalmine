@@ -71,7 +71,7 @@ class NotificationPresenter
   end
 
   def sort_and_wrap_logs(logs)
-    logs.sort { |l| l.bundle.agent_server_id }.map { |l| LogPresenter.new(l) }
+    logs.sort_by { |l| l.bundle.agent_server_id }.map { |l| LogPresenter.new(l) }
   end
 
   class LogPresenter
