@@ -19,7 +19,7 @@
                         <h2><%= link_to vuln.title, vuln_url(vuln.id) %></h2>
                         <p>is no longer present in:</p>
                         
-                        <%= logs.map { |l| link_to_server_or_monitor(l) }.join(", ").html_safe %>
+                        <%= logs.uniq(&:bundle).map { |l| link_to_server_or_monitor(l) }.join(", ").html_safe %>
                         <hr/>
                         <br/>
                       <% end %></p>

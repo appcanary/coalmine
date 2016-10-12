@@ -7,7 +7,7 @@ You've fixed the following vulnerabilities:
   <%= vuln.title %>
 
   Is no longer present in:
-  <% pkgs.each do |log| %>
+  <% pkgs.uniq(&:bundle).each do |log| %>
 
   <% if log.has_server? %>
   Server:
