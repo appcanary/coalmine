@@ -122,10 +122,8 @@ class BundleManager < ServiceManager
     # behaviour is tested in bundle_test.rb
     bundle.packages = packages
 
-    unless $rollout.active?(:skip_reports_cos_dev)
-      # A bundle has changed! Time to record any logs
-      ReportMaker.new(bundle.id).on_bundle_change
-    end
+    # A bundle has changed! Time to record any logs
+    ReportMaker.new(bundle.id).on_bundle_change
 
     bundle
   end
