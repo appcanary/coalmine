@@ -70,8 +70,16 @@ class NotificationPresenter
     end
   end
 
+  # TODO:
+  # this will all go to shit if bundles were deleted b/w
+  # notification trigger and notification processing
+  # so maybe we should do something to filter those out? 
+  
+  # the sorting allows us to effectively "group" bundles on
+  # the same server together. if no server present, sort
+  # them first! cos its a monitor
   def sort_and_wrap_logs(logs)
-    logs.sort_by { |l| l.bundle.agent_server_id }.map { |l| LogPresenter.new(l) }
+    logs.map { |l| LogPresenter.new(l) }.sort_by { |l| l.bundle.agent_server_id || 0 }
   end
 
   class LogPresenter
