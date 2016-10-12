@@ -23,8 +23,7 @@ class NotificationPresenter
   end
 
   def subject
-    note_ct = @notifications_by_vuln.count
-    subject = subject_label % note_ct
+    subject = subject_label % notification_count
 
     if !Rails.env.production?
       subject = "[#{Rails.env}] " + subject
@@ -33,12 +32,14 @@ class NotificationPresenter
     subject
   end
 
+  def notification_count
+    @notifications_by_vuln.count + @unpatched_notifications.count
+  end
+
   def recipients
     recipients = [@account.email]
     if !Rails.env.production?
-      if !PREPROD_EMAILS.include?(@account.email)
-        recipients = ["hello@appcanary.com"]
-      end
+      recipients = ["hello@appcanary.com"]
     end
 
     recipients
