@@ -5,7 +5,6 @@ namespace :db do
       raise ArgumentError.new("You have to specify a FILE env var")
     end
 
-    $rollout.activate(:skip_reports_cos_dev)
     $rollout.activate(:skip_notifications)
 
     # julian's distro is just messed up
@@ -42,11 +41,11 @@ namespace :db do
         prod_import.create_bundle(mon_hsh)
       end
     end
-  end
 
-  # flush out all those pesky email notifications
-  # so we can disable skip_notifications
-  # obviously, this assumes we already have
-  # the vulns all loaded
-  # EmailManager.queue_and_send_vuln_emails
+    # flush out all those pesky email notifications
+    # so we can disable skip_notifications
+    # obviously, this assumes we already have
+    # the vulns all loaded
+    EmailManager.queue_and_send_vuln_emails
+  end
 end
