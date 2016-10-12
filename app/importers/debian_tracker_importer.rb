@@ -15,7 +15,10 @@ class DebianTrackerImporter < AdvisoryImporter
     JSON.parse(open(@index_url).read).
       reduce([]) do |arr, (pkg, hsh)|
       hsh.each_pair do |cve, attr|
-        arr << attr.merge("cve" => cve, "package_name" => pkg)
+        # skip all the temp cves
+        unless cve =~ /^TEMP/
+          arr << attr.merge("cve" => cve, "package_name" => pkg)
+        end
       end
       arr
     end
