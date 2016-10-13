@@ -24,6 +24,12 @@ class BundledPackage < ActiveRecord::Base
   belongs_to :package
   belongs_to :bundle
 
+  scope :affected_by_vuln, -> (account_id, vuln_id) {
+    joins("inner join bundles on bundles.id = bundled_packages.bundle_id
+           inner join vulnerable_packages vp on vp.package_id = bundled_packages.package_id").where("bundles.account_id = ? and vp.vulnerability_id = ?", account_id, vuln_id).includes({bundle: :agent_server}, {package: :vulnerable_dependencies})
+
+  }
+
   # selecting the cols needed for LBV and LBP,
   # joined on VP where the package_id matches
   scope :select_log_joins_vulns, -> { 

@@ -143,7 +143,7 @@ module ApplicationHelper
 
   def link_to_bundle(bundle)
     if bundle.agent_server_id
-      link_to bundle.display_name, server_app_url(bundle, server_id: bundle.agent_server_id)
+      link_to "#{bundle.agent_server.display_name} - #{bundle.display_name}", server_app_url(bundle, server_id: bundle.agent_server_id)
     else
       link_to bundle.display_name, monitors_url(bundle)
     end
