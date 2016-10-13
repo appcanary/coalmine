@@ -164,6 +164,9 @@ class Platforms
               RubyComparator
             when CentOS
               RPMComparator
+            when Amazon
+              # TODO: smokescreen test this
+              RPMComparator
             when Ubuntu
               DpkgComparator
             when Debian
@@ -180,6 +183,9 @@ class Platforms
     when Ruby
       GemfileParser
     when CentOS
+      RPM::Parser
+    when Amazon
+      # TODO: smokescreen test this
       RPM::Parser
     when Ubuntu
       DpkgStatusParser
