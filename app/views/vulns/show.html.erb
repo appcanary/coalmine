@@ -107,7 +107,47 @@
       <% end %>
     </table>
 
+    <% if current_user %>
+      <% if @bundles.any? %>
+        <h4>The following items of yours are affected:</h4>
+        <table class="table">
+          <thead>
+            <th>
+              item
+            </th>
+            <th>
+              package
+            </th>
+            <th>
+              upgrade to
+            </th>
+          </thead>
+          <tbody>
+            <% @bundles.each_pair do |bundle, bps| %>
+              <% bps.each do |bpkg| %>
+                <tr>
+                  <td>
+                    <%= link_to_bundle bundle %>
+                  </td>
+                  <td>
+                    <%= bpkg.package.name %>
+                  </td>
+                  <td>
+                    <code><%= bpkg.package.upgrade_to.first %></code>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <br/>
+        <h4>You are not currently affected by this vulnerability.</h4>
+      <% end %>
+    <% end %>
+
     <% if current_user && current_user.is_admin? %>
+      <h3>(Admin only)</h3>
       <h4>Packages we've seen:</h4>
       <table class="table">
         <th>Release</th>

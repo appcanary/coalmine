@@ -129,7 +129,7 @@ module ApplicationHelper
     if time
       "#{time_ago_in_words time} ago"
     else
-      "never"
+      "never ago"
     end
   end
 
