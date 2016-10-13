@@ -117,6 +117,10 @@ class User < ActiveRecord::Base
     14 - (Time.zone.now - created_at).to_i / 1.day
   end
 
+  def analytics_id
+    self.datomic_id || self.id
+  end
+
   protected
   def absence_of_stripe_errors
     if @stripe_errors.present?

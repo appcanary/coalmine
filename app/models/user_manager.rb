@@ -71,9 +71,9 @@ class UserManager
       # once assigned in AR, they get cast into boolean, so just:
       ic_attr.each_pair do |tag, subscribed| 
         if subscribed
-          OurIntercom.tags.tag(name: tag, users: [{user_id: user.datomic_id}])
+          OurIntercom.tags.tag(name: tag, users: [{user_id: user.analytics_id}])
         else
-          OurIntercom.tags.untag(name: tag, users: [{user_id: user.datomic_id}])
+          OurIntercom.tags.untag(name: tag, users: [{user_id: user.analytics_id}])
         end
       end
     end

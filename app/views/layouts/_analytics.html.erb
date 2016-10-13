@@ -8,7 +8,7 @@
 
   <% if current_user %>
     <script>
-      analytics.identify("<%=j true_user.datomic_id.to_s %>", {
+      analytics.identify("<%=j true_user.analytics_id.to_s %>", {
         email: "<%=j true_user.email %>",
           createdAt: "<%=j true_user.created_at.iso8601 %>",
           name: "<%=j true_user.name %>",
@@ -16,7 +16,7 @@
     }, {
       integrations: {
         Intercom : {
-          user_hash : '<%=j OpenSSL::HMAC.hexdigest("sha256", Rails.configuration.segment.intercom_key, true_user.datomic_id.to_s) %>'
+          user_hash : '<%=j OpenSSL::HMAC.hexdigest("sha256", Rails.configuration.segment.intercom_key, true_user.analytics_id.to_s) %>'
         }
       }
     });

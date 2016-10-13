@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   def track_event(user, event)
     if Rails.env.production?
       Analytics.track({
-        user_id: user.datomic_id,
+        user_id: user.analytics_id,
         event: event
       })
     end
@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
   def identify_user(user)
     if Rails.env.production?
       Analytics.identify(
-        user_id: user.datomic_id,
+        user_id: user.analytics_id,
         traits: {
           email: user.email,
           createdAt: user.created_at,
@@ -86,7 +86,6 @@ class ApplicationController < ActionController::Base
 
   def set_raven_context
     Raven.user_context(id: session[:user_id],
-                       datomic_id: current_user.try(:datomic_id),
                        email: current_user.try(:email))
     Raven.extra_context(params: params.to_hash, url: request.url)
   end
