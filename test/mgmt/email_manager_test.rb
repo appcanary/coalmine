@@ -60,7 +60,8 @@ class EmailManagerTest < ActiveSupport::TestCase
 
     # let's ensure the right properties got set
 
-    email1, email2 = EmailVulnerable.all
+    email1, email2 = EmailVulnerable.order(:account_id)
+
     assert_equal email1.account_id, bundle1.account_id
     assert_equal email2.account_id, bundle3.account_id
 
@@ -112,7 +113,7 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal 3, Notification.where("log_bundle_patch_id is not null").count
 
     # let's ensure the right properties got set
-    email1, email2 = EmailPatched.all
+    email1, email2 = EmailPatched.order(:account_id)
     assert_equal email1.account_id, bundle1.account_id
     assert_equal email2.account_id, bundle2.account_id
 

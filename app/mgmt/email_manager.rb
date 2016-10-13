@@ -35,7 +35,7 @@ class EmailManager < ServiceManager
   # and the foreign key it needs to set accordingly
   def self.queue_emails!(emailklass, logklass, fkey)
     EmailMessage.transaction do
-      account_and_lbvs = logklass.unnotified_logs_by_account.pluck("account_id, #{fkey}")
+      account_and_lbvs = logklass.unnotified_logs_by_account
 
       emails_to_q = group_by_account(account_and_lbvs)
 

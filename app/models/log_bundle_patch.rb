@@ -34,16 +34,10 @@ class LogBundlePatch < ActiveRecord::Base
   belongs_to :vulnerable_package
 
   scope :unnotified_logs_by_account, -> {
-    select("accounts.id account_id, log_bundle_patch_id").
-    from('"accounts" 
-    INNER JOIN 
-      (SELECT bundles.account_id, log_bundle_patches.id log_bundle_patch_id 
-         FROM log_bundle_patches 
-         INNER JOIN "bundles" ON "bundles"."id" = "log_bundle_patches"."bundle_id" 
-          WHERE log_bundle_patches.id NOT IN 
-            (SELECT log_bundle_patch_id 
-             FROM notifications where log_bundle_patch_id is not null)) 
-    unnotified_vuln_bundles ON accounts.id = unnotified_vuln_bundles.account_id')
+    joins('INNER JOIN "bundles" ON "bundles"."id" = "log_bundle_patches"."bundle_id"
+          LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id
+          WHERE "notifications".id IS NULL').
+          pluck('"bundles".account_id, "log_bundle_patches".id log_bundle_patch_id')
   }
 
 
