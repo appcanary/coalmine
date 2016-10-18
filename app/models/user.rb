@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
   end
 
   def monitors_count
-    @monitors_count ||= self.bundles.reject { |b| b.agent_server_id.nil? }.count
+    @monitors_count ||= self.bundles.via_api.count
   end
 
   def api_calls_count
