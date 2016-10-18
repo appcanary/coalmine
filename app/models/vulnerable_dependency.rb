@@ -71,6 +71,12 @@ class VulnerableDependency < ActiveRecord::Base
         package.been_patched?(patched_versions))
   end
 
+  def patcheable?
+    self.patched_versions.present?
+  end
+
+  # used to filter and select collections of 
+  # vuln_deps within the VulnManager
   def unique_hash
     @unique_hash ||= self.attributes.except("id", "created_at", "updated_at", "valid_at", "expired_at")
   end

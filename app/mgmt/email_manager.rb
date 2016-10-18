@@ -36,19 +36,25 @@ class EmailManager < ServiceManager
   def self.queue_emails!(emailklass, logklass, fkey)
     EmailMessage.transaction do
       account_and_lbvs = logklass.unnotified_logs_by_account
+      logs_by_account = group_by_account(account_and_lbvs)
 
-      emails_to_q = group_by_account(account_and_lbvs)
+      logs_by_account.each_pair do |aid, logs|
 
-      emails_to_q.each_pair do |aid, lbvs|
-        email = emailklass.create!(:account_id => aid)
+        # not every log is immediately notifiable
+        notifiable_logs = filter_logs(logs, logklass)
 
-        lbvs.each do |lid|
-          Notification.create!(:email_message_id => email.id,
-                               fkey => lid)
+        # only create an email if we have anything to notify
+        if notifiable_logs.present?
+          email = emailklass.create!(:account_id => aid)
+
+          notifiable_logs.each do |lid|
+            Notification.create!(:email_message_id => email.id,
+                                 fkey => lid)
+          end
         end
+
       end
     end
-
   end
    
   def self.send_new_emails(klass, sym)
@@ -60,6 +66,17 @@ class EmailManager < ServiceManager
         end
         msg.update(sent_at: Time.now)
       end
+    end
+  end
+
+  # purpose of this method is to ditch lbvs that don't have patches
+  def self.filter_logs(logs, klass)
+    if klass == LogBundleVulnerability
+      klass.includes(:vulnerable_dependency).find(logs).select { |lbv|
+        lbv.vulnerable_dependency.patcheable?
+      }.map(&:id)
+    else
+      logs
     end
   end
 
