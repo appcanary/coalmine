@@ -139,4 +139,53 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal 4, ActionMailer::Base.deliveries.size
   end
 
+  it "should not send emails for vulns that are unpatchable" do
+    assert_equal 0, LogBundleVulnerability.count
+    assert_equal 0, EmailMessage.count
+
+    packages1 = FactoryGirl.create_list(:package, 10, :ruby)
+    bundle1 = FactoryGirl.create(:bundle, :packages => packages1)
+
+    # generate ourselves a vuln w/no patched versions
+    # yes, this is very clunky
+
+    vuln_pkg1 = packages1.first
+    vuln1 = FactoryGirl.create(:vulnerability, :debian,
+                           :deps => [])
+    vd = FactoryGirl.create(:vulnerable_dependency,
+                            :vulnerability => vuln1,
+                            :platform => Platforms::Ruby,
+                            :package_name => vuln_pkg1.name,
+                            :patched_versions => [])
+
+    FactoryGirl.create(:vulnerable_package,
+                       :dep => vuln_pkg1, 
+                       :vulnerable_dependency => vd, 
+                       :vulnerability => vuln1)
+
+
+    # create a second vuln cos why not
+
+    vuln_pkg2 = packages1.second
+    vuln2 = FactoryGirl.create(:vulnerability, :pkgs => [vuln_pkg2])
+
+
+    Bundle.transaction do
+      rm = ReportMaker.new(bundle1.id)
+      rm.on_bundle_change
+    end
+    
+    assert_equal 2, LogBundleVulnerability.count
+    EmailManager.queue_vuln_emails!
+
+    assert_equal 1, EmailVulnerable.count
+    assert_equal 1, Notification.count, "one notification per LBV"
+
+    assert_equal Notification.first.log_bundle_vulnerability_id, LogBundleVulnerability.order(:vulnerability_id).last.id
+    unnotified = LogBundleVulnerability.unnotified_logs_by_account
+    assert_equal 1, unnotified.count
+
+    assert_equal LogBundleVulnerability.order(:vulnerability_id).first.id, unnotified[0][1]
+  end
+
 end
