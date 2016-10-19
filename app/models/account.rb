@@ -22,10 +22,12 @@ class Account < ActiveRecord::Base
   has_many :agent_servers
   has_many :active_servers, -> { active }, :class_name => AgentServer
   has_many :bundles
+  has_many :monitors, -> { where(:from_api => true) }, :class_name => Bundle
 
   has_many :log_bundle_vulnerabilities, :through => :bundles
   has_many :log_bundle_patches, :through => :bundles
   has_many :log_api_calls
+  has_many :check_api_calls, -> { where(:action => "check/create") }, :class_name => LogApiCall
 
   has_many :email_messages
   has_many :email_patcheds
@@ -52,10 +54,6 @@ class Account < ActiveRecord::Base
 
   def server_bundles
     bundles.where("agent_server_id is not null")
-  end
-
-  def check_api_calls
-    log_api_calls.where(:action => "check/create")
   end
 
   def analytics_id

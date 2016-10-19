@@ -46,7 +46,7 @@ $( document ).ready(function() {
             <%= @recent_heartbeats %>
           </td>
           <td>
-            <%# number_to_currency(@total_revenue.to_f / 100) %>
+            <%= number_to_currency(@total_revenue.to_f / 100) %>
           </td>
         </tr>
       </tbody>
@@ -109,11 +109,11 @@ $( document ).ready(function() {
             </td>
 
             <td>
-              <%# <%= user.agent_servers.count %>
+              <%= user.agent_servers.size %>
             </td>
 
             <td>
-              <%# <%= user.active_servers_count %>
+              <%= user.active_servers_count %>
             </td>
 
             <td>
@@ -125,10 +125,11 @@ $( document ).ready(function() {
             </td>
 
             <td>
-              <%#= user.has_billing? %>
+              <%= user.has_billing? %>
             </td>
 
             <td>
+              <%= number_to_currency((user.billing_plan.try(:monthly_cost) || 0).to_f / 100) %>
               <%# <%= BillingManager.new(user).to_presenter.monthly_cost_in_dollars %>
             </td>
 

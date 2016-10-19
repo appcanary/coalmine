@@ -62,13 +62,12 @@ class User < ActiveRecord::Base
   validates_presence_of :account
   validates_associated :account
 
-  has_many :agent_servers, :through => :account
-  has_many :bundles, :through => :account
-
   # TODO: eliminate token field from users table
   # TODO: eliminate agent_token
   # TODO: eliminate datomic_id
   delegate :token, :analytics_id, :to => :account
+
+  delegate :active_servers, :agent_servers, :bundles, :monitors, :check_api_calls, :to => :account
 
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
 
@@ -76,20 +75,16 @@ class User < ActiveRecord::Base
     @stripe_errors ||= []
   end
 
-  def active_servers
-    @active_servers ||= self.agent_servers.reject(&:gone_silent?)
-  end
-
   def active_servers_count
-    @active_servers_count ||= self.active_servers.count
+    @active_servers_count ||= self.active_servers.size
   end
 
   def monitors_count
-    @monitors_count ||= self.bundles.via_api.count
+    @monitors_count ||= self.monitors.size
   end
 
   def api_calls_count
-    @api_calls_count ||= 0 #api_info["api-calls-count"]
+    @api_calls_count ||= self.check_api_calls.size
   end
 
   def stripe_customer
