@@ -1,7 +1,7 @@
 class Analytics
   class_attribute :backend
 
-  if Rails.env.production?
+  if Rails.env.production? || Rails.env.staging?
     self.backend = Segment::Analytics
   else
     require_relative "helpers/fake_analytics_backend"

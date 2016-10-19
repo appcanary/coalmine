@@ -14,7 +14,7 @@ class FakeAnalyticsBackend
       @tracked_events << options
     end
   else
-    # NOP in staging / dev
+    # NOP in dev
     def identify(user)
     end
 
