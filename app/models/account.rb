@@ -20,6 +20,7 @@ class Account < ActiveRecord::Base
   has_many :users
 
   has_many :agent_servers
+  has_many :active_servers, -> { active }, :class_name => AgentServer
   has_many :bundles
 
   has_many :log_bundle_vulnerabilities, :through => :bundles
@@ -34,16 +35,23 @@ class Account < ActiveRecord::Base
 
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
 
-  def active_servers
-    agent_servers.joins(:heartbeats).where('"agent_heartbeats".created_at > ?', 2.hours.ago)
-  end
+  # def active_servers
+  #   agent_servers.active
+  # end
 
   def api_bundles
     bundles.where(:from_api => true)
   end
 
+  # TODO: figure out how to reuse the active agent server
+  # scope rather than this
+  def active_server_bundles
+    bundles.joins("inner join agent_servers on agent_servers.id = bundles.agent_server_id 
+                   inner join agent_heartbeats on agent_heartbeats.agent_server_id = agent_servers.id").where("agent_heartbeats.created_at > ?", 2.hours.ago)
+  end
+
   def server_bundles
-    bundles.where(:from_api => false)
+    bundles.where("agent_server_id is not null")
   end
 
   def check_api_calls
@@ -60,6 +68,7 @@ class Account < ActiveRecord::Base
       "server-count": self.agent_servers.count,
       "active-server-count": self.active_servers.count,
       "server-app-count": self.server_bundles.count,
+      "active-server-app-count": self.active_server_bundles.count,
       "monitored-app-count": self.api_bundles.count,
       "api-calls-count": self.check_api_calls.count
     }

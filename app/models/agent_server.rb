@@ -42,6 +42,10 @@ class AgentServer < ActiveRecord::Base
     where(:account_id => user.account_id)
   }
 
+  scope :active, -> { 
+    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', 2.hours.ago)
+  }
+
   def last_heartbeat_at
     last_heartbeat.try(:created_at)
   end
