@@ -8,6 +8,11 @@ development:
     key: "CPttBE3RXFIwbPq2QSN6HBNmEMaJZzp0"
     intercom_key: "InP8xKZ-VpDDoTpRX-VrN7zb1z160eLupoizpy2m"
 
+staging:
+  segment: 
+    key: "CPttBE3RXFIwbPq2QSN6HBNmEMaJZzp0"
+    intercom_key: "InP8xKZ-VpDDoTpRX-VrN7zb1z160eLupoizpy2m"
+
 test:
   segment: 
     key: "LOL"
