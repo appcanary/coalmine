@@ -28,7 +28,7 @@ class Analytics
     @segment.track(hsh)
   end
 
-  # used in users contorller
+  # used in settings contorller
   def identify_user(user)
     account = user.account
     @segment.identify(
@@ -41,16 +41,11 @@ class Analytics
       })
   end
 
-  def track_user(account)
+  def identify_account(account)
     @segment.identify(
       user_id: account.analytics_id,
-      traits: {
-        email: account.email,
-        "server-count": account.agent_servers.count,
-        "active-server-count": account.active_servers.count,
-        "monitored-app-count": account.api_bundles.count,
-        "api-calls-count": account.check_api_calls.count
-      })
+      traits: account.segment_stats
+    )
   end
 
   # users controller
@@ -93,37 +88,36 @@ class Analytics
 
   # added in agent controller
   def added_server(account, server)
-    track_user(account)
+    identify_account(account)
     track_event account, "Added Server", server_attributes(server)
   end
 
   # added in both agent & api server controllers
   def deleted_server(account, server)
-    track_user(account)
+    identify_account(account)
     track_event account, "Deleted Server", server_attributes(server)
   end
 
   # added in bundle manager
   def added_bundle(account, bundle)
-    track_user(account)
+    identify_account(account)
     track_event account, "Added App", bundle_attributes(bundle)
   end
 
   # added in bundle manager
   def updated_bundle(account, bundle)
-    track_user(account)
     track_event account, "Updated App Artifacts", bundle_attributes(bundle)
   end
 
   # added in bundle manager
   def deleted_bundle(account, bundle)
-    track_user(account)
+    identify_account(account)
     track_event account, "Deleted App", bundle_attributes(bundle)
   end
 
   # added to api controller
   def track_api_call(account)
-    track_user(account)
+    identify_account(account)
     track_event account, "Made API Call"
   end
 

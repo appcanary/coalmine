@@ -42,12 +42,27 @@ class Account < ActiveRecord::Base
     bundles.where(:from_api => true)
   end
 
+  def server_bundles
+    bundles.where(:from_api => false)
+  end
+
   def check_api_calls
     log_api_calls.where(:action => "check/create")
   end
 
   def analytics_id
     self.datomic_id || self.id
+  end
+
+  def segment_stats
+    {
+      email: self.email,
+      "server-count": self.agent_servers.count,
+      "active-server-count": self.active_servers.count,
+      "server-app-count": self.server_bundles.count,
+      "monitored-app-count": self.api_bundles.count,
+      "api-calls-count": self.check_api_calls.count
+    }
   end
 
 end
