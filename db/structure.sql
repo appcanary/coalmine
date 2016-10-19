@@ -205,7 +205,8 @@ CREATE TABLE accounts (
     email character varying NOT NULL,
     token character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    datomic_id bigint
 );
 
 
@@ -2566,6 +2567,13 @@ CREATE INDEX index_bundles_on_expired_at ON bundles USING btree (expired_at);
 
 
 --
+-- Name: index_bundles_on_from_api; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bundles_on_from_api ON bundles USING btree (from_api);
+
+
+--
 -- Name: index_bundles_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3335,4 +3343,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160924205930');
 INSERT INTO schema_migrations (version) VALUES ('20160924211127');
 
 INSERT INTO schema_migrations (version) VALUES ('20161003155244');
+
+INSERT INTO schema_migrations (version) VALUES ('20161019151455');
+
+INSERT INTO schema_migrations (version) VALUES ('20161019181329');
 

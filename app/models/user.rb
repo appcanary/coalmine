@@ -67,7 +67,8 @@ class User < ActiveRecord::Base
 
   # TODO: eliminate token field from users table
   # TODO: eliminate agent_token
-  delegate :token, :to => :account
+  # TODO: eliminate datomic_id
+  delegate :token, :analytics_id, :to => :account
 
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
 
@@ -115,10 +116,6 @@ class User < ActiveRecord::Base
 
   def trial_remaining
     14 - (Time.zone.now - created_at).to_i / 1.day
-  end
-
-  def analytics_id
-    self.datomic_id || self.id
   end
 
   protected

@@ -6,6 +6,8 @@ class SettingsController < ApplicationController
   def update
     respond_to do |format|
       if UserManager.update(@user, user_params)
+        $analytics.identify_user(@user)
+        
         format.html { redirect_to dashboard_path, notice: 'User settings updated!' }
       else
         format.html { render :show }

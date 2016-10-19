@@ -1,7 +1,8 @@
 class BundleManager < ServiceManager
-  attr_accessor :account_id, :server_id
+  attr_accessor :account, :account_id, :server_id
   def initialize(account, server = nil)
-    self.account_id = account.id
+    self.account = account
+    self.account_id = self.account.id
     self.server_id = server && server.id
   end
 
@@ -34,6 +35,7 @@ class BundleManager < ServiceManager
       return Result.new(bundle, e)
     end
 
+    $analytics.added_bundle(account, bundle)
     Result.new(bundle)
   end
 
@@ -64,6 +66,8 @@ class BundleManager < ServiceManager
     rescue ActiveRecord::RecordInvalid => e
       return Result.new(bundle, e)
     end
+
+    $analytics.updated_bundle(account, bundle)
 
     Result.new(bundle)
   end
@@ -105,6 +109,7 @@ class BundleManager < ServiceManager
     bundle = Bundle.where(:account_id => @account_id).find(bundle_id)
 
     if bundle.destroy
+      $analytics.deleted_bundle(account, bundle)
       Result.new(bundle)
     else
       Result.new(bundle, bundle.errors)

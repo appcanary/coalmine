@@ -7,6 +7,7 @@ class NotificationMailer < ActionMailer::Base
     query = VulnQuery.from_vuln_notifications(msg.notifications)
     @notifier = NotificationPresenter.new(:vuln, msg.account, query)
 
+    $analytics.track_notification(msg.account, :vuln)
 
     mail(to: @notifier.recipients, :subject => @notifier.subject) do |format|
       format.html { render layout: "vulnerable_header" }
@@ -18,6 +19,7 @@ class NotificationMailer < ActionMailer::Base
     query = VulnQuery.from_patched_notifications(msg.notifications)
     @notifier = NotificationPresenter.new(:patched, msg.account, query)
 
+    $analytics.track_notification(msg.account, :patched)
 
     mail(to: @notifier.recipients, :subject => @notifier.subject) do |format|
       format.html { render layout: "patched_header" }

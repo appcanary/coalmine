@@ -33,10 +33,15 @@ class MonitorsController < ApplicationController
 
 
   def destroy
-    @bundle = current_user.bundles.via_api.find(params[:id])
+    @bm = BundleManager.new(current_user.account)
 
-    @bundle.destroy
-    redirect_to dashboard_path, notice: "OK. Your monitor was deleted."
+    res, error = @bm.delete(params[:id])
+
+    if error
+      redirect_to dashboard_path, notice: "Sorry, something went wrong."
+    else
+      redirect_to dashboard_path, notice: "OK. Your monitor was deleted."
+    end
   end
 
 end

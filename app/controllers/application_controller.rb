@@ -51,28 +51,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-  def track_event(user, event)
-    if Rails.env.production?
-      Analytics.track({
-        user_id: user.analytics_id,
-        event: event
-      })
-    end
-  end
-
-  def identify_user(user)
-    if Rails.env.production?
-      Analytics.identify(
-        user_id: user.analytics_id,
-        traits: {
-          email: user.email,
-          createdAt: user.created_at,
-          name: user.name,
-          signup_source: user.beta_signup_source
-        })
-    end
-  end
-
   def not_authenticated
     redirect_to login_path, alert: "Please login first!"
   end
@@ -82,7 +60,6 @@ class ApplicationController < ActionController::Base
       redirect_to dashboard_path
     end
   end
-
 
   def set_raven_context
     Raven.user_context(id: session[:user_id],

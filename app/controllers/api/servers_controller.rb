@@ -23,6 +23,7 @@ class Api::ServersController < ApiController
     if @server.nil?
       render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
     elsif @server.destroy
+      $analytics.deleted_server(current_account, @server)
       register_api_call!
       render :nothing => true, :status => 204
     else

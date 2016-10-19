@@ -45,6 +45,7 @@ class ServersController < ApplicationController
 
   def destroy
     if server.destroy
+      $analytics.deleted_server(current_user.account, server)
       redirect_to dashboard_path, notice: "OK. Do remember to turn off the agent!"
     end
   end

@@ -69,6 +69,7 @@ class Api::MonitorsController < ApiController
     if @bundle.nil?
       render json: {errors: [{title: "No monitor with that name or id was found"}]}, adapter: :json_api, status: :not_found
     elsif @bundle.destroy
+      $analytics.deleted_bundle(current_account, @bundle)
       register_api_call!
       render :nothing => true, :status => 204
     else

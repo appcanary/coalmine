@@ -13,7 +13,7 @@ class BillingController < ApplicationController
         @user = @billing_manager.cancel_subscription!
         notice = "You've successfully canceled your subscription. Sorry to see you go!" 
 
-        track_event @user, "Canceled subscription"
+        $analytics.canceled_subscription(@user)
         Raven.capture_message("Subscription canceled by: #{@user.email}")
 
       elsif (sub = @billing_manager.valid_subscription?(sub_plan))
@@ -27,7 +27,7 @@ class BillingController < ApplicationController
           # show up below.
 
           if @user.stripe_errors.blank?
-            track_event @user, "Added credit card"
+            $analytics.added_credit_card(@user)
             notice = "Thanks for subscribing! You are awesome."
 
             Raven.capture_message("Subscription added by: #{@user.email}")
