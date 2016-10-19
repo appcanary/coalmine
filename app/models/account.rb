@@ -17,9 +17,11 @@
 class Account < ActiveRecord::Base
   has_secure_token :token
 
-  has_many :agent_servers
+  has_many :users
 
+  has_many :agent_servers
   has_many :bundles
+
   has_many :log_bundle_vulnerabilities, :through => :bundles
   has_many :log_bundle_patches, :through => :bundles
   has_many :log_api_calls
@@ -30,9 +32,22 @@ class Account < ActiveRecord::Base
   has_many :patched_notifications, :through => :email_patcheds, :source => :notifications
   has_many :vulnerable_notifications, :through => :email_vulnerables, :source => :notifications
 
-  has_many :users
-
-
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
+
+  def active_servers
+    agent_servers.joins(:heartbeats).where('"agent_heartbeats".created_at > ?', 2.hours.ago)
+  end
+
+  def api_bundles
+    bundles.where(:from_api => true)
+  end
+
+  def check_api_calls
+    log_api_calls.where(:action => "check/create")
+  end
+
+  def analytics_id
+    self.datomic_id || self.id
+  end
 
 end

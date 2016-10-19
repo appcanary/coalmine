@@ -19,7 +19,7 @@ class UserSessionsController < ApplicationController
         
     respond_to do |format|
       if @user = login(user_params[:email], user_params[:password])
-        track_event(@user, "Logged In")
+        $analytics.logged_in(@user)
        
         format.html { redirect_back_or_to(dashboard_path, notice: 'Login successful') }
         format.json { render json: @user, status: :created, location: dashboard_path }
@@ -36,7 +36,7 @@ class UserSessionsController < ApplicationController
   end
 
   def destroy
-    track_event(current_user, "Logged Out") 
+    $analytics.logged_out(current_user)
 
     logout
     flash.now[:notice] = 'Thanks. Have a good one.'

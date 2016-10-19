@@ -28,6 +28,7 @@ class Api::AgentController < ApiController
 
   def create
     server = current_account.agent_servers.create!(create_params).reload
+    $analytics.added_server(current_account, server)
     render :json => {uuid: server.uuid}
   end
 

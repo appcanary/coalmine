@@ -205,7 +205,8 @@ CREATE TABLE accounts (
     email character varying NOT NULL,
     token character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    datomic_id bigint
 );
 
 
@@ -3335,4 +3336,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160924205930');
 INSERT INTO schema_migrations (version) VALUES ('20160924211127');
 
 INSERT INTO schema_migrations (version) VALUES ('20161003155244');
+
+INSERT INTO schema_migrations (version) VALUES ('20161019151455');
 
