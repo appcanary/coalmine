@@ -17,6 +17,10 @@
     </th>
 
     <th>
+      caused by upstream or user (t/f)
+    </th>
+
+    <th>
       created at
     </th>
 
@@ -38,6 +42,10 @@
 
       <td>
         <%= (lbp.vulnerable_dependency && lbp.vulnerable_dependency.unique_hash) || lbp.vulnerable_dependency_id %>
+      </td>
+
+      <td>
+        <%= lbp.supplementary %>
       </td>
 
       <td>
