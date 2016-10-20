@@ -43,7 +43,7 @@ class AgentServer < ActiveRecord::Base
     where(:account_id => user.account_id)
   }
 
-  scope :active, -> { 
+  scope :active, -> {
     joins(:heartbeats).where('"agent_heartbeats".created_at > ?', ACTIVE_WINDOW.ago).distinct("agent_servers.id")
   }
 

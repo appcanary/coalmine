@@ -47,6 +47,10 @@ class Bundle < ActiveRecord::Base
     where("agent_server_id is not null")
   }
 
+  scope :via_agent_active, -> {
+    joins(:agent_server).merge(AgentServer.active)
+  }
+
   scope :via_api, -> { where("agent_server_id is null") }
 
   def vulnerable?
