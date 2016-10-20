@@ -47,7 +47,7 @@ class Bundle < ActiveRecord::Base
     where("agent_server_id is not null")
   }
 
-  scope :via_agent_active, -> {
+  scope :via_active_agent, -> {
     joins(:agent_server).merge(AgentServer.active)
   }
 
