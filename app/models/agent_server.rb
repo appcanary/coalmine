@@ -43,7 +43,7 @@ class AgentServer < ActiveRecord::Base
   }
 
   scope :active, -> { 
-    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', 65.minutes.ago)
+    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', 2.hours.ago).distinct("agent_servers.id")
   }
 
   def last_heartbeat_at
