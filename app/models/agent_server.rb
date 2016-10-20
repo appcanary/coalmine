@@ -27,6 +27,7 @@
 #
 
 class AgentServer < ActiveRecord::Base
+  ACTIVE_WINDOW = 2.hours
   default_scope { includes(:last_heartbeat) }
   belongs_to :account
   validates :account, :presence => true
@@ -43,7 +44,7 @@ class AgentServer < ActiveRecord::Base
   }
 
   scope :active, -> { 
-    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', 2.hours.ago).distinct("agent_servers.id")
+    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', ACTIVE_WINDOW.ago).distinct("agent_servers.id")
   }
 
   def last_heartbeat_at
@@ -66,7 +67,7 @@ class AgentServer < ActiveRecord::Base
 
   def gone_silent?
     if last_heartbeat_at
-      last_heartbeat_at < 2.hours.ago
+      last_heartbeat_at < ACTIVE_WINDOW.ago
     else
       true
     end
