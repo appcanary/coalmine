@@ -83,14 +83,16 @@
         <% else %>
           <tr>
             <th>name</th>
+            <th>source name</th>
             <th>kind</th>
             <th>version</th>
           </tr>
           <% @packages.each do |package| %>
             <tr class="package">
               <td class="name"><%= package.name %></td>
+              <td class="name"><%= package.source_name %></td>
               <td class="kind"><%= package.platform %></td>
-              <td class="version"><%= package.version %></td>
+              <td class="version"><code><%= package.version %></code></td>
             </tr>
           <% end %>
         <% end %>
