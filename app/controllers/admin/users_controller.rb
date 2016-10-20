@@ -7,6 +7,9 @@ class Admin::UsersController < AdminController
     @user_count = User.count
     @servers_count = AgentServer.count
     @recent_heartbeats = AgentServer.active.count
+    @app_count = Bundle.via_agent.count
+    @active_app_count = Bundle.via_active_agent.count
+    @monitor_count = Bundle.via_api.count
     @total_revenue = @users.reduce([]) { |acc, u| acc << u.billing_plan if u.billing_plan; acc }.map(&:monthly_cost).reduce(&:+)
   end
 

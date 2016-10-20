@@ -45,11 +45,8 @@ class Account < ActiveRecord::Base
     bundles.where(:from_api => true)
   end
 
-  # TODO: figure out how to reuse the active agent server
-  # scope rather than this
   def active_server_bundles
-    bundles.joins("inner join agent_servers on agent_servers.id = bundles.agent_server_id 
-                   inner join agent_heartbeats on agent_heartbeats.agent_server_id = agent_servers.id").where("agent_heartbeats.created_at > ?", 2.hours.ago).distinct("agent_servers.id")
+    bundles.joins(:agent_server).merge(AgentServer.active)
   end
 
   def server_bundles
