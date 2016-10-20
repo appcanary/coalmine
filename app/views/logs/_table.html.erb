@@ -1,0 +1,48 @@
+<table class="table">
+  <thead>
+    <th>
+      bundle
+    </th>
+
+    <th>
+      package
+    </th>
+
+    <th>
+      vuln
+    </th>
+
+    <th>
+      vuln dep
+    </th>
+
+    <th>
+      created at
+    </th>
+
+  </thead>
+  <% logs.each do |lbp| %>
+    <tr>
+
+      <td>
+        <%= link_to_bundle lbp.bundle %>
+      </td>
+
+      <td>
+        <%= lbp.package.display_name %>
+      </td>
+
+      <td>
+        <%= link_to lbp.vulnerability.title, vuln_path(lbp.vulnerability_id) %>
+      </td>
+
+      <td>
+        <%= (lbp.vulnerable_dependency && lbp.vulnerable_dependency.unique_hash) || lbp.vulnerable_dependency_id %>
+      </td>
+
+      <td>
+        <%= lbp.created_at %>
+      </td>
+    </tr>
+  <% end %>
+</table>
