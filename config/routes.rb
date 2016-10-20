@@ -75,7 +75,11 @@ Rails.application.routes.draw do
   end
 
   resources :monitors, :only => [:new, :show, :destroy, :create]
-  resources :vulns, :only => [:index, :show]
+  resources :vulns, :only => [:index, :show] do
+    get "archive/:id" => "vulns#archive", :as => "archive"
+  end
+
+  resources :logs, :only => :index
 
   namespace :admin do
     root to: "users#index"

@@ -1,21 +1,30 @@
 # http://stackoverflow.com/questions/33043106/recommended-way-to-use-rails-view-helpers-in-a-presentation-class
 class VulnPresenter
-  delegate :title, :platform, :criticality, :vulnerable_dependencies, :reported_at, :packages, :source, :criticality, :to => :vuln
+  delegate :title, :platform, :criticality, :reported_at, :updated_at, :expired_at, :packages, :source, :criticality, :archives, :id, :current, :to => :vuln
   attr_reader :vuln
-  def initialize(vuln)
+  def initialize(vuln, archive = false)
     @vuln = vuln
+    @is_archive = archive
   end
 
   def canary_id
     "CNY-#{@vuln.id}"
   end
 
+  def archive?
+    @is_archive
+  end
+
   def description
     @vuln.description.html_safe
   end
 
+  def vulnerable_dependencies
+    @vuln.vulnerable_dependencies.order("release, package_name")
+  end
+
   def dependency_names
-    @vuln.vulnerable_dependency_names.join(", ")
+    vulnerable_dependency_names(@vuln).join(", ")
   end
 
   def related_links
@@ -56,4 +65,9 @@ class VulnPresenter
     host = uri.host.downcase
     host.start_with?('www.') ? host[4..-1] : host
   end
+
+  def vulnerable_dependency_names(vuln)
+    vuln.vulnerable_dependencies.pluck(:package_name).uniq
+  end
+
 end

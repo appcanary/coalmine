@@ -4,6 +4,15 @@ class VulnsController < ApplicationController
     @vulns = Vulnerability.all
   end
 
+  def archive
+    @vulnmodel = VulnerabilityArchive.find(params[:id])
+    @vuln = VulnPresenter.new(@vulnmodel, true)
+
+    @bundles = []
+
+    render :show
+  end
+
   def show
     @vulnmodel = Vulnerability.find(params[:id])
     @vuln = VulnPresenter.new(@vulnmodel)

@@ -1,6 +1,10 @@
 <section>
   <div class="col-sm-12">
-    <h1><%= @vuln.title %></h1>
+    <% if @vuln.archive? %>
+      <h1><span style="color: grey;">[archived]</span> <%= @vuln.title %></h1>
+    <% else %>
+      <h1><%= @vuln.title %></h1>
+    <% end %>
   </div>
 </section>
 <section>
@@ -38,10 +42,35 @@
 
 
       <tr>
-        <td><label>Report date</label></td>
+        <td><label>Reported at</label></td>
         <td><%= @vuln.reported_at.try(:strftime, "%Y-%m-%d") %></td>
       </tr>
 
+      <tr>
+        <td><label>Updated at</label></td>
+        <td><%= @vuln.updated_at.try(:strftime, "%Y-%m-%d %H:%M") %></td>
+      </tr>
+
+      <% if @vuln.archive? %>
+        
+        <tr>
+          <td><label>Current version</label></td>
+          <td><%= link_to @vuln.current.updated_at.try(:strftime, "%Y-%m-%d %H:%M"), vuln_path(@vuln.current.id) %></td>
+        </tr>
+
+      <% end %>
+
+      <% if @vuln.archives.any? %>
+        <tr>
+          <td><label>Archives</label></td>
+          <td>
+            <% @vuln.archives.each do |va| %>
+              <%= link_to va.created_at.strftime("%Y-%m-%d %H:%M"), vuln_archive_path(@vuln.id, va.id) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+        
 
     </table>
   </div>
@@ -140,7 +169,7 @@
             <% end %>
           </tbody>
         </table>
-      <% else %>
+      <% elsif !@vuln.archive? %>
         <br/>
         <h4>You are not currently affected by this vulnerability.</h4>
       <% end %>
