@@ -6,6 +6,7 @@ class Platforms
   Ruby = "ruby"
   CentOS = "centos"
   Amazon = "amzn"
+  None = "none"
 
   @all_platforms = [
     Debian,

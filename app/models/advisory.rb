@@ -86,6 +86,10 @@ class Advisory < ActiveRecord::Base
     where(:source => DebianTrackerImporter::SOURCE)
   }
 
+  scope :from_cve, -> {
+    where(:source => CveImporter::SOURCE)
+  }
+
   def to_vuln_attributes
     valid_attr = Vulnerability.attribute_names
     self.attributes.keep_if { |k, _| valid_attr.include?(k) }
