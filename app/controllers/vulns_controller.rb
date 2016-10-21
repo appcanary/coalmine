@@ -1,7 +1,7 @@
 class VulnsController < ApplicationController
   skip_before_filter :require_login
   def index
-    @vulns = Vulnerability.all
+    redirect_to :root
   end
 
   def archive
