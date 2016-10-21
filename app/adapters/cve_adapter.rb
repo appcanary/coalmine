@@ -14,7 +14,7 @@ class CveAdapter < AdvisoryAdapter.new(:cve, :vulnerable_configurations, :cvss, 
   end
 
   generate :reference_ids do
-    [cve]
+    [cve, cwe]
   end
 
   generate :title do
@@ -48,6 +48,6 @@ class CveAdapter < AdvisoryAdapter.new(:cve, :vulnerable_configurations, :cvss, 
   end
 
   generate :related do
-    [cwe]
+    references.map {|x| x[:link]}
   end
 end
