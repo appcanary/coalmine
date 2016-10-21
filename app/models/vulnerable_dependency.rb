@@ -78,7 +78,7 @@ class VulnerableDependency < ActiveRecord::Base
   # used to filter and select collections of 
   # vuln_deps within the VulnManager
   def unique_hash
-    @unique_hash ||= self.attributes.except("id", "created_at", "updated_at", "valid_at", "expired_at")
+    @unique_hash ||= self.attributes.except("id", "pending", "end_of_life", "created_at", "updated_at", "valid_at", "expired_at")
   end
 
 end
