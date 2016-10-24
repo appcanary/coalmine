@@ -1,27 +1,54 @@
-<h1>One day an index will go here.</h1>
-<% if false #bad comment %>
+<h1>Vulnerabilities</h1>
+
 <table class="table">
   <thead>
     <th>
+      platform
+    </th>
+
+    <th>
+      references
+    </th>
+
+    <th>
       title
     </th>
+
     <th>
       source
+    </th>
+
+    <th>
+      updated at
     </th>
   </thead>
   <tbody>
     <% @vulns.each do |v| %>
       <tr>
         <td>
-          <%= v.title %>
+          <%= platform_icon v.platform %>
+        </td>
+
+        <td>
+          <%= v.reference_ids.join(", ") %>
+        </td>
+
+        <td>
+          <%= link_to v.title, vuln_path(v) %>
         </td>
 
         <td>
           <%= v.source %>
         </td>
-      </tr>-
+
+        <td>
+          <%= v.updated_at %>
+        </td>
+      </tr>
     <% end %>
-    
+
   </tbody>
 </table>
-<% end %>
+
+<%= will_paginate @vulns, renderer: BootstrapPagination::Rails %>
+

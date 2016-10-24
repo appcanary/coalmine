@@ -93,7 +93,6 @@ GEM
       capistrano-bundler (~> 1.1)
     capistrano-rails-console (1.0.2)
       capistrano (>= 3.1.0, < 4.0.0)
-    chunky_png (1.3.4)
     coderay (1.1.0)
     columnize (0.9.0)
     concurrent-ruby (1.0.2)
@@ -121,8 +120,6 @@ GEM
       i18n (~> 0.5)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.9.1)
-      faraday (>= 0.7.4, < 0.10)
     fixtures_dumper (0.0.1)
     font-awesome-rails (4.6.3.1)
       railties (>= 3.2, < 5.1)
@@ -248,7 +245,6 @@ GEM
     representable (3.0.0)
       declarative (~> 0.0.5)
       uber (~> 0.0.15)
-    request_store (1.1.0)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -259,8 +255,6 @@ GEM
       pg (>= 0.15.1)
       rollout (>= 2.0.0)
     ruby-progressbar (1.7.1)
-    ruby_identicon (0.0.4)
-      chunky_png (~> 1.3.0)
     safe_yaml (1.0.4)
     sass (3.4.10)
     sass-rails (5.0.6)
@@ -313,6 +307,9 @@ GEM
     webmock (1.21.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
+    will_paginate (3.1.5)
+    will_paginate-bootstrap (1.0.1)
+      will_paginate (>= 3.0.3)
 
 PLATFORMS
   ruby
@@ -334,8 +331,6 @@ DEPENDENCIES
   database_cleaner (~> 1.5.3)
   factory_girl_rails
   faker
-  faraday (~> 0.9.1)
-  faraday_middleware (~> 0.9.1)
   fixtures_dumper
   font-awesome-rails
   haml (~> 4.0.6)
@@ -359,10 +354,8 @@ DEPENDENCIES
   redcarpet
   reform
   reform-rails
-  request_store (~> 1.1.0)
   rollout
   rollout_postgres_store
-  ruby_identicon (= 0.0.4)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   sentry-raven (~> 0.13.3)
@@ -373,6 +366,8 @@ DEPENDENCIES
   unicorn-rails
   vcr (~> 2.9.3)
   webmock (~> 1.21.0)
+  will_paginate
+  will_paginate-bootstrap
 
 RUBY VERSION
    ruby 2.3.1p112

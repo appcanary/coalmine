@@ -3,10 +3,8 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 
 gem 'rails', '4.2.6'
-# gem 'rails', '4.2.0'
 
 gem 'pg'
-# gem 'redis'
 gem 'rollout'
 gem 'rollout_postgres_store'
 
@@ -25,6 +23,8 @@ gem "neat"
 gem "htmlentities"
 gem 'haml', '~> 4.0.6'
 gem 'redcarpet'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 gem 'reform'
 gem 'reform-rails'
@@ -45,9 +45,6 @@ gem 'has_secure_token'
 # gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
-
-# Use jquery as the JavaScript library
-# gem 'jquery-rails'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
@@ -74,17 +71,8 @@ gem 'capistrano-deploytags', '~> 1.0.0'
 gem 'pry-rails'
 gem 'binding_of_caller'
 
-# API Client
-gem 'faraday', '~> 0.9.1'
-gem 'faraday_middleware', '~> 0.9.1'
-
 #parsers
 gem "msgpack"
-
-
-#misc
-gem 'ruby_identicon', '0.0.4'
-gem 'request_store', '~> 1.1.0'
 
 gem 'que', '~> 0.12.0'
 

@@ -1,7 +1,8 @@
 class VulnsController < ApplicationController
   skip_before_filter :require_login
+  
   def index
-    redirect_to :root
+    @vulns = Vulnerability.paginate(:page => params[:page]).order("updated_at desc")
   end
 
   def archive

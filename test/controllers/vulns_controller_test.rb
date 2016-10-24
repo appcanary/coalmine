@@ -6,6 +6,11 @@ class VulnsControllerTest < ActionController::TestCase
     vulnerability = FactoryGirl.create(:vulnerability, :id => 1234)
   end
 
+  it "should display the index page" do
+    get :index
+    assert_response :success
+  end
+
   describe "while unauthenticated" do
     it "should display the page sucessfully" do
       get :show, :id => 1234
