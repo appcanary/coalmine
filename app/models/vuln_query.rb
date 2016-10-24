@@ -6,6 +6,16 @@
 # to report on.
 
 class VulnQuery
+
+  def self.from_notifications(notifications, type)
+    case type
+    when :vuln
+      from_vuln_notifications(notifications)
+    when :patched
+      from_patched_notifications(notifications)
+    end
+  end
+
   def self.from_patched_notifications(notifications) 
     LogBundlePatch.where("id in (#{notifications.select("log_bundle_patch_id").to_sql})").includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
   end

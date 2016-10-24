@@ -80,6 +80,7 @@ Rails.application.routes.draw do
   end
 
   resources :logs, :only => :index
+  resources :emails, :only => [:index, :show]
 
   namespace :admin do
     root to: "users#index"
