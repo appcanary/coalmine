@@ -16,7 +16,7 @@ class Platforms
   ]
 
   class Releases
-    UbuntuReleases = ["16.04", "15.10", "15.04", "14.04", "12.04"]
+    UbuntuReleases = ["17.04", "16.10", "16.04", "15.10", "15.04", "14.04", "12.04"]
     DebianReleases = ["8", "7", "6", "5"]
     CentOSReleases = ["7"]
     AmazonReleases = ["2016.03"]
@@ -96,6 +96,8 @@ class Platforms
       "15.04"=>"vivid",
       "15.10"=>"wily",
       "16.04"=>"xenial",
+      "16.10"=>"yakkety",
+      "17.04"=>"zesty",
       "warty"=> true,
       "hoary"=> true,
       "breezy"=> true,
@@ -119,7 +121,8 @@ class Platforms
       "vivid"=> true,
       "wily"=> true,
       "xenial" => true,
-
+      "yakkety" => true,
+      "zesty" => true,
     },
     Debian => {
       "2.1" => "slink",
