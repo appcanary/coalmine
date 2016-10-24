@@ -74,14 +74,10 @@ class EmailManager < ServiceManager
   # have since been edited upstream and are now irrelevant
   # TODO: handle LBVs that point to since-deleted vuln_deps
   def self.filter_logs(logs, klass)
-    if klass == LogBundleVulnerability
-      klass.includes(:vulnerable_dependency).find(logs).
-        select(&:vulnerable_dependency).select { |lbv|
-        lbv.vulnerable_dependency.patcheable?
-      }.map(&:id)
-    else
-      logs
-    end
+    klass.includes(:vulnerable_dependency).find(logs).
+      select(&:vulnerable_dependency).select { |lbv|
+      lbv.vulnerable_dependency.patcheable?
+    }.map(&:id)
   end
 
   def self.group_by_account(arr)
