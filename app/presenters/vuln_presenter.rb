@@ -29,8 +29,12 @@ class VulnPresenter
 
   def related_links
     @vuln.related.map { |url|
-      h.link_to(get_host_without_www(url), url, target: "blank")
-    }.join(", ").html_safe
+      if host = get_host_without_www(url)
+        h.link_to(host, url, target: "blank")
+      else
+        nil
+      end
+    }.compact.join(", ").html_safe
   end
 
   def has_cves?
@@ -59,11 +63,23 @@ class VulnPresenter
     ActionController::Base.helpers
   end
 
-  def get_host_without_www(url)
+  def get_host_without_www(refurl)
+    url = refurl
     url = "http://#{url}" unless url.start_with?('http')
-    uri = URI.parse(url)
-    host = uri.host.downcase
-    host.start_with?('www.') ? host[4..-1] : host
+    begin
+      uri = URI.parse(url)
+      host = uri.host.downcase
+      host.start_with?('www.') ? host[4..-1] : host
+    rescue URI::InvalidURIError => e
+      # some of these things have spaces in them
+      possible_urls = url.split(/\s+/)
+      if possible_urls.size > 1
+        url = possible_urls.first
+        retry
+      else
+        nil
+      end
+    end
   end
 
   def vulnerable_dependency_names(vuln)
