@@ -69,8 +69,8 @@ class EmailManager < ServiceManager
     end
   end
 
-  # purpose of this method is to ditch lbvs that don't have patches
-  # we select by (&:vuln_dep) to filter out any lbvs which
+  # purpose of this method is to ditch logs that don't have patches
+  # we select by (&:vuln_dep) to filter out any logs which
   # have since been edited upstream and are now irrelevant
   # TODO: handle LBVs that point to since-deleted vuln_deps
   def self.filter_logs(logs, klass)
