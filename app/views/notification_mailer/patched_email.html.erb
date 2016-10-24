@@ -22,7 +22,17 @@
                         <%= logs.uniq(&:bundle).map { |l| link_to_server_or_monitor(l) }.join(", ").html_safe %>
                         <hr/>
                         <br/>
-                      <% end %></p>
+                      <% end %>
+
+                      <% @notifier.each_unpatched_vuln do |vuln, logs| %>
+                        <h2><%= link_to vuln.title, vuln_url(vuln.id) %></h2>
+                        <p>is no longer present in:</p>
+                        
+                        <%= logs.uniq(&:bundle).map { |l| link_to_server_or_monitor(l) }.join(", ").html_safe %>
+                        <hr/>
+                        <br/>
+                      <% end %>
+
 
                     <h4 class="null">Questions? Concerns? Reply to this message, and we'll get back to&nbsp;you asap.</h4>
 

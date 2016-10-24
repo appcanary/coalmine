@@ -1,0 +1,58 @@
+<table class="table">
+  <thead>
+    <th>
+      subject
+    </th>
+
+    <th>
+      # logs
+    </th>
+
+    <th>
+      # vulns
+    </th>
+
+     <th>
+      # unpatched
+    </th>
+
+    <th>
+      sent at
+    </th>
+
+    <th>
+      created at
+    </th>
+
+  </thead>
+  <% emails.each do |email| %>
+    <% msg = NotificationPresenter.new(email) %>
+    <tr>
+
+      <td>
+        <%= link_to msg.subject, email_path(email.id) %>
+      </td>
+
+      <td>
+        <%= email.notifications.count %>
+      </td>
+
+      <td>
+        <%= msg.notifications_by_vuln.count %>
+      </td>
+
+      <td>
+        <%= msg.unpatched_notifications.count %>
+      </td>
+
+      <td>
+        <%= email.sent_at %>
+      </td>
+
+
+      <td>
+        <%= email.created_at %>
+      </td>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,8 @@
+<h1>Emails</h1>
+<h3>This page is not guaranteed to stick around!</h3>
+
+<h4>Patches</h4>
+<%= render :partial => "table", :locals => { :emails => @patch_emails, :type => :patched } %>
+
+<h4>Vulns</h4>
+<%= render :partial => "table", :locals => { :emails => @vuln_emails, :type => :vuln } %>
