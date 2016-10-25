@@ -15,6 +15,10 @@ class Platforms
     Amazon
   ]
 
+  class << self
+    attr_reader :all_platforms
+  end
+
   class Releases
     UbuntuReleases = ["17.04", "16.10", "16.04", "15.10", "15.04", "14.04", "12.04"]
     DebianReleases = ["8", "7", "6", "5"]

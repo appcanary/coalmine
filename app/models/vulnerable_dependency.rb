@@ -36,7 +36,7 @@ class VulnerableDependency < ActiveRecord::Base
   validates :package_name, :presence => true
 
   delegate :title, :to => :vulnerability, :prefix => true
-  
+
   # strictly, is this a package from the same platform?
   #
   def concerns?(package)
