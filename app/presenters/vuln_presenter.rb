@@ -1,3 +1,4 @@
+# coding: utf-8
 # http://stackoverflow.com/questions/33043106/recommended-way-to-use-rails-view-helpers-in-a-presentation-class
 class VulnPresenter
   delegate :title, :platform, :criticality, :reported_at, :updated_at, :expired_at, :packages, :source, :criticality, :archives, :id, :current, :to => :vuln
@@ -25,6 +26,14 @@ class VulnPresenter
 
   def dependency_names
     vulnerable_dependency_names(@vuln).join(", ")
+  end
+
+  def dependency_names_truncated(count)
+    names = vulnerable_dependency_names(@vuln)
+    if names.size > count
+      names = names.take(count) << "…"
+    end
+    names.join(", ")
   end
 
   def related_links
@@ -88,7 +97,7 @@ class VulnPresenter
   end
 
   def vulnerable_dependency_names(vuln)
-    vuln.vulnerable_dependencies.pluck(:package_name).uniq
+    vuln.vulnerable_dependencies.pluck(:package_name).uniq.sort
   end
 
 end

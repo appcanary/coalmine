@@ -115,7 +115,8 @@ module ApplicationHelper
     if main_ver
       str = "<p>Upgrade to: <code>#{h main_ver}</code></p>"
       if remaining_patches.present?
-        str += "<p>Other safe versions: #{remaining_patches.map { |pv| "<code>#{h pv}</code>" }.join(", ")}"
+        safe_versions = remaining_patches.map { |pv| "<code>#{h pv}</code>" }
+        str += "<p>Other safe versions: #{safe_versions.join(', ')}"
       end
     else
       str = "<p>Upgrade to: No patches exist right now.</p>"
@@ -163,5 +164,9 @@ module ApplicationHelper
     else
       "Unsupported platform"
     end
+  end
+
+  def criticality_icon(criticality)
+    "<span class=\"fa fa-circle #{criticality}\"></span> #{criticality}".html_safe
   end
 end

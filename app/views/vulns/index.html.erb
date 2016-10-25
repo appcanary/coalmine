@@ -1,5 +1,40 @@
 <h1>Vulnerabilities</h1>
 
+We know about <%= Vulnerability.count %> vulnerabilities.
+<table>
+  <thead>
+    <th>
+      platform
+    </th>
+
+    <th>
+      count
+    </th>
+  </thead>
+  <% Vulnerability.platform_counts.each do |p, c| %>
+    <tr>
+      <td><%= p.capitalize %></td>
+      <td><%= c %></td>
+    </tr>
+  <% end %>
+</table>
+<h2>Search</h2>
+<%= form_tag vulns_path, method: :get do %>
+  <div>
+    <%= text_field_tag :search, params[:search],
+    placeholder: 'Search vulnerabilities', type: :search, style: 'width: 200px' %>
+    <label>Platforms:
+      <%= select_tag :platform, options_for_select(["all"] + Platforms.all_platforms, params[:platform]) %>
+    </label>
+  </div>
+  <div><%= submit_tag 'Search' %></div>
+<% end %>
+
+<%if @hits #we searched something %>
+  <h2>Results</h2>
+<% else %>
+  <h2>All Vulnerabilities</h2>
+<% end %>
 <table class="table">
   <thead>
     <th>
@@ -15,7 +50,11 @@
     </th>
 
     <th>
-      source
+      packages
+    </th>
+
+    <th>
+      criticality
     </th>
 
     <th>
@@ -23,7 +62,8 @@
     </th>
   </thead>
   <tbody>
-    <% @vulns.each do |v| %>
+    <% @vulns.each_with_index do |v, i| %>
+    <% presenter = VulnPresenter.new(v) %>
       <tr>
         <td>
           <%= platform_icon v.platform %>
@@ -38,12 +78,35 @@
         </td>
 
         <td>
-          <%= v.source %>
+          <% if @hits.present? && @hits[i].highlights(:package_names).present?%>
+            <% binding.pry %>
+            <% @hits[i].highlights(:package_names).each do |highlight| %>
+              <%= highlight.format { |word| "<strong>#{word}</strong>" }.html_safe %>
+            <% end %>
+          <% else %>
+            <%= presenter.dependency_names_truncated(3) %>
+          <% end %>
+        </td>
+
+        <td>
+          <%= criticality_icon v.criticality %>
         </td>
 
         <td>
           <%= v.updated_at %>
         </td>
+      </tr>
+      <tr>
+        <td colspan="6">
+
+          <% if @hits.present? && @hits[i].highlights(:description).present?%>
+            <% @hits[i].highlights(:description).each do |highlight| %>
+              <%= highlight.format { |word| "<strong>#{word}</strong>" }.html_safe %>
+            <% end %>
+          <% else %>
+            <%= v.description %>
+          <% end %>
+          </td>
       </tr>
     <% end %>
 
