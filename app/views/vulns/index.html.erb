@@ -79,7 +79,6 @@ We know about <%= Vulnerability.count %> vulnerabilities.
 
         <td>
           <% if @hits.present? && @hits[i].highlights(:package_names).present?%>
-            <% binding.pry %>
             <% @hits[i].highlights(:package_names).each do |highlight| %>
               <%= highlight.format { |word| "<strong>#{word}</strong>" }.html_safe %>
             <% end %>
