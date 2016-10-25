@@ -21,11 +21,13 @@ class SettingsControllerTest < ActionController::TestCase
     login_user(user)
 
     new_email = "new@example.com"
+    assert_not_equal user.account.email, new_email
 
     put :update, :user => { :email => new_email }
 
     user.reload
     assert_equal user.email, new_email
+    assert_equal user.account.email, new_email
   end
 
   describe "Intercom" do
