@@ -1,8 +1,0 @@
-=render :partial => "shared/heading"
-
-=form_tag(server_path(@server), method: :put, class: "edit_server") do
-  .form-group.name
-    =label :server, :name, "Server name:"
-    =text_field :server, :name, :class => "form-control"
-  .form-group
-    %button.btn.btn-default(type="submit") Update Server

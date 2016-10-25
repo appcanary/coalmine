@@ -15,6 +15,7 @@ class Admin::UsersController < AdminController
 
   def new
     @user = User.new
+    set_billing_vars(@user)
   end
 
   def impersonate
@@ -23,9 +24,7 @@ class Admin::UsersController < AdminController
   end
 
   def show
-    @billing_manager = BillingManager.new(@user)
-    @billing_presenter = @billing_manager.to_presenter
-    @all_plans = SubscriptionPlan.all
+    set_billing_vars(@user)
   end
 
   def create
@@ -36,6 +35,7 @@ class Admin::UsersController < AdminController
         format.html { redirect_to admin_root_path }
         # format.json { render json: @user, status: :created, location: @user }
       else
+        set_billing_vars(@user)
         format.html { render :new }
         # format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
       end
@@ -77,6 +77,12 @@ class Admin::UsersController < AdminController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def set_billing_vars(user)
+    @billing_manager = BillingManager.new(user)
+    @billing_presenter = @billing_manager.to_presenter
+    @all_plans = SubscriptionPlan.all
   end
 
   def user_params

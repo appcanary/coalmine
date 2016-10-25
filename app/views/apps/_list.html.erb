@@ -1,0 +1,16 @@
+<td>
+  <section>
+    <div class="status">
+      <% if app.vulnerable? %>
+        <span class="fa fa-exclamation-triangle warn"></span>
+      <% else %>
+        <span class="fa fa-check-circle okay"></span>
+      <% end %>
+    </div>
+    <div class="description">
+      <span class="title">
+        <%= link_to app.display_name, server_app_path(@server, app) %>
+      </span>
+    </div>
+  </section>
+</td>
