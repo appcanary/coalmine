@@ -33,6 +33,9 @@ class Bundle < ActiveRecord::Base
   belongs_to :agent_server
   has_many :bundled_packages, :dependent => :destroy
   has_many :packages, :through => :bundled_packages
+  has_many :vulnerable_packages, :through => :bundled_packages
+  has_many :vulnerable_dependencies, :through => :vulnerable_packages
+
   has_many :log_bundle_vulnerabilities
   has_many :log_bundle_patches
 
@@ -53,17 +56,32 @@ class Bundle < ActiveRecord::Base
 
   scope :via_api, -> { where("agent_server_id is null") }
 
+  # vuln at all is used by many serializers
+  # to be determined if they should all switch to VulnQuery
+  def vulnerable_at_all?
+    affected_packages.select(1).limit(1).any?
+  end
+
   def vulnerable?
-    self.vulnerable_packages.any?
+    if patcheable_packages.select(1).limit(1).any?
+      :patcheable
+    elsif affected_packages.select(1).limit(1).any?
+      :vulnerable
+    else
+      false
+    end
+  end
+
+  def affected_packages
+    self.packages.affected
+  end
+
+  def patcheable_packages
+    self.packages.affected_and_patcheable
   end
 
   def display_name
     name.blank? ? path : name
-  end
-
-  # TODO convert to has many?
-  def vulnerable_packages
-    VulnerablePackage.where('"bundled_packages".bundle_id = ?', self.id).joins('inner join bundled_packages on "bundled_packages".package_id ="vulnerable_packages".package_id')
   end
 
   def system_bundle?

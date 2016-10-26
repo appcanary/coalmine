@@ -14,6 +14,6 @@ class BundleWithVulnsSerializer < ActiveModel::Serializer
   end
 
   def vulnerable
-    object.vulnerable?
+    object.vulnerable_at_all?
   end
 end

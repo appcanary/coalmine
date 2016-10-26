@@ -11,6 +11,6 @@ class AppsController < ApplicationController
     @bundle = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
 
     @packages = @bundle.packages.order(:name)
-    @vuln_packages = VulnQuery.from_bundle(@bundle)
+    @vuln_packages = VulnQuery.new(current_account).from_bundle(@bundle)
   end
 end

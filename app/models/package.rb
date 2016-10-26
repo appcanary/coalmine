@@ -50,6 +50,14 @@ class Package < ActiveRecord::Base
     where(clauses.join(" OR "), *values.flatten)
   }
 
+  scope :affected, -> {
+    joins(:vulnerable_packages)
+  }
+
+  scope :affected_and_patcheable, -> {
+    joins(:vulnerable_dependencies).merge(VulnerableDependency.patcheable)
+  }
+
   
   # find all vulnerable dependencies that *could* affect this package
   # we perform a broad search at first and perform the exact package matching

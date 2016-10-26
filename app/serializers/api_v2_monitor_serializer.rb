@@ -8,7 +8,7 @@ class ApiV2MonitorSerializer < ActiveModel::Serializer
   end
 
   def vulnerable
-    object.vulnerable?
+    object.vulnerable_at_all?
   end
 
   def vulnerable_versions

@@ -87,7 +87,7 @@ class Api::AgentController < ApiController
     if bundle.nil?
       render :json => {}
     else
-      hash = VulnQuery.from_bundle(bundle).reduce({}) do  |hash, vp|
+      hash = VulnQuery.patcheable_from_bundle(bundle).reduce({}) do  |hash, vp|
         hash[vp.name] = vp.upgrade_to.first
         hash
       end

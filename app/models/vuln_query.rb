@@ -6,6 +6,28 @@
 # to report on.
 
 class VulnQuery
+  attr_reader :account
+  def initialize(account)
+    @account = account
+  end
+
+  def from_bundle(bundle)
+    if account.notify_everything?
+      self.class.from_bundle(bundle)
+    else
+      self.class.patcheable_from_bundle(bundle)
+    end
+  end
+
+  def vuln_server?(server)
+    if account.notify_everything?
+      server.bundles.any?(&:vulnerable_at_all?)
+    else
+      server.bundles.any? { |b|
+        b.vulnerable? == :patcheable
+      }
+    end
+  end
 
   def self.from_notifications(notifications, type)
     case type
@@ -25,10 +47,14 @@ class VulnQuery
   end
 
   def self.from_bundle(bundle)
-    bundle.packages.joins(:vulnerable_packages).distinct("packages.id").includes(:vulnerabilities, :vulnerable_dependencies)
+    bundle.affected_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+  end
+
+  def self.patcheable_from_bundle(bundle)
+    bundle.patcheable_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
   end
 
   def self.from_packages(package_query)
-    package_query.joins(:vulnerable_packages).distinct("packages.id").includes(:vulnerabilities, :vulnerable_dependencies)
+    package_query.joins(:vulnerable_packages).distinct.includes(:vulnerabilities, :vulnerable_dependencies)
   end
 end

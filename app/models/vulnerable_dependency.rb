@@ -35,6 +35,11 @@ class VulnerableDependency < ActiveRecord::Base
   validates :platform, :presence => true
   validates :package_name, :presence => true
 
+  scope :patcheable, -> { 
+    where("NOT (vulnerable_dependencies.patched_versions = '{}' 
+          AND vulnerable_dependencies.unaffected_versions = '{}')")
+  }
+
   delegate :title, :to => :vulnerability, :prefix => true
   
   # strictly, is this a package from the same platform?
@@ -72,7 +77,7 @@ class VulnerableDependency < ActiveRecord::Base
   end
 
   def patcheable?
-    self.patched_versions.present?
+    self.patched_versions.present? || self.unaffected_versions.present?
   end
 
   # used to filter and select collections of 

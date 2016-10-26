@@ -8,13 +8,14 @@ class ServerExporter
   end
 
   def to_csv
+    vq = VulnQuery.new(server.account)
     output = CSV.generate(headers: true) do |csv|
       csv << ["Name", "Last Heartbeat", "Distro / Release", "Vulnerable?"]
 
       csv << [server.display_name,
               server.last_heartbeat_at,
               "#{server.distro} / #{server.release}",
-              server.vulnerable?]
+              vq.vuln_server?(server)]
 
       csv << [""]
 
