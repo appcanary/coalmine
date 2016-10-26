@@ -48,6 +48,10 @@ FactoryGirl.define do
     transient do
       dep { build(:package, :ruby) }
     end
+
+    trait :patchless do
+      patched_versions { [] }
+    end
   end
 
   factory :vulnerability do
@@ -65,21 +69,27 @@ FactoryGirl.define do
     trait :ubuntu do
       platform { Platforms::Ubuntu }
     end
-
-
+    
     transient do
       platform_type { :ruby }
       deps { 2.times.map { build(:package, platform_type) } }
       pkgs { [] }
+      vd_trait { nil }
+    end
+
+    trait :patchless do
+      transient do
+        vd_trait { :patchless }
+      end
     end
 
     after(:create) do |v, f|
       f.deps.each do |dep|
-        create(:vulnerable_dependency, :dep => dep, :vulnerability => v)
+        create(:vulnerable_dependency, f.vd_trait, :dep => dep, :vulnerability => v)
       end
 
       f.pkgs.each do |pkg|
-        vd = create(:vulnerable_dependency, :dep => pkg, :vulnerability => v)
+        vd = create(:vulnerable_dependency, f.vd_trait, :dep => pkg, :vulnerability => v)
         create(:vulnerable_package, :dep => pkg, :vulnerable_dependency => vd, :vulnerability => v)
       end
     end
