@@ -97,6 +97,16 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, VulnQuery.new(account).vuln_server?(server)
   end
 
+   test "whether vuln_bundle? does the right thing" do
+    bundle = FactoryGirl.create(:bundle, :packages => @packages)
+    account = bundle.account
+
+    assert_equal true, VulnQuery.new(account).vuln_bundle?(bundle)
+    account.notify_everything = true
+    assert_equal true, VulnQuery.new(account).vuln_bundle?(bundle)
+  end
+
+
   test "whether instance from_bundle does the right thing" do
     bundle = FactoryGirl.create(:bundle, :packages => @packages)
     account = bundle.account

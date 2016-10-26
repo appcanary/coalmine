@@ -29,6 +29,14 @@ class VulnQuery
     end
   end
 
+  def vuln_bundle?(bundle)
+    if account.notify_everything?
+      bundle.vulnerable_at_all?
+    else
+      bundle.vulnerable? == :patcheable
+    end
+  end
+
   def self.from_notifications(notifications, type)
     case type
     when :vuln

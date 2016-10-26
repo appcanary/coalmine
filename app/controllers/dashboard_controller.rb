@@ -1,5 +1,6 @@
 class DashboardController < ApplicationController
   def index
+    @vulnquery = VulnQuery.new(current_account)
     @servers = AgentServer.belonging_to(current_user)
     @api_bundles = Bundle.belonging_to(current_user).via_api
 

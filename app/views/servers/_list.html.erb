@@ -3,7 +3,7 @@
     <div class="status">
       <% if server.bundles.empty? || server.gone_silent? %>
         <span class="fa fa-question-circle"></span>
-      <% elsif server.vulnerable? %>
+      <% elsif @vulnquery.vuln_server?(server) %>
         <span class="fa fa-exclamation-triangle warn"></span>
       <% else %>
         <span class="fa fa-check-circle okay"></span>
