@@ -2,7 +2,24 @@ class VulnsController < ApplicationController
   skip_before_filter :require_login
   
   def index
-    @vulns = Vulnerability.paginate(:page => params[:page]).order("updated_at desc")
+    if params[:search].present?
+      search = Vulnerability.search do
+        fulltext params[:search] do
+          highlight :description
+          highlight :package_names
+        end
+        paginate :page => params[:page]
+        if params[:platform] && params[:platform] != "all"
+          with :platform, params[:platform]
+        end
+      end
+      @vulns = search.results
+      @hits = search.hits
+    elsif params[:platform].present?
+      @vulns = Vulnerability.where(:platform => params[:platform]).paginate(:page => params[:page]).order("updated_at desc")
+    else
+      @vulns = Vulnerability.paginate(:page => params[:page]).order("updated_at desc")
+    end
   end
 
   def archive

@@ -37,6 +37,7 @@ gem 'pretender'
 gem 'httparty'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'has_secure_token'
+gem 'sunspot_rails'
 
 # gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -90,6 +91,7 @@ group :development, :test do
   gem 'faker'
   gem 'factory_girl_rails'
   gem 'fixtures_dumper'
+  gem 'sunspot_solr'
 end
 
 group :test do

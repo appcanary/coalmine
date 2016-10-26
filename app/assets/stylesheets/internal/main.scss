@@ -136,6 +136,23 @@ section {
   color: #A60000;
 }
 
+// Criticalities
+.fa.critical {
+  color: #FF4136;
+}
+.fa.high {
+  color: #FF851B;  
+}
+.fa.medium {
+  color: #FFDC00;
+}
+.fa.low {
+  color: #01FF70;  
+}
+.fa.unknown {
+  color: #AAAAAA;  
+}
+
 .empty_message {
   padding: 2em 3em 2em 3em;
   font-size: 1.2em;
