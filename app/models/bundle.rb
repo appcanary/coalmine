@@ -58,14 +58,18 @@ class Bundle < ActiveRecord::Base
 
   # vuln at all is used by many serializers
   # to be determined if they should all switch to VulnQuery
-  def vulnerable_at_all?
+  def vulnerable?
     affected_packages.select(1).limit(1).any?
   end
 
-  def vulnerable?
-    if patcheable_packages.select(1).limit(1).any?
-      :patcheable
-    elsif affected_packages.select(1).limit(1).any?
+  def patchable?
+    patchable_packages.select(1).limit(1).any?
+  end
+
+  def vulnerable_status
+    if patchable?
+      :patchable
+    elsif vulnerable?
       :vulnerable
     else
       false
@@ -76,8 +80,8 @@ class Bundle < ActiveRecord::Base
     self.packages.affected
   end
 
-  def patcheable_packages
-    self.packages.affected_and_patcheable
+  def patchable_packages
+    self.packages.affected_and_patchable
   end
 
   def display_name

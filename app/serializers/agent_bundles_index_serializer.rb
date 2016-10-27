@@ -6,7 +6,7 @@ class AgentBundlesIndexSerializer < ActiveModel::Serializer
   attributes :name, :path, :vulnerable, :created_at
 
   def vulnerable
-    object.vulnerable_at_all?
+    object.vulnerable?
   end
 end
 

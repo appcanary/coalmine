@@ -35,7 +35,7 @@ class VulnerableDependency < ActiveRecord::Base
   validates :platform, :presence => true
   validates :package_name, :presence => true
 
-  scope :patcheable, -> { 
+  scope :patchable, -> { 
     where("NOT (vulnerable_dependencies.patched_versions = '{}' 
           AND vulnerable_dependencies.unaffected_versions = '{}')")
   }
@@ -76,7 +76,7 @@ class VulnerableDependency < ActiveRecord::Base
         package.been_patched?(patched_versions))
   end
 
-  def patcheable?
+  def patchable?
     self.patched_versions.present? || self.unaffected_versions.present?
   end
 

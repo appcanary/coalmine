@@ -54,8 +54,8 @@ class Package < ActiveRecord::Base
     joins(:vulnerable_packages)
   }
 
-  scope :affected_and_patcheable, -> {
-    joins(:vulnerable_dependencies).merge(VulnerableDependency.patcheable)
+  scope :affected_and_patchable, -> {
+    joins(:vulnerable_dependencies).merge(VulnerableDependency.patchable)
   }
 
   

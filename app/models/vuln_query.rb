@@ -15,25 +15,23 @@ class VulnQuery
     if account.notify_everything?
       self.class.from_bundle(bundle)
     else
-      self.class.patcheable_from_bundle(bundle)
+      self.class.patchable_from_bundle(bundle)
     end
   end
 
   def vuln_server?(server)
     if account.notify_everything?
-      server.bundles.any?(&:vulnerable_at_all?)
+      server.vulnerable?
     else
-      server.bundles.any? { |b|
-        b.vulnerable? == :patcheable
-      }
+      server.patchable?
     end
   end
 
   def vuln_bundle?(bundle)
     if account.notify_everything?
-      bundle.vulnerable_at_all?
+      bundle.vulnerable?
     else
-      bundle.vulnerable? == :patcheable
+      bundle.patchable?
     end
   end
 
@@ -58,8 +56,8 @@ class VulnQuery
     bundle.affected_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
   end
 
-  def self.patcheable_from_bundle(bundle)
-    bundle.patcheable_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+  def self.patchable_from_bundle(bundle)
+    bundle.patchable_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
   end
 
   def self.from_packages(package_query)

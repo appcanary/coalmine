@@ -4,7 +4,7 @@ class ApiV2ServerSerializer < ActiveModel::Serializer
   has_many :apps
 
   def vulnerable
-    object.vulnerable_at_all?
+    object.vulnerable?
   end
 
   def apps

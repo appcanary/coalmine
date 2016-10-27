@@ -73,8 +73,12 @@ class AgentServer < ActiveRecord::Base
     end
   end
 
-  def vulnerable_at_all?
-    bundles.any?(&:vulnerable_at_all?)
+  def vulnerable?
+    bundles.any?(&:vulnerable?)
+  end
+
+  def patchable?
+    bundles.any?(&:patchable?)
   end
 
   # TODO: abstract for all OS'
