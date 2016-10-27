@@ -1,7 +1,7 @@
 <section>
   <div class="heading">
     <h3>
-      <span><%= link_to "dashboard", dashboard_path %> / monitors / <span class="name"><%= @bundle.name %></span></span>
+      <span><%= link_to "dashboard", dashboard_path %> / monitors / <span class="name"><%= @bundlepres.display_name %></span></span>
     </h3>
   </div>
 </section>
@@ -25,13 +25,13 @@
       <tbody>
         <tr>
           <td> 
-            <%= @bundle.name %>
+            <%= @bundlepres.display_name %>
           </td>
           <td>
-            <%= monitor_kind_label(@bundle) %>
+            <%= monitor_kind_label(@bundlepres) %>
           </td>
           <td>
-            <%= "#{time_ago_in_words @bundle.created_at} ago" %>
+            <%= "#{time_ago_in_words @bundlepres.created_at} ago" %>
           </td>
         </tr>
       </tbody>
@@ -44,7 +44,7 @@
   <ul class="nav nav-tabs">
     <li class="active" role="presentation">
       <a href="#vuln"  data-toggle="tab">
-        <% if @vuln_packages.empty? %>
+        <% if @bundlepres.vuln_packages.empty? %>
           <span class="fa fa-check-circle okay"></span>
         <% else %>
           <span class="fa fa-exclamation-triangle warn"></span>
@@ -58,12 +58,12 @@
     <div id="vuln" role="tabpanel" class="tab-pane active">
       <table id="vulnerable_artifacts" class="artifacts vulnerable">
 
-        <% if @vuln_packages.empty? %>
+        <% if @bundlepres.vuln_packages.empty? %>
           <tr>
             <td class="empty_message">No vulnerable packages found for this monitor!</td>
           </tr>
         <% else %>
-          <% @vuln_packages.each do |pkg| %>
+          <% @bundlepres.vuln_packages.each do |pkg| %>
             <tr class="artifact">
               <td class="info">
                 <div class="title data">

@@ -1,10 +1,8 @@
 class MonitorsController < ApplicationController
   def show
-    @form = MonitorForm.new(Bundle.new)
-    @bundle = current_user.bundles.via_api.find(params[:id])
+    bundle = current_user.bundles.via_api.find(params[:id])
 
-    @artifacts = @bundle.packages
-    @vuln_packages = VulnQuery.new(current_account).from_bundle(@bundle)
+    @bundlepres = BundlePresenter.new(VulnQuery.new(current_account), bundle)
   end
 
   def new
