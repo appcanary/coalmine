@@ -12,7 +12,7 @@ class OnboardWizard
   end
 
   def onboarded?
-    servers.present? || monitors.present?
+    servers.any? || monitors.any?
   end
 
   def new_user?

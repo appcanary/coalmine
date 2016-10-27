@@ -1,12 +1,14 @@
 module DashboardHelper
-  def at_a_glance(monitors, active_servers, silenced_servers)
+  def at_a_glance(monitors, servers)
+    active_servers = servers.active_servers
+    silenced_servers = servers.silent_servers
 
     total_monitored = active_servers.count + silenced_servers.count + monitors.count
 
-    vuln_servers = active_servers.select { |s| @vulnquery.vuln_server?(s) }.count 
+    vuln_servers = active_servers.select(&:vulnerable?).count 
     miss_servers = silenced_servers.count 
     
-    vuln_monitors = monitors.select { |b| @vulnquery.vuln_bundle?(b) }.count
+    vuln_monitors = monitors.select(&:vulnerable?).count
 
     html = []
 

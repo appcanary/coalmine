@@ -11,7 +11,7 @@ class ServersController < ApplicationController
   end
 
   def show
-    @server = server
+    @serverpres = ServerPresenter.new(VulnQuery.new(current_account), server)
     respond_to do |format|
       format.html
       format.csv do

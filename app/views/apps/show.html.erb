@@ -4,7 +4,7 @@
   <ul class="nav nav-tabs">
     <li class="active" role="presentation">
       <a href="#vuln"  data-toggle="tab">
-        <% if @vuln_packages.empty? %>
+        <% if @bundle.vuln_packages.empty? %>
           <span class="fa fa-check-circle okay"></span>
         <% else %>
           <span class="fa fa-exclamation-triangle warn"></span>
@@ -24,12 +24,12 @@
     <div id="vuln" role="tabpanel" class="tab-pane active">
       <table id="vulnerable_packages" class="artifacts vulnerable">
 
-        <% if @vuln_packages.empty? %>
+        <% if @bundle.vuln_packages.empty? %>
           <tr>
             <td class="empty_message">No vulnerable packages found for this app!</td>
           </tr>
         <% else %>
-          <% @vuln_packages.each do |package| %>
+          <% @bundle.vuln_packages.each do |package| %>
             <tr class="package">
               <td class="info">
                 <div class="title data">
