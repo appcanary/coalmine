@@ -76,7 +76,7 @@ class EmailManager < ServiceManager
   def self.filter_logs(logs, klass)
     klass.includes(:vulnerable_dependency).find(logs).
       select(&:vulnerable_dependency).select { |lbv|
-      lbv.vulnerable_dependency.patcheable?
+      lbv.vulnerable_dependency.patchable?
     }.map(&:id)
   end
 

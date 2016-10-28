@@ -1,32 +1,32 @@
 <div id="dashboard">
   <section>
     <div class="col-sm-12">
-      <p> At a glance: <%= at_a_glance(@api_bundles, @active_servers, @silent_servers) %> </p>
+      <p> At a glance: <%= at_a_glance(@monitors, @servers) %> </p>
     </div>
   </section>
 
 
 
-  <% if @api_bundles.present? %>
+  <% if @monitors.any? %>
     <div class="monitors-section">
       <h1 class="page-header">Monitors 
         <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Monitor'.html_safe, new_monitor_path, :class => "btn btn-default")%>
       </h1>
       <table class="table servers">
-        <% @api_bundles.each do |monitor| %>
+        <% @monitors.each do |monitor| %>
           <%= render :partial => "monitors/list", :locals => { :monitor => monitor } %>
         <% end %>
       </table>
     </div>
   <% end %>
 
-  <% if @active_servers.present? || @silent_servers.present? %>
+  <% if @servers.any? %>
     <div class="servers-section">
       <h1 class="page-header">Servers</h1>
 
-      <% if @active_servers.present? %>
+      <% if @servers.active? %>
         <table class="table servers">
-          <% @active_servers.each do |server| %>
+          <% @servers.active_servers.each do |server| %>
             <tr class="server">
               <%= render :partial => "servers/list", :locals => { :server => server } %>
             </tr>
@@ -34,7 +34,7 @@
         </table>
       <% end %>
 
-      <% if @silent_servers.present? %>
+      <% if @servers.silent? %>
         <h4>Inactive servers 
           <%= link_to("Delete all inactive", destroy_inactive_servers_path, :method => :delete, :class => "btn btn-warning", :data => {:confirm => "Are you sure you want to delete all inactive servers?"})%>
         </h4>
@@ -44,7 +44,7 @@
         </p>
 
         <table class="table servers">
-          <% @silent_servers.each do |server| %>
+          <% @servers.silent_servers.each do |server| %>
             <tr class="server">
               <%= render :partial => "servers/list", :locals => { :server => server } %>
             </tr>

@@ -20,16 +20,16 @@
       <tbody>
         <tr>
           <td> 
-            <%= @server.display_name %>
+            <%= @serverpres.display_name %>
           </td>
           <td>
-            <%= @server.ip %>
+            <%= @serverpres.ip %>
           </td>
           <td>
-            <%= "#{time_ago_in_words_or_never @server.last_heartbeat_at} ago" %>
+            <%= "#{time_ago_in_words_or_never @serverpres.last_heartbeat_at} ago" %>
           </td>
           <td>
-            <%=@server.uname %>
+            <%=@serverpres.uname %>
           </td>
         </tr>
       </tbody>
@@ -40,10 +40,10 @@
 
 <section>
   <div class="server-apps">
-    <% if @server.bundles.present? %>
-      <span class="tabletitle"><h4>Apps and dependencies</h4> <%= link_to "Export to CSV", server_path(@server, format: "csv"), class: "btn btn-default" %></span>
+    <% if @serverpres.bundles.any? %>
+      <span class="tabletitle"><h4>Apps and dependencies</h4> <%= link_to "Export to CSV", server_path(@serverpres, format: "csv"), class: "btn btn-default" %></span>
       <table class="table apps">
-        <% @server.bundles.each do |bundle| %>
+        <% @serverpres.bundles.each do |bundle| %>
           <tr>
             <%= render :partial => "apps/list", :locals => { :app => bundle } %>
           </tr>

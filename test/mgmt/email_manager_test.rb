@@ -150,19 +150,10 @@ class EmailManagerTest < ActiveSupport::TestCase
 
     vuln_pkg1 = packages1.first
     unpatcheable_vuln = FactoryGirl.create(:vulnerability, :debian,
-                           :deps => [])
-    vd = FactoryGirl.create(:vulnerable_dependency,
-                            :vulnerability => unpatcheable_vuln,
-                            :platform => Platforms::Ruby,
-                            :package_name => vuln_pkg1.name,
-                            :patched_versions => [])
-
-    FactoryGirl.create(:vulnerable_package,
-                       :dep => vuln_pkg1, 
-                       :vulnerable_dependency => vd, 
-                       :vulnerability => unpatcheable_vuln)
-
-
+                                           :patchless,
+                                           :pkgs => [vuln_pkg1], 
+                                           :deps => [])
+    
     # create a second vuln that does have a patch
 
     vuln_pkg2 = packages1.second

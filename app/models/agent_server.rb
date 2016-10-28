@@ -77,6 +77,10 @@ class AgentServer < ActiveRecord::Base
     bundles.any?(&:vulnerable?)
   end
 
+  def patchable?
+    bundles.any?(&:patchable?)
+  end
+
   # TODO: abstract for all OS'
   def system_bundle
     self.bundles.where(:platform => Platforms::OPERATING_SYSTEMS).first

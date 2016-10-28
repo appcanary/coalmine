@@ -206,7 +206,8 @@ CREATE TABLE accounts (
     token character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    datomic_id bigint
+    datomic_id bigint,
+    notify_everything boolean DEFAULT false NOT NULL
 );
 
 
@@ -1314,8 +1315,8 @@ CREATE TABLE users (
     daily_email_consent boolean DEFAULT false NOT NULL,
     datomic_id bigint,
     invoiced_manually boolean DEFAULT false,
-    account_id integer NOT NULL,
-    agent_token character varying
+    agent_token character varying,
+    account_id integer NOT NULL
 );
 
 
@@ -3157,27 +3158,11 @@ ALTER TABLE ONLY agent_received_files
 
 
 --
--- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
-
-
---
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_e4107b65b3 FOREIGN KEY (email_message_id) REFERENCES email_messages(id);
-
-
---
--- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_f0b7c79393 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3314,6 +3299,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160530195217');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602133740');
 
+INSERT INTO schema_migrations (version) VALUES ('20160602133741');
+
 INSERT INTO schema_migrations (version) VALUES ('20160602134913');
 
 INSERT INTO schema_migrations (version) VALUES ('20160603150414');
@@ -3347,4 +3334,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161003155244');
 INSERT INTO schema_migrations (version) VALUES ('20161019151455');
 
 INSERT INTO schema_migrations (version) VALUES ('20161019181329');
+
+INSERT INTO schema_migrations (version) VALUES ('20161025191216');
 

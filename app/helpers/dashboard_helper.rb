@@ -1,5 +1,7 @@
 module DashboardHelper
-  def at_a_glance(monitors, active_servers, silenced_servers)
+  def at_a_glance(monitors, servers)
+    active_servers = servers.active_servers
+    silenced_servers = servers.silent_servers
 
     total_monitored = active_servers.count + silenced_servers.count + monitors.count
 
