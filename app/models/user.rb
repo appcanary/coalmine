@@ -69,6 +69,7 @@ class User < ActiveRecord::Base
 
   delegate :active_servers, :agent_servers, :bundles, :monitors, :check_api_calls, :to => :account
 
+  # TODO: most of these need to be cleaned up
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
 
   def stripe_errors

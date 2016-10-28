@@ -61,7 +61,9 @@ Rails.application.routes.draw do
   end
   resources :password_reset, :only => [:show, :update]
   
-  resource :settings, :only => [:show, :update]
+  resource :settings, :only => [:show, :update] do
+    patch 'reset_token', on: :collection
+  end
 
   resources :user_sessions, :only => [:create, :destroy]
 

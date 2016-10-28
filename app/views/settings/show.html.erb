@@ -24,7 +24,11 @@
         <a name="api-token" class="anchor-offset"></a>
         <div class="user_api">
           <h4>API token</h4>
-          <code class="auth_token"><%= @agent_token %></code>
+          <%= form_for @user, url: reset_token_settings_path do |f| %>
+            <%= hidden_field_tag :regenerate_token %>
+            <code class="auth_token"><%= @agent_token %></code>
+            <%= f.submit "Reset token", class: "btn btn-sm btn-danger", data: { confirm: "Are you sure? This will cause all of your servers to stop working!" } %>
+          <% end %>
           <hr>
         </div>
       </div>
