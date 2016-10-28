@@ -15,6 +15,18 @@ class SettingsController < ApplicationController
     end
   end
 
+  def reset_token
+    current_user.account.regenerate_token
+
+    if current_user.save
+      notice = "Your token has been reset. Don't forget to change it everywhere!"
+    else
+      notice = "Something went wrong, and we were unable to save your request"
+    end
+
+    redirect_to settings_path, notice: notice
+  end
+
   def set_vars
     @show_stripe = true
     @user = current_user
@@ -29,6 +41,6 @@ class SettingsController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :onboarded, :newsletter_email_consent, :daily_email_consent, :marketing_email_consent)
+    params.require(:user).permit(:email, :password, :password_confirmation, :onboarded, :newsletter_email_consent, :daily_email_consent, :marketing_email_consent, :regenerate_token)
   end
 end
