@@ -30,6 +30,18 @@ class SettingsControllerTest < ActionController::TestCase
     assert_equal user.account.email, new_email
   end
 
+  it "should regenerate the account token" do
+    login_user(user)
+
+    account = user.account
+    token = account.token
+
+    patch :reset_token
+
+    account.reload
+    assert_not_equal token, account.token
+  end
+
   describe "Intercom" do
 
     it "should let users unsubscribe" do
