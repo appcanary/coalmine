@@ -37,23 +37,26 @@ class EmailManager < ServiceManager
     EmailMessage.transaction do
       account_and_lbvs = logklass.unnotified_logs_by_account
       logs_by_account = group_by_account(account_and_lbvs)
+      create_notifications!(logklass, emailklass, fkey, logs_by_account)
+    end
+  end
 
-      logs_by_account.each_pair do |aid, logs|
+  def self.create_notifications!(logklass, emailklass, fkey, logs_by_account)
+    logs_by_account.each_pair do |aid, logs|
 
-        # not every log is immediately notifiable
-        notifiable_logs = filter_logs(logs, logklass)
+      # not every log is immediately notifiable
+      notifiable_logs = filter_logs(logs, logklass)
 
-        # only create an email if we have anything to notify
-        if notifiable_logs.present?
-          email = emailklass.create!(:account_id => aid)
+      # only create an email if we have anything to notify
+      if notifiable_logs.present?
+        email = emailklass.create!(:account_id => aid)
 
-          notifiable_logs.each do |lid|
-            Notification.create!(:email_message_id => email.id,
-                                 fkey => lid)
-          end
+        notifiable_logs.each do |lid|
+          Notification.create!(:email_message_id => email.id,
+                               fkey => lid)
         end
-
       end
+
     end
   end
    
