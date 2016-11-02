@@ -137,7 +137,7 @@ module ApplicationHelper
     if log.has_server?
       link_to log.server.display_name, server_app_url(log.bundle, server_id: log.server.id)
     else 
-      link_to log.bundle.display_name, monitors_url(log.bundle)
+      link_to log.bundle.display_name, monitor_url(log.bundle)
     end
   end
 
@@ -145,7 +145,7 @@ module ApplicationHelper
     if bundle.agent_server_id
       link_to "#{bundle.agent_server.display_name} - #{bundle.display_name}", server_app_url(bundle, server_id: bundle.agent_server_id)
     else
-      link_to bundle.display_name, monitors_url(bundle)
+      link_to bundle.display_name, monitor_url(bundle)
     end
   end
 
