@@ -172,13 +172,18 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal 1, Notification.count, "one notification per LBV"
 
     second_lbv = LogBundleVulnerability.order(:vulnerability_id).last
+
+    # the second vuln is patcheable one, and the one that got notified:
     assert_equal Notification.first.log_bundle_vulnerability_id, second_lbv.id
     assert_equal second_lbv.vulnerability_id, vuln_w_patch.id
 
+    # unnotified returns a [account_id, lbv_id] tuple
     unnotified = LogBundleVulnerability.unnotified_logs_by_account
     assert_equal 1, unnotified.count
+    
+    unnotified_lbv = LogBundleVulnerability.find(unnotified[0][1])
 
-    assert_equal unpatcheable_vuln.id, unnotified[0][1]
+    assert_equal unpatcheable_vuln.id, unnotified_lbv.vulnerability_id
 
     # ditto for patched notifications
     # let's remove the first vuln from our bundle
