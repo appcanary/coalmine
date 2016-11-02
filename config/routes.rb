@@ -91,6 +91,7 @@ Rails.application.routes.draw do
     end
 
     resources :subscription_plans
+    resources :emails, :only => [:index, :show]
   end
 
   namespace :api do
