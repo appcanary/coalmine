@@ -68,7 +68,7 @@ Rails.application.routes.draw do
   resources :user_sessions, :only => [:create, :destroy]
 
   resources :servers, :only => [:new, :show, :destroy, :edit, :update] do
-    resources :apps, :only => [:index, :new, :show]
+    resources :apps, :only => [:index, :new, :show, :destroy]
     get "install", on: :collection
     get "deb", on: :collection
     get "rpm", on: :collection

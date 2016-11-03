@@ -18,6 +18,17 @@ class AppsControllerTest < ActionController::TestCase
       get :show, :server_id => 1234, :id => 1235
       assert_response :success
     end
+
+    it "should delete the bundle" do
+      bundle = FactoryGirl.create(:bundle, :account_id => user.account_id)
+      assert_equal 2, Bundle.count
+
+      delete :destroy, :server_id => 1234, :id => bundle.id
+      assert_response :redirect
+
+      assert_equal 1, Bundle.count
+    end
+
   end
 
   describe "while unauthenticated" do
