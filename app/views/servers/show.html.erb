@@ -29,7 +29,7 @@
             <%= "#{time_ago_in_words_or_never @serverpres.last_heartbeat_at} ago" %>
           </td>
           <td>
-            <%=@serverpres.uname %>
+            <%= @serverpres.uname %>
           </td>
         </tr>
       </tbody>
@@ -54,9 +54,9 @@
       <h3>Hey! We don't seem to be monitoring any apps.</h3>
       <p> 
         Please consult the 
-        <%= link_to "onboarding page", new_server_path %>
-        for instructions.
-        Ideally we'd tell you a bit more than this, but we're hard at work to improve this page!
+        <%= link_to "server docs page", new_server_path %>
+        for instructions. You're probably just slightly misconfigured.
+        If you run into trouble, click the feedback button above.
       </p>
     <% end %>
   </div>
