@@ -1,5 +1,8 @@
 # TODO: convert to a Form
 class Api::AgentController < ApiController
+  # This is used for logging dead agents (agents for deleted servers)
+  # It was named sigh because Phill was having a bad day
+  # TODO: move this to a table. Give things sane names
   def sigh
     @sigh ||= Logger.new(File.join(Rails.root, "log/agenttest.log"))
   end
