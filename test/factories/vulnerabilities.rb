@@ -69,7 +69,11 @@ FactoryGirl.define do
     trait :ubuntu do
       platform { Platforms::Ubuntu }
     end
-    
+
+    trait :amazon do
+      platform { Platforms::Amazon }
+    end
+
     transient do
       platform_type { :ruby }
       deps { 2.times.map { build(:package, platform_type) } }
