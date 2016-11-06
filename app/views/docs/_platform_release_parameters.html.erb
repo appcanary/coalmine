@@ -11,7 +11,9 @@
       <dt>centos</dt>
       <dd><code>7</code></dd>
       <dt>amzn</dt>
-      <dd><code>2016.03</code></dd>
+      <dd>
+        <%= Platforms::RELEASES["amzn"].keys.map {|r| "<code>#{r}</code>"}.join(", ").html_safe %>
+      </dd>
       <dt>ruby</dt>
       <dd>None, leave blank.</dd>
     </dl>
