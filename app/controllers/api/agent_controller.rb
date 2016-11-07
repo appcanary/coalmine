@@ -115,6 +115,7 @@ class Api::AgentController < ApiController
   def log_faulty_request(server)
     server.received_files.create(account_id: current_account.id, 
                                  request: request.raw_post)
+   Raven.capture_message("Received faulty file from #{server.account.email}, server id: #{server.id}") 
 
   end
 
