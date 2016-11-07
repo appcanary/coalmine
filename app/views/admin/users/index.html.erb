@@ -78,6 +78,9 @@ $( document ).ready(function() {
     <table class="table" id="users">
       <thead>
         <th>
+          name
+        </th>
+        <th>
           email
         </th>
         <th>
@@ -115,6 +118,9 @@ $( document ).ready(function() {
       <tbody>
         <%- @users.each do |user| %>
           <tr>
+            <td>
+              <%= user.name %>
+            </td>
             <td>
               <%= user.email %>
             </td>
