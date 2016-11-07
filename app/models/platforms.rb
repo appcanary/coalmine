@@ -19,7 +19,7 @@ class Platforms
     UbuntuReleases = ["17.04", "16.10", "16.04", "15.10", "15.04", "14.04", "12.04"]
     DebianReleases = ["8", "7", "6", "5"]
     CentOSReleases = ["7"]
-    AmazonReleases = ["2016.03"]
+    AmazonReleases = ["2011.09", "2012.03", "2012.09", "2013.03", "2013.09", "2014.03", "2014.09", "2015.03", "2016.03", "2016.09"]
 
     @platform_to_release = {
       Debian => DebianReleases,
@@ -70,7 +70,16 @@ class Platforms
   ## new api platforms as follows:
   RELEASES = {
     Ruby => { nil => true },
-    Amazon => { "2016.03" => true },
+    Amazon => {"2011.09" => true,
+               "2012.03" => true,
+               "2012.09" => true,
+               "2013.03" => true,
+               "2013.09" => true,
+               "2014.03" => true,
+               "2014.09" => true,
+               "2015.03" => true,
+               "2016.03" => true,
+               "2016.09" => true},
     CentOS => { "7" => true },
     Ubuntu => {
       "4.10"=>"warty",

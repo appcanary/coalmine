@@ -77,6 +77,36 @@ class CheckApiTest < ActionDispatch::IntegrationTest
       end
     end
 
+    describe "for amazon" do
+      it "should tell you you're vulnerable" do
+        vuln = FactoryGirl.create(:vulnerability, :amazon)
+        FactoryGirl.create(:vulnerable_dependency, 
+                           :vulnerability => vuln,
+                           :platform => Platforms::Amazon,
+                           :release => nil, # amazon vds have no releases
+                           :package_name => "bind-utils",
+                           :patched_versions => ["bind-utils-9.8.2-0.37.rc1.47.amzn1.x86_64"])
+
+
+        assert_equal 0, account.log_api_calls.where(:action => "check/create").count
+
+        authed_post(account, {platform: Platforms::Amazon, release: "2016.03", file: amazonqa})
+
+        assert_response :success
+
+        assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+
+        json = json_body
+        assert json.key?("data")
+        assert_equal 1, json["data"].size
+
+        json_pkg = json["data"].first
+        assert_equal "bind-utils", json_pkg["attributes"]["name"]
+        assert_check_response_shape(json)
+      end
+    end
+
+
     describe "for debian" do
       it "should tell you you're vulnerable" do
         vuln = FactoryGirl.create(:vulnerability, :debian)
@@ -209,6 +239,11 @@ class CheckApiTest < ActionDispatch::IntegrationTest
   def centosqa
     @centosqa ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "centos-7-rpmqa.txt")))
   end
+
+  def amazonqa
+    @amazonqa ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "amazon-rpmqa.txt")))
+  end
+
 
   def gemfile
     @gemfile ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "Gemfile")))

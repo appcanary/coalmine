@@ -27,7 +27,7 @@ class AlasImporterTest < ActiveSupport::TestCase
  
       assert new_attr["constraints"].present?
       assert new_attr["constraints"].all? { |p| 
-        ["package_name", "arch", "release", "patched_versions"].all? do |k|
+        ["package_name", "arch", "patched_versions"].all? do |k|
           v = p.fetch(k) 
           !v.nil? && v != ""
         end

@@ -55,24 +55,13 @@ class AlasAdapter < AdvisoryAdapter.new(:alas_id, :reference_ids, :severity,
       nevras.each do |nv|
         h = { "package_name" => name,
               "arch" => nv.arch,
-              "release" => normalize_release(nv.release),
-              "patched_versions" => [nv.filename]
+              "patched_versions" => [nv.filename],
+              # note the lack of release, amazon doesn't really have releases
         }
 
         arr << DependencyConstraint.parse(h)
       end
       arr
-    end
-  end
-
-  #amazon doesn't really have releases?
-
-  def normalize_release(str)
-    case str
-    when /amzn1/
-      "amazn1"
-    else
-      str
     end
   end
 
