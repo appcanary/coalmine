@@ -5,6 +5,8 @@ class Admin::UsersController < AdminController
     @users = User.includes({account: [:bundles, :agent_servers, :active_servers, :monitors, :check_api_calls]}, {billing_plan: [:subscription_plan]})
 
     @user_count = User.count
+    @tried_count = Account.select(&:tried_product?).count
+    @paying_count = User.select(&:has_billing?).count
     @servers_count = AgentServer.count
     @recent_heartbeats = AgentServer.active.count
     @app_count = Bundle.via_agent.count
