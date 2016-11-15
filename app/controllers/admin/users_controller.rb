@@ -2,17 +2,19 @@ class Admin::UsersController < AdminController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
 
   def index
-    @users = User.includes({account: [:bundles, :agent_servers, :active_servers, :monitors, :check_api_calls]}, {billing_plan: [:subscription_plan]})
+    @users = User.includes(:account, {billing_plan: [:subscription_plan]});
 
     @user_count = User.count
-    @tried_count = Account.select(&:tried_product?).count
-    @paying_count = User.select(&:has_billing?).count
+    @tried_count = Account.have_tried_count
+    @paying_count = User.are_paying_count
+
     @servers_count = AgentServer.count
     @recent_heartbeats = AgentServer.active.count
     @app_count = Bundle.via_agent.count
     @active_app_count = Bundle.via_active_agent.count
     @monitor_count = Bundle.via_api.count
-    @total_revenue = @users.reduce([]) { |acc, u| acc << u.billing_plan if u.billing_plan; acc }.map(&:monthly_cost).reduce(&:+)
+
+    @total_revenue = BillingPlan.includes(:subscription_plan, user: :account).map(&:monthly_cost).reduce(&:+)
   end
 
   def new

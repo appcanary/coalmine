@@ -46,15 +46,13 @@ class Bundle < ActiveRecord::Base
     where(:account_id => user.account_id)
   }
 
-  scope :via_agent, -> {
-    where("agent_server_id is not null")
-  }
-
   scope :via_active_agent, -> {
     joins(:agent_server).merge(AgentServer.active)
   }
 
-  scope :via_api, -> { where("agent_server_id is null") }
+  scope :via_api, -> { where("bundles.agent_server_id is null") }
+
+  scope :via_agent, -> { where("bundles.agent_server_id is not null") }
 
   # vuln at all is used by many serializers
   # to be determined if they should all switch to VulnQuery
