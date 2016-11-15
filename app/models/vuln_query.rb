@@ -44,12 +44,12 @@ class VulnQuery
     end
   end
 
-  def self.from_patched_notifications(notifications) 
-    LogBundlePatch.where("id in (#{notifications.select("log_bundle_patch_id").to_sql})").includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
+  def self.from_patched_notifications(notification_rel)
+    LogBundlePatch.joins(:notifications).merge(notification_rel).includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
   end
 
-  def self.from_vuln_notifications(notifications)
-    LogBundleVulnerability.where("id in (#{notifications.select("log_bundle_vulnerability_id").to_sql})").includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
+  def self.from_vuln_notifications(notification_rel)
+    LogBundleVulnerability.joins(:notifications).merge(notification_rel).includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
   end
 
   def self.from_bundle(bundle)

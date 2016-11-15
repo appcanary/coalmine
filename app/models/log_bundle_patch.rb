@@ -33,6 +33,8 @@ class LogBundlePatch < ActiveRecord::Base
   belongs_to :vulnerable_dependency
   belongs_to :vulnerable_package
 
+  has_many :notifications
+
   scope :unnotified_logs_by_account, -> {
     joins('INNER JOIN "bundles" ON "bundles"."id" = "log_bundle_patches"."bundle_id"
           LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id
