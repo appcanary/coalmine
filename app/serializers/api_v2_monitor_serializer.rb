@@ -12,7 +12,7 @@ class ApiV2MonitorSerializer < ActiveModel::Serializer
   end
 
   def vulnerable_versions
-    @vp ||= VulnQuery.from_bundle(object)
+    @vp ||= VulnQuery.affected_from_bundle(object)
     @vp.map do |vuln_pkg|
       { 
         "type" => "artifact-version",

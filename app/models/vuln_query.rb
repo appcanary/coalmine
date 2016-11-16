@@ -1,9 +1,13 @@
-# this class namespaces all the different queries we 
-# run that determine whether something is vulnerable.
+# This class should be sole entry point in entire system
+# for determining if something is "vulnerable"
 #
-# i.e. given a bundle, give me info on what's vuln
-# given a set of notifications, give me what i need
-# to report on.
+# It can be called directly via class methods, or when 
+# instantiated with an account object it will conform to user's
+# expectations of what they care about.
+#
+# TODO: it assumes permissions check has been performed elsewhere
+# is that a good idea or should we check as well?
+
 
 class VulnQuery
   attr_reader :account
@@ -12,15 +16,15 @@ class VulnQuery
   end
 
   def from_bundle(bundle)
-    if account.notify_everything?
-      self.class.from_bundle(bundle)
+    if care_about_affected?
+      self.class.affected_from_bundle(bundle)
     else
       self.class.patchable_from_bundle(bundle)
     end
   end
 
   def vuln_server?(server)
-    if account.notify_everything?
+    if care_about_affected?
       server.vulnerable?
     else
       server.patchable?
@@ -28,7 +32,7 @@ class VulnQuery
   end
 
   def vuln_bundle?(bundle)
-    if account.notify_everything?
+    if care_about_affected?
       bundle.vulnerable?
     else
       bundle.patchable?
@@ -44,6 +48,10 @@ class VulnQuery
     end
   end
 
+  def care_about_affected?
+    account.notify_everything?
+  end
+
   def self.from_patched_notifications(notification_rel)
     LogBundlePatch.joins(:notifications).merge(notification_rel).includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
   end
@@ -52,7 +60,7 @@ class VulnQuery
     LogBundleVulnerability.joins(:notifications).merge(notification_rel).includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
   end
 
-  def self.from_bundle(bundle)
+  def self.affected_from_bundle(bundle)
     bundle.affected_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
   end
 

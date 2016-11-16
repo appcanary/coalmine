@@ -6,7 +6,7 @@ class BundleWithVulnsSerializer < ActiveModel::Serializer
   has_many :vulnerabilities, unless: -> { vulnerable_packages.empty? }
   
   def vulnerable_packages 
-    @vp ||= VulnQuery.from_bundle(object)
+    @vp ||= VulnQuery.affected_from_bundle(object)
   end
 
   def vulnerabilities
