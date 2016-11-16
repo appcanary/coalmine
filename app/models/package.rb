@@ -51,14 +51,13 @@ class Package < ActiveRecord::Base
   }
 
   scope :affected, -> {
-    joins(:vulnerable_packages)
+    joins(:vulnerable_dependencies)
   }
 
   scope :affected_and_patchable, -> {
-    joins(:vulnerable_dependencies).merge(VulnerableDependency.patchable)
+    affected.merge(VulnerableDependency.patchable)
   }
 
-  
   # find all vulnerable dependencies that *could* affect this package
   # we perform a broad search at first and perform the exact package matching
   # in ruby land

@@ -29,6 +29,8 @@ class Account < ActiveRecord::Base
   has_many :log_api_calls
   has_many :check_api_calls, -> { where(:action => "check/create") }, :class_name => LogApiCall
 
+  has_many :log_resolutions
+
   has_many :email_messages
   has_many :email_patcheds
   has_many :email_vulnerables

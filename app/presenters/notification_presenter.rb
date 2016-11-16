@@ -17,6 +17,8 @@ class NotificationPresenter
     notifications_by_vuln = {}
     unpatched_notifications = {}
 
+    # TODO: replace with database call,
+    # see VulnerableDependency.patchable
     # separate chaff from wheat
     @notifications.each do |note|
       if !note.package.upgrade_to.any?

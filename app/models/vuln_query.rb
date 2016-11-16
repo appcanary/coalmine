@@ -10,33 +10,52 @@
 
 
 class VulnQuery
-  attr_reader :account
+  attr_reader :account, :query_bundle, :filter_query
+
+  PROCS = {
+    affected_bundle: -> (bundle) {
+      bundle.affected_packages
+    },
+    patchable_bundle: -> (bundle) {
+      bundle.patchable_packages
+    },
+    filter_with_log: -> (aid, pkg_query) {
+      pkg_query.merge(LogResolution.filter_for(aid))
+    }
+  }
+
   def initialize(account)
     @account = account
+
+    if care_about_affected?(@account)
+      @query_bundle = PROCS[:affected_bundle]
+    else
+      @query_bundle = PROCS[:patchable_bundle]
+    end
+
+    @filter_query = PROCS[:filter_with_log].curry.(@account.id)
+  end
+
+  def uniq_and_include(pkg_query)
+    pkg_query.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+  end
+
+  def limit_query(pkg_query)
+    pkg_query.limit(1).select(1)
   end
 
   def from_bundle(bundle)
-    if care_about_affected?
-      self.class.affected_from_bundle(bundle)
-    else
-      self.class.patchable_from_bundle(bundle)
-    end
+    uniq_and_include(filter_query.(query_bundle.(bundle)))
   end
 
   def vuln_server?(server)
-    if care_about_affected?
-      server.vulnerable?
-    else
-      server.patchable?
-    end
+    server.bundles.any? { |b|
+      vuln_bundle?(b)
+    }
   end
 
   def vuln_bundle?(bundle)
-    if care_about_affected?
-      bundle.vulnerable?
-    else
-      bundle.patchable?
-    end
+    filter_query.(limit_query(query_bundle.(bundle))).any?
   end
 
   def self.from_notifications(notifications, type)
@@ -48,8 +67,8 @@ class VulnQuery
     end
   end
 
-  def care_about_affected?
-    account.notify_everything?
+  def care_about_affected?(acct)
+    acct.notify_everything?
   end
 
   def self.from_patched_notifications(notification_rel)
@@ -60,6 +79,7 @@ class VulnQuery
     LogBundleVulnerability.joins(:notifications).merge(notification_rel).includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
   end
 
+  # TODO: convert to using methods above
   def self.affected_from_bundle(bundle)
     bundle.affected_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
   end

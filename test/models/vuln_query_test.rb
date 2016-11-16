@@ -113,13 +113,27 @@ class VulnQueryTest < ActiveSupport::TestCase
 
   test "whether vuln_server? diagnoses servers properly" do
     # create a bundle and associate it with a server
-    bundle = FactoryGirl.create(:bundle, :packages => @packages)
-    account = bundle.account
+    account = FactoryGirl.create(:account)
+    vulnbundle = FactoryGirl.create(:bundle, :account => account,
+                                    :packages => @packages)
+
+    safebundle = FactoryGirl.create(:bundle, :account => account,
+                                    :packages => @not_vuln_packages)
+
+    
     server = FactoryGirl.create(:agent_server, :account => account,
-                                :bundles => [bundle])
+                                :bundles => [safebundle])
 
 
     # by default, we only notify for patchable stuff
+    assert_equal false, VulnQuery.new(account).vuln_server?(server)
+    account.notify_everything = true
+    assert_equal false, VulnQuery.new(account).vuln_server?(server)
+
+    # reset the notify_everything flag, add the vuln bundle
+    account.notify_everything = false
+    server.bundles << vulnbundle
+
     assert_equal true, VulnQuery.new(account).vuln_server?(server)
     account.notify_everything = true
     assert_equal true, VulnQuery.new(account).vuln_server?(server)
@@ -139,13 +153,25 @@ class VulnQueryTest < ActiveSupport::TestCase
 
   end
 
-   test "whether vuln_bundle? diagnoses bundles correctly" do
-    bundle = FactoryGirl.create(:bundle, :packages => @packages)
-    account = bundle.account
+  test "whether vuln_bundle? diagnoses bundles correctly" do
+    account = FactoryGirl.create(:account)
+    vulnbundle = FactoryGirl.create(:bundle, :account => account,
+                                    :packages => @packages)
 
-    assert_equal true, VulnQuery.new(account).vuln_bundle?(bundle)
+    safebundle = FactoryGirl.create(:bundle, :account => account,
+                                    :packages => @not_vuln_packages)
+
+
+    assert_equal true, VulnQuery.new(account).vuln_bundle?(vulnbundle)
     account.notify_everything = true
-    assert_equal true, VulnQuery.new(account).vuln_bundle?(bundle)
+    assert_equal true, VulnQuery.new(account).vuln_bundle?(vulnbundle)
+
+    # and now for the safe bundle we reset
+    account.notify_everything = false
+
+    assert_equal false, VulnQuery.new(account).vuln_bundle?(safebundle)
+    account.notify_everything = true
+    assert_equal false, VulnQuery.new(account).vuln_bundle?(safebundle)
   end
 
    test "whether vuln_bundle? ignores unpatchable vulns" do
@@ -164,12 +190,12 @@ class VulnQueryTest < ActiveSupport::TestCase
 
     # by default we do not care about patchless
     results = VulnQuery.new(account).from_bundle(bundle).order(:id)
-    assert_equal results, [@vulnpkg1, @vulnpkg2, @vulnpkg4]
+    assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg4], results
 
     account.notify_everything = true
 
     results = VulnQuery.new(account).from_bundle(bundle).order(:id)
-    assert_equal results, [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4]
+    assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
 
   end
 
@@ -240,6 +266,61 @@ class VulnQueryTest < ActiveSupport::TestCase
       results.first.package.upgrade_to
       results.last.bundle.name
     end
-
   end
+
+  test "whether instance from_bundle respects resolution logs" do
+    account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, :account => account)
+    bundle = FactoryGirl.create(:bundle, :account => account,
+                                :packages => @packages)
+
+    # now we mark vulnpkg2 as resolved
+    
+    resolve_log = LogResolution.resolve_package!(user, @vulnpkg2)
+
+    results = VulnQuery.new(account).from_bundle(bundle).order(:id)
+
+    # contrast with from_bundle test above: should ignore vulnpkg3
+    # and now vulnpkg2
+    assert_equal [@vulnpkg1, @vulnpkg4], results
+  end
+
+  test "whether vuln_bundle? respects resolution logs" do
+    account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, :account => account)
+
+    bundle = FactoryGirl.create(:bundle, :account => account,
+                                :packages => [@vulnpkg2])
+    
+    vq = VulnQuery.new(account)
+    assert_equal true, vq.vuln_bundle?(bundle)
+ 
+    # now we mark vulnpkg2 as resolved
+    resolve_log = LogResolution.resolve_package!(user, @vulnpkg2)
+
+    assert_equal false, vq.vuln_bundle?(bundle)
+  end
+
+
+  test "whether vuln_server? respects resolution logs" do
+    account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, :account => account)
+
+    bundle = FactoryGirl.create(:bundle, :account => account,
+                                :packages => [@vulnpkg2])
+
+    server = FactoryGirl.create(:agent_server, :account => account,
+                       :bundles => [bundle])
+
+    
+    vq = VulnQuery.new(account)
+    assert_equal true, vq.vuln_server?(server)
+ 
+    # now we mark vulnpkg2 as resolved
+    resolve_log = LogResolution.resolve_package!(user, @vulnpkg2)
+
+    assert_equal false, vq.vuln_server?(server)
+  end
+
+
 end

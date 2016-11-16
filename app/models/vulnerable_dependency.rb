@@ -30,6 +30,7 @@
 class VulnerableDependency < ActiveRecord::Base
   belongs_to :vulnerability
   has_many :vulnerable_packages, :dependent => :destroy
+  has_many :log_resolutions
 
   validates :vulnerability_id, :presence => true
   validates :platform, :presence => true
