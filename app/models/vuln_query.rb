@@ -10,7 +10,7 @@
 
 
 class VulnQuery
-  attr_reader :account, :query_bundle, :filter_query
+  attr_reader :account, :query_bundle
 
   PROCS = {
     affected_bundle: -> (bundle) {
@@ -19,9 +19,6 @@ class VulnQuery
     patchable_bundle: -> (bundle) {
       bundle.patchable_packages
     },
-    filter_with_log: -> (aid, pkg_query) {
-      pkg_query.merge(LogResolution.filter_for(aid))
-    }
   }
 
   def initialize(account)
@@ -32,20 +29,10 @@ class VulnQuery
     else
       @query_bundle = PROCS[:patchable_bundle]
     end
-
-    @filter_query = PROCS[:filter_with_log].curry.(@account.id)
-  end
-
-  def uniq_and_include(pkg_query)
-    pkg_query.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
-  end
-
-  def limit_query(pkg_query)
-    pkg_query.limit(1).select(1)
   end
 
   def from_bundle(bundle)
-    uniq_and_include(filter_query.(query_bundle.(bundle)))
+    uniq_and_include(filter_with_log(query_bundle.(bundle)))
   end
 
   def vuln_server?(server)
@@ -55,7 +42,7 @@ class VulnQuery
   end
 
   def vuln_bundle?(bundle)
-    filter_query.(limit_query(query_bundle.(bundle))).any?
+    filter_with_log(limit_query(query_bundle.(bundle))).any?
   end
 
   def self.from_notifications(notifications, type)
@@ -70,6 +57,20 @@ class VulnQuery
   def care_about_affected?(acct)
     acct.notify_everything?
   end
+
+  # --- fns for filtering
+  def filter_with_log(pkg_query)
+    pkg_query.merge(LogResolution.filter_for(account.id))
+  end
+
+  def uniq_and_include(pkg_query)
+    pkg_query.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+  end
+
+  def limit_query(pkg_query)
+    pkg_query.limit(1).select(1)
+  end
+
 
   def self.from_patched_notifications(notification_rel)
     LogBundlePatch.joins(:notifications).merge(notification_rel).includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
