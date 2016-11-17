@@ -1259,7 +1259,8 @@ CREATE TABLE subscription_plans (
     monitor_limit integer,
     monitor_value integer,
     user_limit integer DEFAULT 5,
-    api_limit integer DEFAULT 0
+    api_limit integer DEFAULT 0,
+    free boolean DEFAULT false
 );
 
 
