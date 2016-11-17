@@ -13,7 +13,17 @@ class ChangeDefaultSubscriptionPlans < ActiveRecord::Migration
              ["Team",      49900, 50, 50, 500, 5, false],
              ["Startup",  299900, 500, 500, 5000, 1000, false]]
     plans.each do |name, price, agent_limit, monitor_limit, api_limit, user_limit, free|
-      SubscriptionPlan.find_or_create_by(:label => name, :value => price, :agent_limit => agent_limit, :monitor_limit => monitor_limit, :api_limit => api_limit, :user_limit => user_limit, :agent_value => 2500, :monitor_value => 1500, :free => free, :default => true)
+      SubscriptionPlan.find_or_create_by(:label => name) do |s|
+        s.value = price
+        s.agent_limit = agent_limit
+        s.monitor_limit = monitor_limit
+        s.api_limit = api_limit
+        s.user_limit
+        s.agent_value = 2500
+        s.monitor_value = 1500
+        s.free = free
+        s.default = true
+      end
     end
   end
 end
