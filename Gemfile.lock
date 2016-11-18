@@ -73,6 +73,9 @@ GEM
       sass (~> 3.4)
       thor
     builder (3.2.2)
+    bullet (5.4.2)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.10.0)
     byebug (3.5.1)
       columnize (~> 0.8)
       debugger-linecache (~> 1.2)
@@ -303,6 +306,7 @@ GEM
     unicorn-rails (2.2.0)
       rack
       unicorn
+    uniform_notifier (1.10.0)
     vcr (2.9.3)
     webmock (1.21.0)
       addressable (>= 2.3.6)
@@ -322,6 +326,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass (~> 3.3.3)
   bourbon
+  bullet
   capistrano (~> 3.4.0)
   capistrano-bundler (~> 1.1.2)
   capistrano-deploytags (~> 1.0.0)

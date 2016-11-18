@@ -43,4 +43,11 @@ Rails.application.configure do
 
   # plugin for emails
   config.action_mailer.delivery_method = :letter_opener
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    # Bullet.rails_logger = true
+  end
 end
