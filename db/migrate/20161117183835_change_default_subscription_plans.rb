@@ -2,10 +2,7 @@ class ChangeDefaultSubscriptionPlans < ActiveRecord::Migration
   # We've raised prices across the board
   def change
     # make all the existing ones not default
-    SubscriptionPlan.where(:default => true).all.each do |s|
-      s.default = false
-      s.save
-    end
+    SubscriptionPlan.where(:default => true).update_all(:default => false)
 
     # New plans
     plans = [["Free",          0, 1, 1, 10, 1, true],
