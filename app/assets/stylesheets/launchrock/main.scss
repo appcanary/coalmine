@@ -318,6 +318,14 @@ img {
     @include reset-display;
   }
 }
+ .enterprise-pricing {
+   text-align: right;
+   font-size: 1.2em;
+   padding-top: 10px;
+   margin-right: 2em;
+  }
+
+
 
 // deprecated
 .pricing {

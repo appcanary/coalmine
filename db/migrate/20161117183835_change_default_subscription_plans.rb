@@ -9,7 +9,7 @@ class ChangeDefaultSubscriptionPlans < ActiveRecord::Migration
 
     # New plans
     plans = [["Free",          0, 1, 1, 10, 1, true],
-             ["Individual", 9900, 5, 5, 10, 1, false],
+             ["Indie", 9900, 5, 5, 10, 1, false],
              ["Team",      49900, 50, 50, 500, 5, false],
              ["Company",  299900, 500, 500, 5000, 1000, false]]
     plans.each do |name, price, agent_limit, monitor_limit, api_limit, user_limit, free|
