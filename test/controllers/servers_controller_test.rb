@@ -11,7 +11,8 @@ class ServersControllerTest < ActionController::TestCase
     end
 
     it "should show the show page" do
-      FactoryGirl.create(:agent_server, :id => 1234, :account => user.account)
+      bundle = FactoryGirl.create(:bundle_with_packages, :account => user.account)
+      FactoryGirl.create(:agent_server, :id => 1234, :account => user.account, :bundles => [bundle])
       get :show, :id => "1234"
       assert_response :success
     end

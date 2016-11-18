@@ -56,6 +56,9 @@ class Bundle < ActiveRecord::Base
 
   scope :via_api, -> { where("agent_server_id is null") }
 
+  # TODO: change this method to affected?
+  # deeply confusing when using BundlePresenter, which is VQ aware
+  #
   # vuln at all is used by many serializers
   # to be determined if they should all switch to VulnQuery
   def vulnerable?

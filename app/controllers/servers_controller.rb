@@ -11,11 +11,12 @@ class ServersController < ApplicationController
   end
 
   def show
-    @serverpres = ServerPresenter.new(VulnQuery.new(current_account), server)
+    @vulnquery = VulnQuery.new(current_account)
+    @serverpres = ServerPresenter.new(@vulnquery, server)
     respond_to do |format|
       format.html
       format.csv do
-        vuln_reports = server.bundles.map { |b| [b, VulnQuery.new(current_account).from_bundle(b)] }
+        vuln_reports = server.bundles.map { |b| [b, @vulnquery.from_bundle(b)] }
         send_data *ServerExporter.new(server, vuln_reports).to_csv
       end
     end

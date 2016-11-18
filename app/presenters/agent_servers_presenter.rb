@@ -3,9 +3,9 @@ class AgentServersPresenter
     :account, :vulnquery
 
   delegate :any?, :to => :servers
-  def initialize(account, coll = nil)
+  def initialize(account, vulnquery, coll = nil)
     @account = account
-    @vulnquery = VulnQuery.new(account)
+    @vulnquery = vulnquery
 
     @servers = coll || @account.agent_servers
     @servers = @servers.map { |s| ServerPresenter.new(@vulnquery, s) }
