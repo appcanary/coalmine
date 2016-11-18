@@ -92,7 +92,7 @@ class NotificationPresenter
   # the same server together. if no server present, sort
   # them first! cos its a monitor
   def sort_and_wrap_logs(logs)
-    logs.map { |l| LogPresenter.new(l) }.sort_by { |l| l.bundle.agent_server_id || 0 }
+    logs.map { |l| LogPresenter.new(l) }.sort_by { |l| l.bundle.try(:agent_server_id) || 0 }
   end
 
   class LogPresenter
@@ -101,7 +101,7 @@ class NotificationPresenter
     end
 
     def has_server?
-      @log.bundle.agent_server
+      @log.bundle.try(:agent_server)
     end
 
     def bundle
@@ -109,7 +109,7 @@ class NotificationPresenter
     end
 
     def server
-      @log.bundle.agent_server
+      @log.bundle.try(:agent_server)
     end
 
     def package_name

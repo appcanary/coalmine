@@ -1,3 +1,42 @@
+#vulnerabilities_table {
+  .vulnerabilities {
+    ul {
+      list-style: none;
+      padding: 0;
+      li.vulnerability {
+        a {
+          display: block;
+          &:hover {
+          }
+        }
+      }
+    }
+  }
+
+}
+
+#vulnerable_packages {
+
+  .vulnerabilities {
+      ul {
+        list-style: none;
+        padding: 0;
+        li.vulnerability {
+          a {
+            display: block;
+            &:hover {
+            }
+          }
+        }
+      }
+    }
+
+    .mono {
+      font-family: monospace;
+    }
+
+}
+
 table.artifacts {
   td, th {
     padding: 1em 2em 1em 2em;
@@ -50,25 +89,26 @@ table.artifacts {
 }
 
 
+#vuln {
 
+  .vulnerability {
+    $label-width: 150px;
+    padding: 1.5em 3em 1.5em 1.5em;
+    dd, dt {
+      margin-bottom: 1em;
+    }
+    dt {
+      width: $label-width;
+      float: left;
+      text-align: right;
+    }
+    dd {
+      margin-left: $label-width + 10px;
+    }
 
-.vulnerability {
-  $label-width: 150px;
-  padding: 1.5em 3em 1.5em 1.5em;
-  dd, dt {
-    margin-bottom: 1em;
-  }
-  dt {
-    width: $label-width;
-    float: left;
-    text-align: right;
-  }
-  dd {
-    margin-left: $label-width + 10px;
-  }
-
-  .title {
-    font-weight: bold;
-    font-size: 1.1em;
+    .title {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
   }
 }

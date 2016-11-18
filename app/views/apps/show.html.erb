@@ -20,53 +20,62 @@
     <%= link_to "Export to CSV", server_path(@server, format: "csv"), class: "btn btn-default" %>
   </ul>
 
+
   <div class="tab-content">
-    <div id="vuln" role="tabpanel" class="tab-pane active">
-      <table id="vulnerable_packages" class="artifacts vulnerable">
+    <div role="tabpanel" class="tab-pane active">
+      <table id="vulnerabilities_table" class="table">
 
         <% if @bundle.vuln_packages.empty? %>
           <tr>
             <td class="empty_message">No vulnerable packages found for this app!</td>
           </tr>
         <% else %>
+          <thead>
+            <th>package name</th>
+            <th>vulnerabilities</th>
+            <th>current version</th>
+            <th>upgrade to</th>
+            <th></th>
+          </thead>
+
           <% @bundle.vuln_packages.each do |package| %>
-            <tr class="package">
-              <td class="info">
-                <div class="title data">
-                  <%= package.name %>
-                </div>
-                <div class="version">
-                  version
-                  <span class="data"><%= package.version %></span>
-                </div>
-                <div class="kind">
-                  kind:
-                  <span class="data"><%= package.platform %></span>
-                </div>
+
+            <tr>
+              <td class="col-md-3">
+                <span class="mono"><%= package.name %></span>
               </td>
-              <td class="vulnerabilities">
+             
+              <td class="vulnerabilities col-md-5">
                 <ul>
                   <% package.vulnerable_dependencies.each do |vuln| %>
                     <li class="vulnerability">
                       <p><%= link_to vuln.vulnerability_title, vuln_path(vuln.vulnerability) %></p>
 
-                      <% if vuln.patched_versions.present? %>
-                        <% if package.upgrade_to.present? %>
-                          <p class="upgrade_to"> Upgrade to <%= versions_in_english(package.upgrade_to) %></p>
-                        <% else %>
-                          <p class="upgrade_to"> No patches for your release exist right now. </p>
-                        <% end %>
-                        <% if false # vuln.remaining_versions.present? %>
-                          <p class="remaining_versions">Other patched versions include: <%= versions_in_english(vuln.remaining_versions) %></p>
-                        <% end %>
-                      <% else %>
-                        <p>No patches exist right now.</p>
-                      <% end %>
                     </li>
                   <% end %>
                 </ul>
+
               </td>
+
+               <td>
+                <code><%= package.version %></code>
+              </td>
+
+              <td>
+                <p class="upgrade_to"><%= versions_in_english(package.upgrade_to) %></p>
+              </td>
+              <td>
+                <%= form_tag ignore_vuln_monitors_path(package.id), method: :post do %>
+                  <%= hidden_field_tag :package_id, package.id %>
+
+                  <%= submit_tag "Mark Ignored", :class => "btn btn-danger" %>
+                <% end %>
+              </td>
+
             </tr>
+
+
+            
           <% end %>
         <% end %>
       </table>

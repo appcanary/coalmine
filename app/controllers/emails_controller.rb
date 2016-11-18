@@ -1,7 +1,7 @@
 class EmailsController < ApplicationController
   def index
-    @patch_emails = current_user.account.email_patcheds
-    @vuln_emails = current_user.account.email_vulnerables
+    @patch_emails = current_user.account.email_patcheds.order("sent_at desc")
+    @vuln_emails = current_user.account.email_vulnerables.order("sent_at desc")
   end
 
   def show

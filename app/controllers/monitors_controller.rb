@@ -42,4 +42,13 @@ class MonitorsController < ApplicationController
     end
   end
 
+  def ignore_vuln
+    if params[:package_id].present?
+      LogResolution.resolve_package!(current_user, Package.find(params[:package_id]))
+      redirect_to :back, notice: "done!"
+    else
+      redirect_to :back, notice: "something went wrong"
+    end
+  end
+
 end

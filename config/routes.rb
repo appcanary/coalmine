@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 
   resources :servers, :only => [:new, :show, :destroy, :edit, :update] do
     resources :apps, :only => [:index, :new, :show, :destroy]
+
     get "install", on: :collection
     get "deb", on: :collection
     get "rpm", on: :collection
@@ -76,7 +77,10 @@ Rails.application.routes.draw do
     delete "destroy_inactive" => "servers#destroy_inactive", :as => :destroy_inactive, :on => :collection
   end
 
-  resources :monitors, :only => [:new, :show, :destroy, :create]
+  resources :monitors, :only => [:new, :show, :destroy, :create] do
+    post "ignore_vuln/:package_id", action: :ignore_vuln, on: :collection, as: :ignore_vuln
+  end
+
   resources :vulns, :only => [:index, :show] do
     get "archive/:id" => "vulns#archive", :as => "archive"
   end
