@@ -27,20 +27,25 @@ class SubscriptionPlan < ActiveRecord::Base
     value / 100
   end
 
-  def unit_value_in_currency
-    unit_value / 100
+  def agent_value_in_currency
+    agent_value / 100
+  end
+
+  def monitor_value_in_currency
+    monitor_value / 100
   end
 
   def text
-    if limit == 0
-      "$#{self.unit_value_in_currency}/server/month #{label}".strip
+    if agent_limit == 0
+      "$#{self.agent_value_in_currency}/server/month #{label}".strip
     else
       "$#{self.value_in_currency}/month #{label}".strip
     end
   end
 
-  def cost(app_count)
-    app_cost = (([app_count, limit].max - limit) * unit_value) 
-    value + app_cost
+  def cost(agents, monitors)
+    agent_cost = (([agents, agent_limit].max - agent_limit) * agent_value)
+    monitor_cost = (([monitors, monitor_limit].max - monitor_limit) * monitor_value) 
+    value + agent_cost + monitor_cost
   end
 end
