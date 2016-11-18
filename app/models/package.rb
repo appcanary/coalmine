@@ -50,6 +50,9 @@ class Package < ActiveRecord::Base
     where(clauses.join(" OR "), *values.flatten)
   }
 
+  # affected means any package flagged at all.
+  # we join on vuln_dep rather than vuln_pkg to
+  # make chaining with VulnDep.patchable predictably easy
   scope :affected, -> {
     joins(:vulnerable_dependencies)
   }

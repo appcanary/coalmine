@@ -39,6 +39,16 @@ class Account < ActiveRecord::Base
 
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
 
+  scope :with_unnotified_vuln_logs, -> {
+    where(:id => LogBundleVulnerability.unnotified_logs.
+          select("distinct(bundles.account_id)"))
+  }
+
+  scope :with_unnotified_patch_logs, -> {
+    where(:id => LogBundlePatch.unnotified_logs.
+          select("distinct(bundles.account_id)"))
+  }
+
   # def active_servers
   #   agent_servers.active
   # end

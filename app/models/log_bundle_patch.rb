@@ -25,6 +25,12 @@
 #  index_of_six_kings_LBP                                (bundle_id,package_id,bundled_package_id,vulnerability_id,vulnerable_dependency_id,vulnerable_package_id) UNIQUE
 #
 
+# Creates historical record of when a bundle has stopped being 
+# associated with a vulnerability, and how.
+#
+# The supplementary flag tracks whether the change was
+# initiated by the system (i.e. new or changed vulnerability)
+# or by the user (i.e. bundle packages were changed).
 class LogBundlePatch < ActiveRecord::Base
   belongs_to :bundle
   belongs_to :package
@@ -35,11 +41,20 @@ class LogBundlePatch < ActiveRecord::Base
 
   has_many :notifications
 
-  scope :unnotified_logs_by_account, -> {
-    joins('INNER JOIN "bundles" ON "bundles"."id" = "log_bundle_patches"."bundle_id"
-          LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id
-          WHERE "notifications".id IS NULL').
-          pluck('"bundles".account_id, "log_bundle_patches".id log_bundle_patch_id')
+  # we want all LBPs that point to:
+  # 1. vuln_deps that currently exist (i.e. not since deleted)
+  # 2. bundles that currently exist
+  # 3. that have NOT already been put into a notification
+
+  scope :unnotified_logs, -> {
+    joins(:vulnerable_dependency).
+    joins(:bundle).
+    joins('LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id').
+    where('"notifications".id IS NULL')
+  }
+
+  scope :patchable, -> {
+    current_scope.merge(VulnerableDependency.patchable)
   }
 
 

@@ -1,16 +1,16 @@
 # This class should be sole entry point in entire system
-# for determining if something is "vulnerable"
+# for determining if something is "vulnerable".
 #
-# It can be called directly via class methods, or when 
-# instantiated with an account object it will conform to user's
-# expectations of what they care about.
+# When instantiated with an Account, this class figures out
+# what the Account has configured "vulnerable" to mean to them,
+# i.e. whether they want to know about packages w/o patches
 #
 # TODO: it assumes permissions check has been performed elsewhere
 # is that a good idea or should we check as well?
 
 
 class VulnQuery
-  attr_reader :account, :query_bundle
+  attr_reader :account, :query_bundle, :query_log
 
   PROCS = {
     affected_bundle: -> (bundle) {
@@ -19,6 +19,15 @@ class VulnQuery
     patchable_bundle: -> (bundle) {
       bundle.patchable_packages
     },
+    affected_unnotified_logs: -> (logklass, account) {
+      logklass.unnotified_logs.
+      where("bundles.account_id = ?", account.id)
+    },
+    patchable_unnotified_logs: -> (logklass, account) {
+      logklass.unnotified_logs.patchable.
+      where("bundles.account_id = ?", account.id)
+    }
+
   }
 
   def initialize(account)
@@ -26,13 +35,16 @@ class VulnQuery
 
     if care_about_affected?(@account)
       @query_bundle = PROCS[:affected_bundle]
+      @query_log = PROCS[:affected_unnotified_logs]
     else
       @query_bundle = PROCS[:patchable_bundle]
+      @query_log = PROCS[:patchable_unnotified_logs]
     end
   end
 
+  # ---- methods that give you the info you want
   def from_bundle(bundle)
-    uniq_and_include(filter_with_log(query_bundle.(bundle)))
+    uniq_and_include(filter_resolved(query_bundle.(bundle)))
   end
 
   def vuln_server?(server)
@@ -42,7 +54,34 @@ class VulnQuery
   end
 
   def vuln_bundle?(bundle)
-    filter_with_log(limit_query(query_bundle.(bundle))).any?
+    filter_resolved(limit_query(query_bundle.(bundle))).any?
+  end
+
+  def unnotified_vuln_logs
+    filter_resolved(query_log.(LogBundleVulnerability, account))
+  end
+
+  def unnotified_patch_logs
+    filter_resolved(query_log.(LogBundlePatch, account))
+  end
+
+  # --- effectively private methods
+
+  def care_about_affected?(acct)
+    acct.notify_everything?
+  end
+
+  # --- fns for filtering
+  def filter_resolved(query)
+    query.merge(LogResolution.filter_for(account.id))
+  end
+
+  def uniq_and_include(pkg_query)
+    pkg_query.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+  end
+
+  def limit_query(pkg_query)
+    pkg_query.limit(1).select(1)
   end
 
   def self.from_notifications(notifications, type)
@@ -54,23 +93,9 @@ class VulnQuery
     end
   end
 
-  def care_about_affected?(acct)
-    acct.notify_everything?
-  end
 
-  # --- fns for filtering
-  def filter_with_log(pkg_query)
-    pkg_query.merge(LogResolution.filter_for(account.id))
-  end
-
-  def uniq_and_include(pkg_query)
-    pkg_query.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
-  end
-
-  def limit_query(pkg_query)
-    pkg_query.limit(1).select(1)
-  end
-
+  # assumption is everything dumped into a notification
+  # has already been appropriately filtered.
 
   def self.from_patched_notifications(notification_rel)
     LogBundlePatch.joins(:notifications).merge(notification_rel).includes({package: :vulnerable_dependencies}, :vulnerability, :bundle)
