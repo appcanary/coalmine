@@ -2,19 +2,24 @@ class Admin::UsersController < AdminController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
 
   def index
-    @users = User.includes({account: [:bundles, :agent_servers, :active_servers, :monitors, :check_api_calls]}, {billing_plan: [:subscription_plan]})
+    @users = User.includes(:account, {billing_plan: [:subscription_plan]});
 
     @user_count = User.count
+    @tried_count = Account.have_tried_count
+    @paying_count = User.are_paying_count
+
     @servers_count = AgentServer.count
     @recent_heartbeats = AgentServer.active.count
     @app_count = Bundle.via_agent.count
     @active_app_count = Bundle.via_active_agent.count
     @monitor_count = Bundle.via_api.count
-    @total_revenue = @users.reduce([]) { |acc, u| acc << u.billing_plan if u.billing_plan; acc }.map(&:monthly_cost).reduce(&:+)
+
+    @total_revenue = BillingPlan.includes(:subscription_plan, user: :account).map(&:monthly_cost).reduce(&:+)
   end
 
   def new
     @user = User.new
+    set_billing_vars(@user)
   end
 
   def impersonate
@@ -23,9 +28,7 @@ class Admin::UsersController < AdminController
   end
 
   def show
-    @billing_manager = BillingManager.new(@user)
-    @billing_presenter = @billing_manager.to_presenter
-    @all_plans = SubscriptionPlan.all
+    set_billing_vars(@user)
   end
 
   def create
@@ -36,6 +39,7 @@ class Admin::UsersController < AdminController
         format.html { redirect_to admin_root_path }
         # format.json { render json: @user, status: :created, location: @user }
       else
+        set_billing_vars(@user)
         format.html { render :new }
         # format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
       end
@@ -77,6 +81,12 @@ class Admin::UsersController < AdminController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def set_billing_vars(user)
+    @billing_manager = BillingManager.new(user)
+    @billing_presenter = @billing_manager.to_presenter
+    @all_plans = SubscriptionPlan.all
   end
 
   def user_params

@@ -8,7 +8,7 @@ class AgentServerIndexSerializer < ActiveModel::Serializer
   has_many :bundles, :serializer => AgentBundlesIndexSerializer, unless: -> {object.bundles.empty? }, :key => "monitors"
 
   def vulnerable
-    object.bundles.any?(&:vulnerable?)
+    object.vulnerable?
   end
 end
 

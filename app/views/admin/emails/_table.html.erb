@@ -1,0 +1,69 @@
+<table class="table">
+  <thead>
+    <% if current_user.is_admin? %>
+      <th>
+        account
+      </th>
+    <% end %>
+    <th>
+      subject
+    </th>
+
+    <th>
+      # logs
+    </th>
+
+    <th>
+      # vulns
+    </th>
+
+     <th>
+      # unpatched
+    </th>
+
+    <th>
+      sent at
+    </th>
+
+    <th>
+      created at
+    </th>
+
+  </thead>
+  <% emails.each do |email| %>
+    <% msg = NotificationPresenter.new(email) %>
+    <tr>
+       <% if current_user.is_admin? %>
+      <td>
+        <%= email.account.email %>
+      </td>
+    <% end %>
+
+
+      <td>
+        <%= link_to msg.subject, admin_email_path(email.id) %>
+      </td>
+
+      <td>
+        <%= email.notifications.count %>
+      </td>
+
+      <td>
+        <%= msg.notifications_by_vuln.count %>
+      </td>
+
+      <td>
+        <%= msg.unpatched_notifications.count %>
+      </td>
+
+      <td>
+        <%= email.sent_at %>
+      </td>
+
+
+      <td>
+        <%= email.created_at %>
+      </td>
+    </tr>
+  <% end %>
+</table>

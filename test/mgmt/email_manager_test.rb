@@ -147,27 +147,17 @@ class EmailManagerTest < ActiveSupport::TestCase
     bundle1 = FactoryGirl.create(:bundle, :packages => packages1)
 
     # generate ourselves a vuln w/no patched versions
-    # yes, this is very clunky
 
     vuln_pkg1 = packages1.first
-    vuln1 = FactoryGirl.create(:vulnerability, :debian,
-                           :deps => [])
-    vd = FactoryGirl.create(:vulnerable_dependency,
-                            :vulnerability => vuln1,
-                            :platform => Platforms::Ruby,
-                            :package_name => vuln_pkg1.name,
-                            :patched_versions => [])
-
-    FactoryGirl.create(:vulnerable_package,
-                       :dep => vuln_pkg1, 
-                       :vulnerable_dependency => vd, 
-                       :vulnerability => vuln1)
-
-
-    # create a second vuln cos why not
+    unpatcheable_vuln = FactoryGirl.create(:vulnerability, :debian,
+                                           :patchless,
+                                           :pkgs => [vuln_pkg1], 
+                                           :deps => [])
+    
+    # create a second vuln that does have a patch
 
     vuln_pkg2 = packages1.second
-    vuln2 = FactoryGirl.create(:vulnerability, :pkgs => [vuln_pkg2])
+    vuln_w_patch = FactoryGirl.create(:vulnerability, :pkgs => [vuln_pkg2])
 
 
     Bundle.transaction do
@@ -181,11 +171,57 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal 1, EmailVulnerable.count
     assert_equal 1, Notification.count, "one notification per LBV"
 
-    assert_equal Notification.first.log_bundle_vulnerability_id, LogBundleVulnerability.order(:vulnerability_id).last.id
+    second_lbv = LogBundleVulnerability.order(:vulnerability_id).last
+
+    # the second vuln is patcheable one, and the one that got notified:
+    assert_equal Notification.first.log_bundle_vulnerability_id, second_lbv.id
+    assert_equal second_lbv.vulnerability_id, vuln_w_patch.id
+
+    # unnotified returns a [account_id, lbv_id] tuple
     unnotified = LogBundleVulnerability.unnotified_logs_by_account
     assert_equal 1, unnotified.count
+    
+    unnotified_lbv = LogBundleVulnerability.find(unnotified[0][1])
 
-    assert_equal LogBundleVulnerability.order(:vulnerability_id).first.id, unnotified[0][1]
+    assert_equal unpatcheable_vuln.id, unnotified_lbv.vulnerability_id
+
+    # ditto for patched notifications
+    # let's remove the first vuln from our bundle
+    assert_equal 0, LogBundlePatch.count
+
+    Bundle.transaction do
+      bundle1.packages = bundle1.packages[1..-1]
+      rm = ReportMaker.new(bundle1.id)
+      rm.on_bundle_change
+    end
+
+    assert_equal 1, LogBundlePatch.count
+
+    # let's see what happens when we try to queue
+    EmailManager.queue_patched_emails!
+
+    # the notification doesn't have any patches,
+    # so nothing should be generated.
+    assert_equal 0, EmailPatched.count
+    assert_equal 0, Notification.where("log_bundle_patch_id is not null").count
+    assert_equal 1, LogBundlePatch.unnotified_logs_by_account.count
+
+
+    # remove the second vuln, which does have a patch
+    Bundle.transaction do
+      bundle1.packages = bundle1.packages[1..-1]
+      rm = ReportMaker.new(bundle1.id)
+      rm.on_bundle_change
+    end
+    
+    assert_equal 2, LogBundlePatch.count
+    EmailManager.queue_patched_emails!
+
+    # one email created, still one log unnotified
+    assert_equal 1, EmailPatched.count
+    assert_equal 1, Notification.where("log_bundle_patch_id is not null").count
+    assert_equal 1, LogBundlePatch.unnotified_logs_by_account.count
+
   end
 
 end

@@ -1,9 +1,4 @@
 class BillingManager
-  DEFAULT_PLANS = [[2900, 5, "- Up to 5 servers"],
-                   [9900, 15, "- Up to 15 servers"],
-                   [29900, 50, "- Up to 50 servers"]]
-  DEFAULT_UNIT_VALUE = 900
-
   attr_accessor :user, :billing_plan
   def self.add_customer(stripe_token, user)
     self.new(user).add_customer(stripe_token)

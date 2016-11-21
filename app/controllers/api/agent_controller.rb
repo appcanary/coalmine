@@ -1,5 +1,8 @@
 # TODO: convert to a Form
 class Api::AgentController < ApiController
+  # This is used for logging dead agents (agents for deleted servers)
+  # It was named sigh because Phill was having a bad day
+  # TODO: move this to a table. Give things sane names
   def sigh
     @sigh ||= Logger.new(File.join(Rails.root, "log/agenttest.log"))
   end
@@ -87,7 +90,7 @@ class Api::AgentController < ApiController
     if bundle.nil?
       render :json => {}
     else
-      hash = VulnQuery.from_bundle(bundle).reduce({}) do  |hash, vp|
+      hash = VulnQuery.patchable_from_bundle(bundle).reduce({}) do  |hash, vp|
         hash[vp.name] = vp.upgrade_to.first
         hash
       end
@@ -112,6 +115,7 @@ class Api::AgentController < ApiController
   def log_faulty_request(server)
     server.received_files.create(account_id: current_account.id, 
                                  request: request.raw_post)
+   Raven.capture_message("Received faulty file from #{server.account.email}, server id: #{server.id}") 
 
   end
 

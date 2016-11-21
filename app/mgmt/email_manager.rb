@@ -37,23 +37,26 @@ class EmailManager < ServiceManager
     EmailMessage.transaction do
       account_and_lbvs = logklass.unnotified_logs_by_account
       logs_by_account = group_by_account(account_and_lbvs)
+      create_notifications!(logklass, emailklass, fkey, logs_by_account)
+    end
+  end
 
-      logs_by_account.each_pair do |aid, logs|
+  def self.create_notifications!(logklass, emailklass, fkey, logs_by_account)
+    logs_by_account.each_pair do |aid, logs|
 
-        # not every log is immediately notifiable
-        notifiable_logs = filter_logs(logs, logklass)
+      # not every log is immediately notifiable
+      notifiable_logs = filter_logs(logs, logklass)
 
-        # only create an email if we have anything to notify
-        if notifiable_logs.present?
-          email = emailklass.create!(:account_id => aid)
+      # only create an email if we have anything to notify
+      if notifiable_logs.present?
+        email = emailklass.create!(:account_id => aid)
 
-          notifiable_logs.each do |lid|
-            Notification.create!(:email_message_id => email.id,
-                                 fkey => lid)
-          end
+        notifiable_logs.each do |lid|
+          Notification.create!(:email_message_id => email.id,
+                               fkey => lid)
         end
-
       end
+
     end
   end
    
@@ -69,19 +72,15 @@ class EmailManager < ServiceManager
     end
   end
 
-  # purpose of this method is to ditch lbvs that don't have patches
-  # we select by (&:vuln_dep) to filter out any lbvs which
+  # purpose of this method is to ditch logs that don't have patches
+  # we select by (&:vuln_dep) to filter out any logs which
   # have since been edited upstream and are now irrelevant
   # TODO: handle LBVs that point to since-deleted vuln_deps
   def self.filter_logs(logs, klass)
-    if klass == LogBundleVulnerability
-      klass.includes(:vulnerable_dependency).find(logs).
-        select(&:vulnerable_dependency).select { |lbv|
-        lbv.vulnerable_dependency.patcheable?
-      }.map(&:id)
-    else
-      logs
-    end
+    klass.includes(:vulnerable_dependency).find(logs).
+      select(&:vulnerable_dependency).select { |lbv|
+      lbv.vulnerable_dependency.patchable?
+    }.map(&:id)
   end
 
   def self.group_by_account(arr)

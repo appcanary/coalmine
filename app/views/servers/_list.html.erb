@@ -1,7 +1,7 @@
 <td>
   <section>
     <div class="status">
-      <% if server.bundles.empty? || server.gone_silent? %>
+      <% if server.empty? || server.gone_silent? %>
         <span class="fa fa-question-circle"></span>
       <% elsif server.vulnerable? %>
         <span class="fa fa-exclamation-triangle warn"></span>

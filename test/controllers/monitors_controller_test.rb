@@ -49,6 +49,16 @@ class MonitorsControllerTest < ActionController::TestCase
       assert_response :success
       assert_equal false, assigns(:form).valid?
     end
+
+    it "should delete the bundle" do
+      bundle = FactoryGirl.create(:bundle, :account_id => user.account_id)
+      assert_equal 1, Bundle.count
+
+      delete :destroy, :id => bundle.id
+      assert_response :redirect
+
+      assert_equal 0, Bundle.count
+    end
   end
 
   describe "while unauthenticated" do

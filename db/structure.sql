@@ -206,7 +206,8 @@ CREATE TABLE accounts (
     token character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    datomic_id bigint
+    datomic_id bigint,
+    notify_everything boolean DEFAULT false NOT NULL
 );
 
 
@@ -1247,14 +1248,19 @@ CREATE TABLE schema_migrations (
 CREATE TABLE subscription_plans (
     id integer NOT NULL,
     value integer,
-    unit_value integer,
-    "limit" integer,
+    agent_value integer,
+    agent_limit integer,
     label character varying,
     comment character varying,
     "default" boolean DEFAULT false NOT NULL,
     discount boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    monitor_limit integer,
+    monitor_value integer,
+    user_limit integer DEFAULT 5,
+    api_limit integer DEFAULT 0,
+    free boolean DEFAULT false
 );
 
 
@@ -3347,4 +3353,10 @@ INSERT INTO schema_migrations (version) VALUES ('20161003155244');
 INSERT INTO schema_migrations (version) VALUES ('20161019151455');
 
 INSERT INTO schema_migrations (version) VALUES ('20161019181329');
+
+INSERT INTO schema_migrations (version) VALUES ('20161025191216');
+
+INSERT INTO schema_migrations (version) VALUES ('20161117181904');
+
+INSERT INTO schema_migrations (version) VALUES ('20161117183835');
 

@@ -1,8 +1,18 @@
 class NotificationPresenter
-  def initialize(type, account, query)
-    @type = type
-    @account = account
-    @notifications = query
+  attr_accessor :notifications_by_vuln, :unpatched_notifications
+  def initialize(msg)
+    case msg
+    when EmailPatched
+      @type = :patched
+    when EmailVulnerable
+      @type = :vuln
+    end
+
+    @msg = msg
+    @sent_date = msg.created_at
+
+    @account = msg.account
+    @notifications = VulnQuery.from_notifications(msg.notifications, @type)
 
     notifications_by_vuln = {}
     unpatched_notifications = {}
@@ -46,12 +56,12 @@ class NotificationPresenter
   end
 
   def subject_label
-    date_str = Time.now.strftime("%Y-%m-%d")
+    date_str = @sent_date.strftime("%Y-%m-%d")
     case @type
     when :vuln
       "%s vulnerabilities detected (#{date_str})"
     when :patched
-      "Fixed %s vulnerabilities patched (#{date_str})"
+      "Fixed: %s vulnerabilities patched (#{date_str})"
     end
   end
 

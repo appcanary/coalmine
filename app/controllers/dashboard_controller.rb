@@ -1,9 +1,9 @@
 class DashboardController < ApplicationController
   def index
-    @servers = AgentServer.belonging_to(current_user)
-    @api_bundles = Bundle.belonging_to(current_user).via_api
+    @servers = AgentServersPresenter.new(current_account)
+    @monitors = MonitorsPresenter.new(current_account)
 
-    wizard = OnboardWizard.new(current_user, @servers, @api_bundles)
+    wizard = OnboardWizard.new(current_user, @servers, @monitors)
 
 
     # TODO: in the future, keep track of whether ppl
@@ -15,8 +15,6 @@ class DashboardController < ApplicationController
       redirect_to onboarding_path
       return
     end
-
-    @silent_servers, @active_servers = @servers.partition(&:gone_silent?)
   end
 
   def history

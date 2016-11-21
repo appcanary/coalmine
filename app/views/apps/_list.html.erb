@@ -1,0 +1,23 @@
+<td>
+  <section>
+    <div class="status">
+      <% if app.vulnerable? %>
+        <span class="fa fa-exclamation-triangle warn"></span>
+      <% else %>
+        <span class="fa fa-check-circle okay"></span>
+      <% end %>
+    </div>
+    <div class="description">
+      <span class="title">
+        <%= link_to app.display_name, server_app_path(@server, app) %>
+      </span>
+    </div>
+  </section>
+</td>
+<td>
+  <section>
+    <div>
+      <%= link_to('delete', server_app_path(@server, app), method: :delete, class: 'btn btn-danger', data: {confirm: "Are you sure you want to delete this app?"}) %>
+    </div>
+  </section>
+</td>

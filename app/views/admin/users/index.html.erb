@@ -25,6 +25,12 @@ $( document ).ready(function() {
           Users
         </th>
         <th>
+          Tried
+        </th>
+        <th>
+          Paying
+        </th>
+        <th>
           Server Count
         </th>
         <th>
@@ -47,6 +53,12 @@ $( document ).ready(function() {
         <tr>
           <td>
             <%= @user_count %>
+          </td>
+          <td>
+            <%= @tried_count %>
+          </td>
+          <td>
+            <%= @paying_count %>
           </td>
           <td>
             <%= @servers_count %>
@@ -77,6 +89,9 @@ $( document ).ready(function() {
     <%= link_to "New user", new_admin_user_path, :class => "btn btn-default" %>
     <table class="table" id="users">
       <thead>
+        <th>
+          name
+        </th>
         <th>
           email
         </th>
@@ -115,6 +130,9 @@ $( document ).ready(function() {
       <tbody>
         <%- @users.each do |user| %>
           <tr>
+            <td>
+              <%= user.name %>
+            </td>
             <td>
               <%= user.email %>
             </td>

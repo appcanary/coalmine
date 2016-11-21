@@ -61,12 +61,14 @@ Rails.application.routes.draw do
   end
   resources :password_reset, :only => [:show, :update]
   
-  resource :settings, :only => [:show, :update]
+  resource :settings, :only => [:show, :update] do
+    patch 'reset_token', on: :collection
+  end
 
   resources :user_sessions, :only => [:create, :destroy]
 
   resources :servers, :only => [:new, :show, :destroy, :edit, :update] do
-    resources :apps, :only => [:index, :new, :show]
+    resources :apps, :only => [:index, :new, :show, :destroy]
     get "install", on: :collection
     get "deb", on: :collection
     get "rpm", on: :collection
@@ -80,6 +82,7 @@ Rails.application.routes.draw do
   end
 
   resources :logs, :only => :index
+  resources :emails, :only => [:index, :show]
 
   namespace :admin do
     root to: "users#index"
@@ -88,6 +91,7 @@ Rails.application.routes.draw do
     end
 
     resources :subscription_plans
+    resources :emails, :only => [:index, :show]
   end
 
   namespace :api do

@@ -38,7 +38,7 @@ class BillingPlan < ActiveRecord::Base
 
   def monthly_cost
     if cur_sub = self.subscription_plan
-      cur_sub.cost(user.active_servers_count + user.monitors_count)
+      cur_sub.cost(user.active_servers_count, user.monitors_count)
     else
       0
     end
@@ -50,7 +50,7 @@ class BillingPlan < ActiveRecord::Base
     # calling #subscriptions will deserialize the
     # existing fields. if it returns an empty value,
     # then let's load the default subscriptions.
-    unless self.subscription_plans.present?
+    unless self.available_subscription_plans.present?
       if self.user.discounted?
         self.subscription_plans = SubscriptionPlan.default_discount
       else

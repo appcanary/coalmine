@@ -50,6 +50,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_account
+    if current_user
+      current_user.account
+    end
+  end
+
   private
   def not_authenticated
     redirect_to login_path, alert: "Please login first!"

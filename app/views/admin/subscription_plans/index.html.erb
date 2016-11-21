@@ -12,12 +12,17 @@
         value
       </th>
       <th>
-        unit value
+        agent value
       </th>
       <th>
-        limit
+        monitor value
       </th>
-
+      <th>
+        agent_limit
+      </th>
+      <th>
+        monitor_limit
+      </th>
       <th>
         comment
       </th>
@@ -38,11 +43,19 @@
         </td>
 
         <td>
-          <%= number_to_currency asp.unit_value_in_currency %>
+          <%= number_to_currency asp.agent_value_in_currency %>
         </td>
 
         <td>
-          <%= asp.limit %>
+          <%= number_to_currency asp.monitor_value_in_currency %>
+        </td>
+
+        <td>
+          <%= asp.agent_limit %>
+        </td>
+
+        <td>
+          <%= asp.monitor_limit %>
         </td>
 
         <td>
