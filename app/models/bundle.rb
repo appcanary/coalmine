@@ -38,6 +38,7 @@ class Bundle < ActiveRecord::Base
 
   has_many :log_bundle_vulnerabilities
   has_many :log_bundle_patches
+  has_many :log_resolutions, :through => :bundled_packages
 
   validates :account, presence: true
   validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }

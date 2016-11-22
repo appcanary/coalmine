@@ -1045,6 +1045,7 @@ CREATE TABLE log_resolutions (
     id integer NOT NULL,
     account_id integer NOT NULL,
     user_id integer NOT NULL,
+    package_id integer NOT NULL,
     vulnerability_id integer NOT NULL,
     vulnerable_dependency_id integer NOT NULL,
     note character varying,
@@ -2758,6 +2759,13 @@ CREATE INDEX index_log_resolutions_on_account_id ON log_resolutions USING btree 
 
 
 --
+-- Name: index_log_resolutions_on_package_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_log_resolutions_on_package_id ON log_resolutions USING btree (package_id);
+
+
+--
 -- Name: index_log_resolutions_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2776,6 +2784,13 @@ CREATE INDEX index_log_resolutions_on_vulnerability_id ON log_resolutions USING 
 --
 
 CREATE INDEX index_log_resolutions_on_vulnerable_dependency_id ON log_resolutions USING btree (vulnerable_dependency_id);
+
+
+--
+-- Name: index_logres_account_vulndeps; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_logres_account_vulndeps ON log_resolutions USING btree (account_id, package_id, vulnerable_dependency_id);
 
 
 --

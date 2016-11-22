@@ -41,7 +41,7 @@ class VulnerableDependency < ActiveRecord::Base
           AND vulnerable_dependencies.unaffected_versions = '{}')")
   }
 
-  delegate :title, :to => :vulnerability, :prefix => true
+  delegate :title, :criticality, :to => :vulnerability, :prefix => true
   
   # strictly, is this a package from the same platform, release, arch?
   #

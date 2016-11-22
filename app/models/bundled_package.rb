@@ -25,6 +25,7 @@ class BundledPackage < ActiveRecord::Base
   belongs_to :bundle
 
   has_many :vulnerable_packages, :foreign_key => :package_id, :primary_key => :package_id
+  has_many :log_resolutions, :foreign_key => :package_id, :primary_key => :package_id
 
   scope :affected_by_vuln, -> (account_id, vuln_id) {
     joins("inner join bundles on bundles.id = bundled_packages.bundle_id
