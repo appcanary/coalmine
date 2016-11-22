@@ -1,7 +1,7 @@
 require 'open-uri'
 require 'zlib'
 class CveImporter < AdvisoryImporter
-  SOURCE = "cve-importer"
+  SOURCE = "cve"
   PLATFORM = Platforms::None
   CVE_URL = "https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-Modified.xml.gz"
   FIRST_IMPORT_URLS = ["https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-2002.xml.gz",
@@ -27,6 +27,7 @@ class CveImporter < AdvisoryImporter
   def self.first_import!
     # I don't love putting this here :S
     FIRST_IMPORT_URLS.each do |url|
+      puts url
       CveImporter.new(url).import!
     end
   end
