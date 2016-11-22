@@ -5,6 +5,8 @@ class AppsControllerTest < ActionController::TestCase
 
   setup do
     bundle = FactoryGirl.create(:bundle_with_packages, :account => user.account, :id => 1235)
+    vuln = FactoryGirl.create(:vulnerability, :pkgs => bundle.packages[0..1])
+    LogResolution.resolve_package!(user, bundle.packages[0])
     server = FactoryGirl.create(:agent_server, :account => user.account, :id => 1234, :bundles => [bundle])
   end
 
@@ -16,6 +18,7 @@ class AppsControllerTest < ActionController::TestCase
 
     it "should show the show page" do
       get :show, :server_id => 1234, :id => 1235
+
       assert_response :success
     end
 
