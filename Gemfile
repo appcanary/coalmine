@@ -13,13 +13,14 @@ gem 'rollout_postgres_store'
 
 
 # views / assets
-gem 'sass-rails', '~> 5.0'
-gem 'bootstrap-sass', '~> 3.3.3'
+gem 'sass-rails', require: false
+gem 'sassc-rails'
+gem 'bootstrap-sass', :git => "git@github.com:appcanary/bootstrap-sass.git"
 gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
 gem "font-awesome-rails"
-gem "bourbon"
-gem "neat"
+gem "bourbon", :git => "git@github.com:appcanary/bourbon.git", :branch => "v4-stable"
+gem "neat", :git => "git@github.com:appcanary/neat.git"
 gem "htmlentities"
 gem 'haml', '~> 4.0.6'
 gem 'redcarpet'
@@ -90,6 +91,7 @@ group :development, :test do
   gem 'faker'
   gem 'factory_girl_rails'
   gem 'fixtures_dumper'
+  gem 'foreman'
 end
 
 group :test do
