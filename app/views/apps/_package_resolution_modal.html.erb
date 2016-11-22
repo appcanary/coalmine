@@ -1,0 +1,72 @@
+<div class="modal fade" id="modal-<%=package.id%>" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Mark package as resolved</h4>
+      </div>
+      <%= form_for LogResolution.new, url: resolve_vuln_monitors_path(package.id), method: :post do |f| %>
+        <%= f.hidden_field :package_id, value: package.id %>
+        <div class="modal-body">
+
+          <table class="table">
+            <thead>
+              <th>
+                package
+              </th>
+              <th>
+                version
+              </th>
+            </thead>
+            <tr>
+              <td>
+                <span class="fixed-width"><%= package.name %></span>
+              </td>
+              <td>
+                <code><%= package.version %></code>
+              </td>
+            </tr>
+          </table>
+
+          <p>
+            By marking this package as resolved, you will no longer receive notifications that concern this package and the vulnerabilities listed below. You can undo this action!
+          </p>
+
+
+          <table class="table">
+            <thead>
+              <th>
+                vulnerability
+              </th>
+              <th>
+                criticality
+              </th>
+            </thead>
+            <% package.vulnerable_dependencies.each do |vuln| %>
+              <tr>
+                <td>
+                  <%= link_to vuln.vulnerability_title, vuln_path(vuln.vulnerability) %>
+                </td>
+                <td>
+                  <%= vuln.vulnerability_criticality %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+
+
+          <div class="form-group">
+          </div>
+          <div class="form-group">
+            <%= f.label :note, "Note:" %>
+            <%= f.text_area :note, :class => "form-control", :placeholder => "An optional, short explanatory message, i.e. 'fixed in configuration' or 'not exploitable'." %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <%= f.submit "Mark as resolved", class: "btn btn-danger" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
