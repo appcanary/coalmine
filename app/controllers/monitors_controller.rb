@@ -42,13 +42,20 @@ class MonitorsController < ApplicationController
     end
   end
 
-  def ignore_vuln
-    if params[:package_id].present?
-      LogResolution.resolve_package!(current_user, Package.find(params[:package_id]))
-      redirect_to :back, notice: "done!"
-    else
-      redirect_to :back, notice: "something went wrong"
-    end
+  def resolve_vuln
+    pkg = Package.find(resolution_params[:package_id])
+    LogResolution.resolve_package!(current_user, pkg, resolution_params[:note])
+    redirect_to :back, notice: "Package successfully marked as resolved."
+  end
+
+  def unresolve_vuln
+    pkg = Package.find(resolution_params[:package_id])
+    LogResolution.delete_with_package!(current_user, pkg)
+    redirect_to :back, notice: "Package successfully marked as not resolved."
+  end
+
+  def resolution_params
+    params.require(:log_resolution).permit(:package_id, :note)
   end
 
 end
