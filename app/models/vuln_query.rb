@@ -73,7 +73,7 @@ class VulnQuery
 
   # --- fns for filtering
   def filter_resolved(query)
-    query.merge(LogResolution.filter_for(account.id))
+    LogResolution.filter_query_for(query, account.id)
   end
 
   def uniq_and_include(pkg_query)

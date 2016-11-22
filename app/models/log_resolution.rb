@@ -5,15 +5,17 @@ class LogResolution < ActiveRecord::Base
   belongs_to :vulnerability
   belongs_to :vulnerable_dependency
 
-  scope :filter_for, -> (account_id) {
+  scope :filter_query_for, -> (query, account_id) {
+    primary_key = query.klass.resolution_log_primary_key
     sane_account_id = sanitize(account_id)
 
-    joins("LEFT JOIN log_resolutions ON
+    merge_scope = joins("LEFT JOIN log_resolutions ON
       log_resolutions.vulnerable_dependency_id = vulnerable_dependencies.id AND
-      log_resolutions.package_id = packages.id AND
+      log_resolutions.package_id = #{primary_key} AND
       log_resolutions.account_id = #{sane_account_id}").
     where("log_resolutions.id is null")
 
+    query.merge(merge_scope)
   }
 
   def self.resolve!(user, pkg, vuln_dep, note = nil)

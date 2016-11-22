@@ -162,4 +162,8 @@ class LogBundlePatch < ActiveRecord::Base
                  :occurred_at => lbp.occurred_at)
     end
   end
+
+  def self.resolution_log_primary_key
+    "log_bundle_patches.package_id"
+  end
 end

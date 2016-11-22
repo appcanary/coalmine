@@ -190,5 +190,8 @@ class Package < ActiveRecord::Base
   def to_pkg_builder
     Parcel.from_package(self)
   end
-
+  
+  def self.resolution_log_primary_key
+    "packages.id"
+  end
 end
