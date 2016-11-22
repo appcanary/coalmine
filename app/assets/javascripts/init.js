@@ -1,6 +1,8 @@
 window.jQuery = window.$ = require('jquery');
 require('jquery-ujs');
 
+require('bootstrap/dist/js/bootstrap.js');
+
 $(document).ready(function() {
     $('#payment-form').submit(function(event) {
       var $form = $(this);
@@ -25,7 +27,11 @@ $(document).ready(function() {
     });
 });
 
-var hljs = require('highlight.js')
+// var hljs = require('highlight.js')
+var hljs = require('highlight.js/lib/highlight.js')
+hljs.registerLanguage('bash', require('highlight.js/lib/languages/bash'));
+hljs.registerLanguage('json', require('highlight.js/lib/languages/json'));
+
 $(document).ready(function() {
   $('#docs pre').each(function(i, block) {
     hljs.highlightBlock(block);
@@ -59,7 +65,7 @@ $(document).ready(function() {
 
 
   if($("#payment-form .card-wrapper").length > 0) {
-    require('card');
+    require('card/lib/js/card.js');
     var card_form = new Card({form: '#payment-form', container: ".card-wrapper"})
   }
 
