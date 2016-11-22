@@ -47,15 +47,14 @@ class Bundle < ActiveRecord::Base
     where(:account_id => user.account_id)
   }
 
-  scope :via_agent, -> {
-    where("agent_server_id is not null")
-  }
-
   scope :via_active_agent, -> {
     joins(:agent_server).merge(AgentServer.active)
   }
 
-  scope :via_api, -> { where("agent_server_id is null") }
+  # TODO: elimite from_api
+  scope :via_api, -> { where("bundles.agent_server_id is null") }
+
+  scope :via_agent, -> { where("bundles.agent_server_id is not null") }
 
   # TODO: change this method to affected?
   # deeply confusing when using BundlePresenter, which is VQ aware

@@ -25,13 +25,15 @@ class SubscriptionPlanTest < ActiveSupport::TestCase
   test "that we calculate the monthly cost correctly" do
 
     sub = SubscriptionPlan.new(:value => 1000,
-                               :unit_value => 100,
-                               :limit => 10)
+                               :agent_value => 100,
+                               :agent_limit => 10,
+                               :monitor_value => 200,
+                               :monitor_limit => 10)
 
-    assert_equal sub.cost(0), 1000
-    assert_equal sub.cost(1), 1000
-    assert_equal sub.cost(10), 1000
-    assert_equal sub.cost(11), 1100
-    assert_equal sub.cost(20), 2000
+    assert_equal sub.cost(0,0), 1000
+    assert_equal sub.cost(1,1), 1000
+    assert_equal sub.cost(10,10), 1000
+    assert_equal sub.cost(11,10), 1100
+    assert_equal sub.cost(10,11), 1200
   end
 end

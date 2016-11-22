@@ -22,7 +22,11 @@ class Account < ActiveRecord::Base
   has_many :agent_servers
   has_many :active_servers, -> { active }, :class_name => AgentServer
   has_many :bundles
-  has_many :monitors, -> { where(:from_api => true) }, :class_name => Bundle
+  has_many :server_bundles, -> { via_agent }, :class_name => Bundle
+  has_many :active_server_bundles, -> { joins(:agent_server).merge(AgentServer.active) }, :class_name => Bundle
+
+  has_many :api_bundles, -> { via_api }, :class_name => Bundle
+  has_many :monitors, -> { via_api }, :class_name => Bundle
 
   has_many :log_bundle_vulnerabilities, :through => :bundles
   has_many :log_bundle_patches, :through => :bundles
@@ -49,9 +53,14 @@ class Account < ActiveRecord::Base
           select("distinct(bundles.account_id)"))
   }
 
-  # def active_servers
-  #   agent_servers.active
-  # end
+   
+  def self.have_tried_count
+    self.count_by_sql("SELECT count(distinct(accounts.id)) FROM accounts WHERE EXISTS
+                      (SELECT 1 FROM agent_servers WHERE agent_servers.account_id = accounts.id limit 1) OR EXISTS
+                      (SELECT 1 FROM bundles WHERE bundles.account_id = accounts.id limit 1) OR EXISTS
+                      (SELECT 1 FROM log_api_calls WHERE log_api_calls.account_id = accounts.id and action = 'check/create' limit 1)")
+  end
+
 
   def api_bundles
     bundles.where(:from_api => true)
@@ -69,6 +78,7 @@ class Account < ActiveRecord::Base
     self.datomic_id || self.id
   end
 
+  # select count(account_id) from accounts joins an
   def tried_product?
     self.agent_servers.count > 0 || self.server_bundles.count > 0 || self.check_api_calls.count > 0
   end

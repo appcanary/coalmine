@@ -19,7 +19,7 @@
 FactoryGirl.define do
   factory :billing_plan do
     monthly_value "9.99"
-    unit_value "9.99"
+    agent_value "9.99"
     plan_labels ""
     plan_values ""
   end

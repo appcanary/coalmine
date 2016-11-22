@@ -7,6 +7,7 @@ gem 'rails', '4.2.6'
 gem 'pg'
 gem 'rollout'
 gem 'rollout_postgres_store'
+gem 'que', '~> 0.12.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -75,7 +76,6 @@ gem 'binding_of_caller'
 #parsers
 gem "msgpack"
 
-gem 'que', '~> 0.12.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -107,4 +107,5 @@ group :development do
   gem 'spring'
   gem 'annotate'
   gem 'letter_opener'
+  gem 'bullet'
 end
