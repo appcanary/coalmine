@@ -32,6 +32,8 @@ module CanaryWeb
 
     # custom errors
     config.exceptions_app = self.routes
+
+    config.active_job.queue_adapter = :que
   end
 end
 
