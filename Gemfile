@@ -8,6 +8,7 @@ gem 'pg'
 gem 'rollout'
 gem 'rollout_postgres_store'
 gem 'que', '~> 0.12.0'
+gem 'whenever', :require => false
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby

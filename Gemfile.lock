@@ -96,6 +96,7 @@ GEM
       capistrano-bundler (~> 1.1)
     capistrano-rails-console (1.0.2)
       capistrano (>= 3.1.0, < 4.0.0)
+    chronic (0.10.2)
     coderay (1.1.0)
     columnize (0.9.0)
     concurrent-ruby (1.0.2)
@@ -311,6 +312,8 @@ GEM
     webmock (1.21.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
+    whenever (0.9.7)
+      chronic (>= 0.6.3)
     will_paginate (3.1.5)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -371,6 +374,7 @@ DEPENDENCIES
   unicorn-rails
   vcr (~> 2.9.3)
   webmock (~> 1.21.0)
+  whenever
   will_paginate
   will_paginate-bootstrap
 

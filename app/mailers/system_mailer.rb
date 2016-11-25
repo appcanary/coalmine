@@ -20,4 +20,24 @@ class SystemMailer < ActionMailer::Base
     mail(to: "hello@appcanary.com", :subject => "Subscription canceled by #{@user.email}", :body => "")
   end
 
+  def system_report
+    env_prefix = ""
+    if !Rails.env.production?
+      env_prefix = "[#{Rails.env}] "
+    end
+
+    @date = 7.days.ago
+    @today = Date.today.iso8601
+    @new_user_ct = User.where("created_at > ?", @date).count
+    @new_vuln_ct = Vulnerability.where("created_at > ?", @date).group(:platform).count
+    @new_vulns_detected = LogBundleVulnerability.where("created_at > ?", @date).count
+    @new_patches_detected = LogBundlePatch.where("created_at > ?", @date).count
+    @new_patch_emails_sent = EmailPatched.sent.where("created_at > ?", @date).count
+    @new_vuln_emails_sent = EmailVulnerable.sent.where("created_at > ?", @date).count
+
+    @total_revenue = BillingPlan.includes(:subscription_plan, user: :account).map(&:monthly_cost).reduce(&:+)
+
+    mail(to: "hello@appcanary.com", :subject => "#{env_prefix}sysreport #{@today}")
+  end
+
 end
