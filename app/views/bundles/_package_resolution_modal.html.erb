@@ -42,13 +42,13 @@
                 criticality
               </th>
             </thead>
-            <% package.vulnerable_dependencies.each do |vuln| %>
+            <% package.vulnerabilities.each do |vuln| %>
               <tr>
                 <td>
-                  <%= link_to vuln.vulnerability_title, vuln_path(vuln.vulnerability) %>
+                  <%= link_to vuln.title, vuln_path(vuln) %>
                 </td>
                 <td>
-                  <%= vuln.vulnerability_criticality %>
+                  <%= vuln.criticality %>
                 </td>
               </tr>
             <% end %>

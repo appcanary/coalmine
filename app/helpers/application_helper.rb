@@ -23,7 +23,7 @@ module ApplicationHelper
   end
 
   def eui_button(value, opt = {})
-    btn_type = "eui-button-medium-default"
+    btn_type = opt[:type] || "eui-button-medium-default"
     disabled = opt[:disabled] ? "eui-disabled" : nil
     klass = opt[:class] ? opt[:class] : nil
     content_tag("eui-button", :class => "ember-view #{btn_type} #{disabled} #{klass}") do
