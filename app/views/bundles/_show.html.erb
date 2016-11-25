@@ -52,51 +52,34 @@
           <% @bundlepres.vuln_packages.each do |package| %>
             <% vulns = package.vulnerabilities.sort_by(&:criticality_ordinal) %>
             
-            <% rowspan = vulns.count <= 5 ? vulns.count  :  6 %>
             <tr>
-              <td class="package-name col-md-3" rowspan="<%= rowspan %>">
+              <td class="package-name col-md-3">
                 <%= package.name %>
               </td>
-              <td class="package-version" rowspan="<%= rowspan %>">
+              <td class="package-version">
                 <code><%= package.version %></code>
               </td>
-              <td class="package-upgrade-to" rowspan="<%= rowspan %>">
+              <td class="package-upgrade-to">
                 <p class="upgrade_to"><%= versions_in_english(package.upgrade_to) %></p>
               </td>
               <td>
                 <%= vulns.first.criticality %>
               </td>
               <td class="col-md-4">
-                <%= link_to vulns.first.title, vuln_path(vulns.first) %>
-              </td>
+                <%= vulns[0..4].map do |vuln| %>
+                  <% link_to vuln.title, vuln_path(vuln) %>
+                  <% end.join(", ").html_safe %>
+                  <% if (vcount = vulns.count) > 5 %>
+                    
+                    and <%= vcount - 5 %> more.
+                  <% end %>
+                </td>
 
-              <td rowspan="<%= rowspan %>">
-                <%#= render :partial => "bundles/package_resolution_modal", :locals => { :package => package } %>
-                <% if vulns.count == 1 %>
-                  <%= eui_button "Mark resolved", :type => "eui-button-small-warning", data_toggle: "modal", data_target: "#modal-#{package.id}", aria_haspopup: "true", aria_expanded: false %>
-                <% else %>
-                  <%= eui_button "Mark all resolved", :type => "eui-button-small-warning", data_toggle: "modal", data_target: "#modal-#{package.id}", aria_haspopup: "true", aria_expanded: false %>
-                <% end %>
+              <td>
+                <%= render :partial => "bundles/package_resolution_modal", :locals => { :package => package } %>
+                <%= eui_button "Mark resolved", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{package.id}", "aria-haspopup": "true", "aria-expanded": false} %>
               </td>
             </tr>
-            <% vulns[1..4].each do |v| %>
-              <tr>
-                <td>
-                  <%= v.criticality %>
-                </td>
-                <td class="col-md-4">
-                  <%= link_to v.title, vuln_path(v) %>
-                </td>
-            <% end %>
-            <% if vulns.count > 5 %>
-            <tr>
-              <td>
-              </td>
-              <td>
-                see more
-              </td>
-            </tr>
-<% end %>
           <% end %>
         <% end %>
       </table>
