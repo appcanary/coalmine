@@ -1,0 +1,5 @@
+--ignore-file=is:main.bundle.js.map,main.bundle.js
+--ignore-file=is:main.bundle.js
+--ignore-dir=bak/
+--ignore-dir=tmp/
+--ignore-dir=public/assets/

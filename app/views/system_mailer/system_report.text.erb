@@ -1,0 +1,29 @@
+Hello,
+
+This report summarizes activity between <%= @today %> and <%= @date.to_date.iso8601 %>.
+
+Since <%= @date.to_date.iso8601 %>, we have:
+
+---
+Users:
+
+<%= @new_user_ct %> new signups
+<%= @new_server_ct %> new servers
+<%= @new_bundle_ct %> new bundles
+<%= @total_revenue %> total revenue
+
+---
+Email:
+
+<%= @new_vuln_emails_sent %> new vuln emails
+<%= @new_patch_emails_sent %> new patch emails
+
+---
+System:
+
+<% @new_vuln_ct.each_pair do |platform, ct| %>
+  <%= ct %> new <%= platform %> vulns
+<% end %>
+
+<%= @new_vulns_detected %> new log_bundle_vulns
+<%= @new_patches_detected %> new log_bundle_patches

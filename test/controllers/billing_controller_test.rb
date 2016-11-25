@@ -35,7 +35,14 @@ class BillingControllerTest < ActionController::TestCase
       VCR.use_cassette("new_stripe_customer") do
         token = create_token
         user.build_billing_plan
+        
+        assert_equal 0, ActiveJob::Base.queue_adapter.enqueued_jobs.count
         put :update, user: { stripe_token: token.id, subscription_plan: user.billing_plan.subscription_plans.first.id }
+
+        assert_equal 1, ActiveJob::Base.queue_adapter.enqueued_jobs.count
+        # clean up for next test
+        ActiveJob::Base.queue_adapter.enqueued_jobs.pop
+
         assert_equal true, user.stripe_customer_id.present?
         assert_redirected_to dashboard_path
       end
@@ -47,7 +54,11 @@ class BillingControllerTest < ActionController::TestCase
       user.stripe_customer_id = "test"
       user.save!
 
+      assert_equal 0, ActiveJob::Base.queue_adapter.enqueued_jobs.count
       put :update, user: { subscription_plan: BillingPresenter::CANCEL }
+      assert_equal 1, ActiveJob::Base.queue_adapter.enqueued_jobs.count
+      # clean up for next test
+      ActiveJob::Base.queue_adapter.enqueued_jobs.pop
 
       assert user.stripe_customer_id.blank?
       assert user.subscription_plan.blank?
