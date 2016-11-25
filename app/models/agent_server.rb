@@ -47,6 +47,8 @@ class AgentServer < ActiveRecord::Base
     joins(:heartbeats).where('"agent_heartbeats".created_at > ?', ACTIVE_WINDOW.ago).distinct("agent_servers.id")
   }
 
+  # TODO: figure out inactive scope
+  
   def last_heartbeat_at
     last_heartbeat.try(:created_at)
   end
