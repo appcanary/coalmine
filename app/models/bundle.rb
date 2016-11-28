@@ -84,7 +84,7 @@ class Bundle < ActiveRecord::Base
   end
 
   def patchable_packages
-    self.packages.affected_and_patchable
+    self.packages.affected_but_patchable
   end
 
   def display_name
