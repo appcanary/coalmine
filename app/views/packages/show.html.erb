@@ -1,0 +1,79 @@
+<div id="package-show">
+  <section>
+    <div class="col-sm-12">
+      <h1>Packages
+      </h1>
+    </div>
+  </section>
+  <section>
+    <div class="col-sm-4">
+      <h3>Metadata</h3>
+      <table class="table">
+        <tr>
+          <td><label>Platform</label></td>
+          <td>
+            <%= platform_icon(@package.platform) %>
+          </td>
+        </tr>
+        <tr>
+          <td><label>Release</label></td>
+          <td>
+            <%= @package.release || "n/a" %>
+          </td>
+        </tr>
+
+        <tr>
+          <td><label>First seen</label></td>
+          <td>
+            <%= @package.created_at.strftime("%Y-%m-%d") %>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="col-sm-8 package-details">
+      <h3 class="pull-left fixed-width"><%= @package.name %></h3>
+      <% if @vulns.any? %>
+        <h3 style="text-align: right;" class="fixed-width"><code><%= @package.version %></code></h3>
+      <% else %>
+        <h3 style="text-align: right;" class="fixed-width"><%= @package.version %></h3>
+      <% end %>
+      <hr/>
+      <h4 class="package-upgrade-to">You should upgrade to at least: <code><%= @package.upgrade_to.first %></code></h4>
+
+      <% if @vulns.any? %>
+        <p>This package is susceptible to the following vulnerabilities:</p>
+
+        <table class="table">
+          <thead>
+            <th>
+              title
+            </th>
+            <th>
+              criticality
+            </th>
+            <th>
+              date
+            </th>
+          </thead>
+          <% @vulns.each do |vuln| %>
+            <tr>
+              <td>
+                <%= link_to vuln.title, vuln_path(vuln) %>
+              </td>
+              <td>
+                <%= vuln.criticality %>
+              </td>
+              <td>
+                <%= vuln.reported_at.strftime("%Y-%m-%d") %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% else %>
+        <h5>At present, no vulnerabilities have been recording against this version.</h5>
+      <% end %>
+      
+    </div>
+  </section>
+</div>
