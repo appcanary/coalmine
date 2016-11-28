@@ -42,10 +42,10 @@
         <% else %>
           <thead>
             <th>package name</th>
+            <th>priority</th>
+            <th>vulnerabilities</th>
             <th>current version</th>
             <th>upgrade to</th>
-            <th>priority</th>
-            <th>vulnerability</th>
             <th></th>
           </thead>
 
@@ -56,28 +56,33 @@
               <td class="package-name col-md-3">
                 <%= package.name %>
               </td>
-              <td class="package-version">
-                <code><%= package.version %></code>
-              </td>
-              <td class="package-upgrade-to">
-                <p class="upgrade_to"><%= versions_in_english(package.upgrade_to) %></p>
-              </td>
               <td>
                 <%= vulns.first.criticality %>
               </td>
-              <td class="col-md-4">
-                <%= vulns[0..4].map do |vuln| %>
-                  <% link_to vuln.title, vuln_path(vuln) %>
-                  <% end.join(", ").html_safe %>
-                  <% if (vcount = vulns.count) > 5 %>
-                    
-                    and <%= vcount - 5 %> more.
-                  <% end %>
-                </td>
+
+              <td class="col-md-4 package-vulnerabilities">
+                <%= vulns[0..3].map do |vuln| %>
+                  <% link_to(h(vuln.title), vuln_path(vuln), target: "_blank")  %>
+                <% end.join(", <br/>").html_safe %>
+
+                <% if (vcount = vulns.count) > 4 %>
+                  <br/>
+                  ... and <%= link_to "#{vcount - 4} more <i class='fa fa-angle-double-right'></i>".html_safe, show_package_path(package), target: "_blank" %>
+                <% end %>
+              </td>
+
+              <td class="package-version">
+                <code><%= package.version %></code>
+              </td>
+
+              <td class="package-upgrade-to">
+                <p class="upgrade_to"><%= versions_in_english(package.upgrade_to) %></p>
+              </td>
+
 
               <td>
-                <%= render :partial => "bundles/package_resolution_modal", :locals => { :package => package } %>
-                <%= eui_button "Mark resolved", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{package.id}", "aria-haspopup": "true", "aria-expanded": false} %>
+                <%= render :partial => "bundles/package_resolution_modal", :locals => { :package => package, :vulns => vulns } %>
+                <%= eui_button "Mark resolved", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{dom_id(package)}", "aria-haspopup": "true", "aria-expanded": false} %>
               </td>
             </tr>
           <% end %>
