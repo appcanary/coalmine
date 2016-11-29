@@ -77,7 +77,7 @@ class VulnQuery
   end
 
   def uniq_and_include(pkg_query)
-    pkg_query.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+    pkg_query.distinct.preload(:vulnerable_dependencies,:vulnerabilities)
   end
 
   def limit_query(pkg_query)

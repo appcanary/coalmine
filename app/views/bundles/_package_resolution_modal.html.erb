@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-<%=package.id%>" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal-<%=dom_id(package)%>" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -29,30 +29,20 @@
           </table>
 
           <p>
-            By marking this package as resolved, you will no longer receive notifications that concern this package and the vulnerabilities listed below. You can undo this action!
+            By marking this package as resolved, you will no longer receive notifications that concern this package version and any of the <%= link_to "#{vulns.count} vulnerabilities that currently affect this package", show_package_path(package), target: "_blank"%>.</p>
+          <p><strong>Please note:</strong>
+            <ol>
+              <li>
+                You can undo this action!
+              </li>
+              <li>
+                You will be notified when this package is affected by a new vulnerability.
+              </li>
+              <li>
+                Resolving a package is global: this will impact any other servers or monitors that also have this package version.
+              </li>
+            </ol>
           </p>
-
-
-          <table class="table">
-            <thead>
-              <th>
-                vulnerability
-              </th>
-              <th>
-                criticality
-              </th>
-            </thead>
-            <% package.vulnerable_dependencies.each do |vuln| %>
-              <tr>
-                <td>
-                  <%= link_to vuln.vulnerability_title, vuln_path(vuln.vulnerability) %>
-                </td>
-                <td>
-                  <%= vuln.vulnerability_criticality %>
-                </td>
-              </tr>
-            <% end %>
-          </table>
 
 
           <div class="form-group">

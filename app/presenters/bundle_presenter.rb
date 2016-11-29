@@ -13,7 +13,7 @@ class BundlePresenter
   end
 
   def vuln_packages
-    @vuln_packages ||= vulnquery.from_bundle(bundle).to_a
+    @vuln_packages ||= vulnquery.from_bundle(bundle).order(:name).to_a
   end
 
   def all_packages
@@ -23,6 +23,4 @@ class BundlePresenter
   def ignored_package_logs
     @ignored_packages ||= bundle.log_resolutions.select("count(log_resolutions.vulnerable_dependency_id) vuln_count", :user_id, :package_id, :note).group(:package_id, :user_id, :note).includes(:package, :user).to_a
   end
-
-
 end

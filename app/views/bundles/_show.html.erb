@@ -12,12 +12,12 @@
     </li>
 
     <% if @bundlepres.ignored_package_logs.any? %>
-    <li role="presentation">
-      <a href="#ignored-packages-tab" data-toggle="tab">
-        ignored (<%=@bundlepres.ignored_package_logs.count%>)
-      </a>
-    </li>
-  <% end %>
+      <li role="presentation">
+        <a href="#ignored-packages-tab" data-toggle="tab">
+          ignored (<%=@bundlepres.ignored_package_logs.count%>)
+        </a>
+      </li>
+    <% end %>
 
 
     <li role="presentation">
@@ -35,7 +35,6 @@
   <div class="tab-content">
     <div id="vulnerable-packages-tab" role="tabpanel" class="tab-pane active">
       <table id="vulnerable-packages" class="table packages">
-
         <% if @bundlepres.vuln_packages.empty? %>
           <tr>
             <td class="empty_message">No vulnerable packages found for this app!</td>
@@ -43,18 +42,33 @@
         <% else %>
           <thead>
             <th>package name</th>
-            <th>current version</th>
-            <th>upgrade to</th>
             <th>priority</th>
             <th>vulnerabilities</th>
+            <th>current version</th>
+            <th>upgrade to</th>
             <th></th>
           </thead>
 
           <% @bundlepres.vuln_packages.each do |package| %>
-
+            <% vulns = package.vulnerabilities.sort_by(&:criticality_ordinal) %>
+            
             <tr>
               <td class="package-name col-md-3">
                 <%= package.name %>
+              </td>
+              <td>
+                <%= vulns.first.criticality %>
+              </td>
+
+              <td class="col-md-4 package-vulnerabilities">
+                <%= vulns[0..3].map do |vuln| %>
+                  <% link_to(h(vuln.title), vuln_path(vuln), target: "_blank")  %>
+                <% end.join(", <br/>").html_safe %>
+
+                <% if (vcount = vulns.count) > 4 %>
+                  <br/>
+                  ... and <%= link_to "#{vcount - 4} more <i class='fa fa-angle-double-right'></i>".html_safe, show_package_path(package), target: "_blank" %>
+                <% end %>
               </td>
 
               <td class="package-version">
@@ -65,27 +79,11 @@
                 <p class="upgrade_to"><%= versions_in_english(package.upgrade_to) %></p>
               </td>
 
-               <td>
-                <p><%= package.vulnerable_dependencies.map(&:vulnerability).flatten.sort_by(&:criticality_ordinal).first.criticality %></p>
-              </td>
-
-
-
-              <td class="col-md-4">
-                  <%= package.vulnerable_dependencies.map do |vuln| %>
-                    <% link_to vuln.vulnerability_title, vuln_path(vuln.vulnerability) %>
-                  <% end.join(", ").html_safe %>
-                </ul>
-
-              </td>
 
               <td>
-
-                <%= render :partial => "bundles/package_resolution_modal", :locals => { :package => package } %>
-
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-<%= package.id %>" aria-haspopup="true" aria-expanded="false">Resolve</button>
+                <%= render :partial => "bundles/package_resolution_modal", :locals => { :package => package, :vulns => vulns } %>
+                <%= eui_button "Mark resolved", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{dom_id(package)}", "aria-haspopup": "true", "aria-expanded": false} %>
               </td>
-
             </tr>
           <% end %>
         <% end %>

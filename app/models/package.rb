@@ -59,7 +59,7 @@ class Package < ActiveRecord::Base
     joins(:vulnerable_dependencies)
   }
 
-  scope :affected_and_patchable, -> {
+  scope :affected_but_patchable, -> {
     affected.merge(VulnerableDependency.patchable)
   }
 
