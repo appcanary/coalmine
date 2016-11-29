@@ -34,12 +34,16 @@
 
   <div class="tab-content">
     <div id="vulnerable-packages-tab" role="tabpanel" class="tab-pane active">
-      <table id="vulnerable-packages" class="table packages">
-        <% if @bundlepres.vuln_packages.empty? %>
-          <tr>
-            <td class="empty_message">No vulnerable packages found for this app!</td>
-          </tr>
-        <% else %>
+      <% if @bundlepres.vuln_packages.empty? %>
+        <div class="col-sm-12" style="text-align: center">
+          <h3>Hooray! You don't seem to have any vulnerable packages.</h3>
+          <br/>
+        </div>
+        <div class="col-sm-4 col-sm-offset-4">
+          <%= image_tag "canary-party.medium.png", :title => "Illustration of a canary with a party hat. Hooray!", :style => "width: 100%" %>
+        </div>
+      <% else %>
+        <table id="vulnerable-packages" class="table packages">
           <thead>
             <th>package name</th>
             <th>priority</th>
@@ -51,7 +55,7 @@
 
           <% @bundlepres.vuln_packages.each do |package| %>
             <% vulns = package.vulnerabilities.sort_by(&:criticality_ordinal) %>
-            
+
             <tr>
               <td class="package-name col-md-3">
                 <%= package.name %>
@@ -63,11 +67,11 @@
               <td class="col-md-4 package-vulnerabilities">
                 <%= vulns[0..3].map do |vuln| %>
                   <% link_to(h(vuln.title), vuln_path(vuln), target: "_blank")  %>
-                <% end.join(", <br/>").html_safe %>
+                  <% end.join(", <br/>").html_safe %>
 
-                <% if (vcount = vulns.count) > 4 %>
-                  <br/>
-                  ... and <%= link_to "#{vcount - 4} more <i class='fa fa-angle-double-right'></i>".html_safe, show_package_path(package), target: "_blank" %>
+                  <% if (vcount = vulns.count) > 4 %>
+                    <br/>
+                    ... and <%= link_to "#{vcount - 4} more <i class='fa fa-angle-double-right'></i>".html_safe, show_package_path(package), target: "_blank" %>
                 <% end %>
               </td>
 
@@ -86,8 +90,8 @@
               </td>
             </tr>
           <% end %>
-        <% end %>
-      </table>
+        </table>
+      <% end %>
     </div>
 
     <% if @bundlepres.ignored_package_logs.any? %>
