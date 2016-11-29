@@ -1038,6 +1038,42 @@ ALTER SEQUENCE log_bundle_vulnerabilities_id_seq OWNED BY log_bundle_vulnerabili
 
 
 --
+-- Name: log_resolutions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE log_resolutions (
+    id integer NOT NULL,
+    account_id integer NOT NULL,
+    user_id integer NOT NULL,
+    package_id integer NOT NULL,
+    vulnerability_id integer NOT NULL,
+    vulnerable_dependency_id integer NOT NULL,
+    note character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: log_resolutions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE log_resolutions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: log_resolutions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE log_resolutions_id_seq OWNED BY log_resolutions.id;
+
+
+--
 -- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1756,6 +1792,13 @@ ALTER TABLE ONLY log_bundle_vulnerabilities ALTER COLUMN id SET DEFAULT nextval(
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY log_resolutions ALTER COLUMN id SET DEFAULT nextval('log_resolutions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
@@ -2025,6 +2068,14 @@ ALTER TABLE ONLY log_bundle_patches
 
 ALTER TABLE ONLY log_bundle_vulnerabilities
     ADD CONSTRAINT log_bundle_vulnerabilities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: log_resolutions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY log_resolutions
+    ADD CONSTRAINT log_resolutions_pkey PRIMARY KEY (id);
 
 
 --
@@ -2706,6 +2757,48 @@ CREATE INDEX index_log_bundle_vulnerabilities_on_vulnerable_package_id ON log_bu
 
 
 --
+-- Name: index_log_resolutions_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_log_resolutions_on_account_id ON log_resolutions USING btree (account_id);
+
+
+--
+-- Name: index_log_resolutions_on_package_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_log_resolutions_on_package_id ON log_resolutions USING btree (package_id);
+
+
+--
+-- Name: index_log_resolutions_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_log_resolutions_on_user_id ON log_resolutions USING btree (user_id);
+
+
+--
+-- Name: index_log_resolutions_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_log_resolutions_on_vulnerability_id ON log_resolutions USING btree (vulnerability_id);
+
+
+--
+-- Name: index_log_resolutions_on_vulnerable_dependency_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_log_resolutions_on_vulnerable_dependency_id ON log_resolutions USING btree (vulnerable_dependency_id);
+
+
+--
+-- Name: index_logres_account_vulndeps; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_logres_account_vulndeps ON log_resolutions USING btree (account_id, package_id, vulnerable_dependency_id);
+
+
+--
 -- Name: index_notifications_on_email_message_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3355,6 +3448,8 @@ INSERT INTO schema_migrations (version) VALUES ('20161019151455');
 INSERT INTO schema_migrations (version) VALUES ('20161019181329');
 
 INSERT INTO schema_migrations (version) VALUES ('20161025191216');
+
+INSERT INTO schema_migrations (version) VALUES ('20161115013745');
 
 INSERT INTO schema_migrations (version) VALUES ('20161117181904');
 

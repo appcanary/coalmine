@@ -7,11 +7,11 @@ class AppsController < ApplicationController
   end
 
   def show
+    @vulnquery = VulnQuery.new(current_account)
     @server = current_user.agent_servers.find(params[:server_id])
     b = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
-    @bundle = BundlePresenter.new(VulnQuery.new(current_account), b)
 
-    @packages = @bundle.packages.order(:name)
+    @bundlepres = BundlePresenter.new(@vulnquery, b)
   end
 
   # should ideally confirm it belongs to the same server

@@ -1,7 +1,8 @@
 class DashboardController < ApplicationController
   def index
-    @servers = AgentServersPresenter.new(current_account)
-    @monitors = MonitorsPresenter.new(current_account)
+    @vulnquery = VulnQuery.new(current_account)
+    @servers = AgentServersPresenter.new(current_account, @vulnquery)
+    @monitors = MonitorsPresenter.new(current_account, @vulnquery)
 
     wizard = OnboardWizard.new(current_user, @servers, @monitors)
 

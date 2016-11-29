@@ -1,0 +1,28 @@
+.bundle-packages {
+  ul.nav-tabs {
+    padding-top: 10px;
+  }
+
+  .tab-content {
+    padding-top: 10px;
+  }
+
+  table.packages {
+    .package-name {
+      @extend .fixed-width;
+    }
+    .package-upgrade-to {
+      code {
+        color: #288A24;
+        background-color: #DDF9DC;
+      }
+    }
+
+    .package-version--neutral {
+      code {
+        color: black;
+        background-color: #eee;
+      }
+    }
+  }
+}

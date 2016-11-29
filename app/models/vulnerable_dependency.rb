@@ -30,6 +30,7 @@
 class VulnerableDependency < ActiveRecord::Base
   belongs_to :vulnerability
   has_many :vulnerable_packages, :dependent => :destroy
+  has_many :log_resolutions
 
   validates :vulnerability_id, :presence => true
   validates :platform, :presence => true
@@ -40,7 +41,7 @@ class VulnerableDependency < ActiveRecord::Base
           AND vulnerable_dependencies.unaffected_versions = '{}')")
   }
 
-  delegate :title, :to => :vulnerability, :prefix => true
+  delegate :title, :criticality, :to => :vulnerability, :prefix => true
   
   # strictly, is this a package from the same platform, release, arch?
   #

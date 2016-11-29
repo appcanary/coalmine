@@ -41,12 +41,12 @@
 
 
       <tr>
-        <td><label>Reported at</label></td>
+        <td><label>Reported</label></td>
         <td><%= @vuln.reported_at.try(:strftime, "%Y-%m-%d") %></td>
       </tr>
 
       <tr>
-        <td><label>Updated at</label></td>
+        <td><label>Updated</label></td>
         <td><%= @vuln.updated_at.try(:strftime, "%Y-%m-%d %H:%M") %></td>
       </tr>
 

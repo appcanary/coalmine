@@ -45,6 +45,10 @@ a {
   }
 }
 
+.fixed-width {
+  font-family: "Bitstream Vera Sans Mono", monospace;
+}
+
 .navbar {
   .navbar-brand {
     padding-top: 10px;
@@ -136,14 +140,14 @@ section {
   color: #A60000;
 }
 
-.empty_message {
-  padding: 2em 3em 2em 3em;
-  font-size: 1.2em;
-  font-style: italic;
-  font-weight: bold;
-  color: #555;
-  text-align: center;
-}
+// .empty_message {
+//   padding: 2em 3em 2em 3em;
+//   font-size: 1.2em;
+//   font-style: italic;
+//   font-weight: bold;
+//   color: #555;
+//   text-align: center;
+// }
 
 // used for fixed-with-nav menus
 .fixed-side-menu {

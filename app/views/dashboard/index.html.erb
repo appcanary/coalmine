@@ -13,8 +13,8 @@
         <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Monitor'.html_safe, new_monitor_path, :class => "btn btn-default")%>
       </h1>
       <table class="table servers">
-        <% @monitors.each do |monitor| %>
-          <%= render :partial => "monitors/list", :locals => { :monitor => monitor } %>
+        <% @monitors.each do |bundlepres| %>
+          <%= render :partial => "monitors/list", :locals => { :bundlepres => bundlepres } %>
         <% end %>
       </table>
     </div>
@@ -26,9 +26,9 @@
 
       <% if @servers.active? %>
         <table class="table servers">
-          <% @servers.active_servers.each do |server| %>
+          <% @servers.active_servers.each do |serverpres| %>
             <tr class="server">
-              <%= render :partial => "servers/list", :locals => { :server => server } %>
+              <%= render :partial => "servers/list", :locals => { :serverpres => serverpres } %>
             </tr>
           <% end %>
         </table>
@@ -44,9 +44,9 @@
         </p>
 
         <table class="table servers">
-          <% @servers.silent_servers.each do |server| %>
+          <% @servers.silent_servers.each do |serverpres| %>
             <tr class="server">
-              <%= render :partial => "servers/list", :locals => { :server => server } %>
+              <%= render :partial => "servers/list", :locals => { :serverpres => serverpres } %>
             </tr>
           <% end %>
         </table>

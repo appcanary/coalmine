@@ -57,6 +57,7 @@ FactoryGirl.define do
   factory :vulnerability do
     platform { deps.first.platform }
     reference_ids { [generate(:cve_id)] }
+    reported_at { 7.days.ago }
 
     trait :ruby do
       platform { Platforms::Ruby }

@@ -35,6 +35,8 @@ class Package < ActiveRecord::Base
   has_many :vulnerable_dependencies, :through => :vulnerable_packages
   has_many :vulnerabilities, :through => :vulnerable_packages
   has_many :advisories, :through => :vulnerabilities
+  
+  has_many :log_resolutions
 
   validates_uniqueness_of :version, scope: [:platform, :release, :name]
 
@@ -50,15 +52,17 @@ class Package < ActiveRecord::Base
     where(clauses.join(" OR "), *values.flatten)
   }
 
+  # affected means any package flagged at all.
+  # we join on vuln_dep rather than vuln_pkg to
+  # make chaining with VulnDep.patchable predictably easy
   scope :affected, -> {
-    joins(:vulnerable_packages)
+    joins(:vulnerable_dependencies)
   }
 
-  scope :affected_and_patchable, -> {
-    joins(:vulnerable_dependencies).merge(VulnerableDependency.patchable)
+  scope :affected_but_patchable, -> {
+    affected.merge(VulnerableDependency.patchable)
   }
 
-  
   # find all vulnerable dependencies that *could* affect this package
   # we perform a broad search at first and perform the exact package matching
   # in ruby land
@@ -186,5 +190,8 @@ class Package < ActiveRecord::Base
   def to_pkg_builder
     Parcel.from_package(self)
   end
-
+  
+  def self.resolution_log_primary_key
+    "packages.id"
+  end
 end

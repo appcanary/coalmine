@@ -38,6 +38,7 @@ class Bundle < ActiveRecord::Base
 
   has_many :log_bundle_vulnerabilities
   has_many :log_bundle_patches
+  has_many :log_resolutions, :through => :bundled_packages
 
   validates :account, presence: true
   validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }
@@ -55,6 +56,9 @@ class Bundle < ActiveRecord::Base
 
   scope :via_agent, -> { where("bundles.agent_server_id is not null") }
 
+  # TODO: change this method to affected?
+  # deeply confusing when using BundlePresenter, which is VQ aware
+  #
   # vuln at all is used by many serializers
   # to be determined if they should all switch to VulnQuery
   def vulnerable?
@@ -80,7 +84,7 @@ class Bundle < ActiveRecord::Base
   end
 
   def patchable_packages
-    self.packages.affected_and_patchable
+    self.packages.affected_but_patchable
   end
 
   def display_name
