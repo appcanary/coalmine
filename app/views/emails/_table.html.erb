@@ -1,7 +1,7 @@
 <table class="table">
   <thead>
     <th>
-      subject
+      type
     </th>
 
     <th>
@@ -10,10 +10,6 @@
 
     <th>
       # vulns
-    </th>
-
-     <th>
-      # unpatched
     </th>
 
     <th>
@@ -26,11 +22,11 @@
 
   </thead>
   <% emails.each do |email| %>
-    <% msg = NotificationPresenter.new(email) %>
     <tr>
 
+      <% vuln_count = email.logs.group(:vulnerability_id).count.keys.count %>
       <td>
-        <%= link_to msg.subject, email_path(email.id) %>
+        <%= link_to "#{email.class} - #{email.sent_at}", email_path(email.id) %>
       </td>
 
       <td>
@@ -38,11 +34,7 @@
       </td>
 
       <td>
-        <%= msg.notifications_by_vuln.count %>
-      </td>
-
-      <td>
-        <%= msg.unpatched_notifications.count %>
+        <%= vuln_count %>
       </td>
 
       <td>
