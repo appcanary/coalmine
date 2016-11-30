@@ -8,6 +8,7 @@ Bundler.require(*Rails.groups)
 
 APPCANARY_HOST = {
   "development" => "canary.dev:3000",
+  "test" => "canary.dev:3000",
   "staging" => "staging.appcanary.com",
   "production" => "appcanary.com"
 }
