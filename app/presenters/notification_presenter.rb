@@ -48,6 +48,16 @@ class NotificationPresenter
     @notifications_by_vuln.count + @unpatched_notifications.count
   end
 
+  def notifications_by_package
+    @notifications.group_by(&:package).sort_by { |k, v| [k.upgrade_priority_ordinal, k.name] }
+  end
+
+  def each_package
+    notifications_by_package.each do |pkg, logs|
+      yield pkg, sort_and_wrap_logs(logs)
+    end
+  end
+
   def recipients
     recipients = [@account.email]
     if !Rails.env.production?
