@@ -9,7 +9,7 @@ class NotificationMailer < ActionMailer::Base
     $analytics.track_notification(msg.account, :vuln)
 
     mail(to: @notifier.recipients, :subject => @notifier.subject) do |format|
-      format.html { render layout: "mailer" }
+      format.html
       format.text
     end
   end
@@ -20,7 +20,7 @@ class NotificationMailer < ActionMailer::Base
     $analytics.track_notification(msg.account, :patched)
 
     mail(to: @notifier.recipients, :subject => @notifier.subject) do |format|
-      format.html { render layout: "mailer" }
+      format.html
       format.text
     end
   end
