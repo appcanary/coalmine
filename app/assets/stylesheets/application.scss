@@ -1,10 +1,4 @@
-$dark-yellow: #fadc58;
-$slightly-darker-yellow: #eac64b;
-
-$navbar-default-bg: $dark-yellow;
-$navbar-default-border: $slightly-darker-yellow;
-$link-color: #3798A5;
-
+@import "vars";
 @import "bourbon";
 
 @import "bootstrap-sprockets";
