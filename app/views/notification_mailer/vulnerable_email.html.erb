@@ -11,7 +11,16 @@
       <h2>You're running vulnerable software.</h2>
     </td>
   </tr>
+<% end %>
 
+<% if $rollout.active?(:alert_resolve) %>
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px">
+  <tr>
+    <td class="alert alert-neutral" style="width: 100%">
+      New feature alert: you can now ignore vulns that don't really bother you. Click on any server or monitor!
+    </td>
+  </tr>
+</table>
 <% end %>
 
 

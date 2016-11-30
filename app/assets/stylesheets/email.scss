@@ -197,12 +197,13 @@ a {
     Change the class depending on warning email, good email or bad email
 ------------------------------------- */
 .alert {
-  font-size: 16px;
-  // color: #fff;
+  // font-size: 16px;
+  color: #fff;
   font-weight: 500;
   padding: 20px;
-  text-align: center;
+  // text-align: center;
   border-radius: 3px 3px 0 0;
+  margin-bottom: 20px;
 }
 .alert a {
   color: #fff;
@@ -218,6 +219,11 @@ a {
 }
 .alert.alert-good {
   background-color: #68B90F;
+}
+
+.alert.alert-neutral {
+  color: #000000;
+  background-color: #eeeeee;
 }
 
 /* -------------------------------------
