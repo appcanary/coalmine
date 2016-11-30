@@ -1,49 +1,92 @@
-<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody">
-  <tr>
-    <td valign="top" class="bodyContainer"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
-        <tbody class="mcnTextBlockOuter">
+<%= content_for :email_header do %>
+  <tr class="header-logo">
+    <td>
+      <img src="<%=image_url("appcanary-hero-patched.png")%>" title="appcanary logo">
+    </td>
+  </tr>
+
+  <tr class="header-description">
+    <td>
+      <h1>Hey! Good job.</h1>
+      <h2>We've detected that some vulnerabilities got patched.</h2>
+    </td>
+  </tr>
+
+<% end %>
+
+<% @notifier.each_package do |pkg, logs| %>
+  <table class="package-table" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="vuln-package">
+        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+          <thead>
+            <th width="30%">
+              package
+            </th>
+            <th>
+              version
+            </th>
+
+          </thead>
           <tr>
-            <td valign="top" class="mcnTextBlockInner">
+            <td>
+              <code><%= pkg.name %></code>
+            </td>
+            <td class="package-vuln-version">
+              <code><%= link_to pkg.version, show_package_url(pkg), class: "package-vuln-version-a", target: "_blank" %></code>
+            </td>
+          </tr>
+        </table>
 
-              <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer">
-                <tbody><tr>
-
-                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right: 18px; padding-bottom: 9px; padding-left: 18px;">
-
-                      <h1>Hey! Good job.</h1>
-
-                      <h3>We've detected that you patched some vulnerabilities.</h3>
-
-                      <p>Here's what changed:</p>
-                      <% @notifier.each_vuln do |vuln, logs| %>
-                        <h2><%= link_to vuln.title, vuln_url(vuln.id) %></h2>
-                        <p>is no longer present in:</p>
-                        
-                        <%= logs.uniq(&:bundle).map { |l| link_to_server_or_monitor(l) }.join(", ").html_safe %>
-                        <hr/>
-                        <br/>
-                      <% end %>
-
-                      <% @notifier.each_unpatched_vuln do |vuln, logs| %>
-                        <h2><%= link_to vuln.title, vuln_url(vuln.id) %></h2>
-                        <p>is no longer present in:</p>
-                        
-                        <%= logs.uniq(&:bundle).map { |l| link_to_server_or_monitor(l) }.join(", ").html_safe %>
-                        <hr/>
-                        <br/>
-                      <% end %>
+        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+          <thead>
+            <th width="30%">
+              priority
+            </th>
+            <th>
+              vulnerabilities:
+            </th>
+          </thead>
+          <tr>
+            <td>
+              <%= pkg.upgrade_priority %>
+            </td>
+            <td>
+              <%= pkg.vulnerabilities[0..3].map { |v| link_to(h(v.title), vuln_url(v)) }.join(", ").html_safe %>
+              <% if (vct = pkg.vulnerabilities.size) > 4 %>
+                and <%= link_to "#{vct - 4} more", show_package_url(pkg), target: "_blank" %>.
+              <% end %>
+            </td>
+          </tr>
+        </table>
 
 
-                    <h4 class="null">Questions? Concerns? Reply to this message, and we'll get back to&nbsp;you asap.</h4>
 
-                  </td>
-                </tr>
-            </tbody></table>
+        <table class="affected-table" cellpadding="0" cellspacing="0" width="100%">
+          <thead>
+            <th>
+              is no longer present on the following servers or monitors:
+            </th>
+          </thead>
 
-          </td>
-        </tr>
-      </tbody>
-  </table></td>
-</tr>
-</table>
+          <% logs.uniq(&:bundle).each do |lbv| %>
+            <tr>
+              <td>
+                <%= link_to_server_or_monitor(lbv) %>
+              </td>
+            </tr>
 
+          <% end %>
+        </table>
+      </td>
+    </tr>
+    <tr class="divider">
+      <td>
+        <hr/>
+      </td>
+    </tr>
+
+  </table>
+<% end %>
+
+<p class="aligncenter">Questions? Concerns? Reply to this message, and we'll help you out.</p>

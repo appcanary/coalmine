@@ -74,7 +74,7 @@
             </th>
           </thead>
 
-          <% logs.each do |lbv| %>
+          <% logs.uniq(&:bundle).each do |lbv| %>
             <tr>
               <td>
                 <%= link_to_server_or_monitor(lbv) %>
