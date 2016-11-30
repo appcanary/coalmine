@@ -6,6 +6,15 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+APPCANARY_HOST = {
+  "development" => "canary.dev:3000",
+  "staging" => "staging.appcanary.com",
+  "production" => "appcanary.com"
+}
+APPCANARY_HTTP_PROTOCOL = Hash.new("https").tap do |h|
+  h["development"] = "http"
+end
+
 module CanaryWeb
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -30,6 +39,10 @@ module CanaryWeb
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('lib/canary')
 
+    
+    # SIGH http://stackoverflow.com/a/15539534/142266
+    config.action_mailer.asset_host = "#{APPCANARY_HTTP_PROTOCOL[Rails.env]}://#{APPCANARY_HOST[Rails.env]}"
+
     # custom errors
     config.exceptions_app = self.routes
 
@@ -37,12 +50,6 @@ module CanaryWeb
   end
 end
 
-case Rails.env
-when "development"
-  Rails.application.routes.default_url_options[:host] = "canary.dev:3000"
-when "staging"
-  Rails.application.routes.default_url_options[:host] = "staging.appcanary.com"
-else
-  Rails.application.routes.default_url_options[:host] = "appcanary.com"
-  Rails.application.routes.default_url_options[:protocol] = 'https'
-end
+
+Rails.application.routes.default_url_options[:protocol] = APPCANARY_HTTP_PROTOCOL[Rails.env]
+Rails.application.routes.default_url_options[:host] = APPCANARY_HOST[Rails.env]

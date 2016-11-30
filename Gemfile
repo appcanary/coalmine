@@ -10,9 +10,6 @@ gem 'rollout_postgres_store'
 gem 'que', '~> 0.12.0'
 gem 'whenever', :require => false
 
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
 
 # views / assets
 gem 'sass-rails', require: false
@@ -29,6 +26,11 @@ gem 'redcarpet'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 
+gem 'premailer-rails'
+# required for premailer?
+gem 'nokogiri'
+
+# handling user input
 gem 'reform'
 gem 'reform-rails'
 
@@ -40,14 +42,6 @@ gem 'pretender'
 gem 'httparty'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'has_secure_token'
-
-# gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-# gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .coffee assets and views
-# gem 'coffee-rails', '~> 4.1.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
