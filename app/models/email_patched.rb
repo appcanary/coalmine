@@ -18,4 +18,6 @@
 
 class EmailPatched < EmailMessage
   has_many :notifications, -> { where("log_bundle_patch_id is not null") }, :foreign_key => "email_message_id", :dependent => :destroy
+
+  has_many :logs, :source => :log_bundle_patch, :through => :notifications
 end

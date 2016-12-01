@@ -1,108 +1,105 @@
-<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody">
+<%= content_for :email_header do %>
+  <tr class="header-logo">
+    <td>
+      <img src="<%=image_url("appcanary-hero-vuln.png")%>" title="appcanary logo">
+    </td>
+  </tr>
+
+  <tr class="header-description">
+    <td>
+      <h1>Watch out!</h1>
+      <h2>You're running vulnerable software.</h2>
+    </td>
+  </tr>
+<% end %>
+
+<% if $rollout.active?(:alert_resolve) %>
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 20px">
   <tr>
-    <td valign="top" class="bodyContainer"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock">
-        <tbody class="mcnTextBlockOuter">
-          <tr>
-            <td valign="top" class="mcnTextBlockInner">
-              <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" class="mcnTextContentContainer">
-                <tbody>
-                  <tr>
-
-                    <td valign="top" class="mcnTextContent" style="padding-top:9px; padding-right: 18px; padding-bottom: 9px; padding-left: 18px;">
-
-                      <h1>Watch out!</h1>
-                      <h3>You're running vulnerable software.</h3>
-
-                      <p>Here's what we found:</p>
-                      <% @notifier.each_vuln do |vuln, logs| %>
-
-                        <h2><%= link_to vuln.title, vuln_url(vuln.id) %></h2>
-                        <br>
-                        <h3>Criticality:</h3>
-                        <p><%= vuln.criticality %></p>
-                        <h3>Description:</h3>
-                        <% if vuln.description.present? %>
-                          <p><%= vuln.description %></p>
-                        <% else %>
-                          <p>None available right now.</p>
-                        <% end %>
-
-                        <h3>The following are affected:</h3>
-                        <br>
-
-                        <table>
-                          <thead>
-                            <th>
-                              Name
-                            </th>
-                            <th>
-                              Package
-                            </th>
-                            <th>
-                              Upgrade to
-                            </th>
-                          </thead>
-                          <tbody>
-                            <% logs.each do |p| %>
-                              <tr>
-                                <td width="30%">
-                                  <%= link_to_server_or_monitor(p) %>
-                                </td>
-
-                                <td width="30%">
-                                  <p><code><%= p.package_name %></code></p>
-                                </td>
-
-                                <td width="30%">
-
-                                  <p><code><%= p.upgrade_to.first %></code></p>
-                                </td>
-                              </tr>
-                            <% end %>
-                          </tbody>
-                        </table>
-
-                        <hr/>
-                        <br/>
-
-                      <% end %>
-
-                      <% if @notifier.has_unpatched_vulns? %>
-                        <h3>We also found the following issues, but at the moment they do not have patches.</h3>
-
-                        <% @notifier.each_unpatched_vuln do |vuln, logs| %>
-                          <h3><%= link_to vuln.title, vuln_url(vuln.id) %></h3>
-                          <br>
-                          <h4>Criticality:</h4>
-                          <p><%= vuln.criticality %></p>
-                          <h4>Description:</h4>
-                          <% if vuln.description.present? %>
-                            <p><%= vuln.description %></p>
-                          <% else %>
-                            <p>None available right now.</p>
-                          <% end %>
-                          <h3>The following are affected:</h3>
-                          <br>
-                          <%= logs.map { |l| link_to_server_or_monitor(l) }.join(", ").html_safe %>
-
-                          <hr/>
-                          <br/>
-
-
-                        <% end %>
-                      <% end %>
-
-                      <h4>Questions? Concerns? Reply to this message, and we'll help you out.</h4>
-
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <td class="alert alert-neutral" style="width: 100%">
+      New feature alert: you can now ignore vulnerabilities that don't affect you! Click on any server or monitor to begin.
     </td>
   </tr>
 </table>
+<% end %>
 
+
+<% @notifier.each_package do |pkg, logs| %>
+  <table class="package-table" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="vuln-package">
+        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+          <thead>
+            <th width="30%">
+              package
+            </th>
+            <th>
+              version
+            </th>
+
+            <th>
+              upgrade to
+            </th>
+          </thead>
+          <tr>
+            <td>
+              <code><%= pkg.name %></code>
+            </td>
+            <td class="package-vuln-version">
+              <code><%= link_to pkg.version, show_package_url(pkg), class: "package-vuln-version-a", target: "_blank" %></code>
+            </td>
+            <td class="package-upgrade-to">
+              <code><%= pkg.upgrade_to.first %></code>
+            </td>
+          </tr>
+        </table>
+
+        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+          <thead>
+            <th width="30%">
+              priority
+            </th>
+            <th>
+              vulnerabilities:
+            </th>
+          </thead>
+          <tr>
+            <td>
+              <%= pkg.upgrade_priority %>
+            </td>
+            <td>
+              <%= pkg.vulnerabilities[0..3].map { |v| link_to(h(v.title), vuln_url(v)) }.join(", ").html_safe %>
+              <% if (vct = pkg.vulnerabilities.size) > 4 %>
+                and <%= link_to "#{vct - 4} more", show_package_url(pkg), target: "_blank" %>.
+              <% end %>
+            </td>
+          </tr>
+        </table>
+
+        <table class="affected-table" cellpadding="0" cellspacing="0" width="100%">
+          <thead>
+            <th>
+              the following servers or monitors are affected:
+            </th>
+          </thead>
+
+          <% logs.uniq(&:bundle).each do |lbv| %>
+            <tr>
+              <td>
+                <%= link_to_server_or_monitor(lbv) %>
+              </td>
+            </tr>
+
+          <% end %>
+        </table>
+      </td>
+    </tr>
+    <tr class="divider">
+      <td>
+        <hr/>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+<p class="aligncenter">Questions? Concerns? Reply to this message, and we'll help you out.</p>

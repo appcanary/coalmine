@@ -6,7 +6,7 @@
       </th>
     <% end %>
     <th>
-      subject
+      type
     </th>
 
     <th>
@@ -15,10 +15,6 @@
 
     <th>
       # vulns
-    </th>
-
-     <th>
-      # unpatched
     </th>
 
     <th>
@@ -31,17 +27,17 @@
 
   </thead>
   <% emails.each do |email| %>
-    <% msg = NotificationPresenter.new(email) %>
+    <% vuln_count = email.logs.group(:vulnerability_id).count.keys.count %>
     <tr>
-       <% if current_user.is_admin? %>
-      <td>
-        <%= email.account.email %>
-      </td>
-    <% end %>
+      <% if current_user.is_admin? %>
+        <td>
+          <%= email.account.email %>
+        </td>
+      <% end %>
 
 
       <td>
-        <%= link_to msg.subject, admin_email_path(email.id) %>
+        <%= link_to "#{email.class} - #{email.sent_at}", admin_email_path(email.id) %>
       </td>
 
       <td>
@@ -49,12 +45,9 @@
       </td>
 
       <td>
-        <%= msg.notifications_by_vuln.count %>
+        <%= vuln_count %>
       </td>
 
-      <td>
-        <%= msg.unpatched_notifications.count %>
-      </td>
 
       <td>
         <%= email.sent_at %>

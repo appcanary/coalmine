@@ -2,39 +2,30 @@ Hello,
 
 You're affected by the following vulnerabilities:
 
-<% @notifier.each_vuln do |vuln, pkgs| %>
-  Vulnerability: 
-  <%= vuln.title -%>
+<% @notifier.each_package do |pkg, logs| %>
+Package: <%= pkg.name %>
+Affected Version: <%= pkg.version %>
 
-  Criticality:
-  <%= vuln.criticality -%>
+should be upgraded to:
+<%= pkg.upgrade_to.first %>
 
-  Description:
-  <% if vuln.description.present? %>
-  <%= vuln.description -%>
+This is a(n) <%= pkg.upgrade_priority %> priority.
+
+This package is vulnerable to:
+<%= pkg.vulnerabilities[0..3].map { |v| link_to(h(v.title), vuln_url(v)) }.join(", ").html_safe %>
+<% if (vct = pkg.vulnerabilities.size) > 4 %>
+and <%= link_to "#{vct - 4} more", show_package_url(pkg), target: "_blank" %>.
+<% end %>
+
+The following servers or monitors are affected:
+
+<% logs.uniq(&:bundle).each do |log| %>
+  <% if log.has_server? %>
+  Server: <%= log.server.display_name %> ( <%= server_app_url(log.bundle, server_id: log.server.id) %> )
   <% else %>
-  None available right now.
-  <% end %>
-
-  The following are affected:
-  <% pkgs.each do |log| %>
-    ---
-    <% if log.has_server? %>
-    Server:
-    <%= log.server.display_name %> (<%=  link_to log.server.display_name, server_app_url(log.bundle, server_id: log.server.id) %>)
-    <% else %>
-    Monitor:
-    <%= log.bundle.display_name %> (<%= link_to log.bundle.display_name, monitors_url(log.bundle) %>)
-    <% end %>
-    
-    Package: 
-    <%= log.package_name -%>
-    
-    Upgrade to: 
-    <%= log.upgrade_to.first -%>
-
-
-  <%  end %>
+  Monitor: <%= log.bundle.display_name %> ( <%= monitor_url(log.bundle) %> )
+<% end %>
+<%end %>
 
 ####
 <%  end %>

@@ -25,6 +25,15 @@ module ApplicationHelper
     end
   end
 
+  def show_package_url(package)
+    if package.release.nil?
+      package_platform_url(package.platform, package.name, package.version)
+    else
+      package_platform_release_url(package.platform, package.release, package.name, package.version)
+    end
+  end
+
+
   def gravatar_img(email)
     ident = Digest::MD5.hexdigest(email.to_s.downcase)
     "https://gravatar.com/avatar/#{ident}?d=identicon"
