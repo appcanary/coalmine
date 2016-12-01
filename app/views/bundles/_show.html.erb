@@ -57,14 +57,14 @@
             <% vulns = package.vulnerabilities.sort_by(&:criticality_ordinal) %>
 
             <tr>
-              <td class="package-name col-md-3">
+              <td class="package-name">
                 <%= package.name %>
               </td>
               <td>
                 <%= vulns.first.criticality %>
               </td>
 
-              <td class="col-md-4 package-vulnerabilities">
+              <td class="package-vulnerabilities">
                 <%= vulns[0..3].map do |vuln| %>
                   <% link_to(h(vuln.title), vuln_path(vuln), target: "_blank")  %>
                   <% end.join(", <br/>").html_safe %>
