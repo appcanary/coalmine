@@ -276,7 +276,7 @@ class VulnQueryTest < ActiveSupport::TestCase
 
     # now we mark vulnpkg2 as resolved
     
-    resolve_log = LogResolution.resolve_package!(user, @vulnpkg2)
+    resolve_log = LogResolution.resolve_package(user, @vulnpkg2)
 
     results = VulnQuery.new(account).from_bundle(bundle).order(:id)
 
@@ -296,7 +296,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_bundle?(bundle)
  
     # now we mark vulnpkg2 as resolved
-    resolve_log = LogResolution.resolve_package!(user, @vulnpkg2)
+    resolve_log = LogResolution.resolve_package(user, @vulnpkg2)
 
     assert_equal false, vq.vuln_bundle?(bundle)
   end
@@ -317,7 +317,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_server?(server)
  
     # now we mark vulnpkg2 as resolved
-    resolve_log = LogResolution.resolve_package!(user, @vulnpkg2)
+    resolve_log = LogResolution.resolve_package(user, @vulnpkg2)
 
     assert_equal false, vq.vuln_server?(server)
   end

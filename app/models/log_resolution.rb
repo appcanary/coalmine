@@ -18,8 +18,11 @@ class LogResolution < ActiveRecord::Base
     query.merge(merge_scope)
   }
 
-  def self.resolve!(user, pkg, vuln_dep, note = nil)
-    self.create!(account: user.account, 
+  validates_uniqueness_of :vulnerable_dependency_id, scope: [:account_id, :package_id]
+
+
+  def self.resolve(user, pkg, vuln_dep, note = nil)
+    self.create(account: user.account, 
                 user: user,
                 package: pkg,
                 vulnerability: vuln_dep.vulnerability,
@@ -27,19 +30,19 @@ class LogResolution < ActiveRecord::Base
                 note: note)
   end
 
-  def self.resolve_package!(user, vuln_pkg, note = nil)
+  def self.resolve_package(user, vuln_pkg, note = nil)
     if note.blank?
       note = nil
     end
 
     self.transaction do
       vuln_pkg.vulnerable_dependencies.each do |vd|
-        self.resolve!(user, vuln_pkg, vd, note)
+        self.resolve(user, vuln_pkg, vd, note)
       end
     end
   end
 
-  def self.delete_with_package!(user, package_id)
+  def self.delete_with_package(user, package_id)
     self.where(account_id: user.account_id, package_id: package_id).delete_all
   end
 end

@@ -44,13 +44,13 @@ class MonitorsController < ApplicationController
 
   def resolve_vuln
     pkg = Package.find(resolution_params[:package_id])
-    LogResolution.resolve_package!(current_user, pkg, resolution_params[:note])
+    LogResolution.resolve_package(current_user, pkg, resolution_params[:note])
     redirect_to :back, notice: "Package successfully marked as resolved."
   end
 
   def unresolve_vuln
     pkg = Package.find(resolution_params[:package_id])
-    LogResolution.delete_with_package!(current_user, pkg)
+    LogResolution.delete_with_package(current_user, pkg)
     redirect_to :back, notice: "Package successfully marked as not resolved."
   end
 

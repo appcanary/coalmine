@@ -76,7 +76,7 @@ class MonitorsControllerTest < ActionController::TestCase
       a_vuln_pkg = Bundle.first.packages.first
 
       vuln = FactoryGirl.create(:vulnerability, :pkgs => [a_vuln_pkg])
-      LogResolution.resolve_package!(user, a_vuln_pkg)
+      LogResolution.resolve_package(user, a_vuln_pkg)
 
       assert_equal 1, LogResolution.count
       request.env["HTTP_REFERER"] = "/"
