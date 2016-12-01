@@ -15,7 +15,15 @@ class NotificationPresenter
   end
 
   def subject
-    subject = subject_label % notifications_by_package.count
+    pkg_count = notifications_by_package.count
+    date_str = @sent_date.strftime("%Y-%m-%d")
+
+    case @type
+    when :vuln
+      "#{pkg_count} new vulnerable packages (#{date_str})"
+    when :patched
+      "Fixed: #{pkg_count} patched packages (#{date_str})"
+    end
 
     if !Rails.env.production?
       subject = "[#{Rails.env}] " + subject
@@ -42,16 +50,6 @@ class NotificationPresenter
     end
 
     recipients
-  end
-
-  def subject_label
-    date_str = @sent_date.strftime("%Y-%m-%d")
-    case @type
-    when :vuln
-      "%s new vulnerable packages (#{date_str})"
-    when :patched
-      "Fixed: %s patched packages (#{date_str})"
-    end
   end
 
   # TODO:
