@@ -1,7 +1,14 @@
 =begin
 pkg_query = Package.select("distinct(packages.id), packages.*, p2.source_name new_source_name").
-            joins("inner join (select * from packages where release = 'trusty' and platform = 'ubuntu' and release.source_name is not null) p2 on packages.platform = p2.platform and packages.name = p2.name and packages.release = p2.release").
-            where("packages.source_name is null and packages.created_at <= '2016-10-12 22:11:18.000000'")
+      joins("inner join (select * from packages where platform = 'ubuntu' and source_name is not null) p2 on packages.platform = p2.platform and packages.name = p2.name and packages.release = p2.release").
+      where("packages.source_name is null and packages.created_at <= '2016-10-12 22:11:18.000000'")
+
+
+
+pkg_query = Package.select("distinct(packages.id), packages.*, p2.source_name new_source_name").joins("inner join (select * from packages where platform = 'ubuntu' and release = 'trusty' and source_name is not null) p2 on packages.platform = p2.platform and packages.name = p2.name and packages.release = p2.release").where("packages.source_name is null and packages.created_at <= '2016-10-12 22:11:18.000000'");
+
+
+
 =end
 
 class PackageImporter
@@ -42,6 +49,7 @@ class PackageImporter
   def parse(raw_package)
     p = Parcel::Dpkg.new(raw_package)
     # TODO: This is hacky, the Parcel constructor should do this
+
     p.platform = @platform
     p.release = @release
     return p
