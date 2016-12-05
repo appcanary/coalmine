@@ -122,6 +122,14 @@ class PackageManagerTest < ActiveSupport::TestCase
       assert_equal 1, list.count
     end
 
+    it "should stuff" do
+      package_list = [{"Package" => "fakeMcFakerson", "Version" => "1.2.3"},
+                      {"Package" => "fakeMcFakerson", "Version" => "1.2.3"},]
+
+      package_list = package_list.map { |h| Parcel::Dpkg.new(h) }
+      binding.pry
+    end
+
     it "should create packages and update relevant vulns" do
       pkg_name = "fakemcfake"
       pkg = FactoryGirl.build(:package, :ruby, :name => pkg_name, :version => "1.0.2")
