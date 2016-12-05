@@ -4,6 +4,8 @@ class AgentApiTest < ActionDispatch::IntegrationTest
   before do
     @account = FactoryGirl.create(:account)
     @account2 = FactoryGirl.create(:account)
+
+    $rollout.activate(:log_every_file)
   end
 
   describe "while un- or poorly authenticated" do
@@ -59,6 +61,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
     end
 
     it "should accept files, including when they change" do
+      assert_equal 0, AgentAcceptedFile.count
       server = FactoryGirl.create(:agent_server, :centos, :account => @account).reload
 
       assert_equal 0, server.bundles.count
@@ -80,6 +83,8 @@ class AgentApiTest < ActionDispatch::IntegrationTest
       assert_equal 103, b.packages.count
       assert_equal path, b.path
       assert_equal "3.2.19", b.packages.where(:name => "rails").first.version
+ 
+      assert_equal 1, AgentAcceptedFile.count
 
       # let's submit some changes!
 
@@ -95,6 +100,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
       assert_equal 146, b.packages.count 
       assert_equal "4.2.0", b.packages.where(:name => "rails").first.version
 
+      assert_equal 2, AgentAcceptedFile.count
 
       # okay. what happens when I resubmit this but I change the path?
       put api_agent_server_update_path(server.uuid), 
@@ -102,6 +108,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
         {"Content-Type": 'application/json', :authorization => %{Token token="#{@account.token}"}}
 
       assert_equal 2, server.bundles.count
+      assert_equal 3, AgentAcceptedFile.count
     end
 
     # TODO: make this more exhaustive?
