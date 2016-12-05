@@ -24,6 +24,8 @@ class PackageMaker < ServiceMaker
     # the query behind it should return all relevant packages
     # thereby negating the need to add new_packages above
     # to this list.
+
+    #TODO this is no longer true
     existing_pkg_query
   end
 
@@ -34,18 +36,32 @@ class PackageMaker < ServiceMaker
   # the items in package_list.
 
   def create_missing_packages(existing_packages_query, package_list)
-    # if these two lists are the same size, our job here is done
-    if existing_packages_query.count == package_list.count
-      return Package.none
+
+    package_hsh = package_list.index_by{|p| [p.name, p.version]}
+    to_update = []
+    existing_packages_query.each do |existing_pkg|
+      begin
+        new_pkg = package_hsh[[existing_pkg.name, existing_pkg.version]]
+        # do we update source?
+        if existing_pkg.source_name.nil? && new_pkg.source_name.present?
+          to_update << [existing_pkg, new_pkg]
+        end
+
+        # get rid of existing package
+        package_hsh.delete([existing_pkg.name, existing_pkg.version])
+      rescue => e
+        binding.pry
+      end
     end
-    
-    existing_set = existing_packages_query.pluck_unique_fields
-
-    new_packages = diff_packages(existing_set, package_list)
-
-    new_packages.map do |pkg|
+    new_packages = package_hsh.values.map do |pkg|
       self.create(pkg.attributes)
     end
+
+    updated_packages = to_update.map do |pkg, parcel|
+      self.update(pkg, parcel.attributes)
+    end
+
+    new_packages.concat(updated_packages)
   end
 
   def find_existing_packages(package_list)
@@ -67,7 +83,16 @@ class PackageMaker < ServiceMaker
     # current assumption: if there's something wrong with a package, 
     # abort whole txn
     package.save!
+    update_vulns(package)
+  end
 
+  def update(pkg, hsh)
+    pkg.update(hsh)
+    
+    update_vulns(pkg)
+  end
+
+  def update_vulns(package)
     possible_vulns = package.concerning_vulnerabilities
     add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     return package
@@ -78,7 +103,7 @@ class PackageMaker < ServiceMaker
 
   # this doesn't have to trigger a report because:
   # a report will be triggered when the package gets
-  # assigned to a bundle. 
+  # assigned to a bundle.
   #
   # there should not be a scenario where this method
   # gets called, on packages that are in a bundle
@@ -86,9 +111,9 @@ class PackageMaker < ServiceMaker
   def add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     possible_vulns.select do |vuln_dep|
       if vuln_dep.affects?(package)
-        VulnerablePackage.create!(:vulnerability_id => vuln_dep.vulnerability_id,
-                                  :vulnerable_dependency_id => vuln_dep.id,
-                                  :package_id => package.id)
+        VulnerablePackage.find_or_create_by!(:vulnerability_id => vuln_dep.vulnerability_id,
+                                             :vulnerable_dependency_id => vuln_dep.id,
+                                             :package_id => package.id)
       end
     end
   end
