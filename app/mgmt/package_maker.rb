@@ -36,8 +36,8 @@ class PackageMaker < ServiceMaker
   # the items in package_list.
 
   def create_missing_packages(existing_packages_query, package_list)
-
     package_hsh = package_list.index_by{|p| [p.name, p.version]}
+    to_create = package_list.to_set
     to_update = []
     existing_packages_query.each do |existing_pkg|
       begin
@@ -47,8 +47,8 @@ class PackageMaker < ServiceMaker
           to_update << [existing_pkg, new_pkg]
         end
 
-        # get rid of existing package
-        package_hsh.delete([existing_pkg.name, existing_pkg.version])
+        # get rid of existing package from to_create
+        to_create.delete(new_pkg)
       rescue => e
         binding.pry
       end
