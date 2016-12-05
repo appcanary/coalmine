@@ -39,8 +39,9 @@ class PackageMaker < ServiceMaker
     package_hsh = package_list.index_by{|p| [p.name, p.version]}
     to_create = package_list.to_set
     to_update = []
+    begin
     existing_packages_query.each do |existing_pkg|
-      begin
+      
         new_pkg = package_hsh[[existing_pkg.name, existing_pkg.version]]
         # do we update source?
         if existing_pkg.source_name.nil? && new_pkg.source_name.present?
@@ -49,11 +50,9 @@ class PackageMaker < ServiceMaker
 
         # get rid of existing package from to_create
         to_create.delete(new_pkg)
-      rescue => e
-        binding.pry
+      
       end
-    end
-    new_packages = package_hsh.values.map do |pkg|
+    new_packages = to_create.map do |pkg|
       self.create(pkg.attributes)
     end
 
@@ -62,6 +61,9 @@ class PackageMaker < ServiceMaker
     end
 
     new_packages.concat(updated_packages)
+    rescue => e
+      binding.pry
+    end
   end
 
   def find_existing_packages(package_list)
@@ -83,13 +85,12 @@ class PackageMaker < ServiceMaker
     # current assumption: if there's something wrong with a package, 
     # abort whole txn
     package.save!
-    update_vulns(package)
+    #update_vulns(package)
   end
 
   def update(pkg, hsh)
     pkg.update(hsh)
-    
-    update_vulns(pkg)
+    #update_vulns(pkg)
   end
 
   def update_vulns(package)
