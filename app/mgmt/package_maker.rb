@@ -4,9 +4,10 @@
 class PackageMaker < ServiceMaker
   attr_accessor :platform, :release
 
-  def initialize(platform, release)
+  def initialize(platform, release, origin = "user")
     @platform = platform
     @release = release
+    @origin = origin
   end
 
   def find_or_create(package_list)
@@ -43,8 +44,8 @@ class PackageMaker < ServiceMaker
     existing_packages_query.each do |existing_pkg|
       
         new_pkg = package_hsh[[existing_pkg.name, existing_pkg.version]]
-        # do we update source?
-        if existing_pkg.source_name.nil? && new_pkg.source_name.present?
+        # update if it's a user package
+        if existing_pkg.origin == "user"
           to_update << [existing_pkg, new_pkg]
         end
 
@@ -80,7 +81,7 @@ class PackageMaker < ServiceMaker
   def create(hsh)
     package = Package.new(hsh.merge(:platform => @platform,
                                     :release => @release,
-                                    :origin=>"user"))
+                                    :origin=>@origin))
 
     # current assumption: if there's something wrong with a package, 
     # abort whole txn
@@ -89,7 +90,7 @@ class PackageMaker < ServiceMaker
   end
 
   def update(pkg, hsh)
-    pkg.update(hsh)
+    pkg.update_columns(hsh.merge(:origin => @origin))
     #update_vulns(pkg)
   end
 

@@ -10,13 +10,26 @@ pkg_query = Package.select("distinct(packages.id), packages.*, p2.source_name ne
 
 
 =end
-
+require 'open-uri'
 class PackageImporter
-  def initialize(path)
+
+
+  def self.import_trusty!
+    # meh this shouldn't go here
+    #["trusty", "trusty-updates",
+     ["trusty-backports", "trusty-security"].each do |dist| 
+       ["main", "universe", "multiverse", "restricted"].each do |repo|
+        puts "Importing #{dist}/#{repo}"
+        PackageImporter.new("http://archive.ubuntu.com/ubuntu/dists/#{dist}/#{repo}/binary-amd64/Packages.gz", "#{dist}/#{repo}").import!
+      end
+    end
+  end
+
+  def initialize(path, repo)
     @platform = "ubuntu"
     @release = "trusty"
-
-    @raw_data = open(path).read
+    @repo = repo
+    @raw_data = Zlib::GzipReader.open(open(path)).read
   end
 
   def import!
@@ -59,7 +72,7 @@ class PackageImporter
     #Let's not lock the database forever here
     all_packages.in_groups_of(1000, false) do |packages| 
       Package.transaction do
-        pm = PackageMaker.new(@platform, @release)
+        pm = PackageMaker.new(@platform, @release, @repo)
         pm.find_or_create(packages)
       end
     end
