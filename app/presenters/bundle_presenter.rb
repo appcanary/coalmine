@@ -13,7 +13,7 @@ class BundlePresenter
   end
 
   def vuln_packages
-    @vuln_packages ||= vulnquery.from_bundle(bundle).order(:name).to_a
+    @vuln_packages ||= vulnquery.from_bundle(bundle).sort_by { |b| [b.vulnerabilities.first.criticality, b.name]}.to_a
   end
 
   def all_packages
