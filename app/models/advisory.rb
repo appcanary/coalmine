@@ -54,6 +54,15 @@ class Advisory < ActiveRecord::Base
     self.build_advisory_import_state
   end
 
+  enum criticality: {
+         unknown: 0,
+         neglible: 10,
+         low: 20,
+         medium: 30,
+         high: 40,
+         critical: 50,
+       }
+
   scope :most_recent_advisory_for, ->(identifier, source) {
     where(:identifier => identifier, :source => source).order("created_at DESC").limit(1)
   }
