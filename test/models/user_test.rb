@@ -34,6 +34,7 @@
 #  daily_email_consent             :boolean          default("false"), not null
 #  datomic_id                      :integer
 #  invoiced_manually               :boolean          default("false")
+#  agent_token                     :string
 #  account_id                      :integer          not null
 #
 # Indexes
