@@ -5,6 +5,6 @@ class PackagesController < ApplicationController
                   :name => params[:name],
                   :version => params[:version]).first!
 
-    @vulns = @package.vulnerabilities.order(criticality: :desc)
+    @vulns = @package.vulnerabilities.order_by_criticality
   end
 end

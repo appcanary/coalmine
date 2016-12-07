@@ -54,7 +54,7 @@
           </thead>
 
           <% @bundlepres.vuln_packages.each do |package| %>
-            <% vulns = package.vulnerabilities %>
+            <% vulns = package.vulnerabilities.order_by_criticality %>
 
             <tr>
               <td class="package-name">
