@@ -12,11 +12,23 @@ Rails.application.routes.draw do
     end
   end
 
+  class RubysecConstraint
+    def self.matches?(request)
+      Rails.configuration.rubysec.domains.include? request.host
+    end
+  end
+
+
   constraints IsItVulnConstraint do
     root 'is_it_vuln#index', :as => :vuln_root
     post '/submit' => "is_it_vuln#submit", :as => :submit_gemfile
     get '/results/sample' => "is_it_vuln#sample_results", :as => :sample_results
     get '/results/:ident' => "is_it_vuln#results", :as => :vuln_results
+  end
+
+  constraints RubysecConstraint do
+    root "rubysec#index", :as => :rubysec_root
+    get "/new" => "rubysec#new", :as => :rubysec_new
   end
   
   get "isitvuln" => "is_it_vuln#index"
@@ -101,6 +113,7 @@ Rails.application.routes.draw do
 
     resources :subscription_plans
     resources :emails, :only => [:index, :show]
+    resources :advisories
   end
 
   namespace :api do
