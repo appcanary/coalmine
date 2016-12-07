@@ -56,7 +56,7 @@ class Advisory < ActiveRecord::Base
 
   enum criticality: {
          unknown: 0,
-         neglible: 10,
+         negligible: 10,
          low: 20,
          medium: 30,
          high: 40,
