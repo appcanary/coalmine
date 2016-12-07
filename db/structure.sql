@@ -299,7 +299,7 @@ CREATE TABLE advisory_archives (
     constraints jsonb DEFAULT '[]'::jsonb NOT NULL,
     title character varying,
     description text,
-    criticality character varying,
+    criticality integer DEFAULT 0 NOT NULL,
     source_status character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     remediation text,
@@ -1356,8 +1356,8 @@ CREATE TABLE users (
     daily_email_consent boolean DEFAULT false NOT NULL,
     datomic_id bigint,
     invoiced_manually boolean DEFAULT false,
-    account_id integer NOT NULL,
-    agent_token character varying
+    agent_token character varying,
+    account_id integer NOT NULL
 );
 
 
@@ -1436,7 +1436,7 @@ CREATE TABLE vulnerability_archives (
     platform character varying NOT NULL,
     title character varying,
     description text,
-    criticality character varying,
+    criticality integer DEFAULT 0 NOT NULL,
     reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     osvdb_id character varying,
@@ -3256,27 +3256,11 @@ ALTER TABLE ONLY agent_received_files
 
 
 --
--- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
-
-
---
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_e4107b65b3 FOREIGN KEY (email_message_id) REFERENCES email_messages(id);
-
-
---
--- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_f0b7c79393 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3412,6 +3396,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160530195216');
 INSERT INTO schema_migrations (version) VALUES ('20160530195217');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602133740');
+
+INSERT INTO schema_migrations (version) VALUES ('20160602133741');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602134913');
 
