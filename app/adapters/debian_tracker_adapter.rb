@@ -33,27 +33,27 @@ class DebianTrackerAdapter < AdvisoryAdapter.new(:package_name, :cve, :scope, :d
   def normalize_urgency(str)
     case str
     when "unimportant"
-      "negligible"
+      :negligible
     when "low"
-      "low"
+      :low
     when "low*"
-      "low"
+      :low
     when "low**"
-      "low"
+      :low
     when "medium"
-      "medium"
+      :medium
     when "medium*"
-      "medium*"
+      :medium
     when "medium**"
-      "medium"
+      :medium
     when "high"
-      "high"
+      :high
     when "high*"
-      "high"
+      :high
     when "high**"
-      "high"
+      :high
     else
-      "unknown"
+      :unknown
     end
   end
 

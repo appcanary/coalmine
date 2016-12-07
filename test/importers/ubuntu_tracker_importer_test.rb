@@ -22,7 +22,7 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
 
       assert new_attr["identifier"] =~ /CVE-\d\d\d\d-\d\d\d\d/
       assert new_attr["reference_ids"].first =~ /CVE-\d\d\d\d-\d\d\d\d/
-      assert ["medium", "low"].include?(new_attr["criticality"])
+      assert [:medium, :low].include?(new_attr["criticality"])
 
       # are we generating patched/affected properly?
       assert new_attr["patched"].all? { |hsh|
