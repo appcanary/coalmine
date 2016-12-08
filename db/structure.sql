@@ -1387,7 +1387,7 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 CREATE TABLE vulnerabilities (
     id integer NOT NULL,
     platform character varying NOT NULL,
-    title character varying,
+    title character varying NOT NULL,
     description text,
     criticality integer DEFAULT 0 NOT NULL,
     reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
