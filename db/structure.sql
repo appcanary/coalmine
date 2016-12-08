@@ -1302,6 +1302,51 @@ ALTER SEQUENCE que_jobs_job_id_seq OWNED BY que_jobs.job_id;
 
 
 --
+-- Name: rubysec_advisories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE rubysec_advisories (
+    id integer NOT NULL,
+    ident character varying,
+    gem character varying,
+    framework character varying,
+    platform character varying,
+    cve character varying,
+    url character varying,
+    title character varying,
+    date date,
+    description text,
+    cvss_v2 character varying,
+    cvss_v3 character varying,
+    unaffected_versions character varying[] DEFAULT '{}'::character varying[],
+    patched_versions character varying[] DEFAULT '{}'::character varying[],
+    related text,
+    submitter_email character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: rubysec_advisories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE rubysec_advisories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: rubysec_advisories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE rubysec_advisories_id_seq OWNED BY rubysec_advisories.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1389,8 +1434,8 @@ CREATE TABLE users (
     daily_email_consent boolean DEFAULT false NOT NULL,
     datomic_id bigint,
     invoiced_manually boolean DEFAULT false,
-    account_id integer NOT NULL,
-    agent_token character varying
+    agent_token character varying,
+    account_id integer NOT NULL
 );
 
 
@@ -1874,6 +1919,13 @@ ALTER TABLE ONLY que_jobs ALTER COLUMN job_id SET DEFAULT nextval('que_jobs_job_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec_advisories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
 
 
@@ -2164,6 +2216,14 @@ ALTER TABLE ONLY pre_users
 
 ALTER TABLE ONLY que_jobs
     ADD CONSTRAINT que_jobs_pkey PRIMARY KEY (queue, priority, run_at, job_id);
+
+
+--
+-- Name: rubysec_advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY rubysec_advisories
+    ADD CONSTRAINT rubysec_advisories_pkey PRIMARY KEY (id);
 
 
 --
@@ -2931,6 +2991,13 @@ CREATE INDEX index_packages_on_valid_at ON packages USING btree (valid_at);
 
 
 --
+-- Name: index_rubysec_advisories_on_ident; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rubysec_advisories_on_ident ON rubysec_advisories USING btree (ident);
+
+
+--
 -- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3334,27 +3401,11 @@ ALTER TABLE ONLY agent_received_files
 
 
 --
--- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
-
-
---
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_e4107b65b3 FOREIGN KEY (email_message_id) REFERENCES email_messages(id);
-
-
---
--- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_f0b7c79393 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3491,6 +3542,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160530195217');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602133740');
 
+INSERT INTO schema_migrations (version) VALUES ('20160602133741');
+
 INSERT INTO schema_migrations (version) VALUES ('20160602134913');
 
 INSERT INTO schema_migrations (version) VALUES ('20160603150414');
@@ -3534,4 +3587,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161117181904');
 INSERT INTO schema_migrations (version) VALUES ('20161117183835');
 
 INSERT INTO schema_migrations (version) VALUES ('20161205215409');
+
+INSERT INTO schema_migrations (version) VALUES ('20161208165606');
 

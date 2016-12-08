@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   constraints RubysecConstraint do
     root "rubysec#index", :as => :rubysec_root
     get "/new" => "rubysec#new", :as => :rubysec_new
+    post "/preview" => "rubysec#preview", :as => :rubysec_preview
+    post "/create" => "rubysec#create", :as => :rubysec_create
   end
   
   get "isitvuln" => "is_it_vuln#index"

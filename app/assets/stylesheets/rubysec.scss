@@ -64,8 +64,7 @@ section {
 
 
   .new-vuln {
-    @extend .col-sm-8;
-    @extend .col-sm-offset-2;
+    @extend .col-sm-6;
     padding-bottom: 2em;
     p, ol {
       width: 30em;
@@ -75,17 +74,18 @@ section {
       padding-top: 0.5em;
     }
 
-    form {
-      width: 40em;
-    }
+  }
+  #advisory-form {
 
-    .control-label {
-      @extend .col-sm-3;
-    }
+    // // width: 40em;
 
-    .form-field {
-      @extend .col-sm-9;
-    }
+    // .control-label {
+    //   // @extend .col-sm-3;
+    // }
+
+    // .form-field {
+    //   // @extend .col-sm-9;
+    // }
 
     .form-group.required .control-label:after { 
       content:"*";
@@ -100,6 +100,7 @@ section {
       min-height: 8em;
     }
   }
+
 
   .disclaimer {
     @extend .col-sm-12;
