@@ -23,6 +23,9 @@ section {
     }
 
     .title {
+      h1 a {
+        color: black;
+      }
       @extend .col-sm-8;
       p {
         font-weight: 300;
@@ -76,23 +79,12 @@ section {
 
   }
   #advisory-form {
-
-    // // width: 40em;
-
-    // .control-label {
-    //   // @extend .col-sm-3;
-    // }
-
-    // .form-field {
-    //   // @extend .col-sm-9;
-    // }
-
     .form-group.required .control-label:after { 
       content:"*";
       color:red;
     }
 
-    textarea {
+    #rubysec_advisory_description {
       min-height: 15em;
     }
 

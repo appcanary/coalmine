@@ -15,6 +15,7 @@ class RubysecController < ApplicationController
       @submit = true
       render :preview
     end
+    RubysecMailer.new_advisory(@advisory.id).deliver_later!
   end
 
   def advisory_params
@@ -23,6 +24,6 @@ class RubysecController < ApplicationController
              :cve, :url, :title, 
              :date, :description, :cvss_v2, 
              :cvss_v3, :unaffected_versions, 
-             :patched_versions, :submitter_email)
+             :patched_versions, :related, :submitter_email)
   end
 end

@@ -5,12 +5,18 @@ class RubysecAdvisory < ActiveRecord::Base
     [:gem, :framework, :platform,
      :date, :url, :cve, :title, :description,
      :cvss_v2, :cvss_v3, :unaffected_versions, 
-     :patched_versions].reduce({}) { |acc, sym|
+     :patched_versions, :related].reduce({}) { |acc, sym|
 
-      if (val = self.send(sym)).present?
-        acc[sym.to_s] = val
-      end
-      acc
-    }.to_yaml
+       if (val = self.send(sym)).present?
+         if [:unaffected_versions, :patched_versions, :related].include?(sym)
+           val = val.lines.map(&:strip)
+         end
+
+         acc[sym.to_s] = val
+       end
+
+       acc
+
+     }.to_yaml
   end
 end
