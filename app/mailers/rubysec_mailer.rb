@@ -11,7 +11,7 @@ class RubysecMailer < ActionMailer::Base
       recipient = "hello@appcanary.com"
     end
 
-    mail(to: "info@rubysec.com", :subject => "New Rubysec submission") do |format|
+    mail(to: recipient, :subject => "New Rubysec submission!") do |format|
       format.text
     end
   end
