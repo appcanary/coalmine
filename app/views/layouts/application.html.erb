@@ -25,6 +25,8 @@
 
     <% if current_user %>
       <%= render :partial => "layouts/navbar" %>
+    <% else %>
+      <%= render :partial => "layouts/navbar_loggedout"%>
     <% end %>
 
     <div id="main" class="container">
