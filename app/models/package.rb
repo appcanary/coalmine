@@ -185,6 +185,10 @@ class Package < ActiveRecord::Base
     vulnerabilities_by_criticality.first.try(:criticality)
   end
 
+  def upgrade_priority_ordinal
+    Vulnerability.criticalities[upgrade_priority]
+  end
+
   # ----- view stuff
   def display_name
     "#{name} #{version}"
