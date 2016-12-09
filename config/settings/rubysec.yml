@@ -13,6 +13,7 @@ staging:
   rubysec:
     domains:
       - rubysec.staging.appcanary.com
+      - staging.rubysec.com
 
 production:
   rubysec:

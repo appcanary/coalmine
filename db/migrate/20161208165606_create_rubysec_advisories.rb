@@ -12,8 +12,8 @@ class CreateRubysecAdvisories < ActiveRecord::Migration
       t.text :description
       t.string :cvss_v2
       t.string :cvss_v3
-      t.string :unaffected_versions, array: true, default: []
-      t.string :patched_versions, array: true, default: []
+      t.text :unaffected_versions
+      t.text :patched_versions
       t.text :related
       t.string :submitter_email
 

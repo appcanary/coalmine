@@ -22,7 +22,7 @@
     <div class="form-field">
 
       <%= f.url_field :url, :class => "form-control", :required => "required"  %>
-      <span class="help-block">A link to a blog post, mailing list, github issue or commit, etc that describes this vulnerability.</span>
+      <span class="help-block">A link to a blog post, mailing list, github issue, etc that describes this vulnerability.</span>
     </div>
   </div>
 
@@ -40,8 +40,8 @@
     <%= f.label :title, :class => "control-label"  %>
     <div class="form-field">
 
-      <%= f.text_field :title, :class => "form-control", :placeholder => "i.e. XSS in [name of gem]" %>
-      <span class="help-block">A short sentence: what happened in what gem?</span>
+      <%= f.text_field :title, :class => "form-control", :placeholder => "i.e. XSS in [name of gem]", :required => "required" %>
+      <span class="help-block">A short sentence: what kind of bug affects what gem?</span>
     </div>
   </div>
 
@@ -54,12 +54,11 @@
     </div>
   </div>
 
-
   <div class="form-group versions">
     <%= f.label :unaffected_versions, :class => "control-label"  %>
     <div class="form-field">
 
-      <%= f.text_area :unaffected_versions, :value => nil, :class => "form-control fixed-width", :placeholder => "> 1.2.3\n>= 1.2.4\n< 2.3.4\n<= 2.3.3\n~> 2.2.2" %>
+      <%= f.text_area :unaffected_versions, :class => "form-control fixed-width", :placeholder => "> 1.2.3\n>= 1.2.4\n< 2.3.4\n<= 2.3.3\n~> 2.2.2" %>
       <span class="help-block">Are there versions of this gem that are unaffected by the vulnerability?<br/><br/> Please provide line separated Gem <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/rubygems/rdoc/Gem/Requirement.html">version requirements</a>. Use any operator as appropriate, including the <a href="https://robots.thoughtbot.com/rubys-pessimistic-operator">pessimistic one</a>.</span>
     </div>
   </div>
@@ -68,11 +67,19 @@
     <%= f.label :patched_versions, :class => "control-label"  %>
     <div class="form-field">
 
-      <%= f.text_area :patched_versions, :value => nil, :class => "form-control fixed-width", :placeholder => "> 1.2.3\n>= 1.2.4\n< 2.3.4\n<= 2.3.3\n~> 2.2.2" %>
+      <%= f.text_area :patched_versions, :class => "form-control fixed-width", :placeholder => "> 1.2.3\n>= 1.2.4\n< 2.3.4\n<= 2.3.3\n~> 2.2.2" %>
       <span class="help-block">Has the library released any patches?<br/><br/> Please provide line separated Gem <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/rubygems/rdoc/Gem/Requirement.html">version requirements</a>. Use any operator as appropriate, including the <a href="https://robots.thoughtbot.com/rubys-pessimistic-operator">pessimistic one</a>.</span>
     </div>
   </div>
 
+  <div class="form-group">
+    <%= f.label :related, :class => "control-label"  %>
+    <div class="form-field">
+
+      <%= f.text_area :related, :class => "form-control" %>
+      <span class="help-block">Any additional links that might provide more context, i.e. github commits.</span>
+    </div>
+  </div>
 
   <div class="form-group required">
     <%= f.label :submitter_email, "Your email", :class => "control-label"  %>
@@ -82,6 +89,8 @@
       <span class="help-block">We might have to contact you in case things are unclear.</span>
     </div>
   </div>
+
+
 
   <div class="form-group">
 
