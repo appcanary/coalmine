@@ -32,7 +32,11 @@ class Platforms
       @platform_to_release[platform] || []
     end
   end
- 
+
+  def self.all_platforms
+    @all_platforms
+  end
+
   def self.select_platform_release
     arr = [Ruby.titleize]
 
@@ -165,6 +169,10 @@ class Platforms
   ]
 
   def self.supported?(platform)
+    self.full_name(platform)
+  end
+
+  def self.full_name(platform)
     FULL_NAMES[platform]
   end
 
