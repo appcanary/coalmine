@@ -13,7 +13,7 @@ gem 'whenever', :require => false
 
 # views / assets
 gem 'sass-rails', require: false
-gem 'sassc-rails'
+gem 'sassc-rails', :git => "git@github.com:appcanary/sassc-rails.git"
 gem 'bootstrap-sass', :git => "git@github.com:appcanary/bootstrap-sass.git"
 gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
