@@ -1,19 +1,7 @@
 class VulnsController < ApplicationController
   skip_before_filter :require_login
   def index
-    case params[:sort_by]
-    when "criticality"
-      order = {criticality: :desc, reported_at: :desc}
-    when "title"
-      order = {title: :desc, reported_at: :desc}
-    when "reported_at"
-      order = {reported_at: :desc}
-    else
-      order = {reported_at: :desc}
-    end
-
-
-    @vulns = Vulnerability.order(order).paginate(:page => params[:page])
+    @vulns = Vulnerability.paginate(:page => params[:page])
 
     # filter by platform
     if params[:platform].present? && Platforms.all_platforms.include?(params[:platform])
@@ -23,8 +11,13 @@ class VulnsController < ApplicationController
 
     # searching
     if params[:search].present?
-      @vulns = @vulns.search(params[:search])
+      @vulns = @vulns.search(params[:search]).order(criticality: :desc, reported_at: :desc)
+    else
+      #if we're not searching, order by reported_at only
+      @vulns = @vulns.order(criticality: :desc)
     end
+
+
   end
 
   def archive

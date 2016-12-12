@@ -2,11 +2,11 @@
   <div class="col-sm-8">
     <ul class="nav nav-pills" role="tablist">
       <li role="presentation" class="<%= @platform.nil? ? "active" : "" %>">
-        <%= link_to "All", vulns_path %>
+        <%= link_to "All", vulns_path(search: params[:search]) %>
       </li>
       <% Platforms.all_platforms.each do |platform| %>
         <li role="presentation" class="<%= @platform == platform ? "active" : "" %>">
-          <%= link_to Platforms.full_name(platform), platform_vulns_path(platform: platform) %>
+          <%= link_to Platforms.full_name(platform), platform_vulns_path(platform: platform, search: params[:search]) %>
         </li>
       <% end %>
 
