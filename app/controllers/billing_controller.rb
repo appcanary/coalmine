@@ -19,6 +19,7 @@ class BillingController < ApplicationController
       elsif (sub = @billing_manager.valid_subscription?(sub_plan))
         if stripe_params[:stripe_token].blank?
           @user = @billing_manager.change_subscription!(sub)
+          SystemMailer.subscription_plan_changed(@user.id, sub).deliver!
         else
           @user = @billing_manager.add_customer(stripe_params[:stripe_token], sub)
 

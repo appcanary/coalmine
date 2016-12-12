@@ -11,6 +11,15 @@ class SystemMailer < ActionMailer::Base
     mail(to: "hello@appcanary.com", :subject => "Subscription added by #{@user.email}")
   end
 
+  def subscription_plan_changed(user_id, sub_id)
+    @user = User.find_by(id: user_id)
+    @sub = SubscriptionPlan.find_by(id: sub_id)
+    if @user.nil?
+      return
+    end
+    mail(to: "hello@appcanary.com", :subect => "Subscription changed by #{@user.email}")
+  end
+
   def canceled_subscription_email(user_id)
     @user = User.where(id: user_id).first
     if @user.nil?
