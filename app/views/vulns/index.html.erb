@@ -1,3 +1,25 @@
+<script>
+ $( document ).ready(function() {
+   $('#vulns').DataTable( {
+     "paging":   true,
+     "processing": true,
+     "serverSide": true,
+     "ajax": "",
+     "columns": [
+       { data: "platform" },
+       { data: "criticality" },
+       { data: "title" },
+       { data: "cves",
+         orderable: false },
+       { data: "packages",
+         orderable: false },
+       { data: "reported_at"},
+       
+       ]
+   });
+ });
+</script>
+
 <section>
   <div class="col-sm-8">
     <ul class="nav nav-pills" role="tablist">
@@ -11,23 +33,23 @@
       <% end %>
 
     </ul>
-    <h1><%= Platforms.full_name(@platform) || "All" %> Vulnerabilities (<%= @vulns.count %> found) </h1>
-    <div class="row">
-      <form method="get">
-        <div class="col-md-6">
-          <div class="input-group">
-            <%= text_field_tag :search, params[:search], class: "form-control", placeholder: 'Search vulnerabilities', type: :search %>
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-default" type="button">Search</button>
-            </span>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+    <h1><%= Platforms.full_name(@platform) || "All" %> Vulnerabilities </h1>
+    <!-- <div class="row">
+         <form method="get">
+         <div class="col-md-6">
+         <div class="input-group">
+         <%= text_field_tag :search, params[:search], class: "form-control", placeholder: 'Search vulnerabilities', type: :search %>
+         <span class="input-group-btn">
+         <button type="submit" class="btn btn-default" type="button">Search</button>
+         </span>
+         </div>
+         </div>
+         </form>
+         </div>
+         </div> -->
 </section>
 
-<table class="table">
+<table class="table table-striped" id="vulns">
   <thead>
     <th>
       platform
@@ -37,8 +59,16 @@
       criticality
     </th>
 
-    <th>
+    <th class="col-sm-4">
       title
+    </th>
+
+    <th>
+      cves
+    </th>
+
+    <th>
+      packages
     </th>
 
     <th>
@@ -46,28 +76,54 @@
     </th>
   </thead>
   <tbody>
-    <% @vulns.each do |v| %>
+    <!-- <%# @vulns.each do |v| %>
       <tr>
         <td>
-          <%= platform_icon v.platform %>
+          <%#= platform_icon v.platform %>
         </td>
 
         <td>
-          <%= criticality_icon v.criticality %>
+          <%#= criticality_icon v.criticality %>
         </td>
 
         <td>
-          <%= link_to v.title, vuln_path(v) %>
+          <%#= link_to v.title, vuln_path(v) %>
         </td>
-
+3
         <td>
-          <%= v.reported_at.try(:strftime, "%Y-%m-%d") %>
+          <%#= v.reported_at.try(:strftime, "%Y-%m-%d") %>
         </td>
       </tr>
-    <% end %>
+    <%# end %>-->
+    <tfoot>
+      <th>
+        platform
+      </th>
+
+      <th>
+        criticality
+      </th>
+
+      <th>
+        title
+      </th>
+
+      <th>
+        cves
+      </th>
+
+      <th>
+        packages
+      </th>
+
+      <th>
+        reported at
+      </th>
+    </tfoot>
+    <tbody>
 
   </tbody>
 </table>
 
-<%= will_paginate @vulns, renderer: BootstrapPagination::Rails %>
+
 
