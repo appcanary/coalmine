@@ -4,19 +4,32 @@
 class PackageMaker < ServiceMaker
   attr_accessor :platform, :release
 
-  def initialize(platform, release, origin = "user")
+  def initialize(platform, release, origin = "user", update_all = false)
     @platform = platform
     @release = release
     @origin = origin
+    @update_all = update_all
   end
 
   def find_or_create(package_list)
-    existing_pkg_query = find_existing_packages(package_list)
+    existing_packages_query = find_existing_packages(package_list)
 
     # we might not know about every package submitted.
     # Let's check!
 
-    create_missing_packages(existing_pkg_query, package_list)
+    existing_set = existing_packages_query.pluck_unique_fields
+    new_packages = diff_packages(existing_set, package_list)
+
+    new_packages.map do |pkg|
+      self.create(pkg.attributes)
+    end
+
+    if @update_all
+      existing_packages = package_list - new_packages
+      update_packages(existing_packages)
+    end
+
+    # create_missing_packages(existing_pkg_query, package_list)
 
     # this is an ActiveRecord_Relation; it gets
     # lazily evaluated from the database.
@@ -25,9 +38,7 @@ class PackageMaker < ServiceMaker
     # the query behind it should return all relevant packages
     # thereby negating the need to add new_packages above
     # to this list.
-
-    #TODO this is no longer true
-    existing_pkg_query
+    existing_packages_query
   end
 
   # given an Arel query and a list of packages, determines
@@ -36,36 +47,15 @@ class PackageMaker < ServiceMaker
   # assumes that existing_packages_query was built from
   # the items in package_list.
 
-  def create_missing_packages(existing_packages_query, package_list)
-    package_hsh = package_list.index_by{|p| [p.name, p.version]}
-    to_create = package_list.to_set
-    to_update = []
-    begin
-    existing_packages_query.each do |existing_pkg|
-      
-        new_pkg = package_hsh[[existing_pkg.name, existing_pkg.version]]
-        # update if it's a user package
-        if existing_pkg.origin == "user"
-          to_update << [existing_pkg, new_pkg]
-        end
+  # def create_missing_packages(existing_packages_query, package_list)
+  #   existing_set = existing_packages_query.pluck_unique_fields
 
-        # get rid of existing package from to_create
-        to_create.delete(new_pkg)
-      
-      end
-    new_packages = to_create.map do |pkg|
-      self.create(pkg.attributes)
-    end
+  #   new_packages = diff_packages(existing_set, package_list)
 
-    updated_packages = to_update.map do |pkg, parcel|
-      self.update(pkg, parcel.attributes)
-    end
-
-    new_packages.concat(updated_packages)
-    rescue => e
-      binding.pry
-    end
-  end
+  #   new_packages.map do |pkg|
+  #     self.create(pkg.attributes)
+  #   end
+  # end
 
   def find_existing_packages(package_list)
     return Package.none if package_list.empty?
@@ -81,23 +71,28 @@ class PackageMaker < ServiceMaker
   def create(hsh)
     package = Package.new(hsh.merge(:platform => @platform,
                                     :release => @release,
-                                    :origin=>@origin))
+                                    :origin => @origin))
 
     # current assumption: if there's something wrong with a package, 
     # abort whole txn
     package.save!
-    #update_vulns(package)
-  end
 
-  def update(pkg, hsh)
-    pkg.update_columns(hsh.merge(:origin => @origin))
-    #update_vulns(pkg)
-  end
-
-  def update_vulns(package)
+    # temporarily disabled
     possible_vulns = package.concerning_vulnerabilities
     add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     return package
+  end
+
+  def update_packages(package_list)
+    package_list.each do |parcel|
+      pkg = Package.where(:platform => @platform, :release => @release).
+        where(parcel.unique_hash).first!
+
+      pkg.update_attributes!(parcel.attributes.merge(
+        :platform => @platform,
+        :release => @release,
+        :origin => @origin))
+    end
   end
 
 
@@ -105,7 +100,7 @@ class PackageMaker < ServiceMaker
 
   # this doesn't have to trigger a report because:
   # a report will be triggered when the package gets
-  # assigned to a bundle.
+  # assigned to a bundle. 
   #
   # there should not be a scenario where this method
   # gets called, on packages that are in a bundle

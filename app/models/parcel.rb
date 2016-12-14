@@ -37,6 +37,10 @@ class Parcel
     [self.name, self.version]
   end
 
+  def unique_hash
+    {'name' => self.name, 'version' => self.version}
+  end
+
   class RPM < Parcel
     attr_accessor :arch, :filename, :nevra
 

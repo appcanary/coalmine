@@ -112,23 +112,24 @@ class PackageManagerTest < ActiveSupport::TestCase
                                       {name: "fakeMcFakerson", version: "1.2.3"}]
       package_list = package_list.map { |h| Parcel::Rubygem.new(h) }
 
-      existing_query = @pm.find_existing_packages(package_list)
+      # existing_query = @pm.find_existing_packages(package_list)
 
-      list = @pm.create_missing_packages(existing_query, package_list)
+      # list = @pm.create_missing_packages(existing_query, package_list)
+      @pm.find_or_create(package_list)
 
       # even tho we have duplicates, it only creates it once / don't raise
       # validation errors
       assert_equal 11, Package.count
-      assert_equal 1, list.count
+      # assert_equal 1, list.count
     end
 
-    it "should stuff" do
-      package_list = [{"Package" => "fakeMcFakerson", "Version" => "1.2.3"},
-                      {"Package" => "fakeMcFakerson", "Version" => "1.2.3"},]
+    # it "should stuff" do
+    #   package_list = [{"Package" => "fakeMcFakerson", "Version" => "1.2.3"},
+    #                   {"Package" => "fakeMcFakerson", "Version" => "1.2.3"},]
 
-      package_list = package_list.map { |h| Parcel::Dpkg.new(h) }
-      binding.pry
-    end
+    #   package_list = package_list.map { |h| Parcel::Dpkg.new(h) }
+    #   binding.pry
+    # end
 
     it "should create packages and update relevant vulns" do
       pkg_name = "fakemcfake"
