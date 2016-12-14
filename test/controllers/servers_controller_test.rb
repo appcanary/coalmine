@@ -2,7 +2,6 @@ require 'test_helper'
 
 class ServersControllerTest < ActionController::TestCase
   let(:user) { FactoryGirl.create(:user) }
-  let(:server) { FactoryGirl.build(:server) }
 
   describe "while authenticated" do
 
@@ -45,6 +44,20 @@ class ServersControllerTest < ActionController::TestCase
       get :new
       assert_response :success
       assert assigns(:agent_token)
+    end
+
+    it "should get deleted" do
+      this_server = FactoryGirl.create(:agent_server, :account => user.account)
+
+      # there was an error reported when a user tried to delete a server
+      # that had an accepted file, due to a foreign key violation, hence this test. 
+      # there ought to be a better way to test these relationships automatically
+      this_server.received_files.create(:account => user.account)
+      this_server.accepted_files.create(:account => user.account)
+
+      assert_equal 1, AgentServer.count
+      delete :destroy, :id => this_server.id
+      assert_equal 0, AgentServer.count
     end
   end
 
