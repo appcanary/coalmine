@@ -1,7 +1,6 @@
 class RubysecController < ApplicationController
   skip_before_filter :require_login
-  before_action -> { @skiptopbar = true }
-
+  
   def preview
     @advisory = RubysecAdvisory.new(advisory_params)
     @preview = @advisory.generate_yaml
