@@ -29,8 +29,6 @@ class PackageMaker < ServiceMaker
       update_packages(existing_packages)
     end
 
-    # create_missing_packages(existing_pkg_query, package_list)
-
     # this is an ActiveRecord_Relation; it gets
     # lazily evaluated from the database.
     # by the time we get here, the missing packages
@@ -40,22 +38,6 @@ class PackageMaker < ServiceMaker
     # to this list.
     existing_packages_query
   end
-
-  # given an Arel query and a list of packages, determines
-  # which packages we have not seen yet and creates them.
-  #
-  # assumes that existing_packages_query was built from
-  # the items in package_list.
-
-  # def create_missing_packages(existing_packages_query, package_list)
-  #   existing_set = existing_packages_query.pluck_unique_fields
-
-  #   new_packages = diff_packages(existing_set, package_list)
-
-  #   new_packages.map do |pkg|
-  #     self.create(pkg.attributes)
-  #   end
-  # end
 
   def find_existing_packages(package_list)
     return Package.none if package_list.empty?
@@ -77,9 +59,7 @@ class PackageMaker < ServiceMaker
     # abort whole txn
     package.save!
 
-    # temporarily disabled
-    # possible_vulns = package.concerning_vulnerabilities
-    # add_package_to_affecting_vulnerabilities!(possible_vulns, package)
+    update_vulns(package)
     return package
   end
 
@@ -87,22 +67,29 @@ class PackageMaker < ServiceMaker
     package_list.each do |parcel|
       next if parcel.source_name.nil?
 
-      pkgs = Package.where(:platform => @platform, :release => @release).
+      pkgs = Package.where(:platform => @platform, 
+                           :release => @release, 
+                           :origin => "user").
         where(parcel.unique_hash)
 
       # we have a problem with dupes but rn that's not my job to fix
-      begin
-        pkgs.each do |pkg|
-         
-          pkg.update_attributes!(parcel.attributes.merge(
-            :platform => @platform,
-            :release => @release,
-            :origin => @origin))
+      pkgs.each do |pkg|
+
+        h = parcel.attributes.merge(:platform => @platform, 
+                                    :release => @release, 
+                                    :origin => @origin)
+        pkg.assign_attributes(h)
+
+        if pkg.changed? && pkg.save!
+          update_vulns(pkg)
         end
-      rescue Exception => e
-        binding.pry
       end
     end
+  end
+
+  def update_vulns(package)
+    possible_vulns = package.concerning_vulnerabilities
+    add_package_to_affecting_vulnerabilities!(possible_vulns, package)
   end
 
 

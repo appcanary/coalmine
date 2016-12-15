@@ -123,14 +123,6 @@ class PackageManagerTest < ActiveSupport::TestCase
       # assert_equal 1, list.count
     end
 
-    # it "should stuff" do
-    #   package_list = [{"Package" => "fakeMcFakerson", "Version" => "1.2.3"},
-    #                   {"Package" => "fakeMcFakerson", "Version" => "1.2.3"},]
-
-    #   package_list = package_list.map { |h| Parcel::Dpkg.new(h) }
-    #   binding.pry
-    # end
-
     it "should create packages and update relevant vulns" do
       pkg_name = "fakemcfake"
       pkg = FactoryGirl.build(:package, :ruby, :name => pkg_name, :version => "1.0.2")
@@ -157,7 +149,7 @@ class PackageManagerTest < ActiveSupport::TestCase
     end
   end
 
-   test "when a package gets created, the vulns that affect it get updated" do
+  test "when a package gets created, the vulns that affect it get updated" do
     v1, v2, _ = FactoryGirl.create_list(:vulnerability, 5)
 
     pkg_name = v1.vulnerable_dependencies.first.package_name
@@ -180,5 +172,42 @@ class PackageManagerTest < ActiveSupport::TestCase
     assert v1.packages.include?(p1)
   end
 
+  test "when a package we've seen before gets submitted, we update the package nonetheless" do
+    vuln = FactoryGirl.create(:vulnerability, :ubuntu)
+    vuln_dep = vuln.vulnerable_dependencies.first
+
+    # vuln deps default to ruby style version reqs
+    vuln_dep.patched_versions = ["999.9.9"]
+    vuln_dep.save!
+
+    pkg = FactoryGirl.create(:package, :ubuntu, :origin => "user")
+    assert_equal 1, Package.count
+    assert_equal nil, pkg.source_name
+    assert_equal 0, VulnerablePackage.count
+
+    # in ubuntu, vulns are calculated using the source name.
+    # when we update a package to contain a source name when it prev
+    # didn't, are we calculating new vuln packages properly?
+
+    parcel = Parcel.from_package(pkg)
+    parcel.source_name = vuln_dep.package_name
+
+    # nothing will change because we did not set the update flag
+    
+    @pm = PackageMaker.new("ubuntu", pkg.release)
+    @pm.find_or_create([parcel])
+
+    pkg.reload
+    assert_equal nil, pkg.source_name
+    assert_equal 0, VulnerablePackage.count
+
+    # now we actually try to update the package
+    @pm = PackageMaker.new("ubuntu", pkg.release, "user", true)
+    @pm.find_or_create([parcel])
+
+    pkg.reload
+    assert_equal parcel.source_name, pkg.source_name
+    assert_equal 1, VulnerablePackage.count
+  end
 
 end
