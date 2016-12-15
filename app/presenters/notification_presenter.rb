@@ -34,7 +34,7 @@ class NotificationPresenter
 
   def notifications_by_package
     @notifications_by_package ||=
-      @notifications.group_by(&:package).sort_by { |k, v| [k.upgrade_priority_ordinal, k.name] }
+      @notifications.group_by(&:package).sort_by { |k, v| [-k.upgrade_priority_ordinal, k.name] }
   end
 
   def each_package

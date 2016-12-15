@@ -73,15 +73,15 @@ class CesaAdapter < AdvisoryAdapter.new(:cesa_id, :issue_date, :synopsis,
   generate :criticality do
     case severity
     when "Critical"
-      "critical"
+      :critical
     when "Important"
-      "high"
+      :high
     when "Moderate"
-      "medium"
+      :medium
     when "Low"
-      "low"
+      :low
     else
-      "unknown"
+      :unknown
     end
   end
 

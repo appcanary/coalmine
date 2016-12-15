@@ -72,15 +72,15 @@ class AlasAdapter < AdvisoryAdapter.new(:alas_id, :reference_ids, :severity,
   generate :criticality do
     case severity
     when "Critical"
-      "critical"
+      :critical
     when "Important"
-      "high"
+      :high
     when "Medium"
-      "medium"
+      :medium
     when "Low"
-      "low"
+      :low
     else
-      "unknown"
+      :unknown
     end
   end
 

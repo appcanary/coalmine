@@ -245,7 +245,7 @@ CREATE TABLE advisories (
     constraints jsonb DEFAULT '[]'::jsonb NOT NULL,
     title character varying,
     description text,
-    criticality character varying,
+    criticality integer DEFAULT 0 NOT NULL,
     source_status character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     remediation text,
@@ -299,7 +299,7 @@ CREATE TABLE advisory_archives (
     constraints jsonb DEFAULT '[]'::jsonb NOT NULL,
     title character varying,
     description text,
-    criticality character varying,
+    criticality integer DEFAULT 0 NOT NULL,
     source_status character varying,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     remediation text,
@@ -1422,7 +1422,7 @@ CREATE TABLE vulnerabilities (
     platform character varying NOT NULL,
     title character varying,
     description text,
-    criticality character varying,
+    criticality integer DEFAULT 0 NOT NULL,
     reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     osvdb_id character varying,
@@ -1469,7 +1469,7 @@ CREATE TABLE vulnerability_archives (
     platform character varying NOT NULL,
     title character varying,
     description text,
-    criticality character varying,
+    criticality integer DEFAULT 0 NOT NULL,
     reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     related jsonb DEFAULT '[]'::jsonb NOT NULL,
     osvdb_id character varying,
@@ -3486,6 +3486,8 @@ INSERT INTO schema_migrations (version) VALUES ('20161115013745');
 INSERT INTO schema_migrations (version) VALUES ('20161117181904');
 
 INSERT INTO schema_migrations (version) VALUES ('20161117183835');
+
+INSERT INTO schema_migrations (version) VALUES ('20161206201943');
 
 INSERT INTO schema_migrations (version) VALUES ('20161205215409');
 

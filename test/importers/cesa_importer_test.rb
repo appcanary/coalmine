@@ -19,7 +19,7 @@ class CesaImporterTest < ActiveSupport::TestCase
       assert_equal "centos", new_attr["platform"]
       assert new_attr["identifier"] =~ /CESA-2016:\d\d\d\d/
 
-      assert ["medium", "critical", "high"].include?(new_attr["criticality"])
+      assert [:medium, :critical, :high].include?(new_attr["criticality"])
       assert_equal "cefs", new_attr["source"]
 
       # are we generating the patched/affected json properly?

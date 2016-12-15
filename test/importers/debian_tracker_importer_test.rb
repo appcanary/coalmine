@@ -19,7 +19,7 @@ class DebianTrackerImporterTest < ActiveSupport::TestCase
       assert nattr["identifier"] =~ /CVE-\d\d\d\d-\d\d\d\d-[a-z]+/
       assert nattr["reference_ids"].all? { |cve| cve =~ /CVE-\d\d\d\d-\d\d\d\d/ }
 
-      assert ["high", "medium", "low", "negligible", "pending", "unknown"].include?(nattr["criticality"])
+      assert [:high, :medium, :low, :negligible, :pending, :unknown].include?(nattr["criticality"])
 
 
       assert nattr["affected"].all? { |h|

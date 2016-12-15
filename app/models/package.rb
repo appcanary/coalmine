@@ -178,7 +178,7 @@ class Package < ActiveRecord::Base
 
   # ----- view layer show highest vuln priority
   def vulnerabilities_by_criticality
-    @vulns_by_priority ||= self.vulnerabilities.sort_by(&:criticality_ordinal)
+    @vulns_by_priority ||= self.vulnerabilities.order(criticality: :desc)
   end
 
   def upgrade_priority
@@ -186,9 +186,8 @@ class Package < ActiveRecord::Base
   end
 
   def upgrade_priority_ordinal
-    vulnerabilities_by_criticality.first.try(:criticality_ordinal)
+    Vulnerability.criticalities[upgrade_priority]
   end
-
 
   # ----- view stuff
   def display_name

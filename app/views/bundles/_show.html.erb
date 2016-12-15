@@ -54,7 +54,7 @@
           </thead>
 
           <% @bundlepres.vuln_packages.each do |package| %>
-            <% vulns = package.vulnerabilities.sort_by(&:criticality_ordinal) %>
+            <% vulns = package.vulnerabilities.order_by_criticality %>
 
             <tr>
               <td class="package-name">
@@ -69,7 +69,7 @@
                   <% link_to(h(vuln.title), vuln_path(vuln), target: "_blank")  %>
                   <% end.join(", <br/>").html_safe %>
 
-                  <% if (vcount = vulns.count) > 4 %>
+                  <% if (vcount = vulns.size) > 4 %>
                     <br/>
                     ... and <%= link_to "#{vcount - 4} more <i class='fa fa-angle-double-right'></i>".html_safe, show_package_path(package), target: "_blank" %>
                 <% end %>
