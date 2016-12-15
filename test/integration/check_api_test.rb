@@ -79,7 +79,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
 
     describe "for amazon" do
       it "should tell you you're vulnerable" do
-        vuln = FactoryGirl.create(:vulnerability, :amazon)
+        vuln = FactoryGirl.create(:vulnerability, :amzn)
         FactoryGirl.create(:vulnerable_dependency, 
                            :vulnerability => vuln,
                            :platform => Platforms::Amazon,

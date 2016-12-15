@@ -54,6 +54,12 @@ FactoryGirl.define do
       release "7"
     end
 
+    trait :amzn do
+      platform "amzn"
+      release "2016.03"
+    end
+
+
     trait :ruby do
       platform Platforms::Ruby
     end

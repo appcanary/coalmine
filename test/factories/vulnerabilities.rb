@@ -55,7 +55,7 @@ FactoryGirl.define do
   end
 
   factory :vulnerability do
-    platform { deps.first.platform }
+    platform { Platforms::Ruby }
     reference_ids { [generate(:cve_id)] }
     reported_at { 7.days.ago }
 
@@ -71,12 +71,12 @@ FactoryGirl.define do
       platform { Platforms::Ubuntu }
     end
 
-    trait :amazon do
+    trait :amzn do
       platform { Platforms::Amazon }
     end
 
     transient do
-      platform_type { :ruby }
+      platform_type { platform.to_sym }
       deps { 2.times.map { build(:package, platform_type) } }
       pkgs { [] }
       vd_trait { nil }

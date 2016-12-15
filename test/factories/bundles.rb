@@ -30,8 +30,11 @@
 
 FactoryGirl.define do
   factory :bundle do
+    sequence :name do |n|
+      "#{Faker::App.name}#{n}"
+    end
+
     association :account
-    name { Faker::App.name }
     platform { Platforms::Ruby }
     factory :bundle_with_packages do
       transient do
