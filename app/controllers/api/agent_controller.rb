@@ -80,6 +80,7 @@ class Api::AgentController < ApiController
       return
     end
 
+    log_every_request(server)
     render :json => {}
   end
 
@@ -110,6 +111,13 @@ class Api::AgentController < ApiController
     end
 
     PlatformRelease.validate(platform, release)
+  end
+
+  def log_every_request(server)
+    if $rollout.active?(:log_every_file)
+      server.accepted_files.create(account_id: current_account.id, 
+                                   request: request.raw_post)
+    end
   end
 
   def log_faulty_request(server)
