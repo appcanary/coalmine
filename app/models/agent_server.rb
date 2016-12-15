@@ -36,6 +36,7 @@ class AgentServer < ActiveRecord::Base
   has_many :bundles, :dependent => :destroy
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
+  has_many :accepted_files, :class_name => AgentAcceptedFile
 
   has_one :last_heartbeat, -> { order(created_at: :desc) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
 

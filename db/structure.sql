@@ -435,6 +435,39 @@ ALTER SEQUENCE advisory_vulnerability_archives_id_seq OWNED BY advisory_vulnerab
 
 
 --
+-- Name: agent_accepted_files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE agent_accepted_files (
+    id integer NOT NULL,
+    account_id integer NOT NULL,
+    agent_server_id integer NOT NULL,
+    request text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: agent_accepted_files_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE agent_accepted_files_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: agent_accepted_files_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE agent_accepted_files_id_seq OWNED BY agent_accepted_files.id;
+
+
+--
 -- Name: agent_heartbeats; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1673,6 +1706,13 @@ ALTER TABLE ONLY advisory_vulnerability_archives ALTER COLUMN id SET DEFAULT nex
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY agent_accepted_files ALTER COLUMN id SET DEFAULT nextval('agent_accepted_files_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY agent_heartbeats ALTER COLUMN id SET DEFAULT nextval('agent_heartbeats_id_seq'::regclass);
 
 
@@ -1932,6 +1972,14 @@ ALTER TABLE ONLY advisory_vulnerabilities
 
 ALTER TABLE ONLY advisory_vulnerability_archives
     ADD CONSTRAINT advisory_vulnerability_archives_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: agent_accepted_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY agent_accepted_files
+    ADD CONSTRAINT agent_accepted_files_pkey PRIMARY KEY (id);
 
 
 --
@@ -2383,6 +2431,20 @@ CREATE INDEX index_advisory_vulnerability_archives_on_expired_at ON advisory_vul
 --
 
 CREATE INDEX index_advisory_vulnerability_archives_on_valid_at ON advisory_vulnerability_archives USING btree (valid_at);
+
+
+--
+-- Name: index_agent_accepted_files_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_agent_accepted_files_on_account_id ON agent_accepted_files USING btree (account_id);
+
+
+--
+-- Name: index_agent_accepted_files_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_agent_accepted_files_on_agent_server_id ON agent_accepted_files USING btree (agent_server_id);
 
 
 --
@@ -3184,14 +3246,6 @@ CREATE TRIGGER trigger_vulnerable_package_archives AFTER DELETE OR UPDATE ON vul
 
 
 --
--- Name: fk_rails_169d1b409d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY agent_received_files
-    ADD CONSTRAINT fk_rails_169d1b409d FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
-
-
---
 -- Name: fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3245,14 +3299,6 @@ ALTER TABLE ONLY email_messages
 
 ALTER TABLE ONLY bundled_packages
     ADD CONSTRAINT fk_rails_8318307314 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
-
-
---
--- Name: fk_rails_a1b81c819c; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY agent_received_files
-    ADD CONSTRAINT fk_rails_a1b81c819c FOREIGN KEY (account_id) REFERENCES accounts(id);
 
 
 --
@@ -3442,4 +3488,8 @@ INSERT INTO schema_migrations (version) VALUES ('20161117181904');
 INSERT INTO schema_migrations (version) VALUES ('20161117183835');
 
 INSERT INTO schema_migrations (version) VALUES ('20161206201943');
+
+INSERT INTO schema_migrations (version) VALUES ('20161205215409');
+
+INSERT INTO schema_migrations (version) VALUES ('20161214143911');
 
