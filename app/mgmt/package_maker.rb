@@ -4,9 +4,10 @@
 class PackageMaker < ServiceMaker
   attr_accessor :platform, :release
 
-  def initialize(platform, release)
+  def initialize(platform, release, origin = "user")
     @platform = platform
     @release = release
+    @origin = origin
   end
 
   def find_or_create(package_list)
@@ -24,6 +25,8 @@ class PackageMaker < ServiceMaker
     # the query behind it should return all relevant packages
     # thereby negating the need to add new_packages above
     # to this list.
+
+    #TODO this is no longer true
     existing_pkg_query
   end
 
@@ -34,17 +37,33 @@ class PackageMaker < ServiceMaker
   # the items in package_list.
 
   def create_missing_packages(existing_packages_query, package_list)
-    # if these two lists are the same size, our job here is done
-    if existing_packages_query.count == package_list.count
-      return Package.none
-    end
-    
-    existing_set = existing_packages_query.pluck_unique_fields
+    package_hsh = package_list.index_by{|p| [p.name, p.version]}
+    to_create = package_list.to_set
+    to_update = []
+    begin
+    existing_packages_query.each do |existing_pkg|
+      
+        new_pkg = package_hsh[[existing_pkg.name, existing_pkg.version]]
+        # update if it's a user package
+        if existing_pkg.origin == "user"
+          to_update << [existing_pkg, new_pkg]
+        end
 
-    new_packages = diff_packages(existing_set, package_list)
-
-    new_packages.map do |pkg|
+        # get rid of existing package from to_create
+        to_create.delete(new_pkg)
+      
+      end
+    new_packages = to_create.map do |pkg|
       self.create(pkg.attributes)
+    end
+
+    updated_packages = to_update.map do |pkg, parcel|
+      self.update(pkg, parcel.attributes)
+    end
+
+    new_packages.concat(updated_packages)
+    rescue => e
+      binding.pry
     end
   end
 
@@ -62,12 +81,20 @@ class PackageMaker < ServiceMaker
   def create(hsh)
     package = Package.new(hsh.merge(:platform => @platform,
                                     :release => @release,
-                                    :origin=>"user"))
+                                    :origin=>@origin))
 
     # current assumption: if there's something wrong with a package, 
     # abort whole txn
     package.save!
+    #update_vulns(package)
+  end
 
+  def update(pkg, hsh)
+    pkg.update_columns(hsh.merge(:origin => @origin))
+    #update_vulns(pkg)
+  end
+
+  def update_vulns(package)
     possible_vulns = package.concerning_vulnerabilities
     add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     return package
@@ -78,7 +105,7 @@ class PackageMaker < ServiceMaker
 
   # this doesn't have to trigger a report because:
   # a report will be triggered when the package gets
-  # assigned to a bundle. 
+  # assigned to a bundle.
   #
   # there should not be a scenario where this method
   # gets called, on packages that are in a bundle
@@ -86,9 +113,9 @@ class PackageMaker < ServiceMaker
   def add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     possible_vulns.select do |vuln_dep|
       if vuln_dep.affects?(package)
-        VulnerablePackage.create!(:vulnerability_id => vuln_dep.vulnerability_id,
-                                  :vulnerable_dependency_id => vuln_dep.id,
-                                  :package_id => package.id)
+        VulnerablePackage.find_or_create_by!(:vulnerability_id => vuln_dep.vulnerability_id,
+                                             :vulnerable_dependency_id => vuln_dep.id,
+                                             :package_id => package.id)
       end
     end
   end
