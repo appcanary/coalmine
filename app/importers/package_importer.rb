@@ -15,9 +15,8 @@ class PackageImporter
 
 
   def self.import_trusty!
-    # meh this shouldn't go here
-    #["trusty", "trusty-updates",
-     ["trusty-backports", "trusty-security"].each do |dist| 
+    ["trusty", "trusty-updates",
+     "trusty-backports", "trusty-security"].each do |dist| 
        ["main", "universe", "multiverse", "restricted"].each do |repo|
         puts "Importing #{dist}/#{repo}"
         PackageImporter.new("http://archive.ubuntu.com/ubuntu/dists/#{dist}/#{repo}/binary-amd64/Packages.gz", "#{dist}/#{repo}").import!
@@ -29,7 +28,7 @@ class PackageImporter
     @platform = "ubuntu"
     @release = "trusty"
     @repo = repo
-    @raw_data = Zlib::GzipReader.open(open(path)).read
+    @raw_data = Zlib::GzipReader.new(open(path)).read
   end
 
   def import!
@@ -72,7 +71,7 @@ class PackageImporter
     #Let's not lock the database forever here
     all_packages.in_groups_of(1000, false) do |packages| 
       Package.transaction do
-        pm = PackageMaker.new(@platform, @release, @repo)
+        pm = PackageMaker.new(@platform, @release, @repo, true)
         pm.find_or_create(packages)
       end
     end

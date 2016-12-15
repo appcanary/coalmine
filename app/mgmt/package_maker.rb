@@ -78,20 +78,30 @@ class PackageMaker < ServiceMaker
     package.save!
 
     # temporarily disabled
-    possible_vulns = package.concerning_vulnerabilities
-    add_package_to_affecting_vulnerabilities!(possible_vulns, package)
+    # possible_vulns = package.concerning_vulnerabilities
+    # add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     return package
   end
 
   def update_packages(package_list)
     package_list.each do |parcel|
-      pkg = Package.where(:platform => @platform, :release => @release).
-        where(parcel.unique_hash).first!
+      next if parcel.source_name.nil?
 
-      pkg.update_attributes!(parcel.attributes.merge(
-        :platform => @platform,
-        :release => @release,
-        :origin => @origin))
+      pkgs = Package.where(:platform => @platform, :release => @release).
+        where(parcel.unique_hash)
+
+      # we have a problem with dupes but rn that's not my job to fix
+      begin
+        pkgs.each do |pkg|
+         
+          pkg.update_attributes!(parcel.attributes.merge(
+            :platform => @platform,
+            :release => @release,
+            :origin => @origin))
+        end
+      rescue Exception => e
+        binding.pry
+      end
     end
   end
 
