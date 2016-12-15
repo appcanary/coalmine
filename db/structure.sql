@@ -3313,14 +3313,6 @@ CREATE TRIGGER trigger_vulnerable_package_archives AFTER DELETE OR UPDATE ON vul
 
 
 --
--- Name: fk_rails_169d1b409d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY agent_received_files
-    ADD CONSTRAINT fk_rails_169d1b409d FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
-
-
---
 -- Name: fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3334,22 +3326,6 @@ ALTER TABLE ONLY notifications
 
 ALTER TABLE ONLY bundles
     ADD CONSTRAINT fk_rails_553559718b FOREIGN KEY (account_id) REFERENCES accounts(id);
-
-
---
--- Name: fk_rails_564904e6b7; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY agent_accepted_files
-    ADD CONSTRAINT fk_rails_564904e6b7 FOREIGN KEY (account_id) REFERENCES accounts(id);
-
-
---
--- Name: fk_rails_59d1312fc9; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY agent_accepted_files
-    ADD CONSTRAINT fk_rails_59d1312fc9 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
 
 
 --
@@ -3390,14 +3366,6 @@ ALTER TABLE ONLY email_messages
 
 ALTER TABLE ONLY bundled_packages
     ADD CONSTRAINT fk_rails_8318307314 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
-
-
---
--- Name: fk_rails_a1b81c819c; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY agent_received_files
-    ADD CONSTRAINT fk_rails_a1b81c819c FOREIGN KEY (account_id) REFERENCES accounts(id);
 
 
 --
@@ -3590,3 +3558,4 @@ INSERT INTO schema_migrations (version) VALUES ('20161205215409');
 
 INSERT INTO schema_migrations (version) VALUES ('20161208165606');
 
+INSERT INTO schema_migrations (version) VALUES ('20161214143911');

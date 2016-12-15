@@ -15,4 +15,3 @@ class AddAgentsMonitorsToPlans < ActiveRecord::Migration
     end
   end
 end
-``
