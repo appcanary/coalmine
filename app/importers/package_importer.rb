@@ -15,8 +15,7 @@ class PackageImporter
 
 
   def self.import_trusty!
-    ["trusty", "trusty-updates",
-     "trusty-backports", "trusty-security"].each do |dist| 
+    ["trusty", "trusty-updates", "trusty-backports", "trusty-security"].each do |dist| 
        ["main", "universe", "multiverse", "restricted"].each do |repo|
         puts "Importing #{dist}/#{repo}"
         PackageImporter.new("http://archive.ubuntu.com/ubuntu/dists/#{dist}/#{repo}/binary-amd64/Packages.gz", "#{dist}/#{repo}").import!
