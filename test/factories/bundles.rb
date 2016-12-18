@@ -25,13 +25,17 @@
 #  index_bundles_on_account_id_and_agent_server_id_and_path  (account_id,agent_server_id,path)
 #  index_bundles_on_agent_server_id                          (agent_server_id)
 #  index_bundles_on_expired_at                               (expired_at)
+#  index_bundles_on_from_api                                 (from_api)
 #  index_bundles_on_valid_at                                 (valid_at)
 #
 
 FactoryGirl.define do
   factory :bundle do
+    sequence :name do |n|
+      "#{Faker::App.name}#{n}"
+    end
+
     association :account
-    name { Faker::App.name }
     platform { Platforms::Ruby }
     factory :bundle_with_packages do
       transient do

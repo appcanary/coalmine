@@ -1302,6 +1302,51 @@ ALTER SEQUENCE que_jobs_job_id_seq OWNED BY que_jobs.job_id;
 
 
 --
+-- Name: rubysec_advisories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE rubysec_advisories (
+    id integer NOT NULL,
+    ident character varying,
+    gem character varying,
+    framework character varying,
+    platform character varying,
+    cve character varying,
+    url character varying,
+    title character varying,
+    date date,
+    description text,
+    cvss_v2 character varying,
+    cvss_v3 character varying,
+    unaffected_versions text,
+    patched_versions text,
+    related text,
+    submitter_email character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: rubysec_advisories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE rubysec_advisories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: rubysec_advisories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE rubysec_advisories_id_seq OWNED BY rubysec_advisories.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1874,6 +1919,13 @@ ALTER TABLE ONLY que_jobs ALTER COLUMN job_id SET DEFAULT nextval('que_jobs_job_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec_advisories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
 
 
@@ -2164,6 +2216,14 @@ ALTER TABLE ONLY pre_users
 
 ALTER TABLE ONLY que_jobs
     ADD CONSTRAINT que_jobs_pkey PRIMARY KEY (queue, priority, run_at, job_id);
+
+
+--
+-- Name: rubysec_advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY rubysec_advisories
+    ADD CONSTRAINT rubysec_advisories_pkey PRIMARY KEY (id);
 
 
 --
@@ -2931,6 +2991,13 @@ CREATE INDEX index_packages_on_valid_at ON packages USING btree (valid_at);
 
 
 --
+-- Name: index_rubysec_advisories_on_ident; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_rubysec_advisories_on_ident ON rubysec_advisories USING btree (ident);
+
+
+--
 -- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3491,5 +3558,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161206201943');
 
 INSERT INTO schema_migrations (version) VALUES ('20161205215409');
 
-INSERT INTO schema_migrations (version) VALUES ('20161214143911');
+INSERT INTO schema_migrations (version) VALUES ('20161208165606');
 
+INSERT INTO schema_migrations (version) VALUES ('20161214143911');
