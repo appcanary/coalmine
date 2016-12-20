@@ -1,7 +1,7 @@
 class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publicdateatusn, :crd, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches, :filepath)
 
   def identifier
-    filepath.split("/")[-2..-1].join("/")
+    candidate
   end
 
   def source
