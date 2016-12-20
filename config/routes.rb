@@ -122,11 +122,11 @@ Rails.application.routes.draw do
       post "check" => 'check#create'
       get "status" => 'status#status'
 
-      post "monitors(/:name)" => "monitors#create", :constraints => { :name => /.*/ }
-      put "monitors/:name" => "monitors#update", :constraints => { :name => /.*/ }
-      get "monitors/:name" => "monitors#show", :constraints => { :name => /.*/ }, :as => "monitor"
+      post "monitors(/:name)" => "monitors#create", :constraints => { :name => /.+(?=\.json|\.html|$)/ }
+      put "monitors/:name" => "monitors#update", :constraints => { :name => /.+(?=\.json|\.html|$)/ }
+      get "monitors/:name" => "monitors#show", :constraints => { :name => /.+(?=\.json|\.html|$)/ }, :as => "monitor"
       get "monitors" => "monitors#index"
-      delete "monitors/:name" => "monitors#destroy", :constraints => { :name => /.*/ }
+      delete "monitors/:name" => "monitors#destroy", :constraints => { :name => /.+(?=\.json|\.html|$)/ }
 
       get "servers/:uuid" => "servers#show", :as => "server"
       get "servers" => "servers#index"
