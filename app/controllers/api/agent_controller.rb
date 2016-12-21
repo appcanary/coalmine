@@ -68,7 +68,7 @@ class Api::AgentController < ApiController
     bundle_opt = {name: sendfile_params[:name], 
                   path: sendfile_params[:path],
                   last_crc: sendfile_params[:crc]}
-    AgentUpdateJob.enqueue(current_account.id, server.id, pr, bundle_opt, Marshal.dump(package_list))
+    AgentUpdateJob.enqueue(current_account.id, server.id, Marshal.dump(pr), bundle_opt, Marshal.dump(package_list))
     # bm = BundleManager.new(current_account, server)
     # bundle, err = bm.create_or_update(pr, bundle_opt, package_list)
     
