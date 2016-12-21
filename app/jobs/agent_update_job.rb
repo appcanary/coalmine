@@ -12,7 +12,12 @@ class AgentUpdateJob < Jobber
       raise err
     end
 
-    bm = BundleManager.new(account, server)
-    bm.create_or_update(pr, bundle_opt, package_list)
+    ActiveRecord::Base.transaction do
+      bm = BundleManager.new(account, server)
+      bm.create_or_update(pr, bundle_opt, package_list)
+
+      # Clean ourselves up
+      destroy
+    end
   end
 end
