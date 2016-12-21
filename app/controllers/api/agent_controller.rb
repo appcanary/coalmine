@@ -68,17 +68,17 @@ class Api::AgentController < ApiController
     bundle_opt = {name: sendfile_params[:name], 
                   path: sendfile_params[:path],
                   last_crc: sendfile_params[:crc]}
-
-    bm = BundleManager.new(current_account, server)
-    bundle, err = bm.create_or_update(pr, bundle_opt, package_list)
+    AgentUpdateJob.enqueue(current_account.id, server.id, Marshal.dump(pr), bundle_opt, Marshal.dump(package_list))
+    # bm = BundleManager.new(current_account, server)
+    # bundle, err = bm.create_or_update(pr, bundle_opt, package_list)
     
-    if err
-      log_faulty_request(server)
+    # if err
+    #   log_faulty_request(server)
 
-      loggit("400 PUT bundle", params[:uuid])
-      render :text => "", :status => 400
-      return
-    end
+    #   loggit("400 PUT bundle", params[:uuid])
+    #   render :text => "", :status => 400
+    #   return
+    # end
 
     log_every_request(server)
     render :json => {}
