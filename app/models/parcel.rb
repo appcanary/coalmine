@@ -3,20 +3,25 @@ class Parcel
 
   # used solely to build objects for testing
   def self.from_package(package)
-    klass = case package.platform
-            when Platforms::Ruby
-              Parcel::Rubygem
-            when Platforms::CentOS
-              Parcel::RPM
-            when Platforms::Ubuntu
-              Parcel::Dpkg
-            when Platforms::Debian
-              Parcel::Dpkg
-            else
-              raise "unknown platform"
-            end
+    klass = self.for_platform(package.platform)
 
     klass.builder_from_package(package)
+  end
+
+  # What parcel do we need for a given platform?
+  def self.for_platform(platform)
+    case platform
+    when Platforms::Ruby
+      Parcel::Rubygem
+    when Platforms::CentOS
+      Parcel::RPM
+    when Platforms::Ubuntu
+      Parcel::Dpkg
+    when Platforms::Debian
+      Parcel::Dpkg
+    else
+      raise "unknown platform"
+    end
   end
 
   def self.builder_from_package(pkg)
@@ -25,6 +30,14 @@ class Parcel
     builder.release = pkg.release
     builder.name = pkg.name
     builder.version = pkg.version
+    builder
+  end
+
+  def self.builder_from_hsh(hsh)
+    builder = self.new
+    hsh.each do |k, v|
+      builder.send("#{k}=", v)
+    end
     builder
   end
 
@@ -40,7 +53,6 @@ class Parcel
   def unique_hash
     {'name' => self.name, 'version' => self.version}
   end
-
   class RPM < Parcel
     attr_accessor :arch, :filename, :nevra
 
