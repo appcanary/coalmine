@@ -1,5 +1,5 @@
 class EmailNotifyJob < CronJob
-  INTERVAL = 24.hours
+  INTERVAL = 1.hours
 
   def run(args)
     log "Compiling and sending vuln emails"
