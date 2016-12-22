@@ -45,7 +45,7 @@
 class Advisory < ActiveRecord::Base
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
-  has_one :advisory_import_state, autosave: true
+  has_one :advisory_import_state, :autosave => true, :dependent => :destroy
   validates :advisory_import_state, :presence => true
   
   before_validation do

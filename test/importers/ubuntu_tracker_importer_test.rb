@@ -83,7 +83,7 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
     assert_equal 7, Advisory.from_ubuntu.count
 
     # Do we parse the correct reported_at date
-    assert_equal Date.new(2016,01,27), Advisory.where(:identifier => "retired/CVE-2016-0755").first.reported_at
+    assert_equal Date.new(2016,01,27), Advisory.where(:identifier => "CVE-2016-0755").first.reported_at
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)
