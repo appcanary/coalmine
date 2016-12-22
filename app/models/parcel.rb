@@ -34,6 +34,8 @@ class Parcel
   end
 
   def self.builder_from_hsh(hsh)
+    # Makes a parcel from an attributes hash.
+    # This will throw an error if the hash has a key the parcel doesn't know about
     builder = self.new
     hsh.each do |k, v|
       builder.send("#{k}=", v)
