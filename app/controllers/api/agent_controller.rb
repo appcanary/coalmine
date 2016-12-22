@@ -69,17 +69,10 @@ class Api::AgentController < ApiController
                   path: sendfile_params[:path],
                   last_crc: sendfile_params[:crc]}
 
-    bm = BundleManager.new(current_account, server)
-    bundle, err = bm.create_or_update(pr, bundle_opt, package_list)
-    
-    if err
-      log_faulty_request(server)
-
-      loggit("400 PUT bundle", params[:uuid])
-      render :text => "", :status => 400
-      return
-    end
-
+    # This is running in the background so we can no longer signal an error to the agent if something goes wrong here
+    # I call to_json myself here because it's not serialized in test mode.
+    # I don't want to reparse the data in the job because we can still tell the agent the data doesn't parse
+    AgentUpdateJob.enqueue(current_account.id, server.id, pr.platform, pr.release, bundle_opt, package_list.map(&:attributes))
     log_every_request(server)
     render :json => {}
   end
