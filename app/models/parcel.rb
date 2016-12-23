@@ -1,7 +1,6 @@
 class Parcel
   attr_accessor :platform, :release, :name, :version
 
-  # used solely to build objects for testing
   def self.from_package(package)
     klass = self.for_platform(package.platform)
 
@@ -14,6 +13,8 @@ class Parcel
     when Platforms::Ruby
       Parcel::Rubygem
     when Platforms::CentOS
+      Parcel::RPM
+    when Platforms::Amazon
       Parcel::RPM
     when Platforms::Ubuntu
       Parcel::Dpkg
