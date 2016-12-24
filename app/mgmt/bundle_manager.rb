@@ -136,7 +136,7 @@ class BundleManager < ServiceManager
     bundle.packages = packages
 
     # A bundle has changed! Time to record any logs
-    LogMaker.new(bundle.id).on_bundle_change
+    LogMaker.new.on_bundle_change(bundle_id)
 
     bundle
   end

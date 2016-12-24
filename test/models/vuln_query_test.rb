@@ -207,8 +207,8 @@ class VulnQueryTest < ActiveSupport::TestCase
 
     @bundle = FactoryGirl.create(:bundle, :packages => @packages)
     Bundle.transaction do
-      rm = LogMaker.new(@bundle.id)
-      rm.on_bundle_change
+      rm = LogMaker.new
+      rm.on_bundle_change(@bundle.id)
     end
 
     assert_equal 5, LogBundleVulnerability.count
