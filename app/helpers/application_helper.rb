@@ -134,7 +134,8 @@ module ApplicationHelper
     if main_ver
       str = "<p>Upgrade to: <code>#{h main_ver}</code></p>"
       if remaining_patches.present?
-        str += "<p>Other safe versions: #{remaining_patches.map { |pv| "<code>#{h pv}</code>" }.join(", ")}"
+        safe_versions = remaining_patches.map { |pv| "<code>#{h pv}</code>" }.join(", ")
+        str += "<p>Other safe versions: #{safe_versions}"
       end
     else
       str = "<p>Upgrade to: No patches exist right now.</p>"
@@ -155,8 +156,10 @@ module ApplicationHelper
   def link_to_server_or_monitor(log)
     if log.has_server?
       link_to log.server.display_name, server_app_url(log.bundle, server_id: log.server.id)
-    else 
+    elsif log.bundle.present?
       link_to log.bundle.display_name, monitor_url(log.bundle)
+    else
+      "This item has been deleted"
     end
   end
 
