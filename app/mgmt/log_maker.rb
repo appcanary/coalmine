@@ -1,5 +1,4 @@
-# TODO: rename to LogMaker
-class ReportMaker < ServiceMaker
+class LogMaker < ServiceMaker
   attr_accessor :bundle_id
   def initialize(bundle_id = nil)
     self.bundle_id = bundle_id

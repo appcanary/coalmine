@@ -33,13 +33,13 @@ class EmailManagerTest < ActiveSupport::TestCase
    
     # i could use a factory but... we have code for this
     Bundle.transaction do
-      rm = ReportMaker.new(bundle1.id)
+      rm = LogMaker.new(bundle1.id)
       rm.on_bundle_change
 
-      rm = ReportMaker.new(bundle2.id)
+      rm = LogMaker.new(bundle2.id)
       rm.on_bundle_change
 
-      rm = ReportMaker.new(bundle3.id)
+      rm = LogMaker.new(bundle3.id)
       rm.on_bundle_change
     end
 
@@ -161,7 +161,7 @@ class EmailManagerTest < ActiveSupport::TestCase
 
 
     Bundle.transaction do
-      rm = ReportMaker.new(bundle1.id)
+      rm = LogMaker.new(bundle1.id)
       rm.on_bundle_change
     end
     
@@ -191,7 +191,7 @@ class EmailManagerTest < ActiveSupport::TestCase
 
     Bundle.transaction do
       bundle1.packages = bundle1.packages[1..-1]
-      rm = ReportMaker.new(bundle1.id)
+      rm = LogMaker.new(bundle1.id)
       rm.on_bundle_change
     end
 
@@ -210,7 +210,7 @@ class EmailManagerTest < ActiveSupport::TestCase
     # remove the second vuln, which does have a patch
     Bundle.transaction do
       bundle1.packages = bundle1.packages[1..-1]
-      rm = ReportMaker.new(bundle1.id)
+      rm = LogMaker.new(bundle1.id)
       rm.on_bundle_change
     end
     
