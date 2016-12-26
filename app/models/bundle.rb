@@ -32,6 +32,7 @@
 class Bundle < ActiveRecord::Base
   belongs_to :account
   belongs_to :agent_server
+  has_one :bundle_processed_state, :autosave => true, :dependent => :destroy
   has_many :bundled_packages, :dependent => :destroy
   has_many :packages, :through => :bundled_packages
   has_many :vulnerable_packages, :through => :bundled_packages
@@ -42,8 +43,19 @@ class Bundle < ActiveRecord::Base
 
   has_many :log_resolutions, ->(bundle) { where(account_id: bundle.account_id) }, :through => :bundled_packages
 
+  delegate :mark_unprocessed!, :mark_processed!, :to => :bundle_processed_state
+
   validates :account, presence: true
   validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }
+  validates :bundle_processed_state, :presence => true
+
+  before_validation do
+    self.build_bundle_processed_state
+  end
+
+  scope :unprocessed, -> {
+    joins(:bundle_processed_state).where(bundle_processed_states: { processed: false})
+  }
 
   scope :belonging_to, -> (user) {
     where(:account_id => user.account_id)

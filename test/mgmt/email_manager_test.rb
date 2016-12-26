@@ -98,6 +98,9 @@ class EmailManagerTest < ActiveSupport::TestCase
     packages2_sans_vuln = packages2[1..-1]
     BundleManager.new(bundle2.account).update_packages(bundle2.id, packages2_sans_vuln.map(&:to_pkg_builder))
 
+    # Trigger the worker
+    LogMakerJob.enqueue
+
     assert_equal 3, LogBundlePatch.count
 
 

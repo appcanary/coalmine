@@ -755,6 +755,38 @@ ALTER SEQUENCE bundle_archives_id_seq OWNED BY bundle_archives.id;
 
 
 --
+-- Name: bundle_processed_states; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE bundle_processed_states (
+    id integer NOT NULL,
+    bundle_id integer,
+    processed boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: bundle_processed_states_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE bundle_processed_states_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bundle_processed_states_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE bundle_processed_states_id_seq OWNED BY bundle_processed_states.id;
+
+
+--
 -- Name: bundled_package_archives; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1434,8 +1466,8 @@ CREATE TABLE users (
     daily_email_consent boolean DEFAULT false NOT NULL,
     datomic_id bigint,
     invoiced_manually boolean DEFAULT false,
-    agent_token character varying,
-    account_id integer NOT NULL
+    account_id integer NOT NULL,
+    agent_token character varying
 );
 
 
@@ -1549,6 +1581,38 @@ CREATE SEQUENCE vulnerability_archives_id_seq
 --
 
 ALTER SEQUENCE vulnerability_archives_id_seq OWNED BY vulnerability_archives.id;
+
+
+--
+-- Name: vulnerability_processed_states; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE vulnerability_processed_states (
+    id integer NOT NULL,
+    vulnerability_id integer,
+    processed boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: vulnerability_processed_states_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE vulnerability_processed_states_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: vulnerability_processed_states_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE vulnerability_processed_states_id_seq OWNED BY vulnerability_processed_states.id;
 
 
 --
@@ -1814,6 +1878,13 @@ ALTER TABLE ONLY bundle_archives ALTER COLUMN id SET DEFAULT nextval('bundle_arc
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY bundle_processed_states ALTER COLUMN id SET DEFAULT nextval('bundle_processed_states_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY bundled_package_archives ALTER COLUMN id SET DEFAULT nextval('bundled_package_archives_id_seq'::regclass);
 
 
@@ -1948,6 +2019,13 @@ ALTER TABLE ONLY vulnerabilities ALTER COLUMN id SET DEFAULT nextval('vulnerabil
 --
 
 ALTER TABLE ONLY vulnerability_archives ALTER COLUMN id SET DEFAULT nextval('vulnerability_archives_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vulnerability_processed_states ALTER COLUMN id SET DEFAULT nextval('vulnerability_processed_states_id_seq'::regclass);
 
 
 --
@@ -2096,6 +2174,14 @@ ALTER TABLE ONLY billing_plans
 
 ALTER TABLE ONLY bundle_archives
     ADD CONSTRAINT bundle_archives_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bundle_processed_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY bundle_processed_states
+    ADD CONSTRAINT bundle_processed_states_pkey PRIMARY KEY (id);
 
 
 --
@@ -2256,6 +2342,14 @@ ALTER TABLE ONLY vulnerabilities
 
 ALTER TABLE ONLY vulnerability_archives
     ADD CONSTRAINT vulnerability_archives_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vulnerability_processed_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vulnerability_processed_states
+    ADD CONSTRAINT vulnerability_processed_states_pkey PRIMARY KEY (id);
 
 
 --
@@ -2652,6 +2746,13 @@ CREATE INDEX index_bundle_archives_on_expired_at ON bundle_archives USING btree 
 --
 
 CREATE INDEX index_bundle_archives_on_valid_at ON bundle_archives USING btree (valid_at);
+
+
+--
+-- Name: index_bundle_processed_states_on_bundle_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bundle_processed_states_on_bundle_id ON bundle_processed_states USING btree (bundle_id);
 
 
 --
@@ -3096,6 +3197,13 @@ CREATE INDEX index_vulnerability_archives_on_valid_at ON vulnerability_archives 
 
 
 --
+-- Name: index_vulnerability_processed_states_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerability_processed_states_on_vulnerability_id ON vulnerability_processed_states USING btree (vulnerability_id);
+
+
+--
 -- Name: index_vulnerable_dependencies_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3369,11 +3477,27 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
+-- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
+
+
+--
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_e4107b65b3 FOREIGN KEY (email_message_id) REFERENCES email_messages(id);
+
+
+--
+-- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_f0b7c79393 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3510,8 +3634,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160530195217');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602133740');
 
-INSERT INTO schema_migrations (version) VALUES ('20160602133741');
-
 INSERT INTO schema_migrations (version) VALUES ('20160602134913');
 
 INSERT INTO schema_migrations (version) VALUES ('20160603150414');
@@ -3563,4 +3685,8 @@ INSERT INTO schema_migrations (version) VALUES ('20161208165606');
 INSERT INTO schema_migrations (version) VALUES ('20161214143911');
 
 INSERT INTO schema_migrations (version) VALUES ('20161220163846');
+
+INSERT INTO schema_migrations (version) VALUES ('20161224171025');
+
+INSERT INTO schema_migrations (version) VALUES ('20161224200339');
 

@@ -244,6 +244,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     # we update the bundle so we "patch" it, by removing the vuln pkgs
     package_list = @not_vuln_packages.map { |p| Parcel.builder_from_package(p) }
     r = BundleManager.new(@bundle.account).update_packages(@bundle.id, package_list)
+    LogMakerJob.enqueue
 
     assert_equal 5, LogBundlePatch.count
     # generate patch notifications
