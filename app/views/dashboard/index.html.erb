@@ -1,3 +1,18 @@
+<script>
+ $( document ).ready(function() {
+   $('#monitors').DataTable({
+     columnDefs: [{ targets: [4], orderable: false}],
+     order: [[ 1, 'desc' ], [ 2, 'asc' ]],
+     drawCallback: function () { $('[data-toggle="tooltip"]').tooltip() },
+   });
+   $('#servers').DataTable({
+     columnDefs: [{ targets: [4], orderable: false}],
+     order: [[ 1, 'desc' ], [ 2, 'asc' ]],
+     drawCallback: function () { $('[data-toggle="tooltip"]').tooltip() },
+   });
+ });
+</script>
+
 <div id="dashboard">
   <section>
     <div class="col-sm-12">
@@ -12,7 +27,23 @@
       <h1 class="page-header">Monitors 
         <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Monitor'.html_safe, new_monitor_path, :class => "btn btn-default")%>
       </h1>
-      <table class="table servers">
+      <table id ="monitors" class="table table-striped servers">
+        <thead>
+          <th>
+            kind
+          </th>
+          <th>
+            vulnerabilities
+          </th>
+          <th>
+            name
+          </th>
+          <th>
+            updated
+          </th>
+          <th>
+          </th>
+        </thead>
         <% @monitors.each do |bundlepres| %>
           <%= render :partial => "monitors/list", :locals => { :bundlepres => bundlepres } %>
         <% end %>
@@ -20,37 +51,40 @@
     </div>
   <% end %>
 
+
   <% if @servers.any? %>
     <div class="servers-section">
       <h1 class="page-header">Servers</h1>
+      <table id ="servers" class="table table-striped servers">
+        <thead>
+          <th>
+            kind
+          </th>
+          <th>
+            vulnerabilities / apps
+          </th>
+          <th>
+            name
+          </th>
+          <th>
+            updated
+          </th>
+          <th>
+          </th>
+        </thead>
+        <% @servers.each do |serverpres| %>
+          <%= render :partial => "servers/list", :locals => { :serverpres => serverpres } %>
+        <% end %>
+      </table> 
 
-      <% if @servers.active? %>
-        <table class="table servers">
-          <% @servers.active_servers.each do |serverpres| %>
-            <tr class="server">
-              <%= render :partial => "servers/list", :locals => { :serverpres => serverpres } %>
-            </tr>
-          <% end %>
-        </table>
-      <% end %>
-
-      <% if @servers.silent? %>
-        <h4>Inactive servers 
-          <%= link_to("Delete all inactive", destroy_inactive_servers_path, :method => :delete, :class => "btn btn-warning", :data => {:confirm => "Are you sure you want to delete all inactive servers?"})%>
-        </h4>
-        <p>
-          <strong> Psst! We haven't heard from these servers in a while:</strong>
-          <br/>
-        </p>
-
-        <table class="table servers">
-          <% @servers.silent_servers.each do |serverpres| %>
-            <tr class="server">
-              <%= render :partial => "servers/list", :locals => { :serverpres => serverpres } %>
-            </tr>
-          <% end %>
-        </table>
-      <% end %>
+      
+      <h4>Inactive servers 
+        <%= link_to("Delete all inactive", destroy_inactive_servers_path, :method => :delete, :class => "btn btn-warning", :data => {:confirm => "Are you sure you want to delete all inactive servers?"})%>
+      </h4>
+      <p>
+        <strong> Psst! We haven't heard from these servers in a while:</strong>
+        <br/>
+      </p>
     </div>
   <% else %>
     <div class="servers-section">
