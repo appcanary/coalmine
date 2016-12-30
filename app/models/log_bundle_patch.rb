@@ -127,7 +127,7 @@ class LogBundlePatch < ActiveRecord::Base
                  :supplementary => true,
                  :occurred_at => lbp.occurred_at)
     end
-
+    Bundle.eject_vulnerability_caches(lbp.map(&:bundle_id).uniq)
   end
 
   def self.record_bundle_patches!(bundle_id)
@@ -161,6 +161,7 @@ class LogBundlePatch < ActiveRecord::Base
                  :vulnerable_package_id => lbp.vulnerable_package_id,
                  :occurred_at => lbp.occurred_at)
     end
+    Bundle.eject_vulnerability_caches(lbp.map(&:bundle_id).uniq)
   end
 
   def self.resolution_log_primary_key
