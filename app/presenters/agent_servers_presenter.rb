@@ -2,7 +2,7 @@ class AgentServersPresenter
   attr_reader :servers, :active_servers, :silent_servers, 
     :account, :vulnquery
 
-  delegate :any?, :to => :servers
+  delegate :any?, :each, :to => :servers
   def initialize(account, vulnquery, coll = nil)
     @account = account
     @vulnquery = vulnquery
