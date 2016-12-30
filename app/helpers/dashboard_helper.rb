@@ -18,7 +18,7 @@ module DashboardHelper
       html << "<span class='label label-danger'>#{vuln_servers} vulnerable servers</span>"
     end
 
-     if vuln_monitors > 0
+    if vuln_monitors > 0
       html << "<span class='label label-danger'>#{vuln_monitors} vulnerable monitors</span>"
     end
 
@@ -31,7 +31,10 @@ module DashboardHelper
   end
 
   def monitor_kind_label(monitor)
-    icon, label = case monitor.platform
+    platform_label(monitor.platform)
+  end
+  def platform_label(platform)
+    icon, label = case platform
                   when "ruby"
                     ["ruby.png", "Ruby"]
                   when "centos"
@@ -46,6 +49,20 @@ module DashboardHelper
 
     content_tag(:span) do 
       image_tag("icon-#{icon}", :style => "width: 13px") + " #{label}"
+    end
+  end
+
+  def criticalities_icons(criticalities)
+    html = []
+    Vulnerability.criticalities.each_pair do |crit, ordinal|
+      if criticalities[ordinal] > 0
+        html << criticality_icon(crit,criticalities[ordinal])
+      end
+    end
+    if html.present?
+      html.reverse.join("&nbsp;&nbsp;").html_safe
+    else
+      "<span class='fa fa-check-circle okay fa-lg' data-toggle=\"tooltip\" title=\"no vulnerabilities\"></span>".html_safe
     end
   end
 end
