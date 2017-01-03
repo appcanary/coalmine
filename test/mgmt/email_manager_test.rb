@@ -33,12 +33,9 @@ class EmailManagerTest < ActiveSupport::TestCase
    
     # i could use a factory but... we have code for this
     Bundle.transaction do
-      lm = LogMaker.new
-      lm.on_bundle_change(bundle1.id)
-
-      lm.on_bundle_change(bundle2.id)
-
-      lm.on_bundle_change(bundle3.id)
+      LogMaker.new(bundle_id: bundle1.id).make_logs!
+      LogMaker.new(bundle_id: bundle2.id).make_logs!
+      LogMaker.new(bundle_id: bundle3.id).make_logs!
     end
 
     # user1: bundle1 (1 vuln pkg)
@@ -159,8 +156,7 @@ class EmailManagerTest < ActiveSupport::TestCase
 
 
     Bundle.transaction do
-      lm = LogMaker.new
-      lm.on_bundle_change(bundle1.id)
+      LogMaker.new(bundle_id: bundle1.id).make_logs!
     end
     
     assert_equal 2, LogBundleVulnerability.count
@@ -189,8 +185,7 @@ class EmailManagerTest < ActiveSupport::TestCase
 
     Bundle.transaction do
       bundle1.packages = bundle1.packages[1..-1]
-      lm = LogMaker.new
-      lm.on_bundle_change(bundle1.id)
+      LogMaker.new(bundle_id: bundle1.id).make_logs!
     end
 
     assert_equal 1, LogBundlePatch.count
@@ -208,8 +203,7 @@ class EmailManagerTest < ActiveSupport::TestCase
     # remove the second vuln, which does have a patch
     Bundle.transaction do
       bundle1.packages = bundle1.packages[1..-1]
-      lm = LogMaker.new
-      lm.on_bundle_change(bundle1.id)
+      LogMaker.new(bundle_id: bundle1.id).make_logs!
     end
     
     assert_equal 2, LogBundlePatch.count
