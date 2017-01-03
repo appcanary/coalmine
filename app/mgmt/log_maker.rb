@@ -1,7 +1,7 @@
 class LogMaker < ServiceMaker
   attr_accessor :bundle, :vulnerability
   def initialize(bundle_id: nil, vulnerability_id: nil)
-    if bundle_id.present? ^ vulnerability_id.present?
+    if !(bundle_id.present? ^ vulnerability_id.present?)
       raise "LogMaker must be initialized with a bundle_id or vulnerability_id (but not both)"
     end
 
