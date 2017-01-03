@@ -139,6 +139,7 @@ class BundleManager < ServiceManager
 
     # Queue the bundle to be processed for log generation
     bundle.mark_unprocessed!
+    BundleLogMakerJob.enqueue(bundle.id)
 
     bundle
   end

@@ -60,10 +60,6 @@ class ReportManagerTest < ActiveSupport::TestCase
     pr, _ = PlatformRelease.validate(@platform)
     bundle, errors = @bm.create(pr, {}, package_list)
 
-    # Creating the bundle with a vuln should trigger a log:
-    # We process logs in the background, so we need to run the worker in the test
-    LogMakerJob.enqueue
-
     assert_equal 1, bundle.vulnerable_packages.count
     assert_equal 1, LogBundleVulnerability.count
 
@@ -92,9 +88,6 @@ class ReportManagerTest < ActiveSupport::TestCase
     package_list2 = vuln_pkgs_set_2.map { |pkg| Parcel.from_package(pkg) }
     @bm.update_packages(bundle.id, package_list2)
 
-    # trigger the worker
-    LogMakerJob.enqueue
-
     # the vulnerability has not changed, therefore only one LogBundleVuln
     assert_equal 1, bundle.vulnerable_packages.count
     assert_equal 1, LogBundleVulnerability.count
@@ -114,17 +107,11 @@ class ReportManagerTest < ActiveSupport::TestCase
   
     @bm.update_packages(bundle.id, [])
 
-    # Trigger the worker
-    LogMakerJob.enqueue
-
     assert_equal 0, bundle.packages.count
     assert_equal 1, LogBundlePatch.count
 
     package_list3 = vuln_pkgs_set_2.map { |pkg| Parcel.from_package(pkg) }
     @bm.update_packages(bundle.id, package_list3)
-
-    # Trigger the worker
-    LogMakerJob.enqueue
 
     # we now see another LBV.
     assert_equal 2, LogBundleVulnerability.count
@@ -158,9 +145,6 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     vuln_2, error = vm.create(adv2)
 
-    # Trigger the worker
-    LogMakerJob.enqueue
-
     # did we create another LBV?
     assert_equal 2, VulnerablePackage.count
     assert_equal 3, LogBundleVulnerability.where(:bundle_id => bundle.id).count
@@ -188,7 +172,6 @@ class ReportManagerTest < ActiveSupport::TestCase
     assert_equal 3, VulnerablePackage.count
 
     @bm.update_packages(bundle.id, [vuln_pkg_3].map { |pkg| Parcel.from_package(pkg)})
-    LogMakerJob.enqueue
 
     # we've created another LBV,
     # and we wiped out two vuln packages: vuln_pkg_1 and vuln_pkg_2
@@ -208,8 +191,7 @@ class ReportManagerTest < ActiveSupport::TestCase
                                 :unaffected_versions => ["~> #{vuln_pkg_3.version}"]}])
 
     vm.update(vuln_3, adv3)
-    LogMakerJob.enqueue
-    
+
     assert_equal 4, LogBundleVulnerability.where(:bundle_id => bundle.id).count
     assert_equal 4, LogBundlePatch.where(:bundle_id => bundle.id).count
 
@@ -261,7 +243,6 @@ class ReportManagerTest < ActiveSupport::TestCase
 
     pr, _ = PlatformRelease.validate(@platform)
     bundle, error = @bm.create(pr, {}, package_list)
-    LogMakerJob.enqueue
 
     # one LBV thank you
     assert_equal 1, LogBundleVulnerability.count
@@ -277,7 +258,6 @@ class ReportManagerTest < ActiveSupport::TestCase
 
 
     VulnerabilityManager.new(vuln1.platform).update(vuln1, adv)
-    LogMakerJob.enqueue
 
     assert_equal 1, LogBundlePatch.count
     assert_equal 1, LogBundleVulnerability.count # just to double check
@@ -290,7 +270,6 @@ class ReportManagerTest < ActiveSupport::TestCase
 
 
     VulnerabilityManager.new(vuln2.platform).update(vuln2, adv)
-    LogMakerJob.enqueue
 
     assert_equal 2, LogBundleVulnerability.count
     assert_equal 1, LogBundlePatch.count # just to double check
