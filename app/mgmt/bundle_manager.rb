@@ -64,6 +64,8 @@ class BundleManager < ServiceManager
 
     begin
       bundle.transaction do
+        # touch the bundle so we know it's been updated
+        bundle.touch
         if $rollout.active?(:update_all_packages)
           packages = PackageMaker.new(bundle.platform, bundle.release, "user", true).find_or_create(package_list)
         else
@@ -135,8 +137,9 @@ class BundleManager < ServiceManager
     # behaviour is tested in bundle_test.rb
     bundle.packages = packages
 
-    # A bundle has changed! Time to record any logs
-    ReportMaker.new(bundle.id).on_bundle_change
+    # Queue the bundle to be processed for log generation
+    bundle.mark_unprocessed!
+    BundleLogMakerJob.enqueue(bundle.id)
 
     bundle
   end
