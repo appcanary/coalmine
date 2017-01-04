@@ -2,6 +2,7 @@ require 'test_helper'
 
 class CesaImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
+    CesaImporter.any_instance.stubs(:update_local_store!).returns(true)
     @importer = CesaImporter.new("test/data/importers/cesa")
 
     assert_equal 0, Advisory.from_cesa.count
