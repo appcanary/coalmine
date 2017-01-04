@@ -59,17 +59,17 @@ class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publi
   generate :criticality do
     case priority
     when /negligible/i
-      :negligible
+      Advisory.criticalities["negligible"]
     when /low/i
-      :low
+      Advisory.criticalities["low"]
     when /medium/i
-      :medium
+      Advisory.criticalities["medium"]
     when /high/i
-      :high
+      Advisory.criticalities["high"]
     when /critical/i
-      :critical
+      Advisory.criticalities["critical"]
     else
-      :unknown
+      Advisory.criticalities["unknown"]
     end
   end
 

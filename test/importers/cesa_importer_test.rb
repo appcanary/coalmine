@@ -19,7 +19,7 @@ class CesaImporterTest < ActiveSupport::TestCase
       assert_equal "centos", new_attr["platform"]
       assert new_attr["identifier"] =~ /CESA-2016:\d\d\d\d/
 
-      assert [:medium, :critical, :high].include?(new_attr["criticality"])
+      assert Advisory.criticalities.values.include?(new_attr["criticality"])
       assert_equal "cefs", new_attr["source"]
 
       # are we generating the patched/affected json properly?
@@ -51,8 +51,26 @@ class CesaImporterTest < ActiveSupport::TestCase
     @importer.process_advisories(all_advisories)
     assert_equal 4, Advisory.from_cesa.count
 
+    # ----- this should ideally just be shared
+    # ----- but for now is copypasted:
+    #
+    # test that reimporting the same raw advisories
+    # doesn't mark everything for reprocessing
+    assert_equal 0, AdvisoryImportState.where(processed: true).count
+    
+    # at some other point it gets picked up and processed
+    # by the VulnerabilityImporter, and the import state
+    # gets set to processed.
+    AdvisoryImportState.update_all(:processed => true)
 
-     # if we change an attribute tho we should get a more
+    # when the importer runs again, we check the stuff coming in
+    # against our existing advisories. if nothing has changed, 
+    # nothing new should get processed.
+    @importer.import!
+    assert_equal 0, AdvisoryImportState.where(processed: false).count
+
+
+    # if we change an attribute tho we should get a more
     # recent version.
 
     new_cesaadv = @importer.parse(raw_advisories.first)

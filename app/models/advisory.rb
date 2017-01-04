@@ -49,7 +49,9 @@ class Advisory < ActiveRecord::Base
   validates :advisory_import_state, :presence => true
   
   before_validation do
-    self.build_advisory_import_state
+    unless self.advisory_import_state
+      self.build_advisory_import_state
+    end
   end
 
   enum criticality: {
