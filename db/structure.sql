@@ -343,7 +343,7 @@ ALTER SEQUENCE advisory_archives_id_seq OWNED BY advisory_archives.id;
 
 CREATE TABLE advisory_import_states (
     id integer NOT NULL,
-    advisory_id integer,
+    advisory_id integer NOT NULL,
     processed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -3563,4 +3563,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161208165606');
 INSERT INTO schema_migrations (version) VALUES ('20161214143911');
 
 INSERT INTO schema_migrations (version) VALUES ('20161220163846');
+
+INSERT INTO schema_migrations (version) VALUES ('20170104202647');
 

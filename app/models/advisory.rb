@@ -95,6 +95,14 @@ class Advisory < ActiveRecord::Base
     where(:source => DebianTrackerImporter::SOURCE)
   }
 
+  def mark_unprocessed
+    unless self.advisory_import_state
+      self.build_advisory_import_state
+    end
+
+    self.advisory_import_state.processed = false
+  end
+
   def to_vuln_attributes
     valid_attr = Vulnerability.attribute_names
     self.attributes.keep_if { |k, _| valid_attr.include?(k) }

@@ -29,7 +29,7 @@ class AdvisoryImporter
           new_attr = new_adv.to_advisory_attributes
 
           Advisory.transaction do
-            old_adv.advisory_import_state.processed = false
+            old_adv.mark_unprocessed
             old_adv.update_attributes!(new_attr)
           end
         end
