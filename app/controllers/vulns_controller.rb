@@ -13,7 +13,7 @@ class VulnsController < ApplicationController
     search = params.dig(:search, :value)
     if search.present?
       puts search
-      @vulns = @vulns.search(search).order(criticality: :desc, reported_at: :desc)
+      @vulns = @vulns.search(search) 
     end
     filtered_count = @vulns.count
 
