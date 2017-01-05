@@ -5,7 +5,6 @@ class AgentApiTest < ActionDispatch::IntegrationTest
     @account = FactoryGirl.create(:account)
     @account2 = FactoryGirl.create(:account)
 
-    $rollout.activate(:log_every_file)
   end
 
   describe "while un- or poorly authenticated" do
@@ -61,6 +60,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
     end
 
     it "should accept files, including when they change" do
+      $rollout.activate(:log_every_file)
       assert_equal 0, AgentAcceptedFile.count
       server = FactoryGirl.create(:agent_server, :centos, :account => @account).reload
 
@@ -109,6 +109,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
 
       assert_equal 2, server.bundles.count
       assert_equal 3, AgentAcceptedFile.count
+      $rollout.deactivate(:log_every_file)
     end
 
     # TODO: make this more exhaustive?
