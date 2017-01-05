@@ -174,7 +174,7 @@
       <% end %>
     <% end %>
 
-    <% if current_user && current_user.is_admin? %>
+    <% if current_user && current_user.is_admin? && !@vuln.archive? %>
       <h3>(Admin only)</h3>
       <h4>Packages we've seen:</h4>
       <table class="table">
