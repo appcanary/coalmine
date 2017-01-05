@@ -1,5 +1,5 @@
 class TruncateAgentAcceptedFile < ActiveRecord::Migration
   def change
-    AgentAcceptedFile.delete_all
+    ActiveRecord::Base.connection.execute("truncate agent_accepted_files;")
   end
 end
