@@ -29,7 +29,7 @@ class AdvisoryImporter
           new_attr = new_adv.to_advisory_attributes
 
           Advisory.transaction do
-            old_adv.mark_unprocessed
+            old_adv.processed_flag = false
             old_adv.update_attributes!(new_attr)
           end
         end
@@ -39,12 +39,16 @@ class AdvisoryImporter
 
   def has_changed?(old_adv, new_adv)
     new_attributes = new_adv.to_advisory_attributes
+    # IIRC, source_text gets serialized to postgres in
+    # a way that will often fail to compare
+    # so, let's skip worrying about it.
+    new_attributes = new_attributes.except("source_text")
 
     # filter out stuff like id, created_at
     old_attributes = old_adv.attributes.slice(*new_adv.relevant_keys)
 
     # source_text gets serialized in weird ways
-    old_attributes != new_attributes.except("source_text")
+    old_attributes != new_attributes
   end
 
 end

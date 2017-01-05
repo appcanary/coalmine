@@ -95,12 +95,13 @@ class Advisory < ActiveRecord::Base
     where(:source => DebianTrackerImporter::SOURCE)
   }
 
-  def mark_unprocessed
+  # AIS gets auto saved, so we skip saving it ourselves here.
+  def processed_flag=(flag)
     unless self.advisory_import_state
       self.build_advisory_import_state
     end
 
-    self.advisory_import_state.processed = false
+    self.advisory_import_state.processed = flag
   end
 
   def to_vuln_attributes
