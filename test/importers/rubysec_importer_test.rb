@@ -48,24 +48,7 @@ class RubysecImporterTest < ActiveSupport::TestCase
 
     assert_equal 3, Advisory.from_rubysec.count
 
-    # ----- this should ideally just be shared
-    # ----- but for now is copypasted:
-    #
-    # test that reimporting the same raw advisories
-    # doesn't mark everything for reprocessing
-    assert_equal 0, AdvisoryImportState.where(processed: true).count
-    
-    # at some other point it gets picked up and processed
-    # by the VulnerabilityImporter, and the import state
-    # gets set to processed.
-    AdvisoryImportState.update_all(:processed => true)
-
-    # when the importer runs again, we check the stuff coming in
-    # against our existing advisories. if nothing has changed, 
-    # nothing new should get processed.
-    @importer.import!
-    assert_equal 0, AdvisoryImportState.where(processed: false).count
-
+    assert_importer_mark_processed_idempotency(@importer)
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)

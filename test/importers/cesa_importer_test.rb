@@ -52,24 +52,7 @@ class CesaImporterTest < ActiveSupport::TestCase
     @importer.process_advisories(all_advisories)
     assert_equal 4, Advisory.from_cesa.count
 
-    # ----- this should ideally just be shared
-    # ----- but for now is copypasted:
-    #
-    # test that reimporting the same raw advisories
-    # doesn't mark everything for reprocessing
-    assert_equal 0, AdvisoryImportState.where(processed: true).count
-    
-    # at some other point it gets picked up and processed
-    # by the VulnerabilityImporter, and the import state
-    # gets set to processed.
-    AdvisoryImportState.update_all(:processed => true)
-
-    # when the importer runs again, we check the stuff coming in
-    # against our existing advisories. if nothing has changed, 
-    # nothing new should get processed.
-    @importer.import!
-    assert_equal 0, AdvisoryImportState.where(processed: false).count
-
+    assert_importer_mark_processed_idempotency(@importer)
 
     # if we change an attribute tho we should get a more
     # recent version.
