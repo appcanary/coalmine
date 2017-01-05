@@ -14,7 +14,7 @@ class BillingManager
   end
 
   def find_customer
-    customer = nil #Stripe::Customer.retrieve(@user.stripe_customer_id)
+    customer = Stripe::Customer.retrieve(@user.stripe_customer_id)
   end
 
   def add_customer(stripe_token, sub)

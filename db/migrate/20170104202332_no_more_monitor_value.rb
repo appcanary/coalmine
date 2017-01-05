@@ -4,7 +4,7 @@ class NoMoreMonitorValue < ActiveRecord::Migration
     remove_column :subscription_plans, :monitor_limit, :int
     plan_updates = [["Indie", 2000],
                     ["Team", 1000],
-                    ["Team", 600]]
+                    ["Company", 600]]
 
     # Update the subscription plan values to match index
     plan_updates.each do |name, agent_value|

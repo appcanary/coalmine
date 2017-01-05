@@ -104,7 +104,6 @@ class User < ActiveRecord::Base
   end
 
   def payment_info
-    return []
     if stripe_customer_id.present?
       stripe_customer.try(:sources)
     else 
