@@ -44,6 +44,6 @@ class SubscriptionPlan < ActiveRecord::Base
 
   def cost(agents, monitors)
     total_items = agents + monitors
-    (([total_items, agent_limit].max - agent_limit) * agent_value)
+    value + (([total_items, agent_limit].max - agent_limit) * agent_value)
   end
 end
