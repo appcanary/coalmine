@@ -29,7 +29,7 @@ class AdvisoryImporter
           new_attr = new_adv.to_advisory_attributes
 
           Advisory.transaction do
-            old_adv.advisory_import_state.processed = false
+            old_adv.processed_flag = false
             old_adv.update_attributes!(new_attr)
           end
         end
@@ -39,12 +39,13 @@ class AdvisoryImporter
 
   def has_changed?(old_adv, new_adv)
     new_attributes = new_adv.to_advisory_attributes
+    # source_text gets serialized in weird ways
+    new_attributes = new_attributes.except("source_text")
 
     # filter out stuff like id, created_at
     old_attributes = old_adv.attributes.slice(*new_adv.relevant_keys)
 
-    # source_text gets serialized in weird ways
-    old_attributes != new_attributes.except("source_text")
+    old_attributes != new_attributes
   end
 
 end
