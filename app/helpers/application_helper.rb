@@ -156,8 +156,10 @@ module ApplicationHelper
   def link_to_server_or_monitor(log)
     if log.has_server?
       link_to log.server.display_name, server_app_url(log.bundle, server_id: log.server.id)
-    else 
+    elsif log.bundle.present?
       link_to log.bundle.display_name, monitor_url(log.bundle)
+    else
+      "This item has been deleted"
     end
   end
 

@@ -2,6 +2,7 @@ require 'test_helper'
 
 class RubysecImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
+    RubysecImporter.any_instance.stubs(:update_local_store!).returns(true)
     @importer = RubysecImporter.new("test/data/importers/rubysec")
 
     assert_equal 0, Advisory.from_rubysec.count
@@ -46,6 +47,8 @@ class RubysecImporterTest < ActiveSupport::TestCase
     @importer.process_advisories(all_advisories)
 
     assert_equal 3, Advisory.from_rubysec.count
+
+    assert_importer_mark_processed_idempotency(@importer)
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)

@@ -65,7 +65,7 @@ class PackageMaker < ServiceMaker
 
   def update_packages(package_list)
     package_list.each do |parcel|
-      next if parcel.source_name.nil?
+      next if parcel.try(:source_name).nil?
 
       pkgs = Package.where(:platform => @platform, 
                            :release => @release, 

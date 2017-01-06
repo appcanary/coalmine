@@ -7,15 +7,13 @@ require 'webmock/minitest'
 require 'vcr'
 require "minitest/spec"
 require 'mocha/mini_test'
+require 'helpers/importer_helpers'
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 class ActiveSupport::TestCase
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  fixtures :all
-
   include Sorcery::TestHelpers::Rails::Controller
-  # Add more helper methods to be used by all tests here...
+  include ImporterHelpers
 
   def hydrate(*paths)
     File.read(File.join(Rails.root, "test/data/", *paths))

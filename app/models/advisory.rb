@@ -45,11 +45,13 @@
 class Advisory < ActiveRecord::Base
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
-  has_one :advisory_import_state, autosave: true
+  has_one :advisory_import_state, :autosave => true, :dependent => :destroy
   validates :advisory_import_state, :presence => true
   
   before_validation do
-    self.build_advisory_import_state
+    unless self.advisory_import_state
+      self.build_advisory_import_state
+    end
   end
 
   enum criticality: {
@@ -92,6 +94,15 @@ class Advisory < ActiveRecord::Base
   scope :from_debian, -> {
     where(:source => DebianTrackerImporter::SOURCE)
   }
+
+  # AIS gets auto saved, so we skip saving it ourselves here.
+  def processed_flag=(flag)
+    unless self.advisory_import_state
+      self.build_advisory_import_state
+    end
+
+    self.advisory_import_state.processed = flag
+  end
 
   def to_vuln_attributes
     valid_attr = Vulnerability.attribute_names

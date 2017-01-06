@@ -1,7 +1,7 @@
 class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publicdateatusn, :crd, :references, :description, :ubuntu_description, :notes, :bugs, :priority, :discovered_by, :assigned_to, :patches, :filepath)
 
   def identifier
-    filepath.split("/")[-2..-1].join("/")
+    candidate
   end
 
   def source
@@ -59,17 +59,17 @@ class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publi
   generate :criticality do
     case priority
     when /negligible/i
-      :negligible
+      Advisory.criticalities["negligible"]
     when /low/i
-      :low
+      Advisory.criticalities["low"]
     when /medium/i
-      :medium
+      Advisory.criticalities["medium"]
     when /high/i
-      :high
+      Advisory.criticalities["high"]
     when /critical/i
-      :critical
+      Advisory.criticalities["critical"]
     else
-      :unknown
+      Advisory.criticalities["unknown"]
     end
   end
 

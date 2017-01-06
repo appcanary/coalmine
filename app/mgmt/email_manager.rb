@@ -97,8 +97,8 @@ class EmailManager
    
   def self.send_new_emails(klass, sym)
     unless $rollout.active?(:stop_email)
-      klass.transaction do
-        klass.unsent.find_each do |msg|
+      klass.unsent.find_each do |msg|
+        klass.transaction do
           unless $rollout.active?(:skip_notifications)
             NotificationMailer.send(sym, msg).deliver_now
           end

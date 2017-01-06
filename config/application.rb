@@ -48,6 +48,11 @@ module CanaryWeb
     config.exceptions_app = self.routes
 
     config.active_job.queue_adapter = :que
+
+    if ENV["QUE_RUNNING"]
+      config.logger = Logger.new(File.join(Rails.root, "log/que_worker.log"))
+    end
+    
   end
 end
 

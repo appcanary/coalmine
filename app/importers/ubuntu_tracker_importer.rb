@@ -1,3 +1,4 @@
+require_relative File.join(Rails.root, 'lib/bzr_handler')
 class UbuntuTrackerImporter < AdvisoryImporter
   SOURCE = "ubuntu-cve-tracker"
   PLATFORM = Platforms::Ubuntu

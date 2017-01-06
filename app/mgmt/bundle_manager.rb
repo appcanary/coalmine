@@ -64,7 +64,11 @@ class BundleManager < ServiceManager
 
     begin
       bundle.transaction do
-        packages = PackageMaker.new(bundle.platform, bundle.release).find_or_create(package_list)
+        if $rollout.active?(:update_all_packages)
+          packages = PackageMaker.new(bundle.platform, bundle.release, "user", true).find_or_create(package_list)
+        else
+          packages = PackageMaker.new(bundle.platform, bundle.release).find_or_create(package_list)
+        end
         bundle = assign_packages!(bundle, packages)
       end
     rescue ActiveRecord::RecordInvalid => e

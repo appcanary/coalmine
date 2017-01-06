@@ -33,27 +33,27 @@ class DebianTrackerAdapter < AdvisoryAdapter.new(:package_name, :cve, :scope, :d
   def normalize_urgency(str)
     case str
     when "unimportant"
-      :negligible
+      Advisory.criticalities["negligible"]
     when "low"
-      :low
+      Advisory.criticalities["low"]
     when "low*"
-      :low
+      Advisory.criticalities["low"]
     when "low**"
-      :low
+      Advisory.criticalities["low"]
     when "medium"
-      :medium
+      Advisory.criticalities["medium"]
     when "medium*"
-      :medium
+      Advisory.criticalities["medium"]
     when "medium**"
-      :medium
+      Advisory.criticalities["medium"]
     when "high"
-      :high
+      Advisory.criticalities["high"]
     when "high*"
-      :high
+      Advisory.criticalities["high"]
     when "high**"
-      :high
+      Advisory.criticalities["high"]
     else
-      :unknown
+      Advisory.criticalities["unknown"]
     end
   end
 
