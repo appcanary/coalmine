@@ -60,6 +60,14 @@ namespace :deploy do
   end
 end
 
+namespace :deploy do
+  task :db_rollback do
+    on roles(:app) do
+      execute "cd #{release_path} && bundle exec rake db:rollback RAILS_ENV=#{fetch(:rails_env)}"
+    end
+  end
+end
+
 namespace :debug do
   desc "tail rails logs" 
   task :logs do

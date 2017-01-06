@@ -28,9 +28,7 @@ FactoryGirl.define do
   factory :subscription_plan do
     value 1
     agent_value 1
-    monitor_value 1
     agent_limit 1
-    monitor_limit 1
     label "MyString"
     default false
   end

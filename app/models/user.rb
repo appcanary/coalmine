@@ -105,7 +105,7 @@ class User < ActiveRecord::Base
 
   def payment_info
     if stripe_customer_id.present?
-      stripe_customer.sources
+      stripe_customer.try(:sources)
     else 
       []
     end

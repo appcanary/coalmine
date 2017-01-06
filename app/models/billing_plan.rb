@@ -19,7 +19,7 @@
 class BillingPlan < ActiveRecord::Base
   belongs_to :user
   belongs_to :subscription_plan
- 
+  
   # perhaps the only reasonable uses of these methods
   # the 'subscriptions' ivar won't get saved unless
   # we explicitly serialize it.
@@ -60,7 +60,12 @@ class BillingPlan < ActiveRecord::Base
   end
 
   def load_subscriptions
-    SubscriptionPlan.where(:id => available_subscription_plans)
+    #sometimes we're on plans no longer available
+    subs = available_subscription_plans
+    unless subs.include? subscription_plan_id
+      subs = [subscription_plan_id] + subs
+    end
+    SubscriptionPlan.where(id: subs).order(:id)
   end
 
   # Serialize the default subscriptions to the database on save.
