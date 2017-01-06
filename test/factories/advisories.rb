@@ -46,6 +46,7 @@ FactoryGirl.define do
   end
   factory :advisory do
     identifier
+    title { Faker::Lorem.sentence }
     trait :ruby do
       platform { Platforms::Ruby }
       source "rubysec"

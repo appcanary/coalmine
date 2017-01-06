@@ -1434,8 +1434,8 @@ CREATE TABLE users (
     daily_email_consent boolean DEFAULT false NOT NULL,
     datomic_id bigint,
     invoiced_manually boolean DEFAULT false,
-    agent_token character varying,
-    account_id integer NOT NULL
+    account_id integer NOT NULL,
+    agent_token character varying
 );
 
 
@@ -1979,6 +1979,27 @@ ALTER TABLE ONLY vulnerable_packages ALTER COLUMN id SET DEFAULT nextval('vulner
 
 
 --
+-- Name: vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vulnerabilities
+    ADD CONSTRAINT vulnerabilities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vulnerability_search_index; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW vulnerability_search_index AS
+ SELECT vulnerabilities.id AS vulnerability_id,
+    ((((to_tsvector((vulnerabilities.title)::text) || to_tsvector(COALESCE(vulnerabilities.description, ''::text))) || to_tsvector(array_to_string(vulnerabilities.reference_ids, ' '::text, ''::text))) || to_tsvector((vulnerabilities.platform)::text)) || to_tsvector(COALESCE(string_agg((vulnerable_dependencies.package_name)::text, ' '::text), ''::text))) AS document
+   FROM (vulnerabilities
+     JOIN vulnerable_dependencies ON ((vulnerable_dependencies.vulnerability_id = vulnerabilities.id)))
+  GROUP BY vulnerabilities.id
+  WITH NO DATA;
+
+
+--
 -- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2240,14 +2261,6 @@ ALTER TABLE ONLY subscription_plans
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- Name: vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vulnerabilities
-    ADD CONSTRAINT vulnerabilities_pkey PRIMARY KEY (id);
 
 
 --
@@ -3096,6 +3109,20 @@ CREATE INDEX index_vulnerability_archives_on_valid_at ON vulnerability_archives 
 
 
 --
+-- Name: index_vulnerability_search_index_on_document; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerability_search_index_on_document ON vulnerability_search_index USING gin (document);
+
+
+--
+-- Name: index_vulnerability_search_index_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_vulnerability_search_index_on_vulnerability_id ON vulnerability_search_index USING btree (vulnerability_id);
+
+
+--
 -- Name: index_vulnerable_dependencies_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3369,11 +3396,27 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
+-- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
+
+
+--
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_e4107b65b3 FOREIGN KEY (email_message_id) REFERENCES email_messages(id);
+
+
+--
+-- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_f0b7c79393 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3510,8 +3553,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160530195217');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602133740');
 
-INSERT INTO schema_migrations (version) VALUES ('20160602133741');
-
 INSERT INTO schema_migrations (version) VALUES ('20160602134913');
 
 INSERT INTO schema_migrations (version) VALUES ('20160603150414');
@@ -3558,7 +3599,11 @@ INSERT INTO schema_migrations (version) VALUES ('20161205215409');
 
 INSERT INTO schema_migrations (version) VALUES ('20161206201943');
 
+INSERT INTO schema_migrations (version) VALUES ('20161208160412');
+
 INSERT INTO schema_migrations (version) VALUES ('20161208165606');
+
+INSERT INTO schema_migrations (version) VALUES ('20161208210000');
 
 INSERT INTO schema_migrations (version) VALUES ('20161214143911');
 

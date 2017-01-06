@@ -59,6 +59,8 @@ FactoryGirl.define do
     reference_ids { [generate(:cve_id)] }
     reported_at { 7.days.ago }
 
+    title { Faker::Lorem.sentence }
+
     trait :ruby do
       platform { Platforms::Ruby }
     end
