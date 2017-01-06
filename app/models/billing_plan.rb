@@ -62,8 +62,8 @@ class BillingPlan < ActiveRecord::Base
   def load_subscriptions
     #sometimes we're on plans no longer available
     subs = available_subscription_plans
-    unless  subs.include? subscription_plan.id
-      subs = [subscription_plan.id] + subs
+    unless subs.include? subscription_plan_id
+      subs = [subscription_plan_id] + subs
     end
     SubscriptionPlan.where(id: subs).order(:id)
   end
