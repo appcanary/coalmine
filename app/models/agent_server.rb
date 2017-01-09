@@ -28,7 +28,6 @@
 
 class AgentServer < ActiveRecord::Base
   ACTIVE_WINDOW = 2.hours
-  default_scope { includes(:last_heartbeat) }
   belongs_to :account
   validates :account, :presence => true
 

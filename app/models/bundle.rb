@@ -90,10 +90,26 @@ class Bundle < ActiveRecord::Base
   end
 
   def display_name
-    name.blank? ? path : name
+    # If we're a system bundle call it that
+    if agent_server_id.present? and self.system_bundle?
+      "System Packages"
+    else
+      name.blank? ? path : name
+    end
   end
 
   def system_bundle?
     Platforms::OPERATING_SYSTEMS.include?(self.platform)
+  end
+
+  def self.eject_vulnerability_caches(bundle_ids)
+    # We use Rails.cache to store cached info about vulnerabilities.
+    # Given a set of bundle_ids, eject all cached vuln info
+    # This is used after logs are created
+    bundle_ids.each do |id|
+      Rails.cache.delete_matched("bundles/#{id}[^/]*/vuln_packages")
+      Rails.cache.delete_matched("bundles/#{id}[^/]*/criticalities")
+      Rails.cache.delete_matched("bundles/#{id}[^/]*/vulnerable?")
+    end
   end
 end

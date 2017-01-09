@@ -187,7 +187,12 @@ module ApplicationHelper
     end
   end
 
-  def criticality_icon(criticality)
-    "<span class=\"fa fa-circle #{criticality}\"></span> #{criticality}".html_safe
+  def criticality_icon(criticality, number=nil)
+    # if we don't have a number provide the critically label
+    if number.nil?
+      "<span class=\"criticality-#{criticality} tiny\">&nbsp;</span> #{criticality}".html_safe
+    else
+      "<span class=\"criticality-#{criticality}\" data-toggle=\"tooltip\" title=\"#{number} #{criticality}\">#{number}</span>".html_safe
+    end
   end
 end

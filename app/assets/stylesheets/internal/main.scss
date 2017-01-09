@@ -152,20 +152,57 @@ section {
 }
 
 // Criticalities
-.fa.critical {
-  color: #FF4136;
+$critical-color: #bd0026;
+$high-color: #f03b20;
+$medium-color: #fd8d3c;
+$low-color: #feb24c;
+$negligible-color: #fed976;
+$unknown-color: #aaaaaa;
+
+.criticality-icon {
+  border-radius: 0.8em;
+  -moz-border-radius: 0.8em;
+  -webkit-border-radius: 0.8em;
+  color: #ffffff;
+  display: inline-block;
+  font-weight: bold;
+  line-height: 1.6em;
+  //margin-right: .2em;
+  text-align: center;
+  width: 1.6em;
+  border-radius: 50%;
+  font-size: .8em;
 }
-.fa.high {
-  color: #FF851B;  
+
+.criticality-icon.tiny {
+  width: 13px;
+  line-height: 13px;
+
 }
-.fa.medium {
-  color: #FFDC00;
+
+criticality-critical {
+  @extend .criticality-icon;
+  background: $critical-color;
 }
-.fa.low {
-  color: #01FF70;  
+.criticality-high {
+  @extend .criticality-icon;
+  background: $high-color;
 }
-.fa.unknown {
-  color: #AAAAAA;  
+.criticality-medium {
+  @extend .criticality-icon;
+  background: $medium-color
+}
+.criticality-low {
+  @extend .criticality-icon;
+  background: $low-color
+}
+.criticality-negligible {
+  @extend .criticality-icon;
+  background: $negligible-color
+}
+.criticality-unknown {
+  @extend .criticality-icon;
+  background: $unknown-color
 }
 
 
