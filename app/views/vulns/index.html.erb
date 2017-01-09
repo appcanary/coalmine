@@ -1,10 +1,11 @@
 <script>
  $( document ).ready(function() {
-   $('#vulns').DataTable( {
+   $('#vulns_data').DataTable( {
      "paging":   true,
      "processing": true,
      "serverSide": true,
      "ajax": "",
+     "dom":"<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
      "columns": [
        { data: "platform" },
        { data: "criticality" },
@@ -23,6 +24,8 @@
 
 <section>
   <div class="col-sm-8">
+    <h1><%= Platforms.full_name(@platform) || "All" %> Vulnerabilities </h1>
+
     <ul class="nav nav-pills" role="tablist">
       <li role="presentation" class="<%= @platform.nil? ? "active" : "" %>">
         <%= link_to "All", vulns_path(search: params[:search]) %>
@@ -34,7 +37,6 @@
       <% end %>
 
     </ul>
-    <h1><%= Platforms.full_name(@platform) || "All" %> Vulnerabilities </h1>
     <!-- <div class="row">
          <form method="get">
          <div class="col-md-6">
@@ -50,7 +52,7 @@
          </div> -->
 </section>
 
-<table class="table table-striped" id="vulns">
+<table class="table table-striped" id="vulns_data">
   <thead>
     <th>
       platform

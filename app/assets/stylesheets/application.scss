@@ -8,7 +8,6 @@
 @import "internal/main";
 @import "internal/dashboard";
 @import 'internal/boxes';
-
 @import "internal/users";
 @import 'internal/servers';
 @import 'internal/bundles';
@@ -17,4 +16,6 @@
 @import 'internal/docs';
 // for hljs
 @import 'vendor/github-gist';
-@import 'vendor/dataTables.bootstrap.min'
+@import 'vendor/dataTables.bootstrap.min';
+@import 'internal/vuln_search';
+
