@@ -7,8 +7,12 @@ Since <%= @date.to_date.iso8601 %>, we have:
 ---
 Users:
 
+<%= @user_ct %> total users
 <%= @new_user_ct %> new signups
+<%= @active_server_ct %> active servers
 <%= @new_server_ct %> new servers
+<%= @active_server_bundle_ct %> active server bundles
+<%= @monitor_ct %> monitor count
 <%= @new_bundle_ct %> new bundles
 <%= @total_revenue %> total revenue
 
