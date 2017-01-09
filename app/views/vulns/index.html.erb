@@ -1,54 +1,132 @@
-<h1>Vulnerabilities</h1>
+<script>
+ $( document ).ready(function() {
+   $('#vulns_data').DataTable( {
+     "paging":   true,
+     "processing": true,
+     "serverSide": true,
+     "ajax": "",
+     "dom":"<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+     "columns": [
+       { data: "platform" },
+       { data: "criticality" },
+       { data: "title" },
+       { data: "cves",
+         orderable: false },
+       { data: "packages",
+         orderable: false },
+       { data: "reported_at"},
+       
+     ],
+     "order": [[ 5, "desc" ]]
+   });
+ });
+</script>
 
-<table class="table">
+<section>
+  <div class="col-sm-8">
+    <h1><%= Platforms.full_name(@platform) || "All" %> Vulnerabilities </h1>
+
+    <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" class="<%= @platform.nil? ? "active" : "" %>">
+        <%= link_to "All", vulns_path(search: params[:search]) %>
+      </li>
+      <% Platforms.all_platforms.each do |platform| %>
+        <li role="presentation" class="<%= @platform == platform ? "active" : "" %>">
+          <%= link_to Platforms.full_name(platform), platform_vulns_path(platform: platform, search: params[:search]) %>
+        </li>
+      <% end %>
+
+    </ul>
+    <!-- <div class="row">
+         <form method="get">
+         <div class="col-md-6">
+         <div class="input-group">
+         <%= text_field_tag :search, params[:search], class: "form-control", placeholder: 'Search vulnerabilities', type: :search %>
+         <span class="input-group-btn">
+         <button type="submit" class="btn btn-default" type="button">Search</button>
+         </span>
+         </div>
+         </div>
+         </form>
+         </div>
+         </div> -->
+</section>
+
+<table class="table table-striped" id="vulns_data">
   <thead>
     <th>
       platform
     </th>
 
     <th>
-      references
+      criticality
     </th>
 
-    <th>
+    <th class="col-sm-4">
       title
     </th>
 
     <th>
-      source
+      cves
     </th>
 
     <th>
-      updated at
+      packages
+    </th>
+
+    <th>
+      reported at
     </th>
   </thead>
   <tbody>
-    <% @vulns.each do |v| %>
+    <!-- <%# @vulns.each do |v| %>
       <tr>
         <td>
-          <%= platform_icon v.platform %>
+          <%#= platform_icon v.platform %>
         </td>
 
         <td>
-          <%= v.reference_ids.join(", ") %>
+          <%#= criticality_icon v.criticality %>
         </td>
 
         <td>
-          <%= link_to v.title, vuln_path(v) %>
+          <%#= link_to v.title, vuln_path(v) %>
         </td>
-
+3
         <td>
-          <%= v.source %>
-        </td>
-
-        <td>
-          <%= v.updated_at %>
+          <%#= v.reported_at.try(:strftime, "%Y-%m-%d") %>
         </td>
       </tr>
-    <% end %>
+    <%# end %>-->
+    <tfoot>
+      <th>
+        platform
+      </th>
+
+      <th>
+        criticality
+      </th>
+
+      <th>
+        title
+      </th>
+
+      <th>
+        cves
+      </th>
+
+      <th>
+        packages
+      </th>
+
+      <th>
+        reported at
+      </th>
+    </tfoot>
+    <tbody>
 
   </tbody>
 </table>
 
-<%= will_paginate @vulns, renderer: BootstrapPagination::Rails %>
+
 

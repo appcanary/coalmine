@@ -8,13 +8,14 @@
 @import "internal/main";
 @import "internal/dashboard";
 @import 'internal/boxes';
-
 @import "internal/users";
 @import 'internal/servers';
 @import 'internal/bundles';
 @import 'internal/packages';
 @import 'internal/onboarding';
 @import 'internal/docs';
-@import 'internal/admin';
 // for hljs
 @import 'vendor/github-gist';
+@import 'vendor/dataTables.bootstrap.min';
+@import 'internal/vuln_search';
+

@@ -1463,7 +1463,7 @@ ALTER SEQUENCE users_id_seq OWNED BY users.id;
 CREATE TABLE vulnerabilities (
     id integer NOT NULL,
     platform character varying NOT NULL,
-    title character varying,
+    title character varying NOT NULL,
     description text,
     criticality integer DEFAULT 0 NOT NULL,
     reference_ids character varying[] DEFAULT '{}'::character varying[] NOT NULL,
@@ -1977,6 +1977,27 @@ ALTER TABLE ONLY vulnerable_packages ALTER COLUMN id SET DEFAULT nextval('vulner
 
 
 --
+-- Name: vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY vulnerabilities
+    ADD CONSTRAINT vulnerabilities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vulnerability_search_index; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW vulnerability_search_index AS
+ SELECT vulnerabilities.id AS vulnerability_id,
+    ((((to_tsvector((vulnerabilities.title)::text) || to_tsvector(COALESCE(vulnerabilities.description, ''::text))) || to_tsvector(array_to_string(vulnerabilities.reference_ids, ' '::text, ''::text))) || to_tsvector((vulnerabilities.platform)::text)) || to_tsvector(COALESCE(string_agg((vulnerable_dependencies.package_name)::text, ' '::text), ''::text))) AS document
+   FROM (vulnerabilities
+     JOIN vulnerable_dependencies ON ((vulnerable_dependencies.vulnerability_id = vulnerabilities.id)))
+  GROUP BY vulnerabilities.id
+  WITH NO DATA;
+
+
+--
 -- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2238,14 +2259,6 @@ ALTER TABLE ONLY subscription_plans
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- Name: vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY vulnerabilities
-    ADD CONSTRAINT vulnerabilities_pkey PRIMARY KEY (id);
 
 
 --
@@ -3094,6 +3107,20 @@ CREATE INDEX index_vulnerability_archives_on_valid_at ON vulnerability_archives 
 
 
 --
+-- Name: index_vulnerability_search_index_on_document; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerability_search_index_on_document ON vulnerability_search_index USING gin (document);
+
+
+--
+-- Name: index_vulnerability_search_index_on_vulnerability_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_vulnerability_search_index_on_vulnerability_id ON vulnerability_search_index USING btree (vulnerability_id);
+
+
+--
 -- Name: index_vulnerable_dependencies_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3570,7 +3597,11 @@ INSERT INTO schema_migrations (version) VALUES ('20161205215409');
 
 INSERT INTO schema_migrations (version) VALUES ('20161206201943');
 
+INSERT INTO schema_migrations (version) VALUES ('20161208160412');
+
 INSERT INTO schema_migrations (version) VALUES ('20161208165606');
+
+INSERT INTO schema_migrations (version) VALUES ('20161208210000');
 
 INSERT INTO schema_migrations (version) VALUES ('20161214143911');
 

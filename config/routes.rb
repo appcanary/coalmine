@@ -97,6 +97,8 @@ Rails.application.routes.draw do
 
   end
 
+  get "vulns/:platform" => "vulns#index", :as => :platform_vulns, :constraints => ->(req) {Platforms.supported?(req.params[:platform])}
+
   resources :vulns, :only => [:index, :show] do
     get "archive/:id" => "vulns#archive", :as => "archive"
   end

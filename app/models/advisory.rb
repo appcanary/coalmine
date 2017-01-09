@@ -43,6 +43,15 @@
 # sources, but are used to compute `constraints` by the importers.
 
 class Advisory < ActiveRecord::Base
+  # Used for the enums in Advisory, Vulnerability, and VulnerabilityArchive
+  CRITICALITIES = {
+    unknown: 0,
+    negligible: 10,
+    low: 20,
+    medium: 30,
+    high: 40,
+    critical: 50,
+  }
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
   has_one :advisory_import_state, :autosave => true, :dependent => :destroy
@@ -54,14 +63,7 @@ class Advisory < ActiveRecord::Base
     end
   end
 
-  enum criticality: {
-         unknown: 0,
-         negligible: 10,
-         low: 20,
-         medium: 30,
-         high: 40,
-         critical: 50,
-       }
+  enum criticality: CRITICALITIES
 
   scope :most_recent_advisory_for, ->(identifier, source) {
     where(:identifier => identifier, :source => source).order("created_at DESC").limit(1)
