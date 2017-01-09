@@ -18,7 +18,7 @@ class VulnerabilitiesDataTablesSerializer < ActiveModel::Serializer
 
       { platform: scope.platform_icon(vuln.platform),
         criticality: scope.criticality_icon(vuln.criticality),
-        title: scope.link_to(vuln.title, scope.vuln_path(vuln)),
+        title: scope.link_to(vuln.title, scope.vuln_path(vuln), target: "_blank"),
         cves: cves(vuln),
         reported_at: vuln.reported_at.try(:strftime, "%Y-%m-%d"),
         packages: package_names(vuln)
