@@ -18,7 +18,7 @@ class VulnsController < ApplicationController
     filtered_count = @vulns.count
 
     offset = params[:start].to_i || 0
-    limit = params[:length].to_i <= 200 ? params[:length].to_i : 100
+    limit = params[:length].to_i <= 100 ? params[:length].to_i : 100
     @vulns = @vulns.offset(offset).limit(limit)
 
     case params.dig(:order, "0", :column)
