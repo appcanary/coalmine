@@ -38,9 +38,18 @@ class SystemMailer < ActionMailer::Base
     @date = 7.days.ago
     @today = Date.today.iso8601
 
-    @new_server_ct = AgentServer.where("created_at > ?", @date).count
-    @new_bundle_ct = Bundle.where("created_at > ?", @date).count
+    @user_ct = User.count
     @new_user_ct = User.where("created_at > ?", @date).count
+
+    @active_server_ct = AgentServer.active.count
+    @new_server_ct = AgentServer.active.where("created_at > ?", @date).count
+
+    @active_server_bundle_ct = Bundle.via_active_agent.count
+    @new_server_bundle_ct = Bundle.via_agent.where("created_at > ?", @date).count
+
+    @monitor_ct = Bundle.via_api.count
+    @new_monitor_ct = Bundle.via_api.where("created_at > ?", @date).count
+
     @new_vuln_ct = Vulnerability.where("created_at > ?", @date).group(:platform).count
     @new_vulns_detected = LogBundleVulnerability.where("created_at > ?", @date).count
     @new_patches_detected = LogBundlePatch.where("created_at > ?", @date).count

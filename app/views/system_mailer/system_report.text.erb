@@ -7,10 +7,11 @@ Since <%= @date.to_date.iso8601 %>, we have:
 ---
 Users:
 
-<%= @new_user_ct %> new signups
-<%= @new_server_ct %> new servers
-<%= @new_bundle_ct %> new bundles
-<%= @total_revenue %> total revenue
+<%= @new_user_ct %> (<%= @user_ct %>) new signups
+<%= @new_server_ct %> (<%= @active_server_ct %>) new servers
+<%= @new_server_bundle_ct %> (<%= @active_server_bundle_ct %>) new server bundles
+<%= @new_monitor_ct %> (<%= @monitor_ct %>) new monitors
+<%= number_to_currency(@total_revenue.to_f / 100) %> total revenue
 
 ---
 Email:
