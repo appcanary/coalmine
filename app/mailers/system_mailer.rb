@@ -42,7 +42,7 @@ class SystemMailer < ActionMailer::Base
     @new_user_ct = User.where("created_at > ?", @date).count
 
     @active_server_ct = AgentServer.active.count
-    @new_server_ct = AgentServer.where("created_at > ?", @date).count
+    @new_server_ct = AgentServer.active.where("created_at > ?", @date).count
 
     @active_server_bundle_ct = Bundle.via_active_agent.count
     @new_server_bundle_ct = Bundle.via_agent.where("created_at > ?", @date).count
