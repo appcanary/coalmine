@@ -8,6 +8,8 @@ class VulnsController < ApplicationController
       @vulns = @vulns.where(platform: @platform)
     end
 
+    # TODO: next time this gets touched,
+    # convert into a manager and test it tout de suite
     total_count = @vulns.count
 
     search = params.dig(:search, :value)
