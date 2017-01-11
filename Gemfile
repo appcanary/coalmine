@@ -10,7 +10,6 @@ gem 'rollout_postgres_store'
 gem 'que', '~> 0.12.0'
 gem 'whenever', :require => false
 
-
 # views / assets
 gem 'sass-rails', require: false
 gem 'sassc-rails', :git => "git@github.com:appcanary/sassc-rails.git"
@@ -103,4 +102,12 @@ group :development do
   gem 'annotate'
   gem 'letter_opener'
   gem 'bullet'
+  gem 'rack-mini-profiler'
+  # For memory profiling (requires Ruby MRI 2.1+)
+  gem 'memory_profiler'
+
+  # For call-stack profiling flamegraphs (requires Ruby MRI 2.0.0+)
+  gem 'flamegraph'
+  gem 'stackprof'     # For Ruby MRI 2.1+
+  gem 'fast_stack'    # For Ruby MRI 2.0
 end
