@@ -1,7 +1,7 @@
 class BundlePresenter
   attr_reader :vulnquery, :bundle
   delegate :id, :to_param, :display_name,
-    :platform, :created_at, :to => :bundle
+    :platform, :created_at, :updated_at, :system_bundle?, :to => :bundle
  
   def initialize(vq, mon)
     @vulnquery = vq

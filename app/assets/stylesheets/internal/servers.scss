@@ -17,44 +17,6 @@
   }
 }
 
-
-table.servers {
-  td section {
-    padding-top: 1em;
-    padding-bottom: 1em;
-  }
-
-  .status, {
-    @extend .col-xs-1;
-    padding-top: 0.2em;
-    width: 2em;
-    font-size: 1.8em;
-    margin-left: 1em;
-    padding-right: 0px;
-  }
-
-  .icon {
-    width: 1.2em;
-    display: inline;
-  }
-
-  .description {
-    @extend .col-xs-4;
-    .title {
-      font-size: 18px;
-    }
-    .last_updated, .last_updated a {
-      color: grey;
-      font-size: 14px;
-    }
-  }
-
-  .actions {
-    @extend .col-xs-4;
-  }
-}
-
-
 .server-info {
   @extend .col-sm-12;
 }

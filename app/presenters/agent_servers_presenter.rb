@@ -1,5 +1,5 @@
 class AgentServersPresenter
-  attr_reader :active_servers, :silent_servers, 
+  attr_reader :servers, :active_servers, :silent_servers, 
     :account, :vulnquery
 
   def initialize(account, vulnquery)
