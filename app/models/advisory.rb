@@ -52,6 +52,9 @@ class Advisory < ActiveRecord::Base
     high: 40,
     critical: 50,
   }
+
+  CRITICALITIES_BY_VALUE = CRITICALITIES.invert
+
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
   has_one :advisory_import_state, :autosave => true, :dependent => :destroy
