@@ -2,6 +2,8 @@ require 'test_helper'
 
 class AppsControllerTest < ActionController::TestCase
   let(:user) { FactoryGirl.create(:user) }
+  let(:user2) { FactoryGirl.create(:user) }
+  let(:admin) { FactoryGirl.create(:admin_user) }
 
   setup do
     bundle = FactoryGirl.create(:bundle_with_packages, :account => user.account, :id => 1235)
@@ -32,6 +34,27 @@ class AppsControllerTest < ActionController::TestCase
       assert_equal 1, Bundle.count
     end
 
+    it "shouldn't show another user's bundle" do
+      bundle2 = FactoryGirl.create(:bundle_with_packages, :account => user2.account)
+      server2 = FactoryGirl.create(:agent_server, :account => user2.account, :bundles => [bundle2])
+      assert_raises(ActiveRecord::RecordNotFound) do
+        get :show, :server_id => server2.id, :id => bundle2.id
+      end
+    end
+
+  end
+
+  describe "while admin" do
+    setup do
+      login_user(admin)
+    end
+
+    it "should show another user's app" do
+      bundle2 = FactoryGirl.create(:bundle_with_packages, :account => user2.account)
+      server2 = FactoryGirl.create(:agent_server, :account => user2.account, :bundles => [bundle2])
+      get :show, :id => bundle2.id, :server_id => server2.id
+      assert_response :success
+    end
   end
 
   describe "while unauthenticated" do

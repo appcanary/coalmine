@@ -3,6 +3,8 @@ require 'test_helper'
 class MonitorsControllerTest < ActionController::TestCase
   let(:user) { FactoryGirl.create(:user) }
   let(:monitor) { FactoryGirl.build(:moniter) }
+  let(:user2) { FactoryGirl.create(:user) }
+  let(:admin) { FactoryGirl.create(:admin_user) }
 
   describe "while authenticated" do
     setup do
@@ -13,6 +15,13 @@ class MonitorsControllerTest < ActionController::TestCase
     it "should show the show page" do
       get :show, :id => "1234"
       assert_response :success
+    end
+
+    it "shouldn't show someone else's monitor" do
+      bundle2 = FactoryGirl.create(:bundle_with_packages, :account => user2.account)
+      assert_raises(ActiveRecord::RecordNotFound) do
+        get :show, :id => bundle2.id
+      end
     end
 
     it "should redirect to dashboard on destroy" do
@@ -86,6 +95,18 @@ class MonitorsControllerTest < ActionController::TestCase
       assert_equal 0, LogResolution.count
     end
 
+  end
+
+  describe "while admin" do
+    setup do
+      login_user(admin)
+    end
+
+    it "should show another user's monitor" do
+      bundle2 = FactoryGirl.create(:bundle, :account => user2.account)
+      get :show, :id => bundle2.id
+      assert_response :success
+    end
   end
 
   describe "while unauthenticated" do

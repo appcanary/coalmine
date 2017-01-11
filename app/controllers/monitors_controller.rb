@@ -1,7 +1,5 @@
 class MonitorsController < ApplicationController
   def show
-    bundle = current_user.bundles.via_api.find(params[:id])
-
     @bundlepres = BundlePresenter.new(VulnQuery.new(current_account), bundle)
   end
 
@@ -13,7 +11,6 @@ class MonitorsController < ApplicationController
     @form = MonitorForm.new(Bundle.new)
 
     if @form.validate(params[:monitor])
-      
       @bm = BundleManager.new(current_user.account)
       @bundle, error = @bm.create(@form.platform_release, {name: @form.name}, @form.package_list)
 
@@ -56,6 +53,15 @@ class MonitorsController < ApplicationController
 
   def resolution_params
     params.require(:log_resolution).permit(:package_id, :note)
+  end
+
+  protected
+  def bundle
+    if current_user.is_admin?
+      @bundle = Bundle.via_api.find(params[:id])
+    else
+      @bundle ||= current_user.bundles.via_api.find(params[:id])
+    end
   end
 
 end

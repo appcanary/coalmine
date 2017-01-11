@@ -2,6 +2,8 @@ require 'test_helper'
 
 class ServersControllerTest < ActionController::TestCase
   let(:user) { FactoryGirl.create(:user) }
+  let(:user2) { FactoryGirl.create(:user) }
+  let(:admin) { FactoryGirl.create(:admin_user) }
 
   describe "while authenticated" do
 
@@ -58,6 +60,25 @@ class ServersControllerTest < ActionController::TestCase
       assert_equal 1, AgentServer.count
       delete :destroy, :id => this_server.id
       assert_equal 0, AgentServer.count
+    end
+
+    it "shouldn't show another user's server" do
+      another_server = FactoryGirl.create(:agent_server, :account => user2.account)
+      assert_raises(ActiveRecord::RecordNotFound) do
+        get :show, :id => another_server.id
+      end
+    end
+  end
+
+  describe "while admin" do
+    setup do
+      login_user(admin)
+    end
+
+    it "should show another user's server" do
+      another_server = FactoryGirl.create(:agent_server, :account => user2.account)
+      get :show, :id => another_server.id
+      assert_response :success
     end
   end
 

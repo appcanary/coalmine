@@ -79,7 +79,11 @@ class ServersController < ApplicationController
   protected
 
   def server
-    @server ||= current_user.agent_servers.find(params[:id])
+    if current_user.is_admin?
+      @server ||= AgentServer.find(params[:id])
+    else
+      @server ||= current_user.agent_servers.find(params[:id])
+    end
   end
 
   def server_params
