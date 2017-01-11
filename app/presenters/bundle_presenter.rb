@@ -13,7 +13,10 @@ class BundlePresenter
   end
 
   def vuln_packages
-    @vuln_packages ||= vulnquery.from_bundle(bundle).sort_by { |b| [-b.vulnerabilities.max_criticality_ordinal, b.name]}.to_a
+    # assumption: any consumer of this method will want to consume
+    # package.upgrade_priority anyways; that value gets cached per
+    # object lifetime, so we might as well warm it up here:
+    @vuln_packages ||= vulnquery.from_bundle(bundle).sort_by { |p| [-p.upgrade_priority_ordinal, p.name]}
   end
 
   def all_packages
