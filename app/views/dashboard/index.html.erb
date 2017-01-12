@@ -25,6 +25,9 @@
 
       <% if @servers.active? %>
         <%= render :partial => "servers/list", :locals => { :servers => @servers.active_servers } %>
+      <% else %>
+        <h3>You don't have any active servers! <a href="mailto:hello@appcanary.com" class="feedback">Contact us</a> if you need support.</h3>
+        <hr>
       <% end %>
 
       <% if @servers.silent? %>
