@@ -14,7 +14,7 @@ class ServerPresenter
   end
 
   def bundles_sys_sorted
-    bundles.sort_by { |b| b.system_bundle? ? 0 : 1 } 
+    bundles.sort_by { |b| [b.system_bundle? ? 0 : 1, b.display_name] } 
   end
 
   def vulnerable?
