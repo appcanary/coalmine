@@ -29,7 +29,7 @@ class BundledPackage < ActiveRecord::Base
 
   scope :affected_by_vuln, -> (account_id, vuln_id) {
     joins("inner join bundles on bundles.id = bundled_packages.bundle_id
-           inner join vulnerable_packages vp on vp.package_id = bundled_packages.package_id").where("bundles.account_id = ? and vp.vulnerability_id = ?", account_id, vuln_id).includes({bundle: :agent_server}, {package: :vulnerable_dependencies})
+           inner join vulnerable_packages vp on vp.package_id = bundled_packages.package_id").where("bundles.account_id = ? and vp.vulnerability_id = ?", account_id, vuln_id).includes(:package, :bundle)
 
   }
 
