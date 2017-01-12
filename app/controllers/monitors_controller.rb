@@ -1,6 +1,7 @@
 class MonitorsController < ApplicationController
   def show
-    @bundlepres = BundlePresenter.new(VulnQuery.new(current_account), bundle)
+    @bundle = fetch_bundle(params)
+    @bundlepres = BundlePresenter.new(VulnQuery.new(current_account), @bundle)
   end
 
   def new
@@ -56,11 +57,11 @@ class MonitorsController < ApplicationController
   end
 
   protected
-  def bundle
+  def fetch_bundle(params)
     if current_user.is_admin?
-      @bundle = Bundle.via_api.find(params[:id])
+      Bundle.via_api.find(params[:id])
     else
-      @bundle ||= current_user.bundles.via_api.find(params[:id])
+      current_user.bundles.via_api.find(params[:id])
     end
   end
 

@@ -12,7 +12,8 @@ class ServersController < ApplicationController
 
   def show
     @vulnquery = VulnQuery.new(current_account)
-    @serverpres = ServerPresenter.new(@vulnquery, server)
+    @server = fetch_server(params)
+    @serverpres = ServerPresenter.new(@vulnquery, @server)
     respond_to do |format|
       format.html
       format.csv do
@@ -78,11 +79,11 @@ class ServersController < ApplicationController
 
   protected
 
-  def server
+  def fetch_server(params)
     if current_user.is_admin?
-      @server ||= AgentServer.find(params[:id])
+      AgentServer.find(params[:id])
     else
-      @server ||= current_user.agent_servers.find(params[:id])
+      current_user.agent_servers.find(params[:id])
     end
   end
 
