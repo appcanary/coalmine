@@ -17,8 +17,8 @@ class ServersController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        vuln_reports = server.bundles.map { |b| [b, @vulnquery.from_bundle(b)] }
-        send_data *ServerExporter.new(server, vuln_reports).to_csv
+        vuln_reports = @server.bundles.map { |b| [b, @vulnquery.from_bundle(b)] }
+        send_data *ServerExporter.new(@server, vuln_reports).to_csv
       end
     end
   end
@@ -46,8 +46,9 @@ class ServersController < ApplicationController
 
 
   def destroy
-    if server.destroy
-      $analytics.deleted_server(current_user.account, server)
+    @server = fetch_server(params)
+    if @server.destroy
+      $analytics.deleted_server(current_user.account, @server)
       redirect_to dashboard_path, notice: "OK. Do remember to turn off the agent!"
     end
   end
@@ -64,12 +65,13 @@ class ServersController < ApplicationController
   end
 
   def edit
-    server
+    @server = fetch_server(params)
   end
 
   def update
+    @server = fetch_server(params)
     respond_to do |format|
-      if server.update(server_params)
+      if @server.update(server_params)
         format.html { redirect_back_or_to(dashboard_path) }
       else
         format.html { render :edit }
