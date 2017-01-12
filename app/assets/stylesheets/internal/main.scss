@@ -153,19 +153,22 @@ section {
 
 // Criticalities
 .fa.critical {
-  color: #FF4136;
+  color: #bd0026;
 }
 .fa.high {
-  color: #FF851B;  
+  color: #f03b20;
 }
 .fa.medium {
-  color: #FFDC00;
+  color: #fd8d3c;
 }
 .fa.low {
-  color: #01FF70;  
+  color: #feb24c;
+}
+.fa.negligible {
+  color: #fed976;
 }
 .fa.unknown {
-  color: #AAAAAA;  
+  color: #aaaaaa;
 }
 
 
