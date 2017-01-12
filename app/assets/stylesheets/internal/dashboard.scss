@@ -11,5 +11,32 @@
 
   .monitors-section, .servers-section {
     @extend section;
+
+    .dataTables_wrapper {
+      margin-top: 2em;
+    }
+
+    .dataTables_filter {
+      label {
+        font-weight: bold;
+        input {
+
+        }
+      }
+      text-align: left;
+    }
+
   }
+
+  .dashboard.datatables {
+
+
+    .icon {
+      span.fa {
+        font-size: 1.5em;
+      }
+    }
+  }
+
+
 }
