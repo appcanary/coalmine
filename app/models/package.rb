@@ -125,7 +125,7 @@ class Package < ActiveRecord::Base
 
     if self.platform != Platforms::Ruby
       all_patches = vds_pv.flatten
-      [all_patches.sort { |a,b| comparator.vercmp(a,b) }.last]
+      [all_patches.max { |a,b| comparator.vercmp(a,b) }]
     else
 
       # TODO:
@@ -185,7 +185,7 @@ class Package < ActiveRecord::Base
   #
   # This eliminated about 30% of sql calls in bundle/show
   def vulnerabilities_by_criticality
-    @vulns_by_priority ||= pluck_to_hash(self.vulnerabilities.order(criticality: :desc), 
+    @vulns_by_priority ||= pluck_to_hash(self.vulnerabilities.order_by_criticality, 
                                          :id, :criticality, :title)
   end
 
