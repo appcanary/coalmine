@@ -12,7 +12,7 @@
 #  constraints   :jsonb            default("[]"), not null
 #  title         :string
 #  description   :text
-#  criticality   :string
+#  criticality   :integer          default("0"), not null
 #  source_status :string
 #  related       :jsonb            default("[]"), not null
 #  remediation   :text

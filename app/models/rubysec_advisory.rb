@@ -1,3 +1,31 @@
+# == Schema Information
+#
+# Table name: rubysec_advisories
+#
+#  id                  :integer          not null, primary key
+#  ident               :string
+#  gem                 :string
+#  framework           :string
+#  platform            :string
+#  cve                 :string
+#  url                 :string
+#  title               :string
+#  date                :date
+#  description         :text
+#  cvss_v2             :string
+#  cvss_v3             :string
+#  unaffected_versions :text
+#  patched_versions    :text
+#  related             :text
+#  submitter_email     :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#
+# Indexes
+#
+#  index_rubysec_advisories_on_ident  (ident)
+#
+
 class RubysecAdvisory < ActiveRecord::Base
   has_secure_token :ident
 

@@ -2,19 +2,19 @@
 #
 # Table name: subscription_plans
 #
-#  id            :integer          not null, primary key
-#  value         :integer
-#  agent_value   :integer
-#  agent_limit   :integer
-#  label         :string
-#  comment       :string
-#  default       :boolean          default("false"), not null
-#  discount      :boolean          default("false"), not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  user_limit    :integer          default("5")
-#  api_limit     :integer          default("0")
-#  free          :boolean          default("false")
+#  id          :integer          not null, primary key
+#  value       :integer
+#  agent_value :integer
+#  agent_limit :integer
+#  label       :string
+#  comment     :string
+#  default     :boolean          default("false"), not null
+#  discount    :boolean          default("false"), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  user_limit  :integer          default("5")
+#  api_limit   :integer          default("0")
+#  free        :boolean          default("false")
 #
 # Indexes
 #
