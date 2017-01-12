@@ -70,8 +70,8 @@ $(document).ready(function() {
   }
 
   $(".feedback").on("click", function(e) {
-    e.preventDefault();
     if(typeof Intercom != "undefined") {
+      e.preventDefault();
       Intercom("showNewMessage")
     }
   });

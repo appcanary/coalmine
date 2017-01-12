@@ -112,18 +112,20 @@ class Package < ActiveRecord::Base
 
   # TODO needs test
   def upgrade_to
-    @upgrade_to ||= calc_upgrade_to(self.vulnerable_dependencies)
+    @upgrade_to ||= calc_upgrade_to(self.vulnerable_dependencies.pluck(:patched_versions))
   end
 
   def upgrade_to_given(vd)
-    calc_upgrade_to([vd])
+    calc_upgrade_to([vd.patched_versions])
   end
 
-  def calc_upgrade_to(vds)
+  # takes in an array of arrays
+  # i.e. vuln_deps' patched_versions
+  def calc_upgrade_to(vds_pv)
 
     if self.platform != Platforms::Ruby
-      all_patches = vds.map(&:patched_versions).flatten
-      [all_patches.sort { |a,b| comparator.vercmp(a,b) }.last]
+      all_patches = vds_pv.flatten
+      [all_patches.max { |a,b| comparator.vercmp(a,b) }]
     else
 
       # TODO:
@@ -137,8 +139,8 @@ class Package < ActiveRecord::Base
       # Instead, we hack it:
 
       # load every patch requirement into its object
-      all_patches = vds.map { |vd|
-        vd.patched_versions.map { |pv|  Gem::Requirement.new(*pv.split(', ')) }
+      all_patches = vds_pv.map { |vdpv|
+        vdpv.map { |pv|  Gem::Requirement.new(*pv.split(', ')) }
       }
 
       this_version = Gem::Version.new(self.version)
@@ -177,17 +179,29 @@ class Package < ActiveRecord::Base
   end
 
   # ----- view layer show highest vuln priority
+  # perf hack for bundle/show
+  # returns a hash! of just the attributes we need,
+  # avoiding instantiating a whole AR::Base object
+  #
+  # This eliminated about 30% of sql calls in bundle/show
   def vulnerabilities_by_criticality
-    @vulns_by_priority ||= self.vulnerabilities.order(criticality: :desc)
-  end
-
-  def upgrade_priority
-    vulnerabilities_by_criticality.first.try(:criticality)
+    @vulns_by_priority ||= pluck_to_hash(self.vulnerabilities.order_by_criticality, 
+                                         :id, :criticality, :title)
   end
 
   def upgrade_priority_ordinal
-    Vulnerability.criticalities[upgrade_priority]
+    @upgrade_priority_ordinal ||= vulnerabilities_by_criticality.first.try(:[], :criticality)
   end
+
+  def upgrade_priority
+    Advisory::CRITICALITIES_BY_VALUE[upgrade_priority_ordinal]
+  end
+
+  # silly optimization
+  def pluck_to_hash(q, *keys)
+    q.pluck(*keys).map{|pa| Hash[keys.zip(pa)]}
+  end
+
 
   # ----- view stuff
   def display_name

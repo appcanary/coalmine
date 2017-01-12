@@ -90,7 +90,11 @@ class Bundle < ActiveRecord::Base
   end
 
   def display_name
-    name.blank? ? path : name
+    if agent_server_id.present? and self.system_bundle?
+      "System Packages"
+    else
+      name.blank? ? path : name
+    end
   end
 
   def system_bundle?

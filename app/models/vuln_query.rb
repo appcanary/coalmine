@@ -77,7 +77,17 @@ class VulnQuery
   end
 
   def uniq_and_include(pkg_query)
-    pkg_query.distinct.preload(:vulnerable_dependencies,:vulnerabilities)
+    # temporary note: preloading works fine on small numbers of 
+    # associations; but some packages have 150+ vulnerabilities.
+    # preloading it, at least in development, seems to be causing
+    # all sorts of memory management hell.
+    #
+    # basically we need to upend everything and cache it
+    # but, ironically, making lots of queries seems to be better 
+    # than preloading thousands of objects
+    # pkg_query.distinct.preload(:vulnerable_dependencies,:vulnerabilities)
+ 
+    pkg_query.distinct
   end
 
   def limit_query(pkg_query)

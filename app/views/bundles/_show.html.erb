@@ -2,7 +2,7 @@
   <ul class="nav nav-tabs">
     <li class="active" role="presentation">
       <a href="#vulnerable-packages-tab"  data-toggle="tab">
-        <% if @bundlepres.vulnerable? %>
+        <% if @bundlepres.vuln_packages.any? %>
           <span class="fa fa-exclamation-triangle warn"></span>
           vulnerable packages
         <% else %>
@@ -54,19 +54,19 @@
           </thead>
 
           <% @bundlepres.vuln_packages.each do |package| %>
-            <% vulns = package.vulnerabilities.order_by_criticality %>
+            <% vulns = package.vulnerabilities_by_criticality %>
 
             <tr>
               <td class="package-name">
                 <%= package.name %>
               </td>
               <td>
-                <%= vulns.first.criticality %>
+                <%= package.upgrade_priority %>
               </td>
 
               <td class="package-vulnerabilities">
                 <%= vulns[0..3].map do |vuln| %>
-                  <% link_to(h(vuln.title), vuln_path(vuln), target: "_blank")  %>
+                  <% link_to(h(vuln[:title]), vuln_path(vuln[:id]), target: "_blank")  %>
                   <% end.join(", <br/>").html_safe %>
 
                   <% if (vcount = vulns.size) > 4 %>
