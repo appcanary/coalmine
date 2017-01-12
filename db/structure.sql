@@ -3065,6 +3065,13 @@ CREATE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
 
 
 --
+-- Name: index_vulnerabilities_on_criticality_and_reported_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerabilities_on_criticality_and_reported_at ON vulnerabilities USING btree (criticality DESC, reported_at DESC);
+
+
+--
 -- Name: index_vulnerabilities_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3600,4 +3607,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170104202647');
 INSERT INTO schema_migrations (version) VALUES ('20170105193923');
 
 INSERT INTO schema_migrations (version) VALUES ('20170111180619');
+
+INSERT INTO schema_migrations (version) VALUES ('20170112163526');
 
