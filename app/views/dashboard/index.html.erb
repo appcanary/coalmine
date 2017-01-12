@@ -8,44 +8,50 @@
   <% if @monitors.any? %>
 
     <div class="monitors-section">
-      <h1 class="page-header">Monitors 
-        <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Monitor'.html_safe, new_monitor_path, :class => "btn btn-default")%>
-      </h1>
+      <div class="col-sm-12">
+        <h1 class="page-header">Monitors 
+          <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Monitor'.html_safe, new_monitor_path, :class => "btn btn-default")%>
+        </h1>
 
-      <%= render :partial => "monitors/list", :locals => { :monitors => @monitors } %>
+        <%= render :partial => "monitors/list", :locals => { :monitors => @monitors } %>
+      </div>
     </div>
 
   <% end %>
 
   <% if @servers.any? %>
     <div class="servers-section">
-      <h1 class="page-header">Servers
-        <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Server'.html_safe, new_server_path, :class => "btn btn-default")%>
-      </h1>
+      <div class="col-sm-12">
+        <h1 class="page-header">Servers
+          <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Server'.html_safe, new_server_path, :class => "btn btn-default")%>
+        </h1>
 
-      <% if @servers.active? %>
-        <%= render :partial => "servers/list", :locals => { :servers => @servers.active_servers } %>
-      <% else %>
-        <h3>You don't have any active servers! <a href="mailto:hello@appcanary.com" class="feedback">Contact us</a> if you need support.</h3>
-        <hr>
-      <% end %>
+        <% if @servers.active? %>
+          <%= render :partial => "servers/list", :locals => { :servers => @servers.active_servers } %>
+        <% else %>
+          <h3>You don't have any active servers! <a href="mailto:hello@appcanary.com" class="feedback">Contact us</a> if you need support.</h3>
+          <hr>
+        <% end %>
 
-      <% if @servers.silent? %>
-        <h4>Inactive servers 
-          <%= link_to("Delete all inactive", destroy_inactive_servers_path, :method => :delete, :class => "btn btn-warning", :data => {:confirm => "Are you sure you want to delete all inactive servers?"})%>
-        </h4>
-        <p>
-          <strong> Psst! We haven't heard from these servers in a while:</strong>
-          <br/>
-        </p>
+        <% if @servers.silent? %>
+          <h4>Inactive servers 
+            <%= link_to("Delete all inactive", destroy_inactive_servers_path, :method => :delete, :class => "btn btn-warning", :data => {:confirm => "Are you sure you want to delete all inactive servers?"})%>
+          </h4>
+          <p>
+            <strong> Psst! We haven't heard from these servers in a while:</strong>
+            <br/>
+          </p>
 
-        <%= render :partial => "servers/list", :locals => { :servers => @servers.silent_servers } %>
+          <%= render :partial => "servers/list", :locals => { :servers => @servers.silent_servers } %>
 
-      <% end %>
+        <% end %>
+      </div>
     </div>
   <% else %>
     <div class="servers-section">
-      <h3 class="page-header">You're not monitoring any servers. <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Server'.html_safe, new_server_path, :class => "btn btn-default")%></h3>
+      <div class="col-sm-12">
+        <h3 class="page-header">You're not monitoring any servers. <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Server'.html_safe, new_server_path, :class => "btn btn-default")%></h3>
+      </div>
     </div>
   <% end %>
 
