@@ -19,7 +19,9 @@
 
   <% if @servers.any? %>
     <div class="servers-section">
-      <h1 class="page-header">Servers</h1>
+      <h1 class="page-header">Servers
+        <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Server'.html_safe, new_server_path, :class => "btn btn-default")%>
+      </h1>
 
       <% if @servers.active? %>
         <%= render :partial => "servers/list", :locals => { :servers => @servers.active_servers } %>
