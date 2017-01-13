@@ -117,11 +117,15 @@ class VulnQuery
 
   # TODO: convert to using methods above
   def self.affected_from_bundle(bundle)
-    bundle.affected_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+    # like the comment above it turns out that running tons of queries is faster then including all of this
+    #bundle.affected_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+    bundle.affected_packages.distinct
   end
 
   def self.patchable_from_bundle(bundle)
-    bundle.patchable_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+    # like the comment above it turns out that running tons of queries is faster then including all of this
+    #bundle.patchable_packages.distinct.includes(:vulnerabilities, :vulnerable_dependencies)
+    bundle.patchable_packages.distinct
   end
 
   def self.from_packages(package_query)
