@@ -89,10 +89,11 @@ class VulnQueryTest < ActiveSupport::TestCase
 
     assert_equal results, [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4]
 
-    assert_no_difference ->{ SqlCounter.count(Vulnerability) + SqlCounter.count(VulnerableDependency) } do
-      results.first.vulnerabilities.map(&:title)
-      results.second.upgrade_to
-    end
+    # We got rid of the includes in vulnquery so this test is no longer valid
+    # assert_no_difference ->{ SqlCounter.count(Vulnerability) + SqlCounter.count(VulnerableDependency) } do
+    #   results.first.vulnerabilities.map(&:title)
+    #   results.second.upgrade_to
+    # end
 
   end
 
@@ -104,10 +105,11 @@ class VulnQueryTest < ActiveSupport::TestCase
     # vulnpkg3 is tied to @patchless_vuln so we should not see it
     assert_equal results, [@vulnpkg1, @vulnpkg2, @vulnpkg4]
 
-    assert_no_difference ->{ SqlCounter.count(Vulnerability) + SqlCounter.count(VulnerableDependency) } do
-      results.first.vulnerabilities.map(&:title)
-      results.second.upgrade_to
-    end
+    # We got rid of the includes in vulnquery so this test is no longer valid
+    # assert_no_difference ->{ SqlCounter.count(Vulnerability) + SqlCounter.count(VulnerableDependency) } do
+    #   results.first.vulnerabilities.map(&:title)
+    #   results.second.upgrade_to
+    # end
 
   end
 
