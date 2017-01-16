@@ -30,7 +30,7 @@ class VulnPresenter
   def related_links
     @vuln.related.map { |url|
       if host = get_host_without_www(url)
-        h.link_to(host, url, target: "blank")
+        h.link_to(host, url, target: "_blank")
       else
         nil
       end
@@ -43,7 +43,7 @@ class VulnPresenter
 
   def cve_links
     cve_references.map { |cve| 
-      h.link_to(cve, "https://web.nvd.nist.gov/view/vuln/detail?vulnId=#{cve}", target: "blank")
+      h.link_to(cve, "https://web.nvd.nist.gov/view/vuln/detail?vulnId=#{cve}", target: "_blank")
     }
   end
 
