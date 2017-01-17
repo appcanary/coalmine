@@ -78,8 +78,19 @@
   <div class="col-sm-8">
     <h3>Description</h3>
     <p><%= @vuln.description %></p>
-    <hr>
-    <h4>Constraints:</h4>
+    <% if current_user.nil? %>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Am I vulnerable?</h3>
+        </div>
+        <div class="panel-body">
+          <p>The constraints below list the versions that this vulnerability is <strong>patched in</strong>, and versions that are <strong>unaffected</strong>. If a patch is ready but unrealeased, then it is <strong>pending</strong>.</p>
+          <p>Or, you can just let us figure it out for you! <a href="https://appcanary">Appcanary</a> continously monitor your installed packages, and tell you if any of them are vulnerable.</p>
+          <a class="btn btn-default" href="https://appcanary.com/sign_up">Sign up for monitoring</a>
+        </div>
+      </div>
+    <% end %>
+    <h3>Constraints:</h3>
     <table class="table">
       <thead>
         <th>
