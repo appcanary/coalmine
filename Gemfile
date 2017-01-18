@@ -70,8 +70,7 @@ gem 'binding_of_caller'
 #parsers
 gem "msgpack"
 
-gem 'appcanary'
-
+gem 'appcanary', :git => "https://github.com/appcanary/appcanary.rb", :branch => "j0ni/disable-mocks"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
