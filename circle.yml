@@ -9,8 +9,14 @@ dependencies:
 
 test:
   post:
-    - bundle exec rake appcanary:check
-    - bundle exec rake appcanary:update_monitor
+    - bundle exec rake appcanary:check:
+        environment:
+          RAILS_ENV: development
+          RACK_ENV: development
+    - bundle exec rake appcanary:update_monitor:
+        environment:
+          RAILS_ENV: development
+          RACK_ENV: development
 
 # machine:
 #   node:
