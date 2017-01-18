@@ -2,9 +2,16 @@
 # atm we don't test javascript so let's punt
 # on building the thing - just get the tests
 # to run:
+
 dependencies:
   pre:
     - touch app/assets/javascripts/main.bundle.js
+
+test:
+  post:
+    - bundle exec rake appcanary:check
+    - bundle exec rake appcanary:update_monitor
+
 # machine:
 #   node:
 #     version: 0.10.26

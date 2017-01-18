@@ -92,6 +92,9 @@ GEM
       activerecord (>= 2.3.0)
       rake (>= 0.8.7)
     ansi (1.5.0)
+    appcanary (0.1.2)
+      json (>= 1.8.3)
+      multipart-post (~> 2.0)
     arel (6.0.3)
     autoprefixer-rails (6.5.3)
       execjs
@@ -373,6 +376,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   analytics-ruby (~> 2.0.0)
   annotate
+  appcanary
   better_errors
   binding_of_caller
   bootstrap-sass!
@@ -439,4 +443,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.1
+   1.13.6
