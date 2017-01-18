@@ -971,7 +971,9 @@ CREATE TABLE log_api_calls (
     account_id integer,
     action character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    platform character varying,
+    release character varying
 );
 
 

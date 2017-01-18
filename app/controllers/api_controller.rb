@@ -34,7 +34,7 @@ class ApiController < ApplicationController
 
   def register_api_call!
     $analytics.track_api_call(current_account)
-    current_account.log_api_calls.create!(:action => "#{controller_name}/#{action_name}")
+    current_account.log_api_calls.create!(:action => "#{controller_name}/#{action_name}", :platform => params[:platform], :release => params[:release])
   end
 
   def v2_request?
