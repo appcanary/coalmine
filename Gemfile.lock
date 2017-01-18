@@ -37,7 +37,7 @@ GIT
 
 GIT
   remote: https://github.com/appcanary/appcanary.rb
-  revision: 38a8db7676b738ca3fd239ba6597f542c89610d3
+  revision: ce11a0e14acd4ba65528496cefb400b5db3db6a5
   branch: j0ni/disable-mocks
   specs:
     appcanary (0.1.2)
