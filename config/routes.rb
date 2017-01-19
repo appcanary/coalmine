@@ -134,6 +134,7 @@ Rails.application.routes.draw do
       get "servers/:uuid" => "servers#show", :as => "server"
       get "servers" => "servers#index"
       delete "servers/:uuid" => "servers#destroy"
+      put "servers/:uuid/procs" => "servers#update_procs"
     end
 
     scope :v2 do
