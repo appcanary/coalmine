@@ -8,10 +8,8 @@ class AppsController < ApplicationController
 
   def show
     @vulnquery = VulnQuery.new(current_account)
-    @server = current_user.agent_servers.find(params[:server_id])
-    b = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
-
-    @bundlepres = BundlePresenter.new(@vulnquery, b)
+    @server, @bundle = fetch_server_and_bundle(params)
+    @bundlepres = BundlePresenter.new(@vulnquery, @bundle)
   end
 
   # should ideally confirm it belongs to the same server
@@ -28,4 +26,15 @@ class AppsController < ApplicationController
     end
   end
 
+  protected
+  def fetch_server_and_bundle(params)
+    if current_user.is_admin?
+      server = AgentServer.find(params[:server_id])
+      bundle = Bundle.where(:agent_server_id => params[:server_id]).find(params[:id])
+    else
+      server = current_user.agent_servers.find(params[:server_id])
+      bundle = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
+    end
+    [server, bundle]
+  end
 end
