@@ -5,25 +5,31 @@ class Api::ServersController < ApiController
   end
 
   def show
-    @server = current_account.agent_servers.where(:uuid => params[:uuid]).take
-    @server ||= current_account.agent_servers.where(:id => params[:uuid]).take
-
-    if @server
+    if server
       register_api_call!
-      handle_api_response(@server)
+      handle_api_response(server)
     else
       render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
     end
   end
 
-  def destroy
-    @server = current_account.agent_servers.where(:uuid => params[:uuid]).take
-    @server ||= current_account.agent_servers.where(:id => params[:uuid]).take
-
-    if @server.nil?
+  def update_procs
+    if server.nil?
       render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
-    elsif @server.destroy
-      $analytics.deleted_server(current_account, @server)
+    else
+      register_api_call!
+      # update server with a set of procs here
+      server.update_procs(procs_params)
+      server.save!
+      render :nothing => true, :status => 204
+    end
+  end
+
+  def destroy
+    if server.nil?
+      render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
+    elsif server.destroy
+      $analytics.deleted_server(current_account, server)
       register_api_call!
       render :nothing => true, :status => 204
     else
@@ -48,4 +54,13 @@ class Api::ServersController < ApiController
     end
   end
 
+  private
+  def server
+    @server ||= current_account.agent_servers.where(:uuid => params[:uuid]).take
+    @server ||= current_account.agent_servers.where(:id => params[:uuid]).take
+  end
+
+  def procs_params
+    params[:server] && params[:server][:procs]
+  end
 end
