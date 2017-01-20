@@ -5,31 +5,23 @@ class Api::ServersController < ApiController
   end
 
   def show
-    if server
-      register_api_call!
-      handle_api_response(server)
-    else
-      render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
-    end
-  end
+    @server = fetch_server
 
-  def update_procs
-    if server.nil?
-      render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
-    else
+    if @server
       register_api_call!
-      # update server with a set of procs here
-      server.update_procs(procs_params)
-      server.save!
-      render :nothing => true, :status => 204
+      handle_api_response(@server)
+    else
+      render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
     end
   end
 
   def destroy
-    if server.nil?
+    @server = fetch_server
+
+    if @server.nil?
       render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
-    elsif server.destroy
-      $analytics.deleted_server(current_account, server)
+    elsif @server.destroy
+      $analytics.deleted_server(current_account, @server)
       register_api_call!
       render :nothing => true, :status => 204
     else
@@ -55,9 +47,12 @@ class Api::ServersController < ApiController
   end
 
   private
-  def server
-    @server ||= current_account.agent_servers.where(:uuid => params[:uuid]).take
-    @server ||= current_account.agent_servers.where(:id => params[:uuid]).take
+  def fetch_server_using(id_key)
+    current_account.agent_servers.where(id_key => params[:uuid]).take
+  end
+
+  def fetch_server
+    fetch_server_using(:id) || fetch_server_using(:uuid)
   end
 
   def procs_params

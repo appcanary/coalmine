@@ -134,7 +134,6 @@ Rails.application.routes.draw do
       get "servers/:uuid" => "servers#show", :as => "server"
       get "servers" => "servers#index"
       delete "servers/:uuid" => "servers#destroy"
-      put "servers/:uuid/procs" => "servers#update_procs"
     end
 
     scope :v2 do
@@ -159,6 +158,7 @@ Rails.application.routes.draw do
         put "servers/:uuid" => "agent#update", :as => :agent_server_update
         get "servers/:uuid" => "agent#show", :as => :agent_server_upgrade
         post "heartbeat/:uuid" => "agent#heartbeat", :as => :agent_server_heartbeat
+        put "servers/:uuid/processes" => "servers#update_server_processes"
       end
     end
   end
