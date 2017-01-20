@@ -81,6 +81,20 @@ class Api::AgentController < ApiController
     render :json => {}
   end
 
+  def update_server_processes
+    server = current_account.agent_servers.where(:uuid => params[:uuid]).take
+
+    if server.nil?
+      render json: {errors: [{title: "No server with that id was found"}]}, status: 404
+    else
+      register_api_call!
+      # update server with a set of procs here
+      server.update_procs(procs_params)
+      server.save!
+      render :nothing => true, :status => 204
+    end
+  end
+
   def show
     server = current_account.agent_servers.where(:uuid => params[:uuid]).take
     unless server
