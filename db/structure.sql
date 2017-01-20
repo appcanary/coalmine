@@ -1298,24 +1298,25 @@ ALTER SEQUENCE pre_users_id_seq OWNED BY pre_users.id;
 
 
 --
--- Name: proc_libs; Type: TABLE; Schema: public; Owner: -
+-- Name: process_libraries; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE proc_libs (
+CREATE TABLE process_libraries (
     id integer NOT NULL,
     path character varying,
     modified timestamp without time zone,
-    package character varying,
+    package_name character varying,
+    package_version character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
 
 
 --
--- Name: proc_libs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE proc_libs_id_seq
+CREATE SEQUENCE process_libraries_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1324,10 +1325,10 @@ CREATE SEQUENCE proc_libs_id_seq
 
 
 --
--- Name: proc_libs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE proc_libs_id_seq OWNED BY proc_libs.id;
+ALTER SEQUENCE process_libraries_id_seq OWNED BY process_libraries.id;
 
 
 --
@@ -1439,13 +1440,13 @@ CREATE TABLE server_tags (
 );
 
 --
--- Name: server_proc_libs; Type: TABLE; Schema: public; Owner: -
+-- Name: server_process_libraries; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE server_proc_libs (
+CREATE TABLE server_process_libraries (
     id integer NOT NULL,
-    server_proc_id integer NOT NULL,
-    proc_lib_id integer NOT NULL,
+    server_process_id integer NOT NULL,
+    process_library_id integer NOT NULL,
     outdated boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1464,10 +1465,10 @@ CREATE SEQUENCE server_tags_id_seq
     CACHE 1;
 
 --
--- Name: server_proc_libs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE server_proc_libs_id_seq
+CREATE SEQUENCE server_process_libraries_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1482,21 +1483,21 @@ CREATE SEQUENCE server_proc_libs_id_seq
 ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
 
 --
--- Name: server_proc_libs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE server_proc_libs_id_seq OWNED BY server_proc_libs.id;
+ALTER SEQUENCE server_process_libraries_id_seq OWNED BY server_process_libraries.id;
 
 
 --
--- Name: server_procs; Type: TABLE; Schema: public; Owner: -
+-- Name: server_processes; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE server_procs (
+CREATE TABLE server_processes (
     id integer NOT NULL,
     agent_server_id integer NOT NULL,
     pid integer NOT NULL,
-    command_line character varying,
+    name character varying,
     started timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1504,10 +1505,10 @@ CREATE TABLE server_procs (
 
 
 --
--- Name: server_procs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: server_processes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE server_procs_id_seq
+CREATE SEQUENCE server_processes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1516,11 +1517,10 @@ CREATE SEQUENCE server_procs_id_seq
 
 
 --
--- Name: server_procs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: server_processes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE server_procs_id_seq OWNED BY server_procs.id;
->>>>>>> Adds an endpoint and a datamodel for storing server processes
+ALTER SEQUENCE server_processes_id_seq OWNED BY server_processes.id;
 
 
 --
@@ -2117,10 +2117,10 @@ ALTER TABLE ONLY pre_users ALTER COLUMN id SET DEFAULT nextval('pre_users_id_seq
 
 
 --
--- Name: proc_libs id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: process_libraries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY proc_libs ALTER COLUMN id SET DEFAULT nextval('proc_libs_id_seq'::regclass);
+ALTER TABLE ONLY process_libraries ALTER COLUMN id SET DEFAULT nextval('process_libraries_id_seq'::regclass);
 
 
 --
@@ -2138,17 +2138,17 @@ ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec
 
 
 --
--- Name: server_proc_libs id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: server_process_libraries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY server_proc_libs ALTER COLUMN id SET DEFAULT nextval('server_proc_libs_id_seq'::regclass);
+ALTER TABLE ONLY server_process_libraries ALTER COLUMN id SET DEFAULT nextval('server_process_libraries_id_seq'::regclass);
 
 
 --
--- Name: server_procs id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: server_processes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY server_procs ALTER COLUMN id SET DEFAULT nextval('server_procs_id_seq'::regclass);
+ALTER TABLE ONLY server_processes ALTER COLUMN id SET DEFAULT nextval('server_processes_id_seq'::regclass);
 
 
 --
@@ -2483,11 +2483,11 @@ ALTER TABLE ONLY pre_users
 
 
 --
--- Name: proc_libs proc_libs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: process_libraries process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY proc_libs
-    ADD CONSTRAINT proc_libs_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY process_libraries
+    ADD CONSTRAINT process_libraries_pkey PRIMARY KEY (id);
 
 
 --
@@ -2515,19 +2515,19 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: server_proc_libs server_proc_libs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: server_process_libraries server_process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY server_proc_libs
-    ADD CONSTRAINT server_proc_libs_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT server_process_libraries_pkey PRIMARY KEY (id);
 
 
 --
--- Name: server_procs server_procs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: server_processes server_processes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY server_procs
-    ADD CONSTRAINT server_procs_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT server_processes_pkey PRIMARY KEY (id);
 
 
 --
@@ -3330,24 +3330,24 @@ CREATE INDEX index_server_tags_on_tag_id ON server_tags USING btree (tag_id);
 
 
 --
--- Name: index_server_proc_libs_on_proc_lib_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_server_process_libraries_on_process_library_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_server_proc_libs_on_proc_lib_id ON server_proc_libs USING btree (proc_lib_id);
-
-
---
--- Name: index_server_proc_libs_on_server_proc_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_server_proc_libs_on_server_proc_id ON server_proc_libs USING btree (server_proc_id);
+CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
 
 
 --
--- Name: index_server_procs_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_server_process_libraries_on_server_process_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_server_procs_on_agent_server_id ON server_procs USING btree (agent_server_id);
+CREATE INDEX index_server_process_libraries_on_server_process_id ON server_process_libraries USING btree (server_process_id);
+
+
+--
+-- Name: index_server_processes_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
 
 
 --
@@ -3732,11 +3732,11 @@ ALTER TABLE ONLY server_procs
 
 
 --
--- Name: server_proc_libs fk_rails_32d2346357; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: server_process_libraries fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY server_proc_libs
-    ADD CONSTRAINT fk_rails_32d2346357 FOREIGN KEY (server_proc_id) REFERENCES server_procs(id);
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_466a4741cd FOREIGN KEY (process_library_id) REFERENCES process_libraries(id);
 
 
 --
@@ -3820,11 +3820,19 @@ ALTER TABLE ONLY billing_plans
 
 
 --
--- Name: server_proc_libs fk_rails_ae7d9dc0c6; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: server_processes fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY server_proc_libs
-    ADD CONSTRAINT fk_rails_ae7d9dc0c6 FOREIGN KEY (proc_lib_id) REFERENCES proc_libs(id);
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT fk_rails_8e08420c73 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: server_process_libraries fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_a5ff67a393 FOREIGN KEY (server_process_id) REFERENCES server_processes(id);
 
 
 --
