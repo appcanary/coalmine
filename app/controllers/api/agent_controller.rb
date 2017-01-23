@@ -79,6 +79,11 @@ class Api::AgentController < ApiController
 
   def show
     server = current_account.agent_servers.where(:uuid => params[:uuid]).take
+    unless server
+      loggit("404 PUT", params[:uuid])
+      render :text => "", :status => 404
+      return
+    end
 
     bundle = server.system_bundle
     if bundle.nil?
