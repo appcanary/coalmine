@@ -54,8 +54,4 @@ class Api::ServersController < ApiController
   def fetch_server
     fetch_server_using(:id) || fetch_server_using(:uuid)
   end
-
-  def procs_params
-    params[:server] && params[:server][:procs]
-  end
 end

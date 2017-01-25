@@ -131,14 +131,4 @@ class AgentServer < ActiveRecord::Base
   def system_bundle
     self.bundles.where(:platform => Platforms::OPERATING_SYSTEMS).first
   end
-
-  def update_procs(procs)
-    self.transaction do
-      self.server_processes = procs.map do |proc|
-        server_proc = self.server_processes.build(pid: proc[:pid], started: proc[:started])
-        server_proc.update_libs(proc[:libraries]) unless proc[:libraries].nil?
-        server_proc
-      end
-    end
-  end
 end

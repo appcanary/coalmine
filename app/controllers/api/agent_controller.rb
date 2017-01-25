@@ -89,8 +89,7 @@ class Api::AgentController < ApiController
     else
       register_api_call!
       # update server with a set of procs here
-      server.update_procs(procs_params)
-      server.save!
+      AgentServerManager.new(server).update_processes(procs_params)
       render :nothing => true, :status => 204
     end
   end
@@ -153,5 +152,9 @@ class Api::AgentController < ApiController
 
   def sendfile_params
     params.require(:agent).permit(:contents, :crc, :kind, :name, :path)
+  end
+
+  def procs_params
+    params[:server] && params[:server][:procs]
   end
 end
