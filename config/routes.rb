@@ -158,7 +158,7 @@ Rails.application.routes.draw do
         put "servers/:uuid" => "agent#update", :as => :agent_server_update
         get "servers/:uuid" => "agent#show", :as => :agent_server_upgrade
         post "heartbeat/:uuid" => "agent#heartbeat", :as => :agent_server_heartbeat
-        put "servers/:uuid/processes" => "servers#update_server_processes"
+        put "servers/:uuid/processes" => "agent#update_server_processes"
       end
     end
   end

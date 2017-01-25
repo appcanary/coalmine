@@ -1,3 +1,6 @@
 class ProcessLibrary < ActiveRecord::Base
-  belongs_to :server_process
+  attr_accessor :outdated
+
+  has_many :server_process_libraries
+  has_many :server_processes, :through => :server_process_libraries
 end
