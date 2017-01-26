@@ -44,7 +44,7 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
         ["release", "package_name"].all? { |k|
           hsh[k].present?
         } &&
-        ["not-affected", "DNE"].include?(hsh["status"])
+        ["not-affected", "DNE", "ignored"].include?(hsh["status"])
       }
 
       assert new_attr["affected"].all? { |hsh|
@@ -53,6 +53,14 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
         } &&
         ["needed", "active", "deferred", "pending", "released"].include?(hsh["status"])
       }
+
+      assert new_attr["needs_triage"].all? { |hsh|
+        ["release", "package_name"].all? { |k|
+          hsh[k].present?
+        } &&
+          ["needs-triage"].include?(hsh["status"])
+      }
+
 
       assert new_attr["constraints"].present?
       assert new_attr["constraints"].all? { |p| 

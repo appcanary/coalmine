@@ -386,7 +386,9 @@ CREATE TABLE advisories (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
-    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL
+    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
+    needs_triage jsonb DEFAULT '[]'::jsonb NOT NULL,
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -440,7 +442,9 @@ CREATE TABLE advisory_archives (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone NOT NULL,
-    expired_at timestamp without time zone NOT NULL
+    expired_at timestamp without time zone NOT NULL,
+    needs_triage jsonb DEFAULT '[]'::jsonb NOT NULL,
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -1810,7 +1814,8 @@ CREATE TABLE vulnerabilities (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
-    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL
+    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -1857,7 +1862,8 @@ CREATE TABLE vulnerability_archives (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone NOT NULL,
-    expired_at timestamp without time zone NOT NULL
+    expired_at timestamp without time zone NOT NULL,
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -2363,9 +2369,8 @@ ALTER TABLE ONLY vulnerabilities
 
 CREATE MATERIALIZED VIEW vulnerability_search_index AS
  SELECT vulnerabilities.id AS vulnerability_id,
-    ((((to_tsvector((vulnerabilities.title)::text) || to_tsvector(COALESCE(vulnerabilities.description, ''::text))) || to_tsvector(array_to_string(vulnerabilities.reference_ids, ' '::text, ''::text))) || to_tsvector((vulnerabilities.platform)::text)) || to_tsvector(COALESCE(string_agg((vulnerable_dependencies.package_name)::text, ' '::text), ''::text))) AS document
-   FROM (vulnerabilities
-     JOIN vulnerable_dependencies ON ((vulnerable_dependencies.vulnerability_id = vulnerabilities.id)))
+    ((((to_tsvector((vulnerabilities.title)::text) || to_tsvector(COALESCE(vulnerabilities.description, ''::text))) || to_tsvector(array_to_string(vulnerabilities.reference_ids, ' '::text, ''::text))) || to_tsvector((vulnerabilities.platform)::text)) || to_tsvector(array_to_string(vulnerabilities.package_names, ' '::text, ''::text))) AS document
+   FROM vulnerabilities
   GROUP BY vulnerabilities.id
   WITH NO DATA;
 
@@ -4255,3 +4260,9 @@ INSERT INTO schema_migrations (version) VALUES ('20170317203807');
 INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 
 INSERT INTO schema_migrations (version) VALUES ('20170322221344');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126003519');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126052317');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126072816');

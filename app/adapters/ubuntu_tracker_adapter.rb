@@ -123,16 +123,19 @@ class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publi
     hsh["patched"] = []
     hsh["affected"] = []
     hsh["unaffected"] = []
+    hsh["needs_triage"] = []
 
     self.patches ||= []
 
     patches.each do |obj|
       case obj["status"]
       when "needs-triage"
-        # do nothing
+        hsh["needs_triage"] << obj
       when "not-affected"
         hsh["unaffected"] << obj
       when "DNE"
+        hsh["unaffected"] << obj
+      when "ignored"
         hsh["unaffected"] << obj
 
       when "needed"
@@ -152,6 +155,12 @@ class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publi
     @package_info_fields = hsh
   end
 
+  generate :package_names do
+    generate_package_info_fields.map do |k,v|
+      v.map { |hsh| hsh["package_name"] }
+    end.flatten.uniq
+  end
+
   generate :patched do
     generate_package_info_fields["patched"]
   end
@@ -163,4 +172,9 @@ class UbuntuTrackerAdapter < AdvisoryAdapter.new(:candidate, :publicdate, :publi
   generate :unaffected do
     generate_package_info_fields["unaffected"]
   end
+
+  generate :needs_triage do
+    generate_package_info_fields["needs_triage"]
+  end
+
 end
