@@ -16,13 +16,15 @@ class AgentServerManager
           end
         end
       end
+      server.save!
     end
   end
 
   def build_server_process(proc)
     attrs = {
       pid: proc[:pid],
-      started: proc[:started]
+      started: proc[:started],
+      name: proc[:name]
     }
     server.server_processes.find_or_initialize_by(attrs)
   end
