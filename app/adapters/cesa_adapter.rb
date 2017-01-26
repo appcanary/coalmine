@@ -14,6 +14,10 @@ class CesaAdapter < AdvisoryAdapter.new(:cesa_id, :issue_date, :synopsis,
     CesaImporter::SOURCE
   end
 
+  generate :package_names do
+    packages
+  end
+
   generate :reference_ids do
     [identifier.gsub("CESA", "RHSA")]
   end
