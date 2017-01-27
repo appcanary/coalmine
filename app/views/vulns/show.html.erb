@@ -25,7 +25,7 @@
 
       <tr>
         <td><label>Package(s)</label></td>
-        <td><%= @vuln.dependency_names %></td>
+        <td><%= @vuln.package_names %></td>
       </tr>
 
       <tr>
@@ -90,61 +90,8 @@
         </div>
       </div>
     <% end %>
-    <h3>Constraints:</h3>
-    <table class="table">
-      <thead>
-        <th>
-          Release
-        </th>
-        <th>
-          Package
-        </th>
-        <th>
-          Patched in:
-        </th>
-        <th>
-          Unaffected in:
-        </th>
-        <th>
-          Pending?
-        </th>
-        <th>
-          Eolifed
-        </th>
-      </thead>
-      <% @vuln.vulnerable_dependencies.each do |vd| %>
-        <tr>
-          <td>
-            <%= vd.release || "N/A" %>
-          </td>
 
-          <td>
-            <%= vd.package_name %>
-          </td>
-
-          <td>
-            <code>
-              <%= vd.patched_versions.join(",") %>
-            </code>
-          </td>
-
-          <td>
-            <code>
-              <%= vd.unaffected_versions.join(",") %>
-            </code>
-          </td>
-
-          <td>
-            <%= vd.pending %>
-          </td>
-
-          <td>
-            <%= vd.end_of_life %>
-          </td>
-
-        </tr>
-      <% end %>
-    </table>
+    <%= render :partial => "constraints", :locals => { :vuln => @vuln }%>
 
     <% if current_user %>
       <% if @bundles.any? %>
