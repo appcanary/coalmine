@@ -5,10 +5,13 @@ class AgentServerManager
     @server = server
   end
 
-  def update_processes(processes)
+  def update_processes(process_map)
+    libraries = process_map[:libraries]
+    processes = process_map[:processes]
+
     server.transaction do
       server.server_processes = processes.map do |proc|
-        process_libraries = find_or_create_process_libraries(proc)
+        process_libraries = find_or_create_process_libraries(proc, libraries)
         build_server_process(proc).tap do |server_process|
           # server_process.process_libraries = process_libraries
           server_process.server_process_libraries = process_libraries.map do |pl|
@@ -29,8 +32,13 @@ class AgentServerManager
     server.server_processes.find_or_initialize_by(attrs)
   end
 
-  def find_or_create_process_libraries(process)
-    spector_libraries = process[:libraries]
+  def find_or_create_process_libraries(process, libraries)
+    spector_libraries = process[:libraries].try(:map) do |lib|
+      libraries[lib[:library_index]].tap do |spector_lib|
+        spector_lib[:outdated] = lib[:outdated]
+      end
+    end
+
     return [] if spector_libraries.blank?
 
     spector_libraries.map do |lib|
