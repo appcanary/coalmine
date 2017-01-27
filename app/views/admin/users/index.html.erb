@@ -55,10 +55,10 @@ $( document ).ready(function() {
             <%= @user_count %>
           </td>
           <td>
-            <%= @tried_count %>
+            <%= @tried_count %> (<%= number_to_percentage(100.0 * @tried_count / @user_count) %>)
           </td>
           <td>
-            <%= @paying_count %>
+            <%= @paying_count %> (<%= number_to_percentage(100.0 * @paying_count / @tried_count) %>)
           </td>
           <td>
             <%= @servers_count %>
