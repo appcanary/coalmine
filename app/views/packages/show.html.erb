@@ -12,22 +12,32 @@
         <tr>
           <td><label>Platform</label></td>
           <td>
-            <%= platform_icon(@package.platform) %>
+            <%= platform_icon(@platform) %>
           </td>
         </tr>
         <tr>
           <td><label>Release</label></td>
           <td>
-            <%= @package.release || "n/a" %>
+            <%= @release || "n/a" %>
           </td>
         </tr>
 
         <tr>
           <td><label>First seen</label></td>
           <td>
-            <%= @package.created_at.strftime("%Y-%m-%d") %>
+            <%= @packages.map(&:created_at).min.strftime("%Y-%m-%d") %>
           </td>
         </tr>
+        <tr>
+          <td><label>Versions</label></td>
+          <td>
+            <% @packages.each do |p| %>
+              <%= link_to p.version, show_package_path(p) %>
+              <br/>
+            <% end %>
+          </td>
+        </tr>
+
       </table>
     </div>
 
@@ -71,7 +81,7 @@
           <% end %>
         </table>
       <% else %>
-        <h5>At present, no vulnerabilities have been recording against this version.</h5>
+        <h5>At present, no vulnerabilities have been recording against this package.</h5>
       <% end %>
       
     </div>

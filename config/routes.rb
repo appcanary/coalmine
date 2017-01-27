@@ -103,6 +103,7 @@ Rails.application.routes.draw do
     get "archive/:id" => "vulns#archive", :as => "archive"
   end
 
+  get "packages/:platform/:name" => "packages#show", :as => :package_platform1, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/ } 
   get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
   get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
 

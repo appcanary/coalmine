@@ -63,6 +63,11 @@ class Package < ActiveRecord::Base
     affected.merge(VulnerableDependency.patchable)
   }
 
+  #Get the vulnerabilities for a collection of packages
+  def self.vulnerabilities
+    Vulnerability.joins(:vulnerable_packages).where("vulnerable_packages.package_id" => all.pluck(:id)).distinct.order_by_criticality
+  end
+
   # find all vulnerable dependencies that *could* affect this package
   # we perform a broad search at first and perform the exact package matching
   # in ruby land
