@@ -1,0 +1,140 @@
+<% has_unaffected = vuln.vulnerable_dependencies.any? {|vd| vd.unaffected_versions.present?} %>
+
+<% has_release = [Platforms::Debian, Platforms::Ubuntu, Platforms::CentOS].include? vuln.platform %>
+<table class="table">
+  <% if vuln.vulnerable_dependencies.present? %>
+    <thead>
+      <th colspan="5"><h4>Vulnerable</h4></th>
+    </thead>
+    <thead>
+      <th></th>
+      <% if has_release %>
+        <th>
+          Release
+        </th>
+      <% end %>
+      <th>
+        Package
+      </th>
+      <th>
+        Patched in:
+      </th>
+      <% if has_unaffected %>
+        <th>
+          Unaffected in:
+        </th>
+      <% end %>
+    </thead>
+    <% vuln.vulnerable_dependencies.each do |vd| %>
+      <tr>
+        <td>
+          <%= vd.pending ? "pending" : ""%>
+          <%= vd.end_of_life ? "pending" : ""%>
+        </td>
+        <% if has_release %>
+          <td>
+            <%= vd.release %>
+          </td>
+        <% end %>
+
+        <td>
+          <%= vd.package_name %>
+        </td>
+
+        <td>
+          <% if vd.patched_versions.present? %>
+            <code>
+              <%= vd.patched_versions.join(",") %>
+            </code>
+          <% else %>
+            None
+          <% end %>
+        </td>
+
+        <% if has_unaffected %>
+          <td>
+            <code>
+              <%= vd.unaffected_versions.join(",") %>
+            </code>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  <% end %>
+  <% if !has_unaffected && vuln.advisory.unaffected.present?%>
+    <thead>
+      <th colspan="5"><h4>Unaffected</h4></th>
+    </thead>
+    <thead>
+      <th></th>
+      <% if has_release %>
+        <th>
+          Release
+        </th>
+      <% end %>
+      <th>
+        Package
+      </th>
+      <th colspan="2">
+        Reason:
+      </th>
+    </thead>
+    <% vuln.advisory.unaffected.each do |u| %>
+      <tr>
+        <td>
+        </td>
+        <% if has_release %>
+          <td>
+            <%= u["release"] %>
+          </td>
+        <% end %>
+
+        <td>
+          <%= u["package_name"] %>
+        </td>
+
+        <td colspan="2">
+          <%= u["status"] %>
+        </td>
+      </tr>
+    <% end %>
+    <% if vuln.advisory.needs_triage.present?%>
+      <thead>
+        <th colspan="5"><h4>Needs Triage</h4></th>
+      </thead>
+      <thead>
+        <th></th>
+        <% if has_release %>
+          <th>
+            Release
+          </th>
+        <% end %>
+        <th>
+          Package
+        </th>
+        <th colspan="2">
+          Reason:
+        </th>
+      </thead>
+      <% vuln.advisory.needs_triage.each do |u| %>
+        <tr>
+          <td>
+          </td>
+          <% if has_release %>
+            <td>
+              <%= u["release"] %>
+            </td>
+          <% end %>
+
+          <td>
+            <%= u["package_name"] %>
+          </td>
+
+          <td colspan="2">
+            <%= u["status"] %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+</table>

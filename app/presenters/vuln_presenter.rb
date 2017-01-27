@@ -15,16 +15,12 @@ class VulnPresenter
     @is_archive
   end
 
-  def description
-    @vuln.description.html_safe
-  end
-
   def vulnerable_dependencies
     @vuln.vulnerable_dependencies.order("release, package_name")
   end
 
-  def dependency_names
-    vulnerable_dependency_names(@vuln).join(", ")
+  def package_names
+    @vuln.package_names.join(", ")
   end
 
   def related_links
@@ -59,6 +55,10 @@ class VulnPresenter
     end
   end
 
+  def advisory
+    @vuln.advisories.first
+  end
+
   def h
     ActionController::Base.helpers
   end
@@ -86,9 +86,4 @@ class VulnPresenter
       end
     end
   end
-
-  def vulnerable_dependency_names(vuln)
-    vuln.vulnerable_dependencies.pluck(:package_name).uniq
-  end
-
 end
