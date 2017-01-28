@@ -91,7 +91,7 @@
       </div>
     <% end %>
 
-    <%= render :partial => "constraints", :locals => { :vuln => @vuln }%>
+    <%= render partial: "constraints", locals: { vuln: @vuln }%>
 
     <% if current_user %>
       <% if @bundles.any? %>
