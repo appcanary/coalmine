@@ -165,7 +165,9 @@ class DebianTrackerAdapter < AdvisoryAdapter.new(:package_name, :cve, :scope, :d
     hsh
   end
 
-
+  generate :package_names do
+    [package_name]
+  end
   generate :patched do
     generate_package_info_fields["patched"]
   end

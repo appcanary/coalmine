@@ -1,0 +1,11 @@
+<tr>
+  <% if local_assigns[:release].present? %>
+    <td rowspan="<%= local_assigns[:colspan] || 1 %>"><%= local_assigns[:release] %></td>
+  <% end %>
+  <td>
+    <%= u["package_name"] %>
+  </td>
+  <td>
+    <%= u["status"] %>
+  </td>
+</tr>

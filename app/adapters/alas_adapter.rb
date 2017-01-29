@@ -34,6 +34,15 @@ class AlasAdapter < AdvisoryAdapter.new(:alas_id, :reference_ids, :severity,
     remediation
   end
 
+  generate :package_names do
+    # We may need to look into new packages for this. e.g for
+    # https://alas.aws.amazon.com/ALAS-2016-669.html the affected packages are
+    # "kernel", while we have new packages for a bunch of stuff i.e.
+    # perf-debugunfo, kernel-headers, etc. OTOH the remediation is yum update
+    # kernel...
+    affected_packages
+  end
+
   generate :patched do
     new_packages.map { |p|
       {"filename" => p}
