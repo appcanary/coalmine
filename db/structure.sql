@@ -3579,14 +3579,6 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
--- Name: fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY billing_plans
-    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
-
-
---
 -- Name: server_processes fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3603,6 +3595,14 @@ ALTER TABLE ONLY server_process_libraries
 
 
 --
+-- Name: billing_plans fk_rails_b2ed287d75; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY billing_plans
+    ADD CONSTRAINT fk_rails_b2ed287d75 FOREIGN KEY (subscription_plan_id) REFERENCES subscription_plans(id);
+
+
+--
 -- Name: notifications fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3611,7 +3611,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: billing_plans fk_rails_f0b7c79393; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY billing_plans
@@ -3825,3 +3825,4 @@ INSERT INTO schema_migrations (version) VALUES ('20170118224300');
 INSERT INTO schema_migrations (version) VALUES ('20170118224917');
 
 INSERT INTO schema_migrations (version) VALUES ('20170119145353');
+
