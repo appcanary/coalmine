@@ -1,0 +1,21 @@
+Hello,
+
+This report summarizes daily activity between <%= @today %> and <%= @date.to_date.iso8601 %> for <%= Rails.env %>.
+
+New Servers:
+<% if @new_servers.present? %>
+  <% @new_servers.each do |s| %>
+    <%= s.display_name %> - <%= s.account.email%> - <%= s.uname %>
+  <% end %>
+<% else %>
+  None.
+<% end %>
+
+New Monitors:
+<% if @new_monitors.present? %>
+  <% @new_monitors.each do |b| %>
+    <%= b.display_name %> - <%= b.account.email%> - <%= b.platform %><% if b.release.present? %>/<%= b.release %><% end %>
+  <% end %>
+<% else %>
+  None.
+<% end %>

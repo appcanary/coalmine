@@ -58,7 +58,19 @@ class SystemMailer < ActionMailer::Base
 
     @total_revenue = BillingPlan.includes(:subscription_plan, user: :account).map(&:monthly_cost).reduce(&:+)
 
-    mail(to: "hello@appcanary.com", :subject => "#{env_prefix}sysreport #{@today}")
+    mail(to: "hello@appcanary.com", subject: "#{env_prefix}sysreport #{@today}")
+  end
+
+  def daily_report
+    env_prefix = ""
+    if !Rails.env.production?
+      env_prefix = "[#{Rails.env}] "
+    end
+    @today = Date.today.iso8601
+    @date = 120.day.ago
+    @new_servers = AgentServer.where("agent_servers.created_at > ?", @date)
+    @new_monitors = Bundle.via_api.where("created_at > ?", @date)
+    mail(to: "hello.appcanary.com", subject: "#{env_prefix} daily report (#{@today})")
   end
 
 end
