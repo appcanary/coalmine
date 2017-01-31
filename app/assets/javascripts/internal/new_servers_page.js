@@ -1,14 +1,14 @@
-function get_pref_os() {
+function getPrefOS() {
   return $('.server-os-prefs input[type="radio"]:checked').val();
 }
 
-function get_pref_deploy() {
+function getPrefDeploy() {
   return $('.server-deploy-prefs input[type="radio"]:checked').val();
 }
 
-function on_pref_os_click(e) {
+function onPrefOSClick(e) {
   $(this).parents("form").submit();
-  var pref_deploy = get_pref_deploy();
+  var pref_deploy = getPrefDeploy();
 
   // if the deploy prefs buttons are hidden, show them
   // (i.e. .collapse is set, or .collapse.in is NOT set)
@@ -17,24 +17,25 @@ function on_pref_os_click(e) {
     $(".server-deploy-prefs").collapse("show");
   }
   if (pref_deploy != undefined) {
-    draw_deploy_collapse(pref_deploy, this.value);
+    drawDeployCollapse(pref_deploy, this.value);
   }
 }
 
-function on_pref_deploy_click() {
+function onPrefDeployClick() {
   $(this).parents("form").submit();
 
-  var pref_os = get_pref_os()
+  var pref_os = getPrefOS()
   var pref_deploy = this.value;
 
-  draw_deploy_collapse(pref_deploy, pref_os);
+  drawDeployCollapse(pref_deploy, pref_os);
 }
 
-function draw_deploy_collapse(automator, platform) {
-  var current_panel = $('#btn-deploy .collapse.in')
+function drawDeployCollapse(automator, platform) {
+  var current_panel = $('#btn-deploy .collapse.in');
   var new_panel = undefined;
 
-
+  // the shell deploy box displays diff content
+  // if a .deb or .rpm system is selected
   if (automator != "shell") {
     new_panel = $('#deploy-'+automator);
 
@@ -48,6 +49,5 @@ function draw_deploy_collapse(automator, platform) {
   }
 }
 
-$(document).on('change', '.server-deploy-prefs input[type="radio"]', on_pref_deploy_click)
-
-$(document).on('change', '.server-os-prefs input[type="radio"]', on_pref_os_click)
+$(document).on('change', '.server-deploy-prefs input[type="radio"]', onPrefDeployClick);
+$(document).on('change', '.server-os-prefs input[type="radio"]', onPrefOSClick);

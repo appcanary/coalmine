@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ServersHelperTestt < ActiveSupport::TestCase
+class ServersHelperTest < ActiveSupport::TestCase
   include ServersHelper
   test "if hide_deploy_opt behaves properly" do
 
