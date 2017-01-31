@@ -80,6 +80,27 @@ class UsersControllerTest < ActionController::TestCase
       # test not being able to see stuff while logged out.
     end
 
+    test "users should be able to update preferences" do
+      login_user(user)
+      assert_equal user.pref_os, nil
+      assert_equal user.pref_deploy, nil
+      xhr :patch, :update, :id => user.id, :user => { :pref_os => "ubuntu", :pref_deploy => "chef" }
+      assert_response :success
+
+      user.reload
+      assert_equal user.pref_os, "ubuntu"
+      assert_equal user.pref_deploy, "chef"
+    end
+
+    test "users can't update anything else via #update" do
+      login_user(user)
+      xhr :patch, :update, :id => user.id, :user => { :email => "very_obviously_fake@example.com" }
+      assert_response :success
+
+      user.reload
+      assert_not_equal user.email, "very_obviously_fake@example.com"
+    end
+
   end
 
   describe "admin users" do

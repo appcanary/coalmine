@@ -5,7 +5,7 @@ module ServersHelper
       ret << "collapse"
     else
       if platforms.present? 
-        if !platforms.include?(user.os_pref)
+        if !platforms.include?(user.pref_os)
           ret << "collapse"
         end
       end
