@@ -56,7 +56,7 @@ module ApplicationHelper
 
         content_tag("div", :class => "eui-component-wrapper") do
           content_tag("div", :class => "eui-label") do
-            content_tag("a", :href => opt[:href], :class => "eui-label-value") do
+            content_tag("a", :href => opt[:href], :class => "eui-label-value", :target => opt[:target]) do
               value
             end
           end
