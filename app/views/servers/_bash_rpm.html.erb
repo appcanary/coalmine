@@ -1,0 +1,30 @@
+<section id="deploy-shell" class="<%= hide_deploy_opt_klass(current_user, "shell", "centos", "amzn")%>">
+  <div class="onboard-box">
+    <div class="onboard-wrapper">
+      <section style="border: none">
+        <div class="onboard-title">
+
+          <h3>Using Bash</h3>
+        </div>
+      </section>
+
+      <section>
+        <div class="onboard-desc">
+          <p><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat, <%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS and Amazon Linux</p>
+          <%= render :partial => "redhat" %>
+        </div>
+      </section>
+
+
+      <section>
+        <div class="action-bar">
+          <div class="pull-right">
+            <%= eui_button "This didn't work. I need support!", href: "mailto:hello@appcanary.com?subject=\"Problem with bash\"", :class => "eui-button-medium-primary feedback-problem", :target => "_blank"%>
+            <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</section>

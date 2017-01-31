@@ -195,6 +195,6 @@ class Platforms
   end
 
   def self.select_operating_systems
-    OPERATING_SYSTEMS.map { |n| full_name(n) }
+    OPERATING_SYSTEMS.map { |n| [n, full_name(n)] }
   end
 end
