@@ -29,4 +29,16 @@
 #
 
 class BundleArchive < ActiveRecord::Base
+  belongs_to :account
+  
+  scope :via_api, -> { where("bundle_archives.agent_server_id is null") }
+
+  # TODO: this should be in the presenter
+  def display_name
+    if agent_server_id.present? and self.system_bundle?
+      "System Packages"
+    else
+      name.blank? ? path : name
+    end
+  end
 end

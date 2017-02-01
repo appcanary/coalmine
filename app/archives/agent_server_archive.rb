@@ -29,4 +29,11 @@
 #
 
 class AgentServerArchive < ActiveRecord::Base
+  belongs_to :account
+
+
+  #TODO: this should be in the presenter
+  def display_name
+    name.blank? ? hostname : name
+  end
 end

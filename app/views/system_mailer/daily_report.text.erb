@@ -11,9 +11,36 @@ New Servers:
   None.
 <% end %>
 
+Inactive Servers:
+<% if @inactive_servers.present? %>
+  <% @inactive_servers.each do |s| %>
+    <%= s.display_name %> - <%= s.account.email%> - <%= s.uname %>
+  <% end %>
+<% else %>
+  None.
+<% end %>
+
+Deleted Servers:
+<% if @deleted_servers.present? %>
+  <% @deleted_servers.each do |s| %>
+    <%= s.display_name %> - <%= s.account.email%> - <%= s.uname %>
+  <% end %>
+<% else %>
+  None.
+<% end %>
+
 New Monitors:
 <% if @new_monitors.present? %>
   <% @new_monitors.each do |b| %>
+    <%= b.display_name %> - <%= b.account.email%> - <%= b.platform %><% if b.release.present? %>/<%= b.release %><% end %>
+  <% end %>
+<% else %>
+  None.
+<% end %>
+
+Deleted Monitors:
+<% if @deleted_monitors.present? %>
+  <% @deleted_monitors.each do |b| %>
     <%= b.display_name %> - <%= b.account.email%> - <%= b.platform %><% if b.release.present? %>/<%= b.release %><% end %>
   <% end %>
 <% else %>
