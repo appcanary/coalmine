@@ -8,9 +8,11 @@ class NotificationMailer < ActionMailer::Base
 
     $analytics.track_notification(msg.account, :vuln)
 
-    mail(to: @notifier.recipients, :subject => @notifier.subject) do |format|
-      format.html
-      format.text
+    if @notifier.should_deliver?
+      mail(to: @notifier.recipients, :subject => @notifier.subject) do |format|
+        format.html
+        format.text
+      end
     end
   end
 
@@ -19,9 +21,11 @@ class NotificationMailer < ActionMailer::Base
 
     $analytics.track_notification(msg.account, :patched)
 
-    mail(to: @notifier.recipients, :subject => @notifier.subject) do |format|
-      format.html
-      format.text
+    if @notifier.should_deliver?
+      mail(to: @notifier.recipients, :subject => @notifier.subject) do |format|
+        format.html
+        format.text
+      end
     end
   end
 
