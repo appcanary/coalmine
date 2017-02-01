@@ -1,122 +1,72 @@
-<section id="newservers" style="padding-top: 10px;">
-  <div class="fixed-side-menu">
-    <div class="outer-wrapper">
-      <div class="inner-wrapper">
-        <div style="margin-top: 20px;">
-          <%= image_tag "canary-egg.medium.png", :style => "width: 150px" %>
-        </div>
+<div id="newservers">
+  <section>
+    <div class="col-sm-6 col-sm-offset-1">
+      <h1>Add a server to Appcanary</h1>
+      <p>Using our agent is the easiest way to keep your infrastructure in sync with Appcanary. All of the agent's code is <b><a href="https://github.com/appcanary/agent" target="_blank">available on GitHub</a></b>.</p>
 
-        <ul class="nav nav-pills nav-stacked">
-          <li><h2>Add a server</h2></li>
-          <li><a href="#howitworks">How does it work?</a></li>
-          <li><h5>How to install:</h5></li>
-          <li><a href="#ansible">Using Ansible</a></li>
-          <li><a href="#chef">Using Chef</a></li>
-          <li><a href="#puppet">Using Puppet</a></li>
-          <li><a href="#bash">Using Bash</a></li>
-        </ul>
+      <h3>What platform do you use?</h3>
+
+      <%= form_for(current_user, remote: true) do |f| %>
+
+        <div class="server-os-prefs" data-toggle="buttons">
+          <% Platforms.select_operating_systems.each do |plt, fname| %>
+
+            <% op_klass = current_user.pref_os == plt ? "active" : "" %>
+            <%= label_tag "pref_os", class: "btn btn-default #{op_klass}" do %>
+
+              <%= f.radio_button :pref_os, plt %>
+              <span class="platform-logo"><%= image_tag "icon-#{plt}.png", :style => "width: 20px;margin-left: 2px;"%> <%= fname %></span>
+
+            <% end %>
+          <% end %>
+          <br/>
+          <br/>
+        </div>
+      <% end %>
+
+      <%# <%= eui_button "None of the above! I need help.", href: "mailto:hello@appcanary.com?subject=\"Problem with operating systems\"", :class => "eui-button-medium-primary feedback-problem", :target => "_blank" %>
+       
+
+      <%= form_for(current_user, remote: true) do |f| %>
+
+        <% sdp_klass = current_user.pref_os.present? ? "" : "collapse" %>
+        <div class="server-deploy-prefs <%=sdp_klass%>" data-toggle="buttons">
+
+          <h3>How do you provision your servers?</h3>
+          <% [["Ansible", "ansible",  image_tag("icon-ansible.png", :style => "width: 15px")],
+              ["Chef", "chef", image_tag("icon-chef.png", :style => "width: 15px")],
+              ["Puppet", "puppet", image_tag("icon-puppet.png", :style => "width: 15px")],
+              ["the shell", "shell", content_tag("span", "#!", style: 'font-family: monospace')]].each do |tag, plt, img| %>
+
+            <% dp_klass = current_user.pref_deploy == plt ? "active" : "" %>
+            <%= label_tag "pref_deploy", class: "btn btn-default #{dp_klass}" do %>
+              <%= f.radio_button :pref_deploy, plt %>
+              <%= img %> Using <%= tag %>
+            <% end %>
+
+          <% end %>
+        </div>
+      <% end %>
+
+    </div>
+
+    <div class="col-sm-3">
+      <%= image_tag "canary-nest.medium.png", style: "width: 100%" %>
+    </div>
+  </section>
+
+  <br/>
+
+  <section>
+    <div class="col-sm-6 col-sm-offset-1">
+
+      <div id="btn-deploy">
+        <%= render :partial => "ansible" %>
+        <%= render :partial => "chef" %>
+        <%= render :partial => "puppet" %>
+        <%= render :partial => "bash_rpm" %>
+        <%= render :partial => "bash_deb" %>
       </div>
     </div>
-  </div>
-
-  <div class="col-sm-7">
-
-     <a name="howitworks" class="anchor-offset"></a>
-    <h2>How does it work?</h2>
-    <p>You tell us which files list your servers' and apps' dependencies, and our agent will periodically check if anything has changed. Whenever you make a deploy - or new packages are installed - we find out.</p>
-    <p>We don't look at your code. We only ever see the files *explicitly listed* in the configuration. All of the agent's code is <b><a href="https://github.com/appcanary/agent" target="_blank">available on GitHub</a></b>.</p>
-
-
-
-
-    <table class="table">
-      <thead>
-        <th>What platforms get notifications?</th>
-        <th>Where can I install it?</th>
-      </thead>
-      <tr>
-        <td>
-          <span class="platform-logo"><%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby</span>,
-          <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>,
-          <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>,
-          <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS 7</span>
-          <span class="platform-logo"><%= image_tag "icon-amzn.png", :style => "width: 13px"%> Amazon Linux</span>
-          <span class="platform-logo">(more soon, stay tuned!)</span>
-        </td>
-        <td>
-            <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>, <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>, <span class="platform-logo"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat</span>, <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS</span>, <span class="platform-logo"><%= image_tag "icon-amzn.png", :style => "width: 13px"%> Amazon Linux</span>, and Linux Mint.
-        </td>
-      </tr>
-    </table>
-
-    <h4>How do you provision your servers?</h4>
-
-    <%= eui_button "#{image_tag "icon-ansible.png", :style => "width: 15px"} Using Ansible".html_safe, href: "#ansible" %>
-    <%= eui_button "#{image_tag "icon-chef.png", :style => "width: 15px"} Using Chef".html_safe, href: "#chef" %>
-    <%= eui_button "#{image_tag "icon-puppet.png", :style => "width: 15px"} Using Puppet".html_safe, href: "#puppet" %>
-    <%= eui_button "<span style='font-family: monospace'>#!</span> Using the shell".html_safe, href: "#bash" %>
-
-    <br/>
-    <br/>
-
-  
-       <br/>
-
-    <!-- <h2>How does it work?</h2> -->
-    <!-- <ul> -->
-    <!--   <li>We track <strong><%= number_with_delimiter(@vulnerabilities_count) %></strong> vulnerabilities across <strong><%= number_with_delimiter(@artifacts_count) %></strong> packages so you don't have to. </li> -->
-    <!--   <li>Whenever a vulnerability that affects your servers comes out, you receive an email.</li> -->
-    <!--   <li>We tell you how to patch your servers and your apps and stay safe.</li> -->
-    <!-- </ul> -->
-    <!-- <p>Here is a screenshot:</p> -->
-
-    <!-- <div style="width: 300px; margin&#45;left: auto; margin&#45;right: auto; margin&#45;bottom: 20px;"> -->
-    <!--   <a href="#screenshot" data&#45;toggle="modal" data&#45;target="#screenshot"><%= image_tag "screenshot&#45;vuln.jpg", :style => "width: 300px; border: 1px solid black" %></a> -->
-    <!-- </div> -->
-
-    <!--  -->
-    <!-- <br/> -->
-    <h2>How to install:</h2>
-    <br/>
-    <a name="ansible" class="anchor-offset"></a>
-    <%= render :partial => "ansible" %>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <a name="chef" class="anchor-offset"></a>
-    <%= render :partial => "chef" %>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <a name="puppet" class="anchor-offset"></a>
-    <%= render :partial => "puppet" %>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <a name="bash" class="anchor-offset"></a>
-    <%= render :partial => "bash" %>
-    <br>
-    <br>
-    <br>
-    <br>
-  </div>
-  <div class="modal fade" id="screenshot" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Screenshot</h4>
-        </div>
-        <div class="modal-body">
-          <%= image_tag "screenshot-vuln.jpg", :style => "width: 725px;" %>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
+</div>
