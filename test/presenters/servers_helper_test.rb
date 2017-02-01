@@ -19,7 +19,7 @@ class ServersHelperTest < ActiveSupport::TestCase
     user.pref_os = "foo"
     user.pref_deploy = "chef"
     str = hide_deploy_opt_klass(user, "chef", "foo", "bar")
-    assert_equal "foo bar", str
+    assert_equal "foo bar collapse in", str
 
     user.pref_os = "fooooo"
     user.pref_deploy = "chef"
@@ -28,6 +28,6 @@ class ServersHelperTest < ActiveSupport::TestCase
 
     user.pref_deploy = "chef"
     str = hide_deploy_opt_klass(user, "chef")
-    assert_equal "", str
+    assert_equal "collapse in", str
   end
 end
