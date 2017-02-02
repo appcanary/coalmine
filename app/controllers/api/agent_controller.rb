@@ -151,6 +151,6 @@ class Api::AgentController < ApiController
   end
 
   def procs_params
-    params[:server] && params[:server][:process_map]
+    params[:server] && params[:server][:system_state]
   end
 end
