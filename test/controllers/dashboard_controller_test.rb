@@ -13,6 +13,9 @@ class DashboardControllerTest < ActionController::TestCase
         FactoryGirl.create(:agent_server, :account => user.account)
         get :index
         assert_response :success
+
+        # remind people about their trial status
+        assert flash[:notice] =~ /trial/
       end
 
       it "should get index with a new monitor" do
@@ -20,6 +23,9 @@ class DashboardControllerTest < ActionController::TestCase
         
         get :index
         assert_response :success
+
+         # remind people about their trial status
+        assert flash[:notice] =~ /trial/
       end
 
     end
@@ -28,12 +34,17 @@ class DashboardControllerTest < ActionController::TestCase
       it "should be redirected to onboarding path" do
         get :index
         assert_redirected_to onboarding_path
+        assert_equal flash[:notice], nil
       end
 
       it "but tried to add a server, should display flash" do
         get :index, :done => true
         assert(flash[:notice] =~ /hello@appcanary/)
         assert_redirected_to onboarding_path
+
+        # still not actually onboarded, so should not
+        # get trial reminder flash
+        assert_not flash[:notice] =~ /trial/
       end
     end
   end

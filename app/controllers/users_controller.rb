@@ -54,17 +54,21 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
-  # def update
-  #   respond_to do |format|
-  #     if @user.update(user_params)
-  #       format.html { redirect_to @user, notice: 'User was successfully updated.' }
-  #       format.json { render json: @user, status: :ok, location: @user }
-  #     else
-  #       format.html { render :edit }
-  #       format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+
+  # used solely by servers/new form
+  def update
+    respond_to do |format|
+      if @user.update(preference_params)
+        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.json { render json: @user, status: :ok, location: @user }
+        format.js { render json: @user, status: :ok, location: @user }
+      else
+        format.html { render :edit }
+        format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
+        format.js { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # DELETE /users/1
   # DELETE /users/1.json
@@ -87,6 +91,10 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation, :onboarded, :beta_signup_source)
+    end
+
+    def preference_params
+      params.require(:user).permit(:pref_os, :pref_deploy)
     end
 
     def preuser_params
