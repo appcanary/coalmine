@@ -5,9 +5,9 @@ class AgentServerManager
     @server = server
   end
 
-  def update_processes(process_map)
-    libraries = process_map[:libraries]
-    processes = process_map[:processes]
+  def update_processes(system_state)
+    libraries = system_state[:libraries]
+    processes = system_state[:processes]
 
     server.transaction do
       server.server_processes = processes.map do |proc|
