@@ -31,8 +31,8 @@ class AgentServerManager
 
   def find_or_create_process_libraries(process, libraries)
     spector_libraries = process[:libraries].try(:map) do |lib|
-      libraries[lib[:library_index]].tap do |spector_lib|
-        spector_lib[:outdated] = lib[:outdated]
+      libraries[lib[:library_path]].tap do |system_lib|
+        system_lib[:outdated] = lib[:outdated]
       end
     end
 
