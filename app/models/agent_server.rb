@@ -64,6 +64,7 @@ class AgentServer < ActiveRecord::Base
     end
   end
 
+  #TODO: this should be in the presenter
   def display_name
     name.blank? ? hostname : name
   end

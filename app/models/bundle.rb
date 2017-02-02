@@ -89,6 +89,7 @@ class Bundle < ActiveRecord::Base
     self.packages.affected_but_patchable
   end
 
+  # TODO: this should be in the presenter
   def display_name
     if agent_server_id.present? and self.system_bundle?
       "System Packages"

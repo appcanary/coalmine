@@ -10,7 +10,7 @@
 
       <section>
         <div class="onboard-desc">
-          <p><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat, <%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS and Amazon Linux</p>
+          <p><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat, <%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS and <%= image_tag "icon-amzn.png", :style => "width: 13px"%> Amazon Linux</p>
           <%= render :partial => "redhat" %>
         </div>
       </section>
@@ -19,7 +19,7 @@
       <section>
         <div class="action-bar">
           <div class="pull-right">
-            <%= eui_button "This didn't work. I need support!", href: "mailto:hello@appcanary.com?subject=\"Problem with bash\"", :class => "eui-button-medium-primary feedback-problem", :target => "_blank"%>
+            <%= eui_button "This didn't work. I need support!", href: "mailto:hello@appcanary.com?subject=Problem with bash", :class => "eui-button-medium-primary feedback-problem", :target => "_blank"%>
             <%= eui_button "Great. I've done all of this!", href: dashboard_path(done: true) %>
           </div>
         </div>

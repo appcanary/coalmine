@@ -4,9 +4,13 @@ module ServersHelper
     if user.pref_deploy != deployer
       ret << "collapse"
     else
-      if platforms.present? 
+      if !platforms.present? 
+        ret << "collapse in"
+      else
         if !platforms.include?(user.pref_os)
           ret << "collapse"
+        else
+          ret << "collapse in"
         end
       end
     end

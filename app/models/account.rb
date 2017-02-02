@@ -60,7 +60,8 @@ class Account < ActiveRecord::Base
     self.count_by_sql("SELECT count(distinct(accounts.id)) FROM accounts WHERE EXISTS
                       (SELECT 1 FROM agent_servers WHERE agent_servers.account_id = accounts.id limit 1) OR EXISTS
                       (SELECT 1 FROM bundles WHERE bundles.account_id = accounts.id limit 1) OR EXISTS
-                      (SELECT 1 FROM log_api_calls WHERE log_api_calls.account_id = accounts.id and action = 'check/create' limit 1)")
+                      (SELECT 1 FROM agent_server_archives WHERE agent_server_archives.account_id = accounts.id limit 1) OR EXISTS
+                      (SELECT 1 FROM bundle_archives WHERE bundle_archives.account_id = accounts.id limit 1)")
   end
 
 
