@@ -24,11 +24,8 @@ class AgentServerManager
   end
 
   def build_server_process(proc)
-    attrs = {
-      pid: proc[:pid],
-      started: proc[:started],
-      name: proc[:name]
-    }
+    proc_keys = [:pid, :started, :name]
+    attrs = proc.slice(*proc_keys).permit(*proc_keys)
     server.server_processes.find_or_initialize_by(attrs)
   end
 
@@ -41,15 +38,13 @@ class AgentServerManager
 
     return [] if spector_libraries.blank?
 
+    lib_keys = [:path, :package_name, :package_version]
     spector_libraries.map do |lib|
-      attrs = {
-        path: lib[:path],
-        package_name: lib[:package_name],
-        package_version: lib[:package_version]
-      }
+      attrs = lib.slice(*lib_keys).permit(*lib_keys)
 
       ProcessLibrary.find_or_create_by!(attrs).tap do |pl|
         pl.outdated = lib[:outdated]
+        pl.modified = lib[:modified]
       end
     end
   end
