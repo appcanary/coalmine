@@ -49,6 +49,10 @@ class ServerPresenter
       .map { |p| ServerProcessPresenter.new(p) }
   end
 
+  def has_processes?
+    all_processes.any?
+  end
+
   def all_processes
     server.server_processes
       .joins(:server_process_libraries)
