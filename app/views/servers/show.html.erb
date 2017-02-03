@@ -39,7 +39,7 @@
 
 <section>
   <div class="server-processes">
-    <% if @serverpres.has_outdated_processes? %>
+    <% if @serverpres.has_outdated_processes? || debug_server_processes? %>
       <span class="tabletitle"><h4>Stale processes</h4></span>
       <p>Here you'll find stale processes, defined as processes which have yet to be restarted after a dependent library was patched/updated on your server.</p>
 
@@ -52,8 +52,8 @@
           <%= render :partial => "procs/list", :locals => { :process => server_process } %>
         </div>
       <% end %>
-    <% else %>
-      <h3>We don't seem to be getting process telemetry from <%= @server.name %></h3>
+    <% elsif ! @serverpres.has_processes? %>
+      <h4>We don't seem to be getting process telemetry from <%= @server.name %></h4>
     <% end %>
   </div>
 </section>

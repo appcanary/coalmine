@@ -13,7 +13,6 @@ class AgentServerManager
       server.server_processes = processes.map do |proc|
         process_libraries = find_or_create_process_libraries(proc, libraries)
         build_server_process(proc).tap do |server_process|
-          # server_process.process_libraries = process_libraries
           server_process.server_process_libraries = process_libraries.map do |pl|
             ServerProcessLibrary.new(process_library: pl, outdated: pl.outdated)
           end
@@ -30,16 +29,16 @@ class AgentServerManager
   end
 
   def find_or_create_process_libraries(process, libraries)
-    spector_libraries = process[:libraries].try(:map) do |lib|
+    system_libraries = process[:libraries].try(:map) do |lib|
       libraries[lib[:library_path]].tap do |system_lib|
         system_lib[:outdated] = lib[:outdated]
       end
     end
 
-    return [] if spector_libraries.blank?
+    return [] if system_libraries.blank?
 
     lib_keys = [:path, :package_name, :package_version]
-    spector_libraries.map do |lib|
+    system_libraries.map do |lib|
       attrs = lib.slice(*lib_keys).permit(*lib_keys)
 
       ProcessLibrary.find_or_create_by!(attrs).tap do |pl|
