@@ -1,3 +1,17 @@
+<script>
+ $(document).ready(function(){
+   new Clipboard('#clip-btn');
+   $('#clip-btn').tooltip({
+     trigger: 'click',
+     placement: 'bottom'
+   });
+   $('#clip-btn').on('show.bs.tooltip', function () {
+     setTimeout(function() {
+       $('#clip-btn').tooltip('hide');
+     }, 1000);
+   });
+ });
+</script>
 <section id="newservers" style="padding-top: 10px;">
   <div class="fixed-side-menu">
     <div class="outer-wrapper">
@@ -26,7 +40,10 @@
           <h4>API token</h4>
           <%= form_for @user, url: reset_token_settings_path do |f| %>
             <%= hidden_field_tag :regenerate_token %>
-            <code class="auth_token"><%= @agent_token %></code>
+            <code id="foo" class="auth_token"><%= @agent_token %></code>
+            <a href="#" id="clip-btn" class="btn btn-sm btn-default" data-clipboard-target="#foo" data-toggle="tooltip" data-placement="bottom" title="copied")>
+              copy
+            </a>
             <%= f.submit "Reset token", class: "btn btn-sm btn-danger", data: { confirm: "Are you sure? This will cause all of your servers to stop working!" } %>
           <% end %>
           <hr>
