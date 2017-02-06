@@ -12,6 +12,9 @@
       <%= label_with_error(f, @user, :name) %>
       <%= f.text_field :name, :placeholder => "Jane Doe" %>
 
+      <%= label_with_error(f, @user, :phone_number) %>
+      <%= f.text_field :phone_number, :placeholder => "415-867-5309" %>
+
       <%= label_with_error(f, @user, :password) %>
       <%= f.password_field :password, :placeholder => "A secret only you know" %>
 

@@ -27,6 +27,7 @@
 #  beta_signup_source              :string
 #  stripe_customer_id              :string
 #  name                            :string
+#  phone_number                    :string
 #  subscription_plan               :string
 #  newsletter_email_consent        :boolean          default("true"), not null
 #  api_beta                        :boolean          default("false"), not null

@@ -1437,7 +1437,8 @@ CREATE TABLE users (
     agent_token character varying,
     account_id integer NOT NULL,
     pref_os character varying,
-    pref_deploy character varying
+    pref_deploy character varying,
+    phone_number character varying
 );
 
 
@@ -3616,5 +3617,13 @@ INSERT INTO schema_migrations (version) VALUES ('20170112163526');
 
 INSERT INTO schema_migrations (version) VALUES ('20170118224917');
 
+INSERT INTO schema_migrations (version) VALUES ('20170126003519');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126052317');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126072816');
+
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
+
+INSERT INTO schema_migrations (version) VALUES ('20170206172642');
 
