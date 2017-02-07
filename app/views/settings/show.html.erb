@@ -1,11 +1,8 @@
 <script>
  $(document).ready(function(){
    new Clipboard('#clip-btn');
-   $('#clip-btn').tooltip({
-     trigger: 'click',
-     placement: 'bottom'
-   });
-   $('#clip-btn').on('show.bs.tooltip', function () {
+   $('#clip-btn').click(function(){
+     $('#clip-btn').tooltip("show");
      setTimeout(function() {
        $('#clip-btn').tooltip('hide');
      }, 1000);
@@ -38,12 +35,19 @@
         <a name="api-token" class="anchor-offset"></a>
         <div class="user_api">
           <h4>API token</h4>
-          <%= form_for @user, url: reset_token_settings_path do |f| %>
+          <div class="row">
+            <%= form_for @user, url: reset_token_settings_path do |f| %>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <input id="foo" readonly="true" type="text" class="form-control" value="<%= @agent_token %>">
+                <span class="input-group-btn">
+                  <a href="#" id="clip-btn" class="btn btn-default" data-clipboard-target="#foo" data-toggle="tooltip" data-container="body" data-placement="bottom" data-trigger="manual" title="copied")>
+                    <i class="fa fa-clipboard" aria-hidden="true"></i>
+                  </a>
+                </span>
+              </div>
+            </div>
             <%= hidden_field_tag :regenerate_token %>
-            <code id="foo" class="auth_token"><%= @agent_token %></code>
-            <a href="#" id="clip-btn" class="btn btn-sm btn-default" data-clipboard-target="#foo" data-toggle="tooltip" data-placement="bottom" title="copied")>
-              copy
-            </a>
             <%= f.submit "Reset token", class: "btn btn-sm btn-danger", data: { confirm: "Are you sure? This will cause all of your servers to stop working!" } %>
           <% end %>
           <hr>
