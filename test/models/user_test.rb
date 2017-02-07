@@ -36,6 +36,9 @@
 #  invoiced_manually               :boolean          default("false")
 #  agent_token                     :string
 #  account_id                      :integer          not null
+#  pref_os                         :string
+#  pref_deploy                     :string
+#  pref_tech                       :string           is an Array
 #
 # Indexes
 #
