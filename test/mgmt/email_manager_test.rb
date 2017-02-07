@@ -71,6 +71,7 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal 3, email2.notifications.count
 
     # okay. let's actually send these!
+    $rollout.activate(:all_staging_notifications)
     EmailManager.send_vuln_emails!
     assert_equal 2, ActionMailer::Base.deliveries.size
 
