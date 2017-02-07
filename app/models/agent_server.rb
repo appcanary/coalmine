@@ -90,4 +90,8 @@ class AgentServer < ActiveRecord::Base
   def system_bundle
     self.bundles.where(:platform => Platforms::OPERATING_SYSTEMS).first
   end
+
+  def platform_release
+    PlatformRelease.validate(distro, release)
+  end
 end

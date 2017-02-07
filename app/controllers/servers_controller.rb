@@ -10,10 +10,29 @@ class ServersController < ApplicationController
     render :new
   end
 
+  def procs
+    @vulnquery = VulnQuery.new(current_account)
+
+    @server = fetch_server(params)
+    @serverpres = ServerPresenter.new(@vulnquery, @server)
+
+    @outdated_procs = @serverpres.outdated_processes
+    @all_procs = @serverpres.all_processes
+
+    pr, err = @server.platform_release
+    @platform = pr.platform
+    @release = pr.release
+  end
+
   def show
     @vulnquery = VulnQuery.new(current_account)
     @server = fetch_server(params)
     @serverpres = ServerPresenter.new(@vulnquery, @server)
+
+    pr, err = @server.platform_release
+    @platform = pr.platform
+    @release = pr.release
+
     respond_to do |format|
       format.html
       format.csv do

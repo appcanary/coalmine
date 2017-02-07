@@ -31,7 +31,7 @@
         <% if lib.package_name.empty? %>
           (no package information available)
         <% else %>
-          (in package <b><%= lib.package_name %></b>, version <b><%= lib.package_version %></b>)
+          (in package <b><%= link_to lib.package_name, package_platform_release_path(@platform, @release, lib.package_name, lib.package_version) %></b>, version <b><%= lib.package_version %></b>)
         <% end %>
 
         <br />

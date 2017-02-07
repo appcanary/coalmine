@@ -91,6 +91,8 @@ Rails.application.routes.draw do
     delete "destroy_inactive" => "servers#destroy_inactive", :as => :destroy_inactive, :on => :collection
   end
 
+  get "/servers/:id/procs" => "servers#procs"
+
   resources :monitors, :only => [:new, :show, :destroy, :create] do
     post "resolve_vuln/:package_id", action: :resolve_vuln, on: :collection, as: :resolve_vuln
     delete "unresolve_vuln/:package_id", action: :unresolve_vuln, on: :collection, as: :unresolve_vuln
