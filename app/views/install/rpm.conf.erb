@@ -1,0 +1,16 @@
+# Get your api key at https://www.appcanary.com/settings
+api_key = "<%= @api_key %>"
+
+# Name your server (optional)
+# server_name = ""
+
+<% if @platform_supported %>
+# rpm packages
+[[files]]
+process = "rpm -qa"
+<% end %>
+
+# add your gemfiles by uncommenting these lines:
+
+# [[files]]
+# path = "/var/www/someapp/current/Gemfile.lock"
