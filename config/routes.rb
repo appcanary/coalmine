@@ -91,6 +91,11 @@ Rails.application.routes.draw do
     delete "destroy_inactive" => "servers#destroy_inactive", :as => :destroy_inactive, :on => :collection
   end
 
+  scope :install, controller: :install do
+    get "deb"
+    get "deb/:platform/:release/agent", :action => "conf", :as => :appcanary_conf, :pkg_type => "deb"
+  end
+ 
   resources :monitors, :only => [:new, :show, :destroy, :create] do
     post "resolve_vuln/:package_id", action: :resolve_vuln, on: :collection, as: :resolve_vuln
     delete "unresolve_vuln/:package_id", action: :unresolve_vuln, on: :collection, as: :unresolve_vuln
