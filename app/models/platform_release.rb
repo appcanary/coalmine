@@ -12,7 +12,7 @@ class PlatformRelease
     end
 
     def correct_platform_and_release
-      valid_releases = Platforms.releases_for(platform)
+      valid_releases = Platforms.valid_releases_for(platform)
 
       if valid_releases.nil?
         errors.add(:platform, "is invalid")

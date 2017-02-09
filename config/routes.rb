@@ -70,7 +70,7 @@ Rails.application.routes.draw do
 
   resources :docs, :only => :index
 
-  resources :users, :only => [:new, :create, :destroy] do
+  resources :users, :only => [:new, :create, :update, :destroy] do
     post "stop_impersonating", on: :collection
   end
   resources :password_reset, :only => [:show, :update]

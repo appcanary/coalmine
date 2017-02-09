@@ -81,11 +81,6 @@ class Account < ActiveRecord::Base
     self.datomic_id || self.id
   end
 
-  # select count(account_id) from accounts joins an
-  def tried_product?
-    self.agent_servers.count > 0 || self.server_bundles.count > 0 || self.check_api_calls.count > 0
-  end
-
   def segment_stats
     {
       email: self.email,
