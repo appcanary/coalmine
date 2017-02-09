@@ -22,13 +22,14 @@
   @extend .col-sm-12;
 }
 
-.server-processes {
+.server-processes, .server-procs {
   @extend .col-sm-12;
 }
 
 .server-apps {
   @extend .col-sm-12;
   margin-top: 20px;
+
   table.apps {
     td section {
       padding-top: 1em;
@@ -64,7 +65,7 @@
   }
 
   .tabletitle {
-    h4 {
+    h3 {
       display: inline;
     }
     .btn {
