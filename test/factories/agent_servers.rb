@@ -30,6 +30,8 @@ FactoryGirl.define do
   factory :agent_server do
     name { Faker::Hacker.ingverb }
     account
+    distro "ubuntu"
+    release "14.04"
     trait :centos do
       distro "centos"
       release "7"
