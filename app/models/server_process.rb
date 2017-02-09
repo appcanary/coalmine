@@ -9,6 +9,7 @@
 #  started         :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  args            :string
 #
 # Indexes
 #

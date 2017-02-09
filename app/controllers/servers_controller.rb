@@ -29,6 +29,10 @@ class ServersController < ApplicationController
     @server = fetch_server(params)
     @serverpres = ServerPresenter.new(@vulnquery, @server)
 
+    @outdated_procs = @serverpres.outdated_processes
+    @all_procs = @serverpres.all_processes
+
+
     pr, err = @server.platform_release
     @platform = pr.platform
     @release = pr.release

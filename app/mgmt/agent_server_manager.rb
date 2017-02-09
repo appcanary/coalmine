@@ -11,19 +11,22 @@ class AgentServerManager
 
     server.transaction do
       server.server_processes = processes.map do |proc|
+
         process_libraries = find_or_create_process_libraries(proc, libraries)
         build_server_process(proc).tap do |server_process|
           server_process.server_process_libraries = process_libraries.map do |pl|
             ServerProcessLibrary.new(process_library: pl, outdated: pl.outdated)
           end
         end
+
       end
       server.save!
     end
   end
 
   def build_server_process(proc)
-    proc_keys = [:pid, :started, :name]
+    proc_keys = [:pid, :started, :name, :args]
+    # potentially redundant use of permit
     attrs = proc.slice(*proc_keys).permit(*proc_keys)
     server.server_processes.find_or_initialize_by(attrs)
   end
