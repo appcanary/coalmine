@@ -37,6 +37,34 @@
   </div>
 </section>
 
+<%= render :file => "servers/procs" %>
+
+<section>
+  <div class="server-apps">
+    <% if @serverpres.bundles.any? %>
+      <span class="tabletitle"><h3>Apps and dependencies</h3> <%= link_to "Export to CSV", server_path(@serverpres, format: "csv"), class: "btn btn-sm btn-default" %></span>
+
+      <table class="table apps">
+        <% @serverpres.bundles.each do |bundlepres| %>
+          <tr>
+            <%= render :partial => "apps/list", :locals => { :bundlepres => bundlepres } %>
+          </tr>
+        <% end %>
+      </table>
+    
+    <% else %>
+      <h3>Hey! We don't seem to be monitoring any apps.</h3>
+      <p> 
+        Please consult the 
+        <%= link_to "server docs page", new_server_path %>
+        for instructions. You're probably just slightly misconfigured.
+        If you run into trouble, click the feedback button above.
+      </p>
+    <% end %>
+  </div>
+</section>
+
+<% if false %>
 <section>
   <div class="server-processes">
     <% if @serverpres.has_outdated_processes? || debug_server_processes? %>
@@ -57,28 +85,6 @@
     <% end %>
   </div>
 </section>
+<% end %>
 
-<section>
-  <div class="server-apps">
-    <% if @serverpres.bundles.any? %>
-      <span class="tabletitle"><h4>Apps and dependencies</h4> <%= link_to "Export to CSV", server_path(@serverpres, format: "csv"), class: "btn btn-default" %></span>
-      <table class="table apps">
-        <% @serverpres.bundles.each do |bundlepres| %>
-          <tr>
-            <%= render :partial => "apps/list", :locals => { :bundlepres => bundlepres } %>
-          </tr>
-        <% end %>
-      </table>
-
-    <% else %>
-      <h3>Hey! We don't seem to be monitoring any apps.</h3>
-      <p> 
-        Please consult the 
-        <%= link_to "server docs page", new_server_path %>
-        for instructions. You're probably just slightly misconfigured.
-        If you run into trouble, click the feedback button above.
-      </p>
-    <% end %>
-  </div>
-</section>
 

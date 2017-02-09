@@ -53,7 +53,7 @@ class ServerPresenter
   end
 
   def all_processes
-    server.server_processes
+    @all_processes ||= server.server_processes
       .joins(:server_process_libraries)
       .order(:pid)
       .distinct
