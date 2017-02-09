@@ -1,7 +1,7 @@
 class ServerProcessPresenter
   attr_reader :server_process
 
-  delegate :id, :name, :pid, to: :server_process
+  delegate :id, :name, :args, :pid, to: :server_process
 
   def initialize(server_process)
     @server_process = server_process

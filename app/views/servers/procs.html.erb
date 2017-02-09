@@ -3,16 +3,17 @@
     <li class="active" role="presentation">
       <a href="#outdated-processes-tab"  data-toggle="tab">
         <% if @outdated_procs.any? %>
-          <span class="fa fa-spin fa-exclamation-triangle warn"></span>
+          <span class="fa fa-exclamation-triangle warn"></span>
           outdated processes
         <% else %>
           <span class="fa fa-check-circle okay"></span>
+          outdated processes
         <% end %>
       </a>
     </li>
 
     <li role="presentation">
-      <a href="#all-packages-tab" data-toggle="tab">
+      <a href="#all-processes-tab" data-toggle="tab">
         all processes
       </a>
     </li>
@@ -32,7 +33,8 @@
       <% else %>
         <table id="outdated-processes" class="table processes datatables">
           <thead>
-            <th>process path</th>
+            <th>process</th>
+            <th>args</th>
             <th>pid</th>
             <th>outdated packages</th>
           </thead>
@@ -43,6 +45,10 @@
                 <span class="fa fa-caret-square-o-down arrow" style="cursor: pointer"></span> &nbsp;
                 <%= server_proc.name %>
               </td>
+              <td>
+                <%= server_proc.args %>
+              </td>
+
               <td>
                 <%= server_proc.pid %>
               </td>
@@ -60,37 +66,36 @@
     </div>
 
 
-    <div id="all-packages-tab" role="tabpanel" class="tab-pane">
-      <table id="all-packages" class="table packages">
-        <% if true #!@all_procs.any? %>
-          <tr>
-            <td class="empty_message">
-              No processes found for this server!
+    <div id="all-processes-tab" role="tabpanel" class="tab-pane">
+      <table id="all-processes" class="table processes datatables">
+        <thead>
+          <th>process</th>
+          <th>args</th>
+          <th>pid</th>
+        </thead>
+
+        <% @all_procs.each do |server_proc| %>
+          <tr data-id="<%= server_proc.id %>">
+            <td class="process-name">
+              <span class="fa fa-caret-square-o-down arrow" style="cursor: pointer"></span> &nbsp;
+              <%= server_proc.name %>
             </td>
+            <td>
+              <%= server_proc.args %>
+            </td>
+
+            <td>
+              <%= server_proc.pid %>
+            </td>
+
           </tr>
-        <% else %>
-          <thead>
-            <th>kind</th>
-            <th>platform</th>
-            <th>name</th>
-            <th>source name</th>
-            <th>version</th>
-          </thead>
-          <% if false #@bundlepres.all_packages.each do |package| %>
-            <tr class="package">
-              <td class="platform"><%= package.platform %></td>
-              <td class="release"><%= package.release%></td>
-              <td class="package-name"><%= package.name %></td>
-              <td class="package-name"><%= package.source_name %></td>
-              <td class="package-version--neutral"><code><%= package.version %></code></td>
-            </tr>
-          <% end %>
+
         <% end %>
       </table>
     </div>
   </div>
 </div>
-<% @outdated_procs.each do |server_proc| %>
+<% @all_procs.each do |server_proc| %>
   <table class="hidden table" id="server-proc-<%= server_proc.id %>">
     <thead>
       <th>
@@ -141,25 +146,30 @@
 <% end %>
 
 
-<script>
+  <script>
+
   $( document ).ready(function() {
-    var table = $('#outdated-processes').DataTable({
-      searching: false,
-      paging: false,
+    $('.processes.datatables').each(function(i, t) {
+      var elem = $(t);
+      var table = elem.DataTable({
+        searching: false,
+        paging: false,
+      });
+
+      elem.on('click', 'td.process-name', function() {
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+
+        if (row.child.isShown() ) {
+          row.child.hide();
+          tr.find('.arrow').removeClass("fa-rotate-180");
+        } else {
+          var elem = $("#server-proc-" + tr.data("id"));
+          row.child(elem.html()).show();
+          tr.find('.arrow').addClass("fa-rotate-180");
+        }
+
+      });
     });
-
-    $('#outdated-processes tbody').on('click', 'td.process-name', function() {
-      var tr = $(this).closest('tr');
-      var row = table.row(tr);
-
-      if (row.child.isShown() ) {
-        row.child.hide();
-        tr.find('.arrow').removeClass("fa-rotate-180");
-      } else {
-        var elem = $("#server-proc-" + tr.data("id"));
-        row.child(elem.html()).show();
-        tr.find('.arrow').addClass("fa-rotate-180");
-      }
-    })
   });
 </script>

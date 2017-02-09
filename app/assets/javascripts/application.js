@@ -1,3 +1,3 @@
 //= require main.bundle
-//= require vendor/jquery.dataTables.min
+//= require vendor/jquery.dataTables
 //= require vendor/dataTables.bootstrap.min
