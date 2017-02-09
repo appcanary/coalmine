@@ -22,13 +22,8 @@
 <div class="tab-content">
   <div id="outdated-processes-tab" role="tabpanel" class="tab-pane active">
     <% if @outdated_procs.empty? %>
-      <div class="col-sm-12" style="text-align: center">
-        <h3>Hooray! You don't seem to have any outdated processes.</h3>
+        <h4>Hooray! You don't seem to have any outdated processes.</h4>
         <br/>
-      </div>
-      <div class="col-sm-4 col-sm-offset-4">
-        <%= image_tag "canary-party.medium.png", :title => "Illustration of a canary with a party hat. Hooray!", :style => "width: 100%" %>
-      </div>
     <% else %>
       <table id="outdated-processes" class="table processes datatables">
         <thead>
