@@ -32,6 +32,20 @@ class NotificationPresenter
     subject
   end
 
+  def should_deliver?
+    if Rails.env.production?
+      return true
+    elsif $rollout.active?(:all_staging_notifications)
+      return true
+    else
+      if @account.email != "hello@appcanary.com"
+        return false
+      else
+        return true
+      end
+    end
+  end
+
   def notifications_by_package
     @notifications_by_package ||=
       @notifications.group_by(&:package).sort_by { |k, v| [-k.upgrade_priority_ordinal, k.name] }
