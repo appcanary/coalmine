@@ -67,6 +67,14 @@
                 </p>
               </div>
 
+
+              <% if $rollout.active?(:request_phone_number) %>
+              <%= f.label :phone_number %>
+              <div class="form-group">
+                <%=f.text_field :phone_number, :class => "form-control" %>
+              </div>
+              <% end %>
+
               <div class="form-group">
                 <%=f.submit "Update email settings", :class => "btn btn-default" %>
               </div>

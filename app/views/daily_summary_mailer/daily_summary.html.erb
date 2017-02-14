@@ -1,0 +1,17 @@
+<%= content_for :email_header do %>
+  <tr class="header-logo">
+    <td>
+      <img src="<%=image_url("appcanary-hero-vuln.png")%>" title="appcanary logo">
+    </td>
+  </tr>
+
+  <tr class="header-description">
+    <td>
+      <h1>Watch out!</h1>
+      <h2>You're running vulnerable software.</h2>
+    </td>
+  </tr>
+<% end %>
+
+<% @vuln_pkgs.each do |pkg, logs| %>
+<% end %>
