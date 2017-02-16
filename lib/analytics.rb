@@ -37,6 +37,7 @@ class Analytics
         email: account.email,
         createdAt: account.created_at,
         name: user.name,
+        phone: user.phone_number,
         signup_source: user.beta_signup_source
       })
   end
