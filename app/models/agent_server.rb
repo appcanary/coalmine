@@ -36,6 +36,7 @@ class AgentServer < ActiveRecord::Base
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
   has_many :accepted_files, :class_name => AgentAcceptedFile
+  has_many :server_tags, :dependent => :destroy
 
   has_one :last_heartbeat, -> { order(created_at: :desc) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
 
@@ -54,6 +55,7 @@ class AgentServer < ActiveRecord::Base
     last_heartbeat.try(:created_at)
   end
 
+  # TODO: is it time to make a manager?
   def register_heartbeat!(params)
     self.transaction do
       self.heartbeats.create!(:files => params[:files])
@@ -61,6 +63,14 @@ class AgentServer < ActiveRecord::Base
       agent_version = params[:"agent-version"]
       self.agent_release = AgentRelease.where(:version => agent_version).first_or_create!
       self.save!
+    end
+  end
+
+  def update_tags!(tags = [])
+    self.transaction do
+      tags.each do |tag|
+        self.server_tags.find_or_create_by!(tag: tag)
+      end
     end
   end
 

@@ -21,7 +21,8 @@ class Api::AgentController < ApiController
       return
     end
 
-    server.register_heartbeat!(params)
+    server.update_tags!(params[:tags])
+    server.register_heartbeat!(params.except(:tags))
 
     # needs to fetch the newly created heartbeat
     server.reload
