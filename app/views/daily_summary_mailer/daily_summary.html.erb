@@ -7,11 +7,172 @@
 
   <tr class="header-description">
     <td>
-      <h1>Watch out!</h1>
-      <h2>You're running vulnerable software.</h2>
+      <h1>Some title</h1>
+      <h2>tbd</h2>
     </td>
   </tr>
 <% end %>
 
-<% @vuln_pkgs.each do |pkg, logs| %>
+
+<% if @new_servers.present? %>
+  <h3>Servers</h4>
+  <p>You added <%= @new_servers.count %> server(s) today.</p>
+
+    <table class="package-table" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="vuln-package">
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                name
+              </th>
+              <th>
+                vulns
+              </th>
+              <th>
+                distro
+              </th>
+            </thead>
+
+            <% @new_servers.each do |srv| %>
+              <tr>
+                <td>
+                  <%= "#{srv.id} #{srv.display_name}" %>
+                </td>
+                <td>
+                  <%= @vq.from_bundle(srv.system_bundle).count %>
+                </td>
+                <td>
+                  <%= "#{srv.distro} / #{srv.release}" %>
+                </td>
+              </tr>
+            <% end %>
+            
+          </table>
+        </td>
+      </tr>
+    </table>
+
 <% end %>
+
+<% if @new_apps.present? %>
+  <h3>Servers</h4>
+  <p>You added <%= @new_apps.count %> server(s) today.</p>
+
+  <table class="package-table" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="vuln-package">
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                name
+              </th>
+              <th>
+                vulns
+              </th>
+              <th>
+                distro
+              </th>
+            </thead>
+
+            <% @new_apps.each do |app| %>
+              <tr>
+                <td>
+                  <%= "#{app.id} #{app.display_name}" %>
+                </td>
+                <td>
+                  <%= @vq.from_bundle(app).count %>
+                </td>
+                <td>
+                  <%= app.platform %>
+                </td>
+              </tr>
+            <% end %>
+            
+          </table>
+        </td>
+      </tr>
+    </table>
+
+<% end %>
+
+<p>Today, <%= @begin_at %>, you became vulnerable to <%= @vuln_ct %> new vulnerabilties. They affect <%= @pkg_ct %> packages present in <%= @srv_ct %> servers.</p>
+
+
+<% @pkg_by_platform.each do |plt, packages| %>
+  <h3><%= plt %></h3>
+  <% packages.group_by(&:name).each do |pname, sub_pkgs| %>
+    <h4><%= pname %></h4>
+    <table class="package-table" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="vuln-package">
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                version
+              </th>
+              <th>
+                vulns
+              </th>
+
+              <th>
+                where
+              </th>
+            </thead>
+            <% sub_pkgs.each do |pkg| %>
+              <tr>
+                <td>
+                  <%= pkg.version %>
+                </td>
+                <td class="package-vuln-version">
+                  <%= pkg.vulnerabilities.group_by(&:criticality).map { |k, v| "#{v.count} #{k}"}.join(", ") %>
+                </td>
+                <td class="package-upgrade-to">
+                  <%= pkg.bundles.where(:account_id => 22).count %> servers
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        </tr>
+      </tr>
+    </table>
+  <% end %>
+<% end %>
+
+
+
+<table class="package-table" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="vuln-package">
+      <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+        <thead>
+          <th width="30%">
+            vulnerability
+          </th>
+          <th>
+            priority
+          </th>
+
+          <th>
+            date
+          </th>
+        </thead>
+        <% @vulns.each do |vuln| %>
+          <tr>
+            <td>
+              <%= link_to "#{vuln.id} - #{vuln.title}", vuln_path(vuln) %>
+            </td>
+            <td class="package-vuln-version">
+              <%= vuln.criticality %>
+            </td>
+            <td class="package-upgrade-to">
+              <%= vuln.vulnerable_dependencies.map(&:package_name).uniq.join(", ") %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </tr>
+  </tr>
+</table>
+
+
