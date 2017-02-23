@@ -68,7 +68,9 @@ class AgentServer < ActiveRecord::Base
 
   def update_tags!(tags)
     self.transaction do
-      self.tags = tags.map { |tag_s| Tag.find_or_create_by!(tag: tag_s) }
+      self.tags = tags.map do |tag_s|
+        Tag.find_or_create_by!(account_id: self.account_id, tag: tag_s)
+      end
     end
   end
 

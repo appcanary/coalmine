@@ -1540,7 +1540,8 @@ CREATE TABLE tags (
     id integer NOT NULL,
     tag text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    account_id integer DEFAULT 1 NOT NULL
 );
 
 
@@ -3312,6 +3313,13 @@ CREATE INDEX index_subscription_plans_on_discount ON subscription_plans USING bt
 
 
 --
+-- Name: index_tags_on_account_id_and_tag; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_tags_on_account_id_and_tag ON tags USING btree (account_id, tag);
+
+
+--
 -- Name: index_tags_on_tag; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3721,6 +3729,14 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
+-- Name: tags fk_rails_86647bc40a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT fk_rails_86647bc40a FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
 -- Name: server_processes fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3965,4 +3981,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170207223930');
 INSERT INTO schema_migrations (version) VALUES ('20170222211052');
 
 INSERT INTO schema_migrations (version) VALUES ('20170222211057');
+
+INSERT INTO schema_migrations (version) VALUES ('20170223220305');
 
