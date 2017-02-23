@@ -68,8 +68,7 @@ class AgentServer < ActiveRecord::Base
 
   def update_tags!(tags)
     self.transaction do
-      new_tags = tags - self.tags.pluck(:tag)
-      self.tags << new_tags.map { |tag_s| Tag.find_or_create_by!(tag: tag_s) }
+      self.tags = tags.map { |tag_s| Tag.find_or_create_by!(tag: tag_s) }
     end
   end
 
