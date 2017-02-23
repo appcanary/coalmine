@@ -72,7 +72,7 @@ class ServersController < ApplicationController
     @server = fetch_server(params)
     respond_to do |format|
       if @server.update(server_params)
-        @server.update_tags!(tag_params[:tags].reject(&:empty?))
+        @server.update_tags!(tags_from_params)
         format.html { redirect_back_or_to(dashboard_path) }
       else
         format.html { render :edit }
@@ -94,7 +94,8 @@ class ServersController < ApplicationController
     params.require(:server).permit(:name)
   end
 
-  def tag_params
-    params.require(:server).permit(tags: [])
+  def tags_from_params
+    tag_params = params.require(:server).permit(tags: [])
+    tag_params[:tags] && tag_params[:tags].reject(&:empty?)
   end
 end
