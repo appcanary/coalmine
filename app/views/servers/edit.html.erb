@@ -5,6 +5,10 @@
     <%= label :server, :name, "Server name:" %>
     <%= text_field :server, :name, :class => "form-control" %>
   </div>
+  <div class="form-group tags">
+    <%= label :server, :tags, "Server tags:" %>
+    <%= collection_select :server, :tags, Tag.all, :tag, :tag, {}, {multiple: true, class: "form-control tag-select"} %>
+  </div>
   <div class="form-group">
     <button class="btn btn-default" type="submit">Update Server</button>
   </div>
