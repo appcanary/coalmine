@@ -16,6 +16,9 @@
         <th>
           uname
         </th>
+        <th>
+          tags
+        </th>
       </thead>
       <tbody>
         <tr>
@@ -30,6 +33,9 @@
           </td>
           <td>
             <%= @serverpres.uname %>
+          </td>
+          <td>
+            <%= @serverpres.tags.join(", ") %>
           </td>
         </tr>
       </tbody>
