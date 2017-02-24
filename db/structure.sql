@@ -1538,10 +1538,10 @@ ALTER SEQUENCE subscription_plans_id_seq OWNED BY subscription_plans.id;
 
 CREATE TABLE tags (
     id integer NOT NULL,
+    account_id integer NOT NULL,
     tag text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    account_id integer DEFAULT 1 NOT NULL
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -3313,6 +3313,13 @@ CREATE INDEX index_subscription_plans_on_discount ON subscription_plans USING bt
 
 
 --
+-- Name: index_tags_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tags_on_account_id ON tags USING btree (account_id);
+
+
+--
 -- Name: index_tags_on_account_id_and_tag; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3323,7 +3330,7 @@ CREATE UNIQUE INDEX index_tags_on_account_id_and_tag ON tags USING btree (accoun
 -- Name: index_tags_on_tag; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_tags_on_tag ON tags USING btree (tag);
+CREATE INDEX index_tags_on_tag ON tags USING btree (tag);
 
 
 --
@@ -3981,6 +3988,4 @@ INSERT INTO schema_migrations (version) VALUES ('20170207223930');
 INSERT INTO schema_migrations (version) VALUES ('20170222211052');
 
 INSERT INTO schema_migrations (version) VALUES ('20170222211057');
-
-INSERT INTO schema_migrations (version) VALUES ('20170223220305');
 
