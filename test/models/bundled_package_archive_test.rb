@@ -53,38 +53,48 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
 
   test "retrieving the bundle as it was 2 revisions ago" do
     bundle = FactoryGirl.create(:bundle)
+    revision_ids = []
 
-    # initial revision
+    # initial revision: ids 1, 2, 3, 4, 5
     bundle.packages = FactoryGirl.create_list(:package, 5, :ruby)
-    first_rev = bundle.bundled_packages.reload.to_a
+    revision_ids << bundle.bundled_packages.reload.pluck(:package_id)
     assert_equal 0, BundledPackageArchive.count
 
-    # second revision
+    # second revision: ids 6, 7, 8, 9, 10
+    # 5 bp put into archive
     bundle.packages = FactoryGirl.create_list(:package, 5, :ruby)
-    second_rev = bundle.bundled_packages.reload.to_a
+    revision_ids << bundle.bundled_packages.reload.pluck(:package_id)
     assert_equal 5, BundledPackageArchive.count
 
-    reference_t = second_rev.first.valid_at
-
-    # 3rd revision includes some packages from 2nd
+    # 3rd revision: we just add packages
+    # ids: 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    # nothing gets deleted, so nothing gets added to BPA
     bundle.packages = bundle.packages + FactoryGirl.create_list(:package, 5, :ruby)
+    revision_ids << bundle.bundled_packages.reload.pluck(:package_id)
+    assert_equal 5, BundledPackageArchive.count
 
-    # 4th revision
+    # 4th revision: we keep some, delete the rest, and add more
+    # ids: 6, 7, 1, 2, 3, 4
+    # 8 bp put into archive
+    bundle.packages = bundle.packages[0..1] + Package.where("id < 5").order(:id)
+    revision_ids << bundle.bundled_packages.reload.pluck(:package_id)
+    assert_equal 13, BundledPackageArchive.count
+
+
+    # 5th revision: we delete everything and add more
+    # ids: 16, 17, 18, 19, 20
+    # 6 bp put into archive
     bundle.packages = FactoryGirl.create_list(:package, 5, :ruby)
+    revision_ids << bundle.bundled_packages.reload.pluck(:package_id)
+    assert_equal 19, BundledPackageArchive.count
 
-    # we've had 3 prev revisions times 5 packages
-    assert_equal 15, BundledPackageArchive.count
-    assert_equal 3, BundledPackageArchive.revisions(bundle.id).count
 
-    fetched_rev = BundledPackageArchive.as_of(reference_t).where(:bundle_id => bundle.id)
-    assert_equal Set.new(second_rev.map(&:id)), Set.new(fetched_rev.map(&:id))
+    revisions = BundledPackage.revisions(bundle.id)
+    assert_equal 5, revisions.count
 
-    # okay. Now let's give it a rando date
-    # the following should only fetch us the first five packages
-    # since the timestamp is set to before the validity of second_rev
-    new_ref_t = Time.at(reference_t.to_f - 0.001)
-
-    fetched_rev_2 = BundledPackageArchive.as_of(new_ref_t).where(:bundle_id => bundle.id)
-    assert_equal Set.new(first_rev.map(&:id)), Set.new(fetched_rev_2.map(&:id))
+    # ---- now we test how well we can retrieve these revisions
+    revisions.each_with_index do |r_at, i|
+      assert_equal revision_ids[i].to_set, BundledPackage.as_of(r_at).pluck(:package_id).to_set
+    end
   end
 end
