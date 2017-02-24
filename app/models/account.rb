@@ -42,6 +42,7 @@ class Account < ActiveRecord::Base
   has_many :email_vulnerables
   has_many :patched_notifications, :through => :email_patcheds, :source => :notifications
   has_many :vulnerable_notifications, :through => :email_vulnerables, :source => :notifications
+  has_many :tags
 
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
 
