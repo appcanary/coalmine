@@ -15,8 +15,10 @@
 #  index_tags_on_tag                 (tag)
 #
 
-class Tag < ActiveRecord::Base
-  belongs_to :account
-  has_many :server_tags
-  has_many :agent_servers, :through => :server_tags
+FactoryGirl.define do
+  factory :tag do
+    account
+    tag "MyText"
+  end
+
 end
