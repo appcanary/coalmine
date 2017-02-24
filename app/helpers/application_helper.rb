@@ -171,6 +171,14 @@ module ApplicationHelper
     end
   end
 
+  def bundle_url(bundle)
+    if bundle.agent_server_id
+      server_app_url(bundle, server_id: bundle.agent_server_id)
+    else
+      monitor_url(bundle)
+    end
+  end
+
   def render_vuln_description(vuln)
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(escape_html: true), autolink: true, tables: true, no_intra_emphasis: true, fenced_code_blocks: true)
     markdown.render(vuln.description).html_safe

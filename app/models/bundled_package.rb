@@ -64,16 +64,22 @@ class BundledPackage < ActiveRecord::Base
                  lbv.vulnerable_package_id = "vulnerable_packages".id)')
   }
 
-  scope :union, -> (arel1, arel2) {
-    from("((#{arel1.to_sql}) UNION ALL (#{arel2.to_sql})) bundled_packages")
+  scope :revisions, -> (bundle_id) {
+    self.from(union(all, BundledPackageArchive.select_as_archived)).select("distinct(valid_at)").where(:bundle_id => bundle_id).order(:valid_at).map(&:valid_at)
   }
 
   scope :as_of, -> (time_t) {
-    union(all, BundledPackageArchive.select_as_archived).where("valid_at <= ? and expired_at > ?", time_t, time_t)
+    from(build_as_of(time_t) )
   }
 
-  scope :revisions, -> (bundle_id) {
-    self.union(all, BundledPackageArchive.select_as_archived).select("distinct(valid_at)").where(:bundle_id => bundle_id).order(:valid_at).map(&:valid_at)
-  }
+  def self.union(arel1, arel2)
+    "((#{arel1.to_sql}) UNION ALL (#{arel2.to_sql})) bundled_packages"
+  end
+
+  def self.build_as_of(time_t)
+    union(all.where("valid_at <= ? and expired_at > ?", time_t, time_t),
+          BundledPackageArchive.select_as_archived.where("valid_at <= ? and expired_at > ?", time_t, time_t))
+  end
+
 
 end

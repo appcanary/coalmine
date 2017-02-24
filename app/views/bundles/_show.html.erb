@@ -1,4 +1,13 @@
 <div class="bundle-packages">
+  <%= form_tag bundle_url(@bundle), :method => :get do |f| %>
+    <%= select_tag :revisions, options_for_select(@bundle_revisions.each_with_index.map { |d, i| [d, i]}), :prompt => "Pick a date", :class => "form-group" %> 
+    <%= submit_tag "Submit", :class => "btn btn-primary" %>
+  <% end %>
+
+  <% if @cur_revision %>
+    <h3>Showing history for: <%= @cur_revision %></h3>
+  <% end %>
+  
   <ul class="nav nav-tabs">
     <li class="active" role="presentation">
       <a href="#vulnerable-packages-tab"  data-toggle="tab">
@@ -155,6 +164,9 @@
     <% end %>
 
     <div id="all-packages-tab" role="tabpanel" class="tab-pane">
+      <% if @prev_revision %>
+        <h4>Comparing <%= @cur_revision %> to <%= @prev_revision %></h4>
+      <% end %>
       <table id="all-packages" class="table packages">
         <% if !@bundlepres.all_packages.any? %>
           <tr>
@@ -163,6 +175,7 @@
             </td>
           </tr>
         <% else %>
+
           <thead>
             <th>kind</th>
             <th>platform</th>
@@ -170,6 +183,31 @@
             <th>source name</th>
             <th>version</th>
           </thead>
+          <% if @prev_revision %>
+            <% @removed_pkg.each do |package| %>
+              <tr class="package package-removed">
+                <td class="platform"><%= package.platform %></td>
+                <td class="release"><%= package.release%></td>
+                <td class="package-name"><%= package.name %></td>
+                <td class="package-name"><%= package.source_name %></td>
+                <td class="package-version--neutral"><code><%= package.version %></code></td>
+              </tr>
+
+            <% end %>
+
+            <% @added_pkg.each do |package| %>
+              <tr class="package package-added">
+                <td class="platform"><%= package.platform %></td>
+                <td class="release"><%= package.release%></td>
+                <td class="package-name"><%= package.name %></td>
+                <td class="package-name"><%= package.source_name %></td>
+                <td class="package-version--neutral"><code><%= package.version %></code></td>
+              </tr>
+
+            <% end %>
+
+          <% end %>
+
           <% @bundlepres.all_packages.each do |package| %>
             <tr class="package">
               <td class="platform"><%= package.platform %></td>

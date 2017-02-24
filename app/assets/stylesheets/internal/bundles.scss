@@ -8,6 +8,14 @@
   }
 
   table.packages {
+    .package-removed {
+      background: #ffecec;
+    }
+
+    .package-added {
+      background: #eaffea;
+    }
+
     .package-name {
       @extend .fixed-width;
     }
