@@ -72,7 +72,7 @@ class ServersController < ApplicationController
     @server = fetch_server(params)
     respond_to do |format|
       if @server.update(server_params)
-        @server.update_tags!(tags_from_params)
+        @server.destructively_update_tags!(tags_from_params)
         format.html { redirect_back_or_to(dashboard_path) }
       else
         format.html { render :edit }

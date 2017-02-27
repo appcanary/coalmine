@@ -66,7 +66,13 @@ class AgentServer < ActiveRecord::Base
     end
   end
 
-  def update_tags!(tags)
+  def idempotently_add_tags!(tags)
+    self.transaction do
+      self.destructively_update_tags!((tags + self.tags.pluck(:tag)).to_set)
+    end
+  end
+
+  def destructively_update_tags!(tags)
     self.transaction do
       self.tags = tags.map do |tag_s|
         Tag.find_or_create_by!(account_id: self.account_id, tag: tag_s)

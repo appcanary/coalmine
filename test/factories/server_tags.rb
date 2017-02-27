@@ -15,18 +15,10 @@
 #  index_server_tags_on_tag_id                      (tag_id)
 #
 
-require 'test_helper'
-
-class ServerTagTest < ActiveSupport::TestCase
-  let(:server) { FactoryGirl.create(:agent_server) }
-  let(:tag) { FactoryGirl.create(:tag) }
-
-  it "doesn't allow duplicate taggings" do
-    st = ServerTag.create(tag: tag, agent_server: server)
-    assert st
-
-    assert_raises(ActiveRecord::RecordNotUnique) do
-      ServerTag.create(tag: tag, agent_server: server)
-    end
+FactoryGirl.define do
+  factory :server_tag do
+    agent_server nil
+    tag nil
   end
+
 end
