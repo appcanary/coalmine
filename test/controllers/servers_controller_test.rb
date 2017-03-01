@@ -99,13 +99,24 @@ class ServersControllerTest < ActionController::TestCase
           assert server.tags.pluck(:tag).include?(t)
         end
 
-        post :update, :id => 1234, :server => { :tags => ["dog", "asshole"] }
+        post :update, :id => 1234, :server => { :tags => ["dog", "webserver"] }
         server.reload
         assert_equal 2, server.tags.count
 
-        ["dog", "asshole"].each do |t|
+        ["dog", "webserver"].each do |t|
           assert server.tags.pluck(:tag).include?(t)
         end
+      end
+
+      it "deals correctly with the empty tag" do
+        post :update, :id => 1234, :server => { :tags => ["", "dog", "webserver", "android"]}
+        assert request.params.present?
+        assert request.params[:server].present?
+        assert request.params[:server][:tags].present?
+        assert request.params[:server][:tags].any? { |tag| tag == "" }
+
+        server.reload
+        assert server.tags.pluck(:tag).none? { |tag| tag == "" }
       end
     end
   end

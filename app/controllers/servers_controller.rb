@@ -96,6 +96,10 @@ class ServersController < ApplicationController
 
   def tags_from_params
     tag_params = params.require(:server).permit(tags: [])
-    tag_params[:tags] && tag_params[:tags].reject(&:empty?)
+
+    # if it's just empty, we can return it
+    unless tag_params[:tags].nil?
+      tag_params[:tags].reject(&:empty?)
+    end
   end
 end
