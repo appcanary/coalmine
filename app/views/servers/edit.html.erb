@@ -7,7 +7,7 @@
   </div>
   <div class="form-group tags">
     <%= label :server, :tags, "Server tags:" %>
-    <%= collection_select(:server, :tags, Tag.all, :tag, :tag,
+    <%= collection_select(:server, :tags, @server.account.tags, :tag, :tag,
                           {selected: @server.tags.pluck(:tag)},
                           {multiple: true, class: "form-control tag-select"}) %>
   </div>
