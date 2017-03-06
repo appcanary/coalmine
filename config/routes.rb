@@ -105,6 +105,7 @@ Rails.application.routes.draw do
 
   get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
   get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
+  get "packages/:id" => "packages#show", :as => :package, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
 
   resources :logs, :only => :index
   resources :emails, :only => [:index, :show]
