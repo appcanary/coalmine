@@ -9,14 +9,14 @@ class AppsController < ApplicationController
   def show
     @vulnquery = VulnQuery.new(current_account)
     @server, @bundle = fetch_server_and_bundle(params)
-    @bundle_revisions = BundledPackage.revisions(@bundle.id)
+    @bundle_revisions = @bundle.revisions
 
     if params[:revisions] 
       bdix = params[:revisions].to_i
       @cur_revision = @bundle_revisions[bdix]
       bq = BundleQuery.new(@bundle, @cur_revision)
 
-      if (prev_bdix = bdix - 1) > 0
+      if (prev_bdix = bdix - 1) >= 0
         @prev_revision = @bundle_revisions[prev_bdix]
         
         @removed_pkg, @added_pkg = bq.package_delta(@prev_revision)

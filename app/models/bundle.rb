@@ -72,6 +72,17 @@ class Bundle < ActiveRecord::Base
   }
 
 
+  # note that these are instance methods
+  # as opposed to ArchiveBehaviour class methods
+  def as_of(date)
+    bq = BundleQuery.new(self, date);
+  end
+
+  def revisions
+    BundledPackage.revisions.where(:bundle_id => self.id).pluck("distinct(valid_at)")
+  end
+
+
   # TODO: change this method to affected?
   # deeply confusing when using BundlePresenter, which is VQ aware
   #
@@ -115,4 +126,5 @@ class Bundle < ActiveRecord::Base
   def system_bundle?
     Platforms::OPERATING_SYSTEMS.include?(self.platform)
   end
+
 end
