@@ -53,9 +53,6 @@ class DashboardController < ApplicationController
 
 
    
-    # @total_vuln_pkg_ct = total_log_vulns.map(&:package_id).uniq.size
-    # @total_vuln_ct = total_log_vulns.map(&:vulnerability_id).uniq.size
-
     @fresh_vulns = period_log_vulns
     @fresh_vulns_ct = @fresh_vulns.map(&:vulnerability_id).uniq.size
 
@@ -109,7 +106,7 @@ class DashboardController < ApplicationController
     # todo: distinguish supplementary?
 
     @net_patches = total_log_patches.where("log_bundle_patches.occurred_at >= ? and log_bundle_patches.occurred_at <= ?", @begin_at, @end_at)
-    @net_patches = @net_patches.where.not('bundles.agent_server_id': @deleted_servers.map(&:id)) 
+    @net_patches = @net_patches.where.not('bundles.agent_server_id':  @new_servers.map(&:id) + @deleted_servers.map(&:id)) 
 
     @net_patched_vulns = @net_patches.map(&:vulnerability_id).uniq
     @net_patched_vulns_ct = @net_patched_vulns.size
@@ -129,12 +126,13 @@ class DashboardController < ApplicationController
 
     @change_server_ct = @changes.map(&:agent_server_id).uniq.size
     # MUST COME AFTER LOADING ARRAY
-    @change_ct = @changes.size
-
-
+    @change_pkg_ct = @changes.map do |ch| BundleQuery.new(ch.bundle, ch.valid_at).bundled_packages.where(:valid_at => ch.valid_at) end.flatten.size
 
     @fresh_sorted_vulns = @fresh_vulns.group_by(&:vulnerability).reduce({}) { |hsh, (vuln, logs)|  hsh[vuln] = logs.uniq(&:package_id).map(&:package); hsh}.sort_by { |k, v| [-k.criticality_ordinal, -v.size] };
+
     @new_sorted_vulns = @new_vulns.group_by(&:vulnerability).reduce({}) { |hsh, (vuln, logs)|  hsh[vuln] = logs.uniq(&:package_id).map(&:package); hsh}.sort_by { |k, v| [-k.criticality_ordinal, -v.size] };
+    
+    @sorted_net_patched_vulns = @net_patches.group_by(&:vulnerability).reduce({}) { |hsh, (vuln, logs)|  hsh[vuln] = logs.uniq(&:package_id).map(&:package); hsh}.sort_by { |k, v| [-k.criticality_ordinal, -v.size] };
     # need to get:
     # what was introduced today (packages)
     # list of affected servers 

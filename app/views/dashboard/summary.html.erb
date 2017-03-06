@@ -25,11 +25,10 @@
 
 <h1>Daily summary for <%= @date %></h1>
 
+<h2>Vulnerabilities</h2>
 <% if @fresh_vulns_ct > 0 %>
   <h3>Fresh vulnerabilities</h3>
-  <p>Patches to <%= @fresh_vulns_ct %> vulnerabilities that affect you were published today. They affect <%= @fresh_vuln_pkgs_ct %> unique packages present in <%= @freshly_affected_servers_ct %> of your servers.</p>
-<% else %>
-  <p>No vulnerabilities published today affect you.</p>
+  <p>Today, patches to <%= @fresh_vulns_ct %> vulnerabilities that affect you were published. They affect <%= @fresh_vuln_pkgs_ct %> unique packages present in <%= @freshly_affected_servers_ct %> of your servers.</p>
 <% end %>
 
 <% if @new_vulns_ct > 0 %>
@@ -37,19 +36,27 @@
   <p>We recorded <%= @new_vulns_ct %> new vulnerabilites that we hadn't warned you about before. They affect <%= @new_vuln_pkgs_ct %> packages across <%= @new_affected_servers_ct %> servers. Of these, <%= @new_supplmenetary_vulns_ct %> vulns were registered because of new vulnerability information.</p>
 <% end %>
 
+<% if @new_vulns_ct < 1 && @fresh_vulns_ct < 1 %>
+  <p>We didn't find any new vulnerabilities for you today.</p>
+<% end %>
 
-<% if @change_ct > 0 %>
-  <h3>Changes</h3>
-  <p>We detected <%= @change_ct %> changes in <%= @change_server_ct %> existing servers.</p>
+
+<h2>Changes</h2>
+<% if @change_pkg_ct > 0 %>
+  <p>At least <%= @change_pkg_ct %> packages changed over <%= @change_server_ct %> existing servers.</p>
 <% end %>
 
 <% if @net_patched_vulns_ct > 0 %>
-  <p>A total of <%= @net_patched_vulns_ct %> vulnerabilities in <%= @net_patched_pkgs_ct %> packages are no longer present in <%= @patched_servers_ct %> servers. <%= @net_supplementary_vuln_ct %> of these patches happened because of new vulnerability information.</p>
+  <p>A total of <%= @net_patched_vulns_ct %> vulnerabilities in <%= @net_patched_pkgs_ct %> packages are no longer present in <%= @patched_servers_ct %> servers. <% if @net_supplementary_vuln_ct > 0 %><%= @net_supplementary_vuln_ct %> of these patches happened because of new vulnerability information.<% end %></p>
+<% end %>
+
+<% if @change_pkg_ct < 1 && @net_patched_vulns_ct < 1 %>
+  <p>We didn't detect any changes on your systems.</p>
 <% end %>
 
 
 <% if @new_servers.present? %>
-  <h3>Servers</h4>
+  <h2>Servers</h2>
   <p>You added <%= @new_servers.count %> server(s) today.</p>
 
   <table class="package-table" cellpadding="0" cellspacing="0">
@@ -71,8 +78,11 @@
           <% @new_servers.each do |srv| %>
             <tr>
               <td>
-                <%= "#{srv.id} #{srv.display_name}" %>
+                <% if srv.system_bundle %>
+                  <%= link_to srv.display_name, server_app_url(srv.system_bundle, server_id: srv.id) %>
+                <% end %>
               </td>
+
               <td>
                 <% if srv.system_bundle %>
                   <%= @vq.from_bundle(srv.system_bundle).count %>
@@ -91,7 +101,7 @@
 <% end %>
 
 <% if @deleted_servers.any? %>
-  <h3>Deleted Servers</h4>
+  <h2>Deleted Servers</h2>
   <p>You deleted <%= @deleted_servers.count %> server(s) today.</p>
   <table class="package-table" cellpadding="0" cellspacing="0">
     <tr>
@@ -109,7 +119,7 @@
           <% @deleted_servers.each do |srv| %>
             <tr>
               <td>
-                <%= "#{srv.id} #{srv.display_name}" %>
+                <%= srv.display_name %>
               </td>
               <td>
                 <%= "#{srv.distro} / #{srv.release}" %>
@@ -126,12 +136,12 @@
 <% end %>
 
 <% if @fresh_sorted_vulns.any? %>
-  <h3>Top 10 fresh vulnerabilities that impact you:</h3>
+  <h3>Fresh vulnerabilities that impact you:</h3>
   <table class="package-table" cellpadding="0" cellspacing="0">
     <tr>
       <td class="vuln-package">
 
-        <% @fresh_sorted_vulns[0..9].each do |vuln, pkgs| %>
+        <% @fresh_sorted_vulns.each do |vuln, pkgs| %>
           <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
             <thead>
               <th width="30%">
@@ -147,7 +157,7 @@
             </thead>
             <tr>
               <td>
-                <%= link_to "#{vuln.id} - #{vuln.title}", vuln_path(vuln) %>
+                <%= link_to vuln.title, vuln_path(vuln) %>
               </td>
               <td class="package-vuln-version">
                 <%= vuln.criticality %>
@@ -182,12 +192,68 @@
 
 
 <% if @new_sorted_vulns.any? %>
-  <h3>Top 10 new vulnerabilities that impact you:</h3>
+  <h3>New vulnerabilities that impact you:</h3>
   <table class="package-table" cellpadding="0" cellspacing="0">
     <tr>
       <td class="vuln-package">
 
-        <% @new_sorted_vulns[0..9].each do |vuln, pkgs| %>
+        <% @new_sorted_vulns.each do |vuln, pkgs| %>
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                vulnerability
+              </th>
+              <th>
+                priority
+              </th>
+
+              <th>
+                date
+              </th>
+            </thead>
+            <tr>
+              <td>
+                <%= link_to vuln.title, vuln_path(vuln) %>
+              </td>
+              <td class="package-vuln-version">
+                <%= vuln.criticality %>
+              </td>
+              <td class="package-upgrade-to">
+                <%= vuln.reported_at.strftime("%Y-%m-%d") %>
+              </td>
+            </tr>
+          </table>
+
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                affected packages
+              </th>
+            </thead>
+            <tr>
+              <td>
+                <%= pkgs[0..3].map(&:name).join(", ") %>
+                <% if pkgs.size > 4 %>
+                  and <%= pkgs.size - 4 %> others.
+                <% end %>
+              </td>
+            </tr>
+          </table>
+
+        <% end %>
+      </tr>
+    </tr>
+  </table>
+<% end %>
+
+
+<% if @sorted_net_patched_vulns.any? %>
+  <h3>Patched vulnerabilities</h3>
+  <table class="package-table" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="vuln-package">
+
+        <% @sorted_net_patched_vulns.each do |vuln, pkgs| %>
           <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
             <thead>
               <th width="30%">
@@ -235,8 +301,6 @@
     </tr>
   </table>
 <% end %>
-
-
 
 
 <% if @new_apps.present? %>
