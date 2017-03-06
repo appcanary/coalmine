@@ -57,6 +57,63 @@ class LogBundlePatch < ActiveRecord::Base
     current_scope.merge(VulnerableDependency.patchable)
   }
 
+  #-----
+
+  scope :select_bundles_and_vulns, -> {
+    select("bundles.agent_server_id, log_bundle_patches.bundle_id, log_bundle_patches.package_id, log_bundle_patches.vulnerability_id, log_bundle_patches.supplementary")
+  }
+
+   scope :in_bundles_from, -> (account_id) {
+    @previously_saved_account_id = sanitize(account_id)
+    joins("INNER JOIN 
+          (SELECT id, agent_server_id FROM bundles WHERE bundles.account_id = #{@previously_saved_account_id}) bundles ON 
+          bundles.id = log_bundle_patches.bundle_id").select("log_bundle_patches.*").select("bundles.agent_server_id")
+
+   }
+
+   # TODO TEST
+   scope :that_are_not_vulnerable , -> {
+     joins("LEFT JOIN log_bundle_vulnerabilities ON 
+          log_bundle_vulnerabilities.bundle_id = log_bundle_patches.bundle_id AND
+          log_bundle_vulnerabilities.bundled_package_id > log_bundle_patches.bundled_package_id AND
+          log_bundle_vulnerabilities.package_id = log_bundle_patches.package_id AND
+          log_bundle_vulnerabilities.vulnerability_id = log_bundle_patches.vulnerability_id AND
+          log_bundle_vulnerabilities.vulnerable_dependency_id = log_bundle_patches.vulnerable_dependency_id AND
+          log_bundle_vulnerabilities.vulnerable_package_id = log_bundle_patches.vulnerable_package_id").
+          where('"log_bundle_vulnerabilities".id IS NULL')
+   }
+
+   scope :not_vulnerable_as_of, -> (end_at) {
+     joins(:vulnerable_dependency).
+     joins("LEFT JOIN log_bundle_vulnerabilities ON 
+          log_bundle_vulnerabilities.bundle_id = log_bundle_patches.bundle_id AND
+          log_bundle_vulnerabilities.bundled_package_id > log_bundle_patches.bundled_package_id AND
+          log_bundle_vulnerabilities.package_id = log_bundle_patches.package_id AND
+          log_bundle_vulnerabilities.vulnerability_id = log_bundle_patches.vulnerability_id AND
+          log_bundle_vulnerabilities.vulnerable_dependency_id = log_bundle_patches.vulnerable_dependency_id AND
+          log_bundle_vulnerabilities.vulnerable_package_id = log_bundle_patches.vulnerable_package_id AND
+           log_bundle_vulnerabilities.occurred_at <= #{sanitize(end_at)}").
+     where('"log_bundle_vulnerabilities".id IS NULL').
+     where("vulnerable_dependencies.valid_at <= ?", end_at)
+   }
+
+   scope :vulnerable_after, -> (begin_at) {
+     joins(:vulnerable_dependency).
+     where("vulnerable_dependencies.valid_at >= ?", begin_at)
+   }
+
+
+    scope :patched_between, -> (begin_at, end_at) {
+      where("log_bundle_patches.occurred_at >= ? AND log_bundle_patches.occurred_at <= ?", begin_at, end_at)
+  }
+
+
+
+
+
+  
+  ##----
+
 
   # Every time a bundle is changed, note whether
   # the bundle is *no longer* vulnerable to a vuln

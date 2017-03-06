@@ -57,6 +57,10 @@ class AgentServer < ActiveRecord::Base
     where('valid_at >= ? and valid_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
   }
 
+  scope :deleted_on, -> (date) {
+    where('expired_at >= ? and expired_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
+  }
+
   # TODO: figure out inactive scope
   
   def last_heartbeat_at
