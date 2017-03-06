@@ -27,6 +27,21 @@ class BundledPackageArchive < ActiveRecord::Base
   belongs_to :package
   belongs_to :bundle
 
+  ARCHIVED_COL = self.table_name.gsub("archives", "id")
+  ARCHIVED_SELECT = self.columns.reduce([]) { |list, col|
+    if col.name == "id"
+      list
+    elsif col.name == ARCHIVED_COL
+      list << "#{self.table_name}.#{col.name} as id"
+    else
+      list << "#{self.table_name}.#{col.name}"
+    end
+  }.join(", ")
+
+  scope :select_as_archived, -> { 
+    select(ARCHIVED_SELECT)
+  }
+
   scope :select_log_joins_vulns, -> {
     select('"bundled_package_archives".bundle_id, 
            "bundled_package_archives".package_id, 
@@ -44,10 +59,6 @@ class BundledPackageArchive < ActiveRecord::Base
   # being in my system
   scope :select_valid_log_joins_vulns, -> {
     select_log_joins_vulns.where('"vulnerable_packages".valid_at < "bundled_package_archives".expired_at')
-  }
-
-   scope :select_as_archived, -> { 
-    select("bundled_package_id as id, bundled_package_archives.bundle_id, bundled_package_archives.package_id, bundled_package_archives.created_at, bundled_package_archives.updated_at, bundled_package_archives.valid_at, bundled_package_archives.expired_at ")
   }
 
 end

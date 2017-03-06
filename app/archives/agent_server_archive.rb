@@ -31,6 +31,22 @@
 class AgentServerArchive < ActiveRecord::Base
   belongs_to :account
 
+  ARCHIVED_COL = self.table_name.gsub("archives", "id")
+  ARCHIVED_SELECT = self.columns.reduce([]) { |list, col|
+    if col.name == "id"
+      list
+    elsif col.name == ARCHIVED_COL
+      list << "#{self.table_name}.#{col.name} as id"
+    else
+      list << "#{self.table_name}.#{col.name}"
+    end
+  }.join(", ")
+
+
+  scope :select_as_archived, -> { 
+    select(ARCHIVED_SELECT)
+  }
+    
   # note for later:
   # select agent_server_archives.* from agent_server_archives inner join (select agent_server_id, max(id) id from agent_server_archives WHERE (valid_at >= '2017-01-12 00:00:00.000000' and valid_at <= '2017-01-12 23:59:59.999999') group by agent_server_id) specific_as 
   # ON specific_as.id = agent_server_archives.id 
