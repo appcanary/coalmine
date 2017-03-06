@@ -1,5 +1,17 @@
 <%= render :partial => "shared/top_menu" %>
 
+<script>
+ //This is a bit of hack until we seperate pricing into it's own seperate page
+ $(document).ready(function() {
+   if (window.location.pathname == "/pricing") {
+     //scroll to the pricing section
+     window.location.hash = "#pricing";
+   }
+ });
+</script>
+
+</script>
+
 <div class="hero-wrapper">
   <div class="hero-main">
 
@@ -130,36 +142,27 @@
 
     <div class="mobile-pricing">
       <div class="tier">
-        <h3>Free</h3>
-        <p class="price">$0<br/>per month</p>
-        <p class="add-margin">1 agent<br/>10 API calls
+        <h3>Indie</h3>
+        <p class="price">$29<br/>per month</p>
+        <p class="add-margin">2 agents<br/>10 API calls<br/>$15/additional agent
       </div>
 
       <div class="tier">
-        <h3>Indie</h3>
+        <h3>Team</h3>
         <p class="price">$99<br/>per month</p>
-        <p class="add-margin">5 agents<br/>10 API calls<br/>$20/additional agent
-      </div>
-
-      <div class="tier">
-        <h3>Team</h3>
-        <p class="price">$499<br/>per month</p>
-        <p>50 agents<br/>500 API calls<br/>$10/additional agent</p>
+        <p>10 agents<br/>500 API calls<br/>$10/additional agent</p>
       </div>
 
       <div class="tier">
         <h3>Company</h3>
-        <p class="price">$2999<br/>per month</p>
-        <p>500 agents<br/>5000 API calls<br>$6/additional agent</p>
+        <p class="price">$499<br/>per month</p>
+        <p>75 agents<br/>Unlimited API calls<br>$7.5/additional agent</p>
       </div>
 
     </div>
 
     <div class="pricing-row">
       <div class="label">
-      </div>
-      <div class="tier">
-        <h3>Free</h3>
       </div>
       <div class="tier">
         <h3>Indie</h3>
@@ -176,7 +179,7 @@
       <div class="label">
       </div>
       <div class="tier">
-        <p class="price"><span class="value">$0</span><br/>per month</p>
+        <p class="price"><span class="value">$29</span><br/>per month</p>
         &nbsp;
       </div>
       <div class="tier">
@@ -187,11 +190,25 @@
         <p class="price"><span class="value">$499</span><br/>per month</p>
         &nbsp;
       </div>
+    </div>
+
+    <div class="pricing-row">
+      <div class="label">
+      </div>
       <div class="tier">
-        <p class="price"><span class="value">$2999</span><br/>per month</p>
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
         &nbsp;
       </div>
     </div>
+
 
     <div class="pricing-row">
       <div class="label">
@@ -201,19 +218,15 @@
       </div>
 
       <div class="tier">
-        <div>1</div>
+        <div>2</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>5</div>
+        <div>10</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>50</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>500</div>
+        <div>75</div>
         &nbsp;
       </div>
     </div>
@@ -224,13 +237,8 @@
           Additional Agent
         </div>
       </div>
-
       <div class="tier">
-        <div>N/A</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>$20</div>
+        <div>$15</div>
         &nbsp;
       </div>
       <div class="tier">
@@ -238,7 +246,7 @@
         &nbsp;
       </div>
       <div class="tier">
-        <div>$6</div>
+        <div>$7.50</div>
         &nbsp;
       </div>
     </div>
@@ -256,15 +264,11 @@
         &nbsp;
       </div>
       <div class="tier">
-        <div>10</div>
-        &nbsp;
-      </div>
-      <div class="tier">
         <div>500</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>5000</div>
+        <div>Unlimited</div>
         &nbsp;
       </div>
     </div>
@@ -294,7 +298,7 @@
       </div>
     </div>-->
 
-    <div class="pricing-row">
+    <!-- <div class="pricing-row">
       <div class="label">
         <div>
           Support
@@ -317,7 +321,7 @@
         <div>Premium</div>
         &nbsp;
       </div>
-    </div>
+    </div>-->
     <div class="enterprise-pricing">
       Need more usage, enterprise-level support, or an on-premise deployment?  <a class="feedback-enterprise" href="mailto:hello@appcanary.com?subject=Enterprise" target="_blank">Contact us.</a>
     </div>

@@ -39,6 +39,8 @@ Rails.application.routes.draw do
   get 'launchrock' => 'welcome#index'
   post 'beta/list' => "welcome#beta_list"
 
+  get 'pricing' => 'welcome#pricing'
+
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
 

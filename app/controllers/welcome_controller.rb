@@ -1,6 +1,6 @@
 class WelcomeController < ApplicationController
   skip_before_filter :require_login
-  before_filter :skip_if_logged_in
+  before_filter :skip_if_logged_in, :except => :pricing
   layout "launchrock"
 
   def index
@@ -8,6 +8,13 @@ class WelcomeController < ApplicationController
     @preuser = PreUser.new
     # @artifacts_count = Backend.artifacts_count
     @vulnerabilities_count = Vulnerability.count
+  end
+
+  def pricing
+    @user = current_user
+    @preuser = PreUser.new
+    @vulnerabilities_count = Vulnerability.count
+    render 'index'
   end
 
   def beta_list
