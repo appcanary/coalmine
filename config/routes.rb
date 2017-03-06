@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
   get 'history' => "dashboard#history", :as => :history
+  get 'summary/:date' => "dashboard#summary", :as => :summary
 
   get 'welcome' => "onboarding#welcome", :as => :onboarding
 

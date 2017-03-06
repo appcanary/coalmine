@@ -29,6 +29,8 @@ class DailySummaryMailer < ActionMailer::Base
 
     # basic stats
     vuln_logs = LogBundleVulnerability.select_bundles_and_vulns.in_bundles_from(account_id).that_are_unpatched.vulnerable_between(@begin_at, @end_at)
+    binding.pry
+    patch_logs = LogBundlePatch.select_bundles_and_vulns.in_bundles_from(account_id).that_are_not_vulnerable.patched_between(@begin_at, @end_at)
 
     basic_stats = vuln_logs.reduce({}) { |acc, lbv| 
       acc[:vuln] ||= {}
