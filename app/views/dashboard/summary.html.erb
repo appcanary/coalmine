@@ -1,0 +1,323 @@
+<table>
+<tr class="header-logo">
+    <td>
+      <img src="<%=image_url("appcanary-hero-vuln.png")%>" title="appcanary logo">
+    </td>
+  </tr>
+
+  <tr class="header-description">
+    <td>
+      <h1>Some title</h1>
+      <h2>tbd</h2>
+    </td>
+  </tr>
+</table>
+
+
+<div class="motd">
+  <% @motds.each do |motd| %>
+    <% if motd.subject %>
+      <h2><%= motd.subject %></h2>
+    <% end %>
+    <%= motd.body %>
+  <% end %>
+</div>
+
+<h1>Daily summary for <%= @date %></h1>
+
+<% if @fresh_vulns_ct > 0 %>
+  <h3>Fresh vulnerabilities</h3>
+  <p>Patches to <%= @fresh_vulns_ct %> vulnerabilities that affect you were published today. They affect <%= @fresh_vuln_pkgs_ct %> unique packages present in <%= @freshly_affected_servers_ct %> of your servers.</p>
+<% else %>
+  <p>No vulnerabilities published today affect you.</p>
+<% end %>
+
+<% if @new_vulns_ct > 0 %>
+  <h3>New vulnerabilities</h3>
+  <p>We recorded <%= @new_vulns_ct %> new vulnerabilites that we hadn't warned you about before. They affect <%= @new_vuln_pkgs_ct %> packages across <%= @new_affected_servers_ct %> servers. Of these, <%= @new_supplmenetary_vulns_ct %> vulns were registered because of new vulnerability information.</p>
+<% end %>
+
+
+<% if @change_ct > 0 %>
+  <h3>Changes</h3>
+  <p>We detected <%= @change_ct %> changes in <%= @change_server_ct %> existing servers.</p>
+<% end %>
+
+<% if @net_patched_vulns_ct > 0 %>
+  <p>A total of <%= @net_patched_vulns_ct %> vulnerabilities in <%= @net_patched_pkgs_ct %> packages are no longer present in <%= @patched_servers_ct %> servers. <%= @net_supplementary_vuln_ct %> of these patches happened because of new vulnerability information.</p>
+<% end %>
+
+
+<% if @new_servers.present? %>
+  <h3>Servers</h4>
+  <p>You added <%= @new_servers.count %> server(s) today.</p>
+
+  <table class="package-table" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="vuln-package">
+        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+          <thead>
+            <th width="30%">
+              name
+            </th>
+            <th>
+              vulns
+            </th>
+            <th>
+              distro
+            </th>
+          </thead>
+
+          <% @new_servers.each do |srv| %>
+            <tr>
+              <td>
+                <%= "#{srv.id} #{srv.display_name}" %>
+              </td>
+              <td>
+                <% if srv.system_bundle %>
+                  <%= @vq.from_bundle(srv.system_bundle).count %>
+                <% end%>
+              </td>
+              <td>
+                <%= "#{srv.distro} / #{srv.release}" %>
+              </td>
+            </tr>
+          <% end %>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+<% if @deleted_servers.any? %>
+  <h3>Deleted Servers</h4>
+  <p>You deleted <%= @deleted_servers.count %> server(s) today.</p>
+  <table class="package-table" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="vuln-package">
+        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+          <thead>
+            <th width="30%">
+              name
+            </th>
+            <th>
+              distro
+            </th>
+          </thead>
+
+          <% @deleted_servers.each do |srv| %>
+            <tr>
+              <td>
+                <%= "#{srv.id} #{srv.display_name}" %>
+              </td>
+              <td>
+                <%= "#{srv.distro} / #{srv.release}" %>
+              </td>
+            </tr>
+          <% end %>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+
+<% end %>
+
+<% if @fresh_sorted_vulns.any? %>
+  <h3>Top 10 fresh vulnerabilities that impact you:</h3>
+  <table class="package-table" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="vuln-package">
+
+        <% @fresh_sorted_vulns[0..9].each do |vuln, pkgs| %>
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                vulnerability
+              </th>
+              <th>
+                priority
+              </th>
+
+              <th>
+                date
+              </th>
+            </thead>
+            <tr>
+              <td>
+                <%= link_to "#{vuln.id} - #{vuln.title}", vuln_path(vuln) %>
+              </td>
+              <td class="package-vuln-version">
+                <%= vuln.criticality %>
+              </td>
+              <td class="package-upgrade-to">
+                <%= vuln.reported_at.strftime("%Y-%m-%d") %>
+              </td>
+            </tr>
+          </table>
+
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                affected packages
+              </th>
+            </thead>
+            <tr>
+              <td>
+                <%= pkgs[0..3].map(&:name).join(", ") %>
+                <% if pkgs.size > 4 %>
+                  and <%= pkgs.size - 4 %> others.
+                <% end %>
+              </td>
+            </tr>
+          </table>
+
+        <% end %>
+      </tr>
+    </tr>
+  </table>
+<% end %>
+
+
+<% if @new_sorted_vulns.any? %>
+  <h3>Top 10 new vulnerabilities that impact you:</h3>
+  <table class="package-table" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="vuln-package">
+
+        <% @new_sorted_vulns[0..9].each do |vuln, pkgs| %>
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                vulnerability
+              </th>
+              <th>
+                priority
+              </th>
+
+              <th>
+                date
+              </th>
+            </thead>
+            <tr>
+              <td>
+                <%= link_to "#{vuln.id} - #{vuln.title}", vuln_path(vuln) %>
+              </td>
+              <td class="package-vuln-version">
+                <%= vuln.criticality %>
+              </td>
+              <td class="package-upgrade-to">
+                <%= vuln.reported_at.strftime("%Y-%m-%d") %>
+              </td>
+            </tr>
+          </table>
+
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                affected packages
+              </th>
+            </thead>
+            <tr>
+              <td>
+                <%= pkgs[0..3].map(&:name).join(", ") %>
+                <% if pkgs.size > 4 %>
+                  and <%= pkgs.size - 4 %> others.
+                <% end %>
+              </td>
+            </tr>
+          </table>
+
+        <% end %>
+      </tr>
+    </tr>
+  </table>
+<% end %>
+
+
+
+
+<% if @new_apps.present? %>
+  <h3>Servers</h4>
+  <p>You added <%= @new_apps.count %> server(s) today.</p>
+
+  <table class="package-table" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="vuln-package">
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                name
+              </th>
+              <th>
+                vulns
+              </th>
+              <th>
+                distro
+              </th>
+            </thead>
+
+            <% @new_apps.each do |app| %>
+              <tr>
+                <td>
+                  <%= "#{app.id} #{app.display_name}" %>
+                </td>
+                <td>
+                  <%= @vq.from_bundle(app).count %>
+                </td>
+                <td>
+                  <%= app.platform %>
+                </td>
+              </tr>
+            <% end %>
+            
+          </table>
+        </td>
+      </tr>
+    </table>
+
+<% end %>
+
+
+<%# <% @pkg_by_platform.each do |plt, packages| %>
+<% [].each do |plt, packages| %>
+  <h3><%= plt %></h3>
+  <% packages.group_by(&:name).each do |pname, sub_pkgs| %>
+    <h4><%= pname %></h4>
+    <table class="package-table" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="vuln-package">
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                version
+              </th>
+              <th>
+                vulns
+              </th>
+
+              <th>
+                where
+              </th>
+            </thead>
+            <% sub_pkgs.each do |pkg| %>
+              <tr>
+                <td>
+                  <%= pkg.version %>
+                </td>
+                <td class="package-vuln-version">
+                  <%= pkg.vulnerabilities.group_by(&:criticality).map { |k, v| "#{v.count} #{k}"}.join(", ") %>
+                </td>
+                <td class="package-upgrade-to">
+                  <%= pkg.bundles.where(:account_id => 22).count %> servers
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        </tr>
+      </tr>
+    </table>
+  <% end %>
+<% end %>

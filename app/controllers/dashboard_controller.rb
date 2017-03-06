@@ -52,23 +52,18 @@ class DashboardController < ApplicationController
     period_log_patches = total_log_patches.vulnerable_after(@begin_at)
 
 
-    @changes = BundledPackage.revisions.joins(:bundle).where("bundles.account_id" => account_id).except(:select).select("distinct(bundle_id, bundled_packages.valid_at), bundle_id, agent_server_id, bundled_packages.valid_at").where("bundled_packages.valid_at <= ? and bundled_packages.valid_at >= ?", @end_at, @begin_at)
-
-    @change_server_ct = @changes.map(&:agent_server_id).uniq.size
-    # MUST COME AFTER LOADING ARRAY
-    @change_ct = @changes.size
-
+   
     # @total_vuln_pkg_ct = total_log_vulns.map(&:package_id).uniq.size
     # @total_vuln_ct = total_log_vulns.map(&:vulnerability_id).uniq.size
 
-    @new_vulns = period_log_vulns
-    @new_vulns_ct = @new_vulns.map(&:vulnerability_id).uniq.size
+    @fresh_vulns = period_log_vulns
+    @fresh_vulns_ct = @fresh_vulns.map(&:vulnerability_id).uniq.size
 
-    @new_vuln_pkgs = @new_vulns.map(&:package_id).uniq
-    @new_vuln_pkgs_ct = @new_vuln_pkgs.size
+    @fresh_vuln_pkgs = @fresh_vulns.map(&:package_id).uniq
+    @fresh_vuln_pkgs_ct = @fresh_vuln_pkgs.size
 
-    @newly_affected_servers = @new_vulns.map(&:agent_server_id).uniq
-    @newly_affected_servers_ct = @newly_affected_servers.size
+    @freshly_affected_servers = @fresh_vulns.map(&:agent_server_id).uniq
+    @freshly_affected_servers_ct = @freshly_affected_servers.size
 
     #--
 =begin
@@ -86,21 +81,59 @@ class DashboardController < ApplicationController
 
 
     #---- NEW THINKING HERE
-    total_log_vulns.where("log_bundle_vulnerabilities.occurred_at >= ? and log_bundle_vulnerabilities.occurred_at <= ?", @begin_at, @end_at)
-
-    total_log_patches.where("log_bundle_patches.occurred_at >= ? and log_bundle_patches.occurred_at <= ?", @begin_at, @end_at).map(&:package_id).uniq 
-
-    #--- patches
-    @new_patched_vulns = period_log_patches.map(&:vulnerability_id).uniq
-    @new_patched_vulns_ct = @new_patched_vulns.size
-
-    @new_patched_pkgs = period_log_patches.map(&:package_id).uniq
-    @new_patched_pkgs_ct = @new_patched_pkgs.size
-
-    @patched_servers = period_log_patches.map(&:agent_server_id).uniq
-    @patched_servers_ct = @patched_servers.size
+    # - vulnerabilities added 
+    @new_servers = AgentServer.as_of(@end_at).where(:account_id => account_id).created_on(@begin_at)
+    @deleted_servers = AgentServer.as_of(@end_at).where(:account_id => account_id).deleted_on(@begin_at)
+    @new_apps = Bundle.as_of(@end_at).where(:account_id => account_id).app_bundles.created_on(@begin_at)
 
 
+    # VULNS that happened on this day, for vulns that were reported on previous days
+    # for servers that already existed before, or were not deleted.
+    @new_vulns = total_log_vulns.where("log_bundle_vulnerabilities.created_at >= ? and log_bundle_vulnerabilities.created_at <= ?", @begin_at, @end_at).vulnerable_before(@begin_at)
+    @new_vulns = @new_vulns.where.not('bundles.agent_server_id': @new_servers.map(&:id) + @deleted_servers.map(&:id))
+
+    @new_vulns_ct = @new_vulns.map(&:vulnerability_id).uniq.size
+
+    @new_vuln_pkgs = @new_vulns.map(&:package_id).uniq
+    @new_vuln_pkgs_ct = @new_vuln_pkgs.size
+
+    @new_affected_servers = @new_vulns.map(&:agent_server_id).uniq
+    @new_affected_servers_ct = @new_affected_servers.size
+
+
+    @new_added_vulns = @new_vulns.reject(&:supplementary)
+    @new_supplmenetary_vulns = @new_vulns.select(&:supplementary)
+    @new_supplmenetary_vulns_ct = @new_supplmenetary_vulns.map(&:vulnerability_id).uniq.size
+
+    # all patches, except for deleted servers
+    # todo: distinguish supplementary?
+
+    @net_patches = total_log_patches.where("log_bundle_patches.occurred_at >= ? and log_bundle_patches.occurred_at <= ?", @begin_at, @end_at)
+    @net_patches = @net_patches.where.not('bundles.agent_server_id': @deleted_servers.map(&:id)) 
+
+    @net_patched_vulns = @net_patches.map(&:vulnerability_id).uniq
+    @net_patched_vulns_ct = @net_patched_vulns.size
+
+    @net_patched_pkgs = @net_patches.map(&:package_id).uniq
+    @net_patched_pkgs_ct = @net_patched_pkgs.size
+
+    @patched_servers = @net_patches.map(&:agent_server_id).uniq
+    @patched_servers_ct = @patched_servers.size 
+
+    @net_supplementary_vuln_ct = @net_patches.select(&:supplementary).map(&:vulnerability_id).uniq.size
+
+    # all changes, except for those on new and deleted servers
+    
+    @changes = BundledPackage.revisions.joins(:bundle).where("bundles.account_id" => account_id).except(:select).select("distinct(bundle_id, bundled_packages.valid_at), bundle_id, agent_server_id, bundled_packages.valid_at").where("bundled_packages.valid_at <= ? and bundled_packages.valid_at >= ?", @end_at, @begin_at)
+    @changes = @changes.where.not('bundles.agent_server_id': @new_servers.map(&:id) + @deleted_servers.map(&:id))
+
+    @change_server_ct = @changes.map(&:agent_server_id).uniq.size
+    # MUST COME AFTER LOADING ARRAY
+    @change_ct = @changes.size
+
+
+
+    @fresh_sorted_vulns = @fresh_vulns.group_by(&:vulnerability).reduce({}) { |hsh, (vuln, logs)|  hsh[vuln] = logs.uniq(&:package_id).map(&:package); hsh}.sort_by { |k, v| [-k.criticality_ordinal, -v.size] };
     @new_sorted_vulns = @new_vulns.group_by(&:vulnerability).reduce({}) { |hsh, (vuln, logs)|  hsh[vuln] = logs.uniq(&:package_id).map(&:package); hsh}.sort_by { |k, v| [-k.criticality_ordinal, -v.size] };
     # need to get:
     # what was introduced today (packages)
@@ -122,12 +155,8 @@ class DashboardController < ApplicationController
     # basic stats
     # REMINDER: these are not filtered to just patchable!
 
-    @new_servers = AgentServer.as_of(@end_at).where(:account_id => account_id).created_on(@begin_at)
-
-    @deleted_servers = AgentServer.as_of(@end_at).where(:account_id => account_id).deleted_on(@begin_at)
-    @new_apps = Bundle.as_of(@end_at).where(:account_id => account_id).app_bundles.created_on(@begin_at)
-
-    binding.pry
+   
+    # binding.pry
 
   end
 

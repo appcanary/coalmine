@@ -1109,6 +1109,41 @@ ALTER SEQUENCE log_resolutions_id_seq OWNED BY log_resolutions.id;
 
 
 --
+-- Name: motds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE motds (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    subject character varying,
+    body text NOT NULL,
+    remove_at timestamp without time zone NOT NULL,
+    "position" character varying DEFAULT 'header'::character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: motds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE motds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: motds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE motds_id_seq OWNED BY motds.id;
+
+
+--
 -- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1887,6 +1922,13 @@ ALTER TABLE ONLY log_resolutions ALTER COLUMN id SET DEFAULT nextval('log_resolu
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY motds ALTER COLUMN id SET DEFAULT nextval('motds_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
@@ -2200,6 +2242,14 @@ ALTER TABLE ONLY log_bundle_vulnerabilities
 
 ALTER TABLE ONLY log_resolutions
     ADD CONSTRAINT log_resolutions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: motds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY motds
+    ADD CONSTRAINT motds_pkey PRIMARY KEY (id);
 
 
 --
@@ -2937,6 +2987,13 @@ CREATE UNIQUE INDEX index_logres_account_vulndeps ON log_resolutions USING btree
 
 
 --
+-- Name: index_motds_on_remove_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_motds_on_remove_at ON motds USING btree (remove_at);
+
+
+--
 -- Name: index_notifications_on_email_message_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3406,6 +3463,14 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
+-- Name: fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY motds
+    ADD CONSTRAINT fk_rails_a7964aa25c FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3620,4 +3685,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170118224917');
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
 
 INSERT INTO schema_migrations (version) VALUES ('20170206172642');
+
+INSERT INTO schema_migrations (version) VALUES ('20170302155336');
 
