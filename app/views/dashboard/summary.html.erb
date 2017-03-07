@@ -26,280 +26,63 @@
 <h1>Daily summary for <%= @date %></h1>
 
 <h2>Vulnerabilities</h2>
-<% if @fresh_vulns_ct > 0 %>
-  <h3>Fresh vulnerabilities</h3>
-  <p>Today, patches to <%= @fresh_vulns_ct %> vulnerabilities that affect you were published. They affect <%= @fresh_vuln_pkgs_ct %> unique packages present in <%= @freshly_affected_servers_ct %> of your servers.</p>
+
+<% if @presenter.has_fresh_vulns? %>
+   <h3>Fresh vulnerabilities</h3>
+  <p>Today, patches to <%= @presenter.fresh_vulns.vuln_ct %> vulnerabilities that affect you were published. They affect <%= @presenter.fresh_vulns.package_ct %> unique packages present in <%=  @presenter.fresh_vulns.package_ct %> of your servers.</p>
 <% end %>
 
-<% if @new_vulns_ct > 0 %>
+<% if @presenter.has_new_vulns? %>
   <h3>New vulnerabilities</h3>
-  <p>We recorded <%= @new_vulns_ct %> new vulnerabilites that we hadn't warned you about before. They affect <%= @new_vuln_pkgs_ct %> packages across <%= @new_affected_servers_ct %> servers. Of these, <%= @new_supplmenetary_vulns_ct %> vulns were registered because of new vulnerability information.</p>
+  <p>We recorded <%= @presenter.new_vulns.vuln_ct %> new vulnerabilites that we hadn't warned you about before. They affect <%= @presenter.new_vulns.package_ct %> packages across <%= @presenter.new_vulns.package_ct %> servers. Of these, <%= @presenter.new_vulns.supplementary_ct %> vulns were registered because of new vulnerability information.</p>
 <% end %>
 
-<% if @new_vulns_ct < 1 && @fresh_vulns_ct < 1 %>
+<% unless @presenter.has_vulns_to_report? %>
   <p>We didn't find any new vulnerabilities for you today.</p>
 <% end %>
 
-
 <h2>Changes</h2>
-<% if @change_pkg_ct > 0 %>
-  <p>At least <%= @change_pkg_ct %> packages changed over <%= @change_server_ct %> existing servers.</p>
+
+<% if @presenter.has_changes? %>
+  <p>At least <%= @presenter.changes.package_ct %> packages changed over <%= @presenter.changes.server_ct %> existing servers.</p>
 <% end %>
 
-<% if @net_patched_vulns_ct > 0 %>
-  <p>A total of <%= @net_patched_vulns_ct %> vulnerabilities in <%= @net_patched_pkgs_ct %> packages are no longer present in <%= @patched_servers_ct %> servers. <% if @net_supplementary_vuln_ct > 0 %><%= @net_supplementary_vuln_ct %> of these patches happened because of new vulnerability information.<% end %></p>
+<% if @presenter.has_patched_vulns? %>
+  <p>A total of <%= @presenter.patched_vulns.vuln_ct %> vulnerabilities in <%= @presenter.patched_vulns.package_ct %> packages are no longer present in <%= @presenter.patched_vulns.server_ct %> servers. <% if @presenter.patched_vulns.has_supplementary? %><%= @presenter.patched_vulns.supplementary_ct %> of these patches happened because of new vulnerability information.<% end %></p>
 <% end %>
 
-<% if @change_pkg_ct < 1 && @net_patched_vulns_ct < 1 %>
+
+<% unless @presenter.has_changes_to_report? %>
   <p>We didn't detect any changes on your systems.</p>
 <% end %>
 
-
-<% if @new_servers.present? %>
+<% if @presenter.has_new_servers? %>
   <h2>Servers</h2>
-  <p>You added <%= @new_servers.count %> server(s) today.</p>
-
-  <table class="package-table" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="vuln-package">
-        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-          <thead>
-            <th width="30%">
-              name
-            </th>
-            <th>
-              vulns
-            </th>
-            <th>
-              distro
-            </th>
-          </thead>
-
-          <% @new_servers.each do |srv| %>
-            <tr>
-              <td>
-                <% if srv.system_bundle %>
-                  <%= link_to srv.display_name, server_app_url(srv.system_bundle, server_id: srv.id) %>
-                <% end %>
-              </td>
-
-              <td>
-                <% if srv.system_bundle %>
-                  <%= @vq.from_bundle(srv.system_bundle).count %>
-                <% end%>
-              </td>
-              <td>
-                <%= "#{srv.distro} / #{srv.release}" %>
-              </td>
-            </tr>
-          <% end %>
-
-        </table>
-      </td>
-    </tr>
-  </table>
+  <p>You added <%= @presenter.new_servers.count %> server(s) today.</p>
+  <%= render :partial => "servers_table", :locals => { :servers => @presenter.new_servers, :vulnquery => @presenter.vulnquery, :deleted => false } %>
 <% end %>
 
-<% if @deleted_servers.any? %>
+<% if @presenter.has_deleted_servers? %>
   <h2>Deleted Servers</h2>
-  <p>You deleted <%= @deleted_servers.count %> server(s) today.</p>
-  <table class="package-table" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="vuln-package">
-        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-          <thead>
-            <th width="30%">
-              name
-            </th>
-            <th>
-              distro
-            </th>
-          </thead>
-
-          <% @deleted_servers.each do |srv| %>
-            <tr>
-              <td>
-                <%= srv.display_name %>
-              </td>
-              <td>
-                <%= "#{srv.distro} / #{srv.release}" %>
-              </td>
-            </tr>
-          <% end %>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-
-
+  <p>You deleted <%= @presenter.deleted_servers.count %> server(s) today.</p>
+  <%= render :partial => "servers_table", :locals => { :servers => @presenter.deleted_servers, :vulnquery => @presenter.vulnquery, :deleted => true } %>
 <% end %>
 
-<% if @fresh_sorted_vulns.any? %>
+<% if @presenter.has_fresh_vulns? %>
   <h3>Fresh vulnerabilities that impact you:</h3>
-  <table class="package-table" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="vuln-package">
-
-        <% @fresh_sorted_vulns.each do |vuln, pkgs| %>
-          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-            <thead>
-              <th width="30%">
-                vulnerability
-              </th>
-              <th>
-                priority
-              </th>
-
-              <th>
-                date
-              </th>
-            </thead>
-            <tr>
-              <td>
-                <%= link_to vuln.title, vuln_path(vuln) %>
-              </td>
-              <td class="package-vuln-version">
-                <%= vuln.criticality %>
-              </td>
-              <td class="package-upgrade-to">
-                <%= vuln.reported_at.strftime("%Y-%m-%d") %>
-              </td>
-            </tr>
-          </table>
-
-          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-            <thead>
-              <th width="30%">
-                affected packages
-              </th>
-            </thead>
-            <tr>
-              <td>
-                <%= pkgs[0..3].map(&:name).join(", ") %>
-                <% if pkgs.size > 4 %>
-                  and <%= pkgs.size - 4 %> others.
-                <% end %>
-              </td>
-            </tr>
-          </table>
-
-        <% end %>
-      </tr>
-    </tr>
-  </table>
+  <%= render :partial => "sorted_vuln_table", :locals => {:sorted_vulns => @presenter.fresh_vulns } %>
 <% end %>
 
 
-<% if @new_sorted_vulns.any? %>
+<% if @presenter.has_new_vulns? %>
   <h3>New vulnerabilities that impact you:</h3>
-  <table class="package-table" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="vuln-package">
-
-        <% @new_sorted_vulns.each do |vuln, pkgs| %>
-          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-            <thead>
-              <th width="30%">
-                vulnerability
-              </th>
-              <th>
-                priority
-              </th>
-
-              <th>
-                date
-              </th>
-            </thead>
-            <tr>
-              <td>
-                <%= link_to vuln.title, vuln_path(vuln) %>
-              </td>
-              <td class="package-vuln-version">
-                <%= vuln.criticality %>
-              </td>
-              <td class="package-upgrade-to">
-                <%= vuln.reported_at.strftime("%Y-%m-%d") %>
-              </td>
-            </tr>
-          </table>
-
-          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-            <thead>
-              <th width="30%">
-                affected packages
-              </th>
-            </thead>
-            <tr>
-              <td>
-                <%= pkgs[0..3].map(&:name).join(", ") %>
-                <% if pkgs.size > 4 %>
-                  and <%= pkgs.size - 4 %> others.
-                <% end %>
-              </td>
-            </tr>
-          </table>
-
-        <% end %>
-      </tr>
-    </tr>
-  </table>
+  <%= render :partial => "sorted_vuln_table", :locals => {:sorted_vulns => @presenter.new_vulns } %>
 <% end %>
 
 
-<% if @sorted_net_patched_vulns.any? %>
+<% if @presenter.has_patched_vulns? %>
   <h3>Patched vulnerabilities</h3>
-  <table class="package-table" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="vuln-package">
-
-        <% @sorted_net_patched_vulns.each do |vuln, pkgs| %>
-          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-            <thead>
-              <th width="30%">
-                vulnerability
-              </th>
-              <th>
-                priority
-              </th>
-
-              <th>
-                date
-              </th>
-            </thead>
-            <tr>
-              <td>
-                <%= link_to "#{vuln.id} - #{vuln.title}", vuln_path(vuln) %>
-              </td>
-              <td class="package-vuln-version">
-                <%= vuln.criticality %>
-              </td>
-              <td class="package-upgrade-to">
-                <%= vuln.reported_at.strftime("%Y-%m-%d") %>
-              </td>
-            </tr>
-          </table>
-
-          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-            <thead>
-              <th width="30%">
-                affected packages
-              </th>
-            </thead>
-            <tr>
-              <td>
-                <%= pkgs[0..3].map(&:name).join(", ") %>
-                <% if pkgs.size > 4 %>
-                  and <%= pkgs.size - 4 %> others.
-                <% end %>
-              </td>
-            </tr>
-          </table>
-
-        <% end %>
-      </tr>
-    </tr>
-  </table>
+  <%= render :partial => "sorted_vuln_table", :locals => {:sorted_vulns => @presenter.patched_vulns } %>
 <% end %>
 
 

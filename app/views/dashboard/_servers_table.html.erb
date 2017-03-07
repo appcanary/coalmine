@@ -1,0 +1,45 @@
+<table class="package-table" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="vuln-package">
+      <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+        <thead>
+          <th width="30%">
+            name
+          </th>
+          <% unless deleted %>
+            <th>
+              vulns
+            </th>
+          <% end %>
+          <th>
+            distro
+          </th>
+        </thead>
+
+        <% servers.each do |srv| %>
+          <tr>
+            <td>
+              <% if srv.system_bundle %>
+                <%= link_to srv.display_name, server_app_url(srv.system_bundle, server_id: srv.id) %>
+              <% end %>
+            </td>
+
+            <% unless deleted %>
+              <td>
+                <% if srv.system_bundle %>
+                  <%= vulnquery.from_bundle(srv.system_bundle).count %>
+                <% end%>
+              </td>
+            <% end %>
+
+            <td>
+              <%= "#{srv.distro} / #{srv.release}" %>
+            </td>
+          </tr>
+        <% end %>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
