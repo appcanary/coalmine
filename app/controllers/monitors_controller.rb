@@ -13,7 +13,7 @@ class MonitorsController < ApplicationController
 
     if @form.validate(params[:monitor])
       @bm = BundleManager.new(current_user.account)
-      @bundle, error = @bm.create(@form.platform_release, {name: @form.name}, @form.package_list)
+      @bundle, error = @bm.create(@form.platform_release, {name: @form.name, from_api: true}, @form.package_list)
 
       if error
         @form.errors.add(:base, error.message)
