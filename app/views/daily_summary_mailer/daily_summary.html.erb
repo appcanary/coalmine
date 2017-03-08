@@ -7,11 +7,139 @@
 
   <tr class="header-description">
     <td>
-      <h1>Watch out!</h1>
-      <h2>You're running vulnerable software.</h2>
+      <h1>Daily Summary for <%= @date %></h1>
     </td>
   </tr>
 <% end %>
 
-<% @vuln_pkgs.each do |pkg, logs| %>
+<% if @motds.any? %>
+  <div class="motd alert alert-neutral">
+    <% @motds.each do |motd| %>
+      <% if motd.subject %>
+        <h2><%= motd.subject %></h2>
+      <% end %>
+      <%= motd.body %>
+    <% end %>
+  </div>
 <% end %>
+
+<div class="daily-summary">
+
+  <% if @presenter.anything_to_report? %>
+    
+
+    <h2>Vulnerabilities</h2>
+
+    <% if @presenter.has_fresh_vulns? %>
+      <h3>Fresh disclosures</h3>
+      <p>Today, patches to <b><%= @presenter.fresh_vulns.vuln_ct %> vulnerabilities</b> that affect you were published. You should upgrade <b><%= @presenter.fresh_vulns.package_ct %> packages</b> installed in <b><%= @presenter.fresh_vulns.package_ct %> servers</b>.</p>
+    <% end %>
+
+    <% if @presenter.has_new_vulns? %>
+      <h3>New-for-you</h3>
+      <p>We recorded <b><%= @presenter.new_vulns.vuln_ct %> vulnerabilites</b> that we hadn't warned you about before. They affect <b><%= @presenter.new_vulns.package_ct %> packages</b> across <b><%= @presenter.new_vulns.package_ct %> servers</b>. 
+        <% if @presenter.new_vulns.supplementary_ct > 0 %>
+          Of these, <%= @presenter.new_vulns.supplementary_ct %> vulns were registered because of new upstream vulnerability information.
+        <% end %>
+      </p>
+    <% end %>
+
+    <% unless @presenter.has_vulns_to_report? %>
+      <p>We didn't find any new vulnerabilities for you today.</p>
+    <% end %>
+
+    <% if @presenter.has_patched_vulns? %>
+      <h3>Patches</h3>
+      <p>A total of <b><%= @presenter.patched_vulns.vuln_ct %> vulnerabilities</b> in <b><%= @presenter.patched_vulns.package_ct %> packages</b> are no longer present in <b><%= @presenter.patched_vulns.server_ct %> servers</b>. <% if @presenter.patched_vulns.has_supplementary? %><%= @presenter.patched_vulns.supplementary_ct %> of these patches happened because of new vulnerability information.<% end %></p>
+    <% end %>
+
+    <% if @presenter.has_changes? %>
+      <h3>All changes</h3>
+      <p>FYI, a total of <%= @presenter.changes.package_ct %> packages changed in <%= @presenter.changes.server_ct %> existing servers.</p>
+    <% end %>
+
+    <% unless @presenter.has_changes_to_report? %>
+      <p>We didn't detect any changes on your systems.</p>
+    <% end %>
+
+    <% if @presenter.has_new_servers? %>
+      <h2>Servers</h2>
+      <p>You added <%= @presenter.new_servers.count %> server(s) today.</p>
+      <%= render :partial => "dashboard/servers_table", :locals => { :servers => @presenter.new_servers, :vulnquery => @presenter.vulnquery, :deleted => false } %>
+    <% end %>
+
+    <% if @presenter.has_deleted_servers? %>
+      <h2>Deleted Servers</h2>
+      <p>You deleted <%= @presenter.deleted_servers.count %> server(s) today.</p>
+      <%= render :partial => "dashboard/servers_table", :locals => { :servers => @presenter.deleted_servers, :vulnquery => @presenter.vulnquery, :deleted => true } %>
+    <% end %>
+
+    <% if @presenter.has_details_to_show? %>
+      <h2>Details</h2>
+    <% end %>
+
+    <% if @presenter.has_fresh_vulns? %>
+      <h3>Fresh vulnerabilities:</h3>
+      <%= render :partial => "dashboard/sorted_vuln_table", :locals => {:sorted_vulns => @presenter.fresh_vulns } %>
+      <hr/>
+    <% end %>
+
+
+    <% if @presenter.has_new_vulns? %>
+      <h3>New vulnerabilities:</h3>
+      <%= render :partial => "dashboard/sorted_vuln_table", :locals => {:sorted_vulns => @presenter.new_vulns } %>
+      <hr/>
+    <% end %>
+
+    <% if @presenter.has_patched_vulns? %>
+      <h3>Patched vulnerabilities</h3>
+      <%= render :partial => "dashboard/sorted_vuln_table", :locals => {:sorted_vulns => @presenter.patched_vulns } %>
+    <% end %>
+
+
+    <% if @new_apps.present? %>
+      <h3>Servers</h4>
+      <p>You added <%= @new_apps.count %> server(s) today.</p>
+
+      <table class="package-table" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="vuln-package">
+            <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+              <thead>
+                <th width="30%">
+                  name
+                </th>
+                <th>
+                  vulns
+                </th>
+                <th>
+                  distro
+                </th>
+              </thead>
+
+              <% @new_apps.each do |app| %>
+                <tr>
+                  <td>
+                    <%= "#{app.id} #{app.display_name}" %>
+                  </td>
+                  <td>
+                    <%= @vq.from_bundle(app).count %>
+                  </td>
+                  <td>
+                    <%= app.platform %>
+                  </td>
+                </tr>
+              <% end %>
+
+            </table>
+          </td>
+        </tr>
+      </table>
+
+    <% end %>
+  <% else %>
+    <h2>Nothing to report!</h2>
+    <p>No vulnerabilities that affect you came out. Nothing changed on your servers.</p>
+    <p>Hooray!</p>
+  <% end %>
+</div>
