@@ -10,9 +10,14 @@ class DailySummaryMailer < ActionMailer::Base
     @motds = Motd.where("remove_at >= ?", @date)
     @presenter = DailySummaryManager.new(@account, @date).create_presenter
 
-    mail(to: "phillmv@appcanary.com", :subject => "daily summary lol") do |format|
+    mail(to: "hello@appcanary.com", :subject => "daily summary #{@date}") do |format|
         format.html
         format.text
     end
+  end
+
+  def self.send_daily_report!
+    self.daily_summary(22, Date.yesterday).deliver_now
+    self.daily_summary(493, Date.yesterday).deliver_now
   end
 end
