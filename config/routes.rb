@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     post "/preview" => "rubysec#preview", :as => :rubysec_preview
     post "/create" => "rubysec#create", :as => :rubysec_create
   end
-  
+
   get "isitvuln" => "is_it_vuln#index"
 
   root 'welcome#index'
@@ -76,7 +76,7 @@ Rails.application.routes.draw do
     post "stop_impersonating", on: :collection
   end
   resources :password_reset, :only => [:show, :update]
-  
+
   resource :settings, :only => [:show, :update] do
     patch 'reset_token', on: :collection
   end
@@ -96,7 +96,6 @@ Rails.application.routes.draw do
   resources :monitors, :only => [:new, :show, :destroy, :create] do
     post "resolve_vuln/:package_id", action: :resolve_vuln, on: :collection, as: :resolve_vuln
     delete "unresolve_vuln/:package_id", action: :unresolve_vuln, on: :collection, as: :unresolve_vuln
-
   end
 
   get "vulns/:platform" => "vulns#index", :as => :platform_vulns, :constraints => ->(req) {Platforms.supported?(req.params[:platform])}
@@ -105,8 +104,8 @@ Rails.application.routes.draw do
     get "archive/:id" => "vulns#archive", :as => "archive"
   end
 
-  get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
-  get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
+  get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
+  get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
 
   resources :logs, :only => :index
   resources :emails, :only => [:index, :show]
@@ -127,11 +126,11 @@ Rails.application.routes.draw do
       post "check" => 'check#create'
       get "status" => 'status#status'
 
-      post "monitors(/:name)" => "monitors#create"
-      put "monitors/:name" => "monitors#update"
-      get "monitors/:name" => "monitors#show", :as => "monitor"
+      post "monitors(/:name)" => "monitors#create", :constraints => { :name => /.+(?=\.json|\.html|$)/ }
+      put "monitors/:name" => "monitors#update", :constraints => { :name => /.+(?=\.json|\.html|$)/ }
+      get "monitors/:name" => "monitors#show", :constraints => { :name => /.+(?=\.json|\.html|$)/ }, :as => "monitor"
       get "monitors" => "monitors#index"
-      delete "monitors/:name" => "monitors#destroy"
+      delete "monitors/:name" => "monitors#destroy", :constraints => { :name => /.+(?=\.json|\.html|$)/ }
 
       get "servers/:uuid" => "servers#show", :as => "server"
       get "servers" => "servers#index"
