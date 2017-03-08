@@ -89,7 +89,7 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
     assert_equal 19, BundledPackageArchive.count
 
 
-    revisions = BundledPackage.revisions(bundle.id)
+    revisions = bundle.revisions
     assert_equal 5, revisions.count
 
     # ---- now we test how well we can retrieve these revisions

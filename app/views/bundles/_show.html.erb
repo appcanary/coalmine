@@ -1,7 +1,9 @@
 <div class="bundle-packages">
-  <%= form_tag bundle_url(@bundle), :method => :get do |f| %>
-    <%= select_tag :revisions, options_for_select(@bundle_revisions.each_with_index.map { |d, i| [d, i]}), :prompt => "Pick a date", :class => "form-group" %> 
-    <%= submit_tag "Submit", :class => "btn btn-primary" %>
+  <% if @bundle_revisions %>
+    <%= form_tag bundle_url(@bundle), :method => :get do |f| %>
+      <%= select_tag :revisions, options_for_select(@bundle_revisions.each_with_index.map { |d, i| [d, i]}), :prompt => "Pick a date", :class => "form-group" %> 
+      <%= submit_tag "Submit", :class => "btn btn-primary" %>
+    <% end %>
   <% end %>
 
   <% if @cur_revision %>
