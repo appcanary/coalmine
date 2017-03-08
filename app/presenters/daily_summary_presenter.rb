@@ -53,4 +53,10 @@ class DailySummaryPresenter
       has_patched_vulns?
   end
 
+  def has_details_to_show?
+    has_fresh_vulns? ||
+      has_new_vulns? ||
+      has_patched_vulns?
+  end
+
 end

@@ -1,6 +1,6 @@
-<table class="package-table" cellpadding="0" cellspacing="0">
+<table class="servers-wrapper" cellpadding="0" cellspacing="0">
   <tr>
-    <td class="vuln-package">
+    <td>
       <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
         <thead>
           <th width="30%">
@@ -21,6 +21,8 @@
             <td>
               <% if srv.system_bundle %>
                 <%= link_to srv.display_name, server_app_url(srv.system_bundle, server_id: srv.id) %>
+              <% else %>
+                <%= srv.display_name %>
               <% end %>
             </td>
 
@@ -28,6 +30,8 @@
               <td>
                 <% if srv.system_bundle %>
                   <%= vulnquery.from_bundle(srv.system_bundle).count %>
+                <% else %>
+                  (since deleted)
                 <% end%>
               </td>
             <% end %>

@@ -1,52 +1,50 @@
-<table class="package-table" cellpadding="0" cellspacing="0">
+<table class="vulnerability-wrapper" cellpadding="0" cellspacing="0">
   <tr>
-    <td class="vuln-package">
+    <td>
 
-      <% sorted_vulns.each do |vuln, pkgs| %>
-        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-          <thead>
-            <th width="30%">
-              vulnerability
-            </th>
-            <th>
-              priority
-            </th>
-
-            <th>
-              date
-            </th>
-          </thead>
-          <tr>
-            <td>
-              <%= link_to vuln.title, vuln_path(vuln) %>
-            </td>
-            <td class="package-vuln-version">
+      <table class="vulnerability-table" cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+        <thead>
+          <th>
+            priority
+          </th>
+          <th>
+            vulnerability
+          </th>
+          <th>
+            disclosed at
+          </th>
+        </thead>
+        <% sorted_vulns.each do |vuln, pkgs| %>
+          <tr class="vulnerability">
+            <td width="20%" class="package-vuln-version">
               <%= vuln.criticality %>
             </td>
-            <td class="package-upgrade-to">
+            <td width="60%" >
+              <%= link_to vuln.title, vuln_path(vuln) %>
+            </td>
+
+            <td width="20%"  class="package-upgrade-to">
               <%= vuln.reported_at.strftime("%Y-%m-%d") %>
             </td>
           </tr>
-        </table>
-
-        <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
-          <thead>
-            <th width="30%">
-              affected packages
-            </th>
-          </thead>
           <tr>
             <td>
-              <%= pkgs[0..3].map(&:name).join(", ") %>
-              <% if pkgs.size > 4 %>
-                and <%= pkgs.size - 4 %> others.
-              <% end %>
+              &nbsp;
+            </td>
+            <td colspan=2>
+              <p><b>packages:</b><br/>
+                <%= pkgs[0..3].map(&:name).join(", ") %>
+                <% if pkgs.size > 4 %>
+                  and <%= pkgs.size - 4 %> others.
+                <% end %>
+
+              </p>
             </td>
           </tr>
-        </table>
-
-      <% end %>
-    </tr>
+          <tr class="break"><td></td><td></td><td></td></tr>
+        <% end %>
+      </table>
+    </td>
   </tr>
 </table>
 

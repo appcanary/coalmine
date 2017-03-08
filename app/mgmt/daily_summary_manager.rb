@@ -13,9 +13,9 @@ class DailySummaryManager
 
     # ---- we now establish some basic facts
 
-    @new_servers = AgentServer.as_of(@end_at).where(:account_id => account.id).created_on(@begin_at)
+    @new_servers = AgentServer.where(:account_id => account.id).created_on(@begin_at)
 
-    @deleted_servers = AgentServer.as_of(@end_at).where(:account_id => account.id).deleted_on(@begin_at)
+    @deleted_servers = AgentServer.where(:account_id => account.id).deleted_on(@begin_at)
 
     @new_apps = Bundle.as_of(@end_at).where(:account_id => account.id).app_bundles.created_on(@begin_at)
 
