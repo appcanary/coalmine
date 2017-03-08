@@ -8,10 +8,13 @@ class AppsController < ApplicationController
 
   def show
     @vulnquery = VulnQuery.new(current_account)
-    @server, @bundle = fetch_server_and_bundle(params)
-    @bundle_revisions = @bundle.revisions
 
-    if params[:revisions] 
+    if current_user.is_admin? 
+      @server, @bundle = fetch_server_and_bundle(params)
+      @bundle_revisions = @bundle.revisions
+    end
+
+    if current_user.is_admin? && params[:revisions] 
       bdix = params[:revisions].to_i
       @cur_revision = @bundle_revisions[bdix]
       bq = BundleQuery.new(@bundle, @cur_revision)
