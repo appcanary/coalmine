@@ -34,32 +34,4 @@ class DashboardController < ApplicationController
     @presenter = DailySummaryManager.new(current_account, @date).create_presenter
   end
 
-
-  def whatever_old_code
-    if false 
-      vuln_logs = LogBundleVulnerability.select_bundles_and_vulns.in_bundles_from(account_id).that_are_unpatched.vulnerable_between(@begin_at, @end_at)
-      patch_logs = LogBundlePatch.select_bundles_and_vulns.in_bundles_from(account_id).that_are_not_vulnerable.patched_between(@begin_at, @end_at)
-
-      basic_stats = vuln_logs.reduce({}) { |acc, lbv| 
-        acc[:vuln] ||= {}
-        acc[:pkg] ||= {}
-        acc[:srv] ||= {}
-        acc[:vuln][lbv.vulnerability_id] = true
-        acc[:pkg][lbv.package_id] = true
-        acc[:srv][lbv.agent_server_id] = true unless lbv.agent_server_id.nil?
-        acc 
-      }
-
-      @vuln_ct = basic_stats[:vuln].count
-      @pkg_ct = basic_stats[:pkg].count
-      @srv_ct = basic_stats[:srv].count
-
-
-      @vulns = Vulnerability.where("id in (?)", basic_stats[:vuln].keys)
-      @pkgs = Package.where("id in (?)", basic_stats[:pkg].keys)
-
-      @pkg_by_platform = @pkgs.group_by(&:platform)
-    end
-
-  end
 end

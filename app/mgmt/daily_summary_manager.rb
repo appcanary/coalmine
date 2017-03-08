@@ -50,7 +50,10 @@ class DailySummaryManager
 
     sorted_vulns = sort_group_log_vulns(fresh_vulns)
 
-    FreshVulnsPresenter.new(@fresh_vulns_ct, @fresh_vuln_pkgs_ct, @freshly_affected_servers_ct, sorted_vulns)
+    FreshVulnsPresenter.new(@fresh_vulns_ct, 
+                            @fresh_vuln_pkgs_ct, 
+                            @freshly_affected_servers_ct, 
+                            sorted_vulns)
   end
 
   def new_vulns
@@ -70,7 +73,12 @@ class DailySummaryManager
     @new_supplmenetary_vulns_ct = new_supplmenetary_vulns.map(&:vulnerability_id).uniq.size
 
     sorted_vulns = sort_group_log_vulns(new_vulns)
-    NewVulnsPresenter.new(@new_vulns_ct, @new_vuln_pkgs_ct, @new_affected_servers_ct, @new_supplmenetary_vulns_ct, sorted_vulns)
+
+    NewVulnsPresenter.new(@new_vulns_ct, 
+                          @new_vuln_pkgs_ct, 
+                          @new_affected_servers_ct, 
+                          @new_supplmenetary_vulns_ct, 
+                          sorted_vulns)
   end
 
   def patched_vulns
@@ -92,7 +100,11 @@ class DailySummaryManager
     sorted_vulns = sort_group_log_vulns(net_patches)
 
 
-    PatchedVulnsPresenter.new(@net_patched_vulns_ct, @net_patched_pkgs_ct, @patched_servers_ct, @net_supplementary_vuln_ct, sorted_vulns)
+    PatchedVulnsPresenter.new(@net_patched_vulns_ct, 
+                              @net_patched_pkgs_ct, 
+                              @patched_servers_ct, 
+                              @net_supplementary_vuln_ct, 
+                              sorted_vulns)
   end
 
   def changes
@@ -121,6 +133,7 @@ class DailySummaryManager
     attr_accessor :vuln_ct, :package_ct, :server_ct, :sorted_vulns
 
     delegate :each, to: :sorted_vulns
+
     def initialize(vuln_ct, package_ct, server_ct, sorted_vulns)
       @vuln_ct = vuln_ct
       @package_ct = package_ct
@@ -133,6 +146,7 @@ class DailySummaryManager
     attr_accessor :vuln_ct, :package_ct, :server_ct, :supplementary_ct, :sorted_vulns
 
     delegate :each, to: :sorted_vulns
+
     def initialize(vuln_ct, package_ct, server_ct, supplementary_ct, sorted_vulns)
       @vuln_ct = vuln_ct
       @package_ct = package_ct

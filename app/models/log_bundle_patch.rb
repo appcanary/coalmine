@@ -70,8 +70,8 @@ class LogBundlePatch < ActiveRecord::Base
           bundles.id = log_bundle_patches.bundle_id").select("log_bundle_patches.*").select("bundles.agent_server_id")
 
    }
-
-   # TODO TEST
+ 
+   # TODO: document the importance of bp_id > bp_id
    scope :that_are_not_vulnerable , -> {
      joins("LEFT JOIN log_bundle_vulnerabilities ON 
           log_bundle_vulnerabilities.bundle_id = log_bundle_patches.bundle_id AND
