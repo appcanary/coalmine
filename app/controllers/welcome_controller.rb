@@ -11,7 +11,7 @@ class WelcomeController < ApplicationController
   end
 
   def pricing
-    @user = current_user
+    @user = current_user ? current_user : User.new
     @preuser = PreUser.new
     @vulnerabilities_count = Vulnerability.count
     render 'index'
