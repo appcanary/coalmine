@@ -1,5 +1,15 @@
 <%= render :partial => "shared/top_menu" %>
 
+<script>
+ //This is a bit of hack until we seperate pricing into it's own seperate page
+ $(document).ready(function() {
+   if (window.location.pathname == "/pricing") {
+     //scroll to the pricing section
+     window.location.hash = "#pricing";
+   }
+ });
+</script>
+
 <div class="hero-wrapper">
   <div class="hero-main">
 
@@ -130,36 +140,27 @@
 
     <div class="mobile-pricing">
       <div class="tier">
-        <h3>Free</h3>
-        <p class="price">$0<br/>per month</p>
-        <p class="add-margin">1 agent<br/>10 API calls
+        <h3>Indie</h3>
+        <p class="price">$29<br/>per month</p>
+        <p class="add-margin">3 agents<br/>10 API calls<br/>$15/additional agent
       </div>
 
       <div class="tier">
-        <h3>Indie</h3>
+        <h3>Team</h3>
         <p class="price">$99<br/>per month</p>
-        <p class="add-margin">5 agents<br/>10 API calls<br/>$20/additional agent
-      </div>
-
-      <div class="tier">
-        <h3>Team</h3>
-        <p class="price">$499<br/>per month</p>
-        <p>50 agents<br/>500 API calls<br/>$10/additional agent</p>
+        <p>10 agents<br/>500 API calls<br/>$10/additional agent</p>
       </div>
 
       <div class="tier">
         <h3>Company</h3>
-        <p class="price">$2999<br/>per month</p>
-        <p>500 agents<br/>5000 API calls<br>$6/additional agent</p>
+        <p class="price">$499<br/>per month</p>
+        <p>75 agents<br/>Unlimited API calls<br>$7.50/additional agent</p>
       </div>
 
     </div>
 
     <div class="pricing-row">
       <div class="label">
-      </div>
-      <div class="tier">
-        <h3>Free</h3>
       </div>
       <div class="tier">
         <h3>Indie</h3>
@@ -176,7 +177,7 @@
       <div class="label">
       </div>
       <div class="tier">
-        <p class="price"><span class="value">$0</span><br/>per month</p>
+        <p class="price"><span class="value">$29</span><br/>per month</p>
         &nbsp;
       </div>
       <div class="tier">
@@ -187,33 +188,43 @@
         <p class="price"><span class="value">$499</span><br/>per month</p>
         &nbsp;
       </div>
-      <div class="tier">
-        <p class="price"><span class="value">$2999</span><br/>per month</p>
-        &nbsp;
-      </div>
     </div>
 
     <div class="pricing-row">
       <div class="label">
+      </div>
+      <div class="tier">
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
+        &nbsp;
+      </div>
+    </div>
+
+
+    <div class="pricing-row">
+      <div class="label">
         <div>
-          Agents<br/>& Monitors
+          Agents<br/>&amp; Monitors
         </div>
       </div>
 
       <div class="tier">
-        <div>1</div>
+        <div>3</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>5</div>
+        <div>10</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>50</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>500</div>
+        <div>75</div>
         &nbsp;
       </div>
     </div>
@@ -224,13 +235,8 @@
           Additional Agent
         </div>
       </div>
-
       <div class="tier">
-        <div>N/A</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>$20</div>
+        <div>$15</div>
         &nbsp;
       </div>
       <div class="tier">
@@ -238,7 +244,7 @@
         &nbsp;
       </div>
       <div class="tier">
-        <div>$6</div>
+        <div>$7.50</div>
         &nbsp;
       </div>
     </div>
@@ -256,65 +262,11 @@
         &nbsp;
       </div>
       <div class="tier">
-        <div>10</div>
-        &nbsp;
-      </div>
-      <div class="tier">
         <div>500</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>5000</div>
-        &nbsp;
-      </div>
-    </div>
-
-    <!-- <div class="pricing-row">
-      <div class="label">
-        <div>
-          Users
-        </div>
-      </div>
-
-      <div class="tier">
-        <div>1</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>1</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>5</div>
-        &nbsp;
-      </div>
-      <div class="tier">
         <div>Unlimited</div>
-        &nbsp;
-      </div>
-    </div>-->
-
-    <div class="pricing-row">
-      <div class="label">
-        <div>
-          Support
-        </div>
-      </div>
-
-      <div class="tier">
-        <div>Minimal</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>Basic</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>Basic</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>Premium</div>
         &nbsp;
       </div>
     </div>
@@ -349,10 +301,6 @@
         We keep track of which versions of what packages are vulnerable to which security vulnerabilities, so you don't have to.</p>
       <p>
         We provide an <a href="https://github.com/appcanary/agent">open-source</a> agent and an API. We monitor the packages you have installed on your Linux system by hooking into the package manager (i.e. apt or yum). We also monitor the libraries used by your Ruby applications by monitoring their Gemfile.lock files.
-        <!-- We provide an <a href="https://github.com/appcanary/agent">open&#45;source</a> agent and an API. Our agent monitors the packages you have installed on a Linux system by hooking into the package manager (apt or yum). It also monitors the libraries used by Ruby applications by monitoring Gemfile.lock files. -->
-      </p>
-      <p>
-        <!-- We provide an <a href="https://github.com/appcanary/agent">open&#45;source</a> agent and an API. Our APIs support the same platforms as the agent. You can monitor a set of packages for vulnerabilities by uploading a file, either a Gemfile.lock for Ruby or <code>/var/lib/dpkg/status</code> for apt&#45;based systems, or the output of <code>rpm &#45;qa</code> for rpm&#45;based systems. -->
       </p>
       <p>
         You can upload files directly to our API endpoint, or through a web
@@ -364,7 +312,7 @@
         <ul>
           <li>Ubuntu - via apt</li>
           <li>Debian - via apt</li>
-          <li>Centos 7 - via yum</li>
+          <li>CentOS - via yum</li>
           <li>Amazon Linux - via yum</li>
         </ul>
       </div>
