@@ -202,6 +202,8 @@ GEM
     mime-types (2.99.2)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
+    minitest-ci (3.1.0)
+      minitest (~> 5.0, >= 5.0.6)
     minitest-reporters (1.0.10)
       ansi
       builder
@@ -400,6 +402,7 @@ DEPENDENCIES
   jquery-rails
   letter_opener
   memory_profiler
+  minitest-ci
   minitest-reporters
   minitest-spec-rails
   mocha (~> 1.1.0)
@@ -439,4 +442,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.1
+   1.13.6
