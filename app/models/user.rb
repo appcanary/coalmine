@@ -27,7 +27,6 @@
 #  beta_signup_source              :string
 #  stripe_customer_id              :string
 #  name                            :string
-#  phone_number                    :string
 #  subscription_plan               :string
 #  newsletter_email_consent        :boolean          default("true"), not null
 #  api_beta                        :boolean          default("false"), not null
@@ -37,6 +36,9 @@
 #  invoiced_manually               :boolean          default("false")
 #  agent_token                     :string
 #  account_id                      :integer          not null
+#  pref_os                         :string
+#  pref_deploy                     :string
+#  phone_number                    :string
 #
 # Indexes
 #
