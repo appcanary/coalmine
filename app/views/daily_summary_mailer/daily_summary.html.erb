@@ -32,7 +32,7 @@
 
     <% if @presenter.has_fresh_vulns? %>
       <h3>Fresh disclosures</h3>
-      <p>Today, patches to <b><%= @presenter.fresh_vulns.vuln_ct %> vulnerabilities</b> that affect you were published. You should upgrade <b><%= @presenter.fresh_vulns.package_ct %> packages</b> installed in <b><%= @presenter.fresh_vulns.package_ct %> servers</b>.</p>
+      <p>Today, patches to <b><%= @presenter.fresh_vulns.vuln_ct %> vulnerabilities</b> that affect you were published. You should upgrade <b><%= @presenter.fresh_vulns.package_ct %> packages</b> installed in <b><%= @presenter.fresh_vulns.server_ct %> servers</b>.</p>
     <% end %>
 
     <% if @presenter.has_new_vulns? %>
