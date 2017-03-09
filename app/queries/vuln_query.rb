@@ -44,7 +44,7 @@ class VulnQuery
 
   # ---- methods that give you the info you want
   def from_bundle(bundle)
-    uniq_and_include(filter_resolved(query_bundle.(bundle)))
+    uniq_and_include(filter_ignored(filter_resolved(query_bundle.(bundle))))
   end
 
   def vuln_server?(server)
@@ -54,15 +54,15 @@ class VulnQuery
   end
 
   def vuln_bundle?(bundle)
-    filter_resolved(limit_query(query_bundle.(bundle))).any?
+    filter_ignored(filter_resolved(limit_query(query_bundle.(bundle)))).any?
   end
 
   def unnotified_vuln_logs
-    filter_resolved(query_log.(LogBundleVulnerability, account))
+    filter_ignored(filter_resolved(query_log.(LogBundleVulnerability, account)))
   end
 
   def unnotified_patch_logs
-    filter_resolved(query_log.(LogBundlePatch, account))
+    filter_ignored(filter_resolved(query_log.(LogBundlePatch, account)))
   end
 
   # --- effectively private methods
@@ -74,6 +74,10 @@ class VulnQuery
   # --- fns for filtering
   def filter_resolved(query)
     LogResolution.filter_query_for(query, account.id)
+  end
+
+  def filter_ignored(query)
+    Ignore.filter_query_for(query, account.id)
   end
 
   def uniq_and_include(pkg_query)
@@ -102,7 +106,6 @@ class VulnQuery
       from_patched_notifications(notifications)
     end
   end
-
 
   # assumption is everything dumped into a notification
   # has already been appropriately filtered.

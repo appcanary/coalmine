@@ -176,7 +176,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal false, VulnQuery.new(account).vuln_bundle?(safebundle)
   end
 
-   test "whether vuln_bundle? ignores unpatchable vulns" do
+  test "whether vuln_bundle? ignores unpatchable vulns" do
     bundle = FactoryGirl.create(:bundle, :packages => [@patchless_vulnpkg])
     account = bundle.account
 

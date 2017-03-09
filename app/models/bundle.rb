@@ -48,6 +48,7 @@ class Bundle < ActiveRecord::Base
   has_many :log_bundle_patches
 
   has_many :log_resolutions, ->(bundle) { where(account_id: bundle.account_id) }, :through => :bundled_packages
+  has_many :ignores
 
   validates :account, presence: true
   validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }
