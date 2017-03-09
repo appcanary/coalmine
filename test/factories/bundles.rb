@@ -37,6 +37,12 @@ FactoryGirl.define do
 
     association :account
     platform { Platforms::Ruby }
+
+    trait :ubuntu do
+      platform "ubuntu"
+      release "utopic"
+    end
+
     factory :bundle_with_packages do
       transient do
         packages_count 5
