@@ -20,8 +20,10 @@ class DailySummaryQuery
     @log_vuln_query = LogBundleVulnerability.in_bundles_from(account.id).unpatched_as_of(@end_at)
     @log_patch_query = LogBundlePatch.in_bundles_from(account.id).not_vulnerable_as_of(@end_at)
     
-    @log_vuln_query = @log_vuln_query.patchable
-    @log_patch_query = @log_patch_query.patchable
+    @lbv_unpatched_fixable = @log_vuln_query.patchable
+    @lbv_unpatched_cantfix = @log_vuln_query.unpatchable
+
+    @lbp_notvuln_fixable = @log_patch_query.patchable
 
   end
 
@@ -30,11 +32,11 @@ class DailySummaryQuery
   end
 
   def fresh_vulns
-    fresh_vulns = @log_vuln_query.vulnerable_after(@begin_at)
+    fresh_vulns = @lbv_unpatched_fixable.vulnerable_after(@begin_at)
   end
 
   def new_vulns
-    new_vulns = @log_vuln_query.where("log_bundle_vulnerabilities.created_at >= ? and log_bundle_vulnerabilities.created_at <= ?", @begin_at, @end_at).vulnerable_before(@begin_at)
+    new_vulns = @lbv_unpatched_fixable.where("log_bundle_vulnerabilities.created_at >= ? and log_bundle_vulnerabilities.created_at <= ?", @begin_at, @end_at).vulnerable_before(@begin_at)
 
     # make sure we don't report on stuff from brand new
     # or deleted servers
@@ -43,12 +45,16 @@ class DailySummaryQuery
   end
 
   def patched_vulns
-    net_patches = @log_patch_query.where("log_bundle_patches.occurred_at >= ? and log_bundle_patches.occurred_at <= ?", @begin_at, @end_at)
+    net_patches = @lbp_notvuln_fixable.where("log_bundle_patches.occurred_at >= ? and log_bundle_patches.occurred_at <= ?", @begin_at, @end_at)
 
     # make sure we don't report on stuff from brand new
     # or deleted servers
 
     net_patches = net_patches.where.not('bundles.agent_server_id':  @new_servers.map(&:id) + @deleted_servers.map(&:id)) 
+  end
+
+  def cantfix_vulns
+    @lbv_unpatched_cantfix.vulnerable_after(@begin_at)
   end
 
   def changes

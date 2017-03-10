@@ -1,5 +1,5 @@
 class DailySummaryPresenter
-  attr_accessor :account, :vulnquery, :fresh_vulns, :new_vulns, :patched_vulns, :changes, :new_servers, :deleted_servers
+  attr_accessor :account, :vulnquery, :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns, :changes, :new_servers, :deleted_servers
 
   def initialize(query)
     @vulnquery = VulnQuery.new(query.account)
@@ -7,21 +7,12 @@ class DailySummaryPresenter
     @fresh_vulns = FreshVulnsPresenter.new(query.fresh_vulns)
     @new_vulns = NewVulnsPresenter.new(query.new_vulns)
     @patched_vulns = PatchedVulnsPresenter.new(query.patched_vulns)
+    @cantfix_vulns = CantFixVulnsPresenter.new(query.cantfix_vulns)
     @changes = ChangesPresenter.new(query.changes)
 
     @new_servers = query.new_servers
     @deleted_servers = query.deleted_servers
   end
-
-  # def initialize(vulnquery, fresh_vulns, new_vulns, patched_vulns, changes, new_servers, deleted_servers)
-  #   @vulnquery = vulnquery
-  #   @fresh_vulns = fresh_vulns
-  #   @new_vulns = new_vulns
-  #   @patched_vulns = patched_vulns
-  #   @changes = changes
-  #   @new_servers = new_servers
-  #   @deleted_servers = deleted_servers
-  # end
 
   module SortVulnsByCritAndPackages
     def sort_group_log_vulns(query)
@@ -91,6 +82,27 @@ class DailySummaryPresenter
     end
   end
 
+  class CantFixVulnsPresenter
+    include SortVulnsByCritAndPackages
+    attr_accessor :vuln_ct, :package_ct, :server_ct, :supplementary_ct, :sorted_vulns
+
+    delegate :each, to: :sorted_vulns
+
+    def initialize(cantfix_vulns)
+      @sorted_vulns = sort_group_log_vulns(cantfix_vulns)
+
+      @vuln_ct = cantfix_vulns.map(&:vulnerability_id).uniq.size
+      @package_ct = cantfix_vulns.map(&:package_id).uniq.size
+      @server_ct = cantfix_vulns.map(&:agent_server_id).uniq.size
+      @supplementary_ct = cantfix_vulns.select(&:supplementary).map(&:vulnerability_id).uniq.size
+    end
+
+    def has_supplementary?
+      supplementary_ct > 0
+    end
+  end
+
+
 
   class ChangesPresenter
     attr_accessor :package_ct, :server_ct
@@ -122,6 +134,10 @@ class DailySummaryPresenter
     patched_vulns.vuln_ct > 0
   end
 
+  def has_cantfix_vulns?
+    cantfix_vulns.vuln_ct > 0
+  end
+
   def has_changes?
     changes.package_ct > 0
   end
@@ -144,7 +160,8 @@ class DailySummaryPresenter
 
   def has_vulns_to_report?
     has_fresh_vulns? || 
-      has_new_vulns?
+      has_new_vulns? ||
+      has_cantfix_vulns?
   end
 
   def has_changes_to_report?
