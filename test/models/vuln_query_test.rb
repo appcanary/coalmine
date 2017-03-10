@@ -325,4 +325,107 @@ class VulnQueryTest < ActiveSupport::TestCase
   end
 
 
+  test "vuln_server? respects ignores" do
+    account = FactoryGirl.create(:account)
+    bundle1 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
+    bundle2 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
+    server1 = FactoryGirl.create(:agent_server, account: account, bundles: [bundle1])
+    server2 = FactoryGirl.create(:agent_server, account: account, bundles: [bundle2])
+
+    vq = VulnQuery.new(account)
+    assert_equal true, vq.vuln_server?(server1)
+    assert_equal true, vq.vuln_server?(server2)
+
+    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1)
+    assert_equal false, vq.vuln_server?(server1)
+    assert_equal false, vq.vuln_server?(server2)
+  end
+
+  test "vuln_server? respects ignores per bundle" do
+    account = FactoryGirl.create(:account)
+    bundle1 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
+    bundle2 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
+    server1 = FactoryGirl.create(:agent_server, account: account, bundles: [bundle1])
+    server2 = FactoryGirl.create(:agent_server, account: account, bundles: [bundle2])
+
+    vq = VulnQuery.new(account)
+    assert_equal true, vq.vuln_server?(server1)
+    assert_equal true, vq.vuln_server?(server2)
+
+    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1, bundle: bundle1)
+    assert_equal false, vq.vuln_server?(server1)
+    assert_equal true, vq.vuln_server?(server2)
+  end
+
+  test "vuln_bundle? respects ignores" do
+    account = FactoryGirl.create(:account)
+    bundle1 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
+    bundle2 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
+
+    vq = VulnQuery.new(account)
+    assert_equal true, vq.vuln_bundle?(bundle1)
+    assert_equal true, vq.vuln_bundle?(bundle2)
+
+    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1)
+    assert_equal false, vq.vuln_bundle?(bundle1)
+    assert_equal false, vq.vuln_bundle?(bundle2)
+  end
+
+  test "vuln_bundle? respects ignores per bundle" do
+    account = FactoryGirl.create(:account)
+    bundle1 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
+    bundle2 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
+
+    vq = VulnQuery.new(account)
+    assert_equal true, vq.vuln_bundle?(bundle1)
+    assert_equal true, vq.vuln_bundle?(bundle2)
+
+    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1, bundle: bundle1)
+    assert_equal false, vq.vuln_bundle?(bundle1)
+    assert_equal true, vq.vuln_bundle?(bundle2)
+  end
+
+  test "whether instance from_bundle respects ignores" do
+    account = FactoryGirl.create(:account)
+    bundle1 = FactoryGirl.create(:bundle, account: account, packages: @packages)
+    bundle2 = FactoryGirl.create(:bundle, account: account, packages: @packages)
+
+    account.notify_everything = true
+
+    vq = VulnQuery.new(account)
+
+    results = vq.from_bundle(bundle1).order(:id)
+    assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
+    results = vq.from_bundle(bundle2).order(:id)
+    assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
+
+    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1)
+
+    results = vq.from_bundle(bundle1).order(:id)
+    assert_equal [@vulnpkg2, @vulnpkg3, @vulnpkg4], results
+    results = vq.from_bundle(bundle2).order(:id)
+    assert_equal [@vulnpkg2, @vulnpkg3, @vulnpkg4], results
+  end
+
+  test "whether instance from_bundle respects ignores per bundle" do
+    account = FactoryGirl.create(:account)
+    bundle1 = FactoryGirl.create(:bundle, account: account, packages: @packages)
+    bundle2 = FactoryGirl.create(:bundle, account: account, packages: @packages)
+
+    account.notify_everything = true
+
+    vq = VulnQuery.new(account)
+
+    results = vq.from_bundle(bundle1).order(:id)
+    assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
+    results = vq.from_bundle(bundle2).order(:id)
+    assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
+
+    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1, bundle: bundle1)
+
+    results = vq.from_bundle(bundle1).order(:id)
+    assert_equal [@vulnpkg2, @vulnpkg3, @vulnpkg4], results
+    results = vq.from_bundle(bundle2).order(:id)
+    assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
+  end
 end
