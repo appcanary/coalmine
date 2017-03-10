@@ -7,7 +7,7 @@
 
   <tr class="header-description">
     <td>
-      <h1>Daily Summary for <%= @date %></h1>
+      <h1>Daily summary for <%= @date %></h1>
     </td>
   </tr>
 <% end %>
@@ -26,12 +26,10 @@
 <div class="daily-summary">
 
   <% if @presenter.anything_to_report? %>
-    
-
     <h2>Vulnerabilities</h2>
 
     <% if @presenter.has_fresh_vulns? %>
-      <h3>Fresh disclosures</h3>
+      <h3>Freshly patched disclosures</h3>
       <p>Today, patches to <b><%= @presenter.fresh_vulns.vuln_ct %> vulnerabilities</b> that affect you were published. You should upgrade <b><%= @presenter.fresh_vulns.package_ct %> packages</b> installed in <b><%= @presenter.fresh_vulns.server_ct %> servers</b>.</p>
     <% end %>
 
@@ -42,6 +40,11 @@
           Of these, <%= @presenter.new_vulns.supplementary_ct %> vulns were registered because of new upstream vulnerability information.
         <% end %>
       </p>
+    <% end %>
+
+    <% if @presenter.has_cantfix_vulns? %>
+      <h3>Upcoming vulnerabilities</h3>
+      <p>We noticed that there are <%= @presenter.cantfix_vulns.vuln_ct %> new vulnerabilities whose patches haven't been released yet. At the moment, we think they target <%= @presenter.cantfix_vulns.package_ct %> packages in <%= @presenter.cantfix_vulns.server_ct %> of your servers, but this might change by the time patches are released.</p>
     <% end %>
 
     <% unless @presenter.has_vulns_to_report? %>
@@ -94,6 +97,11 @@
     <% if @presenter.has_patched_vulns? %>
       <h3>Patched vulnerabilities</h3>
       <%= render :partial => "dashboard/sorted_vuln_table", :locals => {:sorted_vulns => @presenter.patched_vulns } %>
+    <% end %>
+
+    <% if @presenter.has_cantfix_vulns? %>
+      <h3>Vulnerabilities without patches:</h3>
+      <%= render :partial => "dashboard/sorted_vuln_table", :locals => {:sorted_vulns => @presenter.cantfix_vulns } %>
     <% end %>
 
 
