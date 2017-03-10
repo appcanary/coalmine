@@ -8,7 +8,7 @@ class RubysecImporterTest < ActiveSupport::TestCase
     assert_equal 0, Advisory.from_rubysec.count
     # there are three gems in our fixtures
 
-    raw_advisories = @importer.fetch_advisories
+    raw_advisories = @importer.fetch_advisories.sort
     assert_equal 3, raw_advisories.size
 
     # how well is parsing working?
