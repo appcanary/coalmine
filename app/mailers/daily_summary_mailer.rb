@@ -3,14 +3,18 @@ class DailySummaryMailer < ActionMailer::Base
   layout 'mailer'
   helper :application
 
-  def daily_summary(account_id, date = "2017-01-31")
+  def daily_summary(account_id, date)
     @date = date.to_date
     @account = Account.find(account_id)
 
     @motds = Motd.where("remove_at >= ?", @date)
     @presenter = DailySummaryQuery.new(@account, @date).create_presenter
 
-    mail(to: "hello@appcanary.com", :subject => "daily summary #{@date}") do |format|
+    unless $rollout.active?(:daily_summary, @account)
+      return
+    end
+
+    mail(to: @presenter.recipients, :subject => @presenter.subject) do |format|
         format.html
         format.text
     end

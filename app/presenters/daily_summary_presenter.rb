@@ -1,8 +1,10 @@
 class DailySummaryPresenter
-  attr_accessor :account, :vulnquery, :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns, :changes, :new_servers, :deleted_servers
+  attr_accessor :date, :account, :vulnquery, :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns, :changes, :new_servers, :deleted_servers
 
   def initialize(query)
+    @account = query.account
     @vulnquery = VulnQuery.new(query.account)
+    @date = query.date
     
     @fresh_vulns = FreshVulnsPresenter.new(query.fresh_vulns)
     @new_vulns = NewVulnsPresenter.new(query.new_vulns)
@@ -173,6 +175,22 @@ class DailySummaryPresenter
     has_fresh_vulns? ||
       has_new_vulns? ||
       has_patched_vulns?
+  end
+
+  def subject
+    "Daily Summary for #{date}"
+  end
+
+  def recipients
+    unless Rails.env.production?
+      "hello@appcanary.com"
+    else
+      if $rollout.active?(:redirect_daily_summary)
+        "hello@appcanary.com"
+      else
+        account.email
+      end
+    end
   end
 
 end
