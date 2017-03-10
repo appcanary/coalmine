@@ -1,4 +1,4 @@
-class DailySummaryManager
+class DailySummaryQuery
   attr_accessor :account, :date, :begin_at, :end_at, :motds,
     :vulnquery
 

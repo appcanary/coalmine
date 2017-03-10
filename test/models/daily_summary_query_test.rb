@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DailySummaryManagerTest < ActiveSupport::TestCase
+class DailySummaryQueryTest < ActiveSupport::TestCase
   self.use_transactional_fixtures = false
 
   # hilariously this test is likely to flake out if it ever
@@ -49,7 +49,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
 
     server3.destroy
 
-    @dm = DailySummaryManager.new(account, Date.today).create_presenter
+    @dm = DailySummaryQuery.new(account, Date.today).create_presenter
 
     assert_equal 4, @dm.new_servers.count
     assert_equal 1, @dm.deleted_servers.count
@@ -62,7 +62,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
     # this will impact the vuln counts
     server2.destroy
 
-    @dm = DailySummaryManager.new(account, Date.today).create_presenter
+    @dm = DailySummaryQuery.new(account, Date.today).create_presenter
 
     assert_equal 4, @dm.new_servers.count
     assert_equal 2, @dm.deleted_servers.count

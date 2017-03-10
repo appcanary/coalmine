@@ -8,7 +8,7 @@ class DailySummaryMailer < ActionMailer::Base
     @account = Account.find(account_id)
 
     @motds = Motd.where("remove_at >= ?", @date)
-    @presenter = DailySummaryManager.new(@account, @date).create_presenter
+    @presenter = DailySummaryQuery.new(@account, @date).create_presenter
 
     mail(to: "hello@appcanary.com", :subject => "daily summary #{@date}") do |format|
         format.html

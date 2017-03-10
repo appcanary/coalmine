@@ -31,7 +31,7 @@ class DashboardController < ApplicationController
     @date = params[:date].to_date
 
     @motds = Motd.where("remove_at >= ?", @date)
-    @presenter = DailySummaryManager.new(current_account, @date).create_presenter
+    @presenter = DailySummaryQuery.new(current_account, @date).create_presenter
   end
 
 end
