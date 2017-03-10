@@ -49,6 +49,7 @@ class DailySummaryQueryTest < ActiveSupport::TestCase
 
     server3.destroy
 
+
     @dm = DailySummaryQuery.new(account, Date.today).create_presenter
 
     assert_equal 4, @dm.new_servers.count
