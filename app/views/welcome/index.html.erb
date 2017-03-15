@@ -110,27 +110,27 @@
   </div>
 </div>
 
-
-<div class="unit-container">
-  <div class="unit how">
-    <div class="unit_how">
+<div class="section-wrapper">
+  <section>
+    <div id="products">
+    <div class="agent">
       <h2 class="title">Agent</h2>
       <%= image_tag "canary.bluejay.medium.png" %>
       <h3>Our agent stays with your servers and checks up on them regularly.</br><br/>It's very polite and discreet.</h3>
     </div>
-    <div class="unit_how">
+    <div class="checkapi">
       <h2 class="title">Check API</h2>
       <%= image_tag "canary.pigeon.medium.png" %>
       <h3>Check with us whenever you run tests, or submit pull requests.</h3>
     </div>
-    <div class="unit_how">
+    <div class="monitorapi">
       <h2 class="title">Monitor API</h2>
       <%= image_tag "canary.sparrow.medium.png" %>
       <h3>Let us know whenever you deploy and we'll notify you later.</br><br/>Works great with Docker and Heroku!</h3>
     </div>
-  </div>
+    </div>
+  </section>
 </div>
-
 
 
 <a name="pricing"></a>
@@ -288,44 +288,38 @@
 </div>
 
 <a name="about"></a>
-<div class="unit-container">
-  <div class="unit how">
-    <h2>About</h2>
-    <div class="unit_illustration":>
-      <!-- <h3>How it works</h3> -->
-      <%= image_tag "canary-map.medium.png" %>
-    </div>
-    <div class="unit_exposition">
-      <h3>How it works</h3>
-      <p>
-        We keep track of which versions of what packages are vulnerable to which security vulnerabilities, so you don't have to.</p>
-      <p>
-        We provide an <a href="https://github.com/appcanary/agent">open-source</a> agent and an API. We monitor the packages you have installed on your Linux system by hooking into the package manager (i.e. apt or yum). We also monitor the libraries used by your Ruby applications by monitoring their Gemfile.lock files.
-      </p>
-      <p>
-        You can upload files directly to our API endpoint, or through a web
-        interface.
-      </p>
-      <h3>Platforms supported</h3>
-      <div class="supported">
-        <h4>System packages</h4>
+<div class="section-wrapper">
+  <section>
+    <div id="howitworks">
+      <h2>About</h2>
+      <div class="illustration">
+        <%= image_tag "canary-map.medium.png" %>
+      </div>
+      <div class="exposition">
+        <h3>How it works</h3>
+        <p>
+          We keep track of which versions of what packages are vulnerable to which security vulnerabilities, so you don't have to.</p>
+        <p>
+          We provide an <a href="https://github.com/appcanary/agent">open-source</a> agent and an API. We monitor the packages you have installed on your Linux system by hooking into the package manager (i.e. apt or yum). We also monitor the libraries used by your Ruby applications by monitoring their Gemfile.lock files.
+        </p>
+        <p>
+          You can upload files directly to our API endpoint, or through a web
+          interface.
+        </p>
+        <h3>Platforms supported</h3>
         <ul>
           <li>Ubuntu - via apt</li>
           <li>Debian - via apt</li>
           <li>CentOS - via yum</li>
           <li>Amazon Linux - via yum</li>
-        </ul>
-      </div>
-      <div class="supported">
-        <h4>Application libraries</h4>
-        <ul class="system">
           <li>Ruby - via Gemfile.lock</li>
           <li>More coming soon!</li>
         </ul>
       </div>
     </div>
-  </div>
+  </section>
 </div>
+
 
 <a name="team"></a>
 <div class="unit-container">

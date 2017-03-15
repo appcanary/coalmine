@@ -8,6 +8,26 @@
 @import "sign_up";
 @import "errors";
 
+.mobile-hide {
+  @include mobile-all {
+    display: none;
+  }
+}
+
+.section-wrapper {
+  width: 100%;
+  border-bottom: 1px solid lighten($text-colour, 70%);
+  padding: 3.8em 0;
+}
+
+section {
+  @include outer-container;
+  @include mobile-all {
+    padding: 5% 5% 0% 5%;
+  }
+}
+
+
 body {
   background-color: $bg-colour;
   font-size: 16px;
@@ -18,7 +38,7 @@ body {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
   box-sizing: border-box;
-  @include media($mobile-width) {
+  @include mobile-all {
     width: 100%;
   }
 }
@@ -179,67 +199,60 @@ img {
   }
 }
 
-.how {
-  
+#howitworks {
+
   h2 {
-    @include mobile-all {
-      text-align: center;
-    }
-
-    &.title {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
+    font-size: 3.4em;
+    font-weight: 400;
+    margin-bottom: 1.4em;
+    line-height: 0.9em;
   }
 
-  .unit_how {
-    @include span-columns(4 of 12);
-    @include mobile-all {
-      @include span-columns(12 of 12);
-      margin-bottom: 3em;
+  .illustration {
+    @include desktop-all {
+      @include span-columns(5 of 12);
     }
+  }
 
-    img {
-      margin-bottom: 1em;
-      margin-left: auto;
-      margin-right: auto;
-      width: 70%;
-      display: block;
-    }
-
+  .exposition {
     h3 {
-      padding: 0 0.6em;
       font-size: 2.1em;
-      line-height: 1em;
-      text-align: center;
+    }
+    @include desktop-all {
+      @include span-columns(5 of 12);
+      @include shift(1);
     }
   }
-  form {
+}
+
+#products {
+  h3 {
+    font-size: 2.1em;
+    text-align: center;
+    padding: 5% 0 5% 0%;
+  }
+
+  h2 {
+    font-size: 3.4em;
+    font-weight: 400;
+    margin-bottom: 0.2em;
+    line-height: 0.9em;
     text-align: center;
   }
 
-  .unit_illustration {
-    @include span-columns(5 of 12);
-  }
-
-  .unit_exposition {
-    @include span-columns(5 of 12);
-    @include shift(1);
-
-    h3 {
-      font-size: 2.1em;
+  .agent, .checkapi, .monitorapi {
+    padding: 2%;
+    @include desktop-all {
+      @include span-columns(4 of 12);
     }
-
-    .supported {
-      @include span-columns(6 of 12)
+    @include mobile-all {
+      margin-top: 1em;
     }
   }
-
 }
 
 .mobile-pricing {
-  @include not-mobile {
+  @include desktop-all {
     display: none;
   }
   .tier {
