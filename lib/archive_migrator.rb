@@ -109,6 +109,9 @@ class ArchiveMigrator
     end
   end
 
+
+  # TODO: add trigger for updating valid_at http://www.revsys.com/blog/2006/aug/04/automatically-updating-a-timestamp-column-in-postgresql/
+  # TODO: add ability to replace triggers, i.e. when cols get added
   def construct_trigger!(table_name, archive_table_name, arch_table_builder, orig_table_builder)
     orig_table_cols = orig_table_builder.columns.map{|s| "OLD."+s}.join(", ")
     arch_table_cols = arch_table_builder.columns.join(", ")

@@ -81,6 +81,7 @@ group :development, :test do
 
   gem 'minitest-spec-rails'
   gem 'minitest-reporters'
+  gem 'minitest-ci'
   # gem 'm'
   gem 'faker'
   gem 'factory_girl_rails'

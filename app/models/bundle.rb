@@ -30,6 +30,13 @@
 #
 
 class Bundle < ActiveRecord::Base
+  extend ArchiveBehaviour
+  # needed for archive methods
+  def self.archive_class
+    BundleArchive
+  end
+
+
   belongs_to :account
   belongs_to :agent_server
   has_many :bundled_packages, :dependent => :destroy
@@ -57,6 +64,24 @@ class Bundle < ActiveRecord::Base
   scope :via_api, -> { where("bundles.agent_server_id is null") }
 
   scope :via_agent, -> { where("bundles.agent_server_id is not null") }
+
+  scope :system_bundles, -> { where("platform IN (?)", Platforms::OPERATING_SYSTEMS) }
+  scope :app_bundles, -> { where("platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
+  scope :created_on, -> (date) {
+    where('valid_at >= ? and valid_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
+  }
+
+
+  # note that these are instance methods
+  # as opposed to ArchiveBehaviour class methods
+  def as_of(date)
+    bq = BundleQuery.new(self, date);
+  end
+
+  def revisions
+    BundledPackage.revisions.where(:bundle_id => self.id).pluck("distinct(valid_at)")
+  end
+
 
   # TODO: change this method to affected?
   # deeply confusing when using BundlePresenter, which is VQ aware
@@ -101,4 +126,5 @@ class Bundle < ActiveRecord::Base
   def system_bundle?
     Platforms::OPERATING_SYSTEMS.include?(self.platform)
   end
+
 end

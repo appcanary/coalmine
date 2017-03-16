@@ -34,5 +34,10 @@ FactoryGirl.define do
       distro "centos"
       release "7"
     end
+
+    trait :ubuntu do
+      distro "ubuntu"
+      release "utopic"
+    end
   end
 end

@@ -1,0 +1,128 @@
+<table>
+<tr class="header-logo">
+    <td>
+      <img src="<%=image_url("appcanary-hero-vuln.png")%>" title="appcanary logo">
+    </td>
+  </tr>
+
+  <tr class="header-description">
+    <td>
+      <h1>Some title</h1>
+      <h2>tbd</h2>
+    </td>
+  </tr>
+</table>
+
+
+<div class="motd">
+  <% @motds.each do |motd| %>
+    <% if motd.subject %>
+      <h2><%= motd.subject %></h2>
+    <% end %>
+    <%= motd.body %>
+  <% end %>
+</div>
+
+<h1>Daily summary for <%= @date %></h1>
+
+<h2>Vulnerabilities</h2>
+
+<% if @presenter.has_fresh_vulns? %>
+   <h3>Fresh vulnerabilities</h3>
+  <p>Today, patches to <%= @presenter.fresh_vulns.vuln_ct %> vulnerabilities that affect you were published. They affect <%= @presenter.fresh_vulns.package_ct %> unique packages present in <%=  @presenter.fresh_vulns.package_ct %> of your servers.</p>
+<% end %>
+
+<% if @presenter.has_new_vulns? %>
+  <h3>New vulnerabilities</h3>
+  <p>We recorded <%= @presenter.new_vulns.vuln_ct %> new vulnerabilites that we hadn't warned you about before. They affect <%= @presenter.new_vulns.package_ct %> packages across <%= @presenter.new_vulns.package_ct %> servers. Of these, <%= @presenter.new_vulns.supplementary_ct %> vulns were registered because of new vulnerability information.</p>
+<% end %>
+
+<% unless @presenter.has_vulns_to_report? %>
+  <p>We didn't find any new vulnerabilities for you today.</p>
+<% end %>
+
+<h2>Changes</h2>
+
+<% if @presenter.has_changes? %>
+  <p>At least <%= @presenter.changes.package_ct %> packages changed over <%= @presenter.changes.server_ct %> existing servers.</p>
+<% end %>
+
+<% if @presenter.has_patched_vulns? %>
+  <p>A total of <%= @presenter.patched_vulns.vuln_ct %> vulnerabilities in <%= @presenter.patched_vulns.package_ct %> packages are no longer present in <%= @presenter.patched_vulns.server_ct %> servers. <% if @presenter.patched_vulns.has_supplementary? %><%= @presenter.patched_vulns.supplementary_ct %> of these patches happened because of new vulnerability information.<% end %></p>
+<% end %>
+
+
+<% unless @presenter.has_changes_to_report? %>
+  <p>We didn't detect any changes on your systems.</p>
+<% end %>
+
+<% if @presenter.has_new_servers? %>
+  <h2>Servers</h2>
+  <p>You added <%= @presenter.new_servers.count %> server(s) today.</p>
+  <%= render :partial => "servers_table", :locals => { :servers => @presenter.new_servers, :vulnquery => @presenter.vulnquery, :deleted => false } %>
+<% end %>
+
+<% if @presenter.has_deleted_servers? %>
+  <h2>Deleted Servers</h2>
+  <p>You deleted <%= @presenter.deleted_servers.count %> server(s) today.</p>
+  <%= render :partial => "servers_table", :locals => { :servers => @presenter.deleted_servers, :vulnquery => @presenter.vulnquery, :deleted => true } %>
+<% end %>
+
+<% if @presenter.has_fresh_vulns? %>
+  <h3>Fresh vulnerabilities that impact you:</h3>
+  <%= render :partial => "sorted_vuln_table", :locals => {:sorted_vulns => @presenter.fresh_vulns } %>
+<% end %>
+
+
+<% if @presenter.has_new_vulns? %>
+  <h3>New vulnerabilities that impact you:</h3>
+  <%= render :partial => "sorted_vuln_table", :locals => {:sorted_vulns => @presenter.new_vulns } %>
+<% end %>
+
+
+<% if @presenter.has_patched_vulns? %>
+  <h3>Patched vulnerabilities</h3>
+  <%= render :partial => "sorted_vuln_table", :locals => {:sorted_vulns => @presenter.patched_vulns } %>
+<% end %>
+
+
+<% if @new_apps.present? %>
+  <h3>Servers</h4>
+  <p>You added <%= @new_apps.count %> server(s) today.</p>
+
+  <table class="package-table" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="vuln-package">
+          <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+            <thead>
+              <th width="30%">
+                name
+              </th>
+              <th>
+                vulns
+              </th>
+              <th>
+                distro
+              </th>
+            </thead>
+
+            <% @new_apps.each do |app| %>
+              <tr>
+                <td>
+                  <%= "#{app.id} #{app.display_name}" %>
+                </td>
+                <td>
+                  <%= @vq.from_bundle(app).count %>
+                </td>
+                <td>
+                  <%= app.platform %>
+                </td>
+              </tr>
+            <% end %>
+            
+          </table>
+        </td>
+      </tr>
+    </table>
+
+<% end %>

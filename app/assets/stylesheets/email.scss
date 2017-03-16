@@ -350,3 +350,34 @@ hr {
 .package-vuln-version-a {
   color: $vulnerable-red;
 }
+
+.servers-wrapper {
+  width: 100%;
+}
+
+.vulnerability-wrapper {
+  width: 100%;
+
+  table.vulnerability-table {
+    margin-top: 10px;
+    tr.break, tr.break td{
+      border:none;
+      height:5px;
+      padding:0;
+    }
+    .vulnerability td {
+      padding-top: 10px;
+    }
+    tr:nth-of-type(3n) td {
+      border-bottom: 1px solid #eee;
+    }
+
+    tr:last-of-type td {
+      border: none;
+    }
+  }
+}
+
+.vuln-package p {
+  margin: 0;
+}

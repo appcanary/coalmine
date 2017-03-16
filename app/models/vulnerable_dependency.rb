@@ -41,6 +41,12 @@ class VulnerableDependency < ActiveRecord::Base
           AND vulnerable_dependencies.unaffected_versions = '{}')")
   }
 
+  scope :unpatchable, -> { 
+    where("(vulnerable_dependencies.patched_versions = '{}' 
+          AND vulnerable_dependencies.unaffected_versions = '{}')")
+  }
+
+
   delegate :title, :criticality, :to => :vulnerability, :prefix => true
   
   # strictly, is this a package from the same platform, release, arch?

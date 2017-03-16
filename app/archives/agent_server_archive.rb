@@ -31,6 +31,40 @@
 class AgentServerArchive < ActiveRecord::Base
   belongs_to :account
 
+  ARCHIVED_COL = self.table_name.gsub("archives", "id")
+  ARCHIVED_SELECT = self.columns.reduce([]) { |list, col|
+    if col.name == "id"
+      list
+    elsif col.name == ARCHIVED_COL
+      list << "#{self.table_name}.#{col.name} as id"
+    else
+      list << "#{self.table_name}.#{col.name}"
+    end
+  }.join(", ")
+
+
+  scope :select_as_archived, -> { 
+    select(ARCHIVED_SELECT)
+  }
+
+  scope :deleted, -> {
+    select_as_archived.
+    # look only at the most recently expired rows
+    joins("inner join (select agent_server_id, max(expired_at) expired_at from agent_server_archives group by agent_server_id) max_asa on agent_server_archives.agent_server_id = max_asa.agent_server_id and agent_server_archives.expired_at = max_asa.expired_at").
+    # look only at rows that do not currently exist in AgentServer table
+    joins("left join agent_servers on agent_servers.id = agent_server_archives.agent_server_id").
+    where("agent_servers.id is null").
+    order("id, agent_server_archives.expired_at DESC")
+
+  }
+
+     
+  # note for later:
+  # select agent_server_archives.* from agent_server_archives inner join (select agent_server_id, max(id) id from agent_server_archives WHERE (valid_at >= '2017-01-12 00:00:00.000000' and valid_at <= '2017-01-12 23:59:59.999999') group by agent_server_id) specific_as 
+  # ON specific_as.id = agent_server_archives.id 
+  # left join agent_servers on agent_server_archives.agent_server_id = agent_servers.id
+  # where agent_servers.id is null and agent_server_archives.account_id = 22
+  # order by agent_server_archives.agent_server_id
 
   #TODO: this should be in the presenter
   def display_name
