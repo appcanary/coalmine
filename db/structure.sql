@@ -938,9 +938,11 @@ ALTER SEQUENCE feature_flags_id_seq OWNED BY feature_flags.id;
 CREATE TABLE ignores (
     id integer NOT NULL,
     account_id integer NOT NULL,
-    bundle_id integer,
+    user_id integer NOT NULL,
     package_id integer NOT NULL,
+    bundle_id integer,
     criticality integer,
+    note character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2925,6 +2927,13 @@ CREATE INDEX index_ignores_on_package_id ON ignores USING btree (package_id);
 
 
 --
+-- Name: index_ignores_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignores_on_user_id ON ignores USING btree (user_id);
+
+
+--
 -- Name: index_is_it_vuln_results_on_ident; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3546,6 +3555,14 @@ ALTER TABLE ONLY email_messages
 
 ALTER TABLE ONLY bundled_packages
     ADD CONSTRAINT fk_rails_8318307314 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
+
+
+--
+-- Name: ignores fk_rails_9089e0c809; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignores
+    ADD CONSTRAINT fk_rails_9089e0c809 FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --

@@ -66,6 +66,8 @@ class User < ActiveRecord::Base
   validates_presence_of :account
   validates_associated :account
 
+  has_many :ignores
+
   # TODO: eliminate token field from users table
   # TODO: eliminate agent_token
   # TODO: eliminate datomic_id

@@ -327,6 +327,7 @@ class VulnQueryTest < ActiveSupport::TestCase
 
   test "vuln_server? respects ignores" do
     account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, account: account)
     bundle1 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
     bundle2 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
     server1 = FactoryGirl.create(:agent_server, account: account, bundles: [bundle1])
@@ -336,13 +337,14 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_server?(server1)
     assert_equal true, vq.vuln_server?(server2)
 
-    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1)
+    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1)
     assert_equal false, vq.vuln_server?(server1)
     assert_equal false, vq.vuln_server?(server2)
   end
 
   test "vuln_server? respects ignores per bundle" do
     account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, account: account)
     bundle1 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
     bundle2 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
     server1 = FactoryGirl.create(:agent_server, account: account, bundles: [bundle1])
@@ -352,13 +354,14 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_server?(server1)
     assert_equal true, vq.vuln_server?(server2)
 
-    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1, bundle: bundle1)
+    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
     assert_equal false, vq.vuln_server?(server1)
     assert_equal true, vq.vuln_server?(server2)
   end
 
   test "vuln_bundle? respects ignores" do
     account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, account: account)
     bundle1 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
     bundle2 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
 
@@ -366,13 +369,14 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_bundle?(bundle1)
     assert_equal true, vq.vuln_bundle?(bundle2)
 
-    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1)
+    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1)
     assert_equal false, vq.vuln_bundle?(bundle1)
     assert_equal false, vq.vuln_bundle?(bundle2)
   end
 
   test "vuln_bundle? respects ignores per bundle" do
     account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, account: account)
     bundle1 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
     bundle2 = FactoryGirl.create(:bundle, account: account, packages: [@vulnpkg1])
 
@@ -380,13 +384,14 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_bundle?(bundle1)
     assert_equal true, vq.vuln_bundle?(bundle2)
 
-    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1, bundle: bundle1)
+    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
     assert_equal false, vq.vuln_bundle?(bundle1)
     assert_equal true, vq.vuln_bundle?(bundle2)
   end
 
   test "whether instance from_bundle respects ignores" do
     account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, account: account)
     bundle1 = FactoryGirl.create(:bundle, account: account, packages: @packages)
     bundle2 = FactoryGirl.create(:bundle, account: account, packages: @packages)
 
@@ -399,7 +404,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     results = vq.from_bundle(bundle2).order(:id)
     assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
 
-    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1)
+    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1)
 
     results = vq.from_bundle(bundle1).order(:id)
     assert_equal [@vulnpkg2, @vulnpkg3, @vulnpkg4], results
@@ -409,6 +414,7 @@ class VulnQueryTest < ActiveSupport::TestCase
 
   test "whether instance from_bundle respects ignores per bundle" do
     account = FactoryGirl.create(:account)
+    user = FactoryGirl.create(:user, account: account)
     bundle1 = FactoryGirl.create(:bundle, account: account, packages: @packages)
     bundle2 = FactoryGirl.create(:bundle, account: account, packages: @packages)
 
@@ -421,7 +427,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     results = vq.from_bundle(bundle2).order(:id)
     assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
 
-    ignore = FactoryGirl.create(:ignore, account: account, package: @vulnpkg1, bundle: bundle1)
+    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
 
     results = vq.from_bundle(bundle1).order(:id)
     assert_equal [@vulnpkg2, @vulnpkg3, @vulnpkg4], results
