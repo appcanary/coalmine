@@ -62,10 +62,6 @@
 .top-menu-wrapper {
   background-color: lighten($yellow, 5%);
   z-index: 1001;
-  @include mobile-all {
-    padding: 5% 5% 0% 5%;
-  }
-
 }
 
 .top-menu-container {
@@ -89,6 +85,21 @@
 
   }
 
+  .explore, .interact {
+    @include desktop-all {
+      display: inline;
+    }
+  }
+
+  .interact {
+    @include mobile-all {
+      margin-top: 5px;
+      .sign-up {
+        float: right;
+      }
+    }
+  }
+
   .menu-action {
     @include desktop-all {
       @include span-columns(10 of 12);
@@ -99,9 +110,12 @@
       @include span-columns(12 of 12);
     }
 
-    > a {
+    a {
       margin-left: 15px;
       text-decoration: none;
+      &:first-child {
+        margin-left: 0px;
+      }
     }
 
     .login {

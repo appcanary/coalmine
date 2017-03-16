@@ -132,25 +132,29 @@ img {
   }
 }
 
-.trust {
-
-  padding-bottom: 2em;
-  h3 {
+#trustedby {
+   h3 {
     font-size: 2.2em;
     text-align: center;
-    padding-bottom: 0.8em;
+    margin-bottom: 1.5em;
     @include mobile-all {
       padding-bottom: 0em;
     }
   }
 
-  
-  .customer { 
-    @include span-columns(1 of 7);
-    
+  .brand {
+    @include desktop-all {
+      @include span-columns(1 of 6);
+    }
 
-    .brand {
-      img {
+    @include mobile-all {
+      @include span-columns(1 of 2);
+      min-height: 50px;
+      margin-right: 7%;
+      margin-top: 10px;
+    }
+
+     img {
         display: block;
         width: initial;
         max-width: 90%;
@@ -163,23 +167,8 @@ img {
           margin-top: 0px;
         }
       }
-    }
 
-    @include mobile-all {
-      @include span-columns(6 of 12);
-      margin-right: 0em;
-      margin-top: 2em;
-      // margin-left: 1em;
-    }
   }
-
-  .customer:first-of-type {
-    @include shift(1);
-    @include mobile-all {
-      @include shift(0);
-    }
-  }
-
 }
 
 .vulns {
