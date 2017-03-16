@@ -1393,6 +1393,38 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: server_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_tags (
+    id integer NOT NULL,
+    agent_server_id integer,
+    tag_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: server_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
+
+
+--
 -- Name: subscription_plans; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1430,6 +1462,38 @@ CREATE SEQUENCE subscription_plans_id_seq
 --
 
 ALTER SEQUENCE subscription_plans_id_seq OWNED BY subscription_plans.id;
+
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE tags (
+    id integer NOT NULL,
+    account_id integer NOT NULL,
+    tag text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
 
 
 --
@@ -1971,7 +2035,21 @@ ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY server_tags ALTER COLUMN id SET DEFAULT nextval('server_tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
@@ -2301,11 +2379,27 @@ ALTER TABLE ONLY rubysec_advisories
 
 
 --
+-- Name: server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags
+    ADD CONSTRAINT server_tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subscription_plans
     ADD CONSTRAINT subscription_plans_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -3071,6 +3165,27 @@ CREATE INDEX index_rubysec_advisories_on_ident ON rubysec_advisories USING btree
 
 
 --
+-- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_tags_on_agent_server_id ON server_tags USING btree (agent_server_id);
+
+
+--
+-- Name: index_server_tags_on_agent_server_id_and_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_server_tags_on_agent_server_id_and_tag_id ON server_tags USING btree (agent_server_id, tag_id);
+
+
+--
+-- Name: index_server_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_tags_on_tag_id ON server_tags USING btree (tag_id);
+
+
+--
 -- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3082,6 +3197,27 @@ CREATE INDEX index_subscription_plans_on_default ON subscription_plans USING btr
 --
 
 CREATE INDEX index_subscription_plans_on_discount ON subscription_plans USING btree (discount);
+
+
+--
+-- Name: index_tags_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tags_on_account_id ON tags USING btree (account_id);
+
+
+--
+-- Name: index_tags_on_account_id_and_tag; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_tags_on_account_id_and_tag ON tags USING btree (account_id, tag);
+
+
+--
+-- Name: index_tags_on_tag; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tags_on_tag ON tags USING btree (tag);
 
 
 --
@@ -3407,6 +3543,22 @@ CREATE TRIGGER trigger_vulnerable_package_archives AFTER DELETE OR UPDATE ON vul
 
 
 --
+-- Name: fk_rails_0c5d14504e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags
+    ADD CONSTRAINT fk_rails_0c5d14504e FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: fk_rails_42f69de9f4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags
+    ADD CONSTRAINT fk_rails_42f69de9f4 FOREIGN KEY (tag_id) REFERENCES tags(id);
+
+
+--
 -- Name: fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3460,6 +3612,14 @@ ALTER TABLE ONLY email_messages
 
 ALTER TABLE ONLY bundled_packages
     ADD CONSTRAINT fk_rails_8318307314 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
+
+
+--
+-- Name: fk_rails_86647bc40a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT fk_rails_86647bc40a FOREIGN KEY (account_id) REFERENCES accounts(id);
 
 
 --
@@ -3685,6 +3845,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170118224917');
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
 
 INSERT INTO schema_migrations (version) VALUES ('20170206172642');
+
+INSERT INTO schema_migrations (version) VALUES ('20170222211052');
+
+INSERT INTO schema_migrations (version) VALUES ('20170222211057');
 
 INSERT INTO schema_migrations (version) VALUES ('20170302155336');
 
