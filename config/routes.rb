@@ -95,9 +95,11 @@ Rails.application.routes.draw do
   end
 
   resources :monitors, :only => [:new, :show, :destroy, :create] do
+    post "ignore_vuln/:package_id", action: :ignore_vuln, on: :collection, as: :ignore_vuln
+    delete "unignore_vuln/:package_id", action: :unignore_vuln, on: :collection, as: :unignore_vuln
+
     post "resolve_vuln/:package_id", action: :resolve_vuln, on: :collection, as: :resolve_vuln
     delete "unresolve_vuln/:package_id", action: :unresolve_vuln, on: :collection, as: :unresolve_vuln
-
   end
 
   get "vulns/:platform" => "vulns#index", :as => :platform_vulns, :constraints => ->(req) {Platforms.supported?(req.params[:platform])}

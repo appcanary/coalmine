@@ -23,7 +23,22 @@ class BundlePresenter
     @all_packages ||= bundle.packages.order(:name).to_a
   end
 
-  def ignored_package_logs
-    @ignored_packages ||= bundle.log_resolutions.select("count(log_resolutions.vulnerable_dependency_id) vuln_count", :user_id, :package_id, :note).group(:package_id, :user_id, :note).includes(:package, :user).to_a
+  # TODO this is the wrong place to return ignores that aren't anchored to any
+  # particular bundle
+  def ignored_packages
+    @ignored_packages ||= Ignore.relevant_ignores_for(bundle)
+                            .select("count(vulnerable_packages.vulnerable_dependency_id) vuln_count",
+                                    :user_id, :package_id, :bundle_id, :note)
+                            .group(:package_id, :user_id, :bundle_id, :note)
+                            .to_a
+  end
+
+  def resolved_package_logs
+    @resolved_packages ||= bundle.log_resolutions
+                             .select("count(log_resolutions.vulnerable_dependency_id) vuln_count",
+                                     :user_id, :package_id, :note)
+                             .group(:package_id, :user_id, :note)
+                             .includes(:package, :user)
+                             .to_a
   end
 end

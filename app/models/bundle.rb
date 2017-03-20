@@ -83,6 +83,9 @@ class Bundle < ActiveRecord::Base
     BundledPackage.revisions.where(:bundle_id => self.id).pluck("distinct(valid_at)")
   end
 
+  def relevant_ignores
+    Ignore.relevant_ignores_for(self)
+  end
 
   # TODO: change this method to affected?
   # deeply confusing when using BundlePresenter, which is VQ aware

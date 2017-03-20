@@ -40,23 +40,45 @@ class MonitorsController < ApplicationController
     end
   end
 
+  def ignore_vuln
+    pkg = Package.find(ignore_params[:package_id])
+    Ignore.ignore_package(current_user, pkg, maybe_fetch_bundle, ignore_params[:note])
+    redirect_to :back, notice: "Package successfully marked ignored."
+  end
+
+  def unignore_vuln
+    pkg = Package.find(ignore_params[:package_id])
+    Ignore.unignore_package(current_user, pkg, maybe_fetch_bundle)
+    redirect_to :back, notice: "Package successfully marked unignored."
+  end
+
   def resolve_vuln
     pkg = Package.find(resolution_params[:package_id])
     LogResolution.resolve_package(current_user, pkg, resolution_params[:note])
-    redirect_to :back, notice: "Package successfully marked as resolved."
+    redirect_to :back, notice: "Package successfully marked 'wontfix'."
   end
 
   def unresolve_vuln
     pkg = Package.find(resolution_params[:package_id])
     LogResolution.delete_with_package(current_user, pkg)
-    redirect_to :back, notice: "Package successfully marked as not resolved."
+    redirect_to :back, notice: "Package successfully unmarked 'wontfix'."
   end
 
   def resolution_params
     params.require(:log_resolution).permit(:package_id, :note)
   end
 
+  def ignore_params
+    params.require(:ignore).permit(:package_id, :note, :bundle_id, :global)
+  end
+
   protected
+  def maybe_fetch_bundle
+    if ignore_params[:global] != "yes" && ignore_params[:bundle_id].present?
+      Bundle.find(ignore_params[:bundle_id])
+    end
+  end
+
   def fetch_bundle(params)
     if current_user.is_admin?
       Bundle.via_api.find(params[:id])
