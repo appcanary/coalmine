@@ -1,0 +1,7 @@
+class PrefOpt
+  EMAIL_FREQ_DAILY = "daily"
+  EMAIL_FREQ_BOTH = "both"
+  EMAIL_FREQ_FIRE = "firehose"
+
+  EMAIL_WANTS_DAILY = [EMAIL_FREQ_DAILY, EMAIL_FREQ_BOTH]
+end

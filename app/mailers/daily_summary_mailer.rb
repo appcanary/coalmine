@@ -10,6 +10,8 @@ class DailySummaryMailer < ActionMailer::Base
     @motds = Motd.where("remove_at >= ?", @date)
     @presenter = DailySummaryQuery.new(@account, @date).create_presenter
 
+    # TODO: figure out how to exclude people
+
     unless $rollout.active?(:daily_summary, @account)
       return
     end

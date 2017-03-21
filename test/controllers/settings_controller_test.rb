@@ -30,6 +30,18 @@ class SettingsControllerTest < ActionController::TestCase
     assert_equal user.account.email, new_email
   end
 
+   it "should let users change their email freq prefs" do
+    login_user(user)
+
+    assert_equal user.pref_email_frequency, PrefOpts::EMAIL_FREQ_DAILY
+
+    put :update, :user => { :pref_email_frequency => PrefOpts::EMAIL_FREQ_BOTH }
+
+    user.reload
+    assert_equal user.pref_email_frequency, PrefOpts::EMAIL_FREQ_BOTH
+  end
+
+
   it "should regenerate the account token" do
     login_user(user)
 

@@ -876,7 +876,8 @@ CREATE TABLE email_messages (
     type character varying NOT NULL,
     sent_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    report_date date
 );
 
 
@@ -1537,7 +1538,8 @@ CREATE TABLE users (
     account_id integer NOT NULL,
     pref_os character varying,
     pref_deploy character varying,
-    phone_number character varying
+    phone_number character varying,
+    pref_email_frequency character varying DEFAULT 'daily'::character varying NOT NULL
 );
 
 
@@ -3851,4 +3853,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170222211052');
 INSERT INTO schema_migrations (version) VALUES ('20170222211057');
 
 INSERT INTO schema_migrations (version) VALUES ('20170302155336');
+
+INSERT INTO schema_migrations (version) VALUES ('20170317203807');
+
+INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 

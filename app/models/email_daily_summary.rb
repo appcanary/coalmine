@@ -17,8 +17,6 @@
 #  index_email_messages_on_sent_at     (sent_at)
 #
 
-class EmailVulnerable < EmailMessage
-  has_many :notifications, -> { where("log_bundle_vulnerability_id is not null") }, :foreign_key => "email_message_id", :dependent => :destroy
+class EmailDailySummary < EmailMessage
 
-  has_many :logs, :source => :log_bundle_vulnerability, :through => :notifications
 end
