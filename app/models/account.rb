@@ -66,6 +66,12 @@ class Account < ActiveRecord::Base
   end
 
 
+  def has_activity?
+    active_servers.any? || 
+      monitors.any?
+  end
+
+
   def api_bundles
     bundles.where(:from_api => true)
   end

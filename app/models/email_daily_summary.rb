@@ -18,5 +18,14 @@
 #
 
 class EmailDailySummary < EmailMessage
-
+  # nota bene: EDS is used slightly
+  # differently from EVuln or EPatched:
+  #
+  #
+  # All EmailMessage descendants are used to log
+  # that an email was sent at a particular point in time.
+  #
+  # The difference is EPatched/EVuln messages are created first
+  # then processed later. EDS on the other hand, why bother?
+  # we create this as a log at the point we queued up the email
 end
