@@ -2076,28 +2076,28 @@ ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec
 
 
 --
--- Name: subscription_plans id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: server_tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags ALTER COLUMN id SET DEFAULT nextval('server_tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: subscription_plans id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
@@ -2431,7 +2431,7 @@ ALTER TABLE ONLY rubysec_advisories
 
 
 --
--- Name: server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: server_tags server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags
@@ -2439,7 +2439,7 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: subscription_plans subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subscription_plans
@@ -2447,7 +2447,7 @@ ALTER TABLE ONLY subscription_plans
 
 
 --
--- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags
@@ -2455,7 +2455,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -3630,7 +3630,7 @@ CREATE TRIGGER trigger_vulnerable_package_archives AFTER DELETE OR UPDATE ON vul
 
 
 --
--- Name: fk_rails_0c5d14504e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: server_tags fk_rails_0c5d14504e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags
@@ -3638,7 +3638,7 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: fk_rails_42f69de9f4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: server_tags fk_rails_42f69de9f4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags
@@ -3646,7 +3646,7 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -3710,6 +3710,14 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
+-- Name: tags fk_rails_86647bc40a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT fk_rails_86647bc40a FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
 -- Name: ignores fk_rails_9089e0c809; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3718,15 +3726,7 @@ ALTER TABLE ONLY ignores
 
 
 --
--- Name: fk_rails_86647bc40a; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY tags
-    ADD CONSTRAINT fk_rails_86647bc40a FOREIGN KEY (account_id) REFERENCES accounts(id);
-
-
---
--- Name: fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: motds fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY motds
