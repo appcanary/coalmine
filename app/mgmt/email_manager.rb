@@ -27,7 +27,9 @@ class EmailManager
 
 
   def self.queue_vuln_emails!
-    accounts = Account.with_unnotified_vuln_logs
+    accounts = Account.with_unnotified_vuln_logs.joins(:users).
+      where(users: { :pref_email_frequency => PrefOpt::EMAIL_WANTS_FIREHOSE})
+
 
     accounts.select do |acct|
       self.create_vuln_email!(acct)
@@ -35,7 +37,8 @@ class EmailManager
   end
 
    def self.queue_patched_emails!
-    accounts = Account.with_unnotified_patch_logs
+     accounts = Account.with_unnotified_patch_logs.joins(:users).
+      where(users: { :pref_email_frequency => PrefOpt::EMAIL_WANTS_FIREHOSE})
 
     accounts.select do |acct|
       self.create_patched_email!(acct)

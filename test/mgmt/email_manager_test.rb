@@ -8,11 +8,13 @@ class EmailManagerTest < ActiveSupport::TestCase
   end
 
   it "should generate email messages when appropriate" do
+    user1 = FactoryGirl.create(:user)
+    user2 = FactoryGirl.create(:user)
     assert_equal 0, LogBundleVulnerability.count
     assert_equal 0, EmailMessage.count
 
     packages1 = FactoryGirl.create_list(:package, 10, :ruby)
-    bundle1 = FactoryGirl.create(:bundle, :packages => packages1)
+    bundle1 = FactoryGirl.create(:bundle, :account => user1.account, :packages => packages1)
 
     vuln_pkg1 = packages1.first
     vulnerability1 = FactoryGirl.create(:vulnerability, :pkgs => [vuln_pkg1])
@@ -25,11 +27,11 @@ class EmailManagerTest < ActiveSupport::TestCase
 
 
     # will have two vulns
-    bundle2 = FactoryGirl.create(:bundle, :packages => packages1 + packages2)
+    bundle2 = FactoryGirl.create(:bundle, :account => user2.account, :packages => packages1 + packages2)
 
 
     # user 2 has two bundles
-    bundle3 = FactoryGirl.create(:bundle, :account => bundle2.account, :packages => packages1)
+    bundle3 = FactoryGirl.create(:bundle, :account => user2.account, :packages => packages1)
    
     # i could use a factory but... we have code for this
     Bundle.transaction do
@@ -47,8 +49,22 @@ class EmailManagerTest < ActiveSupport::TestCase
     # user2: bundle2 (2 vp), bundle3 (1 vp)
     assert_equal 4, LogBundleVulnerability.count
 
+    # OK. We've generated some history to notify you on.
+    # Let's start sending these emails!
+    #
+    # First and for all, you don't get these emails unless
+    # you want them.
+
     EmailManager.queue_vuln_emails!
+    assert_equal 0, EmailVulnerable.count, "no emails for nobody"
+
+    user1.pref_email_frequency = PrefOpt::EMAIL_FREQ_FIRE
+    user1.save!
+    user2.pref_email_frequency = PrefOpt::EMAIL_FREQ_FIRE
+    user2.save!
     
+    
+    EmailManager.queue_vuln_emails!
     assert_equal 2, EmailVulnerable.count, "two emails for two accounts"
     assert_equal 4, Notification.count, "one notification per LBV"
 
@@ -141,11 +157,15 @@ class EmailManagerTest < ActiveSupport::TestCase
   end
 
   it "should not send emails for vulns that are unpatchable" do
+    user1 = FactoryGirl.create(:user)
+    user1.pref_email_frequency = PrefOpt::EMAIL_FREQ_BOTH
+    user1.save!
+
     assert_equal 0, LogBundleVulnerability.count
     assert_equal 0, EmailMessage.count
 
     packages1 = FactoryGirl.create_list(:package, 10, :ruby)
-    bundle1 = FactoryGirl.create(:bundle, :packages => packages1)
+    bundle1 = FactoryGirl.create(:bundle, account: user1.account, :packages => packages1)
 
     # generate ourselves a vuln w/no patched versions
 

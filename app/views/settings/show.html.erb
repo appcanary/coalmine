@@ -99,6 +99,12 @@
                   <%= f.label :pref_email_frequency_both, "I love email, give me both", :style => "font-weight: normal; display: inline;" %>
                 </p>
 
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_NEVER %>
+                  <%= f.label :pref_email_frequency_both, "No emails, thanks", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+
                 <%=f.submit "Update email settings", :class => "btn btn-default" %>
 
                 <hr>
