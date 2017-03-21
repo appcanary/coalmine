@@ -22,8 +22,9 @@
     border-color: $text-colour;
     @include transition (all 0.1s ease-in);
   }
-  @include media($mobile-width) {
-    font-size: 1.2em;
+
+  @include mobile-all {
+    font-size: 0.8em;
   }
 }
 
@@ -84,17 +85,37 @@
 
   }
 
+  .explore, .interact {
+    @include desktop-all {
+      display: inline;
+    }
+  }
+
+  .interact {
+    @include mobile-all {
+      margin-top: 5px;
+      .sign-up {
+        float: right;
+      }
+    }
+  }
+
   .menu-action {
-    @include span-columns(10 of 12);
-    text-align: right;
+    @include desktop-all {
+      @include span-columns(10 of 12);
+      text-align: right;
+    }
 
     @include mobile-all {
       @include span-columns(12 of 12);
     }
 
-    > a {
+    a {
       margin-left: 15px;
       text-decoration: none;
+      &:first-child {
+        margin-left: 0px;
+      }
     }
 
     .login {

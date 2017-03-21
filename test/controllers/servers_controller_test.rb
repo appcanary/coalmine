@@ -68,6 +68,57 @@ class ServersControllerTest < ActionController::TestCase
         get :show, :id => another_server.id
       end
     end
+
+    describe "editing tags" do
+      let(:server) { FactoryGirl.create(:agent_server, :id => 1234, :account => user.account) }
+
+      setup do
+        server.tags = ["dog", "cat", "aristocrat"].map do |t|
+          FactoryGirl.create(:tag, :tag => t, :account_id => user.account.id)
+        end
+        server.reload # ¯\_(ツ)_/¯
+      end
+
+      it "should show the edit page" do
+        get :edit, :id => 1234
+        assert_response :success
+      end
+
+      it "should include tags in the edit page" do
+        get :edit, :id => 1234
+        assert_match /server\[tags\]/, response.body
+      end
+
+      it "should allow tag creation and deletion" do
+        assert_equal 3, server.tags.count
+        post :update, :id => 1234, :server => { :tags => ["dog", "cat"] }
+        server.reload
+        assert_equal 2, server.tags.count
+
+        ["dog", "cat"].each do |t|
+          assert server.tags.pluck(:tag).include?(t)
+        end
+
+        post :update, :id => 1234, :server => { :tags => ["dog", "webserver"] }
+        server.reload
+        assert_equal 2, server.tags.count
+
+        ["dog", "webserver"].each do |t|
+          assert server.tags.pluck(:tag).include?(t)
+        end
+      end
+
+      it "deals correctly with the empty tag" do
+        post :update, :id => 1234, :server => { :tags => ["", "dog", "webserver", "android"]}
+        assert request.params.present?
+        assert request.params[:server].present?
+        assert request.params[:server][:tags].present?
+        assert request.params[:server][:tags].any? { |tag| tag == "" }
+
+        server.reload
+        assert server.tags.pluck(:tag).none? { |tag| tag == "" }
+      end
+    end
   end
 
   describe "while admin" do

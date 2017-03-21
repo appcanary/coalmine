@@ -1,5 +1,5 @@
 class ServerPresenter
-  attr_reader :server, :vulnquery, :bundles
+  attr_reader :server, :vulnquery, :bundles, :tags
 
   delegate :id, :to_param, :gone_silent?, 
     :hostname, :display_name, :ip,
@@ -11,6 +11,7 @@ class ServerPresenter
 
 
     @bundles = @server.bundles.map { |b| BundlePresenter.new(vulnquery, b) }
+    @tags = @server.tags.pluck(:tag)
   end
 
   def bundles_sys_sorted

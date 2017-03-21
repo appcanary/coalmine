@@ -20,6 +20,10 @@
     </th>
 
     <th>
+      tags
+    </th>
+
+    <th>
     </th>
   </thead>
 
@@ -62,6 +66,10 @@
 
       <td data-order="<%= serverpres.last_heartbeat_at.to_i %>">
         <%= time_ago_in_words_or_never serverpres.last_heartbeat_at %>
+      </td>
+
+      <td>
+        <%= serverpres.tags.join(", ") %>
       </td>
 
       <td>

@@ -23,6 +23,10 @@ class Api::AgentController < ApiController
 
     server.register_heartbeat!(params)
 
+    unless params[:tags].nil?
+      server.idempotently_add_tags!(params[:tags].reject(&:empty?))
+    end
+
     # needs to fetch the newly created heartbeat
     server.reload
 

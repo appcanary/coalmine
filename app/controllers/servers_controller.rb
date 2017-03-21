@@ -72,6 +72,7 @@ class ServersController < ApplicationController
     @server = fetch_server(params)
     respond_to do |format|
       if @server.update(server_params)
+        @server.destructively_update_tags!(tags_from_params)
         format.html { redirect_back_or_to(dashboard_path) }
       else
         format.html { render :edit }
@@ -91,5 +92,14 @@ class ServersController < ApplicationController
 
   def server_params
     params.require(:server).permit(:name)
+  end
+
+  def tags_from_params
+    tag_params = params.require(:server).permit(tags: [])
+
+    # if it's just empty, we can return it
+    unless tag_params[:tags].nil?
+      tag_params[:tags].reject(&:empty?)
+    end
   end
 end

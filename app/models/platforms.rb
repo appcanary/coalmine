@@ -121,13 +121,11 @@ class Platforms
   end
 
   def self.select_platform_release
-    arr = [Ruby.titleize]
+    arr = [[Ruby.titleize, Ruby]]
 
     arr += [Ubuntu, CentOS, Debian, Amazon].map do |plt|
-      PLATFORM_RELEASES[plt].map { |r,v| "#{FULL_NAMES[plt]} - #{r}" }
-    end.flatten
-
-    arr
+      PLATFORM_RELEASES[plt].map { |r,v| ["#{FULL_NAMES[plt]} - #{r}", "#{plt} - #{r}"] }
+    end.flatten(1)
   end
 
   

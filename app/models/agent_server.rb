@@ -42,6 +42,8 @@ class AgentServer < ActiveRecord::Base
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
   has_many :accepted_files, :class_name => AgentAcceptedFile
+  has_many :server_tags, :dependent => :destroy
+  has_many :tags, :through => :server_tags
 
   has_one :last_heartbeat, -> { order(created_at: :desc) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
 
@@ -85,6 +87,20 @@ class AgentServer < ActiveRecord::Base
       agent_version = params[:"agent-version"]
       self.agent_release = AgentRelease.where(:version => agent_version).first_or_create!
       self.save!
+    end
+  end
+
+  def idempotently_add_tags!(tags)
+    self.transaction do
+      self.destructively_update_tags!((tags + self.tags.pluck(:tag)).to_set)
+    end
+  end
+
+  def destructively_update_tags!(tags)
+    self.transaction do
+      self.tags = tags.map do |tag_s|
+        Tag.find_or_create_by!(account_id: self.account_id, tag: tag_s)
+      end
     end
   end
 
