@@ -64,7 +64,6 @@ class Ignore < ActiveRecord::Base
     end
 
     def unignore_package(user, pkg, bundle)
-      binding.pry
       self.where(account_id: user.account_id,
                  user_id: user.id,
                  package_id: pkg.id,
