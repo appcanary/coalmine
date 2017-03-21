@@ -3,6 +3,10 @@ require 'test_helper'
 class EmailManagerTest < ActiveSupport::TestCase
   self.use_transactional_fixtures = false
 
+  before :each do
+    ActionMailer::Base.deliveries.clear
+  end
+
   after :each do
     DatabaseCleaner.clean
   end
@@ -157,9 +161,7 @@ class EmailManagerTest < ActiveSupport::TestCase
   end
 
   it "should not send emails for vulns that are unpatchable" do
-    user1 = FactoryGirl.create(:user)
-    user1.pref_email_frequency = PrefOpt::EMAIL_FREQ_BOTH
-    user1.save!
+    user1 = FactoryGirl.create(:user, :pref_email_frequency => PrefOpt::EMAIL_FREQ_BOTH)
 
     assert_equal 0, LogBundleVulnerability.count
     assert_equal 0, EmailMessage.count
