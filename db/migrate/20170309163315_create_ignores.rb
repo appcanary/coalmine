@@ -12,6 +12,6 @@ class CreateIgnores < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_index :ignores, [:account_id, :bundle_id, :package_id], unique: true
+    add_index :ignores, [:account_id, :package_id, :bundle_id], unique: true
   end
 end
