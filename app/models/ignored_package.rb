@@ -1,0 +1,52 @@
+class IgnoredPackage < ActiveRecord::Base
+  belongs_to :account
+  belongs_to :user
+  belongs_to :bundle
+  belongs_to :package
+
+  validates :account, presence: true
+  validates :user, presence: true
+  validates :package, presence: true, uniqueness: { scope: [:account, :bundle] }
+
+  scope :filter_query_for, -> (query, account_id) {
+    sanitized_account_id = sanitize(account_id)
+
+    merge_scope = joins("LEFT JOIN ignored_packages ON
+                           ignored_packages.account_id = #{sanitized_account_id} AND
+                           ignored_packages.package_id = packages.id AND
+                           (ignored_packages.bundle_id = bundled_packages.bundle_id OR ignored_packages.bundle_id is null)")
+                    .where("ignored_packages.id is null")
+
+    query.merge(merge_scope)
+  }
+
+  scope :relevant_ignores_for, -> (bundle) {
+    joins(package: [:vulnerable_packages])
+      .where("ignored_packages.bundle_id is null or ignored_packages.bundle_id = ?", bundle.id)
+  }
+
+  def global?
+    self.bundle_id.nil?
+  end
+
+  class << self
+    def ignore_package(user, pkg, bundle, note)
+      note = nil if note.blank?
+
+      self.create(account: user.account,
+                  user: user,
+                  package: pkg,
+                  bundle: bundle,
+                  note: note)
+    end
+
+    def unignore_package(user, pkg, bundle)
+      self.where(account_id: user.account_id,
+                 user_id: user.id,
+                 package_id: pkg.id,
+                 bundle_id: bundle && bundle.id)
+        .take
+        .delete
+    end
+  end
+end

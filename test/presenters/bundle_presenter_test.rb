@@ -10,7 +10,7 @@ class BundlePresenterTest < ActiveSupport::TestCase
     vuln = FactoryGirl.create(:vulnerability, pkgs: [pkg])
 
     # we start off with no ignores
-    assert_equal 0, Ignore.where(account: account).count
+    assert_equal 0, IgnoredPackage.where(account: account).count
 
     query = VulnQuery.new(account)
     bp = BundlePresenter.new(query, bundle)
@@ -18,8 +18,8 @@ class BundlePresenterTest < ActiveSupport::TestCase
     assert_equal 0, bp.ignored_packages.count
 
     # add an ignore for this package/bundle combo
-    Ignore.ignore_package(user, pkg, bundle, "note #1")
-    assert_equal 1, Ignore.where(account: account).count
+    IgnoredPackage.ignore_package(user, pkg, bundle, "note #1")
+    assert_equal 1, IgnoredPackage.where(account: account).count
 
     # make a new presenter, bc we cache things in it
     bp = BundlePresenter.new(query, bundle)
@@ -34,9 +34,9 @@ class BundlePresenterTest < ActiveSupport::TestCase
     vuln1 = FactoryGirl.create(:vulnerability, pkgs: [pkg])
     vuln2 = FactoryGirl.create(:vulnerability, pkgs: [pkg, pkg2])
 
-    assert_equal 0, Ignore.where(account: account).count
-    Ignore.ignore_package(user, pkg, bundle, "note #1")
-    assert_equal 1, Ignore.where(account: account).count
+    assert_equal 0, IgnoredPackage.where(account: account).count
+    IgnoredPackage.ignore_package(user, pkg, bundle, "note #1")
+    assert_equal 1, IgnoredPackage.where(account: account).count
 
     query = VulnQuery.new(account)
     bp = BundlePresenter.new(query, bundle)
@@ -44,8 +44,8 @@ class BundlePresenterTest < ActiveSupport::TestCase
     assert_equal 1, bp.ignored_packages.count
     assert_equal 2, bp.ignored_packages.first.vuln_count
 
-    Ignore.ignore_package(user, pkg2, bundle, "note #2")
-    assert_equal 2, Ignore.where(account: account).count
+    IgnoredPackage.ignore_package(user, pkg2, bundle, "note #2")
+    assert_equal 2, IgnoredPackage.where(account: account).count
 
     bp = BundlePresenter.new(query, bundle)
     assert_equal 2, bp.ignored_packages.count
@@ -63,7 +63,7 @@ class BundlePresenterTest < ActiveSupport::TestCase
     vuln = FactoryGirl.create(:vulnerability, pkgs: [pkg])
 
     # we start off with no ignores
-    assert_equal 0, Ignore.where(account: account).count
+    assert_equal 0, IgnoredPackage.where(account: account).count
 
     query = VulnQuery.new(account)
     bp = BundlePresenter.new(query, bundle)
@@ -71,8 +71,8 @@ class BundlePresenterTest < ActiveSupport::TestCase
     assert_equal 0, bp.ignored_packages.count
 
     # add an ignore for this package in a global context
-    Ignore.ignore_package(user, pkg, nil, "note #1")
-    assert_equal 1, Ignore.where(account: account).count
+    IgnoredPackage.ignore_package(user, pkg, nil, "note #1")
+    assert_equal 1, IgnoredPackage.where(account: account).count
 
     # make a new presenter, bc we cache things in it
     bp = BundlePresenter.new(query, bundle)
@@ -87,9 +87,9 @@ class BundlePresenterTest < ActiveSupport::TestCase
     vuln1 = FactoryGirl.create(:vulnerability, pkgs: [pkg])
     vuln2 = FactoryGirl.create(:vulnerability, pkgs: [pkg, pkg2])
 
-    assert_equal 0, Ignore.where(account: account).count
-    Ignore.ignore_package(user, pkg, nil, "note #1")
-    assert_equal 1, Ignore.where(account: account).count
+    assert_equal 0, IgnoredPackage.where(account: account).count
+    IgnoredPackage.ignore_package(user, pkg, nil, "note #1")
+    assert_equal 1, IgnoredPackage.where(account: account).count
 
     query = VulnQuery.new(account)
     bp = BundlePresenter.new(query, bundle)
@@ -97,8 +97,8 @@ class BundlePresenterTest < ActiveSupport::TestCase
     assert_equal 1, bp.ignored_packages.count
     assert_equal 2, bp.ignored_packages.first.vuln_count
 
-    Ignore.ignore_package(user, pkg2, nil, "note #2")
-    assert_equal 2, Ignore.where(account: account).count
+    IgnoredPackage.ignore_package(user, pkg2, nil, "note #2")
+    assert_equal 2, IgnoredPackage.where(account: account).count
 
     bp = BundlePresenter.new(query, bundle)
     assert_equal 2, bp.ignored_packages.count

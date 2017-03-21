@@ -932,10 +932,10 @@ ALTER SEQUENCE feature_flags_id_seq OWNED BY feature_flags.id;
 
 
 --
--- Name: ignores; Type: TABLE; Schema: public; Owner: -
+-- Name: ignored_packages; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE ignores (
+CREATE TABLE ignored_packages (
     id integer NOT NULL,
     account_id integer NOT NULL,
     user_id integer NOT NULL,
@@ -949,10 +949,10 @@ CREATE TABLE ignores (
 
 
 --
--- Name: ignores_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: ignored_packages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE ignores_id_seq
+CREATE SEQUENCE ignored_packages_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -961,10 +961,10 @@ CREATE SEQUENCE ignores_id_seq
 
 
 --
--- Name: ignores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: ignored_packages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE ignores_id_seq OWNED BY ignores.id;
+ALTER SEQUENCE ignored_packages_id_seq OWNED BY ignored_packages.id;
 
 
 --
@@ -1985,10 +1985,10 @@ ALTER TABLE ONLY feature_flags ALTER COLUMN id SET DEFAULT nextval('feature_flag
 
 
 --
--- Name: ignores id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: ignored_packages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ignores ALTER COLUMN id SET DEFAULT nextval('ignores_id_seq'::regclass);
+ALTER TABLE ONLY ignored_packages ALTER COLUMN id SET DEFAULT nextval('ignored_packages_id_seq'::regclass);
 
 
 --
@@ -2327,11 +2327,11 @@ ALTER TABLE ONLY feature_flags
 
 
 --
--- Name: ignores ignores_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ignored_packages ignored_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY ignores
-    ADD CONSTRAINT ignores_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT ignored_packages_pkey PRIMARY KEY (id);
 
 
 --
@@ -2591,6 +2591,13 @@ CREATE INDEX idx_vulnerable_dependency_id_ar ON vulnerable_dependency_archives U
 --
 
 CREATE INDEX idx_vulnerable_package_id_ar ON vulnerable_package_archives USING btree (vulnerable_package_id);
+
+
+--
+-- Name: ignored_packages_by_account_package_bundle_ids; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ignored_packages_by_account_package_bundle_ids ON ignored_packages USING btree (account_id, package_id, bundle_id);
 
 
 --
@@ -2993,38 +3000,31 @@ CREATE INDEX index_feature_flags_on_data ON feature_flags USING btree (data);
 
 
 --
--- Name: index_ignores_on_account_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_ignored_packages_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_ignores_on_account_id ON ignores USING btree (account_id);
-
-
---
--- Name: index_ignores_on_account_id_and_bundle_id_and_package_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_ignores_on_account_id_and_bundle_id_and_package_id ON ignores USING btree (account_id, bundle_id, package_id);
+CREATE INDEX index_ignored_packages_on_account_id ON ignored_packages USING btree (account_id);
 
 
 --
--- Name: index_ignores_on_bundle_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_ignored_packages_on_bundle_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_ignores_on_bundle_id ON ignores USING btree (bundle_id);
-
-
---
--- Name: index_ignores_on_package_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ignores_on_package_id ON ignores USING btree (package_id);
+CREATE INDEX index_ignored_packages_on_bundle_id ON ignored_packages USING btree (bundle_id);
 
 
 --
--- Name: index_ignores_on_user_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_ignored_packages_on_package_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_ignores_on_user_id ON ignores USING btree (user_id);
+CREATE INDEX index_ignored_packages_on_package_id ON ignored_packages USING btree (package_id);
+
+
+--
+-- Name: index_ignored_packages_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_user_id ON ignored_packages USING btree (user_id);
 
 
 --
@@ -3638,6 +3638,14 @@ ALTER TABLE ONLY server_tags
 
 
 --
+-- Name: ignored_packages fk_rails_257ff0b8e3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_257ff0b8e3 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: server_tags fk_rails_42f69de9f4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3651,14 +3659,6 @@ ALTER TABLE ONLY server_tags
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_52f2f7a9e3 FOREIGN KEY (log_bundle_vulnerability_id) REFERENCES log_bundle_vulnerabilities(id);
-
-
---
--- Name: ignores fk_rails_553342d409; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ignores
-    ADD CONSTRAINT fk_rails_553342d409 FOREIGN KEY (account_id) REFERENCES accounts(id);
 
 
 --
@@ -3702,6 +3702,14 @@ ALTER TABLE ONLY email_messages
 
 
 --
+-- Name: ignored_packages fk_rails_8055c587d4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_8055c587d4 FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
 -- Name: bundled_packages fk_rails_8318307314; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3718,35 +3726,11 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: ignores fk_rails_9089e0c809; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ignores
-    ADD CONSTRAINT fk_rails_9089e0c809 FOREIGN KEY (user_id) REFERENCES users(id);
-
-
---
 -- Name: motds fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY motds
     ADD CONSTRAINT fk_rails_a7964aa25c FOREIGN KEY (user_id) REFERENCES users(id);
-
-
---
--- Name: ignores fk_rails_bdaee0738c; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ignores
-    ADD CONSTRAINT fk_rails_bdaee0738c FOREIGN KEY (package_id) REFERENCES packages(id);
-
-
---
--- Name: ignores fk_rails_c674d92749; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY ignores
-    ADD CONSTRAINT fk_rails_c674d92749 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
 
 
 --
@@ -3758,11 +3742,27 @@ ALTER TABLE ONLY notifications
 
 
 --
+-- Name: ignored_packages fk_rails_e599353bb7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_e599353bb7 FOREIGN KEY (package_id) REFERENCES packages(id);
+
+
+--
 -- Name: notifications fk_rails_f192ff6aa1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_f192ff6aa1 FOREIGN KEY (log_bundle_patch_id) REFERENCES log_bundle_patches(id);
+
+
+--
+-- Name: ignored_packages fk_rails_f8bf4dc6c3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_f8bf4dc6c3 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
 
 
 --

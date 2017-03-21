@@ -337,7 +337,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_server?(server1)
     assert_equal true, vq.vuln_server?(server2)
 
-    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1)
+    ignore = FactoryGirl.create(:ignored_package, account: account, user: user, package: @vulnpkg1)
     assert_equal false, vq.vuln_server?(server1)
     assert_equal false, vq.vuln_server?(server2)
   end
@@ -354,7 +354,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_server?(server1)
     assert_equal true, vq.vuln_server?(server2)
 
-    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
+    ignore = FactoryGirl.create(:ignored_package, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
     assert_equal false, vq.vuln_server?(server1)
     assert_equal true, vq.vuln_server?(server2)
   end
@@ -369,7 +369,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_bundle?(bundle1)
     assert_equal true, vq.vuln_bundle?(bundle2)
 
-    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1)
+    ignore = FactoryGirl.create(:ignored_package, account: account, user: user, package: @vulnpkg1)
     assert_equal false, vq.vuln_bundle?(bundle1)
     assert_equal false, vq.vuln_bundle?(bundle2)
   end
@@ -384,7 +384,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     assert_equal true, vq.vuln_bundle?(bundle1)
     assert_equal true, vq.vuln_bundle?(bundle2)
 
-    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
+    ignore = FactoryGirl.create(:ignored_package, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
     assert_equal false, vq.vuln_bundle?(bundle1)
     assert_equal true, vq.vuln_bundle?(bundle2)
   end
@@ -404,7 +404,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     results = vq.from_bundle(bundle2).order(:id)
     assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
 
-    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1)
+    ignore = FactoryGirl.create(:ignored_package, account: account, user: user, package: @vulnpkg1)
 
     results = vq.from_bundle(bundle1).order(:id)
     assert_equal [@vulnpkg2, @vulnpkg3, @vulnpkg4], results
@@ -427,7 +427,7 @@ class VulnQueryTest < ActiveSupport::TestCase
     results = vq.from_bundle(bundle2).order(:id)
     assert_equal [@vulnpkg1, @vulnpkg2, @vulnpkg3, @vulnpkg4], results
 
-    ignore = FactoryGirl.create(:ignore, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
+    ignore = FactoryGirl.create(:ignored_package, account: account, user: user, package: @vulnpkg1, bundle: bundle1)
 
     results = vq.from_bundle(bundle1).order(:id)
     assert_equal [@vulnpkg2, @vulnpkg3, @vulnpkg4], results

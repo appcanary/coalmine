@@ -84,7 +84,7 @@ class Bundle < ActiveRecord::Base
   end
 
   def relevant_ignores
-    Ignore.relevant_ignores_for(self)
+    IgnoredPackage.relevant_ignores_for(self)
   end
 
   # TODO: change this method to affected?

@@ -89,7 +89,7 @@ class VulnQuery
   end
 
   def filter_ignored(query)
-    Ignore.filter_query_for(query, account.id)
+    IgnoredPackage.filter_query_for(query, account.id)
   end
 
   def uniq_and_include(pkg_query)

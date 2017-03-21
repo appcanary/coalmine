@@ -26,7 +26,7 @@ class BundlePresenter
   # TODO this is the wrong place to return ignores that aren't anchored to any
   # particular bundle
   def ignored_packages
-    @ignored_packages ||= Ignore.relevant_ignores_for(bundle)
+    @ignored_packages ||= IgnoredPackage.relevant_ignores_for(bundle)
                             .select("count(vulnerable_packages.vulnerable_dependency_id) vuln_count",
                                     :user_id, :package_id, :bundle_id, :note)
                             .group(:package_id, :user_id, :bundle_id, :note)
