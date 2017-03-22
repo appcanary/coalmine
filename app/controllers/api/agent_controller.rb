@@ -81,6 +81,19 @@ class Api::AgentController < ApiController
     render :json => {}
   end
 
+  def update_server_processes
+    server = current_account.agent_servers.where(:uuid => params[:uuid]).take
+
+    if server.nil?
+      render json: {errors: [{title: "No server with that id was found"}]}, status: 404
+    else
+      register_api_call!
+      # update server with a set of procs here
+      AgentServerManager.new(server).update_processes(procs_params)
+      render :nothing => true, :status => 204
+    end
+  end
+
   def show
     server = current_account.agent_servers.where(:uuid => params[:uuid]).take
     unless server
@@ -139,5 +152,9 @@ class Api::AgentController < ApiController
 
   def sendfile_params
     params.require(:agent).permit(:contents, :crc, :kind, :name, :path)
+  end
+
+  def procs_params
+    params[:server] && params[:server][:system_state]
   end
 end

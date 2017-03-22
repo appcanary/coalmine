@@ -94,6 +94,8 @@ Rails.application.routes.draw do
     delete "destroy_inactive" => "servers#destroy_inactive", :as => :destroy_inactive, :on => :collection
   end
 
+  get "/servers/:id/procs" => "servers#procs"
+
   resources :monitors, :only => [:new, :show, :destroy, :create] do
     post "resolve_vuln/:package_id", action: :resolve_vuln, on: :collection, as: :resolve_vuln
     delete "unresolve_vuln/:package_id", action: :unresolve_vuln, on: :collection, as: :unresolve_vuln
@@ -162,6 +164,7 @@ Rails.application.routes.draw do
         put "servers/:uuid" => "agent#update", :as => :agent_server_update
         get "servers/:uuid" => "agent#show", :as => :agent_server_upgrade
         post "heartbeat/:uuid" => "agent#heartbeat", :as => :agent_server_heartbeat
+        put "servers/:uuid/processes" => "agent#update_server_processes"
       end
     end
   end
