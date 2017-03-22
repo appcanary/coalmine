@@ -1539,7 +1539,7 @@ CREATE TABLE users (
     pref_os character varying,
     pref_deploy character varying,
     phone_number character varying,
-    pref_email_frequency character varying DEFAULT 'daily'::character varying NOT NULL
+    pref_email_frequency character varying DEFAULT 'firehose'::character varying NOT NULL
 );
 
 

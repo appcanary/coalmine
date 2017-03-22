@@ -12,8 +12,8 @@ class EmailManagerTest < ActiveSupport::TestCase
   end
 
   it "should generate email messages when appropriate" do
-    user1 = FactoryGirl.create(:user)
-    user2 = FactoryGirl.create(:user)
+    user1 = FactoryGirl.create(:user, pref_email_frequency: PrefOpt::EMAIL_FREQ_NEVER)
+    user2 = FactoryGirl.create(:user, pref_email_frequency: PrefOpt::EMAIL_FREQ_NEVER)
     assert_equal 0, LogBundleVulnerability.count
     assert_equal 0, EmailMessage.count
 

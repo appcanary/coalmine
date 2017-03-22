@@ -12,8 +12,8 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
 
 
   it "should idempotently only send email to active users" do
-    user1 = FactoryGirl.create(:user)
-    user2 = FactoryGirl.create(:user)
+    user1 = FactoryGirl.create(:user, pref_email_frequency: PrefOpt::EMAIL_FREQ_DAILY)
+    user2 = FactoryGirl.create(:user, pref_email_frequency: PrefOpt::EMAIL_FREQ_BOTH)
     account = user1.account
     inactive_account = user2.account
 

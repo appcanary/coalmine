@@ -33,7 +33,7 @@ class SettingsControllerTest < ActionController::TestCase
    it "should let users change their email freq prefs" do
     login_user(user)
 
-    assert_equal user.pref_email_frequency, PrefOpt::EMAIL_FREQ_DAILY
+    assert_not_equal user.pref_email_frequency, PrefOpt::EMAIL_FREQ_BOTH
 
     put :update, :user => { :pref_email_frequency => PrefOpt::EMAIL_FREQ_BOTH }
 
