@@ -41,5 +41,12 @@ FactoryGirl.define do
       distro "ubuntu"
       release "utopic"
     end
+
+    trait :with_heartbeat do
+      heartbeats { build_list :agent_heartbeat, 1 }
+    end
+  end
+
+  factory :agent_heartbeat do
   end
 end

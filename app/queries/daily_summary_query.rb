@@ -60,5 +60,33 @@ class DailySummaryQuery
   def changes
     changes = BundledPackage.revisions.joins(:bundle).where("bundles.account_id" => account.id).except(:select).select("distinct(bundle_id, bundled_packages.valid_at)::text as ds, bundle_id, agent_server_id, bundled_packages.valid_at").where("bundled_packages.valid_at <= ? and bundled_packages.valid_at >= ?", @end_at, @begin_at)
     changes = changes.where.not('bundles.agent_server_id': @new_servers.map(&:id) + @deleted_servers.map(&:id))
+
+    hsh = {removed_ct: 0, added_ct: 0, upgraded_ct: 0, server_ids: {}}
+    new_changes = changes.reduce(hsh) { |acc, c|
+      bq = BundleQuery.new(c.bundle, @end_at)
+      removed, added = bq.package_delta(@begin_at)
+
+      hsh = Hash.new(0)
+      added.each do |pkg|
+        hsh[pkg.name] += 1
+      end
+      removed.each do |pkg|
+        hsh[pkg.name] -= 1
+      end
+
+
+      removed_ct = hsh.select {|k,v| v == -1}.count
+      added_ct = hsh.select {|k,v| v == 1}.count
+      upgraded_ct = hsh.select {|k,v| v == 0}.count
+      acc[:removed_ct] += removed_ct
+      acc[:added_ct] += added_ct
+      acc[:upgraded_ct] += upgraded_ct
+      acc[:server_ids][c.bundle.agent_server_id] = 1
+      acc
+    }
+
+
+    new_changes[:server_ct] = new_changes[:server_ids].keys.count
+    new_changes
   end
 end

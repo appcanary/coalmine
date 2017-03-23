@@ -1,0 +1,19 @@
+<% if @presenter.has_patchable_vulns_to_report? %>
+  <h3>New vulnerabilities</h3>
+  <p>Today, you became vulnerable to <b><%= @presenter.total_vuln_ct %> vulnerabilities</b>. You should upgrade <b><%= @presenter.total_package_ct %> packages</b> installed in <b><%= @presenter.total_server_ct %> servers</b>.</p>
+
+  <% if @presenter.has_fresh_vulns? && @presenter.has_new_vulns? %>
+    <p>Of these, <%= @presenter.fresh_vulns.vuln_ct %> vulnerabilities had patches released today, and <%= @presenter.new_vulns.vuln_ct %> had patches released at some point in the past (you became vulnerable to them today because you installed vulnerable packages).</p>
+
+  <% elsif @presenter.has_fresh_vulns? %>
+    <p>All of these patches were released today.</p>
+  <% else #only new vulns %>
+    <p>All of these patches were released at some point in the past. You became vulnerable today because you installed vulnerable packages.</p>
+  <% end %>
+<% end %>
+
+<% if @presenter.has_cantfix_vulns? %>
+  <h3>Upcoming vulnerabilities</h3>
+  <p>We noticed that there are <%= @presenter.cantfix_vulns.vuln_ct %> new vulnerabilities whose patches haven't been released yet. At the moment, we think they target <%= @presenter.cantfix_vulns.package_ct %> packages in <%= @presenter.cantfix_vulns.server_ct %> of your servers, but this might change by the time patches are released.</p>
+<% end %>
+

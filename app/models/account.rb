@@ -40,6 +40,7 @@ class Account < ActiveRecord::Base
   has_many :email_messages
   has_many :email_patcheds
   has_many :email_vulnerables
+  has_many :email_daily_summaries
   has_many :patched_notifications, :through => :email_patcheds, :source => :notifications
   has_many :vulnerable_notifications, :through => :email_vulnerables, :source => :notifications
   has_many :tags
@@ -63,6 +64,12 @@ class Account < ActiveRecord::Base
                       (SELECT 1 FROM bundles WHERE bundles.account_id = accounts.id limit 1) OR EXISTS
                       (SELECT 1 FROM agent_server_archives WHERE agent_server_archives.account_id = accounts.id limit 1) OR EXISTS
                       (SELECT 1 FROM bundle_archives WHERE bundle_archives.account_id = accounts.id limit 1)")
+  end
+
+
+  def has_activity?
+    active_servers.any? || 
+      monitors.any?
   end
 
 

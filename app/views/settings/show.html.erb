@@ -81,8 +81,35 @@
               </div>
 
               <div class="form-group">
-                <p>We will send security notifications to this email address.</p> 
+                <p>We will send security notifications to this email address.</p>
+
+                <h4>Notification settings:</h4>
                 <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_DAILY %>
+                  <%= f.label :pref_email_frequency_daily, "Notify me once a day, with a summary", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_FIRE %>
+                  <%= f.label :pref_email_frequency_firehose, "Notify me about everything as soon as possible", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_BOTH %>
+                  <%= f.label :pref_email_frequency_both, "I love email, give me both", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_NEVER %>
+                  <%= f.label :pref_email_frequency_both, "No vulnerability emails, thanks", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+
+                <%=f.submit "Update email settings", :class => "btn btn-default" %>
+
+                <hr>
+                <p>
+
                   <%= f.check_box :newsletter_email_consent %>
                   <%= f.label :newsletter_email_consent, "Send me your monthly newsletter containing product updates and interesting security news.", :style => "font-weight: normal; display: inline;" %>
                 </p>
@@ -97,12 +124,12 @@
               <% end %>
 
               <div class="form-group">
-                <%=f.submit "Update email settings", :class => "btn btn-default" %>
+                <%=f.submit "Update contact settings", :class => "btn btn-default" %>
               </div>
+              <hr>
             </div>
           </section>
 
-          <hr>
 
           <a name="password" class="anchor-offset"></a>
           <section>
@@ -120,6 +147,7 @@
               <div class="form-group">
                 <%=f.submit "Change password", :class => "btn btn-default" %>
               </div>
+              <hr>
             </div>
           </section>
         <% end %>
