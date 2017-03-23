@@ -19,7 +19,8 @@ class CveImporter < AdvisoryImporter
                        "https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-2014.xml.gz",
                        "https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-2015.xml.gz",
                        "https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-2016.xml.gz",
-                       #TODO: add this in 2017 "https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-2017.xml.gz",
+                       "https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-2017.xml.gz",
+                       #TODO: add this in 2018 "https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-2018.xml.gz",
                        "https://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-Recent.xml.gz",]
   LOCAL_PATH = "tmp/importers/cve"
 
