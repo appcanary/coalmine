@@ -72,6 +72,6 @@ class IgnoredPackage < ActiveRecord::Base
                package_id: pkg.id,
                bundle_id: bundle && bundle.id).
       take.
-      delete
+      try(:delete)
   end
 end
