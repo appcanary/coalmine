@@ -47,6 +47,12 @@
           </a>
         <% end %>
 
+        <%= li_active "vulns" do %>
+          <a href="/vulns">
+            <i class="fa fa-folder-open"></i> Vulnerabilities
+          </a>
+        <% end %>
+
         <%= li_active "settings" do %>
           <a href="/settings">
             <i class="fa fa-cog"></i> Settings
@@ -70,7 +76,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="" class="feedback">
+          <a href="mailto:hello@appcanary.com?subject=Feedback" class="feedback" target="_blank">
             <i class="fa fa-bullhorn"></i> Feedback
           </a>
         </li>

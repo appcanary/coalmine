@@ -29,14 +29,16 @@
 # A package is unique across (name, platform, release, version)
 # todo: track if submitted from users?
 class Package < ActiveRecord::Base
-  has_many :bundled_packages
+  has_many :bundled_packages, :dependent => :destroy
   has_many :bundles, :through => :bundled_packages
-  has_many :vulnerable_packages
+  has_many :vulnerable_packages, :dependent => :destroy
   has_many :vulnerable_dependencies, :through => :vulnerable_packages
   has_many :vulnerabilities, :through => :vulnerable_packages
   has_many :advisories, :through => :vulnerabilities
+  
+  has_many :log_resolutions
 
-  validates_uniqueness_of :version, scope: [:platform, :release, :name]
+  # validates_uniqueness_of :version, scope: [:platform, :release, :name]
 
   scope :pluck_unique_fields, -> { 
     select("name, version").pluck(:name, :version)
@@ -50,15 +52,17 @@ class Package < ActiveRecord::Base
     where(clauses.join(" OR "), *values.flatten)
   }
 
+  # affected means any package flagged at all.
+  # we join on vuln_dep rather than vuln_pkg to
+  # make chaining with VulnDep.patchable predictably easy
   scope :affected, -> {
-    joins(:vulnerable_packages)
+    joins(:vulnerable_dependencies)
   }
 
-  scope :affected_and_patchable, -> {
-    joins(:vulnerable_dependencies).merge(VulnerableDependency.patchable)
+  scope :affected_but_patchable, -> {
+    affected.merge(VulnerableDependency.patchable)
   }
 
-  
   # find all vulnerable dependencies that *could* affect this package
   # we perform a broad search at first and perform the exact package matching
   # in ruby land
@@ -108,18 +112,20 @@ class Package < ActiveRecord::Base
 
   # TODO needs test
   def upgrade_to
-    @upgrade_to ||= calc_upgrade_to(self.vulnerable_dependencies)
+    @upgrade_to ||= calc_upgrade_to(self.vulnerable_dependencies.pluck(:patched_versions))
   end
 
   def upgrade_to_given(vd)
-    calc_upgrade_to([vd])
+    calc_upgrade_to([vd.patched_versions])
   end
 
-  def calc_upgrade_to(vds)
+  # takes in an array of arrays
+  # i.e. vuln_deps' patched_versions
+  def calc_upgrade_to(vds_pv)
 
     if self.platform != Platforms::Ruby
-      all_patches = vds.map(&:patched_versions).flatten
-      [all_patches.sort { |a,b| comparator.vercmp(a,b) }.last]
+      all_patches = vds_pv.flatten
+      [all_patches.max { |a,b| comparator.vercmp(a,b) }]
     else
 
       # TODO:
@@ -133,8 +139,8 @@ class Package < ActiveRecord::Base
       # Instead, we hack it:
 
       # load every patch requirement into its object
-      all_patches = vds.map { |vd|
-        vd.patched_versions.map { |pv|  Gem::Requirement.new(*pv.split(', ')) }
+      all_patches = vds_pv.map { |vdpv|
+        vdpv.map { |pv|  Gem::Requirement.new(*pv.split(', ')) }
       }
 
       this_version = Gem::Version.new(self.version)
@@ -172,6 +178,31 @@ class Package < ActiveRecord::Base
 
   end
 
+  # ----- view layer show highest vuln priority
+  # perf hack for bundle/show
+  # returns a hash! of just the attributes we need,
+  # avoiding instantiating a whole AR::Base object
+  #
+  # This eliminated about 30% of sql calls in bundle/show
+  def vulnerabilities_by_criticality
+    @vulns_by_priority ||= pluck_to_hash(self.vulnerabilities.order_by_criticality, 
+                                         :id, :criticality, :title)
+  end
+
+  def upgrade_priority_ordinal
+    @upgrade_priority_ordinal ||= vulnerabilities_by_criticality.first.try(:[], :criticality)
+  end
+
+  def upgrade_priority
+    Advisory::CRITICALITIES_BY_VALUE[upgrade_priority_ordinal]
+  end
+
+  # silly optimization
+  def pluck_to_hash(q, *keys)
+    q.pluck(*keys).map{|pa| Hash[keys.zip(pa)]}
+  end
+
+
   # ----- view stuff
   def display_name
     "#{name} #{version}"
@@ -186,5 +217,8 @@ class Package < ActiveRecord::Base
   def to_pkg_builder
     Parcel.from_package(self)
   end
-
+  
+  def self.resolution_log_primary_key
+    "packages.id"
+  end
 end

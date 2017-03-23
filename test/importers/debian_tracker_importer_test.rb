@@ -19,7 +19,7 @@ class DebianTrackerImporterTest < ActiveSupport::TestCase
       assert nattr["identifier"] =~ /CVE-\d\d\d\d-\d\d\d\d-[a-z]+/
       assert nattr["reference_ids"].all? { |cve| cve =~ /CVE-\d\d\d\d-\d\d\d\d/ }
 
-      assert ["high", "medium", "low", "negligible", "pending", "unknown"].include?(nattr["criticality"])
+      assert Advisory.criticalities.values.include?(nattr["criticality"])
 
 
       assert nattr["affected"].all? { |h|
@@ -69,6 +69,8 @@ class DebianTrackerImporterTest < ActiveSupport::TestCase
     @importer.process_advisories(all_advisories)
     assert_equal 5, Advisory.from_debian.count
 
+    assert_importer_mark_processed_idempotency(@importer)
+    
     # is this idempotent?
     @importer.process_advisories(all_advisories)
     assert_equal 5, Advisory.from_debian.count

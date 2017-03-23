@@ -38,6 +38,9 @@ class CheckApiTest < ActionDispatch::IntegrationTest
         assert_response :success
 
         assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+        # Make sure we log the right platform release
+        assert_equal "ruby", account.log_api_calls.last.platform
+        assert_equal nil, account.log_api_calls.last.release
 
         json = json_body
         assert json.key?("data")
@@ -66,6 +69,9 @@ class CheckApiTest < ActionDispatch::IntegrationTest
         assert_response :success
 
         assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+        # Make sure we log the right platform release
+        assert_equal "centos", account.log_api_calls.last.platform
+        assert_equal "7", account.log_api_calls.last.release
 
         json = json_body
         assert json.key?("data")
@@ -79,7 +85,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
 
     describe "for amazon" do
       it "should tell you you're vulnerable" do
-        vuln = FactoryGirl.create(:vulnerability, :amazon)
+        vuln = FactoryGirl.create(:vulnerability, :amzn)
         FactoryGirl.create(:vulnerable_dependency, 
                            :vulnerability => vuln,
                            :platform => Platforms::Amazon,
@@ -95,6 +101,9 @@ class CheckApiTest < ActionDispatch::IntegrationTest
         assert_response :success
 
         assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+        # Make sure we log the right platform release
+        assert_equal "amzn", account.log_api_calls.last.platform
+        assert_equal "2016.03", account.log_api_calls.last.release
 
         json = json_body
         assert json.key?("data")
@@ -124,6 +133,9 @@ class CheckApiTest < ActionDispatch::IntegrationTest
         assert_response :success
 
         assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+        # Make sure we log the right platform release
+        assert_equal "debian", account.log_api_calls.last.platform
+        assert_equal "jessie", account.log_api_calls.last.release
 
         json = json_body
         assert json.key?("data")
@@ -156,6 +168,10 @@ class CheckApiTest < ActionDispatch::IntegrationTest
         assert_response :success
 
         assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+
+        # Make sure we log the right platform release
+        assert_equal "ubuntu", account.log_api_calls.last.platform
+        assert_equal "trusty", account.log_api_calls.last.release
 
         json = json_body
         assert json.key?("data")

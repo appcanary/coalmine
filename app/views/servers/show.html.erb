@@ -16,6 +16,9 @@
         <th>
           uname
         </th>
+        <th>
+          tags
+        </th>
       </thead>
       <tbody>
         <tr>
@@ -31,6 +34,9 @@
           <td>
             <%= @serverpres.uname %>
           </td>
+          <td>
+            <%= @serverpres.tags.join(", ") %>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -43,9 +49,9 @@
     <% if @serverpres.bundles.any? %>
       <span class="tabletitle"><h4>Apps and dependencies</h4> <%= link_to "Export to CSV", server_path(@serverpres, format: "csv"), class: "btn btn-default" %></span>
       <table class="table apps">
-        <% @serverpres.bundles.each do |bundle| %>
+        <% @serverpres.bundles.each do |bundlepres| %>
           <tr>
-            <%= render :partial => "apps/list", :locals => { :app => bundle } %>
+            <%= render :partial => "apps/list", :locals => { :bundlepres => bundlepres } %>
           </tr>
         <% end %>
       </table>

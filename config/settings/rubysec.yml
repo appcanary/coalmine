@@ -1,0 +1,21 @@
+development:
+  rubysec:
+    domains:
+      - rubysec.dev
+
+test:
+  rubysec:
+    domains:
+      - rubysec.dev
+
+
+staging:
+  rubysec:
+    domains:
+      - rubysec.staging.appcanary.com
+      - staging.rubysec.com
+
+production:
+  rubysec:
+    domains:
+      - rubysec.com

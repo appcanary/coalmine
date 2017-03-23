@@ -21,14 +21,21 @@
 # TODO: enforce uniqueness constraint
 
 class BundledPackage < ActiveRecord::Base
+  extend ArchiveBehaviour
+  # needed for archive methods
+  def self.archive_class
+    BundledPackageArchive
+  end
+
   belongs_to :package
   belongs_to :bundle
 
   has_many :vulnerable_packages, :foreign_key => :package_id, :primary_key => :package_id
+  has_many :log_resolutions, :foreign_key => :package_id, :primary_key => :package_id
 
   scope :affected_by_vuln, -> (account_id, vuln_id) {
     joins("inner join bundles on bundles.id = bundled_packages.bundle_id
-           inner join vulnerable_packages vp on vp.package_id = bundled_packages.package_id").where("bundles.account_id = ? and vp.vulnerability_id = ?", account_id, vuln_id).includes({bundle: :agent_server}, {package: :vulnerable_dependencies})
+           inner join vulnerable_packages vp on vp.package_id = bundled_packages.package_id").where("bundles.account_id = ? and vp.vulnerability_id = ?", account_id, vuln_id).includes(:package, :bundle)
 
   }
 
@@ -62,7 +69,5 @@ class BundledPackage < ActiveRecord::Base
                  lbv.vulnerable_dependency_id = "vulnerable_packages".vulnerable_dependency_id AND 
                  lbv.vulnerable_package_id = "vulnerable_packages".id)')
   }
-
-
 
 end

@@ -2,6 +2,7 @@ require 'test_helper'
 
 class CesaImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
+    CesaImporter.any_instance.stubs(:update_local_store!).returns(true)
     @importer = CesaImporter.new("test/data/importers/cesa")
 
     assert_equal 0, Advisory.from_cesa.count
@@ -19,7 +20,7 @@ class CesaImporterTest < ActiveSupport::TestCase
       assert_equal "centos", new_attr["platform"]
       assert new_attr["identifier"] =~ /CESA-2016:\d\d\d\d/
 
-      assert ["medium", "critical", "high"].include?(new_attr["criticality"])
+      assert Advisory.criticalities.values.include?(new_attr["criticality"])
       assert_equal "cefs", new_attr["source"]
 
       # are we generating the patched/affected json properly?
@@ -51,8 +52,9 @@ class CesaImporterTest < ActiveSupport::TestCase
     @importer.process_advisories(all_advisories)
     assert_equal 4, Advisory.from_cesa.count
 
+    assert_importer_mark_processed_idempotency(@importer)
 
-     # if we change an attribute tho we should get a more
+    # if we change an attribute tho we should get a more
     # recent version.
 
     new_cesaadv = @importer.parse(raw_advisories.first)

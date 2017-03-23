@@ -1,5 +1,4 @@
 class NotificationPresenter
-  attr_accessor :notifications_by_vuln, :unpatched_notifications
   def initialize(msg)
     case msg
     when EmailPatched
@@ -13,27 +12,18 @@ class NotificationPresenter
 
     @account = msg.account
     @notifications = VulnQuery.from_notifications(msg.notifications, @type)
-
-    notifications_by_vuln = {}
-    unpatched_notifications = {}
-
-    # separate chaff from wheat
-    @notifications.each do |note|
-      if !note.package.upgrade_to.any?
-        unpatched_notifications[note.vulnerability] ||= []
-        unpatched_notifications[note.vulnerability] << note
-      else
-        notifications_by_vuln[note.vulnerability] ||= []
-        notifications_by_vuln[note.vulnerability] << note 
-      end
-    end
-
-    @unpatched_notifications = unpatched_notifications
-    @notifications_by_vuln = notifications_by_vuln
   end
 
   def subject
-    subject = subject_label % notification_count
+    pkg_count = notifications_by_package.count
+    date_str = @sent_date.strftime("%Y-%m-%d")
+
+    subject = case @type
+    when :vuln
+      "#{pkg_count} new vulnerable packages (#{date_str})"
+    when :patched
+      "Fixed: #{pkg_count} patched packages (#{date_str})"
+    end
 
     if !Rails.env.production?
       subject = "[#{Rails.env}] " + subject
@@ -42,8 +32,29 @@ class NotificationPresenter
     subject
   end
 
-  def notification_count
-    @notifications_by_vuln.count + @unpatched_notifications.count
+  def should_deliver?
+    if Rails.env.production?
+      return true
+    elsif $rollout.active?(:all_staging_notifications)
+      return true
+    else
+      if @account.email != "hello@appcanary.com"
+        return false
+      else
+        return true
+      end
+    end
+  end
+
+  def notifications_by_package
+    @notifications_by_package ||=
+      @notifications.group_by(&:package).sort_by { |k, v| [-k.upgrade_priority_ordinal, k.name] }
+  end
+
+  def each_package
+    notifications_by_package.each do |pkg, logs|
+      yield pkg, sort_and_wrap_logs(logs)
+    end
   end
 
   def recipients
@@ -55,32 +66,6 @@ class NotificationPresenter
     recipients
   end
 
-  def subject_label
-    date_str = @sent_date.strftime("%Y-%m-%d")
-    case @type
-    when :vuln
-      "%s vulnerabilities detected (#{date_str})"
-    when :patched
-      "Fixed: %s vulnerabilities patched (#{date_str})"
-    end
-  end
-
-  def each_vuln
-    @notifications_by_vuln.each_pair do |vuln, logs|
-      yield vuln, sort_and_wrap_logs(logs)
-    end
-  end
-
-  def has_unpatched_vulns?
-    @unpatched_notifications.present?
-  end
-
-  def each_unpatched_vuln
-    @unpatched_notifications.each_pair do |vuln, logs|
-      yield vuln, sort_and_wrap_logs(logs)
-    end
-  end
-
   # TODO:
   # this will all go to shit if bundles were deleted b/w
   # notification trigger and notification processing
@@ -90,7 +75,7 @@ class NotificationPresenter
   # the same server together. if no server present, sort
   # them first! cos its a monitor
   def sort_and_wrap_logs(logs)
-    logs.map { |l| LogPresenter.new(l) }.sort_by { |l| l.bundle.agent_server_id || 0 }
+    logs.map { |l| LogPresenter.new(l) }.sort_by { |l| l.bundle.try(:agent_server_id) || 0 }
   end
 
   class LogPresenter
@@ -99,7 +84,7 @@ class NotificationPresenter
     end
 
     def has_server?
-      @log.bundle.agent_server
+      @log.bundle.try(:agent_server)
     end
 
     def bundle
@@ -107,7 +92,7 @@ class NotificationPresenter
     end
 
     def server
-      @log.bundle.agent_server
+      @log.bundle.try(:agent_server)
     end
 
     def package_name

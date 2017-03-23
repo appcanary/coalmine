@@ -1,3 +1,4 @@
 //= require main.bundle
-//= require jquery
-//= require bootstrap-sprockets
+//= require vendor/jquery.dataTables.min
+//= require vendor/dataTables.bootstrap.min
+//= require vendor/clipboard.min

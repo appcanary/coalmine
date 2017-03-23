@@ -3,6 +3,7 @@ require 'test_helper'
 class UbuntuTrackerImporterTest < ActiveSupport::TestCase
 
   it "should do the right thing" do
+    UbuntuTrackerImporter.any_instance.stubs(:update_local_store!).returns(true)
     @importer = UbuntuTrackerImporter.new("test/data/importers/ubuntu-cve-tracker")
     assert_equal 0, Advisory.from_ubuntu.count
 
@@ -22,7 +23,7 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
 
       assert new_attr["identifier"] =~ /CVE-\d\d\d\d-\d\d\d\d/
       assert new_attr["reference_ids"].first =~ /CVE-\d\d\d\d-\d\d\d\d/
-      assert ["medium", "low"].include?(new_attr["criticality"])
+      assert Advisory.criticalities.values.include?(new_attr["criticality"])
 
       # are we generating patched/affected properly?
       assert new_attr["patched"].all? { |hsh|
@@ -83,7 +84,9 @@ class UbuntuTrackerImporterTest < ActiveSupport::TestCase
     assert_equal 7, Advisory.from_ubuntu.count
 
     # Do we parse the correct reported_at date
-    assert_equal Date.new(2016,01,27), Advisory.where(:identifier => "retired/CVE-2016-0755").first.reported_at
+    assert_equal Date.new(2016,01,27), Advisory.where(:identifier => "CVE-2016-0755").first.reported_at
+
+    assert_importer_mark_processed_idempotency(@importer)
 
     # is this idempotent?
     @importer.process_advisories(all_advisories)

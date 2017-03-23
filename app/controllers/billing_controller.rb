@@ -14,11 +14,12 @@ class BillingController < ApplicationController
         notice = "You've successfully canceled your subscription. Sorry to see you go!" 
 
         $analytics.canceled_subscription(@user)
-        Raven.capture_message("Subscription canceled by: #{@user.email}")
+        SystemMailer.canceled_subscription_email(@user.id).deliver_later!
 
       elsif (sub = @billing_manager.valid_subscription?(sub_plan))
         if stripe_params[:stripe_token].blank?
           @user = @billing_manager.change_subscription!(sub)
+          SystemMailer.subscription_plan_changed(@user.id, sub).deliver_later!
         else
           @user = @billing_manager.add_customer(stripe_params[:stripe_token], sub)
 
@@ -30,7 +31,7 @@ class BillingController < ApplicationController
             $analytics.added_credit_card(@user)
             notice = "Thanks for subscribing! You are awesome."
 
-            Raven.capture_message("Subscription added by: #{@user.email}")
+            SystemMailer.new_subscription_email(@user.id).deliver_later!
           end
         end
 

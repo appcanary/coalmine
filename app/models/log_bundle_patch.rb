@@ -25,6 +25,12 @@
 #  index_of_six_kings_LBP                                (bundle_id,package_id,bundled_package_id,vulnerability_id,vulnerable_dependency_id,vulnerable_package_id) UNIQUE
 #
 
+# Creates historical record of when a bundle has stopped being 
+# associated with a vulnerability, and how.
+#
+# The supplementary flag tracks whether the change was
+# initiated by the system (i.e. new or changed vulnerability)
+# or by the user (i.e. bundle packages were changed).
 class LogBundlePatch < ActiveRecord::Base
   belongs_to :bundle
   belongs_to :package
@@ -33,12 +39,80 @@ class LogBundlePatch < ActiveRecord::Base
   belongs_to :vulnerable_dependency
   belongs_to :vulnerable_package
 
-  scope :unnotified_logs_by_account, -> {
-    joins('INNER JOIN "bundles" ON "bundles"."id" = "log_bundle_patches"."bundle_id"
-          LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id
-          WHERE "notifications".id IS NULL').
-          pluck('"bundles".account_id, "log_bundle_patches".id log_bundle_patch_id')
+  has_many :notifications
+
+  # we want all LBPs that point to:
+  # 1. vuln_deps that currently exist (i.e. not since deleted)
+  # 2. bundles that currently exist
+  # 3. that have NOT already been put into a notification
+
+  scope :unnotified_logs, -> {
+    joins(:vulnerable_dependency).
+    joins(:bundle).
+    joins('LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id').
+    where('"notifications".id IS NULL')
   }
+
+  scope :patchable, -> {
+    current_scope.merge(VulnerableDependency.patchable)
+  }
+
+  #-----
+
+  scope :select_bundles_and_vulns, -> {
+    select("bundles.agent_server_id, log_bundle_patches.bundle_id, log_bundle_patches.package_id, log_bundle_patches.vulnerability_id, log_bundle_patches.supplementary")
+  }
+
+   scope :in_bundles_from, -> (account_id) {
+    @previously_saved_account_id = sanitize(account_id)
+    joins("INNER JOIN 
+          (SELECT id, agent_server_id FROM bundles WHERE bundles.account_id = #{@previously_saved_account_id}) bundles ON 
+          bundles.id = log_bundle_patches.bundle_id").select("log_bundle_patches.*").select("bundles.agent_server_id")
+
+   }
+ 
+   # TODO: document the importance of bp_id > bp_id
+   scope :that_are_not_vulnerable , -> {
+     joins("LEFT JOIN log_bundle_vulnerabilities ON 
+          log_bundle_vulnerabilities.bundle_id = log_bundle_patches.bundle_id AND
+          log_bundle_vulnerabilities.bundled_package_id > log_bundle_patches.bundled_package_id AND
+          log_bundle_vulnerabilities.package_id = log_bundle_patches.package_id AND
+          log_bundle_vulnerabilities.vulnerability_id = log_bundle_patches.vulnerability_id AND
+          log_bundle_vulnerabilities.vulnerable_dependency_id = log_bundle_patches.vulnerable_dependency_id AND
+          log_bundle_vulnerabilities.vulnerable_package_id = log_bundle_patches.vulnerable_package_id").
+          where('"log_bundle_vulnerabilities".id IS NULL')
+   }
+
+   scope :not_vulnerable_as_of, -> (end_at) {
+     joins(:vulnerable_dependency).
+     joins("LEFT JOIN log_bundle_vulnerabilities ON 
+          log_bundle_vulnerabilities.bundle_id = log_bundle_patches.bundle_id AND
+          log_bundle_vulnerabilities.bundled_package_id > log_bundle_patches.bundled_package_id AND
+          log_bundle_vulnerabilities.package_id = log_bundle_patches.package_id AND
+          log_bundle_vulnerabilities.vulnerability_id = log_bundle_patches.vulnerability_id AND
+          log_bundle_vulnerabilities.vulnerable_dependency_id = log_bundle_patches.vulnerable_dependency_id AND
+          log_bundle_vulnerabilities.vulnerable_package_id = log_bundle_patches.vulnerable_package_id AND
+           log_bundle_vulnerabilities.occurred_at <= #{sanitize(end_at)}").
+     where('"log_bundle_vulnerabilities".id IS NULL').
+     where("vulnerable_dependencies.valid_at <= ?", end_at)
+   }
+
+   scope :vulnerable_after, -> (begin_at) {
+     joins(:vulnerable_dependency).
+     where("vulnerable_dependencies.valid_at >= ?", begin_at)
+   }
+
+
+    scope :patched_between, -> (begin_at, end_at) {
+      where("log_bundle_patches.occurred_at >= ? AND log_bundle_patches.occurred_at <= ?", begin_at, end_at)
+  }
+
+
+
+
+
+  
+  ##----
 
 
   # Every time a bundle is changed, note whether
@@ -144,5 +218,9 @@ class LogBundlePatch < ActiveRecord::Base
                  :vulnerable_package_id => lbp.vulnerable_package_id,
                  :occurred_at => lbp.occurred_at)
     end
+  end
+
+  def self.resolution_log_primary_key
+    "log_bundle_patches.package_id"
   end
 end

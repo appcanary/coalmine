@@ -4,6 +4,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
   before do
     @account = FactoryGirl.create(:account)
     @account2 = FactoryGirl.create(:account)
+
   end
 
   describe "while un- or poorly authenticated" do
@@ -59,6 +60,8 @@ class AgentApiTest < ActionDispatch::IntegrationTest
     end
 
     it "should accept files, including when they change" do
+      $rollout.activate(:log_every_file)
+      assert_equal 0, AgentAcceptedFile.count
       server = FactoryGirl.create(:agent_server, :centos, :account => @account).reload
 
       assert_equal 0, server.bundles.count
@@ -80,6 +83,8 @@ class AgentApiTest < ActionDispatch::IntegrationTest
       assert_equal 103, b.packages.count
       assert_equal path, b.path
       assert_equal "3.2.19", b.packages.where(:name => "rails").first.version
+ 
+      assert_equal 1, AgentAcceptedFile.count
 
       # let's submit some changes!
 
@@ -95,6 +100,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
       assert_equal 146, b.packages.count 
       assert_equal "4.2.0", b.packages.where(:name => "rails").first.version
 
+      assert_equal 2, AgentAcceptedFile.count
 
       # okay. what happens when I resubmit this but I change the path?
       put api_agent_server_update_path(server.uuid), 
@@ -102,6 +108,8 @@ class AgentApiTest < ActionDispatch::IntegrationTest
         {"Content-Type": 'application/json', :authorization => %{Token token="#{@account.token}"}}
 
       assert_equal 2, server.bundles.count
+      assert_equal 3, AgentAcceptedFile.count
+      $rollout.deactivate(:log_every_file)
     end
 
     # TODO: make this more exhaustive?
@@ -127,6 +135,75 @@ class AgentApiTest < ActionDispatch::IntegrationTest
         {"Content-Type": 'application/json', :authorization => %{Token token="#{@account.token}"}}
 
       assert_equal 2, server.received_files.count
+    end
+
+    describe "tagging" do
+      def build_payload(tags, updated_at)
+        {"agent-version" => "unreleased",
+         :distro => "testD",
+         :release => "testR",
+         :files => [{"being-watched" => true, :crc => 1213720459, :kind => "gemfile", :updated_at => updated_at}],
+         :tags => tags}.to_json
+      end
+
+      let(:server) { FactoryGirl.create(:agent_server, :account => @account).reload }
+
+      it "should tag the server" do
+        tags = ["dogs", "cats", "webservers"]
+
+        assert server.tags.empty?
+        post api_agent_server_heartbeat_path(server.uuid),
+             build_payload(tags, DateTime.parse("2016-07-26 12:00")),
+             {"Content-Type": 'application/json', authorization: %{Token token="#{@account.token}"}}
+
+        server.reload
+        assert_equal 3, server.tags.count
+        tags.each do |tag|
+          assert server.tags.pluck(:tag).include?(tag)
+        end
+      end
+
+      it "should not remove tags" do
+        assert server.tags.empty?
+        post api_agent_server_heartbeat_path(server.uuid),
+             build_payload(["dogs", "cats", "webservers"], DateTime.parse("2016-07-26 12:00")),
+             {"Content-Type": 'application/json', authorization: %{Token token="#{@account.token}"}}
+
+        server.reload
+        assert_equal 3, server.tags.count
+
+        post api_agent_server_heartbeat_path(server.uuid),
+             build_payload(["dogs", "cats"], DateTime.parse("2016-07-26 13:00")), # less tags
+             {"Content-Type": 'application/json', authorization: %{Token token="#{@account.token}"}}
+
+        # should be the same as before, we don't drop tags
+        server.reload
+        assert_equal 3, server.tags.count
+        ["dogs", "cats", "webservers"].each do |tag|
+          assert server.tags.pluck(:tag).include?(tag)
+        end
+      end
+
+      it "should add only the new tags" do
+        assert server.tags.empty?
+        post api_agent_server_heartbeat_path(server.uuid),
+             build_payload(["dogs", "cats", "webservers"], DateTime.parse("2016-07-26 12:00")),
+             {"Content-Type": 'application/json', authorization: %{Token token="#{@account.token}"}}
+
+        server.reload
+        assert_equal 3, server.tags.count
+
+        post api_agent_server_heartbeat_path(server.uuid),
+             build_payload(["dogs", "cats", "donkeys"], DateTime.parse("2016-07-26 13:00")), # less tags
+             {"Content-Type": 'application/json', authorization: %{Token token="#{@account.token}"}}
+
+        # should be the same as before, we don't drop tags
+        server.reload
+        assert_equal 4, server.tags.count
+        ["dogs", "cats", "webservers", "donkeys"].each do |tag|
+          assert server.tags.pluck(:tag).include?(tag)
+        end
+      end
     end
   end
 end

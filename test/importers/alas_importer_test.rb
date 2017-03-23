@@ -2,7 +2,8 @@ require 'test_helper'
 
 class AlasImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
-    @importer = AlasImporter.new(File.join(Rails.root, "test/data/importers/alas/index.html"))
+    AlasImporter.any_instance.stubs(:update_local_store!).returns(true)
+    @importer = AlasImporter.new("not a real website", "test/data/importers/alas")
 
     assert_equal 0, Advisory.from_alas.count
     
@@ -17,7 +18,7 @@ class AlasImporterTest < ActiveSupport::TestCase
       assert_equal "amzn", new_attr["platform"]
       assert new_attr["identifier"] =~ /ALAS-201[4,6]-\d\d\d/
 
-      assert ["high", "low", "critical", "medium"].include? new_attr["criticality"]
+      assert Advisory.criticalities.values.include? new_attr["criticality"]
 
       assert new_attr["reference_ids"].all? { |cve| cve =~ /(CVE|RHSA)-\d\d\d\d-\d\d\d\d/ }
       assert_equal "alas", new_attr["source"]
@@ -45,7 +46,8 @@ class AlasImporterTest < ActiveSupport::TestCase
     @importer.process_advisories(all_advisories)
     assert_equal 4, Advisory.from_alas.count
 
-
+    assert_importer_mark_processed_idempotency(@importer)
+    
     # if we change an attribute tho we should get a more
     # recent version.
 
@@ -55,6 +57,8 @@ class AlasImporterTest < ActiveSupport::TestCase
     @importer.process_advisories([new_alas_adv])
 
     assert_equal 4, Advisory.from_alas.count
+    
     assert_equal "new description omg", Advisory.from_alas.order(:updated_at).last.description
+    
   end
 end

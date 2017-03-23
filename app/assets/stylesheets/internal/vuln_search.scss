@@ -1,0 +1,17 @@
+#vulns_data_wrapper {
+  padding-top: 2em;
+
+  #vulns_data_filter {
+    label {
+      font-weight: bold;
+      input {
+        
+      }
+    }
+    text-align: left;
+  }
+
+  #vulns_data_length {
+    text-align: right;
+  }
+}

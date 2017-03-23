@@ -17,16 +17,35 @@ module ApplicationHelper
     nil
   end
 
+  def show_package_path(package)
+    if package.release.nil?
+      package_platform_path(package.platform, package.name, package.version)
+    else
+      package_platform_release_path(package.platform, package.release, package.name, package.version)
+    end
+  end
+
+  def show_package_url(package)
+    if package.release.nil?
+      package_platform_url(package.platform, package.name, package.version)
+    else
+      package_platform_release_url(package.platform, package.release, package.name, package.version)
+    end
+  end
+
+
   def gravatar_img(email)
     ident = Digest::MD5.hexdigest(email.to_s.downcase)
     "https://gravatar.com/avatar/#{ident}?d=identicon"
   end
 
-  def eui_button(value, opt = {})
-    btn_type = "eui-button-medium-default"
+  def eui_button(value, opt = {}, html = {})
+    btn_type = opt[:type] || "eui-button-medium-default"
     disabled = opt[:disabled] ? "eui-disabled" : nil
     klass = opt[:class] ? opt[:class] : nil
-    content_tag("eui-button", :class => "ember-view #{btn_type} #{disabled} #{klass}") do
+    tag_attr = {:class => "ember-view #{btn_type} #{disabled} #{klass}"}
+
+    content_tag("eui-button", tag_attr.merge(html)) do
       if disabled
       btn = content_tag("button", :disabled => true, :'aria-label' => value) {} 
       else
@@ -37,7 +56,7 @@ module ApplicationHelper
 
         content_tag("div", :class => "eui-component-wrapper") do
           content_tag("div", :class => "eui-label") do
-            content_tag("a", :href => opt[:href], :class => "eui-label-value") do
+            content_tag("a", :href => opt[:href], :class => "eui-label-value", :target => opt[:target]) do
               value
             end
           end
@@ -115,7 +134,8 @@ module ApplicationHelper
     if main_ver
       str = "<p>Upgrade to: <code>#{h main_ver}</code></p>"
       if remaining_patches.present?
-        str += "<p>Other safe versions: #{remaining_patches.map { |pv| "<code>#{h pv}</code>" }.join(", ")}"
+        safe_versions = remaining_patches.map { |pv| "<code>#{h pv}</code>" }
+        str += "<p>Other safe versions: #{safe_versions.join(', ')}"
       end
     else
       str = "<p>Upgrade to: No patches exist right now.</p>"
@@ -136,8 +156,10 @@ module ApplicationHelper
   def link_to_server_or_monitor(log)
     if log.has_server?
       link_to log.server.display_name, server_app_url(log.bundle, server_id: log.server.id)
-    else 
+    elsif log.bundle.present?
       link_to log.bundle.display_name, monitor_url(log.bundle)
+    else
+      "This item has been deleted"
     end
   end
 
@@ -146,6 +168,14 @@ module ApplicationHelper
       link_to "#{bundle.agent_server.display_name} - #{bundle.display_name}", server_app_url(bundle, server_id: bundle.agent_server_id)
     else
       link_to bundle.display_name, monitor_url(bundle)
+    end
+  end
+
+  def bundle_url(bundle)
+    if bundle.agent_server_id
+      server_app_url(bundle, server_id: bundle.agent_server_id)
+    else
+      monitor_url(bundle)
     end
   end
 
@@ -163,5 +193,9 @@ module ApplicationHelper
     else
       "Unsupported platform"
     end
+  end
+
+  def criticality_icon(criticality)
+    "<span class=\"fa fa-circle #{criticality}\"></span> #{criticality}".html_safe
   end
 end

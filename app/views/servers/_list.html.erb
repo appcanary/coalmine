@@ -1,25 +1,82 @@
-<td>
-  <section>
-    <div class="status">
-      <% if server.empty? || server.gone_silent? %>
-        <span class="fa fa-question-circle"></span>
-      <% elsif server.vulnerable? %>
-        <span class="fa fa-exclamation-triangle warn"></span>
-      <% else %>
-        <span class="fa fa-check-circle okay"></span>
-      <% end %>
-    </div>
-    <div class="description">
-      <span class="title">
-        <%= link_to server.display_name, server_path(server) %>
-      </span>
-      <div class="last_updated info">
-        <%= link_to "updated #{time_ago_in_words_or_never server.last_heartbeat_at}", server_path(server) %>
-      </div>
-    </div>
-    <div class="actions">
-      <%=link_to('edit', edit_server_path(server), class: 'btn btn-primary') %>
-      <%=link_to('delete', server_path(server), method: :delete, class: 'btn btn-danger', data: {confirm: "Are you sure you want to delete this server?"}) %>
-    </div>
-  </section>
-</td>
+<table class="dashboard table table-striped datatables servers">
+  <thead>
+    <th>
+    </th>
+
+    <th>
+      name
+    </th>
+
+    <th>
+      apps
+    </th>
+
+    <th>
+      platform
+    </th>
+
+    <th>
+      updated
+    </th>
+
+    <th>
+      tags
+    </th>
+
+    <th>
+    </th>
+  </thead>
+
+  <% servers.each do |serverpres| %>
+    <tr>
+      <td class="icon" data-order="<%= serverpres.vuln_sort_ordinal %>">
+        <% if serverpres.empty? || serverpres.gone_silent? %>
+          <span class="fa fa-question-circle"></span>
+        <% elsif serverpres.vulnerable? %>
+          <span class="fa fa-exclamation-triangle warn"></span>
+        <% else %>
+          <span class="fa fa-check-circle okay"></span>
+        <% end %>
+      </td>
+
+      <td>
+        <%= link_to serverpres.display_name, server_path(serverpres) %>
+      </td>
+
+      <td>
+        <% if serverpres.bundles.present? %>
+          <% serverpres.bundles_sys_sorted.each do |bundlepres| %>
+            <% if bundlepres.vulnerable? %>
+              <span class="fa fa-exclamation-triangle warn"></span>
+            <% else %>
+              <span class="fa fa-check-circle okay"></span>
+            <% end %>
+
+            <%= link_to bundlepres.display_name, server_app_path(serverpres, bundlepres) %>
+            <br/>
+          <% end %>
+        <% else %>
+          None
+        <% end %>
+      </td>
+
+      <td>
+        <%= platform_label(serverpres.distro) %>
+      </td>
+
+      <td data-order="<%= serverpres.last_heartbeat_at.to_i %>">
+        <%= time_ago_in_words_or_never serverpres.last_heartbeat_at %>
+      </td>
+
+      <td>
+        <%= serverpres.tags.join(", ") %>
+      </td>
+
+      <td>
+        <%=link_to('edit', edit_server_path(serverpres), class: 'btn btn-primary') %>
+        <%=link_to('delete', server_path(serverpres), method: :delete, class: 'btn btn-danger', data: {confirm: "Are you sure you want to delete this server?"}) %>
+      </td>
+    </tr>
+  <% end %>
+
+</table> 

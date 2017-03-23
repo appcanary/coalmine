@@ -34,7 +34,12 @@
 #  daily_email_consent             :boolean          default("false"), not null
 #  datomic_id                      :integer
 #  invoiced_manually               :boolean          default("false")
+#  agent_token                     :string
 #  account_id                      :integer          not null
+#  pref_os                         :string
+#  pref_deploy                     :string
+#  pref_tech                       :string           is an Array
+#  phone_number                    :string
 #
 # Indexes
 #

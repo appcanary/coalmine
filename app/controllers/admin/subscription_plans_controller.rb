@@ -74,6 +74,6 @@ class Admin::SubscriptionPlansController < AdminController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def admin_subscription_plan_params
-      params.require(:subscription_plan).permit(:value, :agent_value, :monior_value, :agent_limit, :monitor_limit, :api_limit, :label, :comment)
+      params.require(:subscription_plan).permit(:value, :agent_value, :agent_limit, :api_limit, :label, :comment)
     end
 end

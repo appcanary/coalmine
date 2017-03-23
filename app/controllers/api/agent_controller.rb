@@ -23,6 +23,10 @@ class Api::AgentController < ApiController
 
     server.register_heartbeat!(params)
 
+    unless params[:tags].nil?
+      server.idempotently_add_tags!(params[:tags].reject(&:empty?))
+    end
+
     # needs to fetch the newly created heartbeat
     server.reload
 
@@ -69,22 +73,21 @@ class Api::AgentController < ApiController
                   path: sendfile_params[:path],
                   last_crc: sendfile_params[:crc]}
 
-    bm = BundleManager.new(current_account, server)
-    bundle, err = bm.create_or_update(pr, bundle_opt, package_list)
-    
-    if err
-      log_faulty_request(server)
-
-      loggit("400 PUT bundle", params[:uuid])
-      render :text => "", :status => 400
-      return
-    end
-
+    # This is running in the background so we can no longer signal an error to the agent if something goes wrong here
+    # I call to_json myself here because it's not serialized in test mode.
+    # I don't want to reparse the data in the job because we can still tell the agent the data doesn't parse
+    AgentUpdateJob.enqueue(current_account.id, server.id, pr.platform, pr.release, bundle_opt, package_list.map(&:attributes))
+    log_every_request(server)
     render :json => {}
   end
 
   def show
     server = current_account.agent_servers.where(:uuid => params[:uuid]).take
+    unless server
+      loggit("404 PUT", params[:uuid])
+      render :text => "", :status => 404
+      return
+    end
 
     bundle = server.system_bundle
     if bundle.nil?
@@ -110,6 +113,13 @@ class Api::AgentController < ApiController
     end
 
     PlatformRelease.validate(platform, release)
+  end
+
+  def log_every_request(server)
+    if $rollout.active?(:log_every_file)
+      server.accepted_files.create(account_id: current_account.id, 
+                                   request: request.raw_post)
+    end
   end
 
   def log_faulty_request(server)

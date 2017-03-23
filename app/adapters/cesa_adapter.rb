@@ -44,14 +44,18 @@ class CesaAdapter < AdvisoryAdapter.new(:cesa_id, :issue_date, :synopsis,
   end
 
 
-  # versions pre el7 are a crapshoot;
-  # most but not all el6 and el5 is a ???
+  # versions pre el5 are a crapshoot;
+  # TODO: there are 20 vulns we need to account for manually from 2011-2014
   def normalize_release(str)
     case str
     when /el7/
       "7"
     when /el6/
       "6"
+    when /el5/
+      "5"
+    when /el4/
+      "4"
     else
       "unknown"
     end
@@ -69,15 +73,15 @@ class CesaAdapter < AdvisoryAdapter.new(:cesa_id, :issue_date, :synopsis,
   generate :criticality do
     case severity
     when "Critical"
-      "critical"
+      Advisory.criticalities["critical"]
     when "Important"
-      "high"
+      Advisory.criticalities["high"]
     when "Moderate"
-      "medium"
+      Advisory.criticalities["medium"]
     when "Low"
-      "low"
+      Advisory.criticalities["low"]
     else
-      "unknown"
+      Advisory.criticalities["unknown"]
     end
   end
 

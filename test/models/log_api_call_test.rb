@@ -7,6 +7,8 @@
 #  action     :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  platform   :string
+#  release    :string
 #
 # Indexes
 #

@@ -1,3 +1,4 @@
+require_relative File.join(Rails.root, 'lib/git_handler')
 class RubysecImporter < AdvisoryImporter
   SOURCE = "rubysec"
   PLATFORM = Platforms::Ruby

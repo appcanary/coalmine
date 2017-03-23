@@ -2,16 +2,19 @@
 #
 # Table name: subscription_plans
 #
-#  id         :integer          not null, primary key
-#  value      :integer
-#  unit_value :integer
-#  limit      :integer
-#  label      :string
-#  comment    :string
-#  default    :boolean          default("false"), not null
-#  discount   :boolean          default("false"), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :integer          not null, primary key
+#  value       :integer
+#  agent_value :integer
+#  agent_limit :integer
+#  label       :string
+#  comment     :string
+#  default     :boolean          default("false"), not null
+#  discount    :boolean          default("false"), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  user_limit  :integer          default("5")
+#  api_limit   :integer          default("0")
+#  free        :boolean          default("false")
 #
 # Indexes
 #
@@ -26,14 +29,12 @@ class SubscriptionPlanTest < ActiveSupport::TestCase
 
     sub = SubscriptionPlan.new(:value => 1000,
                                :agent_value => 100,
-                               :agent_limit => 10,
-                               :monitor_value => 200,
-                               :monitor_limit => 10)
-
-    assert_equal sub.cost(0,0), 1000
-    assert_equal sub.cost(1,1), 1000
-    assert_equal sub.cost(10,10), 1000
-    assert_equal sub.cost(11,10), 1100
-    assert_equal sub.cost(10,11), 1200
+                               :agent_limit => 10)
+    
+    assert_equal 1000, sub.cost(0,0)
+    assert_equal 1000, sub.cost(1,1)
+    assert_equal 1000, sub.cost(5,5)
+    assert_equal 1100, sub.cost(5,6)
+    assert_equal 1100, sub.cost(6,5)
   end
 end

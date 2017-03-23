@@ -2,16 +2,19 @@
 #
 # Table name: subscription_plans
 #
-#  id         :integer          not null, primary key
-#  value      :integer
-#  unit_value :integer
-#  limit      :integer
-#  label      :string
-#  comment    :string
-#  default    :boolean          default("false"), not null
-#  discount   :boolean          default("false"), not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :integer          not null, primary key
+#  value       :integer
+#  agent_value :integer
+#  agent_limit :integer
+#  label       :string
+#  comment     :string
+#  default     :boolean          default("false"), not null
+#  discount    :boolean          default("false"), not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  user_limit  :integer          default("5")
+#  api_limit   :integer          default("0")
+#  free        :boolean          default("false")
 #
 # Indexes
 #
@@ -24,28 +27,23 @@ class SubscriptionPlan < ActiveRecord::Base
   scope :default_discount, -> { where(:discount => true) }
 
   def value_in_currency
-    value / 100
+    value / 100.0
   end
 
   def agent_value_in_currency
-    agent_value / 100
-  end
-
-  def monitor_value_in_currency
-    monitor_value / 100
+    agent_value / 100.0
   end
 
   def text
     if agent_limit == 0
-      "$#{self.agent_value_in_currency}/server/month #{label}".strip
+      "$#{self.agent_value_in_currency}/agent/month #{label}".strip
     else
       "$#{self.value_in_currency}/month #{label}".strip
     end
   end
 
   def cost(agents, monitors)
-    agent_cost = (([agents, agent_limit].max - agent_limit) * agent_value)
-    monitor_cost = (([monitors, monitor_limit].max - monitor_limit) * monitor_value) 
-    value + agent_cost + monitor_cost
+    total_items = agents + monitors
+    value + (([total_items, agent_limit].max - agent_limit) * agent_value)
   end
 end

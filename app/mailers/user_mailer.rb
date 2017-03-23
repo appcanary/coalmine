@@ -1,4 +1,4 @@
-class UserMailer < ApplicationMailer
+class UserMailer < ActionMailer::Base
   default from: "Appcanary Support <support@appcanary.com>"
   layout 'mailer'
 

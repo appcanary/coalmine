@@ -1,8 +1,7 @@
 class MonitorsController < ApplicationController
   def show
-    bundle = current_user.bundles.via_api.find(params[:id])
-
-    @bundlepres = BundlePresenter.new(VulnQuery.new(current_account), bundle)
+    @bundle = fetch_bundle(params)
+    @bundlepres = BundlePresenter.new(VulnQuery.new(current_account), @bundle)
   end
 
   def new
@@ -13,7 +12,6 @@ class MonitorsController < ApplicationController
     @form = MonitorForm.new(Bundle.new)
 
     if @form.validate(params[:monitor])
-      
       @bm = BundleManager.new(current_user.account)
       @bundle, error = @bm.create(@form.platform_release, {name: @form.name}, @form.package_list)
 
@@ -39,6 +37,31 @@ class MonitorsController < ApplicationController
       redirect_to dashboard_path, notice: "Sorry, something went wrong."
     else
       redirect_to dashboard_path, notice: "OK. Your monitor was deleted."
+    end
+  end
+
+  def resolve_vuln
+    pkg = Package.find(resolution_params[:package_id])
+    LogResolution.resolve_package(current_user, pkg, resolution_params[:note])
+    redirect_to :back, notice: "Package successfully marked as resolved."
+  end
+
+  def unresolve_vuln
+    pkg = Package.find(resolution_params[:package_id])
+    LogResolution.delete_with_package(current_user, pkg)
+    redirect_to :back, notice: "Package successfully marked as not resolved."
+  end
+
+  def resolution_params
+    params.require(:log_resolution).permit(:package_id, :note)
+  end
+
+  protected
+  def fetch_bundle(params)
+    if current_user.is_admin?
+      Bundle.via_api.find(params[:id])
+    else
+      current_user.bundles.via_api.find(params[:id])
     end
   end
 

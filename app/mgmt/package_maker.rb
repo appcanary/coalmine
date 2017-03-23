@@ -4,18 +4,30 @@
 class PackageMaker < ServiceMaker
   attr_accessor :platform, :release
 
-  def initialize(platform, release)
+  def initialize(platform, release, origin = "user", update_all = false)
     @platform = platform
     @release = release
+    @origin = origin
+    @update_all = update_all
   end
 
   def find_or_create(package_list)
-    existing_pkg_query = find_existing_packages(package_list)
+    existing_packages_query = find_existing_packages(package_list)
 
     # we might not know about every package submitted.
     # Let's check!
 
-    create_missing_packages(existing_pkg_query, package_list)
+    existing_set = existing_packages_query.pluck_unique_fields
+    new_packages = diff_packages(existing_set, package_list)
+
+    new_packages.map do |pkg|
+      self.create(pkg.attributes)
+    end
+
+    if @update_all
+      existing_packages = package_list - new_packages
+      update_packages(existing_packages)
+    end
 
     # this is an ActiveRecord_Relation; it gets
     # lazily evaluated from the database.
@@ -24,28 +36,7 @@ class PackageMaker < ServiceMaker
     # the query behind it should return all relevant packages
     # thereby negating the need to add new_packages above
     # to this list.
-    existing_pkg_query
-  end
-
-  # given an Arel query and a list of packages, determines
-  # which packages we have not seen yet and creates them.
-  #
-  # assumes that existing_packages_query was built from
-  # the items in package_list.
-
-  def create_missing_packages(existing_packages_query, package_list)
-    # if these two lists are the same size, our job here is done
-    if existing_packages_query.count == package_list.count
-      return Package.none
-    end
-    
-    existing_set = existing_packages_query.pluck_unique_fields
-
-    new_packages = diff_packages(existing_set, package_list)
-
-    new_packages.map do |pkg|
-      self.create(pkg.attributes)
-    end
+    existing_packages_query
   end
 
   def find_existing_packages(package_list)
@@ -62,15 +53,43 @@ class PackageMaker < ServiceMaker
   def create(hsh)
     package = Package.new(hsh.merge(:platform => @platform,
                                     :release => @release,
-                                    :origin=>"user"))
+                                    :origin => @origin))
 
     # current assumption: if there's something wrong with a package, 
     # abort whole txn
     package.save!
 
+    update_vulns(package)
+    return package
+  end
+
+  def update_packages(package_list)
+    package_list.each do |parcel|
+      next if parcel.try(:source_name).nil?
+
+      pkgs = Package.where(:platform => @platform, 
+                           :release => @release, 
+                           :origin => "user").
+        where(parcel.unique_hash)
+
+      # we have a problem with dupes but rn that's not my job to fix
+      pkgs.each do |pkg|
+
+        h = parcel.attributes.merge(:platform => @platform, 
+                                    :release => @release, 
+                                    :origin => @origin)
+        pkg.assign_attributes(h)
+
+        if pkg.changed? && pkg.save!
+          update_vulns(pkg)
+        end
+      end
+    end
+  end
+
+  def update_vulns(package)
     possible_vulns = package.concerning_vulnerabilities
     add_package_to_affecting_vulnerabilities!(possible_vulns, package)
-    return package
   end
 
 
@@ -86,9 +105,9 @@ class PackageMaker < ServiceMaker
   def add_package_to_affecting_vulnerabilities!(possible_vulns, package)
     possible_vulns.select do |vuln_dep|
       if vuln_dep.affects?(package)
-        VulnerablePackage.create!(:vulnerability_id => vuln_dep.vulnerability_id,
-                                  :vulnerable_dependency_id => vuln_dep.id,
-                                  :package_id => package.id)
+        VulnerablePackage.find_or_create_by!(:vulnerability_id => vuln_dep.vulnerability_id,
+                                             :vulnerable_dependency_id => vuln_dep.id,
+                                             :package_id => package.id)
       end
     end
   end

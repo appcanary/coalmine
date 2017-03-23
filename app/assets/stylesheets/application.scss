@@ -1,27 +1,22 @@
-$dark-yellow: #fadc58;
-$slightly-darker-yellow: #eac64b;
-
-$navbar-default-bg: $dark-yellow;
-$navbar-default-border: $slightly-darker-yellow;
-$link-color: #3798A5;
-
+@import "vars";
 @import "bourbon";
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
-@import 'vendor/emberui.scss';
+@import 'vendor/emberui';
 @import "font-awesome";
 @import "internal/main";
 @import "internal/dashboard";
 @import 'internal/boxes';
-
 @import "internal/users";
 @import 'internal/servers';
-@import 'internal/apps';
-@import 'internal/vulns';
+@import 'internal/bundles';
+@import 'internal/packages';
 @import 'internal/onboarding';
 @import 'internal/docs';
-@import 'internal/admin';
 // for hljs
 @import 'vendor/github-gist';
-
+@import 'vendor/dataTables.bootstrap.min';
+@import 'internal/vuln_search';
+@import 'vendor/select2';
+@import 'vendor/select2-bootstrap';

@@ -4,9 +4,9 @@
 #
 #  id            :integer          not null, primary key
 #  platform      :string           not null
-#  title         :string
+#  title         :string           not null
 #  description   :text
-#  criticality   :string
+#  criticality   :integer          default("0"), not null
 #  reference_ids :string           default("{}"), not null, is an Array
 #  related       :jsonb            default("[]"), not null
 #  osvdb_id      :string
@@ -24,9 +24,10 @@
 #
 # Indexes
 #
-#  index_vulnerabilities_on_expired_at  (expired_at)
-#  index_vulnerabilities_on_platform    (platform)
-#  index_vulnerabilities_on_valid_at    (valid_at)
+#  index_vulnerabilities_on_criticality_and_reported_at  (criticality,reported_at)
+#  index_vulnerabilities_on_expired_at                   (expired_at)
+#  index_vulnerabilities_on_platform                     (platform)
+#  index_vulnerabilities_on_valid_at                     (valid_at)
 #
 
 require File.join(Rails.root, "test/factories", 'factory_helper')
@@ -55,8 +56,11 @@ FactoryGirl.define do
   end
 
   factory :vulnerability do
-    platform { deps.first.platform }
+    platform { Platforms::Ruby }
     reference_ids { [generate(:cve_id)] }
+    reported_at { 7.days.ago }
+
+    title { Faker::Lorem.sentence }
 
     trait :ruby do
       platform { Platforms::Ruby }
@@ -70,12 +74,12 @@ FactoryGirl.define do
       platform { Platforms::Ubuntu }
     end
 
-    trait :amazon do
+    trait :amzn do
       platform { Platforms::Amazon }
     end
 
     transient do
-      platform_type { :ruby }
+      platform_type { platform.to_sym }
       deps { 2.times.map { build(:package, platform_type) } }
       pkgs { [] }
       vd_trait { nil }

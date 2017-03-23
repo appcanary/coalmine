@@ -1,0 +1,10 @@
+<%= @email.created_at %>
+
+<% case @email %>
+<% when EmailPatched %>
+  <h1>Patched</h1>
+  <%= render template: "notification_mailer/patched_email" %>
+<% when EmailVulnerable %>
+  <h1>Vuln</h1>
+  <%=   render template: "notification_mailer/vulnerable_email" %>
+<% end %>

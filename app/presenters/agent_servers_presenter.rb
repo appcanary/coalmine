@@ -2,15 +2,21 @@ class AgentServersPresenter
   attr_reader :servers, :active_servers, :silent_servers, 
     :account, :vulnquery
 
-  delegate :any?, :to => :servers
-  def initialize(account, coll = nil)
+  def initialize(account, vulnquery)
     @account = account
-    @vulnquery = VulnQuery.new(account)
+    @vulnquery = vulnquery
 
-    @servers = coll || @account.agent_servers
-    @servers = @servers.map { |s| ServerPresenter.new(@vulnquery, s) }
+    @servers = @account.agent_servers.includes(:bundles)
+    @active_servers = @servers.active
+    @silent_servers = @servers - @active_servers
 
-    @silent_servers, @active_servers = @servers.partition(&:gone_silent?)
+
+    @active_servers = @active_servers.map { |s| ServerPresenter.new(@vulnquery, s) }
+    @silent_servers = @silent_servers.map { |s| ServerPresenter.new(@vulnquery, s) }
+  end
+
+  def any?
+    active_servers.any? || silent_servers.any?
   end
 
   def active?

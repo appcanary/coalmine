@@ -8,25 +8,28 @@ gem 'pg'
 gem 'rollout'
 gem 'rollout_postgres_store'
 gem 'que', '~> 0.12.0'
-
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
+gem 'whenever', :require => false
 
 # views / assets
-gem 'sass-rails', '~> 5.0'
-gem 'bootstrap-sass', '~> 3.3.3'
+gem 'sass-rails', require: false
+gem 'sassc-rails', :git => "git@github.com:appcanary/sassc-rails.git"
+gem 'bootstrap-sass', :git => "git@github.com:appcanary/bootstrap-sass.git"
 gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0'
 gem "font-awesome-rails"
-gem "bourbon"
-gem "neat"
+gem "bourbon", :git => "git@github.com:appcanary/bourbon.git", :branch => "v4-stable"
+gem "neat", :git => "git@github.com:appcanary/neat.git"
 gem "htmlentities"
 gem 'haml', '~> 4.0.6'
 gem 'redcarpet'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 
+gem 'premailer-rails'
+# required for premailer?
+gem 'nokogiri'
+
+# handling user input
 gem 'reform'
 gem 'reform-rails'
 
@@ -38,14 +41,6 @@ gem 'pretender'
 gem 'httparty'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'has_secure_token'
-
-# gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-# gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .coffee assets and views
-# gem 'coffee-rails', '~> 4.1.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
@@ -86,10 +81,12 @@ group :development, :test do
 
   gem 'minitest-spec-rails'
   gem 'minitest-reporters'
+  gem 'minitest-ci'
   # gem 'm'
   gem 'faker'
   gem 'factory_girl_rails'
   gem 'fixtures_dumper'
+  gem 'foreman'
 end
 
 group :test do
@@ -106,4 +103,12 @@ group :development do
   gem 'annotate'
   gem 'letter_opener'
   gem 'bullet'
+  gem 'rack-mini-profiler'
+  # For memory profiling (requires Ruby MRI 2.1+)
+  gem 'memory_profiler'
+
+  # For call-stack profiling flamegraphs (requires Ruby MRI 2.0.0+)
+  gem 'flamegraph'
+  gem 'stackprof'     # For Ruby MRI 2.1+
+  gem 'fast_stack'    # For Ruby MRI 2.0
 end

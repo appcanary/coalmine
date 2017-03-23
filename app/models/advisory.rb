@@ -12,7 +12,8 @@
 #  constraints   :jsonb            default("[]"), not null
 #  title         :string
 #  description   :text
-#  criticality   :string
+#  criticality   :integer          default("0"), not null
+#  source_status :string
 #  related       :jsonb            default("[]"), not null
 #  remediation   :text
 #  reference_ids :string           default("{}"), not null, is an Array
@@ -22,7 +23,6 @@
 #  rhsa_id       :string
 #  cesa_id       :string
 #  source_text   :text
-#  processed     :boolean          default("false"), not null
 #  reported_at   :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -33,26 +33,40 @@
 #
 #  index_advisories_on_expired_at             (expired_at)
 #  index_advisories_on_identifier             (identifier)
-#  index_advisories_on_processed              (processed)
 #  index_advisories_on_source                 (source)
 #  index_advisories_on_source_and_identifier  (source,identifier) UNIQUE
 #  index_advisories_on_valid_at               (valid_at)
 #
-
 
 # `constraints` is the column we actually use to compute what packages are
 # vulnerable. `patched`, `affected`, and `unaffected` all come from the advisory
 # sources, but are used to compute `constraints` by the importers.
 
 class Advisory < ActiveRecord::Base
+  # Used for the enums in Advisory, Vulnerability, and VulnerabilityArchive
+  CRITICALITIES = {
+    unknown: 0,
+    negligible: 10,
+    low: 20,
+    medium: 30,
+    high: 40,
+    critical: 50,
+  }
+
+  CRITICALITIES_BY_VALUE = CRITICALITIES.invert
+
   has_many :advisory_vulnerabilities
   has_many :vulnerabilities, :through => :advisory_vulnerabilities
-  has_one :advisory_import_state, autosave: true
+  has_one :advisory_import_state, :autosave => true, :dependent => :destroy
   validates :advisory_import_state, :presence => true
   
   before_validation do
-    self.build_advisory_import_state
+    unless self.advisory_import_state
+      self.build_advisory_import_state
+    end
   end
+
+  enum criticality: CRITICALITIES
 
   scope :most_recent_advisory_for, ->(identifier, source) {
     where(:identifier => identifier, :source => source).order("created_at DESC").limit(1)
@@ -89,6 +103,14 @@ class Advisory < ActiveRecord::Base
   scope :from_cve, -> {
     where(:source => CveImporter::SOURCE)
   }
+  # AIS gets auto saved, so we skip saving it ourselves here.
+  def processed_flag=(flag)
+    unless self.advisory_import_state
+      self.build_advisory_import_state
+    end
+
+    self.advisory_import_state.processed = flag
+  end
 
   def to_vuln_attributes
     valid_attr = Vulnerability.attribute_names

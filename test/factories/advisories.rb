@@ -12,7 +12,8 @@
 #  constraints   :jsonb            default("[]"), not null
 #  title         :string
 #  description   :text
-#  criticality   :string
+#  criticality   :integer          default("0"), not null
+#  source_status :string
 #  related       :jsonb            default("[]"), not null
 #  remediation   :text
 #  reference_ids :string           default("{}"), not null, is an Array
@@ -22,7 +23,6 @@
 #  rhsa_id       :string
 #  cesa_id       :string
 #  source_text   :text
-#  processed     :boolean          default("false"), not null
 #  reported_at   :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -33,7 +33,6 @@
 #
 #  index_advisories_on_expired_at             (expired_at)
 #  index_advisories_on_identifier             (identifier)
-#  index_advisories_on_processed              (processed)
 #  index_advisories_on_source                 (source)
 #  index_advisories_on_source_and_identifier  (source,identifier) UNIQUE
 #  index_advisories_on_valid_at               (valid_at)
@@ -47,6 +46,7 @@ FactoryGirl.define do
   end
   factory :advisory do
     identifier
+    title { Faker::Lorem.sentence }
     trait :ruby do
       platform { Platforms::Ruby }
       source "rubysec"

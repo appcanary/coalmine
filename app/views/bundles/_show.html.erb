@@ -1,0 +1,226 @@
+<div class="bundle-packages">
+  <% if @bundle_revisions %>
+    <%= form_tag bundle_url(@bundle), :method => :get do |f| %>
+      <%= select_tag :revisions, options_for_select(@bundle_revisions.each_with_index.map { |d, i| [d, i]}), :prompt => "Pick a date", :class => "form-group" %> 
+      <%= submit_tag "Submit", :class => "btn btn-primary" %>
+    <% end %>
+  <% end %>
+
+  <% if @cur_revision %>
+    <h3>Showing history for: <%= @cur_revision %></h3>
+  <% end %>
+  
+  <ul class="nav nav-tabs">
+    <li class="active" role="presentation">
+      <a href="#vulnerable-packages-tab"  data-toggle="tab">
+        <% if @bundlepres.vuln_packages.any? %>
+          <span class="fa fa-exclamation-triangle warn"></span>
+          vulnerable packages
+        <% else %>
+          <span class="fa fa-check-circle okay"></span>
+        <% end %>
+      </a>
+    </li>
+
+    <% if @bundlepres.ignored_package_logs.any? %>
+      <li role="presentation">
+        <a href="#ignored-packages-tab" data-toggle="tab">
+          ignored (<%=@bundlepres.ignored_package_logs.count%>)
+        </a>
+      </li>
+    <% end %>
+
+
+    <li role="presentation">
+      <a href="#all-packages-tab" data-toggle="tab">
+        all packages
+      </a>
+    </li>
+
+    <% if @server %>
+      <%= link_to "Export to CSV", server_path(@server, format: "csv"), class: "btn btn-default" %>
+    <% end %>
+  </ul>
+
+
+  <div class="tab-content">
+    <div id="vulnerable-packages-tab" role="tabpanel" class="tab-pane active">
+      <% if @bundlepres.vuln_packages.empty? %>
+        <div class="col-sm-12" style="text-align: center">
+          <h3>Hooray! You don't seem to have any vulnerable packages.</h3>
+          <br/>
+        </div>
+        <div class="col-sm-4 col-sm-offset-4">
+          <%= image_tag "canary-party.medium.png", :title => "Illustration of a canary with a party hat. Hooray!", :style => "width: 100%" %>
+        </div>
+      <% else %>
+        <table id="vulnerable-packages" class="table packages">
+          <thead>
+            <th>package name</th>
+            <th>priority</th>
+            <th>vulnerabilities</th>
+            <th>current version</th>
+            <th>upgrade to</th>
+            <th></th>
+          </thead>
+
+          <% @bundlepres.vuln_packages.each do |package| %>
+            <% vulns = package.vulnerabilities_by_criticality %>
+
+            <tr>
+              <td class="package-name">
+                <%= package.name %>
+              </td>
+              <td>
+                <%= package.upgrade_priority %>
+              </td>
+
+              <td class="package-vulnerabilities">
+                <%= vulns[0..3].map do |vuln| %>
+                  <% link_to(h(vuln[:title]), vuln_path(vuln[:id]), target: "_blank")  %>
+                  <% end.join(", <br/>").html_safe %>
+
+                  <% if (vcount = vulns.size) > 4 %>
+                    <br/>
+                    ... and <%= link_to "#{vcount - 4} more <i class='fa fa-angle-double-right'></i>".html_safe, show_package_path(package), target: "_blank" %>
+                <% end %>
+              </td>
+
+              <td class="package-version">
+                <code><%= package.version %></code>
+              </td>
+
+              <td class="package-upgrade-to">
+                <p class="upgrade_to"><%= versions_in_english(package.upgrade_to) %></p>
+              </td>
+
+
+              <td>
+                <%= render :partial => "bundles/package_resolution_modal", :locals => { :package => package, :vulns => vulns } %>
+                <%= eui_button "Mark resolved", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{dom_id(package)}", "aria-haspopup": "true", "aria-expanded": false} %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
+
+    <% if @bundlepres.ignored_package_logs.any? %>
+      <div id="ignored-packages-tab" role="tabpanel" class="tab-pane">
+        <table id="ignored-packages" class="table packages">
+          <thead>
+            <th>
+              user
+            </th>
+            <th>
+              package name
+            </th>
+            <th>
+              version
+            </th>
+            <th>
+              vulnerabilities
+            </th>
+            <th>
+              note
+            </th>
+
+            <th>
+            </th>
+          </thead>
+
+          <% @bundlepres.ignored_package_logs.each do |ip| %>
+            <tr>
+              <td>
+                <%= ip.user.email %>
+              </td>
+
+              <td class="package-name">
+                <%= ip.package.name %>
+              </td>
+              <td class="package-version">
+                <code><%= ip.package.version %></code>
+              </td>
+
+              <td class="">
+                <%= ip.vuln_count %>
+              </td>
+
+              <td class="col-md-3">
+                <%= ip.note %>
+              </td>
+
+
+
+              <td>
+                <%= form_for LogResolution.new, url: unresolve_vuln_monitors_path(ip.package_id), method: :delete do |f| %>
+                  <%= f.hidden_field :package_id, value: ip.package_id %>
+                  <%= f.submit "Remove", class: "btn btn-small btn-default", :data => {:confirm => "Are you sure? This may trigger new notifications."} %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+
+        </table>
+      </div>
+    <% end %>
+
+    <div id="all-packages-tab" role="tabpanel" class="tab-pane">
+      <% if @prev_revision %>
+        <h4>Comparing <%= @cur_revision %> to <%= @prev_revision %></h4>
+      <% end %>
+      <table id="all-packages" class="table packages">
+        <% if !@bundlepres.all_packages.any? %>
+          <tr>
+            <td class="empty_message">
+              No packages found for this app!
+            </td>
+          </tr>
+        <% else %>
+
+          <thead>
+            <th>kind</th>
+            <th>platform</th>
+            <th>name</th>
+            <th>source name</th>
+            <th>version</th>
+          </thead>
+          <% if @prev_revision %>
+            <% @removed_pkg.each do |package| %>
+              <tr class="package package-removed">
+                <td class="platform"><%= package.platform %></td>
+                <td class="release"><%= package.release%></td>
+                <td class="package-name"><%= package.name %></td>
+                <td class="package-name"><%= package.source_name %></td>
+                <td class="package-version--neutral"><code><%= package.version %></code></td>
+              </tr>
+
+            <% end %>
+
+            <% @added_pkg.each do |package| %>
+              <tr class="package package-added">
+                <td class="platform"><%= package.platform %></td>
+                <td class="release"><%= package.release%></td>
+                <td class="package-name"><%= package.name %></td>
+                <td class="package-name"><%= package.source_name %></td>
+                <td class="package-version--neutral"><code><%= package.version %></code></td>
+              </tr>
+
+            <% end %>
+
+          <% end %>
+
+          <% @bundlepres.all_packages.each do |package| %>
+            <tr class="package">
+              <td class="platform"><%= package.platform %></td>
+              <td class="release"><%= package.release%></td>
+              <td class="package-name"><%= package.name %></td>
+              <td class="package-name"><%= package.source_name %></td>
+              <td class="package-version--neutral"><code><%= package.version %></code></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

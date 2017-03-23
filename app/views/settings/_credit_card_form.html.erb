@@ -15,7 +15,11 @@
   <div class="form-group">
     <p>You currently have <%= @active_servers_count %> active servers and <%= @monitors_count %> monitors.</p>
 
-    <p>Your monthly bill is: <%= @billing_presenter.monthly_cost_in_dollars %></p>
+    <% if current_user.has_billing? %>
+      <p>Your monthly bill is: <%= @billing_presenter.monthly_cost_in_dollars %></p>
+    <% end %>
+
+    <p>Find out more about our <a href="/pricing">plans</a>.  </p>
 
     <label>Available plans:</label><br/>
     <%# if current_user.discounted? %>

@@ -1,7 +1,8 @@
 class DashboardController < ApplicationController
   def index
-    @servers = AgentServersPresenter.new(current_account)
-    @monitors = MonitorsPresenter.new(current_account)
+    @vulnquery = VulnQuery.new(current_account)
+    @servers = AgentServersPresenter.new(current_account, @vulnquery)
+    @monitors = MonitorsPresenter.new(current_account, @vulnquery)
 
     wizard = OnboardWizard.new(current_user, @servers, @monitors)
 
@@ -24,4 +25,13 @@ class DashboardController < ApplicationController
 
     @messages = current_user.account.email_messages
   end
+
+
+  def summary
+    @date = params[:date].to_date
+
+    @motds = Motd.where("remove_at >= ?", @date)
+    @presenter = DailySummaryQuery.new(current_account, @date).create_presenter
+  end
+
 end

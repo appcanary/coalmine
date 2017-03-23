@@ -2,6 +2,9 @@
   width: 100%;
   background-color: lighten($yellow, 5%);
   border-bottom: 1px solid darken($yellow, 10%);
+  @include mobile-all {
+    padding: 5% 5% 0% 5%;
+  }
 }
 
 .hero {

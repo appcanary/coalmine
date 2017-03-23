@@ -274,4 +274,59 @@ class ReportManagerTest < ActiveSupport::TestCase
     assert_equal 1, LogBundlePatch.count # just to double check
 
   end
+
+
+  test "whether we can reliably peek inside LBPs to see if something is current vuln" do
+
+    # first create a vulnerabile package...
+    packages = FactoryGirl.create_list(:package, 5, :ruby)
+    vuln_pkg = packages.first
+    vuln = FactoryGirl.create(:vulnerability, :pkgs => [vuln_pkg])
+
+    # and add it to a bundle
+    @bm = BundleManager.new(account)
+    pr, _ = PlatformRelease.validate(@platform)
+
+    package_list = packages.map { |p| Parcel.from_package(p) }
+    bundle, error = @bm.create(pr, {}, package_list)
+
+    # we now see one LBV and zero patches.
+    assert_equal 1, LogBundleVulnerability.count
+    assert_equal 0, LogBundlePatch.count
+
+    assert_equal 1, LogBundleVulnerability.that_are_unpatched.count
+
+    # so let's create some log bundle patches, by removing the pkg
+    package_list = packages[1..-1].map { |p| Parcel.from_package(p) }
+    bundle, error = @bm.update_packages(bundle.id, package_list)
+
+    assert_equal 1, LogBundleVulnerability.count
+    assert_equal 1, LogBundlePatch.count
+
+    # okay now we get to test what we were looking for.
+    # that are 0 unpatched LBVs; there is 1 LBP that is not vuln
+    assert_equal 0, LogBundleVulnerability.that_are_unpatched.count
+    assert_equal 1, LogBundlePatch.that_are_not_vulnerable.count
+
+    # so let's reintroduce the vulnerability:
+    package_list = packages.map { |p| Parcel.from_package(p) }
+    bundle, error = @bm.update_packages(bundle.id, package_list)
+
+    assert_equal 2, LogBundleVulnerability.count
+    assert_equal 1, LogBundlePatch.count
+
+    # we now have 1 LBV that is unpatched, and 0 not_vuln LBP
+    assert_equal 1, LogBundleVulnerability.that_are_unpatched.count
+    assert_equal 0, LogBundlePatch.that_are_not_vulnerable.count
+
+    # finally, we now repatch it
+    package_list = packages[1..-1].map { |p| Parcel.from_package(p) }
+    bundle, error = @bm.update_packages(bundle.id, package_list)
+
+    assert_equal 2, LogBundleVulnerability.count
+    assert_equal 2, LogBundlePatch.count
+
+    assert_equal 0, LogBundleVulnerability.that_are_unpatched.count
+    assert_equal 1, LogBundlePatch.that_are_not_vulnerable.count
+  end
 end

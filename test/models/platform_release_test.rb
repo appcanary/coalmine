@@ -24,7 +24,7 @@ class PackageReleaseTest < ActiveSupport::TestCase
 
     assert_equal({:release=>["is invalid"]}, err.messages)
 
-    pr, err = PlatformRelease.validate(Platforms::CentOS, "6")
+    pr, err = PlatformRelease.validate(Platforms::CentOS, "4")
     assert_equal nil, pr
 
     assert_equal({:release=>["is invalid"]}, err.messages)
@@ -39,6 +39,19 @@ class PackageReleaseTest < ActiveSupport::TestCase
 
     assert_equal "centos", pr.platform
     assert_equal "7", pr.release
+
+    pr, err = PlatformRelease.validate(Platforms::CentOS, "6")
+    assert_equal nil, err
+
+    assert_equal "centos", pr.platform
+    assert_equal "6", pr.release
+
+    pr, err = PlatformRelease.validate(Platforms::CentOS, "5")
+    assert_equal nil, err
+
+    assert_equal "centos", pr.platform
+    assert_equal "5", pr.release
+
   end
 
 

@@ -7,11 +7,29 @@ class AppsController < ApplicationController
   end
 
   def show
-    @server = current_user.agent_servers.find(params[:server_id])
-    b = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
-    @bundle = BundlePresenter.new(VulnQuery.new(current_account), b)
+    @vulnquery = VulnQuery.new(current_account)
 
-    @packages = @bundle.packages.order(:name)
+    @server, @bundle = fetch_server_and_bundle(params)
+
+    if current_user.is_admin? 
+      @bundle_revisions = @bundle.revisions
+    end
+
+    if current_user.is_admin? && params[:revisions] 
+      bdix = params[:revisions].to_i
+      @cur_revision = @bundle_revisions[bdix]
+      bq = BundleQuery.new(@bundle, @cur_revision)
+
+      if (prev_bdix = bdix - 1) >= 0
+        @prev_revision = @bundle_revisions[prev_bdix]
+        
+        @removed_pkg, @added_pkg = bq.package_delta(@prev_revision)
+      end
+
+      @bundlepres = BundlePresenter.new(@vulnquery, bq)
+    else
+      @bundlepres = BundlePresenter.new(@vulnquery, @bundle)
+    end
   end
 
   # should ideally confirm it belongs to the same server
@@ -28,4 +46,15 @@ class AppsController < ApplicationController
     end
   end
 
+  protected
+  def fetch_server_and_bundle(params)
+    if current_user.is_admin?
+      server = AgentServer.find(params[:server_id])
+      bundle = Bundle.where(:agent_server_id => params[:server_id]).find(params[:id])
+    else
+      server = current_user.agent_servers.find(params[:server_id])
+      bundle = current_user.bundles.where(:agent_server_id => params[:server_id]).find(params[:id])
+    end
+    [server, bundle]
+  end
 end

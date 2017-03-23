@@ -12,11 +12,25 @@ Rails.application.routes.draw do
     end
   end
 
+  class RubysecConstraint
+    def self.matches?(request)
+      Rails.configuration.rubysec.domains.include? request.host
+    end
+  end
+
+
   constraints IsItVulnConstraint do
     root 'is_it_vuln#index', :as => :vuln_root
     post '/submit' => "is_it_vuln#submit", :as => :submit_gemfile
     get '/results/sample' => "is_it_vuln#sample_results", :as => :sample_results
     get '/results/:ident' => "is_it_vuln#results", :as => :vuln_results
+  end
+
+  constraints RubysecConstraint do
+    root "rubysec#index", :as => :rubysec_root
+    get "/new" => "rubysec#new", :as => :rubysec_new
+    post "/preview" => "rubysec#preview", :as => :rubysec_preview
+    post "/create" => "rubysec#create", :as => :rubysec_create
   end
   
   get "isitvuln" => "is_it_vuln#index"
@@ -25,11 +39,14 @@ Rails.application.routes.draw do
   get 'launchrock' => 'welcome#index'
   post 'beta/list' => "welcome#beta_list"
 
+  get 'pricing' => 'welcome#pricing'
+
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
   get 'history' => "dashboard#history", :as => :history
+  get 'summary/:date' => "dashboard#summary", :as => :summary
 
   get 'welcome' => "onboarding#welcome", :as => :onboarding
 
@@ -56,7 +73,7 @@ Rails.application.routes.draw do
 
   resources :docs, :only => :index
 
-  resources :users, :only => [:new, :create, :destroy] do
+  resources :users, :only => [:new, :create, :update, :destroy] do
     post "stop_impersonating", on: :collection
   end
   resources :password_reset, :only => [:show, :update]
@@ -69,6 +86,7 @@ Rails.application.routes.draw do
 
   resources :servers, :only => [:new, :show, :destroy, :edit, :update] do
     resources :apps, :only => [:index, :new, :show, :destroy]
+
     get "install", on: :collection
     get "deb", on: :collection
     get "rpm", on: :collection
@@ -76,10 +94,21 @@ Rails.application.routes.draw do
     delete "destroy_inactive" => "servers#destroy_inactive", :as => :destroy_inactive, :on => :collection
   end
 
-  resources :monitors, :only => [:new, :show, :destroy, :create]
+  resources :monitors, :only => [:new, :show, :destroy, :create] do
+    post "resolve_vuln/:package_id", action: :resolve_vuln, on: :collection, as: :resolve_vuln
+    delete "unresolve_vuln/:package_id", action: :unresolve_vuln, on: :collection, as: :unresolve_vuln
+
+  end
+
+  get "vulns/:platform" => "vulns#index", :as => :platform_vulns, :constraints => ->(req) {Platforms.supported?(req.params[:platform])}
+
   resources :vulns, :only => [:index, :show] do
     get "archive/:id" => "vulns#archive", :as => "archive"
   end
+
+  get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
+  get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
+  get "packages/:id" => "packages#show", :as => :package, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
 
   resources :logs, :only => :index
   resources :emails, :only => [:index, :show]
@@ -92,6 +121,7 @@ Rails.application.routes.draw do
 
     resources :subscription_plans
     resources :emails, :only => [:index, :show]
+    resources :advisories
   end
 
   namespace :api do

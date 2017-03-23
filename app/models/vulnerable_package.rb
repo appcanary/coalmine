@@ -31,6 +31,8 @@ class VulnerablePackage < ActiveRecord::Base
   has_many :bundled_packages
   has_many :bundles, :through => :bundled_packages
 
+  has_many :log_resolutions, :foreign_key => :vulnerable_dependency_id, :primary_key => :vulnerable_dependency_id
+
   delegate :name, :source_name, :platform, :release, :version, :upgrade_to, :to => :package
 
   scope :distinct_package, -> { 
