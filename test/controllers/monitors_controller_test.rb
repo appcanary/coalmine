@@ -156,8 +156,7 @@ class MonitorsControllerTest < ActionController::TestCase
       post :unignore_vuln, {
              package_id: a_vuln_pkg.id,
              ignored_package: {
-               package_id: a_vuln_pkg.id,
-               bundle_id: a_bundle.id
+               ignored_package_id: IgnoredPackage.first.id
              }
            }
 
@@ -179,7 +178,7 @@ class MonitorsControllerTest < ActionController::TestCase
       post :unignore_vuln, {
              package_id: a_vuln_pkg.id,
              ignored_package: {
-               package_id: a_vuln_pkg.id
+               ignored_package_id: IgnoredPackage.first.id
              }
            }
 

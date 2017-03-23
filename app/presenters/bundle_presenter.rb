@@ -28,8 +28,8 @@ class BundlePresenter
   def ignored_packages
     @ignored_packages ||= bundle.ignored_packages.
                             select("count(vulnerable_packages.vulnerable_dependency_id) vuln_count",
-                                   :user_id, :package_id, :bundle_id, :note).
-                            group(:package_id, :user_id, :bundle_id, :note).
+                                   :id, :user_id, :package_id, :bundle_id, :note).
+                            group(:id, :user_id, :package_id, :bundle_id, :note).
                             to_a
   end
 

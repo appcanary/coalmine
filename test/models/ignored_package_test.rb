@@ -74,14 +74,15 @@ class IgnoredPackageTest < ActiveSupport::TestCase
     end
   end
 
-  describe "unignore_packages" do
+  describe "unignore_package" do
     test "works for a package/bundle combo" do
       ignore = FactoryGirl.create(:ignored_package, account: account, user: user, bundle: bundle, package: pkg)
 
       assert_equal 1, IgnoredPackage.where(account: account).count
       assert_equal false, query.vuln_bundle?(bundle)
 
-      IgnoredPackage.unignore_package(user, pkg, bundle)
+      ignore.reload
+      IgnoredPackage.unignore_package(user, ignore.id)
 
       assert_equal 0, IgnoredPackage.where(account: account).count
       assert_equal true, query.vuln_bundle?(bundle)
@@ -93,7 +94,8 @@ class IgnoredPackageTest < ActiveSupport::TestCase
       assert_equal 1, IgnoredPackage.where(account: account).count
       assert_equal false, query.vuln_bundle?(bundle)
 
-      IgnoredPackage.unignore_package(user, pkg, nil)
+      ignore.reload
+      IgnoredPackage.unignore_package(user, ignore.id)
 
       assert_equal 0, IgnoredPackage.where(account: account).count
       assert_equal true, query.vuln_bundle?(bundle)

@@ -47,8 +47,7 @@ class MonitorsController < ApplicationController
   end
 
   def unignore_vuln
-    pkg = Package.find(ignore_params[:package_id])
-    IgnoredPackage.unignore_package(current_user, pkg, maybe_fetch_bundle)
+    IgnoredPackage.unignore_package(current_user, ignore_params[:ignored_package_id])
     redirect_to :back, notice: "Package successfully marked unignored."
   end
 
@@ -69,7 +68,7 @@ class MonitorsController < ApplicationController
   end
 
   def ignore_params
-    params.require(:ignored_package).permit(:package_id, :note, :bundle_id, :global)
+    params.require(:ignored_package).permit(:package_id, :note, :bundle_id, :global, :ignored_package_id)
   end
 
   protected

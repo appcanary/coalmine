@@ -226,8 +226,7 @@
 
               <td>
                 <%= form_for ip, url: unignore_vuln_monitors_path(ip.package_id), method: :delete do |f| %>
-                  <%= f.hidden_field :package_id, value: ip.package_id %>
-                  <%= f.hidden_field :bundle_id, value: ip.bundle_id %>
+                  <%= f.hidden_field :ignored_package_id, value: ip.id %>
                   <%= f.submit "Remove", class: "btn btn-small btn-default", :data => {:confirm => "Are you sure? This may trigger new notifications."} %>
                 <% end %>
               </td>

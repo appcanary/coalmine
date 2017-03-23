@@ -66,11 +66,10 @@ class IgnoredPackage < ActiveRecord::Base
                 note: note)
   end
 
-  def self.unignore_package(user, pkg, bundle)
+  def self.unignore_package(user, ignored_package_id)
     self.where(account_id: user.account_id,
                user_id: user.id,
-               package_id: pkg.id,
-               bundle_id: bundle && bundle.id).
+               id: ignored_package_id).
       take.
       try(:delete)
   end
