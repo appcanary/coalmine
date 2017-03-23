@@ -21,8 +21,11 @@ class DailySummaryManager
 
   def self.accounts_that_want_summaries(date)
 
-    # give me all accounts
     Account.joins(:users).
+      # we left join on email messages that either
+      # do not have a report_date or the report_date
+      # matches this date. 
+      # LEFT JOIN because we want to filter them out
       joins("LEFT JOIN email_messages ON 
             accounts.id = email_messages.account_id AND 
             email_messages.type = 'EmailDailySummary'").

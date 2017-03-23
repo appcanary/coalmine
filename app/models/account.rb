@@ -40,6 +40,7 @@ class Account < ActiveRecord::Base
   has_many :email_messages
   has_many :email_patcheds
   has_many :email_vulnerables
+  has_many :email_daily_summaries
   has_many :patched_notifications, :through => :email_patcheds, :source => :notifications
   has_many :vulnerable_notifications, :through => :email_vulnerables, :source => :notifications
   has_many :tags
