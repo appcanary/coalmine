@@ -25,16 +25,16 @@ class CesaAdapter < AdvisoryAdapter.new(:cesa_id, :issue_date, :synopsis,
   end
 
   generate :constraints do 
-    nevras_by_name = packages.map { |p|
-      nevra = RPM::Nevra.new(p)
+    parcels_by_name = packages.map { |p|
+      Parcel::RPM.new(p)
     }.group_by(&:name)
 
-    @packages_to_constraints = nevras_by_name.reduce([]) do |arr, (name, nevras)|
-      nevras.each do |nv|
+    @packages_to_constraints = parcels_by_name.reduce([]) do |arr, (name, parcels)|
+      parcels.each do |p|
         h = { "package_name" => name,
-              "arch" => nv.arch,
-              "release" => normalize_release(nv.release),
-              "patched_versions" => [nv.filename]
+              "arch" => p.arch,
+              "release" => normalize_release(p.nevra.release),
+              "patched_versions" => [p.filename]
         }
 
         arr << DependencyConstraint.parse(h)
