@@ -18,13 +18,8 @@ class DailySummaryMailer < ActionMailer::Base
     end
   end
 
-  def self.send_daily_report!
-    self.daily_summary(22, Date.yesterday).deliver_now
-    self.daily_summary(493, Date.yesterday).deliver_now
-  end
-
   def should_deliver?(account)
-    if Rails.env.production? && $rollout.active?(:daily_summary, @account)
+    if Rails.env.production?
       return true
     elsif $rollout.active?(:all_staging_notifications)
       return true
