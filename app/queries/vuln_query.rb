@@ -22,20 +22,20 @@ class VulnQuery
     affected_unnotified_logs: -> (logklass, account) {
       log_table = logklass.table_name
 
-      logklass.unnotified_logs
-        .joins("LEFT JOIN bundled_packages ON
+      logklass.unnotified_logs.
+        joins("LEFT JOIN bundled_packages ON
           bundled_packages.id = #{log_table}.bundled_package_id AND
-          bundled_packages.bundle_id = #{log_table}.bundle_id")
-        .where("bundles.account_id = ?", account.id)
+          bundled_packages.bundle_id = #{log_table}.bundle_id").
+        where("bundles.account_id = ?", account.id)
     },
     patchable_unnotified_logs: -> (logklass, account) {
       log_table = logklass.table_name
 
-      logklass.unnotified_logs.patchable
-        .joins("LEFT JOIN bundled_packages ON
+      logklass.unnotified_logs.patchable.
+        joins("LEFT JOIN bundled_packages ON
           bundled_packages.id = #{log_table}.bundled_package_id AND
-          bundled_packages.bundle_id = #{log_table}.bundle_id")
-        .where("bundles.account_id = ?", account.id)
+          bundled_packages.bundle_id = #{log_table}.bundle_id").
+        where("bundles.account_id = ?", account.id)
     }
 
   }

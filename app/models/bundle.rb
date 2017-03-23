@@ -48,7 +48,7 @@ class Bundle < ActiveRecord::Base
   has_many :log_bundle_patches
 
   has_many :log_resolutions, ->(bundle) { where(account_id: bundle.account_id) }, :through => :bundled_packages
-  has_many :ignores
+  has_many :ignored_packages
 
   validates :account, presence: true
   validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }
@@ -83,7 +83,7 @@ class Bundle < ActiveRecord::Base
     BundledPackage.revisions.where(:bundle_id => self.id).pluck("distinct(valid_at)")
   end
 
-  def relevant_ignores
+  def ignored_packages
     IgnoredPackage.relevant_ignores_for(self)
   end
 
