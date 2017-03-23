@@ -27,16 +27,20 @@ class IgnoredPackage < ActiveRecord::Base
   belongs_to :bundle
   belongs_to :package
 
+  has_many :vulnerable_packages, :foreign_key => :package_id, :primary_key => :package_id
+  has_many :bundled_packages, :foreign_key => :package_id, :primary_key => :package_id
+
   validates :account, presence: true
   validates :user, presence: true
   validates :package, presence: true, uniqueness: { scope: [:account, :bundle] }
 
   scope :filter_query_for, -> (query, account_id) {
     sanitized_account_id = sanitize(account_id)
+    primary_key = query.klass.resolution_log_primary_key
 
     merge_scope = joins("LEFT JOIN ignored_packages ON
                            ignored_packages.account_id = #{sanitized_account_id} AND
-                           ignored_packages.package_id = packages.id AND
+                           ignored_packages.package_id = #{primary_key} AND
                            (ignored_packages.bundle_id = bundled_packages.bundle_id OR ignored_packages.bundle_id is null)")
                     .where("ignored_packages.id is null")
 
@@ -44,7 +48,7 @@ class IgnoredPackage < ActiveRecord::Base
   }
 
   scope :relevant_ignores_for, -> (bundle) {
-    joins(package: [:vulnerable_packages])
+    joins(:vulnerable_packages)
       .where("ignored_packages.bundle_id is null or ignored_packages.bundle_id = ?", bundle.id)
   }
 

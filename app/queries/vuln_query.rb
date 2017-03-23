@@ -23,7 +23,6 @@ class VulnQuery
       log_table = logklass.table_name
 
       logklass.unnotified_logs
-        .joins(:package)
         .joins("LEFT JOIN bundled_packages ON
           bundled_packages.id = #{log_table}.bundled_package_id AND
           bundled_packages.bundle_id = #{log_table}.bundle_id")
@@ -33,7 +32,6 @@ class VulnQuery
       log_table = logklass.table_name
 
       logklass.unnotified_logs.patchable
-        .joins(:package)
         .joins("LEFT JOIN bundled_packages ON
           bundled_packages.id = #{log_table}.bundled_package_id AND
           bundled_packages.bundle_id = #{log_table}.bundle_id")
