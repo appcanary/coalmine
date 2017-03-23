@@ -26,7 +26,7 @@ class CesaAdapter < AdvisoryAdapter.new(:cesa_id, :issue_date, :synopsis,
 
   generate :constraints do 
     parcels_by_name = packages.map { |p|
-      parcel = Parcel::RPM.new(p)
+      Parcel::RPM.new(p)
     }.group_by(&:name)
 
     @packages_to_constraints = parcels_by_name.reduce([]) do |arr, (name, parcels)|
