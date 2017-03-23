@@ -7,5 +7,5 @@ every 1.day, :at => "12:00am" do
 end
 
 every 1.day, :at => "8:00am" do
-  runner "DailySummaryMailer.send_daily_report!"
+  runner "DailySummaryManager.send_todays_summary!"
 end
