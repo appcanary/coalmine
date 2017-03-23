@@ -2,7 +2,8 @@ require 'test_helper'
 
 class AlasImporterTest < ActiveSupport::TestCase
   it "should do the right thing" do
-    @importer = AlasImporter.new(File.join(Rails.root, "test/data/importers/alas/index.html"))
+    AlasImporter.any_instance.stubs(:update_local_store!).returns(true)
+    @importer = AlasImporter.new("not a real website", "test/data/importers/alas")
 
     assert_equal 0, Advisory.from_alas.count
     

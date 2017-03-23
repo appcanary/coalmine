@@ -45,6 +45,8 @@ class AgentServer < ActiveRecord::Base
   has_many :server_tags, :dependent => :destroy
   has_many :tags, :through => :server_tags
 
+  has_many :server_processes, :dependent => :destroy
+
   has_one :last_heartbeat, -> { order(created_at: :desc) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
 
   scope :belonging_to, -> (user) {
@@ -128,5 +130,9 @@ class AgentServer < ActiveRecord::Base
   # TODO: abstract for all OS'
   def system_bundle
     self.bundles.where(:platform => Platforms::OPERATING_SYSTEMS).first
+  end
+
+  def platform_release
+    PlatformRelease.validate(distro, release)
   end
 end

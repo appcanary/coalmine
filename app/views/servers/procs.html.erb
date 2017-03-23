@@ -1,0 +1,12 @@
+<section>
+  <div class="server-procs">
+    <h3>Process information <span class="label label-warning">New!</span> </h3>
+    <% if @serverpres.has_processes? %>
+      <%= render partial: "proc_table" %>
+    <% else %>
+      <p>We haven't received any process telemetry. Please double check your settings and logs, or contact support.</p>
+      <hr/>
+    <% end %>
+  </div>
+</section>
+

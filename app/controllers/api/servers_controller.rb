@@ -5,8 +5,7 @@ class Api::ServersController < ApiController
   end
 
   def show
-    @server = current_account.agent_servers.where(:uuid => params[:uuid]).take
-    @server ||= current_account.agent_servers.where(:id => params[:uuid]).take
+    @server = fetch_server
 
     if @server
       register_api_call!
@@ -17,8 +16,7 @@ class Api::ServersController < ApiController
   end
 
   def destroy
-    @server = current_account.agent_servers.where(:uuid => params[:uuid]).take
-    @server ||= current_account.agent_servers.where(:id => params[:uuid]).take
+    @server = fetch_server
 
     if @server.nil?
       render json: {errors: [{title: "No server with that id was found"}]}, adapter: :json_api, status: :not_found
@@ -48,4 +46,12 @@ class Api::ServersController < ApiController
     end
   end
 
+  private
+  def fetch_server_using(id_key)
+    current_account.agent_servers.where(id_key => params[:uuid]).take
+  end
+
+  def fetch_server
+    fetch_server_using(:id) || fetch_server_using(:uuid)
+  end
 end

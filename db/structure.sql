@@ -1298,6 +1298,40 @@ ALTER SEQUENCE pre_users_id_seq OWNED BY pre_users.id;
 
 
 --
+-- Name: process_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE process_libraries (
+    id integer NOT NULL,
+    path character varying,
+    modified timestamp without time zone,
+    package_name character varying,
+    package_version character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE process_libraries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE process_libraries_id_seq OWNED BY process_libraries.id;
+
+
+--
 -- Name: que_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1405,6 +1439,19 @@ CREATE TABLE server_tags (
     updated_at timestamp without time zone NOT NULL
 );
 
+--
+-- Name: server_process_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_process_libraries (
+    id integer NOT NULL,
+    server_process_id integer NOT NULL,
+    process_library_id integer NOT NULL,
+    outdated boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
 
 --
 -- Name: server_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
@@ -1417,12 +1464,64 @@ CREATE SEQUENCE server_tags_id_seq
     NO MAXVALUE
     CACHE 1;
 
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_process_libraries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 --
 -- Name: server_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
+
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_process_libraries_id_seq OWNED BY server_process_libraries.id;
+
+
+--
+-- Name: server_processes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_processes (
+    id integer NOT NULL,
+    agent_server_id integer NOT NULL,
+    pid integer NOT NULL,
+    name character varying,
+    started timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    args character varying
+);
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_processes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_processes_id_seq OWNED BY server_processes.id;
 
 
 --
@@ -2020,6 +2119,13 @@ ALTER TABLE ONLY pre_users ALTER COLUMN id SET DEFAULT nextval('pre_users_id_seq
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY process_libraries ALTER COLUMN id SET DEFAULT nextval('process_libraries_id_seq'::regclass);
+
+
+--
 -- Name: job_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2031,6 +2137,20 @@ ALTER TABLE ONLY que_jobs ALTER COLUMN job_id SET DEFAULT nextval('que_jobs_job_
 --
 
 ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec_advisories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries ALTER COLUMN id SET DEFAULT nextval('server_process_libraries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes ALTER COLUMN id SET DEFAULT nextval('server_processes_id_seq'::regclass);
 
 
 --
@@ -2333,7 +2453,7 @@ ALTER TABLE ONLY motds
 
 
 --
--- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -2365,6 +2485,14 @@ ALTER TABLE ONLY pre_users
 
 
 --
+-- Name: process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY process_libraries
+    ADD CONSTRAINT process_libraries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: que_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2389,6 +2517,22 @@ ALTER TABLE ONLY server_tags
 
 
 --
+-- Name: server_process_libraries server_process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT server_process_libraries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_processes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT server_processes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2405,7 +2549,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -3188,6 +3332,27 @@ CREATE INDEX index_server_tags_on_tag_id ON server_tags USING btree (tag_id);
 
 
 --
+-- Name: index_server_process_libraries_on_process_library_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
+
+
+--
+-- Name: index_server_process_libraries_on_server_process_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_server_process_id ON server_process_libraries USING btree (server_process_id);
+
+
+--
+-- Name: index_server_processes_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
+
+
+--
 -- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3561,6 +3726,22 @@ ALTER TABLE ONLY server_tags
 
 
 --
+-- Name: server_procs fk_rails_04cbd52b76; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_procs
+    ADD CONSTRAINT fk_rails_04cbd52b76 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: server_process_libraries fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_466a4741cd FOREIGN KEY (process_library_id) REFERENCES process_libraries(id);
+
+
+--
 -- Name: fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3630,6 +3811,22 @@ ALTER TABLE ONLY tags
 
 ALTER TABLE ONLY motds
     ADD CONSTRAINT fk_rails_a7964aa25c FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: server_processes fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT fk_rails_8e08420c73 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_a5ff67a393 FOREIGN KEY (server_process_id) REFERENCES server_processes(id);
 
 
 --
@@ -3842,11 +4039,21 @@ INSERT INTO schema_migrations (version) VALUES ('20170111180619');
 
 INSERT INTO schema_migrations (version) VALUES ('20170112163526');
 
+INSERT INTO schema_migrations (version) VALUES ('20170118213120');
+
+INSERT INTO schema_migrations (version) VALUES ('20170118224300');
+
 INSERT INTO schema_migrations (version) VALUES ('20170118224917');
+
+INSERT INTO schema_migrations (version) VALUES ('20170119145353');
 
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
 
+INSERT INTO schema_migrations (version) VALUES ('20170131223446');
+
 INSERT INTO schema_migrations (version) VALUES ('20170206172642');
+
+INSERT INTO schema_migrations (version) VALUES ('20170207223930');
 
 INSERT INTO schema_migrations (version) VALUES ('20170222211052');
 
@@ -3857,4 +4064,3 @@ INSERT INTO schema_migrations (version) VALUES ('20170302155336');
 INSERT INTO schema_migrations (version) VALUES ('20170317203807');
 
 INSERT INTO schema_migrations (version) VALUES ('20170320135753');
-
