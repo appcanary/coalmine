@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Mark package as resolved</h4>
+        <h4 class="modal-title">Wontfix</h4>
       </div>
       <%= form_for LogResolution.new, url: resolve_vuln_monitors_path(package.id), method: :post do |f| %>
         <%= f.hidden_field :package_id, value: package.id %>
@@ -28,22 +28,20 @@
             </tr>
           </table>
 
-          <p>
-            By marking this package as resolved, you will no longer receive notifications that concern this package version and any of the <%= link_to "#{vulns.size} vulnerabilities that currently affect this package", show_package_path(package), target: "_blank"%>.</p>
-          <p><strong>Please note:</strong>
+          <p>Marking this package as wontfix means:
             <ol>
               <li>
-                You can undo this action!
+                This package, and the <%= link_to "#{vulns.size} vulnerabilities that currently affect it", show_package_path(package), target: "_blank"%> will disappear from reports.
               </li>
               <li>
-                You will be notified when this package is affected by a new vulnerability.
+                You will be notified when this package is affected by <b>new</b> vulnerabilities.
               </li>
+
               <li>
-                Resolving a package is global: this will impact any other servers or monitors that also have this package version.
+                This action is global: this will impact any other servers or monitors that also have this package version.
               </li>
             </ol>
           </p>
-
 
           <div class="form-group">
           </div>
@@ -54,7 +52,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <%= f.submit "Mark as resolved", class: "btn btn-danger" %>
+          <%= f.submit "Mark as wontfix", class: "btn btn-warning" %>
         </div>
       <% end %>
     </div>

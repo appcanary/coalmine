@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Mark package as ignored</h4>
+        <h4 class="modal-title">Ignore this package</h4>
       </div>
       <%= form_for IgnoredPackage.new, url: ignore_vuln_monitors_path(package.id), method: :post do |f| %>
         <%= f.hidden_field :package_id, value: package.id %>
@@ -30,15 +30,15 @@
           </table>
 
           <p>
-            By marking this package as ignored, you will no longer receive
-            notifications that concern this package version and any
-            vulnerabilities that affect this package.
+            Ignoring this package version means:
+            <ol>
+              <li>
+                This package and its vulnerabilities will disappear from reports.
+              </li>
+              <li>You will <b>never</b> be bothered about this package version again, even if new vulnerabilities come out.</li>
+            </ol>
           </p>
-          <p>
-            <strong>You can undo this action.</strong>
-          </p>
-
-
+            
           <div class="form-group">
             <%= f.label :note, "Note:" %>
             <%= f.text_area :note, :class => "form-control", :placeholder => "An optional, short explanatory message, i.e. 'fixed in configuration' or 'not exploitable'." %>
@@ -47,7 +47,7 @@
         <div class="modal-footer">
           <div class="form-group pull-left">
             <%= check_box_tag "ignored_package[:global]", "yes", false, {} %>
-            <%= label_tag "Ignore globally" %>
+            <%= label_tag "Ignore everywhere" %>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <%= f.submit "Mark as ignored", class: "btn btn-danger" %>
