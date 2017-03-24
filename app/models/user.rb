@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
 
   delegate :active_servers, :agent_servers, :bundles, :monitors, :check_api_calls, :to => :account
 
-  scope :with_billing, -> { where("invoiced_manually = true or stripe_customer_id is not null") } 
+  scope :with_billing, -> { where("invoiced_manually = true or (stripe_customer_id is not null and stripe_customer_id != '')") } 
 
   # TODO: most of these need to be cleaned up
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
