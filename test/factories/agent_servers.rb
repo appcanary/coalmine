@@ -30,6 +30,8 @@ FactoryGirl.define do
   factory :agent_server do
     name { Faker::Hacker.ingverb }
     account
+    distro "ubuntu"
+    release "14.04"
     trait :centos do
       distro "centos"
       release "7"
@@ -39,5 +41,12 @@ FactoryGirl.define do
       distro "ubuntu"
       release "utopic"
     end
+
+    trait :with_heartbeat do
+      heartbeats { build_list :agent_heartbeat, 1 }
+    end
+  end
+
+  factory :agent_heartbeat do
   end
 end

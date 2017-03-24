@@ -10,10 +10,13 @@ class ServersController < ApplicationController
     render :new
   end
 
+  def procs
+    setup_process_ivars
+  end
+
   def show
-    @vulnquery = VulnQuery.new(current_account)
-    @server = fetch_server(params)
-    @serverpres = ServerPresenter.new(@vulnquery, @server)
+    setup_process_ivars
+
     respond_to do |format|
       format.html
       format.csv do
@@ -81,6 +84,21 @@ class ServersController < ApplicationController
   end
 
   protected
+
+  def setup_process_ivars
+    @account = current_account # used for rollout
+    @vulnquery = VulnQuery.new(@account)
+
+    @server = fetch_server(params)
+    @serverpres = ServerPresenter.new(@vulnquery, @server)
+
+    @outdated_procs = @serverpres.outdated_processes
+    @all_procs = @serverpres.all_processes
+
+    pr, err = @server.platform_release
+    @platform = pr.platform
+    @release = pr.release
+  end
 
   def fetch_server(params)
     if current_user.is_admin?
