@@ -44,6 +44,7 @@ class Package < ActiveRecord::Base
     select("name, version").pluck(:name, :version)
   }
 
+  # TODO PHILL: why don't we include platform/release here?
   scope :search_unique_fields, ->(values) {
     clauses = values.map do |vals|
       '(name = ? AND version = ?)'
