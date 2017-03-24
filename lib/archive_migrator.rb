@@ -1,7 +1,17 @@
+# this class wraps ActiveRecord migrations and spits out
+# corresponding database archive tables, and their corresponding
+# postgres triggers
 class ArchiveMigrator
+
+  # this class acts as a proxy between our code and the 
+  # normal rails migration code; it fakes accepting the same
+  # methods & arguments, for the most part, and lets us transform
+  # them prior to passing it along to the Migration layer.
   class TableBuilder
     attr_accessor :arguments, :is_archive, :initial_columns
-    UNSUPPORTED_TRANSFORMATIONS = [:rename_index, :change, :change_default, :rename, :belongs_to, :remove, :remove_references, :remove_belongs_to, :remove_index, :remove_timestamps]
+    UNSUPPORTED_TRANSFORMATIONS = [:rename_index, :change, :change_default, 
+                                   :rename, :belongs_to, :remove, :remove_references, 
+                                   :remove_belongs_to, :remove_index, :remove_timestamps]
 
     def initialize(table_name = nil, opts = {})
       if table_name
@@ -79,15 +89,20 @@ class ArchiveMigrator
 
     def columns
       new_columns = arguments.map { |type, args|
+
         if UNSUPPORTED_TRANSFORMATIONS.include?(type)
           raise ActiveRecord::MigrationError.new("Archive doesn't support transformation #{type}")
+
         elsif type == :references
           "#{args.first}_id"
+
         elsif type == :timestamps
           ["created_at","updated_at"]
+
         else
           args.first.to_s
         end
+
       }.flatten
       filter_columns(initial_columns + new_columns)
     end
@@ -109,10 +124,13 @@ class ArchiveMigrator
         if rg.is_a? Hash
           new_rg = rg.dup
           new_rg.delete(:foreign_key)
+
           if (new_rg[:index].is_a? Hash) && new_rg[:index][:name]
             new_rg[:index][:name] = new_rg[:index][:name] + "_ar"
           end
+
           new_rg
+
         else
           rg
         end
@@ -148,12 +166,13 @@ class ArchiveMigrator
 
   def create_table(table_name, opt = {})
     compute_table_names(table_name)
+
     table_builder = TableBuilder.new
 
     # collect schema from migration
     yield table_builder
 
-    # we now know what the table will look like.
+    # use this schema to create the archive table
     archive_table_builder = build_archive_schema(table_builder, self.singular_table_name)
 
     construct_table!(table_name, table_builder, opt)
@@ -231,6 +250,7 @@ class ArchiveMigrator
   def construct_triggers!(table_name, archive_table_name, arch_table_builder, orig_table_builder)
     archive_fn_name = "archive_#{table_name}"
     update_fn_name = "update_#{table_name}_valid_at"
+
     orig_table_cols = orig_table_builder.columns.map{|s| "OLD."+s}.join(", ")
     arch_table_cols = arch_table_builder.columns.join(", ")
 
@@ -256,15 +276,19 @@ class ArchiveMigrator
          EXECUTE PROCEDURE #{update_fn_name}();
       END$$"
 
+    # the magic works like this:
+    # every time a row is updated or deleted, it gets copied into an archive table
+    # and its expired_at value is replaced with the current time.
     archive_fn_sql =
       "CREATE OR REPLACE FUNCTION #{archive_fn_name}() RETURNS TRIGGER AS $$
        BEGIN
          INSERT INTO #{archive_table_name}(#{arch_table_cols}, valid_at, expired_at) VALUES
-           (OLD.id, #{orig_table_cols}, OLD.valid_at, CURRENT_TIMESTAMP);
+           (OLD.id, #{orig_table_cols}, OLD.valid_at, now());
          RETURN OLD;
        END;
        $$ language plpgsql;"
 
+    # similarly, whenever a row is updated, we must also update the valid_at field:
     update_fn_sql =
       "CREATE OR REPLACE FUNCTION #{update_fn_name}() RETURNS TRIGGER AS $$
        BEGIN

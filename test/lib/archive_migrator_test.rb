@@ -41,7 +41,7 @@ class ArchiveMigratorTest < ActiveSupport::TestCase
     CreateFoos.new.exec_migration(ActiveRecord::Base.connection, :down)
   end
 
-  it "should creaate archive tables" do
+  it "should create archive tables" do
     f = Foo.create(name: "a name")
     assert_equal 1, Foo.count
     assert_equal 0, FooArchive.count
@@ -53,24 +53,28 @@ class ArchiveMigratorTest < ActiveSupport::TestCase
     assert_equal 1, Foo.count
     assert_equal 1, FooArchive.count
 
+    foo_archive = FooArchive.first
+
     assert_equal 123, f.bars_id
-    assert_equal nil, f.archives.first.bars_id
+    assert_equal nil, foo_archive.bars_id
+    assert_equal f.id, foo_archive.foo_id
+    assert_not_equal f.expired_at, foo_archive.expired_at
   end
 
-  it "should trigger updates to created_at" do
+  it "should trigger updates to valid_at" do
     f = Foo.create(name: "a name")
 
     f.reload
     old_valid_at = f.valid_at
-    assert f.created_at == f.updated_at
+    assert_equal f.created_at, f.updated_at
 
     f.name = "changed my name"
     f.save
     f.reload
 
     # The updated_at timestamp should come after create, and valid should be the same as updated at because of the update trigger
-    assert f.created_at != f.updated_at
-    assert old_valid_at != f.valid_at
+    assert_not_equal f.created_at, f.updated_at
+    assert_operator old_valid_at, :<, f.valid_at
   end
 
   it "should let you alter tables" do
