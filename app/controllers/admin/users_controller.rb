@@ -2,7 +2,7 @@ class Admin::UsersController < AdminController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
 
   def index
-    @users = User.all
+    @users = User.pluck_to_struct(:id, :name, :email, :phone_number, :created_at, :account_id, :last_login_at, :stripe_customer_id, :invoiced_manually)
     # compute aggregate counts for acitve servers, api calls and monitors, make sure hash has 0 default
     # TODO: this should maybe be in a presenter
     @server_counts = Account.joins(:agent_servers).group("accounts.id").count.tap { |h| h.default = 0 }
