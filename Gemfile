@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.3.1'
 
-gem 'rails', '4.2.6'
+gem 'rails', '4.2.7.1'
 
 gem 'pg'
 gem 'rollout'
@@ -14,8 +14,8 @@ gem 'whenever', :require => false
 gem 'sass-rails', require: false
 gem 'sassc-rails', :git => "git@github.com:appcanary/sassc-rails.git"
 gem 'bootstrap-sass', :git => "git@github.com:appcanary/bootstrap-sass.git"
-gem 'jquery-rails'
-gem 'uglifier', '>= 1.3.0'
+gem 'jquery-rails', '~> 4.0.4'
+gem 'uglifier', '~> 2.7.1'
 gem "font-awesome-rails"
 gem "bourbon", :git => "git@github.com:appcanary/bourbon.git", :branch => "v4-stable"
 gem "neat", :git => "git@github.com:appcanary/neat.git"
@@ -27,7 +27,7 @@ gem 'will_paginate-bootstrap'
 
 gem 'premailer-rails'
 # required for premailer?
-gem 'nokogiri', '>= 1.7.1'
+gem 'nokogiri', '~> 1.7.1'
 
 # handling user input
 gem 'reform'
