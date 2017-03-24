@@ -2,12 +2,11 @@ class Admin::UsersController < AdminController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
 
   def index
-    @users = User.all #includes(:account) #, {billing_plan: [:subscription_plan]});
-    @server_counts = Account.joins(:agent_servers).group("accounts.id").count
-
+    @users = User.all
     # compute aggregate counts for acitve servers, api calls and monitors, make sure hash has 0 default
     # TODO: this should maybe be in a presenter
-    @active_server_counts = Account.joins(:agent_servers).merge(AgentServer.active).group("accounts.id").count.tap { |h| h.default = 0 }
+    @server_counts = Account.joins(:agent_servers).group("accounts.id").count.tap { |h| h.default = 0 }
+    @active_server_counts = AgentServer.active.joins(:account).group("accounts.id").count.tap { |h| h.default = 0 }
     @api_calls_counts = Account.joins(:check_api_calls).group("accounts.id").count.tap { |h| h.default = 0 }
     @monitor_counts = Account.joins(:monitors).group("accounts.id").count.tap { |h| h.default = 0 }
 
