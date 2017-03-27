@@ -2,12 +2,11 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.1
--- Dumped by pg_dump version 9.6.1
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -877,7 +876,8 @@ CREATE TABLE email_messages (
     type character varying NOT NULL,
     sent_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    report_date date
 );
 
 
@@ -1334,6 +1334,40 @@ ALTER SEQUENCE pre_users_id_seq OWNED BY pre_users.id;
 
 
 --
+-- Name: process_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE process_libraries (
+    id integer NOT NULL,
+    path character varying,
+    modified timestamp without time zone,
+    package_name character varying,
+    package_version character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE process_libraries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE process_libraries_id_seq OWNED BY process_libraries.id;
+
+
+--
 -- Name: que_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1427,6 +1461,74 @@ ALTER SEQUENCE rubysec_advisories_id_seq OWNED BY rubysec_advisories.id;
 CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: server_process_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_process_libraries (
+    id integer NOT NULL,
+    server_process_id integer NOT NULL,
+    process_library_id integer NOT NULL,
+    outdated boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_process_libraries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_process_libraries_id_seq OWNED BY server_process_libraries.id;
+
+
+--
+-- Name: server_processes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_processes (
+    id integer NOT NULL,
+    agent_server_id integer NOT NULL,
+    pid integer NOT NULL,
+    name character varying,
+    started timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    args character varying
+);
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_processes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_processes_id_seq OWNED BY server_processes.id;
 
 
 --
@@ -1574,7 +1676,8 @@ CREATE TABLE users (
     account_id integer NOT NULL,
     pref_os character varying,
     pref_deploy character varying,
-    phone_number character varying
+    phone_number character varying,
+    pref_email_frequency character varying DEFAULT 'firehose'::character varying NOT NULL
 );
 
 
@@ -1845,308 +1948,329 @@ ALTER SEQUENCE vulnerable_packages_id_seq OWNED BY vulnerable_packages.id;
 
 
 --
--- Name: accounts id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq'::regclass);
 
 
 --
--- Name: advisories id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisories ALTER COLUMN id SET DEFAULT nextval('advisories_id_seq'::regclass);
 
 
 --
--- Name: advisory_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_archives ALTER COLUMN id SET DEFAULT nextval('advisory_archives_id_seq'::regclass);
 
 
 --
--- Name: advisory_import_states id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_import_states ALTER COLUMN id SET DEFAULT nextval('advisory_import_states_id_seq'::regclass);
 
 
 --
--- Name: advisory_vulnerabilities id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_vulnerabilities ALTER COLUMN id SET DEFAULT nextval('advisory_vulnerabilities_id_seq'::regclass);
 
 
 --
--- Name: advisory_vulnerability_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_vulnerability_archives ALTER COLUMN id SET DEFAULT nextval('advisory_vulnerability_archives_id_seq'::regclass);
 
 
 --
--- Name: agent_accepted_files id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_accepted_files ALTER COLUMN id SET DEFAULT nextval('agent_accepted_files_id_seq'::regclass);
 
 
 --
--- Name: agent_heartbeats id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_heartbeats ALTER COLUMN id SET DEFAULT nextval('agent_heartbeats_id_seq'::regclass);
 
 
 --
--- Name: agent_received_files id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_received_files ALTER COLUMN id SET DEFAULT nextval('agent_received_files_id_seq'::regclass);
 
 
 --
--- Name: agent_releases id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_releases ALTER COLUMN id SET DEFAULT nextval('agent_releases_id_seq'::regclass);
 
 
 --
--- Name: agent_server_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_server_archives ALTER COLUMN id SET DEFAULT nextval('agent_server_archives_id_seq'::regclass);
 
 
 --
--- Name: agent_servers id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_servers ALTER COLUMN id SET DEFAULT nextval('agent_servers_id_seq'::regclass);
 
 
 --
--- Name: beta_users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY beta_users ALTER COLUMN id SET DEFAULT nextval('beta_users_id_seq'::regclass);
 
 
 --
--- Name: billing_plans id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY billing_plans ALTER COLUMN id SET DEFAULT nextval('billing_plans_id_seq'::regclass);
 
 
 --
--- Name: bundle_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundle_archives ALTER COLUMN id SET DEFAULT nextval('bundle_archives_id_seq'::regclass);
 
 
 --
--- Name: bundled_package_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_package_archives ALTER COLUMN id SET DEFAULT nextval('bundled_package_archives_id_seq'::regclass);
 
 
 --
--- Name: bundled_packages id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_packages ALTER COLUMN id SET DEFAULT nextval('bundled_packages_id_seq'::regclass);
 
 
 --
--- Name: bundles id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundles ALTER COLUMN id SET DEFAULT nextval('bundles_id_seq'::regclass);
 
 
 --
--- Name: email_messages id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_messages ALTER COLUMN id SET DEFAULT nextval('email_messages_id_seq'::regclass);
 
 
 --
--- Name: feature_flags id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY feature_flags ALTER COLUMN id SET DEFAULT nextval('feature_flags_id_seq'::regclass);
 
 
 --
--- Name: ignored_packages id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages ALTER COLUMN id SET DEFAULT nextval('ignored_packages_id_seq'::regclass);
 
 
 --
--- Name: is_it_vuln_results id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY is_it_vuln_results ALTER COLUMN id SET DEFAULT nextval('is_it_vuln_results_id_seq'::regclass);
 
 
 --
--- Name: log_api_calls id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_api_calls ALTER COLUMN id SET DEFAULT nextval('log_api_calls_id_seq'::regclass);
 
 
 --
--- Name: log_bundle_patches id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_bundle_patches ALTER COLUMN id SET DEFAULT nextval('log_bundle_patches_id_seq'::regclass);
 
 
 --
--- Name: log_bundle_vulnerabilities id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_bundle_vulnerabilities ALTER COLUMN id SET DEFAULT nextval('log_bundle_vulnerabilities_id_seq'::regclass);
 
 
 --
--- Name: log_resolutions id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_resolutions ALTER COLUMN id SET DEFAULT nextval('log_resolutions_id_seq'::regclass);
 
 
 --
--- Name: motds id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY motds ALTER COLUMN id SET DEFAULT nextval('motds_id_seq'::regclass);
 
 
 --
--- Name: notifications id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
 --
--- Name: package_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY package_archives ALTER COLUMN id SET DEFAULT nextval('package_archives_id_seq'::regclass);
 
 
 --
--- Name: packages id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY packages ALTER COLUMN id SET DEFAULT nextval('packages_id_seq'::regclass);
 
 
 --
--- Name: pre_users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pre_users ALTER COLUMN id SET DEFAULT nextval('pre_users_id_seq'::regclass);
 
 
 --
--- Name: que_jobs job_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY process_libraries ALTER COLUMN id SET DEFAULT nextval('process_libraries_id_seq'::regclass);
+
+
+--
+-- Name: job_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY que_jobs ALTER COLUMN job_id SET DEFAULT nextval('que_jobs_job_id_seq'::regclass);
 
 
 --
--- Name: rubysec_advisories id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec_advisories_id_seq'::regclass);
 
 
 --
--- Name: server_tags id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries ALTER COLUMN id SET DEFAULT nextval('server_process_libraries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes ALTER COLUMN id SET DEFAULT nextval('server_processes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags ALTER COLUMN id SET DEFAULT nextval('server_tags_id_seq'::regclass);
 
 
 --
--- Name: subscription_plans id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
 
 
 --
--- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- Name: vulnerabilities id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerabilities ALTER COLUMN id SET DEFAULT nextval('vulnerabilities_id_seq'::regclass);
 
 
 --
--- Name: vulnerability_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerability_archives ALTER COLUMN id SET DEFAULT nextval('vulnerability_archives_id_seq'::regclass);
 
 
 --
--- Name: vulnerable_dependencies id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_dependencies ALTER COLUMN id SET DEFAULT nextval('vulnerable_dependencies_id_seq'::regclass);
 
 
 --
--- Name: vulnerable_dependency_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_dependency_archives ALTER COLUMN id SET DEFAULT nextval('vulnerable_dependency_archives_id_seq'::regclass);
 
 
 --
--- Name: vulnerable_package_archives id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_package_archives ALTER COLUMN id SET DEFAULT nextval('vulnerable_package_archives_id_seq'::regclass);
 
 
 --
--- Name: vulnerable_packages id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_packages ALTER COLUMN id SET DEFAULT nextval('vulnerable_packages_id_seq'::regclass);
 
 
 --
--- Name: vulnerabilities vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerabilities
@@ -2167,7 +2291,7 @@ CREATE MATERIALIZED VIEW vulnerability_search_index AS
 
 
 --
--- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY accounts
@@ -2175,7 +2299,7 @@ ALTER TABLE ONLY accounts
 
 
 --
--- Name: advisories advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisories
@@ -2183,7 +2307,7 @@ ALTER TABLE ONLY advisories
 
 
 --
--- Name: advisory_archives advisory_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: advisory_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_archives
@@ -2191,7 +2315,7 @@ ALTER TABLE ONLY advisory_archives
 
 
 --
--- Name: advisory_import_states advisory_import_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: advisory_import_states_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_import_states
@@ -2199,7 +2323,7 @@ ALTER TABLE ONLY advisory_import_states
 
 
 --
--- Name: advisory_vulnerabilities advisory_vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: advisory_vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_vulnerabilities
@@ -2207,7 +2331,7 @@ ALTER TABLE ONLY advisory_vulnerabilities
 
 
 --
--- Name: advisory_vulnerability_archives advisory_vulnerability_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: advisory_vulnerability_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_vulnerability_archives
@@ -2215,7 +2339,7 @@ ALTER TABLE ONLY advisory_vulnerability_archives
 
 
 --
--- Name: agent_accepted_files agent_accepted_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: agent_accepted_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_accepted_files
@@ -2223,7 +2347,7 @@ ALTER TABLE ONLY agent_accepted_files
 
 
 --
--- Name: agent_heartbeats agent_heartbeats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: agent_heartbeats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_heartbeats
@@ -2231,7 +2355,7 @@ ALTER TABLE ONLY agent_heartbeats
 
 
 --
--- Name: agent_received_files agent_received_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: agent_received_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_received_files
@@ -2239,7 +2363,7 @@ ALTER TABLE ONLY agent_received_files
 
 
 --
--- Name: agent_releases agent_releases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: agent_releases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_releases
@@ -2247,7 +2371,7 @@ ALTER TABLE ONLY agent_releases
 
 
 --
--- Name: agent_server_archives agent_server_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: agent_server_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_server_archives
@@ -2255,7 +2379,7 @@ ALTER TABLE ONLY agent_server_archives
 
 
 --
--- Name: agent_servers agent_servers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: agent_servers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_servers
@@ -2263,7 +2387,7 @@ ALTER TABLE ONLY agent_servers
 
 
 --
--- Name: beta_users beta_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: beta_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY beta_users
@@ -2271,7 +2395,7 @@ ALTER TABLE ONLY beta_users
 
 
 --
--- Name: billing_plans billing_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: billing_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY billing_plans
@@ -2279,7 +2403,7 @@ ALTER TABLE ONLY billing_plans
 
 
 --
--- Name: bundle_archives bundle_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bundle_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundle_archives
@@ -2287,7 +2411,7 @@ ALTER TABLE ONLY bundle_archives
 
 
 --
--- Name: bundled_package_archives bundled_package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bundled_package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_package_archives
@@ -2295,7 +2419,7 @@ ALTER TABLE ONLY bundled_package_archives
 
 
 --
--- Name: bundled_packages bundled_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bundled_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_packages
@@ -2303,7 +2427,7 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
--- Name: bundles bundles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bundles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundles
@@ -2311,7 +2435,7 @@ ALTER TABLE ONLY bundles
 
 
 --
--- Name: email_messages email_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: email_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_messages
@@ -2319,7 +2443,7 @@ ALTER TABLE ONLY email_messages
 
 
 --
--- Name: feature_flags feature_flags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: feature_flags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY feature_flags
@@ -2327,7 +2451,7 @@ ALTER TABLE ONLY feature_flags
 
 
 --
--- Name: ignored_packages ignored_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: ignored_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages
@@ -2335,7 +2459,7 @@ ALTER TABLE ONLY ignored_packages
 
 
 --
--- Name: is_it_vuln_results is_it_vuln_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: is_it_vuln_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY is_it_vuln_results
@@ -2343,7 +2467,7 @@ ALTER TABLE ONLY is_it_vuln_results
 
 
 --
--- Name: log_api_calls log_api_calls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: log_api_calls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_api_calls
@@ -2351,7 +2475,7 @@ ALTER TABLE ONLY log_api_calls
 
 
 --
--- Name: log_bundle_patches log_bundle_patches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: log_bundle_patches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_bundle_patches
@@ -2359,7 +2483,7 @@ ALTER TABLE ONLY log_bundle_patches
 
 
 --
--- Name: log_bundle_vulnerabilities log_bundle_vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: log_bundle_vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_bundle_vulnerabilities
@@ -2367,7 +2491,7 @@ ALTER TABLE ONLY log_bundle_vulnerabilities
 
 
 --
--- Name: log_resolutions log_resolutions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: log_resolutions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_resolutions
@@ -2375,7 +2499,7 @@ ALTER TABLE ONLY log_resolutions
 
 
 --
--- Name: motds motds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: motds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY motds
@@ -2383,7 +2507,7 @@ ALTER TABLE ONLY motds
 
 
 --
--- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -2391,7 +2515,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: package_archives package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY package_archives
@@ -2399,7 +2523,7 @@ ALTER TABLE ONLY package_archives
 
 
 --
--- Name: packages packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY packages
@@ -2407,7 +2531,7 @@ ALTER TABLE ONLY packages
 
 
 --
--- Name: pre_users pre_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pre_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pre_users
@@ -2415,7 +2539,15 @@ ALTER TABLE ONLY pre_users
 
 
 --
--- Name: que_jobs que_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY process_libraries
+    ADD CONSTRAINT process_libraries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: que_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY que_jobs
@@ -2423,7 +2555,7 @@ ALTER TABLE ONLY que_jobs
 
 
 --
--- Name: rubysec_advisories rubysec_advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: rubysec_advisories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rubysec_advisories
@@ -2431,7 +2563,23 @@ ALTER TABLE ONLY rubysec_advisories
 
 
 --
--- Name: server_tags server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: server_process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT server_process_libraries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_processes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT server_processes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags
@@ -2439,7 +2587,7 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: subscription_plans subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subscription_plans
@@ -2447,7 +2595,7 @@ ALTER TABLE ONLY subscription_plans
 
 
 --
--- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags
@@ -2455,7 +2603,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -2463,7 +2611,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: vulnerability_archives vulnerability_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vulnerability_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerability_archives
@@ -2471,7 +2619,7 @@ ALTER TABLE ONLY vulnerability_archives
 
 
 --
--- Name: vulnerable_dependencies vulnerable_dependencies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vulnerable_dependencies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_dependencies
@@ -2479,7 +2627,7 @@ ALTER TABLE ONLY vulnerable_dependencies
 
 
 --
--- Name: vulnerable_dependency_archives vulnerable_dependency_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vulnerable_dependency_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_dependency_archives
@@ -2487,7 +2635,7 @@ ALTER TABLE ONLY vulnerable_dependency_archives
 
 
 --
--- Name: vulnerable_package_archives vulnerable_package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vulnerable_package_archives_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_package_archives
@@ -2495,7 +2643,7 @@ ALTER TABLE ONLY vulnerable_package_archives
 
 
 --
--- Name: vulnerable_packages vulnerable_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vulnerable_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_packages
@@ -3252,6 +3400,27 @@ CREATE INDEX index_rubysec_advisories_on_ident ON rubysec_advisories USING btree
 
 
 --
+-- Name: index_server_process_libraries_on_process_library_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
+
+
+--
+-- Name: index_server_process_libraries_on_server_process_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_server_process_id ON server_process_libraries USING btree (server_process_id);
+
+
+--
+-- Name: index_server_processes_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
+
+
+--
 -- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3567,70 +3736,70 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
--- Name: advisories trigger_advisory_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_advisory_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_advisory_archives AFTER DELETE OR UPDATE ON advisories FOR EACH ROW EXECUTE PROCEDURE archive_advisories();
 
 
 --
--- Name: advisory_vulnerabilities trigger_advisory_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_advisory_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_advisory_vulnerability_archives AFTER DELETE OR UPDATE ON advisory_vulnerabilities FOR EACH ROW EXECUTE PROCEDURE archive_advisory_vulnerabilities();
 
 
 --
--- Name: agent_servers trigger_agent_server_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_agent_server_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_agent_server_archives AFTER DELETE OR UPDATE ON agent_servers FOR EACH ROW EXECUTE PROCEDURE archive_agent_servers();
 
 
 --
--- Name: bundles trigger_bundle_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_bundle_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_bundle_archives AFTER DELETE OR UPDATE ON bundles FOR EACH ROW EXECUTE PROCEDURE archive_bundles();
 
 
 --
--- Name: bundled_packages trigger_bundled_package_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_bundled_package_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_bundled_package_archives AFTER DELETE OR UPDATE ON bundled_packages FOR EACH ROW EXECUTE PROCEDURE archive_bundled_packages();
 
 
 --
--- Name: packages trigger_package_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_package_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_package_archives AFTER DELETE OR UPDATE ON packages FOR EACH ROW EXECUTE PROCEDURE archive_packages();
 
 
 --
--- Name: vulnerabilities trigger_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_vulnerability_archives AFTER DELETE OR UPDATE ON vulnerabilities FOR EACH ROW EXECUTE PROCEDURE archive_vulnerabilities();
 
 
 --
--- Name: vulnerable_dependencies trigger_vulnerable_dependency_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_vulnerable_dependency_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_vulnerable_dependency_archives AFTER DELETE OR UPDATE ON vulnerable_dependencies FOR EACH ROW EXECUTE PROCEDURE archive_vulnerable_dependencies();
 
 
 --
--- Name: vulnerable_packages trigger_vulnerable_package_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: trigger_vulnerable_package_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_vulnerable_package_archives AFTER DELETE OR UPDATE ON vulnerable_packages FOR EACH ROW EXECUTE PROCEDURE archive_vulnerable_packages();
 
 
 --
--- Name: server_tags fk_rails_0c5d14504e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_0c5d14504e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags
@@ -3638,7 +3807,7 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: ignored_packages fk_rails_257ff0b8e3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_257ff0b8e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages
@@ -3646,7 +3815,7 @@ ALTER TABLE ONLY ignored_packages
 
 
 --
--- Name: server_tags fk_rails_42f69de9f4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_42f69de9f4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags
@@ -3654,7 +3823,15 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: notifications fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_466a4741cd FOREIGN KEY (process_library_id) REFERENCES process_libraries(id);
+
+
+--
+-- Name: fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -3662,7 +3839,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: bundles fk_rails_553559718b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_553559718b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundles
@@ -3670,7 +3847,7 @@ ALTER TABLE ONLY bundles
 
 
 --
--- Name: vulnerable_packages fk_rails_602d23d9db; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_602d23d9db; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_packages
@@ -3678,7 +3855,7 @@ ALTER TABLE ONLY vulnerable_packages
 
 
 --
--- Name: users fk_rails_61ac11da2b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_61ac11da2b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -3686,7 +3863,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: bundled_packages fk_rails_6c7c501d37; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_6c7c501d37; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_packages
@@ -3694,7 +3871,7 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
--- Name: email_messages fk_rails_7ffd76ae80; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_7ffd76ae80; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_messages
@@ -3702,7 +3879,7 @@ ALTER TABLE ONLY email_messages
 
 
 --
--- Name: ignored_packages fk_rails_8055c587d4; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_8055c587d4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages
@@ -3710,7 +3887,7 @@ ALTER TABLE ONLY ignored_packages
 
 
 --
--- Name: bundled_packages fk_rails_8318307314; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_8318307314; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_packages
@@ -3718,7 +3895,7 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
--- Name: tags fk_rails_86647bc40a; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_86647bc40a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags
@@ -3726,7 +3903,23 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: motds fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT fk_rails_8e08420c73 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_a5ff67a393 FOREIGN KEY (server_process_id) REFERENCES server_processes(id);
+
+
+--
+-- Name: fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY motds
@@ -3734,7 +3927,7 @@ ALTER TABLE ONLY motds
 
 
 --
--- Name: notifications fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -3742,7 +3935,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: ignored_packages fk_rails_e599353bb7; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_e599353bb7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages
@@ -3750,7 +3943,7 @@ ALTER TABLE ONLY ignored_packages
 
 
 --
--- Name: notifications fk_rails_f192ff6aa1; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_f192ff6aa1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -3758,7 +3951,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: ignored_packages fk_rails_f8bf4dc6c3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_f8bf4dc6c3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages
@@ -3766,7 +3959,7 @@ ALTER TABLE ONLY ignored_packages
 
 
 --
--- Name: vulnerable_packages fk_rails_fa826b18a3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_fa826b18a3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_packages
@@ -3774,7 +3967,7 @@ ALTER TABLE ONLY vulnerable_packages
 
 
 --
--- Name: advisory_import_states fk_rails_fc4067142b; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_fc4067142b; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_import_states
@@ -3782,7 +3975,7 @@ ALTER TABLE ONLY advisory_import_states
 
 
 --
--- Name: agent_servers fk_rails_fca1b65201; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_fca1b65201; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_servers
@@ -3790,7 +3983,7 @@ ALTER TABLE ONLY agent_servers
 
 
 --
--- Name: agent_servers fk_rails_fe164d0a00; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_fe164d0a00; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_servers
@@ -3798,7 +3991,7 @@ ALTER TABLE ONLY agent_servers
 
 
 --
--- Name: vulnerable_packages fk_rails_ff1c2105ae; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_ff1c2105ae; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_packages
@@ -3959,11 +4152,19 @@ INSERT INTO schema_migrations (version) VALUES ('20170111180619');
 
 INSERT INTO schema_migrations (version) VALUES ('20170112163526');
 
+INSERT INTO schema_migrations (version) VALUES ('20170118213120');
+
+INSERT INTO schema_migrations (version) VALUES ('20170118224300');
+
 INSERT INTO schema_migrations (version) VALUES ('20170118224917');
+
+INSERT INTO schema_migrations (version) VALUES ('20170119145353');
 
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
 
 INSERT INTO schema_migrations (version) VALUES ('20170206172642');
+
+INSERT INTO schema_migrations (version) VALUES ('20170207223930');
 
 INSERT INTO schema_migrations (version) VALUES ('20170222211052');
 
@@ -3972,4 +4173,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170222211057');
 INSERT INTO schema_migrations (version) VALUES ('20170302155336');
 
 INSERT INTO schema_migrations (version) VALUES ('20170309163315');
+
+INSERT INTO schema_migrations (version) VALUES ('20170317203807');
+
+INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 
