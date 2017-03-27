@@ -35,8 +35,9 @@ class Package < ActiveRecord::Base
   has_many :vulnerable_dependencies, :through => :vulnerable_packages
   has_many :vulnerabilities, :through => :vulnerable_packages
   has_many :advisories, :through => :vulnerabilities
-  
+
   has_many :log_resolutions
+  has_many :ignored_packages
 
   # validates_uniqueness_of :version, scope: [:platform, :release, :name]
 

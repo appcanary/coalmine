@@ -47,7 +47,7 @@ module ApplicationHelper
 
     content_tag("eui-button", tag_attr.merge(html)) do
       if disabled
-      btn = content_tag("button", :disabled => true, :'aria-label' => value) {} 
+        btn = content_tag("button", :disabled => true, :'aria-label' => value) {}
       else
         btn = content_tag("button", :'aria-label' => value) {} 
       end

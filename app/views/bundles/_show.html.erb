@@ -22,14 +22,21 @@
       </a>
     </li>
 
-    <% if @bundlepres.ignored_package_logs.any? %>
+    <% if @bundlepres.resolved_package_logs.any? %>
       <li role="presentation">
-        <a href="#ignored-packages-tab" data-toggle="tab">
-          ignored (<%=@bundlepres.ignored_package_logs.count%>)
+        <a href="#resolved-packages-tab" data-toggle="tab">
+          wontfix (<%= @bundlepres.resolved_package_logs.count %>)
         </a>
       </li>
     <% end %>
 
+    <% if @bundlepres.ignored_packages.any? %>
+      <li role="presentation">
+        <a href="#ignored-packages-tab" data-toggle="tab">
+          ignored (<%= @bundlepres.ignored_packages.count %>)
+        </a>
+      </li>
+    <% end %>
 
     <li role="presentation">
       <a href="#all-packages-tab" data-toggle="tab">
@@ -97,7 +104,12 @@
 
               <td>
                 <%= render :partial => "bundles/package_resolution_modal", :locals => { :package => package, :vulns => vulns } %>
-                <%= eui_button "Mark resolved", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{dom_id(package)}", "aria-haspopup": "true", "aria-expanded": false} %>
+                <%= render :partial => "bundles/package_ignore_modal", :locals => { :package => package, :bundle => @bundle } %>
+
+                <span class="package-ignore-buttons">
+                  <%= eui_button "Wontfix", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{dom_id(package)}-resolution", "aria-haspopup": "true", "aria-expanded": false} %>
+                  <%= eui_button "Ignore", {:type => "eui-button-small-danger"}, {"data-toggle": "modal", "data-target": "#modal-#{dom_id(package)}-ignore", "aria-haspopup": "true", "aria-expanded": false} %>
+                </span>
               </td>
             </tr>
           <% end %>
@@ -105,9 +117,9 @@
       <% end %>
     </div>
 
-    <% if @bundlepres.ignored_package_logs.any? %>
-      <div id="ignored-packages-tab" role="tabpanel" class="tab-pane">
-        <table id="ignored-packages" class="table packages">
+    <% if @bundlepres.resolved_package_logs.any? %>
+      <div id="resolved-packages-tab" role="tabpanel" class="tab-pane">
+        <table id="resolved-packages" class="table packages">
           <thead>
             <th>
               user
@@ -129,7 +141,7 @@
             </th>
           </thead>
 
-          <% @bundlepres.ignored_package_logs.each do |ip| %>
+          <% @bundlepres.resolved_package_logs.each do |ip| %>
             <tr>
               <td>
                 <%= ip.user.email %>
@@ -155,6 +167,66 @@
               <td>
                 <%= form_for LogResolution.new, url: unresolve_vuln_monitors_path(ip.package_id), method: :delete do |f| %>
                   <%= f.hidden_field :package_id, value: ip.package_id %>
+                  <%= f.submit "Remove", class: "btn btn-small btn-default", :data => {:confirm => "Are you sure? This may trigger new notifications."} %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+
+        </table>
+      </div>
+    <% end %>
+
+    <% if @bundlepres.ignored_packages.any? %>
+      <div id="ignored-packages-tab" role="tabpanel" class="tab-pane">
+        <table id="ignored-packages" class="table packages">
+          <thead>
+            <th>
+              user
+            </th>
+            <th>
+              package name
+            </th>
+            <th>
+              version
+            </th>
+            <th>
+              vulnerabilities
+            </th>
+            <th>
+              note
+            </th>
+
+            <th>
+            </th>
+          </thead>
+
+          <% @bundlepres.ignored_packages.each do |ip| %>
+            <tr>
+              <td>
+                <%= ip.user.email %>
+              </td>
+
+              <td class="package-name">
+                <%= ip.package.name %>
+              </td>
+              <td class="package-version">
+                <code><%= ip.package.version %></code>
+              </td>
+
+              <td class="">
+                <%= ip.vuln_count %>
+              </td>
+
+              <td class="col-md-3">
+                <%= ip.note %>
+              </td>
+
+
+
+              <td>
+                <%= form_for ip, url: unignore_vuln_monitors_path(ip.package_id), method: :delete do |f| %>
+                  <%= f.hidden_field :ignored_package_id, value: ip.id %>
                   <%= f.submit "Remove", class: "btn btn-small btn-default", :data => {:confirm => "Are you sure? This may trigger new notifications."} %>
                 <% end %>
               </td>
