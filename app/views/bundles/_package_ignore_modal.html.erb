@@ -46,8 +46,8 @@
         </div>
         <div class="modal-footer">
           <div class="form-group pull-left">
-            <%= check_box_tag "ignored_package[:global]", "yes", false, {} %>
-            <%= label_tag "Ignore everywhere" %>
+            <%= f.check_box :global, {checked: true}, "yes", false %>
+            <%= f.label :global, "Ignore this package everywhere" %>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <%= f.submit "Mark as ignored", class: "btn btn-danger" %>

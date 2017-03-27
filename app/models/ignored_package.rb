@@ -52,6 +52,8 @@ class IgnoredPackage < ActiveRecord::Base
       where("ignored_packages.bundle_id is null or ignored_packages.bundle_id = ?", bundle.id)
   }
 
+  # used ONLY in the form
+  attr_accessor :global
   def global?
     self.bundle_id.nil?
   end
