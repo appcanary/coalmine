@@ -1,6 +1,7 @@
 class AddPackagesToVulnerabilities < ActiveRecord::Migration
   def change
-    add_column :vulnerabilities, :package_names, :string, :array => true, :default => [], :null => false
-    add_column :vulnerability_archives, :package_names, :string, :array => true, :default => [], :null => false
+    ArchiveMigrator.new(self).change_table :vulnerabilities do |t|
+      t.string :package_names, :array => true, :default => [], :null => false
+    end
   end
 end
