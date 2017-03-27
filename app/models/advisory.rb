@@ -103,6 +103,11 @@ class Advisory < ActiveRecord::Base
   scope :from_cve, -> {
     where(:source => CveImporter::SOURCE)
   }
+
+  scope :from_friends_of_php, -> {
+    where(:source => FriendsOfPHPImporter::SOURCE)
+  }
+
   # AIS gets auto saved, so we skip saving it ourselves here.
   def processed_flag=(flag)
     unless self.advisory_import_state

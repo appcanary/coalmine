@@ -1,8 +1,12 @@
 class DependencyConstraint
-  ATTR = [:release, :package_name, :arch, :patched_versions, 
-          :unaffected_versions, :end_of_life, :pending]
-  ATTR_MAP = Hash[ATTR.map { |a| [a.to_s, true] }]
+  PERMITTED_ATTRS = [:release, :package_name, :arch,
+                     :patched_versions, :unaffected_versions,
+                     :affected_versions, :end_of_life, :pending]
+  ATTR_MAP = Hash[PERMITTED_ATTRS.map { |a| [a.to_s, true] }]
 
+  # Validates that (1) no unexpected keys are present in hsh, (2) at least the
+  # package_name is present, and (3) nothing is set to nil. Returns the original
+  # hsh.
   def self.parse(hsh)
     attributes = {}
 
