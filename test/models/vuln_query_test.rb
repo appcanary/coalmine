@@ -202,12 +202,13 @@ class VulnQueryTest < ActiveSupport::TestCase
   end
 
   test "whether #from_patched_notifications returns correct LBV/LBPs" do
+    user1 = FactoryGirl.create(:user, :pref_email_frequency => PrefOpt::EMAIL_FREQ_FIRE)
  
     # first we generate some LBVs.
     # we create a vuln bundle and set off a report,
     # then we create notifications from the LBVs
 
-    @bundle = FactoryGirl.create(:bundle, :packages => @packages)
+    @bundle = FactoryGirl.create(:bundle, :account => user1.account, :packages => @packages)
     Bundle.transaction do
       rm = ReportMaker.new(@bundle.id)
       rm.on_bundle_change

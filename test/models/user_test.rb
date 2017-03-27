@@ -39,6 +39,7 @@
 #  pref_os                         :string
 #  pref_deploy                     :string
 #  phone_number                    :string
+#  pref_email_frequency            :string           default("daily"), not null
 #
 # Indexes
 #

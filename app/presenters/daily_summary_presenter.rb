@@ -107,20 +107,27 @@ class DailySummaryPresenter
 
 
   class ChangesPresenter
-    attr_accessor :package_ct, :server_ct
+    attr_accessor :added_ct, :removed_ct, :upgraded_ct, :server_ct
 
-    def initialize(changes)
-      @server_ct = changes.map(&:agent_server_id).uniq.size
-      # caveat: this is the one presenter that
-      # does make a db call.
-      
-      # iterate over every prev state of the bundle
-      # and count the packages
-      @package_ct = changes.map do |ch| 
-        BundleQuery.new(ch.bundle, ch.valid_at).
-          bundled_packages.where(:valid_at => ch.valid_at) 
-      end.flatten.size
+    def initialize(new_changes)
+      @server_ct = new_changes[:server_ct]
+      @added_ct = new_changes[:added_ct]
+      @removed_ct = new_changes[:removed_ct]
+      @upgraded_ct = new_changes[:upgraded_ct]
     end
+  end
+
+
+  def total_vuln_ct
+    fresh_vulns.vuln_ct + new_vulns.vuln_ct
+  end
+
+  def total_package_ct
+    fresh_vulns.package_ct + new_vulns.package_ct
+  end
+
+  def total_server_ct
+    fresh_vulns.server_ct + new_vulns.server_ct
   end
 
 
@@ -141,7 +148,7 @@ class DailySummaryPresenter
   end
 
   def has_changes?
-    changes.package_ct > 0
+    changes.server_ct > 0
   end
 
   def has_new_servers?
@@ -153,16 +160,21 @@ class DailySummaryPresenter
   end
 
   def anything_to_report?
-    has_fresh_vulns?   || 
-      has_new_vulns?   ||
-      has_changes?     ||
-      has_new_servers? ||
+    has_fresh_vulns?     || 
+      has_new_vulns?     ||
+      has_changes?       ||
+      has_cantfix_vulns? ||
+      has_new_servers?   ||
       has_deleted_servers?
   end
 
-  def has_vulns_to_report?
+  def has_patchable_vulns_to_report?
     has_fresh_vulns? || 
-      has_new_vulns? ||
+      has_new_vulns? 
+  end
+
+  def has_vulns_to_report?
+    has_patchable_vulns_to_report? ||
       has_cantfix_vulns?
   end
 
@@ -172,8 +184,9 @@ class DailySummaryPresenter
   end
 
   def has_details_to_show?
-    has_fresh_vulns? ||
-      has_new_vulns? ||
+    has_fresh_vulns?     ||
+      has_new_vulns?     ||
+      has_cantfix_vulns? ||
       has_patched_vulns?
   end
 

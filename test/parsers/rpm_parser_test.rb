@@ -22,5 +22,17 @@ class RpmParserTest < ActiveSupport::TestCase
     assert_equal "openssh-server-6.6.1p1-22.el7.x86_64", openssh.version
     assert_equal "x86_64", openssh.arch
   end
+
+  it "should correctly tag 'alt' packages" do
+    sample_text = "kernel-3.4.59-8.el6.centos.alt.src"
+
+    pkgs, err = RPM::Parser.parse(sample_text)
+
+    kernel = pkgs.first
+
+    assert_equal "kernel^alt", kernel.name
+    assert_equal "kernel-3.4.59-8.el6.centos.alt.src", kernel.version
+    assert_equal "src", kernel.arch
+  end
 end
 

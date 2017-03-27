@@ -8,29 +8,47 @@
 <h4>2. Add your API key</h4>
 <p>Now edit the configuration:
   <br/>
-  <kbd>sudo vim /etc/appcanary/agent.conf</kbd>
+  <% if $rollout.active?(:yaml_config) %>
+    <kbd>sudo vim /etc/appcanary/agent.yml</kbd>
+  <% else %>
+    <kbd>sudo vim /etc/appcanary/agent.conf</kbd>
+  <% end %>
   <br/>
   <br/>
   The following block has your API key; make sure to fill in the full path of your <code>Gemfile.lock</code> files:
   <br/>
   <pre class="auth_token">
+    <% if $rollout.active?(:yaml_config) %>
+api_key: "<%= @agent_token %>"
+
+watchers:
+  # if you are on Centos or Amazon Linux, uncomment this line:
+  #- command: "rpm -qa"
+
+  # Fill in your Ruby app's path and uncomment the next line:
+  #- path: "/path/to/a/Gemfile.lock"
+
+  # To add another app:
+  #- path: "/path/to/a/different/Gemfile.lock"
+    <% else %>
 api_key = "<%= @agent_token %>"
 
 # if you are on Centos or Amazon Linux, uncomment these lines:
 #[[files]]
 #process = "rpm -qa"
 
-# Fill in your Ruby app's path and 
+# Fill in your Ruby app's path and
 # uncomment the next two lines:
 
 #[[files]]
 #path = "/path/to/a/Gemfile.lock"
 
 # You need one [[files]] &amp; path per app.
-# To add another app: 
+# To add another app:
 
 #[[files]]
 #path = "/path/to/a/different/Gemfile.lock"
+    <% end %>
 </pre>
 </p>
 

@@ -1543,6 +1543,19 @@ CREATE TABLE server_tags (
     updated_at timestamp without time zone NOT NULL
 );
 
+--
+-- Name: server_process_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_process_libraries (
+    id integer NOT NULL,
+    server_process_id integer NOT NULL,
+    process_library_id integer NOT NULL,
+    outdated boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
 
 --
 -- Name: server_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
@@ -1555,12 +1568,64 @@ CREATE SEQUENCE server_tags_id_seq
     NO MAXVALUE
     CACHE 1;
 
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_process_libraries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 
 --
 -- Name: server_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
+
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_process_libraries_id_seq OWNED BY server_process_libraries.id;
+
+
+--
+-- Name: server_processes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_processes (
+    id integer NOT NULL,
+    agent_server_id integer NOT NULL,
+    pid integer NOT NULL,
+    name character varying,
+    started timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    args character varying
+);
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_processes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_processes_id_seq OWNED BY server_processes.id;
 
 
 --
@@ -2507,7 +2572,7 @@ ALTER TABLE ONLY motds
 
 
 --
--- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -2587,6 +2652,22 @@ ALTER TABLE ONLY server_tags
 
 
 --
+-- Name: server_process_libraries server_process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT server_process_libraries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_processes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT server_processes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2603,7 +2684,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -3442,6 +3523,27 @@ CREATE INDEX index_server_tags_on_tag_id ON server_tags USING btree (tag_id);
 
 
 --
+-- Name: index_server_process_libraries_on_process_library_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
+
+
+--
+-- Name: index_server_process_libraries_on_server_process_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_server_process_id ON server_process_libraries USING btree (server_process_id);
+
+
+--
+-- Name: index_server_processes_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
+
+
+--
 -- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3823,7 +3925,16 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+
+-- Name: server_procs fk_rails_04cbd52b76; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_procs
+    ADD CONSTRAINT fk_rails_04cbd52b76 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: server_process_libraries fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_process_libraries
@@ -3924,6 +4035,22 @@ ALTER TABLE ONLY server_process_libraries
 
 ALTER TABLE ONLY motds
     ADD CONSTRAINT fk_rails_a7964aa25c FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: server_processes fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT fk_rails_8e08420c73 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_a5ff67a393 FOREIGN KEY (server_process_id) REFERENCES server_processes(id);
 
 
 --
@@ -4162,6 +4289,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170119145353');
 
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
 
+INSERT INTO schema_migrations (version) VALUES ('20170131223446');
+
 INSERT INTO schema_migrations (version) VALUES ('20170206172642');
 
 INSERT INTO schema_migrations (version) VALUES ('20170207223930');
@@ -4178,3 +4307,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170317203807');
 
 INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 
+INSERT INTO schema_migrations (version) VALUES ('20170317203807');
+
+INSERT INTO schema_migrations (version) VALUES ('20170320135753');

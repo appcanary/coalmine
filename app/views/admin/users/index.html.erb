@@ -128,7 +128,7 @@ $( document ).ready(function() {
         </th>
       </thead>
       <tbody>
-        <%- @users.each do |user| %>
+        <% @users.each do |user| %>
           <tr>
             <td>
               <%= user.name %>
@@ -145,19 +145,19 @@ $( document ).ready(function() {
             </td>
 
             <td>
-              <%= user.agent_servers.size %>
+              <%= @server_counts[user.account_id] %>
             </td>
 
             <td>
-              <%= user.active_servers_count %>
+              <%= @active_server_counts[user.account_id] %>
             </td>
 
             <td>
-              <%= user.api_calls_count %>
+              <%= @api_calls_counts[user.account_id] %>
             </td>
 
             <td>
-              <%= user.monitors_count %>
+              <%= @monitor_counts[user.account_id] %>
             </td>
 
             <td>
@@ -165,8 +165,7 @@ $( document ).ready(function() {
             </td>
 
             <td>
-              <%= number_to_currency((user.billing_plan.try(:monthly_cost) || 0).to_f / 100) %>
-              <%# <%= BillingManager.new(user).to_presenter.monthly_cost_in_dollars %>
+              <%= number_to_currency(@monthly_costs[user.account_id].to_f / 100) %>
             </td>
 
             <td>

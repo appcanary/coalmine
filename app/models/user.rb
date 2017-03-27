@@ -39,6 +39,7 @@
 #  pref_os                         :string
 #  pref_deploy                     :string
 #  phone_number                    :string
+#  pref_email_frequency            :string           default("daily"), not null
 #
 # Indexes
 #
@@ -75,12 +76,10 @@ class User < ActiveRecord::Base
 
   delegate :active_servers, :agent_servers, :bundles, :monitors, :check_api_calls, :to => :account
 
+  scope :with_billing, -> { where("invoiced_manually = true or (stripe_customer_id is not null and stripe_customer_id != '')") } 
+
   # TODO: most of these need to be cleaned up
   attr_accessor :stripe_errors, :servers_count, :active_servers_count, :api_calls_count, :monitors_count
-
-  def self.are_paying_count
-    User.count_by_sql("SELECT count(*) from users WHERE (stripe_customer_id is not null and stripe_customer_id != '') OR invoiced_manually = true")
-  end
 
   def stripe_errors
     @stripe_errors ||= []

@@ -1,30 +1,21 @@
-require 'open-uri'
 class AlasImporter < AdvisoryImporter
   SOURCE = "alas"
   PLATFORM = Platforms::Amazon
   URL = "https://alas.aws.amazon.com/index.html"
+  LOCAL_PATH = "tmp/importers/alas"
 
-  def initialize(url = nil)
+  def initialize(url = nil, local_path = nil)
     @index_url = url || URL
-    @base_url = File.dirname(@index_url)
+    @local_path = local_path || LOCAL_PATH
+  end
+
+  def update_local_store!
+    wget = WgetHandler.new(self.class, @index_url, @local_path, "ALAS-*.html")
+    wget.mirror!
   end
 
   def fetch_advisories
-    alas_index = open(@index_url).read
-
-    document = Nokogiri::HTML.parse(alas_index)
-    # there is an #ALAStable, whose first row is a column header
-    # that lists every advisory it knows about
-    alas_paths = document.css("#ALAStable tr")[1..-1].map do |row| 
-      row.css("a").first.attributes["href"].value
-    end
-
-    alas_urls = alas_paths.map { |s|
-      # don't look now but using File rather than
-      # URI lets this work both for http and for local
-      # files, i.e. when testing
-      File.join(@base_url, s).to_s
-    }
+    Dir[File.join(Rails.root, @local_path, "ALAS-*.html")]
   end
 
   def parse(adv_url)
@@ -39,7 +30,7 @@ class AlasImporter < AdvisoryImporter
 
     severity = document.css("#severity").first.children[4].text.strip
 
-    reference_ids = document.css("#references a").map { |cve| 
+    reference_ids = document.css("#references a").map { |cve|
       cve.text.gsub(/\p{Space}/, "")
     } 
  
