@@ -21,8 +21,15 @@ class PackageMergerTest < ActiveSupport::TestCase
 
     assert_equal 1, Package.count
     assert_equal [], empty_bundle.packages.reload.to_a
+    assert_equal [], empty_bundle.bundled_packages
+
     assert_equal [pkg1], bundle_with_pkg1.packages.reload.to_a
+    assert_equal 1, bundle_with_pkg1.bundled_packages.reload.count
+
     assert_equal [pkg1], bundle_with_pkg2.packages.reload.to_a
+    assert_equal 1, bundle_with_pkg2.bundled_packages.reload.count
+
     assert_equal [pkg1], bundle_with_both.packages.reload.to_a
+    assert_equal 1, bundle_with_both.bundled_packages.reload.count
   end
 end
