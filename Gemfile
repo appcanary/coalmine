@@ -41,6 +41,7 @@ gem 'pretender'
 gem 'httparty'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'has_secure_token'
+gem 'pluck_to_hash'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc

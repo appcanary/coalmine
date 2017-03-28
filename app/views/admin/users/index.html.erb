@@ -161,7 +161,7 @@ $( document ).ready(function() {
             </td>
 
             <td>
-              <%= user.has_billing? %>
+              <%= user.invoiced_manually || user.stripe_customer_id.present? %>
             </td>
 
             <td>
@@ -173,12 +173,12 @@ $( document ).ready(function() {
             </td>
 
             <td>
-              <%= link_to "edit", [:admin, user] %>
+              <%= link_to "edit", admin_user_path(user.id) %>
             </td>
 
             <td>
-              <% if user != current_user %>
-                <%= link_to "impersonate", impersonate_admin_user_path(user), :method => :post %>
+              <% if user.id != current_user.id %>
+                <%= link_to "impersonate", impersonate_admin_user_path(user.id), :method => :post %>
               <% else %>
                 (that's you!)
               <% end %>
