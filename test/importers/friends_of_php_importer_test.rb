@@ -8,10 +8,10 @@ class FriendsOfPHPImporterTest < ActiveSupport::TestCase
     assert_equal 0, Advisory.from_friends_of_php.count
 
     # there are 51 packages in our fixtures
-    advisory_files = @importer.fetch_advisories
+    advisory_files = @importer.fetch_advisories.sort
     assert_equal 51, advisory_files.size
 
-    # aws/aws-sdk-php/2015-08-31.yaml
+    # aws/aws-sdk-php/2015-08-31.yaml - contains one branch
     advisory_file = advisory_files.first
     assert advisory_file.end_with?("aws/aws-sdk-php/2015-08-31.yaml")
 
@@ -54,5 +54,32 @@ class FriendsOfPHPImporterTest < ActiveSupport::TestCase
 
     assert_equal 51, Advisory.from_friends_of_php.count
     assert_equal "new title omg", Advisory.from_friends_of_php.order(:updated_at).last.title
+  end
+
+  test "correctly imports multiple constraints" do
+    FriendsOfPHPImporter.any_instance.stubs(:update_local_store!).returns(true)
+    @importer = FriendsOfPHPImporter.new("test/data/importers/friendsofphp")
+    assert_equal 0, Advisory.from_friends_of_php.count
+
+    advisory_files = @importer.fetch_advisories.sort
+
+    # laravel/socialite/2015-08-03.yaml - contains 2 branches
+    advisory_file = advisory_files.last
+    assert advisory_file.end_with?("laravel/socialite/2015-08-03.yaml")
+
+    adapter = @importer.parse(advisory_file)
+    attributes = adapter.to_advisory_attributes
+
+    assert_equal 2, attributes["affected"].count
+    assert attributes["affected"].all? { |vc| vc.key?("version") }
+    assert attributes["affected"].all? { |vc| vc.key?("package_name") }
+
+    assert attributes["constraints"].present?
+    assert_equal 1, attributes["constraints"].count
+
+    constraint = attributes["constraints"].first
+    assert_equal "laravel/socialite", constraint["package_name"]
+    assert_equal [['>=1.0.0', '<1.0.99'], ['>=2.0.0', '<2.0.10']],
+                 constraint["affected_versions"]
   end
 end
