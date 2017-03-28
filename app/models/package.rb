@@ -44,7 +44,9 @@ class Package < ActiveRecord::Base
     select("name, version").pluck(:name, :version)
   }
 
-  # TODO PHILL: why don't we include platform/release here?
+  # this scope doesn't include package/release because
+  # it is only used in PackageMaker, which takes package/release
+  # as an input, and scopes the whole query to those values.
   scope :search_unique_fields, ->(values) {
     clauses = values.map do |vals|
       '(name = ? AND version = ?)'
