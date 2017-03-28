@@ -88,7 +88,7 @@ class Package < ActiveRecord::Base
 
   def not_affected?(unaffected_versions)
     unaffected_versions.any? do |v|
-      version_matches?(v)
+      version_satisfies?(v)
     end
   end
 
@@ -98,16 +98,12 @@ class Package < ActiveRecord::Base
 
   def been_patched?(patched_versions)
     patched_versions.any? do |v|
-      version_matches?(v)
+      version_satisfies?(v)
     end
   end
 
-  def version_matches?(other_version)
-    comparator.matches?(other_version)
-  end
-
-  def earlier_version?(pv)
-    comparator.earlier_version?(pv)
+  def version_satisfies?(version_constraint)
+    comparator.satisfies?(version_constraint)
   end
 
   def comparator

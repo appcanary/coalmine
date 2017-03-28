@@ -5,7 +5,7 @@ class PHPComparator
     @version = version_str
   end
 
-  def matches?(constraints)
+  def satisfies?(constraints)
     # Going to assume this means "satisfies"
     if constraints.is_a?(Array)
       constraint_checker.satisfies(@version, constraints)
@@ -20,10 +20,6 @@ class PHPComparator
     when comparator.greater_than?(v1, v2) then 1
     when comparator.equal_to?(v1, v2)     then 0
     end
-  end
-
-  def earlier_version?(version_constraint)
-    raise "Not implemented for PHPComparator"
   end
 
   private
