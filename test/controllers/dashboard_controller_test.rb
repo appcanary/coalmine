@@ -34,7 +34,7 @@ class DashboardControllerTest < ActionController::TestCase
       it "should be redirected to onboarding path" do
         get :index
         assert_redirected_to onboarding_path
-        assert_equal flash[:notice], nil
+        assert_nil flash[:notice]
       end
 
       it "but tried to add a server, should display flash" do
