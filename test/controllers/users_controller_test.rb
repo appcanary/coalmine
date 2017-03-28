@@ -82,8 +82,8 @@ class UsersControllerTest < ActionController::TestCase
 
     test "users should be able to update preferences" do
       login_user(user)
-      assert_equal user.pref_os, nil
-      assert_equal user.pref_deploy, nil
+      assert_nil user.pref_os
+      assert_nil user.pref_deploy
       xhr :patch, :update, :id => user.id, :user => { :pref_os => "ubuntu", :pref_deploy => "chef" }
       assert_response :success
 
