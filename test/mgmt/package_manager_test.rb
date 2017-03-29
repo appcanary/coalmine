@@ -182,7 +182,7 @@ class PackageManagerTest < ActiveSupport::TestCase
 
     pkg = FactoryGirl.create(:package, :ubuntu, :origin => "user")
     assert_equal 1, Package.count
-    assert_equal nil, pkg.source_name
+    assert_nil pkg.source_name
     assert_equal 0, VulnerablePackage.count
 
     # in ubuntu, vulns are calculated using the source name.
@@ -198,7 +198,7 @@ class PackageManagerTest < ActiveSupport::TestCase
     @pm.find_or_create([parcel])
 
     pkg.reload
-    assert_equal nil, pkg.source_name
+    assert_nil pkg.source_name
     assert_equal 0, VulnerablePackage.count
 
     # now we actually try to update the package

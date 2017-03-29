@@ -1,12 +1,13 @@
-<div class="modal fade" id="modal-<%=dom_id(package)%>-resolution" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal-<%=dom_id(package)%>-ignore" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Wontfix</h4>
+        <h4 class="modal-title">Ignore this package</h4>
       </div>
-      <%= form_for LogResolution.new, url: resolve_vuln_monitors_path(package.id), method: :post do |f| %>
+      <%= form_for IgnoredPackage.new, url: ignore_vuln_monitors_path(package.id), method: :post do |f| %>
         <%= f.hidden_field :package_id, value: package.id %>
+        <%= f.hidden_field :bundle_id, value: bundle.id %>
         <div class="modal-body">
 
           <table class="table">
@@ -28,31 +29,28 @@
             </tr>
           </table>
 
-          <p>Marking this package as wontfix means:
+          <p>
+            Ignoring this package version means:
             <ol>
               <li>
-                This package, and the <%= link_to "#{vulns.size} vulnerabilities that currently affect it", show_package_path(package), target: "_blank"%> will disappear from reports.
+                This package and its vulnerabilities will disappear from reports.
               </li>
-              <li>
-                You will be notified when this package is affected by <b>new</b> vulnerabilities.
-              </li>
-
-              <li>
-                This action is global: this will impact any other servers or monitors that also have this package version.
-              </li>
+              <li>You will <b>never</b> be bothered about this package version again, even if new vulnerabilities come out.</li>
             </ol>
           </p>
-
-          <div class="form-group">
-          </div>
+            
           <div class="form-group">
             <%= f.label :note, "Note:" %>
             <%= f.text_area :note, :class => "form-control", :placeholder => "An optional, short explanatory message, i.e. 'fixed in configuration' or 'not exploitable'." %>
           </div>
         </div>
         <div class="modal-footer">
+          <div class="form-group pull-left">
+            <%= f.check_box :global, {checked: true}, "yes", false %>
+            <%= f.label :global, "Ignore this package everywhere" %>
+          </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <%= f.submit "Mark as wontfix", class: "btn btn-warning" %>
+          <%= f.submit "Mark as ignored", class: "btn btn-danger" %>
         </div>
       <% end %>
     </div>

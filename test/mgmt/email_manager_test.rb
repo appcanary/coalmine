@@ -85,8 +85,8 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal email1.account_id, bundle1.account_id
     assert_equal email2.account_id, bundle3.account_id
 
-    assert_equal nil, email1.sent_at
-    assert_equal nil, email2.sent_at
+    assert_nil email1.sent_at
+    assert_nil email2.sent_at
     assert_equal 1, email1.notifications.count
     assert_equal 3, email2.notifications.count
 
@@ -138,8 +138,8 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal email1.account_id, bundle1.account_id
     assert_equal email2.account_id, bundle2.account_id
 
-    assert_equal nil, email1.sent_at
-    assert_equal nil, email2.sent_at
+    assert_nil email1.sent_at
+    assert_nil email2.sent_at
     assert_equal 1, email1.notifications.count
     assert_equal 2, email2.notifications.count
 

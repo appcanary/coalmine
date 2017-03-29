@@ -28,4 +28,6 @@ class EmailDailySummary < EmailMessage
   # The difference is EPatched/EVuln messages are created first
   # then processed later. EDS on the other hand, why bother?
   # we create this as a log at the point we queued up the email
+  
+  validates :report_date, uniqueness: { scope: :account_id }
 end
