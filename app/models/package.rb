@@ -82,6 +82,16 @@ class Package < ActiveRecord::Base
     self.source_name == dep_name || self.name == dep_name
   end
 
+  # Given a list of affected version constraints,
+  # is our version affected?
+
+  def affected?(affected_version_constraints)
+    # binding.pry unless affected_version_constraints.empty?
+    affected_version_constraints.any? do |vc|
+      version_satisfies?(vc)
+    end
+  end
+
   # Given a list of unaffected versions,
   # is our version greater than or equal any of 
   # the "unaffected" constraints?

@@ -193,132 +193,6 @@ CREATE FUNCTION archive_vulnerable_packages() RETURNS trigger
        $$;
 
 
---
--- Name: update_advisories_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_advisories_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
---
--- Name: update_advisory_vulnerabilities_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_advisory_vulnerabilities_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
---
--- Name: update_agent_servers_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_agent_servers_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
---
--- Name: update_bundled_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_bundled_packages_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
---
--- Name: update_bundles_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_bundles_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
---
--- Name: update_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_packages_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
---
--- Name: update_vulnerabilities_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_vulnerabilities_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
---
--- Name: update_vulnerable_dependencies_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_vulnerable_dependencies_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
---
--- Name: update_vulnerable_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION update_vulnerable_packages_valid_at() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$
-       BEGIN
-         NEW.valid_at = now();
-         RETURN NEW;
-       END;
-       $$;
-
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -1976,7 +1850,8 @@ CREATE TABLE vulnerable_dependencies (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
-    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL
+    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
+    affected_versions text[] DEFAULT '{}'::text[] NOT NULL
 );
 
 
@@ -3942,69 +3817,6 @@ CREATE TRIGGER trigger_package_archives AFTER DELETE OR UPDATE ON packages FOR E
 
 
 --
--- Name: advisories trigger_update_advisories_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_advisories_valid_at BEFORE UPDATE ON advisories FOR EACH ROW EXECUTE PROCEDURE update_advisories_valid_at();
-
-
---
--- Name: advisory_vulnerabilities trigger_update_advisory_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_advisory_vulnerabilities_valid_at BEFORE UPDATE ON advisory_vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_advisory_vulnerabilities_valid_at();
-
-
---
--- Name: agent_servers trigger_update_agent_servers_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_agent_servers_valid_at BEFORE UPDATE ON agent_servers FOR EACH ROW EXECUTE PROCEDURE update_agent_servers_valid_at();
-
-
---
--- Name: bundled_packages trigger_update_bundled_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_bundled_packages_valid_at BEFORE UPDATE ON bundled_packages FOR EACH ROW EXECUTE PROCEDURE update_bundled_packages_valid_at();
-
-
---
--- Name: bundles trigger_update_bundles_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_bundles_valid_at BEFORE UPDATE ON bundles FOR EACH ROW EXECUTE PROCEDURE update_bundles_valid_at();
-
-
---
--- Name: packages trigger_update_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_packages_valid_at BEFORE UPDATE ON packages FOR EACH ROW EXECUTE PROCEDURE update_packages_valid_at();
-
-
---
--- Name: vulnerabilities trigger_update_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_vulnerabilities_valid_at BEFORE UPDATE ON vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_vulnerabilities_valid_at();
-
-
---
--- Name: vulnerable_dependencies trigger_update_vulnerable_dependencies_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_vulnerable_dependencies_valid_at BEFORE UPDATE ON vulnerable_dependencies FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_dependencies_valid_at();
-
-
---
--- Name: vulnerable_packages trigger_update_vulnerable_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
---
-
-CREATE TRIGGER trigger_update_vulnerable_packages_valid_at BEFORE UPDATE ON vulnerable_packages FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_packages_valid_at();
-
-
---
 -- Name: vulnerabilities trigger_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -4412,5 +4224,7 @@ INSERT INTO schema_migrations (version) VALUES ('20170317203807');
 INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 
 INSERT INTO schema_migrations (version) VALUES ('20170322221344');
+
+INSERT INTO schema_migrations (version) VALUES ('20170328203134');
 
 INSERT INTO schema_migrations (version) VALUES ('20170404212231');

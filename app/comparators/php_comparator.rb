@@ -2,15 +2,14 @@ class PHPComparator
   attr_accessor :version
 
   def initialize(version_str)
-    @version = version_str
+    self.version = version_str
   end
 
   def satisfies?(constraints)
-    # Going to assume this means "satisfies"
     if constraints.is_a?(Array)
-      constraint_checker.satisfies(@version, constraints)
+      constraint_checker.satisfies?(self.version, constraints.join(", "))
     elsif constraints.is_a?(String)
-      constraint_checker.satisfied_by(constraints, @version)
+      constraint_checker.satisfied_by(constraints, self.version)
     end
   end
 
@@ -25,10 +24,10 @@ class PHPComparator
   private
 
   def comparator
-    Composer::Semver::Comparator
+    ::Composer::Semver::Comparator
   end
 
   def constraint_checker
-    Composer::Semver::Semver
+    ::Composer::Semver::Semver
   end
 end

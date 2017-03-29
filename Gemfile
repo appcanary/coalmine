@@ -56,7 +56,7 @@ gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'
 gem 'intercom'
 
 # importer utilities
-gem 'php-composer-semver'
+gem 'php-composer-semver', :require => 'composer/semver'
 
 # deployment
 gem 'unicorn-rails'

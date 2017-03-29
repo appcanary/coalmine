@@ -16,6 +16,7 @@
 #  updated_at          :datetime         not null
 #  valid_at            :datetime         not null
 #  expired_at          :datetime         default("infinity"), not null
+#  affected_versions   :text             default("{}"), not null, is an Array
 #
 # Indexes
 #
@@ -70,21 +71,35 @@ class VulnerableDependency < ActiveRecord::Base
 
   # whether this package could be vulnerable
 
-  # N_A?  B_P?  Vuln?
-  # T     T     F
-  # T     F     F
-  # F     T     F
-  # F     F     T
+  # N_A?  B_P?  A?    Vuln?
+  # T     T     T     T
+  # T     F     T     T
+  # F     T     T     T
+  # F     F     T     T
+  # T     T     F     F
+  # T     F     F     F
+  # F     T     F     F
+  # F     F     F     T
   #
   # i.e. !(N_A? || B_P?)
 
   def affects?(package)
-    # a package is vulnerable if
+    return false unless concerns?(package)
+
+    # a package is vulnerable if it's in the affected_versions OR
     # it's not in the unaffected_versions AND
     # it's not been patched
-    concerns?(package) && 
+
+    # this seems superficially like a dumb proxy for PHP, but it
+    # also seems reasonable to skip additional checks if there's
+    # a list of affected_versions
+
+    if affected_versions.empty?
       !(package.not_affected?(unaffected_versions) ||
         package.been_patched?(patched_versions))
+    else
+      package.affected?(affected_versions)
+    end
   end
 
   def patchable?
