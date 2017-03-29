@@ -9,7 +9,7 @@ class VulnPresenterTest < ActiveSupport::TestCase
     assert_equal "example.com", vp.get_host_without_www("https://example.com")
     assert_equal "example.com", vp.get_host_without_www("http://example.com sometimes they leave comments")
 
-    assert_equal nil, vp.get_host_without_www("http://example.com/foo{}$$ test")
+    assert_nil vp.get_host_without_www("http://example.com/foo{}$$ test")
   end
 end
 

@@ -26,6 +26,11 @@
       }
     }
 
+    .package-ignore-buttons {
+      white-space: nowrap;
+      float: right;
+    }
+
     .package-version--neutral {
       code {
         color: black;

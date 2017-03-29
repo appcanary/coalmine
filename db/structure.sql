@@ -1058,6 +1058,42 @@ ALTER SEQUENCE feature_flags_id_seq OWNED BY feature_flags.id;
 
 
 --
+-- Name: ignored_packages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE ignored_packages (
+    id integer NOT NULL,
+    account_id integer NOT NULL,
+    user_id integer NOT NULL,
+    package_id integer NOT NULL,
+    bundle_id integer,
+    criticality integer,
+    note character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ignored_packages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE ignored_packages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ignored_packages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE ignored_packages_id_seq OWNED BY ignored_packages.id;
+
+
+--
 -- Name: is_it_vuln_results; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1552,6 +1588,86 @@ CREATE TABLE schema_migrations (
     version character varying NOT NULL
 );
 
+
+--
+-- Name: server_process_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_process_libraries (
+    id integer NOT NULL,
+    server_process_id integer NOT NULL,
+    process_library_id integer NOT NULL,
+    outdated boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_process_libraries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_process_libraries_id_seq OWNED BY server_process_libraries.id;
+
+
+--
+-- Name: server_processes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_processes (
+    id integer NOT NULL,
+    agent_server_id integer NOT NULL,
+    pid integer NOT NULL,
+    name character varying,
+    started timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    args character varying
+);
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_processes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_processes_id_seq OWNED BY server_processes.id;
+
+
+--
+-- Name: server_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_tags (
+    id integer NOT NULL,
+    agent_server_id integer,
+    tag_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 --
 -- Name: server_process_libraries; Type: TABLE; Schema: public; Owner: -
@@ -2181,6 +2297,13 @@ ALTER TABLE ONLY feature_flags ALTER COLUMN id SET DEFAULT nextval('feature_flag
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY ignored_packages ALTER COLUMN id SET DEFAULT nextval('ignored_packages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY is_it_vuln_results ALTER COLUMN id SET DEFAULT nextval('is_it_vuln_results_id_seq'::regclass);
 
 
@@ -2534,6 +2657,14 @@ ALTER TABLE ONLY feature_flags
 
 
 --
+-- Name: ignored_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT ignored_packages_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: is_it_vuln_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2639,6 +2770,30 @@ ALTER TABLE ONLY rubysec_advisories
 
 --
 -- Name: server_process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT server_process_libraries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_processes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT server_processes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags
+    ADD CONSTRAINT server_tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_process_libraries server_process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_process_libraries
@@ -2814,6 +2969,13 @@ CREATE INDEX idx_vulnerable_dependency_id_ar ON vulnerable_dependency_archives U
 --
 
 CREATE INDEX idx_vulnerable_package_id_ar ON vulnerable_package_archives USING btree (vulnerable_package_id);
+
+
+--
+-- Name: ignored_packages_by_account_package_bundle_ids; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ignored_packages_by_account_package_bundle_ids ON ignored_packages USING btree (account_id, package_id, bundle_id);
 
 
 --
@@ -3216,6 +3378,34 @@ CREATE INDEX index_feature_flags_on_data ON feature_flags USING btree (data);
 
 
 --
+-- Name: index_ignored_packages_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_account_id ON ignored_packages USING btree (account_id);
+
+
+--
+-- Name: index_ignored_packages_on_bundle_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_bundle_id ON ignored_packages USING btree (bundle_id);
+
+
+--
+-- Name: index_ignored_packages_on_package_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_package_id ON ignored_packages USING btree (package_id);
+
+
+--
+-- Name: index_ignored_packages_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_user_id ON ignored_packages USING btree (user_id);
+
+
+--
 -- Name: index_is_it_vuln_results_on_ident; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3441,6 +3631,27 @@ CREATE INDEX index_rubysec_advisories_on_ident ON rubysec_advisories USING btree
 
 --
 -- Name: index_server_process_libraries_on_process_library_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
+
+
+--
+-- Name: index_server_process_libraries_on_server_process_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_server_process_id ON server_process_libraries USING btree (server_process_id);
+
+
+--
+-- Name: index_server_processes_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
+
+
+--
+-- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
@@ -3910,6 +4121,14 @@ ALTER TABLE ONLY server_tags
 
 
 --
+-- Name: fk_rails_257ff0b8e3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_257ff0b8e3 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_42f69de9f4; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3918,7 +4137,15 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: server_procs fk_rails_04cbd52b76; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_procs
+    ADD CONSTRAINT fk_rails_04cbd52b76 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: server_process_libraries fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_process_libraries
@@ -3974,6 +4201,14 @@ ALTER TABLE ONLY email_messages
 
 
 --
+-- Name: fk_rails_8055c587d4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_8055c587d4 FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
 -- Name: fk_rails_8318307314; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4014,6 +4249,30 @@ ALTER TABLE ONLY motds
 
 
 --
+-- Name: server_processes fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT fk_rails_8e08420c73 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_a5ff67a393 FOREIGN KEY (server_process_id) REFERENCES server_processes(id);
+
+
+--
+-- Name: fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY motds
+    ADD CONSTRAINT fk_rails_a7964aa25c FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_e4107b65b3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4022,11 +4281,27 @@ ALTER TABLE ONLY notifications
 
 
 --
+-- Name: fk_rails_e599353bb7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_e599353bb7 FOREIGN KEY (package_id) REFERENCES packages(id);
+
+
+--
 -- Name: fk_rails_f192ff6aa1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_f192ff6aa1 FOREIGN KEY (log_bundle_patch_id) REFERENCES log_bundle_patches(id);
+
+
+--
+-- Name: fk_rails_f8bf4dc6c3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_f8bf4dc6c3 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
 
 
 --
@@ -4242,6 +4517,12 @@ INSERT INTO schema_migrations (version) VALUES ('20170222211052');
 INSERT INTO schema_migrations (version) VALUES ('20170222211057');
 
 INSERT INTO schema_migrations (version) VALUES ('20170302155336');
+
+INSERT INTO schema_migrations (version) VALUES ('20170309163315');
+
+INSERT INTO schema_migrations (version) VALUES ('20170317203807');
+
+INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 
 INSERT INTO schema_migrations (version) VALUES ('20170317203807');
 
