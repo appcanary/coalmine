@@ -24,11 +24,14 @@ $(document).ready(function() {
     var expiry = $form.find("[name=expiry]").val().split("/").map(function(e) { return $.trim(e) })
     card["exp_month"] = expiry[0];
     card["exp_year"] = expiry[1];
-
-    Stripe.card.createToken(card, stripeResponseHandler);
-
-    // Prevent the form from submitting with the default action
-    return false;
+    // Only do stripe if the credit card form has been filled out
+    if (card.number != "") {
+      Stripe.card.createToken(card, stripeResponseHandler);
+      // Prevent the form from submitting with the default action
+      return false;
+    } else {
+      return true;
+    }
   });
 });
 
