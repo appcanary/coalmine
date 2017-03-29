@@ -53,7 +53,7 @@ class BillingController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to billing_path, notice: notice }
+        format.html { redirect_to dashboard_path, notice: notice }
       else
         @billing_presenter = BillingManager.new(@user).to_presenter
         @servers_count = @user.servers_count
