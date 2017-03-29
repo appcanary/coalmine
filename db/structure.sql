@@ -192,6 +192,132 @@ CREATE FUNCTION archive_vulnerable_packages() RETURNS trigger
        $$;
 
 
+--
+-- Name: update_advisories_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_advisories_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_advisory_vulnerabilities_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_advisory_vulnerabilities_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_agent_servers_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_agent_servers_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_bundled_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_bundled_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_bundles_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_bundles_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerabilities_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerabilities_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerable_dependencies_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerable_dependencies_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerable_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerable_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -1558,17 +1684,6 @@ CREATE TABLE server_process_libraries (
 
 
 --
--- Name: server_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE server_tags_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
---
 -- Name: server_process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1579,12 +1694,6 @@ CREATE SEQUENCE server_process_libraries_id_seq
     NO MAXVALUE
     CACHE 1;
 
-
---
--- Name: server_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
 
 --
 -- Name: server_process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
@@ -1626,6 +1735,38 @@ CREATE SEQUENCE server_processes_id_seq
 --
 
 ALTER SEQUENCE server_processes_id_seq OWNED BY server_processes.id;
+
+
+--
+-- Name: server_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_tags (
+    id integer NOT NULL,
+    agent_server_id integer,
+    tag_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: server_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
 
 
 --
@@ -2572,7 +2713,7 @@ ALTER TABLE ONLY motds
 
 
 --
--- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -2668,6 +2809,14 @@ ALTER TABLE ONLY server_processes
 
 
 --
+-- Name: server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags
+    ADD CONSTRAINT server_tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2684,7 +2833,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -3505,27 +3654,6 @@ CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING
 -- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_server_tags_on_agent_server_id ON server_tags USING btree (agent_server_id);
-
-
---
--- Name: index_server_tags_on_agent_server_id_and_tag_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_server_tags_on_agent_server_id_and_tag_id ON server_tags USING btree (agent_server_id, tag_id);
-
-
---
--- Name: index_server_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_server_tags_on_tag_id ON server_tags USING btree (tag_id);
-
-
---
--- Name: index_server_process_libraries_on_process_library_id; Type: INDEX; Schema: public; Owner: -
---
-
 CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
 
 
@@ -3541,6 +3669,27 @@ CREATE INDEX index_server_process_libraries_on_server_process_id ON server_proce
 --
 
 CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
+
+
+--
+-- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_tags_on_agent_server_id ON server_tags USING btree (agent_server_id);
+
+
+--
+-- Name: index_server_tags_on_agent_server_id_and_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_server_tags_on_agent_server_id_and_tag_id ON server_tags USING btree (agent_server_id, tag_id);
+
+
+--
+-- Name: index_server_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_tags_on_tag_id ON server_tags USING btree (tag_id);
 
 
 --
@@ -3880,6 +4029,69 @@ CREATE TRIGGER trigger_package_archives AFTER DELETE OR UPDATE ON packages FOR E
 
 
 --
+-- Name: trigger_update_advisories_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_advisories_valid_at BEFORE UPDATE ON advisories FOR EACH ROW EXECUTE PROCEDURE update_advisories_valid_at();
+
+
+--
+-- Name: trigger_update_advisory_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_advisory_vulnerabilities_valid_at BEFORE UPDATE ON advisory_vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_advisory_vulnerabilities_valid_at();
+
+
+--
+-- Name: trigger_update_agent_servers_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_agent_servers_valid_at BEFORE UPDATE ON agent_servers FOR EACH ROW EXECUTE PROCEDURE update_agent_servers_valid_at();
+
+
+--
+-- Name: trigger_update_bundled_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_bundled_packages_valid_at BEFORE UPDATE ON bundled_packages FOR EACH ROW EXECUTE PROCEDURE update_bundled_packages_valid_at();
+
+
+--
+-- Name: trigger_update_bundles_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_bundles_valid_at BEFORE UPDATE ON bundles FOR EACH ROW EXECUTE PROCEDURE update_bundles_valid_at();
+
+
+--
+-- Name: trigger_update_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_packages_valid_at BEFORE UPDATE ON packages FOR EACH ROW EXECUTE PROCEDURE update_packages_valid_at();
+
+
+--
+-- Name: trigger_update_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerabilities_valid_at BEFORE UPDATE ON vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_vulnerabilities_valid_at();
+
+
+--
+-- Name: trigger_update_vulnerable_dependencies_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerable_dependencies_valid_at BEFORE UPDATE ON vulnerable_dependencies FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_dependencies_valid_at();
+
+
+--
+-- Name: trigger_update_vulnerable_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerable_packages_valid_at BEFORE UPDATE ON vulnerable_packages FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_packages_valid_at();
+
+
+--
 -- Name: trigger_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -3925,7 +4137,6 @@ ALTER TABLE ONLY server_tags
 
 
 --
-
 -- Name: server_procs fk_rails_04cbd52b76; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4051,6 +4262,14 @@ ALTER TABLE ONLY server_processes
 
 ALTER TABLE ONLY server_process_libraries
     ADD CONSTRAINT fk_rails_a5ff67a393 FOREIGN KEY (server_process_id) REFERENCES server_processes(id);
+
+
+--
+-- Name: fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY motds
+    ADD CONSTRAINT fk_rails_a7964aa25c FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -4289,8 +4508,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170119145353');
 
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
 
-INSERT INTO schema_migrations (version) VALUES ('20170131223446');
-
 INSERT INTO schema_migrations (version) VALUES ('20170206172642');
 
 INSERT INTO schema_migrations (version) VALUES ('20170207223930');
@@ -4310,3 +4527,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 INSERT INTO schema_migrations (version) VALUES ('20170317203807');
 
 INSERT INTO schema_migrations (version) VALUES ('20170320135753');
+
+INSERT INTO schema_migrations (version) VALUES ('20170322221344');
+
