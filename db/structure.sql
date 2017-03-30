@@ -193,6 +193,132 @@ CREATE FUNCTION archive_vulnerable_packages() RETURNS trigger
        $$;
 
 
+--
+-- Name: update_advisories_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_advisories_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_advisory_vulnerabilities_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_advisory_vulnerabilities_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_agent_servers_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_agent_servers_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_bundled_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_bundled_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_bundles_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_bundles_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerabilities_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerabilities_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerable_dependencies_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerable_dependencies_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerable_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerable_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -1569,38 +1695,6 @@ ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
 
 
 --
--- Name: server_tags; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE server_tags (
-    id integer NOT NULL,
-    agent_server_id integer,
-    tag_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: server_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE server_tags_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: server_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
-
-
---
 -- Name: subscription_plans; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2546,7 +2640,7 @@ ALTER TABLE ONLY motds
 
 
 --
--- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -2642,7 +2736,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -3463,21 +3557,21 @@ CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING
 -- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
+CREATE INDEX index_server_tags_on_agent_server_id ON server_tags USING btree (agent_server_id);
 
 
 --
--- Name: index_server_process_libraries_on_server_process_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_server_tags_on_agent_server_id_and_tag_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_server_process_libraries_on_server_process_id ON server_process_libraries USING btree (server_process_id);
+CREATE UNIQUE INDEX index_server_tags_on_agent_server_id_and_tag_id ON server_tags USING btree (agent_server_id, tag_id);
 
 
 --
--- Name: index_server_processes_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_server_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
+CREATE INDEX index_server_tags_on_tag_id ON server_tags USING btree (tag_id);
 
 
 --
@@ -3814,6 +3908,69 @@ CREATE TRIGGER trigger_bundled_package_archives AFTER DELETE OR UPDATE ON bundle
 --
 
 CREATE TRIGGER trigger_package_archives AFTER DELETE OR UPDATE ON packages FOR EACH ROW EXECUTE PROCEDURE archive_packages();
+
+
+--
+-- Name: advisories trigger_update_advisories_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_advisories_valid_at BEFORE UPDATE ON advisories FOR EACH ROW EXECUTE PROCEDURE update_advisories_valid_at();
+
+
+--
+-- Name: advisory_vulnerabilities trigger_update_advisory_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_advisory_vulnerabilities_valid_at BEFORE UPDATE ON advisory_vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_advisory_vulnerabilities_valid_at();
+
+
+--
+-- Name: agent_servers trigger_update_agent_servers_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_agent_servers_valid_at BEFORE UPDATE ON agent_servers FOR EACH ROW EXECUTE PROCEDURE update_agent_servers_valid_at();
+
+
+--
+-- Name: bundled_packages trigger_update_bundled_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_bundled_packages_valid_at BEFORE UPDATE ON bundled_packages FOR EACH ROW EXECUTE PROCEDURE update_bundled_packages_valid_at();
+
+
+--
+-- Name: bundles trigger_update_bundles_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_bundles_valid_at BEFORE UPDATE ON bundles FOR EACH ROW EXECUTE PROCEDURE update_bundles_valid_at();
+
+
+--
+-- Name: packages trigger_update_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_packages_valid_at BEFORE UPDATE ON packages FOR EACH ROW EXECUTE PROCEDURE update_packages_valid_at();
+
+
+--
+-- Name: vulnerabilities trigger_update_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerabilities_valid_at BEFORE UPDATE ON vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_vulnerabilities_valid_at();
+
+
+--
+-- Name: vulnerable_dependencies trigger_update_vulnerable_dependencies_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerable_dependencies_valid_at BEFORE UPDATE ON vulnerable_dependencies FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_dependencies_valid_at();
+
+
+--
+-- Name: vulnerable_packages trigger_update_vulnerable_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerable_packages_valid_at BEFORE UPDATE ON vulnerable_packages FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_packages_valid_at();
 
 
 --
