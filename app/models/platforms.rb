@@ -193,7 +193,7 @@ class Platforms
     when Ruby
       GemfileParser
     when PHP
-      ComposerlockParser
+      ComposerLockParser
     when CentOS
       RPM::Parser
     when Amazon
