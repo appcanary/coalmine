@@ -60,6 +60,10 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
     revision_ids << bundle.bundled_packages.reload.pluck(:package_id)
     assert_equal 0, BundledPackageArchive.count
 
+    # used later in the test to be added back
+    # to the bundle
+    first_four = bundle.packages[0..3]
+
     # second revision: ids 6, 7, 8, 9, 10
     # 5 bp put into archive
     bundle.packages = FactoryGirl.create_list(:package, 5, :ruby)
@@ -73,10 +77,10 @@ class BundledPackageArchiveTest < ActiveSupport::TestCase
     revision_ids << bundle.bundled_packages.reload.pluck(:package_id)
     assert_equal 5, BundledPackageArchive.count
 
-    # 4th revision: we keep some, delete the rest, and add more
+    # 4th revision: we keep 2 packages, delete 8, and add 4 more
     # ids: 6, 7, 1, 2, 3, 4
     # 8 bp put into archive
-    bundle.packages = bundle.packages[0..1] + Package.where("id < 5").order(:id)
+    bundle.packages = bundle.packages[0..1] + first_four
     revision_ids << bundle.bundled_packages.reload.pluck(:package_id)
     assert_equal 13, BundledPackageArchive.count
 
