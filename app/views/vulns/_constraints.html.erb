@@ -1,0 +1,89 @@
+<% @show_unaffected_col = vuln.show_unaffected?  %>
+<% @show_release = vuln.show_release? %>
+<table class="table">
+
+  <thead>
+    <th colspan="5"><h4>Vulnerable</h4></th>
+  </thead>
+  <% if vuln.vulnerable_dependencies.present? %>
+    <thead>
+      <% if @show_release %>
+        <th>
+          Release
+        </th>
+      <% end %>
+      <th>
+        Package
+      </th>
+      <th>
+        Patched in
+      </th>
+      <% if @show_unaffected_col %>
+        <th>
+          Unaffected in
+        </th>
+      <% end %>
+      <th></th>
+    </thead>
+    <% vuln.vulnerable_dependencies.group_by(&:release).each do |release, vds| %>
+      <%= render "vd_row", vd: vds.first, release: release, rowspan: vds.count%>
+      <% vds.drop(1).each do |vd| %>
+        <%= render "vd_row", vd: vd %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="5">
+        None
+      </td>
+  <% end %>
+
+  <% if !@show_unaffected_col && vuln.advisory.unaffected.present?%>
+    <thead>
+      <th colspan="5"><h4>Unaffected</h4></th>
+    </thead>
+    <thead>
+      <% if @show_release %>
+        <th>
+          Release
+        </th>
+      <% end %>
+      <th>
+        Package
+      </th>
+      <th colspan="2">
+        Reason
+      </th>
+    </thead>
+    <% vuln.advisory.unaffected.group_by{|u| u["release"]}.each do |release, us| %>
+      <%= render "unaffected_row", u: us.first, release: release, rowspan: us.count %>
+      <% us.drop(1).each do |u| %>
+        <%= render "unaffected_row", u: u %>
+      <% end %>
+    <% end %>
+    <% if vuln.advisory.needs_triage.present?%>
+      <thead>
+        <th colspan="5"><h4>Needs Triage</h4></th>
+      </thead>
+      <thead>
+        <% if @show_release %>
+          <th>
+            Release
+          </th>
+        <% end %>
+        <th>
+          Package
+        </th>
+        <th colspan="2">
+          Reason
+        </th>
+      </thead>
+      <% vuln.advisory.needs_triage.group_by{|u| u["release"]}.each do |release, us| %>
+        <%= render "unaffected_row", u: us.first, release: release, rowspan: us.count %>
+        <% us.drop(1).each do |u| %>
+          <%= render "unaffected_row", u: u %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</table>

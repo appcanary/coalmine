@@ -26,6 +26,10 @@ class RubysecAdapter < AdvisoryAdapter.new(:filepath, :gem, :cve,
     end
   end
 
+  generate :package_names do
+    [gem]
+  end
+
   # rubysec advisories are only ever about 1 package
   generate :constraints do
     hsh = {"package_name" => gem }

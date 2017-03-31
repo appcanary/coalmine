@@ -28,9 +28,7 @@ class VulnerabilitiesDataTablesSerializer < ActiveModel::Serializer
 
   private
   def package_names(vuln)
-    # we have this in the vuln presenter, but I don't want to instantiate the extra object
-    # also it seems that the fasted way to do this is to do one includes query
-    package_names = vuln.vulnerable_dependencies.map(&:package_name).sort.uniq #package_names
+    package_names = vuln.package_names
     if package_names.size > 2
       package_names = package_names.take(2) << "&#8230;"
     end
