@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite time='0.504623' skipped='0' failures='0' errors='0' name="PackageMergerTest" assertions='11' tests='1'>
-  <testcase time='0.504623' file="test/lib/package_merger_test.rb" name="test_0001_should merge any duplicate packages" assertions='11'>
-  </testcase>
-</testsuite>
