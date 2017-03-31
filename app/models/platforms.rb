@@ -1,6 +1,5 @@
 require File.join(Rails.root, "app/parsers", 'rpm_parser')
 class Platforms
-  # TODO cleanup old platforms code
   Debian = "debian"
   Ubuntu = "ubuntu"
   Ruby = "ruby"
@@ -80,6 +79,14 @@ class Platforms
       "2016.03", 
       "2016.09"
     ]
+  }
+
+  PLATFORMS_WITH_UNAFFECTED = [Ruby]
+  PLATFORMS_WITH_RELEASES = PLATFORM_RELEASES.reduce([]) { |arr,(plt,rels)|
+    if rels.compact.any?
+      arr << plt
+    end
+    arr
   }
 
   # This constructs a hash of platform-name to hash of

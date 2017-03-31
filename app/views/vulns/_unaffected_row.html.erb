@@ -1,6 +1,6 @@
 <tr>
-  <% if local_assigns[:release].present? %>
-    <td rowspan="<%= local_assigns[:colspan] || 1 %>"><%= local_assigns[:release] %></td>
+  <% if defined?(release) && release %>
+    <td rowspan="<%= rowspan || 1 %>"><%= release %></td>
   <% end %>
   <td>
     <%= u["package_name"] %>

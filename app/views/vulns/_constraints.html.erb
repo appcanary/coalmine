@@ -1,5 +1,5 @@
-<% @show_unaffected_col = [Platforms::Ruby].include? vuln.platform %>
-<% @show_release = [Platforms::Debian, Platforms::Ubuntu, Platforms::CentOS].include? vuln.platform %>
+<% @show_unaffected_col = vuln.show_unaffected?  %>
+<% @show_release = vuln.show_release? %>
 <table class="table">
 
   <thead>
@@ -26,7 +26,7 @@
       <th></th>
     </thead>
     <% vuln.vulnerable_dependencies.group_by(&:release).each do |release, vds| %>
-      <%= render "vd_row", vd: vds.first, release: release, colspan: vds.count%>
+      <%= render "vd_row", vd: vds.first, release: release, rowspan: vds.count%>
       <% vds.drop(1).each do |vd| %>
         <%= render "vd_row", vd: vd %>
       <% end %>
@@ -56,7 +56,7 @@
       </th>
     </thead>
     <% vuln.advisory.unaffected.group_by{|u| u["release"]}.each do |release, us| %>
-      <%= render "unaffected_row", u: us.first, release: release, colspan: us.count %>
+      <%= render "unaffected_row", u: us.first, release: release, rowspan: us.count %>
       <% us.drop(1).each do |u| %>
         <%= render "unaffected_row", u: u %>
       <% end %>
@@ -79,7 +79,7 @@
         </th>
       </thead>
       <% vuln.advisory.needs_triage.group_by{|u| u["release"]}.each do |release, us| %>
-        <%= render "unaffected_row", u: us.first, release: release, colspan: us.count %>
+        <%= render "unaffected_row", u: us.first, release: release, rowspan: us.count %>
         <% us.drop(1).each do |u| %>
           <%= render "unaffected_row", u: u %>
         <% end %>

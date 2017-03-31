@@ -59,6 +59,14 @@ class VulnPresenter
     @vuln.advisories.first
   end
 
+  def show_unaffected?
+    Platforms::PLATFORMS_WITH_UNAFFECTED.include? self.platform
+  end
+
+  def show_release?
+    Platforms::PLATFORMS_WITH_RELEASES.include? self.platform 
+  end
+
   def h
     ActionController::Base.helpers
   end
