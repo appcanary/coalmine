@@ -24,3 +24,11 @@ In the future we're going to want to check it in blank and run "assume unchanged
 To run, install packages and then:
 `be rails s -p 4000`
 `npm run webpack-w`
+
+
+## Testing
+
+To test with a given seed, run 
+```
+be rake test TESTOPTS="--seed YOURSEEDHERE"
+```
