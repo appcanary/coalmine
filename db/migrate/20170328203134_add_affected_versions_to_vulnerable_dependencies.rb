@@ -1,6 +1,7 @@
 class AddAffectedVersionsToVulnerableDependencies < ActiveRecord::Migration
   def change
-    add_column :vulnerable_dependencies, :affected_versions, :text,
-               array: true, default: [], null: false
+    ArchiveMigrator.new(self).change_table :vulnerable_dependencies do |t|
+      t.string :affected_versions, :text, array: true, default: [], null: false
+    end
   end
 end
