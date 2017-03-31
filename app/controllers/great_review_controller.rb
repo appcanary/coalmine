@@ -37,9 +37,10 @@ class GreatReviewController < ApplicationController
     @user = current_user
 
     if stripe_token = stripe_params[:stripe_token]
+      # DEAD CODE
       # this method was deprecated and would have thrown an exception
       # We're not doing this / not showing a payment page anymore anyways
-      # TODO: delete this controlelr/routes
+      # TODO: delete this controller/routes
       customer = BillingManager.add_customer(stripe_token, @user)
       if customer
         # hack to get strong params to shut up

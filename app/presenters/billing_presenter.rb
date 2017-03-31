@@ -32,7 +32,7 @@ class BillingPresenter
 
   def selected_plan
     if self.current_plan
-      [current_plan.text, current_plan.id]
+      [self.current_plan.text, self.current_plan.id]
     end
   end
 

@@ -1,9 +1,6 @@
 class BillingController < ApplicationController
   before_action :set_vars
   def show
-    if params[:change_card]
-      @change_card = true
-    end
   end
 
   def update
@@ -25,7 +22,7 @@ class BillingController < ApplicationController
           notice = "You've changed your plan!"
           SystemMailer.subscription_plan_changed(@user.id, sub_id).deliver_later!
         when :invalid
-          notice = "Sorry you can't change your plan to what you selected. Please try again or contact us at support@appcanary.com"
+          notice = "Sorry, you can't select that plan. Please try again or contact us at support@appcanary.com"
         when :none
           #nop
         else
@@ -49,7 +46,9 @@ class BillingController < ApplicationController
       end
     end
     # clear notice if it's empty
-    notice = notice.present?
+    if notice.blank?
+      notice = nil
+    end
 
     respond_to do |format|
       if @user.save

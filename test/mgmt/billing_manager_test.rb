@@ -3,7 +3,6 @@ require 'test_helper'
 class BillingManagerTest <ActiveSupport::TestCase
   def setup
     @user = FactoryGirl.create(:user)
-    
     @sub1 = FactoryGirl.create(:subscription_plan)
     @sub2 = FactoryGirl.create(:subscription_plan)
     @unavailable_sub = FactoryGirl.create(:subscription_plan)
@@ -14,6 +13,7 @@ class BillingManagerTest <ActiveSupport::TestCase
     @bm = BillingManager.new(@user.reload)
 
   end
+
   describe "change_subscription!" do
     it "should return add a subscription if none exists" do
       assert_nil @user.billing_plan.subscription_plan_id
@@ -24,6 +24,7 @@ class BillingManagerTest <ActiveSupport::TestCase
       @user.save
       assert_equal @sub1.id, @user.billing_plan.subscription_plan_id
     end
+
     it "should do nothing if subscription is unchanged" do
       @bm.billing_plan.subscription_plan_id = @sub1.id
       @bm.billing_plan.save
@@ -47,6 +48,7 @@ class BillingManagerTest <ActiveSupport::TestCase
       @user.save
       assert_equal @sub2.id, @user.billing_plan.subscription_plan_id
     end
+
     it "should return invalid when it's not a valid subscription" do
       assert_nil @user.billing_plan.subscription_plan_id
 
@@ -69,8 +71,8 @@ class BillingManagerTest <ActiveSupport::TestCase
       assert_nil @user.billing_plan.subscription_plan_id
     end
   end
-  describe "change_token!!" do
 
+  describe "change_token!!" do
     it "should create a stripe customer when adding a credit card" do
       token = "TOKEN"
       stripe_id = "STRIPEID"
@@ -87,6 +89,7 @@ class BillingManagerTest <ActiveSupport::TestCase
       @user.save
       assert_equal stripe_id, @user.stripe_customer_id
     end
+
     it "should change the credit card when changing the user" do
       token = "TOKEN"
       stripe_id = "STRIPEID"
