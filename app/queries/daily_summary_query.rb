@@ -1,5 +1,5 @@
 class DailySummaryQuery
-  attr_accessor :account, :date, :begin_at, :end_at, :new_servers, :deleted_servers
+  attr_accessor :account, :date, :begin_at, :end_at, :all_servers, :new_servers, :deleted_servers
 
   def initialize(account, date)
     @account = account
@@ -9,6 +9,8 @@ class DailySummaryQuery
 
 
     # ---- we now establish some basic facts
+
+    @all_servers = AgentServer.where(:account_id => account.id)
 
     @new_servers = AgentServer.where(:account_id => account.id).created_on(@begin_at)
 
@@ -31,11 +33,17 @@ class DailySummaryQuery
     DailySummaryPresenter.new(self)
   end
 
+  def all_vuln_ct
+    @lbv_unpatched_fixable.pluck(:vulnerability_id).uniq.size
+  end
+
   def fresh_vulns
+    # Vulnerabilities that are new for you and are patchable
     fresh_vulns = @lbv_unpatched_fixable.vulnerable_after(@begin_at)
   end
 
   def new_vulns
+    # Vulnerabilities that are new for you but may have existed before
     new_vulns = @lbv_unpatched_fixable.where("log_bundle_vulnerabilities.created_at >= ? and log_bundle_vulnerabilities.created_at <= ?", @begin_at, @end_at).vulnerable_before(@begin_at)
 
     # make sure we don't report on stuff from brand new

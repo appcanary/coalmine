@@ -54,7 +54,11 @@ class AgentServer < ActiveRecord::Base
   }
 
   scope :active, -> {
-    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', ACTIVE_WINDOW.ago).distinct("agent_servers.id")
+    self.active_as_of(Time.now)
+  }
+
+  scope :active_as_of, ->(date) {
+    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', date - ACTIVE_WINDOW).distinct("agent_servers.id")
   }
 
   # TODO:
