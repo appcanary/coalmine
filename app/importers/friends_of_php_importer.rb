@@ -21,7 +21,7 @@ class FriendsOfPHPImporter < AdvisoryImporter
   end
 
   def fetch_advisories
-    Dir[File.join(local_path, "/**/**yaml")]
+    Dir.glob(File.join(local_path, "/**/*.yaml"))
   end
 
   def parse(ymlfile)
