@@ -73,8 +73,9 @@ class MonitorsController < ApplicationController
 
   protected
   def maybe_fetch_bundle
+    #TODO: this is used to fetch monitors AND server apps while the fetch_bundle below is scoped to monitors
     if ignore_params[:global] != "yes" && ignore_params[:bundle_id].present?
-      Bundle.find(ignore_params[:bundle_id])
+      current_user.bundles.find(ignore_params[:bundle_id])
     end
   end
 
