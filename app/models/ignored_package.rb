@@ -49,7 +49,7 @@ class IgnoredPackage < ActiveRecord::Base
 
   scope :relevant_ignores_for, -> (bundle) {
     joins(:vulnerable_packages).
-      where("ignored_packages.bundle_id is null or ignored_packages.bundle_id = ?", bundle.id)
+      where("ignored_packages.account_id = ? and (ignored_packages.bundle_id is null or ignored_packages.bundle_id = ?)", bundle.account.id, bundle.id)
   }
 
   # used ONLY in the form
