@@ -59,6 +59,9 @@ class IgnoredPackage < ActiveRecord::Base
   end
 
   def self.ignore_package(user, pkg, bundle, note)
+    if bundle.present? and bundle.account_id != user.account_id
+      raise ArgumentError.new("tried to ignore on a bundle (#{bundle.id}) not belonging to user's (#{user.id}) account")
+    end
     note = nil if note.blank?
 
     self.create(account: user.account,
