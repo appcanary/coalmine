@@ -173,6 +173,10 @@ class DailySummaryPresenter
       has_new_vulns? 
   end
 
+  def has_vulns_or_patches_to_report?
+    has_vulns_to_report? || has_patched_vulns?
+  end
+
   def has_vulns_to_report?
     has_patchable_vulns_to_report? ||
       has_cantfix_vulns?

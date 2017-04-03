@@ -3,12 +3,12 @@ class DailySummaryMailer < ActionMailer::Base
   layout 'mailer'
   helper :application
 
-  def daily_summary(account_id, date)
-    @date = date.to_date
-    @account = Account.find(account_id)
+  def daily_summary(presenter)
+    @presenter = presenter
+    @date = @presenter.date
+    @account = @presenter.account
 
     @motds = Motd.where("remove_at >= ?", @date)
-    @presenter = DailySummaryQuery.new(@account, @date).create_presenter
 
     if should_deliver?(@account)
       mail(to: @presenter.recipients, :subject => @presenter.subject) do |format|
