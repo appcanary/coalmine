@@ -61,18 +61,10 @@ class AgentServer < ActiveRecord::Base
     joins(:heartbeats).where('"agent_heartbeats".created_at > ?', date - ACTIVE_WINDOW).distinct("agent_servers.id")
   }
 
-  # TODO:
-  #
-  # test!!!
-
   scope :created_on, -> (date) {
     from(union_str(all, AgentServerArchive.deleted)).
     where('created_at >= ? and created_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
   }
-
-  # TODO:
-  #
-  # test!!!
 
   scope :deleted_on, -> (date) {
     from("(#{AgentServerArchive.deleted.to_sql}) #{self.table_name}").
