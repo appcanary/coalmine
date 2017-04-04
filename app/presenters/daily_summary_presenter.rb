@@ -160,10 +160,10 @@ class DailySummaryPresenter
   end
 
   def anything_to_report?
-    has_vulns_servers_to_report? || has_changes_to_report?
+    has_vulns_or_servers_to_report? || has_changes_to_report?
   end
 
-  def has_vulns_servers_to_report?
+  def has_vulns_or_servers_to_report?
     has_fresh_vulns?     ||
       has_new_vulns?     ||
       has_cantfix_vulns? ||
