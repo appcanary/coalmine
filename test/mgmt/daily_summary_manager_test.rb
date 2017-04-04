@@ -99,5 +99,19 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
     assert_equal ds_only_vuln_account.id, EmailDailySummary.last.account_id
 
     assert_equal 1, ActionMailer::Base.deliveries.size
+
+    # User should also get an email when they create a server
+    ds_only_vuln_user2 = FactoryGirl.create(:user, :pref_email_frequency => PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN)
+    ds_only_vuln_account2 = ds_only_vuln_user2.account
+    server = FactoryGirl.create(:agent_server, :with_heartbeat, account: ds_only_vuln_account2)
+
+    DailySummaryManager.send_todays_summary!(Date.today)
+    assert_equal 2, EmailDailySummary.count
+
+    assert_equal [ds_only_vuln_account.id, ds_only_vuln_account2.id].to_set, EmailDailySummary.pluck(:account_id).to_set
+
+    assert_equal 2, ActionMailer::Base.deliveries.size
+
+
   end
 end

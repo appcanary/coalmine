@@ -14,8 +14,8 @@ class DailySummaryManager
         pref = acct.users.first.pref_email_frequency
 
         if pref != PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN ||
-           (pref == PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN && presenter.has_vulns_or_patches_to_report?)
-                    msg = DailySummaryMailer.daily_summary(presenter)
+           (pref == PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN && presenter.has_vulns_servers_to_report?)
+          msg = DailySummaryMailer.daily_summary(presenter)
 
           if msg
             EmailDailySummary.create!(:account_id => acct.id, 
