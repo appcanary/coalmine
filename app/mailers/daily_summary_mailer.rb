@@ -19,16 +19,6 @@ class DailySummaryMailer < ActionMailer::Base
   end
 
   def should_deliver?(account)
-    if Rails.env.production?
-      return true
-    elsif $rollout.active?(:all_staging_notifications)
-      return true
-    else
-      if account.email == "hello@appcanary.com"
-        return true
-      else
-        return false
-      end
-    end
+    Rails.env.production? || $rollout.active?(:all_staging_notifications) || account.email == "hello@appcanary.com"
   end
 end
