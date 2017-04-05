@@ -2,11 +2,22 @@ class Admin::UsersController < AdminController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :impersonate]
 
   def index
-    @users = User.includes(:account, {billing_plan: [:subscription_plan]});
+    @users = User.pluck_to_struct(:id, :name, :email, :phone_number, :created_at, :account_id, :last_login_at, :stripe_customer_id, :invoiced_manually)
+    # compute aggregate counts for acitve servers, api calls and monitors, make sure hash has 0 default
+    # TODO: this should maybe be in a presenter
+    @server_counts = Account.joins(:agent_servers).group("accounts.id").count.tap { |h| h.default = 0 }
+    @active_server_counts = AgentServer.active.joins(:account).group("accounts.id").count.tap { |h| h.default = 0 }
+    @api_calls_counts = Account.joins(:check_api_calls).group("accounts.id").count.tap { |h| h.default = 0 }
+    @monitor_counts = Account.joins(:monitors).group("accounts.id").count.tap { |h| h.default = 0 }
+
+    @monthly_costs = Hash.new(0)
+    BillingPlan.where("subscription_plan_id is not null").includes(:subscription_plan, :user).each do |bp|
+      @monthly_costs[bp.user.account_id] = bp.subscription_plan.cost(@active_server_counts[bp.user.account_id], @monitor_counts[bp.user.account_id])
+    end
 
     @user_count = User.count
     @tried_count = Account.have_tried_count
-    @paying_count = User.are_paying_count
+    @paying_count = User.with_billing.count
 
     @servers_count = AgentServer.count
     @recent_heartbeats = AgentServer.active.count
@@ -14,7 +25,7 @@ class Admin::UsersController < AdminController
     @active_app_count = Bundle.via_active_agent.count
     @monitor_count = Bundle.via_api.count
 
-    @total_revenue = BillingPlan.includes(:subscription_plan, user: :account).map(&:monthly_cost).reduce(&:+)
+    @total_revenue = @monthly_costs.values.sum
   end
 
   def new

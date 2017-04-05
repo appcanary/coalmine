@@ -95,6 +95,115 @@ class MonitorsControllerTest < ActionController::TestCase
       assert_equal 0, LogResolution.count
     end
 
+    it "adds packages to ignores list in the context of a bundle" do
+      a_bundle = Bundle.first
+      a_vuln_pkg = a_bundle.packages.first
+
+      vuln = FactoryGirl.create(:vulnerability, pkgs: [a_vuln_pkg])
+
+      assert_equal 0, IgnoredPackage.count
+
+      request.env["HTTP_REFERER"] = "/"
+      post :ignore_vuln, {
+             package_id: a_vuln_pkg.id,
+             ignored_package: {
+               package_id: a_vuln_pkg.id,
+               bundle_id: a_bundle.id
+             }
+           }
+
+      assert_response :redirect
+      assert_equal 1, IgnoredPackage.count
+
+      ignore = IgnoredPackage.first
+      assert_equal a_vuln_pkg.id, ignore.package_id
+      assert_equal a_bundle.id, ignore.bundle_id
+    end
+
+    it "adds packages to ignores list globally" do
+      a_vuln_pkg = Bundle.first.packages.first
+
+      vuln = FactoryGirl.create(:vulnerability, pkgs: [a_vuln_pkg])
+
+      assert_equal 0, IgnoredPackage.count
+
+      request.env["HTTP_REFERER"] = "/"
+      post :ignore_vuln, {
+             package_id: a_vuln_pkg.id,
+             ignored_package: {
+               package_id: a_vuln_pkg.id,
+               global: "yes"
+             }
+           }
+
+      assert_response :redirect
+      assert_equal 1, IgnoredPackage.count
+
+      ignore = IgnoredPackage.first
+      assert_equal a_vuln_pkg.id, ignore.package_id
+      assert_nil ignore.bundle_id
+    end
+
+    it "dosen't let you ignore on someone else's bundle" do
+      bundle2 = FactoryGirl.create(:bundle_with_packages, :account => user2.account)
+      pkg = bundle2.packages.first
+      assert_equal 0, IgnoredPackage.count
+
+      assert_raises(ActiveRecord::RecordNotFound) do
+        request.env["HTTP_REFERER"] = "/"
+        post :ignore_vuln, {
+               package_id: pkg.id,
+               ignored_package: {
+                 package_id: pkg.id,
+                 bundle_id: bundle2.id
+               }
+             }
+      end
+
+      assert_equal 0, IgnoredPackage.count
+    end
+
+    it "removes packages from the ignore list in the context of a bundle" do
+      a_bundle = Bundle.first
+      a_vuln_pkg = a_bundle.packages.first
+
+      vuln = FactoryGirl.create(:vulnerability, :pkgs => [a_vuln_pkg])
+      IgnoredPackage.ignore_package(user, a_vuln_pkg, a_bundle, "note #1")
+      assert_equal 1, IgnoredPackage.count
+
+      request.env["HTTP_REFERER"] = "/"
+      post :unignore_vuln, {
+             package_id: a_vuln_pkg.id,
+             ignored_package: {
+               ignored_package_id: IgnoredPackage.first.id
+             }
+           }
+
+      assert_response :redirect
+      assert_equal 0, IgnoredPackage.count
+    end
+
+    it "removes packages from the ignore list globally" do
+      a_vuln_pkg = Bundle.first.packages.first
+
+      vuln = FactoryGirl.create(:vulnerability, :pkgs => [a_vuln_pkg])
+      IgnoredPackage.ignore_package(user, a_vuln_pkg, nil, "note #1")
+      assert_equal 1, IgnoredPackage.count
+
+      ignore = IgnoredPackage.first
+      assert_nil ignore.bundle_id
+
+      request.env["HTTP_REFERER"] = "/"
+      post :unignore_vuln, {
+             package_id: a_vuln_pkg.id,
+             ignored_package: {
+               ignored_package_id: IgnoredPackage.first.id
+             }
+           }
+
+      assert_response :redirect
+      assert_equal 0, IgnoredPackage.count
+    end
   end
 
   describe "while admin" do

@@ -1,11 +1,11 @@
 require File.join(Rails.root, "app/parsers", 'rpm_parser')
 class Platforms
-  # TODO cleanup old platforms code
   Debian = "debian"
   Ubuntu = "ubuntu"
   Ruby = "ruby"
   CentOS = "centos"
   Amazon = "amzn"
+  None = "none"
 
   FULL_NAMES = {
     Ruby => "Ruby",
@@ -81,6 +81,14 @@ class Platforms
     ]
   }
 
+  PLATFORMS_WITH_UNAFFECTED = [Ruby]
+  PLATFORMS_WITH_RELEASES = PLATFORM_RELEASES.reduce([]) { |arr,(plt,rels)|
+    if rels.compact.any?
+      arr << plt
+    end
+    arr
+  }
+
   # This constructs a hash of platform-name to hash of
   # valid platform-releases. This hash is used for
   # validating user-input release values.
@@ -121,13 +129,11 @@ class Platforms
   end
 
   def self.select_platform_release
-    arr = [Ruby.titleize]
+    arr = [[Ruby.titleize, Ruby]]
 
     arr += [Ubuntu, CentOS, Debian, Amazon].map do |plt|
-      PLATFORM_RELEASES[plt].map { |r,v| "#{FULL_NAMES[plt]} - #{r}" }
-    end.flatten
-
-    arr
+      PLATFORM_RELEASES[plt].map { |r,v| ["#{FULL_NAMES[plt]} - #{r}", "#{plt} - #{r}"] }
+    end.flatten(1)
   end
 
   

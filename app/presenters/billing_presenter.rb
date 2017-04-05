@@ -11,16 +11,19 @@ class BillingPresenter
   attr_accessor :user, :billing_plan, :show_cancel
   delegate :monthly_cost, :to => :billing_plan
 
-  def initialize(billing_plan, show_cancel)
+  def initialize(billing_plan)
     self.billing_plan = billing_plan
+  end
 
-    self.show_cancel = show_cancel
+  def current_plan
+    self.billing_plan.subscription_plan
   end
 
   def select_plans
     plans = self.billing_plan.subscription_plans.map { |s| [s.text, s.id] }
 
-    if self.show_cancel
+    # Only show cancel if we have a selected plan
+    if self.current_plan.present?
       [CANCEL] + plans
     else
       plans
@@ -28,9 +31,8 @@ class BillingPresenter
   end
 
   def selected_plan
-    cs = self.billing_plan.subscription_plan
-    if cs
-      [cs.text, cs.id]
+    if self.current_plan
+      [self.current_plan.text, self.current_plan.id]
     end
   end
 

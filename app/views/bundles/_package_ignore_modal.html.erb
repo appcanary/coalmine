@@ -1,0 +1,58 @@
+<div class="modal fade" id="modal-<%=dom_id(package)%>-ignore" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Ignore this package</h4>
+      </div>
+      <%= form_for IgnoredPackage.new, url: ignore_vuln_monitors_path(package.id), method: :post do |f| %>
+        <%= f.hidden_field :package_id, value: package.id %>
+        <%= f.hidden_field :bundle_id, value: bundle.id %>
+        <div class="modal-body">
+
+          <table class="table">
+            <thead>
+              <th>
+                package
+              </th>
+              <th>
+                version
+              </th>
+            </thead>
+            <tr>
+              <td>
+                <span class="fixed-width"><%= package.name %></span>
+              </td>
+              <td>
+                <code><%= package.version %></code>
+              </td>
+            </tr>
+          </table>
+
+          <p>
+            Ignoring this package version means:
+            <ol>
+              <li>
+                This package and its vulnerabilities will disappear from reports.
+              </li>
+              <li>You will <b>never</b> be bothered about this package version again, even if new vulnerabilities come out.</li>
+            </ol>
+          </p>
+            
+          <div class="form-group">
+            <%= f.label :note, "Note:" %>
+            <%= f.text_area :note, :class => "form-control", :placeholder => "An optional, short explanatory message, i.e. 'fixed in configuration' or 'not exploitable'." %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group pull-left">
+            <%= f.check_box :global, {checked: true}, "yes", false %>
+            <%= f.label :global, "Ignore this package everywhere" %>
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <%= f.submit "Mark as ignored", class: "btn btn-danger" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

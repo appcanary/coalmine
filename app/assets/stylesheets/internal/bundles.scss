@@ -8,6 +8,14 @@
   }
 
   table.packages {
+    .package-removed {
+      background: #ffecec;
+    }
+
+    .package-added {
+      background: #eaffea;
+    }
+
     .package-name {
       @extend .fixed-width;
     }
@@ -16,6 +24,11 @@
         color: $upgrade-to-green;
         background-color: $upgrade-to-green-shading;
       }
+    }
+
+    .package-ignore-buttons {
+      white-space: nowrap;
+      float: right;
     }
 
     .package-version--neutral {

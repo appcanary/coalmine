@@ -38,10 +38,12 @@ class Account < ActiveRecord::Base
   has_many :log_resolutions
 
   has_many :email_messages
-  has_many :email_patcheds
-  has_many :email_vulnerables
+  has_many :email_patcheds, :dependent => :destroy
+  has_many :email_vulnerables, :dependent => :destroy
+  has_many :email_daily_summaries, :dependent => :destroy
   has_many :patched_notifications, :through => :email_patcheds, :source => :notifications
   has_many :vulnerable_notifications, :through => :email_vulnerables, :source => :notifications
+  has_many :tags, :dependent => :destroy
 
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
 
@@ -62,6 +64,12 @@ class Account < ActiveRecord::Base
                       (SELECT 1 FROM bundles WHERE bundles.account_id = accounts.id limit 1) OR EXISTS
                       (SELECT 1 FROM agent_server_archives WHERE agent_server_archives.account_id = accounts.id limit 1) OR EXISTS
                       (SELECT 1 FROM bundle_archives WHERE bundle_archives.account_id = accounts.id limit 1)")
+  end
+
+
+  def has_activity?
+    active_servers.any? || 
+      monitors.any?
   end
 
 
@@ -93,4 +101,14 @@ class Account < ActiveRecord::Base
     }
   end
 
+  # Decide if we should send the daily email summary based on the user prefs and whether they have any vulns or servers to report
+  def wants_daily_summary?(has_vulns_or_servers)
+    # TODO: when users aren't 1-1 with accounts move this to User
+    pref = self.users.first.pref_email_frequency
+    if pref == PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN
+      has_vulns_or_servers
+    else
+      PrefOpt::EMAIL_WANTS_DAILY
+    end
+  end
 end

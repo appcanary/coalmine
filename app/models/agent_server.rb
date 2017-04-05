@@ -27,6 +27,12 @@
 #
 
 class AgentServer < ActiveRecord::Base
+  extend ArchiveBehaviour
+  # needed for archive methods
+  def self.archive_class
+    AgentServerArchive
+  end
+
   ACTIVE_WINDOW = 2.hours
   belongs_to :account
   validates :account, :presence => true
@@ -36,6 +42,10 @@ class AgentServer < ActiveRecord::Base
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
   has_many :accepted_files, :class_name => AgentAcceptedFile
+  has_many :server_tags, :dependent => :destroy
+  has_many :tags, :through => :server_tags
+
+  has_many :server_processes, :dependent => :destroy
 
   has_one :last_heartbeat, -> { order(created_at: :desc) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
 
@@ -44,9 +54,31 @@ class AgentServer < ActiveRecord::Base
   }
 
   scope :active, -> {
-    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', ACTIVE_WINDOW.ago).distinct("agent_servers.id")
+    self.active_as_of(Time.now)
   }
 
+  scope :active_as_of, ->(date) {
+    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', date - ACTIVE_WINDOW).distinct("agent_servers.id")
+  }
+
+  # TODO:
+  #
+  # test!!!
+
+  scope :created_on, -> (date) {
+    from(union_str(all, AgentServerArchive.deleted)).
+    where('created_at >= ? and created_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
+  }
+
+  # TODO:
+  #
+  # test!!!
+
+  scope :deleted_on, -> (date) {
+    from("(#{AgentServerArchive.deleted.to_sql}) #{self.table_name}").
+    # and only look at stuff from this day in particular
+    where("agent_servers.expired_at >= ? and agent_servers.expired_at <= ?", date.at_beginning_of_day, date.at_end_of_day)
+  }
 
   # TODO: figure out inactive scope
   
@@ -61,6 +93,20 @@ class AgentServer < ActiveRecord::Base
       agent_version = params[:"agent-version"]
       self.agent_release = AgentRelease.where(:version => agent_version).first_or_create!
       self.save!
+    end
+  end
+
+  def idempotently_add_tags!(tags)
+    self.transaction do
+      self.destructively_update_tags!((tags + self.tags.pluck(:tag)).to_set)
+    end
+  end
+
+  def destructively_update_tags!(tags)
+    self.transaction do
+      self.tags = tags.map do |tag_s|
+        Tag.find_or_create_by!(account_id: self.account_id, tag: tag_s)
+      end
     end
   end
 
@@ -88,5 +134,9 @@ class AgentServer < ActiveRecord::Base
   # TODO: abstract for all OS'
   def system_bundle
     self.bundles.where(:platform => Platforms::OPERATING_SYSTEMS).first
+  end
+
+  def platform_release
+    PlatformRelease.validate(distro, release)
   end
 end

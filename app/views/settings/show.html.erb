@@ -1,3 +1,14 @@
+<script>
+ $(document).ready(function(){
+   new Clipboard('#clip-btn');
+   $('#clip-btn').click(function(){
+     $('#clip-btn').tooltip("show");
+     setTimeout(function() {
+       $('#clip-btn').tooltip('hide');
+     }, 1000);
+   });
+ });
+</script>
 <section id="newservers" style="padding-top: 10px;">
   <div class="fixed-side-menu">
     <div class="outer-wrapper">
@@ -24,9 +35,19 @@
         <a name="api-token" class="anchor-offset"></a>
         <div class="user_api">
           <h4>API token</h4>
-          <%= form_for @user, url: reset_token_settings_path do |f| %>
+          <div class="row">
+            <%= form_for @user, url: reset_token_settings_path do |f| %>
+            <div class="col-lg-6">
+              <div class="input-group">
+                <input id="foo" readonly="true" type="text" class="form-control" value="<%= @agent_token %>">
+                <span class="input-group-btn">
+                  <a href="#" id="clip-btn" class="btn btn-default" data-clipboard-target="#foo" data-toggle="tooltip" data-container="body" data-placement="bottom" data-trigger="manual" title="copied")>
+                    <i class="fa fa-clipboard" aria-hidden="true"></i>
+                  </a>
+                </span>
+              </div>
+            </div>
             <%= hidden_field_tag :regenerate_token %>
-            <code class="auth_token"><%= @agent_token %></code>
             <%= f.submit "Reset token", class: "btn btn-sm btn-danger", data: { confirm: "Are you sure? This will cause all of your servers to stop working!" } %>
           <% end %>
           <hr>
@@ -60,20 +81,61 @@
               </div>
 
               <div class="form-group">
-                <p>We will send security notifications to this email address.</p> 
+                <p>We will send security notifications to this email address.</p>
+
+                <h4>Notification settings:</h4>
                 <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_DAILY %>
+                  <%= f.label :pref_email_frequency_daily, "Notify me every day, with a summary", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN %>
+                  <%= f.label :pref_email_frequency_daily, "Notify me once a day, but only if vulnerabilities come out or are patched", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_FIRE %>
+                  <%= f.label :pref_email_frequency_firehose, "Notify me about everything as soon as possible", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_BOTH %>
+                  <%= f.label :pref_email_frequency_both, "I love email, give me both", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_NEVER %>
+                  <%= f.label :pref_email_frequency_none, "No vulnerability emails, thanks", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
+
+                <%=f.submit "Update email settings", :class => "btn btn-default" %>
+
+                <hr>
+                <p>
+
                   <%= f.check_box :newsletter_email_consent %>
                   <%= f.label :newsletter_email_consent, "Send me your monthly newsletter containing product updates and interesting security news.", :style => "font-weight: normal; display: inline;" %>
                 </p>
               </div>
 
+
+              <% if $rollout.active?(:request_phone_number) %>
+              <%= f.label :phone_number %>
               <div class="form-group">
-                <%=f.submit "Update email settings", :class => "btn btn-default" %>
+                <%=f.text_field :phone_number, :class => "form-control" %>
               </div>
+              <% end %>
+
+              <div class="form-group">
+                <%=f.submit "Update contact settings", :class => "btn btn-default" %>
+              </div>
+              <hr>
             </div>
           </section>
 
-          <hr>
 
           <a name="password" class="anchor-offset"></a>
           <section>
@@ -91,6 +153,7 @@
               <div class="form-group">
                 <%=f.submit "Change password", :class => "btn btn-default" %>
               </div>
+              <hr>
             </div>
           </section>
         <% end %>
@@ -98,7 +161,7 @@
     </section>
     <section>
       <a name="billing" class="anchor-offset"></a>
-      <%= render :partial => "settings/subscription" %>
+      <%= render :partial => "billing/subscription" %>
     </section>
   </div>
 </section>

@@ -10,10 +10,13 @@ class ServersController < ApplicationController
     render :new
   end
 
+  def procs
+    setup_process_ivars
+  end
+
   def show
-    @vulnquery = VulnQuery.new(current_account)
-    @server = fetch_server(params)
-    @serverpres = ServerPresenter.new(@vulnquery, @server)
+    setup_process_ivars
+
     respond_to do |format|
       format.html
       format.csv do
@@ -72,6 +75,7 @@ class ServersController < ApplicationController
     @server = fetch_server(params)
     respond_to do |format|
       if @server.update(server_params)
+        @server.destructively_update_tags!(tags_from_params)
         format.html { redirect_back_or_to(dashboard_path) }
       else
         format.html { render :edit }
@@ -80,6 +84,21 @@ class ServersController < ApplicationController
   end
 
   protected
+
+  def setup_process_ivars
+    @account = current_account # used for rollout
+    @vulnquery = VulnQuery.new(@account)
+
+    @server = fetch_server(params)
+    @serverpres = ServerPresenter.new(@vulnquery, @server)
+
+    @outdated_procs = @serverpres.outdated_processes
+    @all_procs = @serverpres.all_processes
+
+    pr, err = @server.platform_release
+    @platform = pr.platform
+    @release = pr.release
+  end
 
   def fetch_server(params)
     if current_user.is_admin?
@@ -91,5 +110,14 @@ class ServersController < ApplicationController
 
   def server_params
     params.require(:server).permit(:name)
+  end
+
+  def tags_from_params
+    tag_params = params.require(:server).permit(tags: [])
+
+    # if it's just empty, we can return it
+    unless tag_params[:tags].nil?
+      tag_params[:tags].reject(&:empty?)
+    end
   end
 end

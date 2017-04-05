@@ -47,7 +47,7 @@ module ApplicationHelper
 
     content_tag("eui-button", tag_attr.merge(html)) do
       if disabled
-      btn = content_tag("button", :disabled => true, :'aria-label' => value) {} 
+        btn = content_tag("button", :disabled => true, :'aria-label' => value) {}
       else
         btn = content_tag("button", :'aria-label' => value) {} 
       end
@@ -168,6 +168,14 @@ module ApplicationHelper
       link_to "#{bundle.agent_server.display_name} - #{bundle.display_name}", server_app_url(bundle, server_id: bundle.agent_server_id)
     else
       link_to bundle.display_name, monitor_url(bundle)
+    end
+  end
+
+  def bundle_url(bundle)
+    if bundle.agent_server_id
+      server_app_url(bundle, server_id: bundle.agent_server_id)
+    else
+      monitor_url(bundle)
     end
   end
 

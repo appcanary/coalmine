@@ -21,6 +21,12 @@
 # TODO: enforce uniqueness constraint
 
 class BundledPackage < ActiveRecord::Base
+  extend ArchiveBehaviour
+  # needed for archive methods
+  def self.archive_class
+    BundledPackageArchive
+  end
+
   belongs_to :package
   belongs_to :bundle
 
@@ -63,7 +69,5 @@ class BundledPackage < ActiveRecord::Base
                  lbv.vulnerable_dependency_id = "vulnerable_packages".vulnerable_dependency_id AND 
                  lbv.vulnerable_package_id = "vulnerable_packages".id)')
   }
-
-
 
 end

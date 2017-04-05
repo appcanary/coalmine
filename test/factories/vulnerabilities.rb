@@ -92,6 +92,8 @@ FactoryGirl.define do
     end
 
     after(:create) do |v, f|
+      adv = create(:advisory, :ruby)
+      v.advisory_ids = adv.id
       f.deps.each do |dep|
         create(:vulnerable_dependency, f.vd_trait, :dep => dep, :vulnerability => v)
       end

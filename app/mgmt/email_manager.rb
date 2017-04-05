@@ -27,7 +27,9 @@ class EmailManager
 
 
   def self.queue_vuln_emails!
-    accounts = Account.with_unnotified_vuln_logs
+    accounts = Account.with_unnotified_vuln_logs.joins(:users).
+      where(users: { :pref_email_frequency => PrefOpt::EMAIL_WANTS_FIREHOSE})
+
 
     accounts.select do |acct|
       self.create_vuln_email!(acct)
@@ -35,7 +37,8 @@ class EmailManager
   end
 
    def self.queue_patched_emails!
-    accounts = Account.with_unnotified_patch_logs
+     accounts = Account.with_unnotified_patch_logs.joins(:users).
+      where(users: { :pref_email_frequency => PrefOpt::EMAIL_WANTS_FIREHOSE})
 
     accounts.select do |acct|
       self.create_patched_email!(acct)
@@ -45,7 +48,7 @@ class EmailManager
 
   def self.create_vuln_email!(acct)
     EmailMessage.transaction do
-      unnotified_logs = VulnQuery.new(acct).unnotified_vuln_logs
+      unnotified_logs = VulnQuery.new(acct).unnotified_vuln_logs.where("log_bundle_vulnerabilities.created_at >= ? ", 2.days.ago)
 
       # TODO: perform checks like, has it been long enough
       # since the last email?
@@ -67,7 +70,7 @@ class EmailManager
 
   def self.create_patched_email!(acct)
     EmailMessage.transaction do
-      unnotified_logs = VulnQuery.new(acct).unnotified_patch_logs
+      unnotified_logs = VulnQuery.new(acct).unnotified_patch_logs.where("log_bundle_patches.created_at >= ? ", 2.days.ago)
 
       # TODO: perform checks like, has it been long enough
       # since the last email?

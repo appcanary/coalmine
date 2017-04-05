@@ -76,6 +76,12 @@ class Parcel
       self.name = nevra.name
       self.version = filename
       self.arch = nevra.arch
+
+      # Centos has "alt" packages for Xen4CentOS and software collections.
+      # we tag them in the name with "^alt"
+      if nevra.release.ends_with?(".alt")
+        self.name = self.name + "^alt"
+      end
     end
 
     def attributes

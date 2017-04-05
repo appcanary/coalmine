@@ -39,11 +39,14 @@ Rails.application.routes.draw do
   get 'launchrock' => 'welcome#index'
   post 'beta/list' => "welcome#beta_list"
 
+  get 'pricing' => 'welcome#pricing'
+
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
   get 'history' => "dashboard#history", :as => :history
+  get 'summary/:date' => "dashboard#summary", :as => :summary
 
   get 'welcome' => "onboarding#welcome", :as => :onboarding
 
@@ -91,10 +94,14 @@ Rails.application.routes.draw do
     delete "destroy_inactive" => "servers#destroy_inactive", :as => :destroy_inactive, :on => :collection
   end
 
+  get "/servers/:id/procs" => "servers#procs"
+
   resources :monitors, :only => [:new, :show, :destroy, :create] do
+    post "ignore_vuln/:package_id", action: :ignore_vuln, on: :collection, as: :ignore_vuln
+    delete "unignore_vuln/:package_id", action: :unignore_vuln, on: :collection, as: :unignore_vuln
+
     post "resolve_vuln/:package_id", action: :resolve_vuln, on: :collection, as: :resolve_vuln
     delete "unresolve_vuln/:package_id", action: :unresolve_vuln, on: :collection, as: :unresolve_vuln
-
   end
 
   get "vulns/:platform" => "vulns#index", :as => :platform_vulns, :constraints => ->(req) {Platforms.supported?(req.params[:platform])}
@@ -105,6 +112,7 @@ Rails.application.routes.draw do
 
   get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
   get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
+  get "packages/:id" => "packages#show", :as => :package, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
 
   resources :logs, :only => :index
   resources :emails, :only => [:index, :show]
@@ -158,6 +166,7 @@ Rails.application.routes.draw do
         put "servers/:uuid" => "agent#update", :as => :agent_server_update
         get "servers/:uuid" => "agent#show", :as => :agent_server_upgrade
         post "heartbeat/:uuid" => "agent#heartbeat", :as => :agent_server_heartbeat
+        put "servers/:uuid/processes" => "agent#update_server_processes"
       end
     end
   end

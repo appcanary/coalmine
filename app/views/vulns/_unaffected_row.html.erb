@@ -1,0 +1,11 @@
+<tr>
+  <% if defined?(release) && release %>
+    <td rowspan="<%= rowspan || 1 %>"><%= release %></td>
+  <% end %>
+  <td>
+    <%= u["package_name"] %>
+  </td>
+  <td>
+    <%= u["status"] %>
+  </td>
+</tr>

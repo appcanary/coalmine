@@ -1,6 +1,6 @@
 require 'msgpack'
 class UsnImporter < AdvisoryImporter
-  SOURCE = "usn-importer"
+  SOURCE = "usn"
   PLATFORM = Platforms::Ubuntu
   PICKLE_URL = "/Users/maxim/Downloads/database-all.pickle.bz2" #"https://usn.ubuntu.com/usn-db/database-all.pickle.bz2"
   LOCAL_PATH = "tmp/importers/usn"

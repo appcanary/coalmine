@@ -96,7 +96,7 @@ $( document ).ready(function() {
           email
         </th>
         <th>
-          source
+          phone
         </th>
         <th>
           created at
@@ -128,7 +128,7 @@ $( document ).ready(function() {
         </th>
       </thead>
       <tbody>
-        <%- @users.each do |user| %>
+        <% @users.each do |user| %>
           <tr>
             <td>
               <%= user.name %>
@@ -137,7 +137,7 @@ $( document ).ready(function() {
               <%= user.email %>
             </td>
             <td>
-              <%= user.beta_signup_source %>
+              <%= user.phone_number %>
             </td>
 
             <td>
@@ -145,28 +145,27 @@ $( document ).ready(function() {
             </td>
 
             <td>
-              <%= user.agent_servers.size %>
+              <%= @server_counts[user.account_id] %>
             </td>
 
             <td>
-              <%= user.active_servers_count %>
+              <%= @active_server_counts[user.account_id] %>
             </td>
 
             <td>
-              <%= user.api_calls_count %>
+              <%= @api_calls_counts[user.account_id] %>
             </td>
 
             <td>
-              <%= user.monitors_count %>
+              <%= @monitor_counts[user.account_id] %>
             </td>
 
             <td>
-              <%= user.has_billing? %>
+              <%= user.invoiced_manually || user.stripe_customer_id.present? %>
             </td>
 
             <td>
-              <%= number_to_currency((user.billing_plan.try(:monthly_cost) || 0).to_f / 100) %>
-              <%# <%= BillingManager.new(user).to_presenter.monthly_cost_in_dollars %>
+              <%= number_to_currency(@monthly_costs[user.account_id].to_f / 100) %>
             </td>
 
             <td>
@@ -174,12 +173,12 @@ $( document ).ready(function() {
             </td>
 
             <td>
-              <%= link_to "edit", [:admin, user] %>
+              <%= link_to "edit", admin_user_path(user.id) %>
             </td>
 
             <td>
-              <% if user != current_user %>
-                <%= link_to "impersonate", impersonate_admin_user_path(user), :method => :post %>
+              <% if user.id != current_user.id %>
+                <%= link_to "impersonate", impersonate_admin_user_path(user.id), :method => :post %>
               <% else %>
                 (that's you!)
               <% end %>

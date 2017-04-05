@@ -1,0 +1,35 @@
+<tr>
+  <% if defined?(release) && release %>
+    <td rowspan="<%= rowspan || 1 %>"><%= release %></td>
+  <% end %>
+  <td>
+    <%= vd.package_name %>
+  </td>
+  <td>
+    <% if vd.patched_versions.present? %>
+      <code>
+        <%= vd.patched_versions.join(",") %>
+      </code>
+    <% else %>
+      None
+    <% end %>
+
+    <% if vd.pending %>
+      &nbsp;<span class="label label-warning">pending</span>
+    <% end %>
+    <% if vd.end_of_life %>
+      &nbsp;<span class="label label-warning">EOL</span>
+    <% end %>
+  </td>
+  <% if @show_unaffected_col %>
+    <td>
+      <% if vd.unaffected_versions.present? %>
+        <code>
+          <%= vd.unaffected_versions.join(",") %>
+        </code>
+      <% else %>
+        None
+      <% end %>
+    </td>
+  <% end %>
+</tr>

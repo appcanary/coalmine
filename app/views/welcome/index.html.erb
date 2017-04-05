@@ -1,5 +1,15 @@
 <%= render :partial => "shared/top_menu" %>
 
+<script>
+ //This is a bit of hack until we seperate pricing into it's own seperate page
+ $(document).ready(function() {
+   if (window.location.pathname == "/pricing") {
+     //scroll to the pricing section
+     window.location.hash = "#pricing";
+   }
+ });
+</script>
+
 <div class="hero-wrapper">
   <div class="hero-main">
 
@@ -31,55 +41,36 @@
 
 </div>
 
-<div class="unit-container trust">
-  <div class="unit">
-    <h3>Trusted by:</h3>
-    
-    <div class="customer">
-      &nbsp;
+<div class="section-wrapper">
+  <section>
+    <div id="trustedby">
+      <h3>Trusted by:</h3>
       <div class="brand">
         <a href="https://www.codeclub.org.uk/"><%= image_tag(image_path("logo-cc.png"), :style => "width: 40%;") %></a>
       </div>
-    </div>
 
-    <div class="customer">
-      &nbsp;
       <div class="brand">
         <a href="https://eligible.com"><%= image_tag(image_path("logo-eligible.png")) %></a>
       </div>
-    </div>
 
-    <div class="customer">
-      &nbsp;
       <div class="brand">
         <a href="https://procore.com"><%= image_tag(image_path("logo-procore.png")) %></a>
       </div>
-    </div>
 
-    <div class="customer">
-      &nbsp;
       <div class="brand">
         <a href="https://www.reactiveops.com/"><%= image_tag(image_path("logo-reactive.png")) %></a>
       </div>
-    </div> 
 
-    <div class="customer">
-      &nbsp;
       <div class="brand">
         <a href="https://curious.com"><%= image_tag(image_path("logo-curious.png")) %></a>
       </div>
-    </div>
 
-    <div class="customer">
-      &nbsp;
       <div class="brand">
         <a href="https://www.ycombinator.com"><%= image_tag(image_path("logo-yc.png"), :style => "width: 40%;") %></a>
       </div>
-    </div> 
-
-  </div>
+    </div>
+  </section>
 </div>
-
 
 <div class="unit-container">
   <div class="unit vulns">
@@ -100,27 +91,27 @@
   </div>
 </div>
 
-
-<div class="unit-container">
-  <div class="unit how">
-    <div class="unit_how">
+<div class="section-wrapper">
+  <section>
+    <div id="products">
+    <div class="agent">
       <h2 class="title">Agent</h2>
       <%= image_tag "canary.bluejay.medium.png" %>
       <h3>Our agent stays with your servers and checks up on them regularly.</br><br/>It's very polite and discreet.</h3>
     </div>
-    <div class="unit_how">
+    <div class="checkapi">
       <h2 class="title">Check API</h2>
       <%= image_tag "canary.pigeon.medium.png" %>
       <h3>Check with us whenever you run tests, or submit pull requests.</h3>
     </div>
-    <div class="unit_how">
+    <div class="monitorapi">
       <h2 class="title">Monitor API</h2>
       <%= image_tag "canary.sparrow.medium.png" %>
       <h3>Let us know whenever you deploy and we'll notify you later.</br><br/>Works great with Docker and Heroku!</h3>
     </div>
-  </div>
+    </div>
+  </section>
 </div>
-
 
 
 <a name="pricing"></a>
@@ -130,36 +121,27 @@
 
     <div class="mobile-pricing">
       <div class="tier">
-        <h3>Free</h3>
-        <p class="price">$0<br/>per month</p>
-        <p class="add-margin">1 agent<br/>10 API calls
+        <h3>Indie</h3>
+        <p class="price">$29<br/>per month</p>
+        <p class="add-margin">3 agents<br/>10 API calls
       </div>
 
       <div class="tier">
-        <h3>Indie</h3>
+        <h3>Team</h3>
         <p class="price">$99<br/>per month</p>
-        <p class="add-margin">5 agents<br/>10 API calls<br/>$20/additional agent
-      </div>
-
-      <div class="tier">
-        <h3>Team</h3>
-        <p class="price">$499<br/>per month</p>
-        <p>50 agents<br/>500 API calls<br/>$10/additional agent</p>
+        <p>10 agents<br/>500 API calls</p>
       </div>
 
       <div class="tier">
         <h3>Company</h3>
-        <p class="price">$2999<br/>per month</p>
-        <p>500 agents<br/>5000 API calls<br>$6/additional agent</p>
+        <p class="price">$499<br/>per month</p>
+        <p>75 agents<br/>Unlimited API calls<br>$7.50/additional agent</p>
       </div>
 
     </div>
 
     <div class="pricing-row">
       <div class="label">
-      </div>
-      <div class="tier">
-        <h3>Free</h3>
       </div>
       <div class="tier">
         <h3>Indie</h3>
@@ -176,7 +158,7 @@
       <div class="label">
       </div>
       <div class="tier">
-        <p class="price"><span class="value">$0</span><br/>per month</p>
+        <p class="price"><span class="value">$29</span><br/>per month</p>
         &nbsp;
       </div>
       <div class="tier">
@@ -187,33 +169,43 @@
         <p class="price"><span class="value">$499</span><br/>per month</p>
         &nbsp;
       </div>
-      <div class="tier">
-        <p class="price"><span class="value">$2999</span><br/>per month</p>
-        &nbsp;
-      </div>
     </div>
 
     <div class="pricing-row">
       <div class="label">
+      </div>
+      <div class="tier">
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
+        &nbsp;
+      </div>
+      <div class="tier">
+        <div><a class="button" href="/sign_up">Try for Free</a></div>
+        &nbsp;
+      </div>
+    </div>
+
+
+    <div class="pricing-row">
+      <div class="label">
         <div>
-          Agents<br/>& Monitors
+          Agents<br/>&amp; <a href="/docs#create-monitor">Monitors</a>
         </div>
       </div>
 
       <div class="tier">
-        <div>1</div>
+        <div>3</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>5</div>
+        <div>10</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>50</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>500</div>
+        <div>75</div>
         &nbsp;
       </div>
     </div>
@@ -224,21 +216,16 @@
           Additional Agent
         </div>
       </div>
-
       <div class="tier">
-        <div>N/A</div>
+        <div>-</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>$20</div>
+        <div>-</div>
         &nbsp;
       </div>
       <div class="tier">
-        <div>$10</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>$6</div>
+        <div>$7.50</div>
         &nbsp;
       </div>
     </div>
@@ -247,14 +234,10 @@
     <div class="pricing-row">
       <div class="label">
         <div>
-          API Calls
+          <a href="/docs#check-endpoint">Check API Calls</a>
         </div>
       </div>
 
-      <div class="tier">
-        <div>10</div>
-        &nbsp;
-      </div>
       <div class="tier">
         <div>10</div>
         &nbsp;
@@ -264,57 +247,7 @@
         &nbsp;
       </div>
       <div class="tier">
-        <div>5000</div>
-        &nbsp;
-      </div>
-    </div>
-
-    <!-- <div class="pricing-row">
-      <div class="label">
-        <div>
-          Users
-        </div>
-      </div>
-
-      <div class="tier">
-        <div>1</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>1</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>5</div>
-        &nbsp;
-      </div>
-      <div class="tier">
         <div>Unlimited</div>
-        &nbsp;
-      </div>
-    </div>-->
-
-    <div class="pricing-row">
-      <div class="label">
-        <div>
-          Support
-        </div>
-      </div>
-
-      <div class="tier">
-        <div>Minimal</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>Basic</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>Basic</div>
-        &nbsp;
-      </div>
-      <div class="tier">
-        <div>Premium</div>
         &nbsp;
       </div>
     </div>
@@ -336,48 +269,38 @@
 </div>
 
 <a name="about"></a>
-<div class="unit-container">
-  <div class="unit how">
-    <h2>About</h2>
-    <div class="unit_illustration":>
-      <!-- <h3>How it works</h3> -->
-      <%= image_tag "canary-map.medium.png" %>
-    </div>
-    <div class="unit_exposition">
-      <h3>How it works</h3>
-      <p>
-        We keep track of which versions of what packages are vulnerable to which security vulnerabilities, so you don't have to.</p>
-      <p>
-        We provide an <a href="https://github.com/appcanary/agent">open-source</a> agent and an API. We monitor the packages you have installed on your Linux system by hooking into the package manager (i.e. apt or yum). We also monitor the libraries used by your Ruby applications by monitoring their Gemfile.lock files.
-        <!-- We provide an <a href="https://github.com/appcanary/agent">open&#45;source</a> agent and an API. Our agent monitors the packages you have installed on a Linux system by hooking into the package manager (apt or yum). It also monitors the libraries used by Ruby applications by monitoring Gemfile.lock files. -->
-      </p>
-      <p>
-        <!-- We provide an <a href="https://github.com/appcanary/agent">open&#45;source</a> agent and an API. Our APIs support the same platforms as the agent. You can monitor a set of packages for vulnerabilities by uploading a file, either a Gemfile.lock for Ruby or <code>/var/lib/dpkg/status</code> for apt&#45;based systems, or the output of <code>rpm &#45;qa</code> for rpm&#45;based systems. -->
-      </p>
-      <p>
-        You can upload files directly to our API endpoint, or through a web
-        interface.
-      </p>
-      <h3>Platforms supported</h3>
-      <div class="supported">
-        <h4>System packages</h4>
+<div class="section-wrapper">
+  <section>
+    <div id="howitworks">
+      <h2>About</h2>
+      <div class="illustration">
+        <%= image_tag "canary-map.medium.png" %>
+      </div>
+      <div class="exposition">
+        <h3>How it works</h3>
+        <p>
+          We keep track of which versions of what packages are vulnerable to which security vulnerabilities, so you don't have to.</p>
+        <p>
+          We provide an <a href="https://github.com/appcanary/agent">open-source</a> agent and an API. We monitor the packages you have installed on your Linux system by hooking into the package manager (i.e. apt or yum). We also monitor the libraries used by your Ruby applications by monitoring their Gemfile.lock files.
+        </p>
+        <p>
+          You can upload files directly to our API endpoint, or through a web
+          interface.
+        </p>
+        <h3>Platforms supported</h3>
         <ul>
           <li>Ubuntu - via apt</li>
           <li>Debian - via apt</li>
-          <li>Centos 7 - via yum</li>
+          <li>CentOS - via yum</li>
           <li>Amazon Linux - via yum</li>
-        </ul>
-      </div>
-      <div class="supported">
-        <h4>Application libraries</h4>
-        <ul class="system">
           <li>Ruby - via Gemfile.lock</li>
           <li>More coming soon!</li>
         </ul>
       </div>
     </div>
-  </div>
+  </section>
 </div>
+
 
 <a name="team"></a>
 <div class="unit-container">

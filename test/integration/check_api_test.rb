@@ -40,7 +40,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
         assert_equal 1, account.log_api_calls.where(:action => "check/create").count
         # Make sure we log the right platform release
         assert_equal "ruby", account.log_api_calls.last.platform
-        assert_equal nil, account.log_api_calls.last.release
+        assert_nil account.log_api_calls.last.release
 
         json = json_body
         assert json.key?("data")

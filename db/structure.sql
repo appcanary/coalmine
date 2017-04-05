@@ -65,8 +65,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, needs_triage, package_names, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.needs_triage, OLD.package_names, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -155,8 +155,8 @@ CREATE FUNCTION archive_vulnerabilities() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, package_names, valid_at, expired_at) VALUES
+           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.package_names, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -188,6 +188,132 @@ CREATE FUNCTION archive_vulnerable_packages() RETURNS trigger
          INSERT INTO vulnerable_package_archives(vulnerable_package_id, package_id, vulnerable_dependency_id, vulnerability_id, created_at, updated_at, valid_at, expired_at) VALUES
            (OLD.id, OLD.package_id, OLD.vulnerable_dependency_id, OLD.vulnerability_id, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
+       END;
+       $$;
+
+
+--
+-- Name: update_advisories_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_advisories_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_advisory_vulnerabilities_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_advisory_vulnerabilities_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_agent_servers_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_agent_servers_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_bundled_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_bundled_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_bundles_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_bundles_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerabilities_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerabilities_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerable_dependencies_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerable_dependencies_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
+       END;
+       $$;
+
+
+--
+-- Name: update_vulnerable_packages_valid_at(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION update_vulnerable_packages_valid_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+       BEGIN
+         NEW.valid_at = now();
+         RETURN NEW;
        END;
        $$;
 
@@ -260,7 +386,9 @@ CREATE TABLE advisories (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
-    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL
+    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
+    needs_triage jsonb DEFAULT '[]'::jsonb NOT NULL,
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -314,7 +442,9 @@ CREATE TABLE advisory_archives (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone NOT NULL,
-    expired_at timestamp without time zone NOT NULL
+    expired_at timestamp without time zone NOT NULL,
+    needs_triage jsonb DEFAULT '[]'::jsonb NOT NULL,
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -876,7 +1006,8 @@ CREATE TABLE email_messages (
     type character varying NOT NULL,
     sent_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    report_date date
 );
 
 
@@ -928,6 +1059,42 @@ CREATE SEQUENCE feature_flags_id_seq
 --
 
 ALTER SEQUENCE feature_flags_id_seq OWNED BY feature_flags.id;
+
+
+--
+-- Name: ignored_packages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE ignored_packages (
+    id integer NOT NULL,
+    account_id integer NOT NULL,
+    user_id integer NOT NULL,
+    package_id integer NOT NULL,
+    bundle_id integer,
+    criticality integer,
+    note character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ignored_packages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE ignored_packages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ignored_packages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE ignored_packages_id_seq OWNED BY ignored_packages.id;
 
 
 --
@@ -1109,6 +1276,41 @@ ALTER SEQUENCE log_resolutions_id_seq OWNED BY log_resolutions.id;
 
 
 --
+-- Name: motds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE motds (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    subject character varying,
+    body text NOT NULL,
+    remove_at timestamp without time zone NOT NULL,
+    "position" character varying DEFAULT 'header'::character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: motds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE motds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: motds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE motds_id_seq OWNED BY motds.id;
+
+
+--
 -- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1262,6 +1464,40 @@ ALTER SEQUENCE pre_users_id_seq OWNED BY pre_users.id;
 
 
 --
+-- Name: process_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE process_libraries (
+    id integer NOT NULL,
+    path character varying,
+    modified timestamp without time zone,
+    package_name character varying,
+    package_version character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE process_libraries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE process_libraries_id_seq OWNED BY process_libraries.id;
+
+
+--
 -- Name: que_jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1358,6 +1594,106 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: server_process_libraries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_process_libraries (
+    id integer NOT NULL,
+    server_process_id integer NOT NULL,
+    process_library_id integer NOT NULL,
+    outdated boolean DEFAULT false,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_process_libraries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_process_libraries_id_seq OWNED BY server_process_libraries.id;
+
+
+--
+-- Name: server_processes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_processes (
+    id integer NOT NULL,
+    agent_server_id integer NOT NULL,
+    pid integer NOT NULL,
+    name character varying,
+    started timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    args character varying
+);
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_processes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_processes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_processes_id_seq OWNED BY server_processes.id;
+
+
+--
+-- Name: server_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE server_tags (
+    id integer NOT NULL,
+    agent_server_id integer,
+    tag_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: server_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE server_tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: server_tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE server_tags_id_seq OWNED BY server_tags.id;
+
+
+--
 -- Name: subscription_plans; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1395,6 +1731,38 @@ CREATE SEQUENCE subscription_plans_id_seq
 --
 
 ALTER SEQUENCE subscription_plans_id_seq OWNED BY subscription_plans.id;
+
+
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE tags (
+    id integer NOT NULL,
+    account_id integer NOT NULL,
+    tag text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
 
 
 --
@@ -1437,7 +1805,9 @@ CREATE TABLE users (
     agent_token character varying,
     account_id integer NOT NULL,
     pref_os character varying,
-    pref_deploy character varying
+    pref_deploy character varying,
+    phone_number character varying,
+    pref_email_frequency character varying DEFAULT 'dailywhenvuln'::character varying NOT NULL
 );
 
 
@@ -1483,7 +1853,8 @@ CREATE TABLE vulnerabilities (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
-    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL
+    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -1530,7 +1901,8 @@ CREATE TABLE vulnerability_archives (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone NOT NULL,
-    expired_at timestamp without time zone NOT NULL
+    expired_at timestamp without time zone NOT NULL,
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -1851,6 +2223,13 @@ ALTER TABLE ONLY feature_flags ALTER COLUMN id SET DEFAULT nextval('feature_flag
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY ignored_packages ALTER COLUMN id SET DEFAULT nextval('ignored_packages_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY is_it_vuln_results ALTER COLUMN id SET DEFAULT nextval('is_it_vuln_results_id_seq'::regclass);
 
 
@@ -1886,6 +2265,13 @@ ALTER TABLE ONLY log_resolutions ALTER COLUMN id SET DEFAULT nextval('log_resolu
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY motds ALTER COLUMN id SET DEFAULT nextval('motds_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
@@ -1911,6 +2297,13 @@ ALTER TABLE ONLY pre_users ALTER COLUMN id SET DEFAULT nextval('pre_users_id_seq
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY process_libraries ALTER COLUMN id SET DEFAULT nextval('process_libraries_id_seq'::regclass);
+
+
+--
 -- Name: job_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1928,7 +2321,35 @@ ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY server_process_libraries ALTER COLUMN id SET DEFAULT nextval('server_process_libraries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes ALTER COLUMN id SET DEFAULT nextval('server_processes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags ALTER COLUMN id SET DEFAULT nextval('server_tags_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
@@ -1994,9 +2415,8 @@ ALTER TABLE ONLY vulnerabilities
 
 CREATE MATERIALIZED VIEW vulnerability_search_index AS
  SELECT vulnerabilities.id AS vulnerability_id,
-    ((((to_tsvector((vulnerabilities.title)::text) || to_tsvector(COALESCE(vulnerabilities.description, ''::text))) || to_tsvector(array_to_string(vulnerabilities.reference_ids, ' '::text, ''::text))) || to_tsvector((vulnerabilities.platform)::text)) || to_tsvector(COALESCE(string_agg((vulnerable_dependencies.package_name)::text, ' '::text), ''::text))) AS document
-   FROM (vulnerabilities
-     JOIN vulnerable_dependencies ON ((vulnerable_dependencies.vulnerability_id = vulnerabilities.id)))
+    ((((to_tsvector((vulnerabilities.title)::text) || to_tsvector(COALESCE(vulnerabilities.description, ''::text))) || to_tsvector(array_to_string(vulnerabilities.reference_ids, ' '::text, ''::text))) || to_tsvector((vulnerabilities.platform)::text)) || to_tsvector(array_to_string(vulnerabilities.package_names, ' '::text, ''::text))) AS document
+   FROM vulnerabilities
   GROUP BY vulnerabilities.id
   WITH NO DATA;
 
@@ -2162,6 +2582,14 @@ ALTER TABLE ONLY feature_flags
 
 
 --
+-- Name: ignored_packages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT ignored_packages_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: is_it_vuln_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2202,6 +2630,14 @@ ALTER TABLE ONLY log_resolutions
 
 
 --
+-- Name: motds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY motds
+    ADD CONSTRAINT motds_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2234,6 +2670,14 @@ ALTER TABLE ONLY pre_users
 
 
 --
+-- Name: process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY process_libraries
+    ADD CONSTRAINT process_libraries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: que_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2250,11 +2694,43 @@ ALTER TABLE ONLY rubysec_advisories
 
 
 --
+-- Name: server_process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT server_process_libraries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_processes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT server_processes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags
+    ADD CONSTRAINT server_tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subscription_plans
     ADD CONSTRAINT subscription_plans_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -2394,6 +2870,13 @@ CREATE INDEX idx_vulnerable_dependency_id_ar ON vulnerable_dependency_archives U
 --
 
 CREATE INDEX idx_vulnerable_package_id_ar ON vulnerable_package_archives USING btree (vulnerable_package_id);
+
+
+--
+-- Name: ignored_packages_by_account_package_bundle_ids; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ignored_packages_by_account_package_bundle_ids ON ignored_packages USING btree (account_id, package_id, bundle_id);
 
 
 --
@@ -2796,6 +3279,34 @@ CREATE INDEX index_feature_flags_on_data ON feature_flags USING btree (data);
 
 
 --
+-- Name: index_ignored_packages_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_account_id ON ignored_packages USING btree (account_id);
+
+
+--
+-- Name: index_ignored_packages_on_bundle_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_bundle_id ON ignored_packages USING btree (bundle_id);
+
+
+--
+-- Name: index_ignored_packages_on_package_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_package_id ON ignored_packages USING btree (package_id);
+
+
+--
+-- Name: index_ignored_packages_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ignored_packages_on_user_id ON ignored_packages USING btree (user_id);
+
+
+--
 -- Name: index_is_it_vuln_results_on_ident; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2936,6 +3447,13 @@ CREATE UNIQUE INDEX index_logres_account_vulndeps ON log_resolutions USING btree
 
 
 --
+-- Name: index_motds_on_remove_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_motds_on_remove_at ON motds USING btree (remove_at);
+
+
+--
 -- Name: index_notifications_on_email_message_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3013,6 +3531,48 @@ CREATE INDEX index_rubysec_advisories_on_ident ON rubysec_advisories USING btree
 
 
 --
+-- Name: index_server_process_libraries_on_process_library_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
+
+
+--
+-- Name: index_server_process_libraries_on_server_process_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_process_libraries_on_server_process_id ON server_process_libraries USING btree (server_process_id);
+
+
+--
+-- Name: index_server_processes_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
+
+
+--
+-- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_tags_on_agent_server_id ON server_tags USING btree (agent_server_id);
+
+
+--
+-- Name: index_server_tags_on_agent_server_id_and_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_server_tags_on_agent_server_id_and_tag_id ON server_tags USING btree (agent_server_id, tag_id);
+
+
+--
+-- Name: index_server_tags_on_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_server_tags_on_tag_id ON server_tags USING btree (tag_id);
+
+
+--
 -- Name: index_subscription_plans_on_default; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3024,6 +3584,27 @@ CREATE INDEX index_subscription_plans_on_default ON subscription_plans USING btr
 --
 
 CREATE INDEX index_subscription_plans_on_discount ON subscription_plans USING btree (discount);
+
+
+--
+-- Name: index_tags_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tags_on_account_id ON tags USING btree (account_id);
+
+
+--
+-- Name: index_tags_on_account_id_and_tag; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_tags_on_account_id_and_tag ON tags USING btree (account_id, tag);
+
+
+--
+-- Name: index_tags_on_tag; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_tags_on_tag ON tags USING btree (tag);
 
 
 --
@@ -3328,6 +3909,69 @@ CREATE TRIGGER trigger_package_archives AFTER DELETE OR UPDATE ON packages FOR E
 
 
 --
+-- Name: trigger_update_advisories_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_advisories_valid_at BEFORE UPDATE ON advisories FOR EACH ROW EXECUTE PROCEDURE update_advisories_valid_at();
+
+
+--
+-- Name: trigger_update_advisory_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_advisory_vulnerabilities_valid_at BEFORE UPDATE ON advisory_vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_advisory_vulnerabilities_valid_at();
+
+
+--
+-- Name: trigger_update_agent_servers_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_agent_servers_valid_at BEFORE UPDATE ON agent_servers FOR EACH ROW EXECUTE PROCEDURE update_agent_servers_valid_at();
+
+
+--
+-- Name: trigger_update_bundled_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_bundled_packages_valid_at BEFORE UPDATE ON bundled_packages FOR EACH ROW EXECUTE PROCEDURE update_bundled_packages_valid_at();
+
+
+--
+-- Name: trigger_update_bundles_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_bundles_valid_at BEFORE UPDATE ON bundles FOR EACH ROW EXECUTE PROCEDURE update_bundles_valid_at();
+
+
+--
+-- Name: trigger_update_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_packages_valid_at BEFORE UPDATE ON packages FOR EACH ROW EXECUTE PROCEDURE update_packages_valid_at();
+
+
+--
+-- Name: trigger_update_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerabilities_valid_at BEFORE UPDATE ON vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_vulnerabilities_valid_at();
+
+
+--
+-- Name: trigger_update_vulnerable_dependencies_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerable_dependencies_valid_at BEFORE UPDATE ON vulnerable_dependencies FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_dependencies_valid_at();
+
+
+--
+-- Name: trigger_update_vulnerable_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER trigger_update_vulnerable_packages_valid_at BEFORE UPDATE ON vulnerable_packages FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_packages_valid_at();
+
+
+--
 -- Name: trigger_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -3346,6 +3990,38 @@ CREATE TRIGGER trigger_vulnerable_dependency_archives AFTER DELETE OR UPDATE ON 
 --
 
 CREATE TRIGGER trigger_vulnerable_package_archives AFTER DELETE OR UPDATE ON vulnerable_packages FOR EACH ROW EXECUTE PROCEDURE archive_vulnerable_packages();
+
+
+--
+-- Name: fk_rails_0c5d14504e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags
+    ADD CONSTRAINT fk_rails_0c5d14504e FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: fk_rails_257ff0b8e3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_257ff0b8e3 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: fk_rails_42f69de9f4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_tags
+    ADD CONSTRAINT fk_rails_42f69de9f4 FOREIGN KEY (tag_id) REFERENCES tags(id);
+
+
+--
+-- Name: fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_466a4741cd FOREIGN KEY (process_library_id) REFERENCES process_libraries(id);
 
 
 --
@@ -3397,11 +4073,51 @@ ALTER TABLE ONLY email_messages
 
 
 --
+-- Name: fk_rails_8055c587d4; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_8055c587d4 FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
 -- Name: fk_rails_8318307314; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_packages
     ADD CONSTRAINT fk_rails_8318307314 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
+
+
+--
+-- Name: fk_rails_86647bc40a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT fk_rails_86647bc40a FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
+-- Name: fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_processes
+    ADD CONSTRAINT fk_rails_8e08420c73 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
+
+
+--
+-- Name: fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY server_process_libraries
+    ADD CONSTRAINT fk_rails_a5ff67a393 FOREIGN KEY (server_process_id) REFERENCES server_processes(id);
+
+
+--
+-- Name: fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY motds
+    ADD CONSTRAINT fk_rails_a7964aa25c FOREIGN KEY (user_id) REFERENCES users(id);
 
 
 --
@@ -3413,11 +4129,27 @@ ALTER TABLE ONLY notifications
 
 
 --
+-- Name: fk_rails_e599353bb7; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_e599353bb7 FOREIGN KEY (package_id) REFERENCES packages(id);
+
+
+--
 -- Name: fk_rails_f192ff6aa1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT fk_rails_f192ff6aa1 FOREIGN KEY (log_bundle_patch_id) REFERENCES log_bundle_patches(id);
+
+
+--
+-- Name: fk_rails_f8bf4dc6c3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY ignored_packages
+    ADD CONSTRAINT fk_rails_f8bf4dc6c3 FOREIGN KEY (bundle_id) REFERENCES bundles(id);
 
 
 --
@@ -3614,7 +4346,39 @@ INSERT INTO schema_migrations (version) VALUES ('20170111180619');
 
 INSERT INTO schema_migrations (version) VALUES ('20170112163526');
 
+INSERT INTO schema_migrations (version) VALUES ('20170118213120');
+
+INSERT INTO schema_migrations (version) VALUES ('20170118224300');
+
 INSERT INTO schema_migrations (version) VALUES ('20170118224917');
 
+INSERT INTO schema_migrations (version) VALUES ('20170119145353');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126003519');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126052317');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126072816');
+
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
+
+INSERT INTO schema_migrations (version) VALUES ('20170206172642');
+
+INSERT INTO schema_migrations (version) VALUES ('20170207223930');
+
+INSERT INTO schema_migrations (version) VALUES ('20170222211052');
+
+INSERT INTO schema_migrations (version) VALUES ('20170222211057');
+
+INSERT INTO schema_migrations (version) VALUES ('20170302155336');
+
+INSERT INTO schema_migrations (version) VALUES ('20170309163315');
+
+INSERT INTO schema_migrations (version) VALUES ('20170317203807');
+
+INSERT INTO schema_migrations (version) VALUES ('20170320135753');
+
+INSERT INTO schema_migrations (version) VALUES ('20170322221344');
+
+INSERT INTO schema_migrations (version) VALUES ('20170404212231');
 

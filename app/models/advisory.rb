@@ -100,6 +100,9 @@ class Advisory < ActiveRecord::Base
     where(:source => DebianTrackerImporter::SOURCE)
   }
 
+  scope :from_cve, -> {
+    where(:source => CveImporter::SOURCE)
+  }
   # AIS gets auto saved, so we skip saving it ourselves here.
   def processed_flag=(flag)
     unless self.advisory_import_state
