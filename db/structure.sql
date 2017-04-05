@@ -65,8 +65,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, needs_triage, package_names, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.needs_triage, OLD.package_names, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -155,8 +155,8 @@ CREATE FUNCTION archive_vulnerabilities() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, package_names, valid_at, expired_at) VALUES
+           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.package_names, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
