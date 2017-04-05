@@ -16,7 +16,8 @@
 #  updated_at          :datetime         not null
 #  valid_at            :datetime         not null
 #  expired_at          :datetime         default("infinity"), not null
-#  affected_versions   :text             default("{}"), not null, is an Array
+#  affected_versions   :string           default("{}"), not null, is an Array
+#  text                :string           default("{}"), not null, is an Array
 #
 # Indexes
 #
