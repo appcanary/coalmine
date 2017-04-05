@@ -1,19 +1,27 @@
 class DailySummaryPresenter
-  attr_accessor :date, :account, :vulnquery, :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns, :changes, :new_servers, :deleted_servers
+  attr_accessor :date, :account, :vulnquery, :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns, :changes, :server_ct, :inactive_server_ct, :new_servers, :deleted_servers
 
   def initialize(query)
     @account = query.account
     @vulnquery = VulnQuery.new(query.account)
     @date = query.date
-    
+
     @fresh_vulns = FreshVulnsPresenter.new(query.fresh_vulns)
     @new_vulns = NewVulnsPresenter.new(query.new_vulns)
+
+    @all_vuln_ct = query.all_vuln_ct
+
     @patched_vulns = PatchedVulnsPresenter.new(query.patched_vulns)
     @cantfix_vulns = CantFixVulnsPresenter.new(query.cantfix_vulns)
     @changes = ChangesPresenter.new(query.changes)
 
+    @all_servers = query.all_servers
     @new_servers = query.new_servers
     @deleted_servers = query.deleted_servers
+
+    @server_ct = @all_servers.count
+    active_server_ct = @all_servers.active_as_of(@date).count
+    @inactive_server_ct = @server_ct - active_server_ct
   end
 
   module SortVulnsByCritAndPackages
@@ -31,7 +39,7 @@ class DailySummaryPresenter
 
   class FreshVulnsPresenter
     include SortVulnsByCritAndPackages
-    attr_accessor :vuln_ct, :package_ct, :server_ct, :sorted_vulns
+    attr_accessor :vuln_ct, :package_ct, :server_ct, :sorted_vulns, :package_ids, :server_ids
 
     delegate :each, to: :sorted_vulns
 
@@ -41,12 +49,14 @@ class DailySummaryPresenter
       @vuln_ct = fresh_vulns.map(&:vulnerability_id).uniq.size
       @package_ct = fresh_vulns.map(&:package_id).uniq.size
       @server_ct = fresh_vulns.map(&:agent_server_id).uniq.size
+      @server_ids = fresh_vulns.map(&:agent_server_id).uniq
+      @package_ids = fresh_vulns.map(&:package_id).uniq
     end
   end
 
   class NewVulnsPresenter
     include SortVulnsByCritAndPackages
-    attr_accessor :vuln_ct, :package_ct, :server_ct, :supplementary_ct, :sorted_vulns
+    attr_accessor :vuln_ct, :package_ct, :server_ct, :supplementary_ct, :sorted_vulns, :package_ids, :server_ids
 
     delegate :each, to: :sorted_vulns
 
@@ -57,6 +67,8 @@ class DailySummaryPresenter
       @package_ct = new_vulns.map(&:package_id).uniq.size
 
       @server_ct = new_vulns.map(&:agent_server_id).uniq.size
+      @server_ids = new_vulns.map(&:agent_server_id).uniq
+      @package_ids = new_vulns.map(&:package_id).uniq
 
       new_supplmenetary_vulns = new_vulns.select(&:supplementary)
       @supplmenetary_ct = new_supplmenetary_vulns.map(&:vulnerability_id).uniq.size
@@ -122,12 +134,16 @@ class DailySummaryPresenter
     fresh_vulns.vuln_ct + new_vulns.vuln_ct
   end
 
+  def old_vuln_ct
+    @all_vuln_ct - total_vuln_ct
+  end
+
   def total_package_ct
-    fresh_vulns.package_ct + new_vulns.package_ct
+    (fresh_vulns.package_ids + new_vulns.package_ids).uniq.size
   end
 
   def total_server_ct
-    fresh_vulns.server_ct + new_vulns.server_ct
+    (fresh_vulns.server_ids + new_vulns.server_ids).uniq.size
   end
 
 

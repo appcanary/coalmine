@@ -1,7 +1,7 @@
 <%= content_for :email_header do %>
   <tr class="header-logo">
     <td>
-      <img src="<%=image_url("appcanary-hero-vuln.png")%>" title="appcanary logo">
+      <a href="https://appcanary.com"><img src="<%=image_url("appcanary-hero-vuln.png")%>" title="appcanary logo"></a>
     </td>
   </tr>
 
@@ -24,6 +24,12 @@
 <% end %>
 
 <div class="daily-summary">
+
+  <p>You have <b><%= @presenter.server_ct %> servers</b> monitored by Appcanary.
+    <% if @presenter.inactive_server_ct > 0 %>
+      Of these <b><%= @presenter.inactive_server_ct %> are inactive</b> (we haven't heard from them in a while).
+    <% end %>
+  </p>
 
   <% if @presenter.anything_to_report? %>
     <h2>Vulnerabilities</h2>
@@ -129,7 +135,10 @@
     <% end %>
   <% else %>
     <h2>Nothing to report!</h2>
-    <p>No vulnerabilities that affect you came out. Nothing changed on your servers.</p>
+    <p>No vulnerabilities that affect you came out today. Nothing changed on your servers.</p>
     <p>Hooray!</p>
+    <% if @presenter.old_vuln_ct > 0 %>
+      <p>Note that you still <b><%= @presenter.old_vuln_ct %></b> unaddressed vulnerabilities across <b><%= @presenter.server_ct %> servers</b>.</p>
+     <% end %>
   <% end %>
 </div>
