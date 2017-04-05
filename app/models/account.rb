@@ -38,12 +38,12 @@ class Account < ActiveRecord::Base
   has_many :log_resolutions
 
   has_many :email_messages
-  has_many :email_patcheds
-  has_many :email_vulnerables
-  has_many :email_daily_summaries
+  has_many :email_patcheds, :dependent => :destroy
+  has_many :email_vulnerables, :dependent => :destroy
+  has_many :email_daily_summaries, :dependent => :destroy
   has_many :patched_notifications, :through => :email_patcheds, :source => :notifications
   has_many :vulnerable_notifications, :through => :email_vulnerables, :source => :notifications
-  has_many :tags
+  has_many :tags, :dependent => :destroy
 
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
 
