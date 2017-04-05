@@ -17,7 +17,15 @@ class SystemMailer < ActionMailer::Base
     if @user.nil?
       return
     end
-    mail(to: "hello@appcanary.com", :subect => "Subscription changed by #{@user.email}")
+    mail(to: "hello@appcanary.com", :subject => "Subscription changed by #{@user.email}")
+  end
+
+  def credit_card_changed(user_id)
+    @user = User.find_by(id: user_id)
+    if @user.nil?
+      return
+    end
+    mail(to: "hello@appcanary.com", :subject => "Credit card changed by #{@user.email}")
   end
 
   def canceled_subscription_email(user_id)
