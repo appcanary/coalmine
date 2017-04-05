@@ -49,7 +49,7 @@ class IgnoredPackage < ActiveRecord::Base
 
   scope :relevant_ignores_for, -> (bundle) {
     joins(:vulnerable_packages).
-      where("ignored_packages.bundle_id is null or ignored_packages.bundle_id = ?", bundle.id)
+      where("ignored_packages.account_id = ? and (ignored_packages.bundle_id is null or ignored_packages.bundle_id = ?)", bundle.account.id, bundle.id)
   }
 
   # used ONLY in the form
@@ -59,6 +59,9 @@ class IgnoredPackage < ActiveRecord::Base
   end
 
   def self.ignore_package(user, pkg, bundle, note)
+    if bundle.present? and bundle.account_id != user.account_id
+      raise ArgumentError.new("tried to ignore on a bundle (#{bundle.id}) not belonging to user's (#{user.id}) account")
+    end
     note = nil if note.blank?
 
     self.create(account: user.account,

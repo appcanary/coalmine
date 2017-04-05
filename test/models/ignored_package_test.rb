@@ -27,7 +27,7 @@ class IgnoredPackageTest < ActiveSupport::TestCase
   let(:account) { FactoryGirl.create(:account) }
   let(:user) { FactoryGirl.create(:user, account: account) }
   let(:pkg) { FactoryGirl.create(:package) }
-  let(:bundle) { FactoryGirl.create(:bundle, packages: [pkg]) }
+  let(:bundle) { FactoryGirl.create(:bundle, packages: [pkg], account: account) }
   let(:query) { VulnQuery.new(account) }
 
   setup do
@@ -72,6 +72,16 @@ class IgnoredPackageTest < ActiveSupport::TestCase
       assert_equal false, query.vuln_bundle?(bundle)
       assert_equal true, query.vuln_bundle?(bundle2)
     end
+
+    test "can't ignore in another account's bundle" do
+      account2 = FactoryGirl.create(:account)
+      bundle2 = FactoryGirl.create(:bundle, packages: [pkg], account: account2)
+
+      assert_raises ArgumentError do
+       IgnoredPackage.ignore_package(user, pkg, bundle2, "note #1") 
+      end
+    end
+
   end
 
   describe "unignore_package" do

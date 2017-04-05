@@ -4,7 +4,7 @@ class BundlePresenterTest < ActiveSupport::TestCase
   let(:account) { FactoryGirl.create(:account) }
   let(:user) { FactoryGirl.create(:user, account: account) }
   let(:pkg) { FactoryGirl.create(:package) }
-  let(:bundle) { FactoryGirl.create(:bundle, packages: [pkg]) }
+  let(:bundle) { FactoryGirl.create(:bundle, packages: [pkg], account: account) }
 
   test "ignored_packages simplest case works" do
     vuln = FactoryGirl.create(:vulnerability, pkgs: [pkg])
@@ -29,7 +29,7 @@ class BundlePresenterTest < ActiveSupport::TestCase
 
   test "ignored_packages gets the correct vuln_count" do
     pkg2 = FactoryGirl.create(:package)
-    bundle = FactoryGirl.create(:bundle, packages: [pkg, pkg2])
+    bundle = FactoryGirl.create(:bundle, packages: [pkg, pkg2], account: account)
 
     vuln1 = FactoryGirl.create(:vulnerability, pkgs: [pkg])
     vuln2 = FactoryGirl.create(:vulnerability, pkgs: [pkg, pkg2])
@@ -82,7 +82,7 @@ class BundlePresenterTest < ActiveSupport::TestCase
 
   test "ignored_packages gets the correct vuln_count with global ignores" do
     pkg2 = FactoryGirl.create(:package)
-    bundle = FactoryGirl.create(:bundle, packages: [pkg, pkg2])
+    bundle = FactoryGirl.create(:bundle, packages: [pkg, pkg2], account: account)
 
     vuln1 = FactoryGirl.create(:vulnerability, pkgs: [pkg])
     vuln2 = FactoryGirl.create(:vulnerability, pkgs: [pkg, pkg2])
@@ -110,5 +110,23 @@ class BundlePresenterTest < ActiveSupport::TestCase
         assert 1, ip.vuln_count
       end
     end
+  end
+
+  test "ignored_packages doesn't show packages belong to another account" do
+    account2 = FactoryGirl.create(:account)
+    user2 = FactoryGirl.create(:user, account: account2)
+    bundle2 = FactoryGirl.create(:bundle, packages: [pkg], account: account2)
+
+    vuln = FactoryGirl.create(:vulnerability, pkgs: [pkg])
+
+    assert_equal 0, IgnoredPackage.where(account: account2).count
+    IgnoredPackage.ignore_package(user2, pkg, nil, "note #1")
+    assert_equal 1, IgnoredPackage.where(account: account2).count
+
+    # User1 still has no ignores in the presenter
+    query = VulnQuery.new(account)
+    bp = BundlePresenter.new(query, bundle)
+
+    assert_equal 0, bp.ignored_packages.count
   end
 end

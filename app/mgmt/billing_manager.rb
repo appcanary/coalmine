@@ -1,9 +1,5 @@
 class BillingManager
   attr_accessor :user, :billing_plan
-  def self.add_customer(stripe_token, user)
-    self.new(user).add_customer(stripe_token)
-  end
-
   def self.find_customer(user)
     self.new(user).find_customer()
   end
@@ -14,22 +10,24 @@ class BillingManager
   end
 
   def find_customer
-    customer = Stripe::Customer.retrieve(@user.stripe_customer_id)
+    Stripe::Customer.retrieve(@user.stripe_customer_id)
   end
 
-  def add_customer(stripe_token, sub)
-    customer = nil
-    stripe_wrapper do 
+  def add_customer(stripe_token)
+    stripe_wrapper do
       customer = Stripe::Customer.create(
         :source => stripe_token,
         :email => @user.email
       )
+      @user.stripe_customer_id = customer.id
     end
+  end
 
-    if customer
-      return set_subscription!(customer.id, sub)
-    else
-      return @user
+  def update_customer(stripe_token)
+    stripe_wrapper do
+      customer = find_customer
+      customer.source = stripe_token
+      customer.save
     end
   end
 
@@ -73,32 +71,38 @@ class BillingManager
     end
   end
 
-  def cancel_subscription?(param)
-    param == BillingPresenter::CANCEL
-  end
-
   def valid_subscription?(sub_id)
     self.billing_plan.subscription_plans.find_by_id(sub_id)
   end
 
-  def set_subscription!(stripe_customer_id, sub)
-    @user.stripe_customer_id = stripe_customer_id
-    change_subscription!(sub)
-  end
-
-  def change_subscription!(sub)
-    if @user.has_billing?
-      @user.billing_plan.subscription_plan = sub
+  def change_subscription!(sub_id)
+    if sub_id == BillingPresenter::CANCEL
+      @user.billing_plan.reset_subscription
+      return @user, :canceled
+    elsif sub_id.to_i == self.billing_plan.subscription_plan_id
+      return @user, :none
+    elsif valid_subscription?(sub_id)
+      # did we add or change?
+      old_sub = self.billing_plan.subscription_plan_id
+      self.billing_plan.subscription_plan_id = sub_id
+      if old_sub.present?
+        return @user, :changed
+      else
+        return @user, :added
+      end
     else
-      @user.errors.add(:base, "Sorry, we can't change your subscription without any payment information.")
+      return @user, :invalid
     end
-    @user
   end
 
-  def cancel_subscription!
-    @user.stripe_customer_id = nil
-    @user.billing_plan.reset_subscription
-    @user
+  def change_token!(token)
+    if @user.stripe_customer_id.nil?
+      add_customer(token)
+      return @user, :added
+    else
+      update_customer(token)
+      return @user, :changed
+    end
   end
 
   def set_available_subscriptions!(ids)
@@ -107,6 +111,6 @@ class BillingManager
   end
 
   def to_presenter
-    BillingPresenter.new(self.billing_plan, self.user.has_billing?)
+    BillingPresenter.new(self.billing_plan)
   end
 end

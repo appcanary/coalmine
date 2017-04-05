@@ -144,6 +144,25 @@ class MonitorsControllerTest < ActionController::TestCase
       assert_nil ignore.bundle_id
     end
 
+    it "dosen't let you ignore on someone else's bundle" do
+      bundle2 = FactoryGirl.create(:bundle_with_packages, :account => user2.account)
+      pkg = bundle2.packages.first
+      assert_equal 0, IgnoredPackage.count
+
+      assert_raises(ActiveRecord::RecordNotFound) do
+        request.env["HTTP_REFERER"] = "/"
+        post :ignore_vuln, {
+               package_id: pkg.id,
+               ignored_package: {
+                 package_id: pkg.id,
+                 bundle_id: bundle2.id
+               }
+             }
+      end
+
+      assert_equal 0, IgnoredPackage.count
+    end
+
     it "removes packages from the ignore list in the context of a bundle" do
       a_bundle = Bundle.first
       a_vuln_pkg = a_bundle.packages.first

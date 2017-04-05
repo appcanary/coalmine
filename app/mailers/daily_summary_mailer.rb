@@ -3,12 +3,12 @@ class DailySummaryMailer < ActionMailer::Base
   layout 'mailer'
   helper :application
 
-  def daily_summary(account_id, date)
-    @date = date.to_date
-    @account = Account.find(account_id)
+  def daily_summary(presenter)
+    @presenter = presenter
+    @date = @presenter.date
+    @account = @presenter.account
 
     @motds = Motd.where("remove_at >= ?", @date)
-    @presenter = DailySummaryQuery.new(@account, @date).create_presenter
 
     if should_deliver?(@account)
       mail(to: @presenter.recipients, :subject => @presenter.subject) do |format|
@@ -19,16 +19,6 @@ class DailySummaryMailer < ActionMailer::Base
   end
 
   def should_deliver?(account)
-    if Rails.env.production?
-      return true
-    elsif $rollout.active?(:all_staging_notifications)
-      return true
-    else
-      if account.email == "hello@appcanary.com"
-        return true
-      else
-        return false
-      end
-    end
+    Rails.env.production? || $rollout.active?(:all_staging_notifications) || account.email == "hello@appcanary.com"
   end
 end

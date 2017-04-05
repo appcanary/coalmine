@@ -4,42 +4,50 @@ class BillingController < ApplicationController
   end
 
   def update
-    notice = "You've successfully changed your billing settings. Thanks!" 
-
-    if params[:user]
-      sub_plan = params[:user][:subscription_plan]
-
-      if @billing_manager.cancel_subscription?(sub_plan)
-        @user = @billing_manager.cancel_subscription!
-        notice = "You've successfully canceled your subscription. Sorry to see you go!" 
-
-        $analytics.canceled_subscription(@user)
-        SystemMailer.canceled_subscription_email(@user.id).deliver_later!
-
-      elsif (sub = @billing_manager.valid_subscription?(sub_plan))
-        if stripe_params[:stripe_token].blank?
-          @user = @billing_manager.change_subscription!(sub)
-          SystemMailer.subscription_plan_changed(@user.id, sub).deliver_later!
-        else
-          @user = @billing_manager.add_customer(stripe_params[:stripe_token], sub)
-
-          # if these are stripe errors, the validation
-          # on user.save below will trigger them to
-          # show up below.
-
-          if @user.stripe_errors.blank?
-            $analytics.added_credit_card(@user)
-            notice = "Thanks for subscribing! You are awesome."
-
-            SystemMailer.new_subscription_email(@user.id).deliver_later!
-          end
-        end
-
-      else
-        notice = "Sorry, something seems to have gone wrong. Please try again, or contact support@appcanary.com"
-      end
-    else
+    if params[:user].nil?
       notice = "Were you trying to change a setting? You may have missed a field."
+    else
+      sub_id = stripe_params[:subscription_plan]
+      stripe_token = stripe_params[:stripe_token]
+
+      notice = ""
+      if sub_id.present?
+        @user, action = @billing_manager.change_subscription!(sub_id)
+        case action
+        when :canceled
+          notice = "You've successfully canceled your subscription. Sorry to see you go!"
+          SystemMailer.canceled_subscription_email(@user.id).deliver_later!
+          $analytics.canceled_subscription(@user)
+        when :changed
+          notice = "You've changed your plan!"
+          SystemMailer.subscription_plan_changed(@user.id, sub_id).deliver_later!
+        when :invalid
+          notice = "Sorry, you can't select that plan. Please try again or contact us at support@appcanary.com"
+        when :none
+          #nop
+        else
+          @user.errors.add(:base, "Sorry, something seems to have gone wrong with changing your subscription. Please try again, or contact support@appcanary.com")
+        end
+      end
+
+      if stripe_token.present?
+        @user, action = @billing_manager.change_token!(stripe_token)
+        case action
+        when :added
+          notice += "Thanks for subscribing! You are awesome."
+          SystemMailer.new_subscription_email(@user.id).deliver_later!
+          $analytics.added_credit_card(@user)
+        when :changed
+          notice += "You've successfully changed your credit card!"
+          SystemMailer.credit_card_changed(@user.id).deliver_later!
+        else
+          @user.errors.add(:base, "Sorry, something seems to have gone wrong with changing your card. Please try again, or contact support@appcanary.com")
+        end
+      end
+    end
+    # clear notice if it's empty
+    if notice.blank?
+      notice = nil
     end
 
     respond_to do |format|
