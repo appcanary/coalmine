@@ -86,8 +86,14 @@
                 <h4>Notification settings:</h4>
                 <p>
                   <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_DAILY %>
-                  <%= f.label :pref_email_frequency_daily, "Notify me once a day, with a summary", :style => "font-weight: normal; display: inline;" %>
+                  <%= f.label :pref_email_frequency_daily, "Notify me every day, with a summary", :style => "font-weight: normal; display: inline;" %>
                 </p>
+
+                <p>
+                  <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN %>
+                  <%= f.label :pref_email_frequency_daily, "Notify me once a day, but only if vulnerabilities come out or are patched", :style => "font-weight: normal; display: inline;" %>
+                </p>
+
 
                 <p>
                   <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_FIRE %>
@@ -101,7 +107,7 @@
 
                 <p>
                   <%= f.radio_button :pref_email_frequency, PrefOpt::EMAIL_FREQ_NEVER %>
-                  <%= f.label :pref_email_frequency_both, "No vulnerability emails, thanks", :style => "font-weight: normal; display: inline;" %>
+                  <%= f.label :pref_email_frequency_none, "No vulnerability emails, thanks", :style => "font-weight: normal; display: inline;" %>
                 </p>
 
 

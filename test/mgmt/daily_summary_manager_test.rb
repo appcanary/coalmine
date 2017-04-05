@@ -75,6 +75,43 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
     assert_equal no_ds_account.id, EmailDailySummary.last.account_id
 
     assert_equal 1, ActionMailer::Base.deliveries.size
+  end
+
+  it "should only send daily summaries when vulnerabilities to people who want that" do
+    ds_only_vuln_user = FactoryGirl.create(:user, :pref_email_frequency => PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN)
+    ds_only_vuln_account = ds_only_vuln_user.account
+    bundle = FactoryGirl.create(:bundle_with_packages, account: ds_only_vuln_account)
+
+    # No emails cuz no vulns
+    assert_equal 0, EmailDailySummary.count
+    DailySummaryManager.send_todays_summary!
+    assert_equal 0, EmailDailySummary.count
+
+
+    # Now we have a vulnerability that affects user2
+    vuln = FactoryGirl.create(:vulnerability, pkgs: [bundle.packages.first])
+    ReportMaker.new.on_vulnerability_change(vuln.id)
+
+    # normally the daily summar is sent for Date.yesterday but we created the vuln now so send the daily summary for this very moment
+    DailySummaryManager.send_todays_summary!(Date.today)
+    assert_equal 1, EmailDailySummary.count
+
+    assert_equal ds_only_vuln_account.id, EmailDailySummary.last.account_id
+
+    assert_equal 1, ActionMailer::Base.deliveries.size
+
+    # User should also get an email when they create a server
+    ds_only_vuln_user2 = FactoryGirl.create(:user, :pref_email_frequency => PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN)
+    ds_only_vuln_account2 = ds_only_vuln_user2.account
+    server = FactoryGirl.create(:agent_server, :with_heartbeat, account: ds_only_vuln_account2)
+
+    DailySummaryManager.send_todays_summary!(Date.today)
+    assert_equal 2, EmailDailySummary.count
+
+    assert_equal [ds_only_vuln_account.id, ds_only_vuln_account2.id].to_set, EmailDailySummary.pluck(:account_id).to_set
+
+    assert_equal 2, ActionMailer::Base.deliveries.size
+
 
   end
 end

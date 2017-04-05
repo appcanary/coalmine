@@ -101,4 +101,14 @@ class Account < ActiveRecord::Base
     }
   end
 
+  # Decide if we should send the daily email summary based on the user prefs and whether they have any vulns or servers to report
+  def wants_daily_summary?(has_vulns_or_servers)
+    # TODO: when users aren't 1-1 with accounts move this to User
+    pref = self.users.first.pref_email_frequency
+    if pref == PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN
+      has_vulns_or_servers
+    else
+      PrefOpt::EMAIL_WANTS_DAILY
+    end
+  end
 end

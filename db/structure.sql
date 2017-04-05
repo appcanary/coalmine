@@ -65,8 +65,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, needs_triage, package_names, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.needs_triage, OLD.package_names, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -155,8 +155,8 @@ CREATE FUNCTION archive_vulnerabilities() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, package_names, valid_at, expired_at) VALUES
+           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.package_names, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -1673,86 +1673,6 @@ CREATE TABLE server_tags (
     updated_at timestamp without time zone NOT NULL
 );
 
---
--- Name: server_process_libraries; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE server_process_libraries (
-    id integer NOT NULL,
-    server_process_id integer NOT NULL,
-    process_library_id integer NOT NULL,
-    outdated boolean DEFAULT false,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: server_process_libraries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE server_process_libraries_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: server_process_libraries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE server_process_libraries_id_seq OWNED BY server_process_libraries.id;
-
-
---
--- Name: server_processes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE server_processes (
-    id integer NOT NULL,
-    agent_server_id integer NOT NULL,
-    pid integer NOT NULL,
-    name character varying,
-    started timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    args character varying
-);
-
-
---
--- Name: server_processes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE server_processes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: server_processes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE server_processes_id_seq OWNED BY server_processes.id;
-
-
---
--- Name: server_tags; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE server_tags (
-    id integer NOT NULL,
-    agent_server_id integer,
-    tag_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
 
 --
 -- Name: server_tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
@@ -1887,7 +1807,7 @@ CREATE TABLE users (
     pref_os character varying,
     pref_deploy character varying,
     phone_number character varying,
-    pref_email_frequency character varying DEFAULT 'firehose'::character varying NOT NULL
+    pref_email_frequency character varying DEFAULT 'dailywhenvuln'::character varying NOT NULL
 );
 
 
@@ -2798,30 +2718,6 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: server_process_libraries server_process_libraries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY server_process_libraries
-    ADD CONSTRAINT server_process_libraries_pkey PRIMARY KEY (id);
-
-
---
--- Name: server_processes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY server_processes
-    ADD CONSTRAINT server_processes_pkey PRIMARY KEY (id);
-
-
---
--- Name: server_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY server_tags
-    ADD CONSTRAINT server_tags_pkey PRIMARY KEY (id);
-
-
---
 -- Name: subscription_plans_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3659,27 +3555,6 @@ CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING
 -- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_server_process_libraries_on_process_library_id ON server_process_libraries USING btree (process_library_id);
-
-
---
--- Name: index_server_process_libraries_on_server_process_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_server_process_libraries_on_server_process_id ON server_process_libraries USING btree (server_process_id);
-
-
---
--- Name: index_server_processes_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_server_processes_on_agent_server_id ON server_processes USING btree (agent_server_id);
-
-
---
--- Name: index_server_tags_on_agent_server_id; Type: INDEX; Schema: public; Owner: -
---
-
 CREATE INDEX index_server_tags_on_agent_server_id ON server_tags USING btree (agent_server_id);
 
 
@@ -4142,15 +4017,7 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: server_procs fk_rails_04cbd52b76; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY server_procs
-    ADD CONSTRAINT fk_rails_04cbd52b76 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
-
-
---
--- Name: server_process_libraries fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_466a4741cd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_process_libraries
@@ -4231,30 +4098,6 @@ ALTER TABLE ONLY tags
 
 --
 -- Name: fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY server_processes
-    ADD CONSTRAINT fk_rails_8e08420c73 FOREIGN KEY (agent_server_id) REFERENCES agent_servers(id);
-
-
---
--- Name: fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY server_process_libraries
-    ADD CONSTRAINT fk_rails_a5ff67a393 FOREIGN KEY (server_process_id) REFERENCES server_processes(id);
-
-
---
--- Name: fk_rails_a7964aa25c; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY motds
-    ADD CONSTRAINT fk_rails_a7964aa25c FOREIGN KEY (user_id) REFERENCES users(id);
-
-
---
--- Name: server_processes fk_rails_8e08420c73; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_processes
@@ -4511,6 +4354,12 @@ INSERT INTO schema_migrations (version) VALUES ('20170118224917');
 
 INSERT INTO schema_migrations (version) VALUES ('20170119145353');
 
+INSERT INTO schema_migrations (version) VALUES ('20170126003519');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126052317');
+
+INSERT INTO schema_migrations (version) VALUES ('20170126072816');
+
 INSERT INTO schema_migrations (version) VALUES ('20170130212333');
 
 INSERT INTO schema_migrations (version) VALUES ('20170206172642');
@@ -4529,14 +4378,7 @@ INSERT INTO schema_migrations (version) VALUES ('20170317203807');
 
 INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 
-INSERT INTO schema_migrations (version) VALUES ('20170317203807');
-
-INSERT INTO schema_migrations (version) VALUES ('20170320135753');
-
 INSERT INTO schema_migrations (version) VALUES ('20170322221344');
 
-INSERT INTO schema_migrations (version) VALUES ('20170126003519');
+INSERT INTO schema_migrations (version) VALUES ('20170404212231');
 
-INSERT INTO schema_migrations (version) VALUES ('20170126052317');
-
-INSERT INTO schema_migrations (version) VALUES ('20170126072816');
