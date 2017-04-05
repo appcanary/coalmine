@@ -45,6 +45,7 @@ FactoryGirl.define do
    
     patched_versions { ["> #{dep.version}"] }
     unaffected_versions { [] }
+    affected_versions { [] }
 
     transient do
       dep { build(:package, :ruby) }
@@ -76,6 +77,10 @@ FactoryGirl.define do
 
     trait :amzn do
       platform { Platforms::Amazon }
+    end
+
+    trait :php do
+      platform { Platforms::PHP }
     end
 
     transient do

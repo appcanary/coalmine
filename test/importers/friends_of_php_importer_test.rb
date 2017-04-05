@@ -34,7 +34,7 @@ class FriendsOfPHPImporterTest < ActiveSupport::TestCase
 
     constraint = attributes["constraints"].first
     assert "aws/aws-sdk-php", constraint["package_name"]
-    assert_equal [['>=3.0.0', '<3.2.1']], constraint["affected_versions"]
+    assert_equal ['>=3.0.0', '<3.2.1'], constraint["affected_versions"]
 
     all_advisories = advisory_files.map { |af| @importer.parse(af) }
     @importer.process_advisories(all_advisories)
@@ -75,11 +75,13 @@ class FriendsOfPHPImporterTest < ActiveSupport::TestCase
     assert attributes["affected"].all? { |vc| vc.key?("package_name") }
 
     assert attributes["constraints"].present?
-    assert_equal 1, attributes["constraints"].count
+    assert_equal 2, attributes["constraints"].count
 
-    constraint = attributes["constraints"].first
-    assert_equal "laravel/socialite", constraint["package_name"]
-    assert_equal [['>=1.0.0', '<1.0.99'], ['>=2.0.0', '<2.0.10']],
-                 constraint["affected_versions"]
+    constraint1 = attributes["constraints"].first
+    constraint2 = attributes["constraints"].last
+    assert_equal "laravel/socialite", constraint1["package_name"]
+    assert_equal "laravel/socialite", constraint2["package_name"]
+    assert_equal ['>=1.0.0', '<1.0.99'], constraint1["affected_versions"]
+    assert_equal ['>=2.0.0', '<2.0.10'], constraint2["affected_versions"]
   end
 end

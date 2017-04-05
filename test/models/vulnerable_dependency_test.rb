@@ -82,7 +82,6 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
 
     diff_pkg = build_ppkg(name+"lol", "1.7.1")
 
-    puts vuln_dep.affects?(unaffected_pkg1)
     refute vuln_dep.affects?(unaffected_pkg1), "unaffected should not be vuln"
     refute vuln_dep.affects?(unaffected_pkg2), "unaffected should not be vuln"
     refute vuln_dep.affects?(unaffected_pkg3), "unaffected should not be vuln"

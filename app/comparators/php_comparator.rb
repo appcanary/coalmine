@@ -18,6 +18,8 @@ class PHPComparator
     when comparator.less_than?(v1, v2)    then -1
     when comparator.greater_than?(v1, v2) then 1
     when comparator.equal_to?(v1, v2)     then 0
+    else
+      raise "v1 (#{v1}) isn't greater than, equal to or less than v2 (#{v2}) ¯\_(ツ)_/¯"
     end
   end
 

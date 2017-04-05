@@ -27,12 +27,16 @@ class FriendsOfPHPAdapter < AdvisoryAdapter.new(:filepath, :cve, :link, :title,
   end
 
   generate :constraints do
-    hsh = {"package_name" => package_name}
+    hshs = []
+
     if branches.present?
-      hsh["affected_versions"] = branches.map { |k, v| v["versions"] }
+      hshs = branches.map do |k, v|
+        {"package_name" => package_name,
+         "affected_versions" => v["versions"]}
+      end
     end
 
-    [DependencyConstraint.parse(hsh)]
+    hshs.map { |hsh| DependencyConstraint.parse(hsh) }
   end
 
   generate :reference_ids do

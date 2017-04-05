@@ -37,6 +37,8 @@ class VulnerableDependency < ActiveRecord::Base
   validates :platform, :presence => true
   validates :package_name, :presence => true
 
+  validate :affected_or_patched_not_both
+
   scope :patchable, -> { 
     where("NOT (vulnerable_dependencies.patched_versions = '{}' 
           AND vulnerable_dependencies.unaffected_versions = '{}')")
@@ -112,4 +114,9 @@ class VulnerableDependency < ActiveRecord::Base
     @unique_hash ||= self.attributes.except("id", "pending", "end_of_life", "created_at", "updated_at", "valid_at", "expired_at")
   end
 
+  def affected_or_patched_not_both
+    if affected_versions.present? && (patched_versions.present? || unaffected_versions.present?)
+      errors.add(:affected_versions, "can't coexist with patched or unaffected versions")
+    end
+  end
 end
