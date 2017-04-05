@@ -13,8 +13,10 @@ class PackageMerger
 
         # Make sure all the affected bundles have the canonical package
         all_bundles.each do |b|
-          b.packages = (b.packages + [canonical_pkg]).uniq
-          b.save
+          if !b.packages.include?(canonical_pkg)
+            b.packages << canonical_pkg
+            b.save
+          end
         end
 
         # Destroy the extra packages
