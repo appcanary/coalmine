@@ -49,6 +49,18 @@ class BundleArchive < ActiveRecord::Base
 
   scope :via_api, -> { where("bundle_archives.agent_server_id is null") }
 
+  scope :deleted, -> {
+    select_as_archived.
+      # look only at the most recently expired rows
+      joins("inner join (select bundle_id, max(expired_at) expired_at from bundle_archives group by bundle_id) max_ba on bundle_archives.bundle_id = max_ba.bundle_id and bundle_archives.expired_at = max_ba.expired_at").
+      # look only at rows that do not currently exist in AgentServer table
+      joins("left join bundles on bundles.id = bundle_archives.bundle_id").
+      where("bundles.id is null").
+      order("id, bundle_archives.expired_at DESC")
+
+  }
+
+
 
   # TODO: this should be in the presenter
   def display_name

@@ -1,5 +1,5 @@
 class DailySummaryQuery
-  attr_accessor :account, :date, :begin_at, :end_at, :all_servers, :new_servers, :deleted_servers
+  attr_accessor :account, :date, :begin_at, :end_at, :all_servers, :new_servers, :deleted_servers, :all_monitors, :new_monitors, :deleted_monitors
 
   def initialize(account, date)
     @account = account
@@ -10,13 +10,18 @@ class DailySummaryQuery
 
     # ---- we now establish some basic facts
 
-    @all_servers = AgentServer.where(:account_id => account.id)
+    @all_servers = AgentServer.where(account_id: account.id)
 
-    @new_servers = AgentServer.where(:account_id => account.id).created_on(@begin_at)
+    @new_servers = @all_servers.created_on(@begin_at)
 
-    @deleted_servers = AgentServer.where(:account_id => account.id).deleted_on(@begin_at)
+    @deleted_servers = @all_servers.deleted_on(@begin_at)
 
-    @new_apps = Bundle.as_of(@end_at).where(:account_id => account.id).app_bundles.created_on(@begin_at)
+    @all_monitors = Bundle.via_api.where(account_id: account.id)
+
+    @new_monitors = @all_monitors.created_on(@begin_at)
+
+    @deleted_monitors = @all_monitors.deleted_on(@begin_at)
+
 
     # ---- and we set up the basic queries
     @log_vuln_query = LogBundleVulnerability.in_bundles_from(account.id).unpatched_as_of(@end_at)

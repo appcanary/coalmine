@@ -1,5 +1,11 @@
 class DailySummaryPresenter
-  attr_accessor :date, :account, :vulnquery, :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns, :changes, :server_ct, :inactive_server_ct, :new_servers, :deleted_servers
+  attr_accessor :date, :account, :vulnquery,
+                :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns,
+                :changes,
+                :server_ct, :inactive_server_ct,
+                :new_servers, :deleted_servers,
+                :new_monitors, :deleted_monitors,
+                :monitor_ct
 
   def initialize(query)
     @account = query.account
@@ -19,7 +25,12 @@ class DailySummaryPresenter
     @new_servers = query.new_servers
     @deleted_servers = query.deleted_servers
 
+    @all_monitors = query.all_monitors
+    @new_monitors = query.new_monitors
+    @deleted_monitors = query.deleted_monitors
+
     @server_ct = @all_servers.count
+    @monitor_ct = @all_monitors.count
     active_server_ct = @all_servers.active_as_of(@date).count
     @inactive_server_ct = @server_ct - active_server_ct
   end
@@ -35,11 +46,16 @@ class DailySummaryPresenter
         [-vuln.criticality_ordinal, -pkgs.size] 
       }
     end
+
+    # I'm going to do a refactor of this presenter, leaving this in here for now
+    def calc_monitor_ids(vulns)
+      vulns.map(&:bundle).flatten.select(&:from_api)
+    end
   end
 
   class FreshVulnsPresenter
     include SortVulnsByCritAndPackages
-    attr_accessor :vuln_ct, :package_ct, :server_ct, :sorted_vulns, :package_ids, :server_ids
+    attr_accessor :vuln_ct, :package_ct, :server_ct, :sorted_vulns, :package_ids, :server_ids, :monitor_ids, :monitor_ct
 
     delegate :each, to: :sorted_vulns
 
@@ -51,6 +67,7 @@ class DailySummaryPresenter
       @server_ct = fresh_vulns.map(&:agent_server_id).uniq.size
       @server_ids = fresh_vulns.map(&:agent_server_id).uniq
       @package_ids = fresh_vulns.map(&:package_id).uniq
+      @monitor_ids = calc_monitor_ids(fresh_vulns)
     end
   end
 

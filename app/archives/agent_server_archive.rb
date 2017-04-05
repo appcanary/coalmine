@@ -47,6 +47,7 @@ class AgentServerArchive < ActiveRecord::Base
     select(ARCHIVED_SELECT)
   }
 
+  # TODO: TEST
   scope :deleted, -> {
     select_as_archived.
     # look only at the most recently expired rows

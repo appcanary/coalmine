@@ -75,6 +75,52 @@ class DailySummaryQueryTest < ActiveSupport::TestCase
 
   end
 
+  it "should report on deleted and added monitors properly" do
+    # ensure it's scoped to our main account
+    # by creating irrelevant accounts
+    unrelated_bundle1 = FactoryGirl.create(:bundle, account: unrelated_account)
+    unrelated_bundle2 = FactoryGirl.create(:bundle, account: unrelated_account)
+    unrelated_bundle2.destroy
+
+    vb1 = FactoryGirl.create(:bundle, :ubuntu, account: account)
+    add_to_bundle(vb1, [@vpkg1])
+
+    vb2 = FactoryGirl.create(:bundle, :ubuntu, account: account)
+    add_to_bundle(vb2, [@vpkg2])
+
+    bundle3 = FactoryGirl.create(:bundle, :account => account)
+    bundle4 = FactoryGirl.create(:bundle, :account => account)
+
+
+    bundle3.destroy
+
+
+    @dm = DailySummaryQuery.new(account, Date.today).create_presenter
+
+    assert_equal 4, @dm.new_monitors.count
+    assert_equal 1, @dm.deleted_monitors.count
+
+    assert_equal 2, @dm.fresh_vulns.package_ct
+    assert_equal 2, @dm.fresh_vulns.monitor_ct
+    assert_equal 3, @dm.fresh_vulns.vuln_ct
+
+    # now we delete one bundle
+    # this will impact the vuln counts
+    bundle2.destroy
+
+    @dm = DailySummaryQuery.new(account, Date.today).create_presenter
+
+    assert_equal 4, @dm.new_monitors.count
+    assert_equal 2, @dm.deleted_monitors.count
+
+    # fresh vulns ignore deleted servers.
+    assert_equal 1, @dm.fresh_vulns.package_ct
+    assert_equal 1, @dm.fresh_vulns.server_ct
+    assert_equal 2, @dm.fresh_vulns.vuln_ct
+
+  end
+
+
   def add_to_bundle(bundle, packages)
     @bm = BundleManager.new(bundle.account)
 

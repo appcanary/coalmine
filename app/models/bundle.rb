@@ -68,9 +68,19 @@ class Bundle < ActiveRecord::Base
 
   scope :system_bundles, -> { where("platform IN (?)", Platforms::OPERATING_SYSTEMS) }
   scope :app_bundles, -> { where("platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
+
   scope :created_on, -> (date) {
-    where('valid_at >= ? and valid_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
+    from(union_str(all, BundleArchive.deleted)).
+      where('created_at >= ? and created_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
   }
+
+  scope :deleted_on, -> (date) {
+    from("(#{BundleArchive.deleted.to_sql}) #{self.table_name}").
+      # and only look at stuff from this day in particular
+      where("bundles.expired_at >= ? and bundles.expired_at <= ?", date.at_beginning_of_day, date.at_end_of_day)
+  }
+
+
 
 
   # note that these are instance methods

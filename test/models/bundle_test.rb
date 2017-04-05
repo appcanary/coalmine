@@ -85,4 +85,81 @@ class BundleTest < ActiveSupport::TestCase
     # but the first two remain the same, since they were unchanged.
     assert_equal first_two_ids, bundle.bundled_packages.limit(2).order("id ASC").map(&:id)
   end
+
+  # TODO: AgentServer has the exact same test for it's created_on and deleted_on scopes. When this is generalized, delete this test
+  describe "created_on scope" do
+    it "should not get bundles created yesterday" do
+      travel_to 1.day.ago do
+        FactoryGirl.create(:bundle)
+      end
+
+      assert_equal [], Bundle.created_on(Date.today)
+    end
+
+    it "should get bundles created today" do
+      bundle = FactoryGirl.create(:bundle)
+
+      assert_equal [bundle], Bundle.created_on(Date.today)
+    end
+
+    it "should get bundles created today and deleted today" do
+      bundle = FactoryGirl.create(:bundle)
+      bundle.destroy!
+
+      # The bundle doesn't actually exist
+      assert_equal [], Bundle.all
+
+      # But we still see it's archive when we look for ones created today
+      assert_equal [bundle], Bundle.created_on(Date.today)
+    end
+
+    it "should not get bundles created yesterday but deleted today" do
+      bundle = travel_to 1.day.ago do
+        FactoryGirl.create(:bundle)
+      end
+      bundle.destroy!
+
+      assert_equal [], Bundle.created_on(Date.today)
+    end
+  end
+
+  describe "deleted_on scope" do
+    it "should not get bundles deleted yesterday" do
+      travel_to 1.day.ago do
+        bundle = FactoryGirl.create(:bundle)
+        destroy_when_traveling(bundle)
+      end
+
+      assert_equal [], Bundle.deleted_on(Date.today)
+    end
+
+    it "should get bundles created yesterday and deleted today" do
+      bundle = travel_to 1.day.ago do
+        FactoryGirl.create(:bundle)
+      end
+      bundle.destroy!
+
+      assert_equal [bundle], Bundle.deleted_on(Date.today)
+    end
+
+    it "should get bundles created today and deleted today" do
+      bundle = FactoryGirl.create(:bundle)
+      bundle.destroy!
+
+      # The bundle doesn't actually exist
+      assert_equal [], Bundle.all
+
+      # But we still see it's archive when we look for ones created today
+      assert_equal [bundle], Bundle.deleted_on(Date.today)
+    end
+  end
+
+  def destroy_when_traveling(bundle)
+    # Since we may be time traveling, but we can't mock out CURRENT_TIMESTAMP in postgres-land, we need to cheat a little and change the valid_at of our bundlearchive
+    bundle.destroy!
+
+    archive = BundleArchive.where(bundle_id: bundle.id).last
+    archive.expired_at = Time.now
+    archive.save
+  end
 end
