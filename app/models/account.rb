@@ -72,11 +72,6 @@ class Account < ActiveRecord::Base
       monitors.any?
   end
 
-
-  def api_bundles
-    bundles.where(:from_api => true)
-  end
-
   def active_server_bundles
     bundles.joins(:agent_server).merge(AgentServer.active)
   end

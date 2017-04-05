@@ -61,7 +61,6 @@ class Bundle < ActiveRecord::Base
     joins(:agent_server).merge(AgentServer.active)
   }
 
-  # TODO: elimite from_api
   scope :via_api, -> { where("bundles.agent_server_id is null") }
 
   scope :via_agent, -> { where("bundles.agent_server_id is not null") }

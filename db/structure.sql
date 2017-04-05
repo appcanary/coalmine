@@ -967,7 +967,6 @@ CREATE TABLE bundles (
     release character varying,
     last_crc bigint,
     being_watched boolean,
-    from_api boolean,
     deleted_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -3244,13 +3243,6 @@ CREATE INDEX index_bundles_on_expired_at ON bundles USING btree (expired_at);
 
 
 --
--- Name: index_bundles_on_from_api; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_bundles_on_from_api ON bundles USING btree (from_api);
-
-
---
 -- Name: index_bundles_on_valid_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4381,4 +4373,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 INSERT INTO schema_migrations (version) VALUES ('20170322221344');
 
 INSERT INTO schema_migrations (version) VALUES ('20170404212231');
+
+INSERT INTO schema_migrations (version) VALUES ('20170405171914');
 
