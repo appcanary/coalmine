@@ -74,7 +74,7 @@ class PackageTest < ActiveSupport::TestCase
                                version: "1.7.0")
       v = FactoryGirl.create(:vulnerability, :php, :patchless, pkgs: [pkg])
       vd = pkg.vulnerable_dependencies.first
-      vd.affected_versions = [">=1.7.0", "<=1.10"]
+      vd.affected_versions = [">=1.7.0,<=1.10"]
       vd.save!
 
       assert_equal ["~1.10,>1.10"], pkg.upgrade_to
@@ -88,7 +88,7 @@ class PackageTest < ActiveSupport::TestCase
                                version: "1.7.0")
       v = FactoryGirl.create(:vulnerability, :php, :patchless, pkgs: [pkg])
       vd = pkg.vulnerable_dependencies.first
-      vd.affected_versions = [">=1.7.0", "<1.10"]
+      vd.affected_versions = [">=1.7.0,<1.10"]
       vd.save!
 
       assert_equal ["~1.10"], pkg.upgrade_to
@@ -102,13 +102,13 @@ class PackageTest < ActiveSupport::TestCase
                                version: "1.7.0")
       v = FactoryGirl.create(:vulnerability, :php, :patchless, pkgs: [pkg])
       vd = pkg.vulnerable_dependencies.first
-      vd.affected_versions = [">=1.7.0", "<1.10"]
+      vd.affected_versions = [">=1.7.0,<1.10"]
       vd.save!
 
       vd2 = FactoryGirl.create(:vulnerable_dependency, :patchless,
                                dep: pkg,
                                vulnerability: v,
-                               affected_versions: [">=2.0.1", "<2.0.20"])
+                               affected_versions: [">=2.0.1,<2.0.20"])
       FactoryGirl.create(:vulnerable_package,
                          dep: pkg,
                          vulnerable_dependency: vd2,
@@ -125,13 +125,13 @@ class PackageTest < ActiveSupport::TestCase
                                version: "2.0.7")
       v = FactoryGirl.create(:vulnerability, :php, :patchless, pkgs: [pkg])
       vd = pkg.vulnerable_dependencies.first
-      vd.affected_versions = [">=1.7.0", "<1.10"]
+      vd.affected_versions = [">=1.7.0,<1.10"]
       vd.save!
 
       vd2 = FactoryGirl.create(:vulnerable_dependency, :patchless,
                                dep: pkg,
                                vulnerability: v,
-                               affected_versions: [">=2.0.1", "<=2.0.20"])
+                               affected_versions: [">=2.0.1,<=2.0.20"])
       FactoryGirl.create(:vulnerable_package,
                          dep: pkg,
                          vulnerable_dependency: vd2,

@@ -56,7 +56,7 @@ class FriendsOfPHPAdapter < AdvisoryAdapter.new(:filepath, :cve, :link, :title,
   generate :affected do
     if branches.present?
       branches.
-        map { |k, v| v["versions"] }.
+        map { |k, v| v["versions"].join(",") }.
         map { |v| package_version(package_name, v) }
     else
       []

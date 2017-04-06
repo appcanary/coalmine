@@ -71,7 +71,7 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
                                  :package_name => name,
                                  :unaffected_versions => [],
                                  :patched_versions => [],
-                                 :affected_versions => [[">=1.7.0", "<1.10"]])
+                                 :affected_versions => [">=1.7.0,<1.10"])
 
     unaffected_pkg1 = build_ppkg(name, "1.11")
     unaffected_pkg2 = build_ppkg(name, "1.10.0")

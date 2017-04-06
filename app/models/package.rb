@@ -148,10 +148,12 @@ class Package < ActiveRecord::Base
   def calc_php_upgrade_to(affected)
     constraint = affected.
                    reject(&:empty?).
-                   find { |vc| comparator.satisfies?(vc) }.
-                   try(:last)
+                   map(&:first).
+                   find { |vc| comparator.satisfies?(vc) }
 
     return nil unless constraint.present?
+
+    constraint = constraint.split(/,/).last
 
     parts = /^([^\d]+)(.*)$/.match(constraint)
 

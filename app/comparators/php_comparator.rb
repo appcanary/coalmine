@@ -6,11 +6,7 @@ class PHPComparator
   end
 
   def satisfies?(constraints)
-    if constraints.is_a?(Array)
-      constraint_checker.satisfies?(self.version, constraints.join(", "))
-    elsif constraints.is_a?(String)
-      constraint_checker.satisfied_by(constraints, self.version)
-    end
+    constraint_checker.satisfies?(self.version, constraints)
   end
 
   def vercmp(v1, v2)
