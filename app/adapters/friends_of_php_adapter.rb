@@ -66,4 +66,8 @@ class FriendsOfPHPAdapter < AdvisoryAdapter.new(:filepath, :cve, :link, :title,
   generate :title do
     title
   end
+
+  generate :package_names do
+    [package_name]
+  end
 end

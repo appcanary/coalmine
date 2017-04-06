@@ -10,6 +10,10 @@
       <code>
         <%= vd.patched_versions.join(",") %>
       </code>
+    <% elsif vd.affected_versions.present? %>
+      <code>
+        <%= vd.affected_versions.join(",") %>
+      </code>
     <% else %>
       None
     <% end %>
