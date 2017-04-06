@@ -32,7 +32,7 @@ class FriendsOfPHPAdapter < AdvisoryAdapter.new(:filepath, :cve, :link, :title,
     if branches.present?
       hshs = branches.map do |k, v|
         {"package_name" => package_name,
-         "affected_versions" => v["versions"]}
+         "affected_versions" => [v["versions"].join(",")]}
       end
     end
 
@@ -56,7 +56,7 @@ class FriendsOfPHPAdapter < AdvisoryAdapter.new(:filepath, :cve, :link, :title,
   generate :affected do
     if branches.present?
       branches.
-        map { |k, v| v["versions"].join(",") }.
+        map { |k, v| [v["versions"].join(",")] }.
         map { |v| package_version(package_name, v) }
     else
       []

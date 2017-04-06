@@ -145,25 +145,35 @@ class Package < ActiveRecord::Base
     end
   end
 
+  def find_newest_composer_constraint(constraints)
+    constraints.reduce([]) do |newest, next_constraints|
+      last_constraint = next_constraints.split(/,/).last
+      prefix, version = /^([^\d]+)(.*)$/.match(last_constraint)[1..2]
+      case comparator.vercmp(version, newest[2])
+      when -1 then newest
+      when  1 then [prefix, version]
+      when  0
+        prefix == "<=" ? [prefix, version] : newest
+      end
+    end
+  end
+
   def calc_php_upgrade_to(affected)
-    constraint = affected.
-                   reject(&:empty?).
-                   map(&:first).
-                   find { |vc| comparator.satisfies?(vc) }
+    constraints = affected.reject(&:empty?).
+                    map(&:first).
+                    # select, not find - there may be multiple vulns
+                    select { |vc| comparator.satisfies?(vc) }
 
-    return nil unless constraint.present?
+    return nil if constraints.empty?
 
-    constraint = constraint.split(/,/).last
-
-    parts = /^([^\d]+)(.*)$/.match(constraint)
-
-    case parts[1]
+    prefix, version = find_newest_composer_constraint(constraints)
+    case prefix
     when "<"
-      ["~#{parts[2]}"]
+      ["~#{version}"]
     when "<="
-      ["~#{parts[2]},>#{parts[2]}"]
+      ["~#{version},>#{version}"]
     else
-      ["¯\_(ツ)_/¯"]
+      ["¯\\_(ツ)_/¯"]
     end
   end
 

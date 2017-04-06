@@ -109,7 +109,7 @@ class Parcel
     def initialize(hsh = nil)
       return if hsh.nil?
       self.name = hsh["name"]
-      self.version = hsh["version"]
+      self.version = hsh["version"].split(/v/).last
     end
   end
 
