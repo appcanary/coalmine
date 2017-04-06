@@ -120,12 +120,12 @@ class Platforms
 
 
   @all_platforms = [
-    Debian,
     Ubuntu,
+    Debian,
     CentOS,
+    Amazon,
     Ruby,
-    PHP,
-    Amazon
+    PHP
   ]
 
   def self.all_platforms
