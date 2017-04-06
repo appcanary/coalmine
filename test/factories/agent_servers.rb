@@ -32,18 +32,30 @@ FactoryGirl.define do
     account
     distro "ubuntu"
     release "14.04"
+    transient do
+      with_bundle { false }
+    end
+    
     trait :centos do
       distro "centos"
       release "7"
     end
 
-    trait :ubuntu do
-      distro "ubuntu"
-      release "utopic"
-    end
 
     trait :with_heartbeat do
       heartbeats { build_list :agent_heartbeat, 1 }
+    end
+
+    trait :with_bundle do
+      transient do
+        with_bundle { true }
+      end
+    end
+
+    after(:create) do |s, f|
+      if f.with_bundle
+        s.bundles << create(:bundle, account: s.account, platform: s.distro, release: s.release)
+      end
     end
   end
 
