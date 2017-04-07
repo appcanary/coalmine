@@ -29,23 +29,8 @@
 #
 
 class AgentServerArchive < ActiveRecord::Base
+  extend ArchiveTableBehaviour
   belongs_to :account
-
-  ARCHIVED_COL = self.table_name.gsub("archives", "id")
-  ARCHIVED_SELECT = self.columns.reduce([]) { |list, col|
-    if col.name == "id"
-      list
-    elsif col.name == ARCHIVED_COL
-      list << "#{self.table_name}.#{col.name} as id"
-    else
-      list << "#{self.table_name}.#{col.name}"
-    end
-  }.join(", ")
-
-
-  scope :select_as_archived, -> { 
-    select(ARCHIVED_SELECT)
-  }
 
   scope :deleted, -> {
     select_as_archived.

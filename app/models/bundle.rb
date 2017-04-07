@@ -31,11 +31,6 @@
 
 class Bundle < ActiveRecord::Base
   extend ArchiveBehaviour
-  # needed for archive methods
-  def self.archive_class
-    BundleArchive
-  end
-
 
   belongs_to :account
   belongs_to :agent_server
