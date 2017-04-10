@@ -1,7 +1,7 @@
 <a name="check-endpoint" class="anchor-offset"></a>
 <h1>Check API</h1>
 <h2>Request</h2>
-<h4><code>POST https://appcanary.com/api/v3/check/:platform/:release</code></h4>
+<h4><code>POST https://appcanary.com/api/v3/check?platform=:platform&release=:release</code></h4>
 
 <p>Check your dependencies for vulnerabilities. For example, with Ruby:</p>
 
@@ -24,7 +24,7 @@
 <%= render :partial => "file_parameter" %>
 <hr>
 
-<p>The purpose of this endpoint is to show which vulnerabilities your app's dependencies are affected by.</p> 
+<p>The purpose of this endpoint is to show which vulnerabilities your app's dependencies are affected by.</p>
 <p>At the moment we only accept requests with <code>Content-Type: multipart/form-data</code> with an embedded <code>application/octet-stream</code>. If you need to send data in a different format, please let us <a href="mailto:hello@appcanary.com" target="_blank">know</a>.</p>
 
 <h4>Please note!</h4>
@@ -45,7 +45,7 @@
   }
 }
 </pre>
-    
+
 <h4>The response container object</h4>
 <% render :partial => "response_coll_container_fields" %>
 
@@ -104,4 +104,3 @@
 
 <h4>Vulnerability object</h4>
 <%= render :partial => "vulnerability_fields" %>
-
