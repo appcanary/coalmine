@@ -3,4 +3,13 @@ class DocsController < ApplicationController
   def index
     @agent_token = current_user ? current_user.token : "<YOUR_TOKEN_HERE>"
   end
+
+  def api
+    @agent_token = current_user ? current_user.token : "<YOUR_TOKEN_HERE>"
+  end
+
+  def ci
+    @agent_token = current_user ? current_user.token : "<YOUR_TOKEN_HERE>"
+  end
+
 end

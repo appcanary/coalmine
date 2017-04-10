@@ -1,0 +1,80 @@
+<div id="onboarding">
+  <section>
+
+    <div class="col-sm-6 col-sm-offset-1">
+
+      <h1>Appcanary + Continuous Integration</h1>
+      <p>One neat way to use Appcanary is in tandem with your continuous integration service. This way, you can automatically keep Appcanary up to date or cause builds with security vulnerabilities to fail before your code gets deployed.</p>
+
+      <p>Here we'll show you how to integrate Appcanary with CircleCI but the same principle should apply to any other continuous integration service you might use.</p>
+
+<br/>
+      <h2>1. Set up the Appcanary gem</h2>
+      <p>We're going to assume a Rails app here. In your Gemfile, add the line:</p>
+      <pre class="ruby">
+gem "appcanary"</pre>
+
+<p>and run <code>bundle install</code> to update packages.</p>
+<br/>
+
+
+<p>Next, create a file at <code>config/initializers/appcanary.rb</code> and add the following line:</p>
+<pre class="ruby">
+Appcanary.api_key = ENV["APPCANARY_API_KEY"] || "api key not set"</pre>
+<br/>
+
+<p>Great! Time to test that it works. In a terminal, type:</p>
+
+<pre class="bash">
+  APPCANARY_API_KEY=<%= @agent_token%> \
+  bundle exec rake appcanary:check</pre>
+
+<p>If that command exits without any errors, you're good to go!</p>
+<br/>
+
+<h2>2. Set up CircleCI</h2>
+
+<p>Now let's create a <code>circle.yml</code> file. You can configure Appcanary to do either (or both!) of the following:</p>
+<ol>
+  <li>Fail the build if a dependency has a security vulnerability</li>
+  <li>Create or update a monitor, which will notify if you it becomes vulnerable in the future</li>
+</ol>
+<br/>
+
+
+<p><b>To fail the build if there are vulnerabilities</b>, add the following:</p>
+
+<pre>
+test:
+  # [ ... other dependency bits elided ... ]
+  post:
+    - bundle exec rake appcanary:check</pre>
+<br/>
+
+<p><b>To update a monitor on every build</b>, add the following instead:</p>
+
+<pre>
+test:
+  # [ ... other dependency bits elided ... ]
+  post:
+    - bundle exec rake appcanary:update_monitor</pre>
+
+
+<br/>
+<h3>3. Configure API key</h3>
+
+<p>Finally, go to your project's settings page and add your Appcanary API key to your build's environment variables:</p>
+<pre class="bash">
+  APPCANARY_API_KEY=<%= @agent_token%></pre>
+
+<p>And you're done. Rejoice!</p>
+</div>
+ <div class="col-sm-4">
+
+      <%= image_tag "canary-map.medium.stroke.png", style:"max-width: 100%" %>
+    </div>
+
+
+</section>
+</div>
+
