@@ -9,10 +9,11 @@ class PackageReleaseTest < ActiveSupport::TestCase
     assert_nil pr.release
 
 
+    # When we don't specify a release, we accept anything as well as nil
     pr, err = PlatformRelease.validate(Platforms::Ruby, "lol")
-    assert_nil pr
+    assert_nil err
 
-    assert_equal({:release=>["is invalid"]}, err.messages)
+    assert_equal "lol", pr.release
 
     pr, err = PlatformRelease.validate("RUBY")
     assert_nil pr

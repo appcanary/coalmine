@@ -95,8 +95,10 @@ class Platforms
         if nam
           h[rel] = nam
           h[nam] = true
-        else
+        elsif rel
           h[rel] = true
+        else
+          # Has no releases, do nothing
         end
       end
 
