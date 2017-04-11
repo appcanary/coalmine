@@ -7,7 +7,11 @@ class ApiForm < Reform::Form
   property :file, :virtual => true
 
   def file_contents
-    @file_contents ||= file.read
+    if file.class == String
+      @file_contents ||= file
+    else
+      @file_contents ||= file.read
+    end
   end
 
   validate :platform_release do
