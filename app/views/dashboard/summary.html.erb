@@ -1,3 +1,4 @@
+<%# WARNING THIS IS OUT OF DAT!! TODO: MAKE THIS THE SAME AS THE MAILER%>
 <table>
 <tr class="header-logo">
     <td>
@@ -19,7 +20,7 @@
     <% if motd.subject %>
       <h2><%= motd.subject %></h2>
     <% end %>
-    <%= motd.body %>
+    <%= motd.body.html_safe %>
   <% end %>
 </div>
 
@@ -119,7 +120,7 @@
                 </td>
               </tr>
             <% end %>
-            
+
           </table>
         </td>
       </tr>
