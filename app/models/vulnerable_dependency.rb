@@ -41,8 +41,9 @@ class VulnerableDependency < ActiveRecord::Base
   validate :affected_or_patched_not_both
 
   scope :patchable, -> { 
-    where("NOT (vulnerable_dependencies.patched_versions = '{}' 
-          AND vulnerable_dependencies.unaffected_versions = '{}')")
+    where("vulnerable_dependencies.affected_versions != '{}'
+           OR NOT (vulnerable_dependencies.patched_versions = '{}'
+                   AND vulnerable_dependencies.unaffected_versions = '{}')")
   }
 
   scope :unpatchable, -> { 
