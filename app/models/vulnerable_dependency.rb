@@ -30,6 +30,7 @@
 #
 
 class VulnerableDependency < ActiveRecord::Base
+  extend ArchiveBehaviour
   belongs_to :vulnerability
   has_many :vulnerable_packages, :dependent => :destroy
   has_many :log_resolutions

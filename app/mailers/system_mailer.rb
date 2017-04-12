@@ -86,6 +86,8 @@ class SystemMailer < ActionMailer::Base
     @deleted_servers =  AgentServerArchive.where("agent_server_id not in (?) and expired_at > ?", AgentServer.pluck(:id), @date).uniq { |asa| asa.agent_server_id }
     @deleted_monitors = BundleArchive.via_api.where("bundle_id not in (?) and expired_at > ?", Bundle.pluck(:id), @date).uniq { |asa| asa.bundle_id }
 
+    @daily_summaries = EmailDailySummary.where("sent_at > ?", @date)
+
     mail(to: "hello@appcanary.com", subject: "#{env_prefix} daily report (#{@today})")
   end
 

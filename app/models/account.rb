@@ -108,7 +108,7 @@ class Account < ActiveRecord::Base
     if pref == PrefOpt::EMAIL_FREQ_DAILY_WHEN_VULN
       has_vulns_or_servers
     else
-      PrefOpt::EMAIL_WANTS_DAILY
+      PrefOpt::EMAIL_WANTS_DAILY.include?(pref)
     end
   end
 end

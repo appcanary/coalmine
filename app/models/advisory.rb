@@ -45,6 +45,7 @@
 # sources, but are used to compute `constraints` by the importers.
 
 class Advisory < ActiveRecord::Base
+  extend ArchiveBehaviour
   # Used for the enums in Advisory, Vulnerability, and VulnerabilityArchive
   CRITICALITIES = {
     unknown: 0,
