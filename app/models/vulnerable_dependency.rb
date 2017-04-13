@@ -120,10 +120,10 @@ class VulnerableDependency < ActiveRecord::Base
     # a list of affected_versions
 
     if affected_versions.empty?
-      !(package.not_affected?(unaffected_versions) ||
-        package.been_patched?(patched_versions))
+      !(package.version_satisfies_any?(unaffected_versions) ||
+        package.version_satisfies_any?(patched_versions))
     else
-      package.affected?(affected_versions)
+      package.version_satisfies_any?(affected_versions)
     end
   end
 

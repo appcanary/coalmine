@@ -82,35 +82,16 @@ class Package < ActiveRecord::Base
     self.source_name == dep_name || self.name == dep_name
   end
 
-  # Given a list of affected version constraints,
-  # is our version affected?
-
-  def affected?(affected_version_constraints)
-    affected_version_constraints.any? do |vc|
+  # Given a list of version constraints, does
+  # our package version fall within any of them?
+  def version_satisfies_any?(version_constraints)
+    version_constraints.any? do |vc|
       version_satisfies?(vc)
     end
   end
 
-  # Given a list of unaffected versions,
-  # is our version greater than or equal any of 
-  # the "unaffected" constraints?
-
-  def not_affected?(unaffected_versions)
-    unaffected_versions.any? do |v|
-      version_satisfies?(v)
-    end
-  end
-
-  # Given a list of version that have been patched,
-  # is our version greater than or equal to any of
-  # the "patched" contraints?
-
-  def been_patched?(patched_versions)
-    patched_versions.any? do |v|
-      version_satisfies?(v)
-    end
-  end
-
+  # Given a single version constraint, does
+  # our package fall within?
   def version_satisfies?(version_constraint)
     comparator.satisfies?(version_constraint)
   end
