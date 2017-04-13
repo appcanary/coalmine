@@ -41,6 +41,26 @@ class VulnerableDependency < ActiveRecord::Base
 
   validate :affected_or_patched_not_both
 
+  # Patchable is now a bit of a hack/misnomer based on shoe-horning PHP
+  # advisories into this mould. PHP advisories only have affected version
+  # constraints, and not patched versions or unaffected versions. So, we modify
+  # the "patchable" scope to include any VDs which have non-empty affected
+  # versions, because as of right now, this is a proxy for PHP. Otherwise, in
+  # order to make these VDs show up we would need account.notify_everything to
+  # be set.
+
+  # Here's @phillmv's comments from slack for the historical record:
+
+  # now vuln query has to understand platforms
+  # i think this is a gordian knot that can just be cut
+  # patchable doesn’t make sense with the php data
+  # so both patchable and affected just give you the same result
+  # and therefore vulnquery doesn’t need to change
+  # it’ll silently Just Work for every platform
+  # and then we’ve successfully punted the problem until we import a
+  # future dataset that also has affected
+  # if PHP forever remains the sole platform that uses affected ¯\_(ツ)_/¯
+
   scope :patchable, -> { 
     where("vulnerable_dependencies.affected_versions != '{}'
            OR NOT (vulnerable_dependencies.patched_versions = '{}'
@@ -86,7 +106,7 @@ class VulnerableDependency < ActiveRecord::Base
   # F     T     F     F
   # F     F     F     T
   #
-  # i.e. !(N_A? || B_P?)
+  # i.e. A? || !(N_A? || B_P?)
 
   def affects?(package)
     return false unless concerns?(package)

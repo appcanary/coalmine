@@ -86,7 +86,6 @@ class Package < ActiveRecord::Base
   # is our version affected?
 
   def affected?(affected_version_constraints)
-    # binding.pry unless affected_version_constraints.empty?
     affected_version_constraints.any? do |vc|
       version_satisfies?(vc)
     end
@@ -129,8 +128,8 @@ class Package < ActiveRecord::Base
     calc_upgrade_to([[vd.patched_versions, vd.affected_versions]])
   end
 
-  # takes in an array of arrays
-  # i.e. vuln_deps' patched_versions
+  # takes in an array of arrays - the nested arrays are themselves the result of
+  # plucking two columns which are themselves arrays, so this is a triple nested array.
   def calc_upgrade_to(patched_and_affected)
     patched = patched_and_affected.map(&:first)
     affected = patched_and_affected.map(&:last)
@@ -145,19 +144,6 @@ class Package < ActiveRecord::Base
     end
   end
 
-  def find_newest_composer_constraint(constraints)
-    constraints.reduce([]) do |newest, next_constraints|
-      last_constraint = next_constraints.split(/,/).last
-      prefix, version = /^([^\d]+)(.*)$/.match(last_constraint)[1..2]
-      case comparator.vercmp(version, newest[2])
-      when -1 then newest
-      when  1 then [prefix, version]
-      when  0
-        prefix == "<=" ? [prefix, version] : newest
-      end
-    end
-  end
-
   def calc_php_upgrade_to(affected)
     constraints = affected.reject(&:empty?).
                     map(&:first).
@@ -166,7 +152,7 @@ class Package < ActiveRecord::Base
 
     return nil if constraints.empty?
 
-    prefix, version = find_newest_composer_constraint(constraints)
+    prefix, version = PHPComparator.find_newest_composer_constraint(constraints)
     case prefix
     when "<"
       ["~#{version}"]
