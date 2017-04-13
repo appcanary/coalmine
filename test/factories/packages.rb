@@ -59,9 +59,12 @@ FactoryGirl.define do
       release "2016.03"
     end
 
-
     trait :ruby do
       platform Platforms::Ruby
+    end
+
+    trait :php do
+      platform Platforms::PHP
     end
   end
 end

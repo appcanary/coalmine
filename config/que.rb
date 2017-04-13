@@ -20,6 +20,7 @@ EmailNotifyJob.enqueue_if_not_existing!
 AlasImporterJob.enqueue_if_not_existing!
 CesaImporterJob.enqueue_if_not_existing!
 RubysecImporterJob.enqueue_if_not_existing!
+FriendsOfPHPImporterJob.enqueue_if_not_existing!
 UbuntuTrackerImporterJob.enqueue_if_not_existing!
 DebianTrackerImporterJob.enqueue_if_not_existing!
 

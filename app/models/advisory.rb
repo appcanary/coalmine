@@ -28,6 +28,8 @@
 #  updated_at    :datetime         not null
 #  valid_at      :datetime         not null
 #  expired_at    :datetime         default("infinity"), not null
+#  needs_triage  :jsonb            default("[]"), not null
+#  package_names :string           default("{}"), not null, is an Array
 #
 # Indexes
 #
@@ -104,6 +106,11 @@ class Advisory < ActiveRecord::Base
   scope :from_cve, -> {
     where(:source => CveImporter::SOURCE)
   }
+
+  scope :from_friends_of_php, -> {
+    where(:source => FriendsOfPHPImporter::SOURCE)
+  }
+
   # AIS gets auto saved, so we skip saving it ourselves here.
   def processed_flag=(flag)
     unless self.advisory_import_state

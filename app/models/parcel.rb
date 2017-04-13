@@ -56,6 +56,7 @@ class Parcel
   def unique_hash
     {'name' => self.name, 'version' => self.version}
   end
+
   class RPM < Parcel
     attr_accessor :arch, :filename, :nevra
 
@@ -94,7 +95,6 @@ class Parcel
         filename: filename
       }
     end
-
   end
 
   class Rubygem < Parcel
@@ -102,6 +102,14 @@ class Parcel
       return if hsh.nil?
       self.name = hsh[:name]
       self.version = hsh[:version]
+    end
+  end
+
+  class Composer < Parcel
+    def initialize(hsh = nil)
+      return if hsh.nil?
+      self.name = hsh["name"]
+      self.version = hsh["version"].split(/v/).last
     end
   end
 

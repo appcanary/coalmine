@@ -6,18 +6,12 @@ class RPMComparator
   # is the current version identical, or more
   # recent, than the version constraint provided?
 
-  def matches?(version_constraint)
+  def satisfies?(version_constraint)
     # it feels like AskingForTrouble to use two different
     # EVR parsers. So, let's just use the one we use elsewhere.
     constraint_evr = ::RPM::Nevra.new(version_constraint)
 
     (constraint_evr <=> @current_evr) <= 0
-  end
-
-  # current version is older than constraint
-  def earlier_version?(version_constraint)
-    constraint_evr = ::RPM::Nevra.new(version_constraint)
-    (@current_evr <=> constraint_evr) < 0
   end
 
   def vercmp(a,b)

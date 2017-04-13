@@ -16,6 +16,8 @@
 #  updated_at          :datetime         not null
 #  valid_at            :datetime         not null
 #  expired_at          :datetime         default("infinity"), not null
+#  affected_versions   :string           default("{}"), not null, is an Array
+#  text                :string           default("{}"), not null, is an Array
 #
 # Indexes
 #
@@ -37,9 +39,32 @@ class VulnerableDependency < ActiveRecord::Base
   validates :platform, :presence => true
   validates :package_name, :presence => true
 
+  validate :affected_or_patched_not_both
+
+  # Patchable is now a bit of a hack/misnomer based on shoe-horning PHP
+  # advisories into this mould. PHP advisories only have affected version
+  # constraints, and not patched versions or unaffected versions. So, we modify
+  # the "patchable" scope to include any VDs which have non-empty affected
+  # versions, because as of right now, this is a proxy for PHP. Otherwise, in
+  # order to make these VDs show up we would need account.notify_everything to
+  # be set.
+
+  # Here's @phillmv's comments from slack for the historical record:
+
+  # now vuln query has to understand platforms
+  # i think this is a gordian knot that can just be cut
+  # patchable doesn’t make sense with the php data
+  # so both patchable and affected just give you the same result
+  # and therefore vulnquery doesn’t need to change
+  # it’ll silently Just Work for every platform
+  # and then we’ve successfully punted the problem until we import a
+  # future dataset that also has affected
+  # if PHP forever remains the sole platform that uses affected ¯\_(ツ)_/¯
+
   scope :patchable, -> { 
-    where("NOT (vulnerable_dependencies.patched_versions = '{}' 
-          AND vulnerable_dependencies.unaffected_versions = '{}')")
+    where("vulnerable_dependencies.affected_versions != '{}'
+           OR NOT (vulnerable_dependencies.patched_versions = '{}'
+                   AND vulnerable_dependencies.unaffected_versions = '{}')")
   }
 
   scope :unpatchable, -> { 
@@ -71,21 +96,35 @@ class VulnerableDependency < ActiveRecord::Base
 
   # whether this package could be vulnerable
 
-  # N_A?  B_P?  Vuln?
-  # T     T     F
-  # T     F     F
-  # F     T     F
-  # F     F     T
+  # N_A?  B_P?  A?    Vuln?
+  # T     T     T     T
+  # T     F     T     T
+  # F     T     T     T
+  # F     F     T     T
+  # T     T     F     F
+  # T     F     F     F
+  # F     T     F     F
+  # F     F     F     T
   #
-  # i.e. !(N_A? || B_P?)
+  # i.e. A? || !(N_A? || B_P?)
 
   def affects?(package)
-    # a package is vulnerable if
+    return false unless concerns?(package)
+
+    # a package is vulnerable if it's in the affected_versions OR
     # it's not in the unaffected_versions AND
     # it's not been patched
-    concerns?(package) && 
-      !(package.not_affected?(unaffected_versions) ||
-        package.been_patched?(patched_versions))
+
+    # this seems superficially like a dumb proxy for PHP, but it
+    # also seems reasonable to skip additional checks if there's
+    # a list of affected_versions
+
+    if affected_versions.empty?
+      !(package.version_satisfies_any?(unaffected_versions) ||
+        package.version_satisfies_any?(patched_versions))
+    else
+      package.version_satisfies_any?(affected_versions)
+    end
   end
 
   def patchable?
@@ -98,4 +137,9 @@ class VulnerableDependency < ActiveRecord::Base
     @unique_hash ||= self.attributes.except("id", "pending", "end_of_life", "created_at", "updated_at", "valid_at", "expired_at")
   end
 
+  def affected_or_patched_not_both
+    if affected_versions.present? && (patched_versions.present? || unaffected_versions.present?)
+      errors.add(:affected_versions, "can't coexist with patched or unaffected versions")
+    end
+  end
 end

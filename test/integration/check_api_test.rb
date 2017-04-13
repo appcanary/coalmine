@@ -57,6 +57,37 @@ class CheckApiTest < ActionDispatch::IntegrationTest
       end
     end
 
+    describe "for php" do
+      it "should tell you you're vulnerable" do
+        pkg = FactoryGirl.create(:package, :php, name: "composer/semver", version: "1.4.2")
+        vuln = FactoryGirl.create(:vulnerability, pkgs: [pkg])
+
+        assert_equal 0, account.log_api_calls.where(action: "check/create").count
+        post api_check_path, {platform: Platforms::PHP, file: composerlock},
+             {authorization: %{Token token="#{account.token}"}}
+
+        assert_response :success
+
+        assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+        # Make sure we log the right platform release
+        assert_equal "php", account.log_api_calls.last.platform
+        assert_nil account.log_api_calls.last.release
+
+        json = json_body
+        assert json.key?("data")
+        assert_equal 1, json["data"].size
+
+        json_pkg = json["data"].first
+        assert_equal "composer/semver", json_pkg["attributes"]["name"]
+        assert json_pkg["relationships"].key?("vulnerabilities")
+
+        assert_equal "vulnerabilities", json["included"].first["type"]
+        assert json["included"].first["attributes"].key?("reference-ids")
+
+        assert_equal true, json["meta"]["vulnerable"]
+      end
+    end
+
     describe "for centos" do
       it "should tell you you're vulnerable" do
         pkg = FactoryGirl.create(:package, :centos, :release => "7", :name => "openssh", :version => "openssh-6.6.2p1-22.el7.x86_64")
@@ -241,28 +272,34 @@ class CheckApiTest < ActionDispatch::IntegrationTest
   end
 
   def gemfilelock
-    @gemfilelock ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "420rails.gemfile.lock")))
+    @gemfilelock ||= uploaded_file("420rails.gemfile.lock")
+  end
+
+  def composerlock
+    @composerlock ||= uploaded_file("drupal.composer.lock")
   end
 
   def debianstatus
-    @debianstatus ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "debian-jessie-dpkg-status.txt")))
+    @debianstatus ||= uploaded_file("debian-jessie-dpkg-status.txt")
   end
 
   def ubuntustatus
-    @ubuntustatus ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "ubuntu-trusty-dpkg-status.txt")))
+    @ubuntustatus ||= uploaded_file("ubuntu-trusty-dpkg-status.txt")
   end
 
   def centosqa
-    @centosqa ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "centos-7-rpmqa.txt")))
+    @centosqa ||= uploaded_file("centos-7-rpmqa.txt")
   end
 
   def amazonqa
-    @amazonqa ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", "amazon-rpmqa.txt")))
+    @amazonqa ||= uploaded_file("amazon-rpmqa.txt")
   end
-
 
   def gemfile
     @gemfile ||= Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "Gemfile")))
   end
 
+  def uploaded_file(filename)
+    Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, "test/data/parsers", filename)))
+  end
 end

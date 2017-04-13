@@ -55,6 +55,9 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'
 gem 'intercom'
 
+# importer utilities
+gem 'php-composer-semver', :require => 'composer/semver'
+
 # deployment
 gem 'unicorn-rails'
 gem 'capistrano', '~> 3.4.0'

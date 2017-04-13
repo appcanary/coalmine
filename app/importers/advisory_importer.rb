@@ -8,6 +8,14 @@ class AdvisoryImporter
     
   end
 
+  def fetch_advisories
+    raise "Importers *must* implement fetch_advisories"
+  end
+
+  def parse(ra)
+    raise "Importers *must* implement parse(ra)"
+  end
+
   def update_local_store!
     # not everyone needs to do this.
     # benefit of breaking this out
