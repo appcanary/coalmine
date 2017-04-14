@@ -134,11 +134,11 @@ Rails.application.routes.draw do
       post "check" => 'check#create'
       get "status" => 'status#status'
 
-      post "monitors(/:name)" => "monitors#create"
-      put "monitors/:name" => "monitors#update"
-      get "monitors/:name" => "monitors#show", :as => "monitor"
+      post "monitors(/:name)" => "monitors#create", :constraints => { :name => /.*/ }
+      put "monitors/:name" => "monitors#update", :constraints => { :name => /.*/ }
+      get "monitors/:name" => "monitors#show", :as => "monitor", :constraints => { :name => /.*/ }
       get "monitors" => "monitors#index"
-      delete "monitors/:name" => "monitors#destroy"
+      delete "monitors/:name" => "monitors#destroy", :constraints => { :name => /.*/ }
 
       get "servers/:uuid" => "servers#show", :as => "server"
       get "servers" => "servers#index"
