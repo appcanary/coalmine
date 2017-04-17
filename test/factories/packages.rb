@@ -41,7 +41,7 @@ FactoryGirl.define do
 
     trait :ubuntu do
       platform "ubuntu"
-      release "utopic"
+      release "trusty"
     end
 
     trait :debian do
