@@ -41,12 +41,12 @@ FactoryGirl.define do
 
     trait :ubuntu do
       platform "ubuntu"
-      release "14.04"
+      release "trusty"
     end
 
     trait :debian do
       platform "debian"
-      release "8"
+      release "jessie"
     end
 
     trait :centos do

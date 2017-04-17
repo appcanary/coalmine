@@ -13,6 +13,9 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
   let(:account) { FactoryGirl.create(:account) }
   let(:unrelated_account) { FactoryGirl.create(:account) }
 
+  # NOTE: these tests assume the Package and AgentServer Factories
+  # both default to the same release of Ubuntu
+
   describe "presenter" do
     it "should have the correct fields" do
       # Create our bundles and servers

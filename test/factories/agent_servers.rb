@@ -54,7 +54,8 @@ FactoryGirl.define do
 
     after(:create) do |s, f|
       if f.with_bundle
-        s.bundles << create(:bundle, account: s.account, platform: s.distro, release: s.release)
+        rel = Platforms::PLATFORM_TO_RELEASE[s.distro][s.release]
+        s.bundles << create(:bundle, account: s.account, platform: s.distro, release: rel)
       end
     end
   end
