@@ -20,6 +20,8 @@ class Parcel
       Parcel::Dpkg
     when Platforms::Debian
       Parcel::Dpkg
+    when Platforms::PHP
+      Parcel::Composer
     else
       raise "unknown platform"
     end
