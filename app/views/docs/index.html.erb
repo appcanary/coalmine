@@ -23,17 +23,18 @@
           </thead>
           <tr>
             <td>
-              <span class="platform-logo"><%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby</span>,
-              <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>,
-              <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian </span>,
-              <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS</span>,
-              <span class="platform-logo"><%= image_tag "icon-amzn.png", :style => "width: 13px"%> Amazon Linux</span>
+              <span class="platform-logo"><%= image_tag "icon-ruby.png", :style => "width: 16px" %> Ruby</span>,
+              <span class="platform-logo"><%= image_tag "icon-php.png", :style => "width: 16px" %> PHP</span>,
+              <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 16px"%> Ubuntu</span>,
+              <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 16px"%> Debian </span>,
+              <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 16px"%> CentOS</span>,
+              <span class="platform-logo"><%= image_tag "icon-amzn.png", :style => "width: 16px"%> Amazon Linux</span>
             </td>
           </tr>
         </table>
       </div>
 
-      <h3>Here are the different ways you can use our service:</h3>
+      <h3>Here are some different ways you can use our service:</h3>
 
       <ol>
         <li>
@@ -54,57 +55,16 @@
 
         <li>
           <p>
-            <strong>Use our APIs to automate reports</strong>
+            <strong><%= link_to "Use our APIs to automate reports", api_docs_path %></strong>
             <br>
             <small>The world is your oyster.</small>
           </p>
         </li>
-    </ol>
-
-
-
+      </ol>
     </div>
-     <div class="col-sm-4">
 
+    <div class="col-sm-4">
       <%= image_tag "canary-map.medium.stroke.png", style:"max-width: 100%" %>
     </div>
   </section>
 </div>
-
-
-<section id="docs">
- 
-  <div class="col-sm-7 col-sm-offset-2">
-    <a name="start" class="anchor-offset"></a>
-    <h1>Hello!</h1>
-    <p>Welcome to Appcanary. There are many ways to use our service. Here are a few!</p>
-
-     <ol>
-      <li>
-        <p>
-          <strong><%= link_to "Install our agent on your servers.", new_server_path %></strong>
-          <br/>
-          <small>Great for providing audit trails!</small>
-        </p>
-      </li>
-
-      <li>
-        <p>
-          <strong>Add checks to your test suite or continuous integration</strong>
-          <br>
-          <small>Don't deploy software with known vulnerabilities.</small>
-        </p>
-      </li>
-
-      <li>
-        <p>
-          <strong>Use our APIs to automate reports</strong>
-          <br>
-          <small>The world is your oyster.</small>
-        </p>
-      </li>
-    </ol>
-
-
-  </div>
-</section>
