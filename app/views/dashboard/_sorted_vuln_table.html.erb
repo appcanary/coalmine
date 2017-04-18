@@ -24,7 +24,7 @@
             </td>
 
             <td width="20%"  class="package-upgrade-to">
-              <%= vuln.reported_at.strftime("%Y-%m-%d") %>
+              <%= vuln.reported_at.try(:strftime, "%Y-%m-%d") || "unknown" %>
             </td>
           </tr>
           <tr>
@@ -33,8 +33,9 @@
             </td>
             <td colspan=2>
               <p><b>packages:</b><br/>
-                <%= pkgs[0..3].map(&:name).join(", ") %>
-                <% if pkgs.size > 4 %>
+              <% plist = pkgs[0..3].map(&:name).uniq %>
+              <%= plist.join(", ") %>
+                <% if plist.size > 4 %>
                   and <%= pkgs.size - 4 %> others.
                 <% end %>
 

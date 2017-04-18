@@ -16,7 +16,11 @@
         Package
       </th>
       <th>
-        Patched in
+        <% if vuln.platform == Platforms::PHP %>
+          Vulnerable in
+        <% else %>
+          Patched in
+        <% end %>
       </th>
       <% if @show_unaffected_col %>
         <th>

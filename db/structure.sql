@@ -170,8 +170,8 @@ CREATE FUNCTION archive_vulnerable_dependencies() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, platform, release, package_name, arch, patched_versions, unaffected_versions, pending, end_of_life, created_at, updated_at, valid_at, expired_at) VALUES
-           (OLD.id, OLD.vulnerability_id, OLD.platform, OLD.release, OLD.package_name, OLD.arch, OLD.patched_versions, OLD.unaffected_versions, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerable_dependency_archives(vulnerable_dependency_id, vulnerability_id, platform, release, package_name, arch, patched_versions, unaffected_versions, pending, end_of_life, created_at, updated_at, affected_versions, valid_at, expired_at) VALUES
+           (OLD.id, OLD.vulnerability_id, OLD.platform, OLD.release, OLD.package_name, OLD.arch, OLD.patched_versions, OLD.unaffected_versions, OLD.pending, OLD.end_of_life, OLD.created_at, OLD.updated_at, OLD.affected_versions, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -1943,7 +1943,9 @@ CREATE TABLE vulnerable_dependencies (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
-    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL
+    expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
+    affected_versions character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    text character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -1985,7 +1987,9 @@ CREATE TABLE vulnerable_dependency_archives (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone NOT NULL,
-    expired_at timestamp without time zone NOT NULL
+    expired_at timestamp without time zone NOT NULL,
+    affected_versions character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    text character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -4379,6 +4383,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170317203807');
 INSERT INTO schema_migrations (version) VALUES ('20170320135753');
 
 INSERT INTO schema_migrations (version) VALUES ('20170322221344');
+
+INSERT INTO schema_migrations (version) VALUES ('20170328203134');
 
 INSERT INTO schema_migrations (version) VALUES ('20170404212231');
 

@@ -28,11 +28,7 @@
 
 class AgentServer < ActiveRecord::Base
   extend ArchiveBehaviour
-  # needed for archive methods
-  def self.archive_class
-    AgentServerArchive
-  end
-
+ 
   ACTIVE_WINDOW = 2.hours
   belongs_to :account
   validates :account, :presence => true

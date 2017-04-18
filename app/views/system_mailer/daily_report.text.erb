@@ -46,3 +46,12 @@ Deleted Monitors:
 <% else %>
   None.
 <% end %>
+
+Daily Summaries:
+<% if @daily_summaries.present? %>
+  <% @daily_summaries.each do |ds| %>
+    <%= ds.recipients.join(", ")%>
+  <% end %>
+<% else %>
+  None.
+<% end %>

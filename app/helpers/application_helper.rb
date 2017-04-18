@@ -18,7 +18,9 @@ module ApplicationHelper
   end
 
   def show_package_path(package)
-    if package.release.nil?
+    if package.platform == Platforms::PHP
+      php_package_version_path(package.name, package.version)
+    elsif package.release.nil?
       package_platform_path(package.platform, package.name, package.version)
     else
       package_platform_release_path(package.platform, package.release, package.name, package.version)
@@ -26,7 +28,9 @@ module ApplicationHelper
   end
 
   def show_package_url(package)
-    if package.release.nil?
+    if package.platform == Platforms::PHP
+      php_package_version_url(package.name, package.version)
+    elsif package.release.nil?
       package_platform_url(package.platform, package.name, package.version)
     else
       package_platform_release_url(package.platform, package.release, package.name, package.version)

@@ -119,9 +119,12 @@ class Api::AgentController < ApiController
     platform = server.distro
     release = server.release
 
-    case pr_params[:kind]
-    when "gemfile"
+    case pr_params[:path]
+    when /gemfile/i
       platform = "ruby"
+      release = nil
+    when /composer/i
+      platform = "php"
       release = nil
     end
 

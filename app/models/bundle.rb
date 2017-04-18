@@ -31,11 +31,6 @@
 
 class Bundle < ActiveRecord::Base
   extend ArchiveBehaviour
-  # needed for archive methods
-  def self.archive_class
-    BundleArchive
-  end
-
 
   belongs_to :account
   belongs_to :agent_server
@@ -48,7 +43,7 @@ class Bundle < ActiveRecord::Base
   has_many :log_bundle_patches
 
   has_many :log_resolutions, ->(bundle) { where(account_id: bundle.account_id) }, :through => :bundled_packages
-  has_many :ignored_packages
+  has_many :ignored_packages, :dependent => :destroy
 
   validates :account, presence: true
   validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }

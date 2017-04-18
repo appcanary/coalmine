@@ -38,6 +38,8 @@ module DashboardHelper
     icon, label = case platform
                   when "ruby"
                     ["ruby.png", "Ruby"]
+                  when "php"
+                    ["php.png", "PHP"]
                   when "centos"
                     ["centos.png", "CentOS"]
                   when "ubuntu"
