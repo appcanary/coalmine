@@ -32,4 +32,10 @@ class DailySummaryManager
     Account.where(id: daily_users.select(:account_id)).
       where.not(id: sent_emails.select(:account_id))
   end
+
+  def self.regenerate(aid, date)
+    acct = Account.find(aid)
+    p = DailySummaryQuery.new(acct, date).create_presenter
+    DailySummaryMailer.daily_summary(p).deliver_now!
+  end
 end
