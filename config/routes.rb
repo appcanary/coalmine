@@ -135,7 +135,7 @@ Rails.application.routes.draw do
       get "status" => 'status#status'
 
       post "monitors(/:name)" => "monitors#create", :constraints => { :name => /.*/ }
-      put "monitors/:name" => "monitors#update_or_create", :constraints => { :name => /.*/ }
+      put "monitors/:name" => "monitors#create_or_update", :constraints => { :name => /.*/ }
       get "monitors/:name" => "monitors#show", :as => "monitor", :constraints => { :name => /.*/ }
       get "monitors" => "monitors#index"
       delete "monitors/:name" => "monitors#destroy", :constraints => { :name => /.*/ }
@@ -150,7 +150,7 @@ Rails.application.routes.draw do
       get "status" => 'status#status'
 
       post "monitors(/:name)" => "monitors#create"
-      put "monitors/:name" => "monitors#update_or_create"
+      put "monitors/:name" => "monitors#create_or_update"
       get "monitors/:name" => "monitors#show", :as => "v2_monitor"
       get "monitors" => "monitors#index", :as => "v2_monitors"
       delete "monitors/:name" => "monitors#destroy"

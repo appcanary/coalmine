@@ -27,7 +27,7 @@ class Api::MonitorsController < ApiController
     end
   end
 
-  def update_or_create
+  def create_or_update
     @bundle = fetch_bundle
     @form = ApiMonitorForm.new(@bundle || Bundle.new)
     @bm = BundleManager.new(current_account)
@@ -42,9 +42,6 @@ class Api::MonitorsController < ApiController
 
     if error
       @form.errors.add(:base, error.message)
-    end
-
-    if @form.errors.present?
       render json: errors_to_h(@form.errors), adapter: :json_api, status: :bad_request
     else
       register_api_call!
