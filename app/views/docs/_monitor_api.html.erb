@@ -7,8 +7,8 @@
     <h2>Create Request</h2>
     <h4><code>POST https://appcanary.com/api/v3/monitors/:name?platform=:platform&release=:release</code></h4>
 
-    <p>Every monitor has a name unique to your account. You can specify the monitor's name, or let us generate one for you. Creates a monitor with an optionally specified name. For example, with Ubuntu:</p>
-    
+    <p>Every monitor has a name unique to your account. You must specify the monitor's name. Creates a monitor with a specified name. For example, with Ubuntu:</p>
+
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
       -X POST -F <strong>file</strong>=@/var/lib/dpkg/status \
       "https://appcanary.com/api/v3/monitors/<strong>my-server</strong>?platform=<strong>ubuntu</strong>&amp;release=<strong>12.04</strong>"</pre>
@@ -44,7 +44,7 @@
   }
 }
 </pre>
-    
+
     <h4>The response container object</h4>
     <%= render :partial => "response_container_fields" %>
 
@@ -60,7 +60,7 @@
     <h4><code>GET https://appcanary.com/api/v3/monitors</code></h4>
 
     <p>For example</p>
-    
+
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
       https://appcanary.com/api/v3/monitors/</pre>
 
@@ -95,7 +95,7 @@
   ]
 }
 </pre>
-    
+
     <h4>The response container object</h4>
     <%= render :partial => "response_coll_container_fields" %>
 
@@ -192,7 +192,7 @@
   ]
 }
     </pre>
-    
+
     <h4>The response container object</h4>
     <%= render :partial => "response_container_fields" %>
 
@@ -220,14 +220,15 @@
     <h4><code>PUT https://appcanary.com/api/v3/monitors/:name</code></h4>
 
     <p>Updates a monitor with the specified name with the contents of file. For example, with Ubuntu:</p>
-    
+
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
       -X PUT -F <strong>file</strong>=@/var/lib/dpkg/status \
       https://appcanary.com/api/v3/monitors/<strong>my-server</strong></pre>
 
+    <p><strong>Note:</strong> if a monitor with the name does not exist yet, this method will create it. In that case, ou can specify platform and release as query parameters, as in the <a href="#create-monitor">create</a> request.
 
     <h4>Required path parameters</h4>
-    <%= render :partial => "monitor_name" %> 
+    <%= render :partial => "monitor_name" %>
 
     <h4>Required query parameters</h4>
     <%= render :partial => "file_parameter" %>
@@ -253,7 +254,7 @@
   }
 }
 </pre>
-    
+
     <h4>The response container object</h4>
     <%= render :partial => "response_container_fields" %>
 
@@ -270,7 +271,7 @@
     <h4><code>DELETE https://appcanary.com/api/v3/monitors/<strong>:name</strong></code></h4>
 
     <p>For example</p>
-    
+
     <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
      -X DELETE \
      https://appcanary.com/api/v3/monitors/<strong>my-server</strong></pre>

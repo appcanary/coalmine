@@ -11,7 +11,7 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert_equal 1, Bundle.count
-      
+
       json = json_body
       assert json.key?("data")
       assert json["data"].key?("id")
@@ -68,6 +68,21 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
       assert_equal "monitors", json["data"]["type"]
       assert_equal "foo", json["data"]["attributes"]["name"]
       assert_equal false, json["data"]["attributes"]["vulnerable"]
+    end
+
+    it "should create a monitor when PUTTING to one that doesn't exist" do
+      assert_equal 0, Bundle.count
+
+      put api_monitor_path(name: "foo"), {file: gemfilelock, platform: Platforms::Ruby},
+          {authorization: %{Token token="#{account.token}"}}
+      assert_response :success
+      assert_equal 1, Bundle.count
+
+      # Calling again will update
+      put api_monitor_path(name: "foo"), {file: gemfilelock, platform: Platforms::Ruby},
+          {authorization: %{Token token="#{account.token}"}}
+      assert_response :success
+      assert_equal 1, Bundle.count
     end
 
     it "should delete an existing monitor" do
@@ -152,7 +167,7 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
       assert_equal "Unauthorized", json_body["errors"].first["title"]
 
       @bundle = FactoryGirl.create(:bundle_with_packages, name: "foo", account: account)
- 
+
       # show
       get api_monitor_path(name: "foo"), {},
         {authorization: %{Token token="LOLFAKE"}}
@@ -163,7 +178,7 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
       # update
       put api_monitor_path(name: "foo"), {file: gemfilelock},
         {authorization: %{Token token="LOLFAKE"}}
-      
+
       assert_response :unauthorized
       assert_equal "Unauthorized", json_body["errors"].first["title"]
 
@@ -181,15 +196,23 @@ class MonitorApiTest < ActionDispatch::IntegrationTest
       new_account = FactoryGirl.create(:account)
       old_pkgs = @bundle.packages.to_a
 
-      put api_monitor_path(name: "foo"), {file: gemfilelock},
+      # try PUTting to a bundle with the same name
+      put api_monitor_path(name: "foo"), {platform: Platforms::Ruby, file: gemfilelock},
         {authorization: %{Token token="#{new_account.token}"}}
 
-      assert_response :not_found
+      # We created a *new* bundle for our account with the same name as @bundle
+      assert_response :success
 
+      # Try doing it with @bundle's id as well
+      put api_monitor_path(name: @bundle.id), {platform: Platforms::Ruby, file: gemfilelock},
+          {authorization: %{Token token="#{new_account.token}"}}
+
+      # We created a *new* bundle for our account with the same name as @bundle
+      assert_response :success
+
+      # The packages of the old bundle did not change did not change
       @bundle.reload
       assert_equal old_pkgs, @bundle.packages.order(:id).to_a
-
-      assert_equal "No monitor with that name or id was found", json_body["errors"].first["title"]
     end
 
     it "should not let you delete someone else's monitor" do

@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     post "/preview" => "rubysec#preview", :as => :rubysec_preview
     post "/create" => "rubysec#create", :as => :rubysec_create
   end
-  
+
   get "isitvuln" => "is_it_vuln#index"
 
   root 'welcome#index'
@@ -77,7 +77,7 @@ Rails.application.routes.draw do
     post "stop_impersonating", on: :collection
   end
   resources :password_reset, :only => [:show, :update]
-  
+
   resource :settings, :only => [:show, :update] do
     patch 'reset_token', on: :collection
   end
@@ -111,9 +111,9 @@ Rails.application.routes.draw do
   end
 
   get "packages/php/:name/:version" => "packages#show", :as => :php_package_version, :constraints => { :name => /[^\/]+\/[^\/]+/, :version => /[^\/]+/ }
-  get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
-  get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
-  get "packages/:id" => "packages#show", :as => :package, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
+  get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
+  get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
+  get "packages/:id" => "packages#show", :as => :package, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
 
   resources :logs, :only => :index
   resources :emails, :only => [:index, :show]
@@ -135,7 +135,7 @@ Rails.application.routes.draw do
       get "status" => 'status#status'
 
       post "monitors(/:name)" => "monitors#create", :constraints => { :name => /.*/ }
-      put "monitors/:name" => "monitors#update", :constraints => { :name => /.*/ }
+      put "monitors/:name" => "monitors#update_or_create", :constraints => { :name => /.*/ }
       get "monitors/:name" => "monitors#show", :as => "monitor", :constraints => { :name => /.*/ }
       get "monitors" => "monitors#index"
       delete "monitors/:name" => "monitors#destroy", :constraints => { :name => /.*/ }
@@ -150,7 +150,7 @@ Rails.application.routes.draw do
       get "status" => 'status#status'
 
       post "monitors(/:name)" => "monitors#create"
-      put "monitors/:name" => "monitors#update"
+      put "monitors/:name" => "monitors#update_or_create"
       get "monitors/:name" => "monitors#show", :as => "v2_monitor"
       get "monitors" => "monitors#index", :as => "v2_monitors"
       delete "monitors/:name" => "monitors#destroy"
