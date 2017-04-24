@@ -49,11 +49,13 @@ class DailySummaryPresenter
   end
 
   def has_vulns_or_servers_to_report?
-    has_fresh_vulns?     ||
-      has_new_vulns?     ||
-      has_cantfix_vulns? ||
-      has_new_servers?   ||
-      has_deleted_servers?
+    has_fresh_vulns?       ||
+      has_new_vulns?       ||
+      has_cantfix_vulns?   ||
+      has_new_servers?     ||
+      has_deleted_servers? ||
+      has_new_monitors?    ||
+      has_deleted_monitors?
   end
 
   def has_patchable_vulns_to_report?
@@ -103,7 +105,8 @@ class DailySummaryPresenter
     end
   end
 
-  create_collection_has_any_methods :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns, :changes, :new_servers, :deleted_servers
+  create_collection_has_any_methods :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns,
+                                    :changes, :new_servers, :deleted_servers, :new_monitors, :deleted_monitors
 
 
 

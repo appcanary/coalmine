@@ -25,7 +25,7 @@
 
 <div class="daily-summary">
 
-  <p>You have <b><%= @presenter.server_ct %> servers</b> monitored by Appcanary.
+  <p>You have <%= servers_and_or_monitors @presenter.server_ct, @presenter.monitor_ct %> registered with Appcanary.
     <% if @presenter.inactive_server_ct > 0 %>
       Of these <b><%= @presenter.inactive_server_ct %> are inactive</b> (we haven't heard from them in a while).
     <% end %>
@@ -55,15 +55,27 @@
     <% end %>
 
     <% if @presenter.has_new_servers? %>
-      <h2>Servers</h2>
-      <p>You added <%= @presenter.new_servers.count %> server(s) today.</p>
+      <h2>New Servers</h2>
+      <p>You added <%= pluralize @presenter.new_servers.count, "server" %> today.</p>
       <%= render :partial => "dashboard/servers_table", :locals => { :servers => @presenter.new_servers, :vulnquery => @presenter.vulnquery, :deleted => false } %>
     <% end %>
 
     <% if @presenter.has_deleted_servers? %>
       <h2>Deleted Servers</h2>
-      <p>You deleted <%= @presenter.deleted_servers.count %> server(s) today.</p>
+      <p>You deleted <%= pluralize @presenter.deleted_servers.count, "server" %> today.</p>
       <%= render :partial => "dashboard/servers_table", :locals => { :servers => @presenter.deleted_servers, :vulnquery => @presenter.vulnquery, :deleted => true } %>
+    <% end %>
+
+    <% if @presenter.has_new_monitors? %>
+      <h2>New Monitors</h2>
+      <p>You added <%= pluralize @presenter.new_servers.count, "monitor" %> today.</p>
+      <%= render :partial => "dashboard/monitors_table", :locals => { :monitors => @presenter.new_monitors, :vulnquery => @presenter.vulnquery, :deleted => false } %>
+    <% end %>
+
+    <% if @presenter.has_deleted_monitors? %>
+      <h2>Deleted Monitors</h2>
+      <p>You deleted <%= pluralize @presenter.deleted_servers.count, "monitor" %> today.</p>
+      <%= render :partial => "dashboard/monitors_table", :locals => { :monitors => @presenter.deleted_monitors, :vulnquery => @presenter.vulnquery, :deleted => true } %>
     <% end %>
 
     <% if @presenter.has_details_to_show? %>
