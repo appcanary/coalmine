@@ -3,28 +3,32 @@ class DailySummaryManager
     accts = accounts_that_want_summaries(date)
 
     accts.find_each do |acct|
-      # If one of these errors out, we still want to send the rest.
-      # This will send the error to sentry and carry on
-      begin
-        if acct.has_activity?
-          presenter = DailySummaryQuery.new(acct, date).create_presenter
-          if acct.wants_daily_summary?(presenter.has_vulns_or_servers_to_report?)
-            msg = DailySummaryMailer.daily_summary(presenter).deliver_now!
+      send_summary(acct, date)
+    end
+  end
 
-            if msg
-              EmailDailySummary.create!(:account_id => acct.id,
-                                        :report_date => date,
-                                        :recipients => msg.to,
-                                        :sent_at => msg.date)
-            end
+  def self.send_summary(acct, date)
+    # If one of these errors out, we still want to send the rest.
+    # This will send the error to sentry and carry on
+    begin
+      if acct.has_activity?
+        presenter = DailySummaryQuery.new(acct, date).create_presenter
+        if acct.wants_daily_summary?(presenter.has_vulns_or_servers_to_report?)
+          msg = DailySummaryMailer.daily_summary(presenter).deliver_now!
+
+          if msg
+            EmailDailySummary.create!(:account_id => acct.id,
+                                      :report_date => date,
+                                      :recipients => msg.to,
+                                      :sent_at => msg.date)
           end
         end
-      rescue Exception => e
-        Raven.capture_exception(e)
-        # Normally we want to swallow this exception since we're running this in a task and we'll get in Sentry, but in dev and test I actually want to be alerted to it
-        if Rails.env.test? || Rails.env.development?
-          raise e
-        end
+      end
+    rescue Exception => e
+      Raven.capture_exception(e)
+      # Normally we want to swallow this exception since we're running this in a task and we'll get in Sentry, but in dev and test I actually want to be alerted to it
+      if Rails.env.test? || Rails.env.development?
+        raise e
       end
     end
   end
