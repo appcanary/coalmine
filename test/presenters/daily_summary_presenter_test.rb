@@ -23,8 +23,12 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
       server2 = FactoryGirl.create(:agent_server, :with_bundle, account: account)
       server3 = FactoryGirl.create(:agent_server, account: account)
       server4 = FactoryGirl.create(:agent_server, account: account)
-
       server3.destroy
+
+      monitor1 = FactoryGirl.create(:bundle, account: account)
+      monitor2 = FactoryGirl.create(:bundle, account: account)
+      monitor2.destroy
+
 
       # ensure it's scoped to our main account
       # by creating irrelevant accounts
@@ -35,13 +39,16 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
       dsp = new_dsp()
       assert_equal account, dsp.account
       assert_equal Date.today, dsp.date
-
-      # Server count dosen't show deleted
+      # Server count doesn't show deleted
       assert_equal 3, dsp.server_ct
+      assert_equal 1, dsp.monitor_ct
 
       # But new servers do
       assert_equal [server1, server2, server3, server4].to_set, dsp.new_servers.to_set
       assert_equal [server3], dsp.deleted_servers
+
+      assert_equal [monitor1, monitor2].to_set, dsp.new_monitors.to_set
+      assert_equal [monitor2].to_set, dsp.deleted_monitors.to_set
 
       # delete a server
       server2.destroy
@@ -62,22 +69,26 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
       server1 = FactoryGirl.create(:agent_server, :with_bundle, account: account)
       add_to_bundle(server1.bundles.first, [pkg_with_2_vulns.reload])
       server2 = FactoryGirl.create(:agent_server, :with_bundle, account: account)
-      add_to_bundle(server2.bundles.first, [pkg_with_1_vuln])
+      add_to_bundle(server2.bundles.first, [pkg_with_1_vuln.reload])
+
+      monitor1 = FactoryGirl.create(:bundle, :ubuntu, account: account)
+      add_to_bundle(monitor1, [pkg_with_1_vuln2.reload])
 
 
       dsp = new_dsp()
       fresh_vulns = dsp.fresh_vulns
 
-      assert_equal 2, fresh_vulns.package_ct
+      assert_equal 3, fresh_vulns.package_ct
       assert_equal 2, fresh_vulns.server_ct
-      assert_equal 3, fresh_vulns.vuln_ct
+      assert_equal 1, fresh_vulns.monitor_ct
+      assert_equal 4, fresh_vulns.vuln_ct
 
       # fresh vulns ignore deleted servers.
       server2.destroy
       fresh_vulns = new_dsp().fresh_vulns
-      assert_equal 1, fresh_vulns.package_ct
+      assert_equal 2, fresh_vulns.package_ct
       assert_equal 1, fresh_vulns.server_ct
-      assert_equal 2, fresh_vulns.vuln_ct
+      assert_equal 3, fresh_vulns.vuln_ct
 
       # Make sure we didn't mess up somewhere else
       assert_equal 0, dsp.new_vulns.vuln_ct
@@ -87,7 +98,7 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
 
     it "should have new vulns" do
       # vulnerability and server was created a while ago
-      bundle, pkg = travel_to 10.years.ago do 
+      bundle, pkg = travel_to 10.years.ago do
         pkg = FactoryGirl.create(:package, :ubuntu)
         FactoryGirl.create(:vulnerability, pkgs: [pkg])
         FactoryGirl.create(:vulnerability, pkgs: [pkg])
@@ -157,22 +168,29 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
     end
 
     it "should have changes" do
-      bundle, pkg, pkg2, pkg3, upgraded_pkg = nil
+      bundle, monitor, pkg, pkg2, pkg3, pkg5, pkg5, upgraded_pkg = nil
       travel_to 10.years.ago do
         pkg = FactoryGirl.create(:package, :ubuntu, version: "11")
         pkg2 = FactoryGirl.create(:package, :ubuntu)
         pkg3 = FactoryGirl.create(:package, :ubuntu)
+        pkg4 = FactoryGirl.create(:package, :ubuntu)
+        pkg5 = FactoryGirl.create(:package, :ubuntu)
         upgraded_pkg = FactoryGirl.create(:package, :ubuntu, name: pkg.name, release: pkg.release, version: "12")
         server = FactoryGirl.create(:agent_server, :with_bundle, account: account)
         bundle = server.bundles.first
 
+        monitor = FactoryGirl.create(:bundle, :ubuntu, account: account)
+
         # Bundle had pkg1 and pkg2
         add_to_bundle(bundle, [pkg, pkg2])
+
+        # Monitor had pkg4
+        add_to_bundle(monitor, [pkg4] )
 
         # We need to cheat a little bit here and change valid_at of the
         # bundled_packages since Rails time travel magic can't affect postgres
         # triggers
-        bundle.bundled_packages.find_each do |bp|
+        BundledPackage.find_each do |bp|
           # disable triggers
           ActiveRecord::Base.connection.execute("SET session_replication_role = replica;")
           bp.valid_at = Time.now
@@ -184,12 +202,17 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
       # You upgraded pkg, removed pkg2 and added pkg3
       add_to_bundle(bundle, [pkg3, upgraded_pkg])
 
+      # Monitor had pkg4 changed to pkg5
+      add_to_bundle(monitor, [pkg5])
+
       dsp = new_dsp()
       changes = dsp.changes
       assert_equal 1, changes.server_ct
-      assert_equal 1, changes.added_ct
+      assert_equal 1, changes.monitor_ct
+
+      assert_equal 2, changes.added_ct
       assert_equal 1, changes.upgraded_ct
-      assert_equal 1, changes.removed_ct
+      assert_equal 2, changes.removed_ct
     end
 
 

@@ -1,29 +1,31 @@
 class DailySummaryPresenter
-  attr_accessor :date, :account, :vulnquery,
+  attr_accessor :dsquery, :vulnquery,
                 :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns,
-                :changes, :server_ct, :inactive_server_ct, :new_servers, :deleted_servers
+                :changes, :server_ct, :inactive_server_ct, :monitor_ct
 
-  def initialize(query)
-    @account = query.account
-    @vulnquery = VulnQuery.new(query.account)
-    @date = query.date
 
-    @fresh_vulns = VulnCollectionPresenter.new(query.fresh_vulns)
-    @new_vulns = VulnCollectionPresenter.new(query.new_vulns)
+  delegate :date, :account,
+           :all_vuln_ct,
+           :all_servers, :new_servers, :deleted_servers,
+           :all_monitors, :new_monitors, :deleted_monitors,
+           :to => :dsquery
 
-    @all_vuln_ct = query.all_vuln_ct
+  def initialize(dsquery)
+    self.dsquery = dsquery
+    self.vulnquery = VulnQuery.new(self.account)
 
-    @patched_vulns = VulnCollectionPresenter.new(query.patched_vulns)
-    @cantfix_vulns = VulnCollectionPresenter.new(query.cantfix_vulns)
-    @changes = ChangesPresenter.new(query.changes)
+    self.fresh_vulns = VulnCollectionPresenter.new(dsquery.fresh_vulns)
+    self.new_vulns = VulnCollectionPresenter.new(dsquery.new_vulns)
 
-    @all_servers = query.all_servers
-    @new_servers = query.new_servers
-    @deleted_servers = query.deleted_servers
+    self.patched_vulns = VulnCollectionPresenter.new(dsquery.patched_vulns)
+    self.cantfix_vulns = VulnCollectionPresenter.new(dsquery.cantfix_vulns)
+    self.changes = ChangesPresenter.new(dsquery.changes)
 
-    @server_ct = @all_servers.count
-    active_server_ct = @all_servers.active_as_of(@date).count
-    @inactive_server_ct = @server_ct - active_server_ct
+    self.server_ct = self.all_servers.count
+    self.monitor_ct = self.all_monitors.count
+
+    active_server_ct = self.all_servers.active_as_of(self.date).count
+    self.inactive_server_ct = self.server_ct - active_server_ct
   end
 
   def total_vuln_ct
@@ -31,7 +33,7 @@ class DailySummaryPresenter
   end
 
   def old_vuln_ct
-    @all_vuln_ct - total_vuln_ct
+    self.all_vuln_ct - total_vuln_ct
   end
 
   def total_package_ct
@@ -77,7 +79,7 @@ class DailySummaryPresenter
   end
 
   def subject
-    "Daily Summary for #{date}"
+    "Daily Summary for #{self.date}"
   end
 
   def recipients
@@ -120,7 +122,7 @@ class DailySummaryPresenter
 
   class VulnCollectionPresenter
     include SortVulnsByCritAndPackages
-    attr_accessor :vuln_ct, :package_ct, :server_ct, :sorted_vulns, :package_ids, :server_ids, :supplementary_ct
+    attr_accessor :vuln_ct, :package_ct, :server_ct, :sorted_vulns, :package_ids, :server_ids, :supplementary_ct, :monitor_ids, :monitor_ct
 
     delegate :each, to: :sorted_vulns
     def initialize(coll)
@@ -128,8 +130,13 @@ class DailySummaryPresenter
 
       self.vuln_ct = coll.map(&:vulnerability_id).uniq.size
       self.package_ct = coll.map(&:package_id).uniq.size
-      self.server_ct = coll.map(&:agent_server_id).uniq.size
-      self.server_ids = coll.map(&:agent_server_id).uniq
+
+      self.server_ids = coll.map(&:agent_server_id).select(&:present?).uniq
+      self.server_ct = self.server_ids.size
+
+      self.monitor_ids = coll.select{|lbv| lbv.agent_server_id.nil?}.map(&:bundle_id).uniq
+      self.monitor_ct = monitor_ids.size
+
       self.package_ids = coll.map(&:package_id).uniq
       self.supplementary_ct = coll.select(&:supplementary).map(&:vulnerability_id).uniq.size
     end
@@ -144,10 +151,11 @@ class DailySummaryPresenter
   end
 
   class ChangesPresenter
-    attr_accessor :added_ct, :removed_ct, :upgraded_ct, :server_ct
+    attr_accessor :added_ct, :removed_ct, :upgraded_ct, :server_ct, :monitor_ct
 
     def initialize(new_changes)
       self.server_ct = new_changes[:server_ct]
+      self.monitor_ct = new_changes[:monitor_ct]
       self.added_ct = new_changes[:added_ct]
       self.removed_ct = new_changes[:removed_ct]
       self.upgraded_ct = new_changes[:upgraded_ct]
