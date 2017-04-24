@@ -15,7 +15,7 @@ class ServerApiTest < ActionDispatch::IntegrationTest
 
       body = json_body
 
-      assert_equal body["data"].map { |h| h["id"] }, @servers.map(&:id).map(&:to_s).reverse
+      assert_equal body["data"].map { |h| h["id"] }.to_set, @servers.map(&:id).map(&:to_s).to_set
       assert body["data"].first["attributes"]["name"].present?
       assert body["data"].first["attributes"]["uuid"].present?
 
@@ -40,7 +40,7 @@ class ServerApiTest < ActionDispatch::IntegrationTest
     it "should show an existing server" do
       @bundle1 = FactoryGirl.create(:bundle_with_packages, name: "foo", account: account)
       @vuln = FactoryGirl.create(:vulnerability, :pkgs => [@bundle1.packages.first])
-      
+
       @bundle2 = FactoryGirl.create(:bundle_with_packages, name: "foo2", account: account)
       @servers = [FactoryGirl.create(:agent_server, :account => account, :bundles => [@bundle1])]
       @servers << FactoryGirl.create(:agent_server, :account => account, :bundles => [@bundle2])
@@ -53,7 +53,7 @@ class ServerApiTest < ActionDispatch::IntegrationTest
       body = json_body
       assert_equal @server1.id.to_s, body["data"]["id"]
       assert_equal [@server1.name, @server1.uuid], body["data"]["attributes"].slice("name", "uuid").values
-      
+
       monitors = body["included"].select { |h| h["type"] == "monitors" }
 
       assert_equal 1, monitors.count
@@ -78,7 +78,7 @@ class ServerApiTest < ActionDispatch::IntegrationTest
       get api_server_path(:uuid => "FAKE"), {}, auth_token(account)
       assert_response :not_found
       assert_equal "No server with that id was found", json_body["errors"].first["title"]
-      
+
       # quick v2 smokescreen test
       get api_v2_server_path(:uuid => @server1.uuid), {}, auth_token(account)
       assert_response :success
@@ -108,14 +108,14 @@ class ServerApiTest < ActionDispatch::IntegrationTest
       @server1 = FactoryGirl.create(:agent_server, :account => account).reload
       get api_servers_path, {}, auth_token(Struct.new(:token).new("FAKE"))
 
-      assert_response :unauthorized   
+      assert_response :unauthorized
       assert_equal "Unauthorized", json_body["errors"].first["title"]
     end
 
     it "should not list other people's servers" do
       @server1 = FactoryGirl.create(:agent_server, :account => account).reload
       account2 = FactoryGirl.create(:account)
-      
+
       get api_server_path(:uuid => @server1.uuid), {}, auth_token(account2)
 
       assert_response :not_found
@@ -123,7 +123,7 @@ class ServerApiTest < ActionDispatch::IntegrationTest
 
 
       get api_servers_path(:uuid => @server1.uuid), {}, auth_token(Struct.new(:token).new("FAKE"))
-      assert_response :unauthorized   
+      assert_response :unauthorized
       assert_equal "Unauthorized", json_body["errors"].first["title"]
     end
 
