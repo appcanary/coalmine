@@ -12,7 +12,7 @@ class DailySummaryManager
             msg = DailySummaryMailer.daily_summary(presenter).deliver_now!
 
             if msg
-              EmailDailySummary.create!(:account_id => acct.id, 
+              EmailDailySummary.create!(:account_id => acct.id,
                                         :report_date => date,
                                         :recipients => msg.to,
                                         :sent_at => msg.date)
@@ -21,6 +21,10 @@ class DailySummaryManager
         end
       rescue Exception => e
         Raven.capture_exception(e)
+        # Normally we want to swallow this exception since we're running this in a task and we'll get in Sentry, but in dev and test I actually want to be alerted to it
+        if Rails.env.test? || Rails.env.development?
+          raise e
+        end
       end
     end
   end
