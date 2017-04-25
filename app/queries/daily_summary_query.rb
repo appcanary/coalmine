@@ -70,12 +70,14 @@ class DailySummaryQuery
   end
 
   def changes
-    changes = BundledPackage.revisions.joins(:bundle).where("bundles.account_id" => account.id).except(:select).select("distinct(bundle_id, bundled_packages.valid_at)::text as ds, bundle_id, agent_server_id, bundled_packages.valid_at").where("bundled_packages.valid_at <= ? and bundled_packages.valid_at >= ?", @end_at, @begin_at)
-    changes = changes.where.not('bundles.agent_server_id': @new_servers.map(&:id) + @deleted_servers.map(&:id))
+    # We want only the bundles that had changes today.
+    # We can do this by calling updated_at if it's a monitor but it's not clear if agent_servers also do a .touch when changing packages
+    bundled_packages_changed_today = BundledPackage.from(BundledPackage.union_str(BundledPackage.created_on(@begin_at), BundledPackage.deleted_on(@begin_at)))
 
+    changed_bundles = account.bundles.merge(bundled_packages_changed_today.joins("RIGHT JOIN bundles ON bundles.id = bundled_packages.bundle_id")).uniq
     hsh = {removed_ct: 0, added_ct: 0, upgraded_ct: 0, server_ids: {}, monitor_ids: {}}
-    new_changes = changes.reduce(hsh) { |acc, c|
-      bq = BundleQuery.new(c.bundle, @end_at)
+    changes = changed_bundles.reduce(hsh) { |acc, bundle|
+      bq = BundleQuery.new(bundle, @end_at)
       removed, added = bq.package_delta(@begin_at)
 
       hsh = Hash.new(0)
@@ -93,18 +95,18 @@ class DailySummaryQuery
       acc[:removed_ct] += removed_ct
       acc[:added_ct] += added_ct
       acc[:upgraded_ct] += upgraded_ct
-      if c.bundle.agent_server.present?
-        acc[:server_ids][c.bundle.agent_server_id] = 1
+      if bundle.agent_server.present?
+        acc[:server_ids][bundle.agent_server_id] = 1
       else
-        acc[:monitor_ids][c.bundle.id] = 1
+        acc[:monitor_ids][bundle.id] = 1
       end
 
       acc
     }
 
 
-    new_changes[:server_ct] = new_changes[:server_ids].keys.select(&:present?).count
-    new_changes[:monitor_ct] = new_changes[:monitor_ids].keys.count
-    new_changes
+    changes[:server_ct] = changes[:server_ids].keys.select(&:present?).count
+    changes[:monitor_ct] = changes[:monitor_ids].keys.count
+    changes
   end
 end

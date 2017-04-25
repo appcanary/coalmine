@@ -185,7 +185,7 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
         add_to_bundle(bundle, [pkg, pkg2])
 
         # Monitor had pkg4
-        add_to_bundle(monitor, [pkg4] )
+        add_to_bundle(monitor, [pkg4, pkg5] )
 
         # We need to cheat a little bit here and change valid_at of the
         # bundled_packages since Rails time travel magic can't affect postgres
@@ -202,7 +202,7 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
       # You upgraded pkg, removed pkg2 and added pkg3
       add_to_bundle(bundle, [pkg3, upgraded_pkg])
 
-      # Monitor had pkg4 changed to pkg5
+      # Monitor had pkg4 removed
       add_to_bundle(monitor, [pkg5])
 
       dsp = new_dsp()
@@ -210,7 +210,7 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
       assert_equal 1, changes.server_ct
       assert_equal 1, changes.monitor_ct
 
-      assert_equal 2, changes.added_ct
+      assert_equal 1, changes.added_ct
       assert_equal 1, changes.upgraded_ct
       assert_equal 2, changes.removed_ct
     end
