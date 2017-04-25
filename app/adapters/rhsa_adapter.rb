@@ -27,10 +27,6 @@ class RHSAAdapter < AdvisoryAdapter.new(:rhsa_id, :cves, :title, :severity, :rel
     description
   end
 
-  generate :rhsa_id do
-    rhsa_id
-  end
-
   generate :criticality do
     case severity
     when /low/i
