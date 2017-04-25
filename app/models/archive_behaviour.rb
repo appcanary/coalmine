@@ -14,8 +14,9 @@ module ArchiveBehaviour
   end
 
   def build_as_of(time_t)
-    union_str(all.where("valid_at <= ? and expired_at > ?", time_t, time_t),
-              self::ARCHIVE_CLASS.select_as_archived.where("valid_at <= ? and expired_at > ?", time_t, time_t))
+    archive_table_name = self::ARCHIVE_CLASS.table_name
+    union_str(all.where("#{self.table_name}.valid_at <= ? and expired_at > ?", time_t, time_t),
+              self::ARCHIVE_CLASS.select_as_archived.where("#{archive_table_name}.valid_at <= ? and #{archive_table_name}.expired_at > ?", time_t, time_t))
 
   end
 
@@ -35,13 +36,13 @@ module ArchiveBehaviour
 
   def created_on(date)
     from(union_str(all, self.deleted)).
-      where('created_at >= ? and created_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
+      where("#{self.table_name}.created_at >= ? and #{self.table_name}.created_at <= ?", date.at_beginning_of_day, date.at_end_of_day)
   end
 
   def deleted_on(date)
     from("(#{self.deleted.to_sql}) #{self.table_name}").
       # and only look at stuff from this day in particular
-      where("expired_at >= ? and expired_at <= ?", date.at_beginning_of_day, date.at_end_of_day)
+      where("#{self.table_name}.expired_at >= ? and #{self.table_name}.expired_at <= ?", date.at_beginning_of_day, date.at_end_of_day)
   end
 
   def revisions
