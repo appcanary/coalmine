@@ -31,6 +31,12 @@
 class AgentServerArchive < ActiveRecord::Base
   extend ArchiveTableBehaviour
   belongs_to :account
+  # note for later:
+  # select agent_server_archives.* from agent_server_archives inner join (select agent_server_id, max(id) id from agent_server_archives WHERE (valid_at >= '2017-01-12 00:00:00.000000' and valid_at <= '2017-01-12 23:59:59.999999') group by agent_server_id) specific_as
+  # ON specific_as.id = agent_server_archives.id
+  # left join agent_servers on agent_server_archives.agent_server_id = agent_servers.id
+  # where agent_servers.id is null and agent_server_archives.account_id = 22
+  # order by agent_server_archives.agent_server_id
 
   #TODO: this should be in the presenter
   def display_name
