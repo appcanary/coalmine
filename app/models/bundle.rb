@@ -57,12 +57,12 @@ class Bundle < ActiveRecord::Base
   }
 
   # TODO: elimite from_api
-  scope :via_api, -> { where("agent_server_id is null") }
+  scope :via_api, -> { where("bundles.agent_server_id is null") }
 
-  scope :via_agent, -> { where("agent_server_id is not null") }
+  scope :via_agent, -> { where("bundles.agent_server_id is not null") }
 
-  scope :system_bundles, -> { where("platform IN (?)", Platforms::OPERATING_SYSTEMS) }
-  scope :app_bundles, -> { where("platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
+  scope :system_bundles, -> { where("bundles.platform IN (?)", Platforms::OPERATING_SYSTEMS) }
+  scope :app_bundles, -> { where("bundles.platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
 
   # note that these are instance methods
   # as opposed to ArchiveBehaviour class methods
