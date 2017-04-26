@@ -29,11 +29,15 @@ class RHSAImporter < AdvisoryImporter
       }
 
       xml = RestClient.get("#{RHSD_CVE_ENDPOINT}/cvrf.xml", params)
-      this_page = Nokogiri::XML(xml)
-      results = results.concat(this_page.css("Cvrfs Cvrf"))
+      this_page = Nokogiri::XML(xml).css("Cvrfs Cvrf")
+      results = results.concat(this_page)
+
+      Rails.logger.info("Processing index page #{page}, #{this_page.count} CVRFs")
 
       # no more pages
       break if this_page.count < per_page
+
+      page += 1
     end
 
     results
