@@ -11,7 +11,6 @@ require("select2");
 $(document).ready(function() {
   $('select').select2({
     theme: "bootstrap",
-    placeholder: "I use..."
   });
 
   $('select.tag-select').select2({

@@ -8,7 +8,7 @@
 
         <ul class="nav nav-pills nav-stacked">
           <li><h2>Monitors</h2></li>
-          <li><%= link_to 'Using the API', docs_path(:anchor => "create-monitor") %></li>
+          <li><%= link_to 'Using the API', api_docs_path(:anchor => "create-monitor") %></li>
         </ul>
       </div>
     </div>
@@ -18,10 +18,13 @@
     <section>
       <div class="form">
 
-       <h2>Create a new monitor:</h2>
-       <p>A monitor lets you register a set of packages for us to keep a watch on.</p>
+        <div class="col-sm-12">
+          <h2>Create a new monitor</h2>
+          <p>A monitor lets you register a set of packages for us to keep a watch on.</p>
 
-       <p>You'll be able to see the vulnerabilities that affect you in the <%= link_to "dashboard", dashboard_path %>, and we will email you updates whenever any of the packages listed have a known vulnerability.</p>
+          <p>You'll be able to see the vulnerabilities that affect you in the <%= link_to "dashboard", dashboard_path %>, and we will email you updates whenever any of the packages listed have a known vulnerability. Find out more via the <%= link_to "API docs", api_docs_path(anchor: "create-monitor") %>.</p>
+          <br/>
+        </div>
 
         <div class="col-sm-6">
           <a name="righthere" class="anchor-offset"></a>
