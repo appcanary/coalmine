@@ -87,7 +87,12 @@ class Platforms
       "2016.09"
     ],
     Alpine => [
-      nil
+      "3.0.0", "3.0.1", "3.0.2", "3.0.3", "3.0.4", "3.0.5", "3.0.6",
+      "3.1.0", "3.1.1", "3.1.2", "3.1.3", "3.1.4",
+      "3.2.0", "3.2.1", "3.2.2", "3.2.3",
+      "3.3.0", "3.3.1", "3.3.2", "3.3.3",
+      "3.4.0", "3.4.1", "3.4.2", "3.4.3", "3.4.4", "3.4.5", "3.4.6",
+      "3.5.0", "3.5.1", "3.5.2"
     ]
   }
 
@@ -196,7 +201,7 @@ class Platforms
     klass.new(package.version)
   end
 
-  def self.parser_for(platform)
+  def self.parser_for(platform, release = nil)
     case platform
     when Ruby
       GemfileParser
@@ -211,6 +216,8 @@ class Platforms
       DpkgStatusParser
     when Debian
       DpkgStatusParser
+    when Alpine
+      ApkInstalledDbParser.new(release)
     else
       nil
     end

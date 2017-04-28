@@ -115,6 +115,16 @@ class Parcel
     end
   end
 
+  class APK < Parcel
+    def initialize(hsh = nil)
+      return if hsh.nil?
+      self.name = hsh["name"]
+      self.version = hsh["version"]
+      self.platform = Platforms::Alpine
+      self.release = hsh["release"]
+    end
+  end
+
   class Dpkg < Parcel
     attr_accessor :source_name, :source_version
     def initialize(hsh = nil)
