@@ -57,6 +57,7 @@ gem 'intercom'
 
 # importer utilities
 gem 'php-composer-semver', :require => 'composer/semver'
+gem 'mustache', '~> 1.0'
 
 # deployment
 gem 'unicorn-rails'

@@ -6,6 +6,7 @@ class Platforms
   PHP = "php"
   CentOS = "centos"
   Amazon = "amzn"
+  Alpine = "alpine"
   None = "none"
 
   FULL_NAMES = {
@@ -14,14 +15,16 @@ class Platforms
     Amazon => "Amazon",
     CentOS => "CentOS",
     Ubuntu => "Ubuntu",
-    Debian => "Debian"
+    Debian => "Debian",
+    Alpine => "Alpine"
   }
 
   OPERATING_SYSTEMS = [
     Ubuntu,
     Debian,
     CentOS,
-    Amazon
+    Amazon,
+    Alpine
   ]
 
   PLATFORM_RELEASES = {
@@ -82,6 +85,9 @@ class Platforms
       "2015.03", 
       "2016.03", 
       "2016.09"
+    ],
+    Alpine => [
+      nil
     ]
   }
 
@@ -125,6 +131,7 @@ class Platforms
     Debian,
     CentOS,
     Amazon,
+    Alpine,
     Ruby,
     PHP
   ]
@@ -134,7 +141,7 @@ class Platforms
   end
 
   def self.select_platform_release
-    arr = [[Ruby.titleize, Ruby], [PHP.titleize, PHP]]
+    arr = [[Ruby.titleize, Ruby], [PHP.titleize, PHP], [Alpine.titleize, Alpine]]
 
     arr += [Ubuntu, CentOS, Debian, Amazon].map do |plt|
       PLATFORM_RELEASES[plt].map { |r,v| ["#{FULL_NAMES[plt]} - #{r}", "#{plt} - #{r}"] }
@@ -209,6 +216,8 @@ class Platforms
     end
   end
 
+  # TODO Used as a UI helper in the add new server docs, so don't forget to deal
+  # with that before merging the Alpine changes.
   def self.select_operating_systems
     OPERATING_SYSTEMS.map { |n| [n, full_name(n)] }
   end

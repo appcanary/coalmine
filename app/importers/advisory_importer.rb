@@ -3,9 +3,8 @@ class AdvisoryImporter
   def import!
     update_local_store!
     raw_advisories = fetch_advisories
-    all_advisories = raw_advisories.lazy.map { |ra| parse(ra) }
+    all_advisories = raw_advisories.lazy.flat_map { |ra| parse(ra) }
     process_advisories(all_advisories)
-    
   end
 
   def fetch_advisories
