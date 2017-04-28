@@ -27,7 +27,7 @@
 #
 
 class AgentServer < ActiveRecord::Base
-  extend ArchiveBehaviour
+  extend ArchiveBehaviour::BaseModel
 
   ACTIVE_WINDOW = 2.hours
   belongs_to :account

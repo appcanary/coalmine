@@ -29,7 +29,7 @@
 #
 
 class AgentServerArchive < ActiveRecord::Base
-  extend ArchiveTableBehaviour
+  extend ArchiveBehaviour::ArchiveModel
   belongs_to :account
   # note for later:
   # select agent_server_archives.* from agent_server_archives inner join (select agent_server_id, max(id) id from agent_server_archives WHERE (valid_at >= '2017-01-12 00:00:00.000000' and valid_at <= '2017-01-12 23:59:59.999999') group by agent_server_id) specific_as

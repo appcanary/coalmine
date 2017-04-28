@@ -30,7 +30,7 @@
 #
 
 class Bundle < ActiveRecord::Base
-  extend ArchiveBehaviour
+  extend ArchiveBehaviour::BaseModel
 
   belongs_to :account
   belongs_to :agent_server

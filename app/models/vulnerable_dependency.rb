@@ -1,3 +1,4 @@
+# coding: utf-8
 # == Schema Information
 #
 # Table name: vulnerable_dependencies
@@ -30,7 +31,7 @@
 #
 
 class VulnerableDependency < ActiveRecord::Base
-  extend ArchiveBehaviour
+  extend ArchiveBehaviour::BaseModel
   belongs_to :vulnerability
   has_many :vulnerable_packages, :dependent => :destroy
   has_many :log_resolutions
