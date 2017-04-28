@@ -72,9 +72,8 @@ class DailySummaryQuery
   def changes
     # We want only the bundles that had changes today.
     # We can do this by calling updated_at if it's a monitor but it's not clear if agent_servers also do a .touch when changing packages
-    bundled_packages_changed_today = BundledPackage.from(BundledPackage.union_str(BundledPackage.created_on(@begin_at), BundledPackage.deleted_on(@begin_at)))
-
-    changed_bundles = account.bundles.merge(bundled_packages_changed_today.joins("RIGHT JOIN bundles ON bundles.id = bundled_packages.bundle_id")).uniq
+    all_changed_bundle_ids = BundledPackage.from(BundledPackage.union_str(BundledPackage.created_on(@begin_at), BundledPackage.deleted_on(@begin_at))).pluck('distinct bundle_id')
+    changed_bundles = account.bundles.where(id: all_changed_bundle_ids)
     hsh = {removed_ct: 0, added_ct: 0, upgraded_ct: 0, server_ids: {}, monitor_ids: {}}
     changes = changed_bundles.reduce(hsh) { |acc, bundle|
       bq = BundleQuery.new(bundle, @end_at)

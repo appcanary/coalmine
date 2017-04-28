@@ -16,7 +16,7 @@ module ArchiveBehaviour
 
     def build_as_of(time_t)
       archive_table_name = self::ARCHIVE_CLASS.table_name
-      union_str(all.where("#{self.table_name}.valid_at <= ? and expired_at > ?", time_t, time_t),
+      union_str(all.where("#{self.table_name}.valid_at <= ? and #{self.table_name}.expired_at > ?", time_t, time_t),
                 self::ARCHIVE_CLASS.select_as_archived.where("#{archive_table_name}.valid_at <= ? and #{archive_table_name}.expired_at > ?", time_t, time_t))
 
     end
