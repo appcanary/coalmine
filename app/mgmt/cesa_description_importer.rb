@@ -1,33 +1,23 @@
 class CesaDescriptionImporter
-  include ResultObject
-
-  attr_reader :since
-
-  def initialize(since = nil)
-    @since = since || 2.hours.ago
-  end
-
-  def import_descriptions
+  def self.import_descriptions
     errors = []
 
-    Advisory.from_rhsa.where("updated_at > ?", since).each do |advisory|
-      begin
+    Advisory.from_rhsa.unprocessed.find_each do |rhsa|
+      rhsa.transaction do
         cesa = Advisory.from_cesa.
-                 find_by("reference_ids @> ARRAY[?]::varchar[]", [advisory.identifier])
+                 find_by("reference_ids @> ARRAY[?]::varchar[]", [rhsa.identifier])
+
         unless cesa.nil?
-          cesa.description = advisory.description
+          cesa.description = rhsa.description
           cesa.save!
+
+          # Reusing the `processed` flag for now because this usage is disjoint
+          # with usage by the VulnerabilityImporter. If at some point we start
+          # doing multi-step processing we should extract distinct flags for
+          # different processing steps.
+          rhsa.advisory_import_state.update_attributes!(processed: true)
         end
-      rescue => e
-        Rails.logger.warn(e)
-        errors << e
       end
     end
-
-    Result.new(true, errors.empty? ? nil : errors)
-  end
-
-  def self.import_all_descriptions
-    self.new(Time.at(0)).import_descriptions
   end
 end
