@@ -87,6 +87,10 @@ class Advisory < ActiveRecord::Base
     where(:source => CesaImporter::SOURCE)
   }
 
+  scope :from_rhsa, -> {
+    where(:source => RHSAImporter::SOURCE)
+  }
+
   scope :from_alas, -> {
     where(:source => AlasImporter::SOURCE)
   }

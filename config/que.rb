@@ -26,3 +26,8 @@ DebianTrackerImporterJob.enqueue_if_not_existing!
 
 # process imported data
 VulnerabilityImporterJob.enqueue_if_not_existing!
+
+# not processed by VulnerabilityImporter...
+RHSAImporterJob.enqueue_if_not_existing!
+# ...but instead by the CesaDescriptionImporter
+CesaDescriptionImporterJob.enqueue_if_not_existing!
