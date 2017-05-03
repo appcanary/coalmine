@@ -16,28 +16,20 @@
           </th>
         </thead>
 
-        <% servers.each do |srv| %>
+        <% monitors.each do |mon| %>
           <tr>
             <td>
-              <% if srv.system_bundle %>
-                <%= link_to srv.display_name, server_app_url(srv.system_bundle, server_id: srv.id) %>
-              <% else %>
-                <%= srv.display_name %>
-              <% end %>
+              <%= link_to mon.display_name, monitor_url(mon) %>
             </td>
 
             <% unless deleted %>
               <td>
-                <% if srv.system_bundle %>
-                  <%= vulnquery.from_bundle(srv.system_bundle).count %>
-                <% else %>
-                  (since deleted)
-                <% end%>
+                <%= vulnquery.from_bundle(mon).count %>
               </td>
             <% end %>
 
             <td>
-              <%= "#{srv.distro} / #{srv.release}" %>
+              <%= "#{mon.platform} / #{mon.release}" %>
             </td>
           </tr>
         <% end %>

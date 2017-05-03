@@ -30,7 +30,7 @@
 #
 
 class Bundle < ActiveRecord::Base
-  extend ArchiveBehaviour
+  extend ArchiveBehaviour::BaseModel
 
   belongs_to :account
   belongs_to :agent_server
@@ -61,12 +61,8 @@ class Bundle < ActiveRecord::Base
 
   scope :via_agent, -> { where("bundles.agent_server_id is not null") }
 
-  scope :system_bundles, -> { where("platform IN (?)", Platforms::OPERATING_SYSTEMS) }
-  scope :app_bundles, -> { where("platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
-  scope :created_on, -> (date) {
-    where('valid_at >= ? and valid_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
-  }
-
+  scope :system_bundles, -> { where("bundles.platform IN (?)", Platforms::OPERATING_SYSTEMS) }
+  scope :app_bundles, -> { where("bundles.platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
 
   # note that these are instance methods
   # as opposed to ArchiveBehaviour class methods

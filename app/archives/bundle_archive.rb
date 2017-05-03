@@ -29,7 +29,7 @@
 #
 
 class BundleArchive < ActiveRecord::Base
-  extend ArchiveTableBehaviour
+  extend ArchiveBehaviour::ArchiveModel
   belongs_to :account
 
   scope :via_api, -> { where("bundle_archives.agent_server_id is null") }

@@ -1,5 +1,5 @@
 class DailySummaryQuery
-  attr_accessor :account, :date, :begin_at, :end_at, :all_servers, :new_servers, :deleted_servers
+  attr_accessor :account, :date, :begin_at, :end_at, :all_servers, :new_servers, :deleted_servers, :all_monitors, :new_monitors, :deleted_monitors
 
   def initialize(account, date)
     @account = account
@@ -10,18 +10,22 @@ class DailySummaryQuery
 
     # ---- we now establish some basic facts
 
-    @all_servers = AgentServer.where(:account_id => account.id)
+    @all_servers = AgentServer.where(account_id: account.id)
 
-    @new_servers = AgentServer.where(:account_id => account.id).created_on(@begin_at)
+    @new_servers = AgentServer.where(account_id: account.id).created_on(@begin_at)
 
-    @deleted_servers = AgentServer.where(:account_id => account.id).deleted_on(@begin_at)
+    @deleted_servers = AgentServer.where(account_id: account.id).deleted_on(@begin_at)
 
-    @new_apps = Bundle.as_of(@end_at).where(:account_id => account.id).app_bundles.created_on(@begin_at)
+    @all_monitors = Bundle.where(account_id: account.id).via_api
+
+    @new_monitors = Bundle.where(account_id: account.id).created_on(@begin_at).via_api
+
+    @deleted_monitors = Bundle.where(account_id: account.id).deleted_on(@begin_at).via_api
 
     # ---- and we set up the basic queries
     @log_vuln_query = LogBundleVulnerability.in_bundles_from(account.id).unpatched_as_of(@end_at)
     @log_patch_query = LogBundlePatch.in_bundles_from(account.id).not_vulnerable_as_of(@end_at)
-    
+
     @lbv_unpatched_fixable = @log_vuln_query.patchable
     @lbv_unpatched_cantfix = @log_vuln_query.unpatchable
 
@@ -58,7 +62,7 @@ class DailySummaryQuery
     # make sure we don't report on stuff from brand new
     # or deleted servers
 
-    net_patches = net_patches.where.not('bundles.agent_server_id':  @new_servers.map(&:id) + @deleted_servers.map(&:id)) 
+    net_patches = net_patches.where.not('bundles.agent_server_id':  @new_servers.map(&:id) + @deleted_servers.map(&:id))
   end
 
   def cantfix_vulns
@@ -66,12 +70,13 @@ class DailySummaryQuery
   end
 
   def changes
-    changes = BundledPackage.revisions.joins(:bundle).where("bundles.account_id" => account.id).except(:select).select("distinct(bundle_id, bundled_packages.valid_at)::text as ds, bundle_id, agent_server_id, bundled_packages.valid_at").where("bundled_packages.valid_at <= ? and bundled_packages.valid_at >= ?", @end_at, @begin_at)
-    changes = changes.where.not('bundles.agent_server_id': @new_servers.map(&:id) + @deleted_servers.map(&:id))
-
-    hsh = {removed_ct: 0, added_ct: 0, upgraded_ct: 0, server_ids: {}}
-    new_changes = changes.reduce(hsh) { |acc, c|
-      bq = BundleQuery.new(c.bundle, @end_at)
+    # We want only the bundles that had changes today.
+    # We can do this by calling updated_at if it's a monitor but it's not clear if agent_servers also do a .touch when changing packages
+    all_changed_bundle_ids = BundledPackage.from(BundledPackage.union_str(BundledPackage.created_on(@begin_at), BundledPackage.deleted_on(@begin_at))).pluck('distinct bundle_id')
+    changed_bundles = account.bundles.where(id: all_changed_bundle_ids)
+    hsh = {removed_ct: 0, added_ct: 0, upgraded_ct: 0, server_ids: {}, monitor_ids: {}}
+    changes = changed_bundles.reduce(hsh) { |acc, bundle|
+      bq = BundleQuery.new(bundle, @end_at)
       removed, added = bq.package_delta(@begin_at)
 
       hsh = Hash.new(0)
@@ -89,12 +94,18 @@ class DailySummaryQuery
       acc[:removed_ct] += removed_ct
       acc[:added_ct] += added_ct
       acc[:upgraded_ct] += upgraded_ct
-      acc[:server_ids][c.bundle.agent_server_id] = 1
+      if bundle.agent_server.present?
+        acc[:server_ids][bundle.agent_server_id] = 1
+      else
+        acc[:monitor_ids][bundle.id] = 1
+      end
+
       acc
     }
 
 
-    new_changes[:server_ct] = new_changes[:server_ids].keys.count
-    new_changes
+    changes[:server_ct] = changes[:server_ids].keys.select(&:present?).count
+    changes[:monitor_ct] = changes[:monitor_ids].keys.count
+    changes
   end
 end

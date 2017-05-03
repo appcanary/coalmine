@@ -21,7 +21,7 @@
 # TODO: enforce uniqueness constraint
 
 class BundledPackage < ActiveRecord::Base
-  extend ArchiveBehaviour
+  extend ArchiveBehaviour::BaseModel
   
   belongs_to :package
   belongs_to :bundle

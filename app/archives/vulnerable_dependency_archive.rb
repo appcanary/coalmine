@@ -1,3 +1,3 @@
 class VulnerableDependencyArchive < ActiveRecord::Base
-  extend ArchiveTableBehaviour
+  extend ArchiveBehaviour::ArchiveModel
 end
