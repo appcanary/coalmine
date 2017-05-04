@@ -40,7 +40,7 @@ class AlpineAdapter < AdvisoryAdapter.new(:distroversion,
   generate :constraints do
     hsh = {
       "package_name" => package_name,
-      "patched_versions" = [package_version]
+      "patched_versions" => [package_version]
     }
 
     [DependencyConstraint.parse(hsh)]
