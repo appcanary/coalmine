@@ -41,12 +41,14 @@
           </a>
         <% end %>
 
-        <%= li_active "docs" do %>
-          <a href="/docs">
-            <i class="fa fa-book"></i> Documentation
-          </a>
+        <%= li_active "docs", class: "dropdown" do %>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-book"></i> Documentation <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="/docs">Getting Started</a></li>
+                <li><a href="/docs/api">API Docs</a></li>
+                <li><a href="/docs/ci">Continuous Integration</a></li>
+            </ul>
         <% end %>
-
         <%= li_active "vulns" do %>
           <a href="/vulns">
             <i class="fa fa-folder-open"></i> Vulnerabilities
