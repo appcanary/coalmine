@@ -218,7 +218,6 @@ GEM
     multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mustache (1.0.5)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (3.2.0)
@@ -410,7 +409,6 @@ DEPENDENCIES
   minitest-spec-rails
   mocha (~> 1.1.0)
   msgpack
-  mustache (~> 1.0)
   neat!
   nokogiri (~> 1.7.1)
   pg
