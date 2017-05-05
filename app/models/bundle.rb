@@ -34,7 +34,7 @@ class Bundle < ActiveRecord::Base
 
   belongs_to :account
   belongs_to :agent_server
-  has_many :bundled_packages, :dependent => :destroy
+  has_many :bundled_packages, :dependent => :delete_all
   has_many :packages, :through => :bundled_packages
   has_many :vulnerable_packages, :through => :bundled_packages
   has_many :vulnerable_dependencies, :through => :vulnerable_packages

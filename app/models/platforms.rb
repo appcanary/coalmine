@@ -134,7 +134,7 @@ class Platforms
   end
 
   def self.select_platform_release
-    arr = [[Ruby.titleize, Ruby], [PHP.titleize, PHP]]
+    arr = [[FULL_NAMES[Ruby], Ruby], [FULL_NAMES[PHP], PHP]]
 
     arr += [Ubuntu, CentOS, Debian, Amazon].map do |plt|
       PLATFORM_RELEASES[plt].map { |r,v| ["#{FULL_NAMES[plt]} - #{r}", "#{plt} - #{r}"] }

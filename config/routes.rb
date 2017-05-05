@@ -71,7 +71,10 @@ Rails.application.routes.draw do
   post 'greatrubyreview/payment' => "great_review#payment", :as => :great_review_payment
 
 
-  resources :docs, :only => :index
+  resources :docs, :only => :index do
+    get "api", as: :api, on: :collection
+    get "ci", as: :ci, on: :collection
+  end
 
   resources :users, :only => [:new, :create, :update, :destroy] do
     post "stop_impersonating", on: :collection
