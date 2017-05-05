@@ -120,10 +120,11 @@ class ApkComparator
         end
         nt = :digit
         v = -1
+      else
+        read_digit.call
       end
-      read_digit.()
     when :digit, :suffix_no, :revision_no
-      read_digit.()
+      read_digit.call
     when :letter
       v = vs.version_str[i]
       i += 1

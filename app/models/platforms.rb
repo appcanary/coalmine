@@ -194,6 +194,8 @@ class Platforms
               DpkgComparator
             when Debian
               DpkgComparator
+            when Alpine
+              ApkComparator
             else
               raise "unknown platform for comparator"
             end

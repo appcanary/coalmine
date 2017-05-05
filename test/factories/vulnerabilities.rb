@@ -80,6 +80,10 @@ FactoryGirl.define do
       platform { Platforms::Amazon }
     end
 
+    trait :alpine do
+      platform { Platforms::Alpine }
+    end
+
     trait :php do
       platform { Platforms::PHP }
     end

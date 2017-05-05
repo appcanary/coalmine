@@ -10,6 +10,8 @@ class ApkComparatorTest < ActiveSupport::TestCase
              ["1.1.7-r0", "1.1.6-r1", GT],
 
              ["6.3.008-r4", "6.3.008-r4", EQ],
+             ["6.3.008-r4", "6.3.008-r5", LT],
+             ["6.3.010-r4", "6.3.008-r4", GT],
 
              # TODO should this evaluate to EQ? Because it doesn't :(
              # ["6.3.008-r4", "6.3.8-r4", EQ],
