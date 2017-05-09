@@ -19,7 +19,7 @@
           type
         </th>
         <th>
-          created
+          updated
         </th>
       </thead>
       <tbody>
@@ -31,7 +31,7 @@
             <%= monitor_kind_label(@bundlepres) %>
           </td>
           <td>
-            <%= "#{time_ago_in_words @bundlepres.created_at} ago" %>
+            <%= "#{time_ago_in_words @bundlepres.updated_at} ago" %>
           </td>
         </tr>
       </tbody>
