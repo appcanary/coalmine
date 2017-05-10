@@ -133,40 +133,63 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
   end
 
   # TODO: affected releases, affected arches?
-  it "should correctly calculate vuln alpine packages" do
-    name = "openssh"
+  describe "alpine linux" do
+    it "should correctly calculate vuln packages" do
+      name = "openssh"
 
-    vuln_dep = FactoryGirl.build(:vulnerable_dependency,
-                                 :platform => Platforms::Alpine,
-                                 :package_name => name,
-                                 :release => "3.5.1",
-                                 :patched_versions =>  ["7.4_p1-r1"],
-                                 :unaffected_versions => [])
+      vuln_dep = FactoryGirl.build(:vulnerable_dependency,
+                                   :platform => Platforms::Alpine,
+                                   :package_name => name,
+                                   :release => "3.5.1",
+                                   :patched_versions =>  ["7.4_p1-r1"],
+                                   :unaffected_versions => [])
 
-    # exact same version
-    patched_pkg1 = build_apkg(name, "7.4_p1-r1")
-    # higher version
-    patched_pkg2 = build_apkg(name, "7.5_p1-r1")
+      # exact same version
+      patched_pkg1 = build_apkg(name, "7.4_p1-r1")
+      # higher version
+      patched_pkg2 = build_apkg(name, "7.5_p1-r1")
 
-    # higher release
-    patched_pkg3 = build_apkg(name, "7.4_p1-r2")
-    patched_pkg4 = build_apkg(name, "7.4_p1-r3")
+      # higher release
+      patched_pkg3 = build_apkg(name, "7.4_p1-r2")
+      patched_pkg4 = build_apkg(name, "7.4_p1-r3")
 
 
-    # release is lower
-    vuln_pkg1 = build_apkg(name, "7.4_p1-r0")
-    # version is lower
-    vuln_pkg2 = build_apkg(name, "7.3_p1-r1")
+      # release is lower
+      vuln_pkg1 = build_apkg(name, "7.4_p1-r0")
+      # version is lower
+      vuln_pkg2 = build_apkg(name, "7.3_p1-r1")
 
-    diff_pkg = build_apkg(name+"lol", vuln_pkg1.version)
+      diff_pkg = build_apkg(name+"lol", vuln_pkg1.version)
 
-    refute vuln_dep.affects?(patched_pkg1), "patched should not be vuln"
-    refute vuln_dep.affects?(patched_pkg2), "patched should not be vuln"
-    refute vuln_dep.affects?(patched_pkg3), "patched should not be vuln"
-    refute vuln_dep.affects?(patched_pkg4), "patched should not be vuln"
-    assert vuln_dep.affects?(vuln_pkg1), "vuln pkg should be vuln"
-    assert vuln_dep.affects?(vuln_pkg2), "vuln pkg should be vuln"
-    refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"
+      refute vuln_dep.affects?(patched_pkg1), "patched should not be vuln"
+      refute vuln_dep.affects?(patched_pkg2), "patched should not be vuln"
+      refute vuln_dep.affects?(patched_pkg3), "patched should not be vuln"
+      refute vuln_dep.affects?(patched_pkg4), "patched should not be vuln"
+      assert vuln_dep.affects?(vuln_pkg1), "vuln pkg should be vuln"
+      assert vuln_dep.affects?(vuln_pkg2), "vuln pkg should be vuln"
+      refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"
+    end
+
+    it "should correctly not find vulnerable packages from other releases" do
+      name = "openssh"
+
+      vuln_dep = FactoryGirl.build(:vulnerable_dependency,
+                                   :platform => Platforms::Alpine,
+                                   :package_name => name,
+                                   :release => "3.5.2",
+                                   :patched_versions =>  ["7.4_p1-r1"],
+                                   :unaffected_versions => [])
+
+      # OS release in factory is 3.5.1
+
+      # release is lower
+      pkg1 = build_apkg(name, "7.4_p1-r0")
+      # version is lower
+      pkg2 = build_apkg(name, "7.3_p1-r1")
+
+      refute vuln_dep.affects?(pkg1), "different release should not be vuln"
+      refute vuln_dep.affects?(pkg2), "different release should not be vuln"
+    end
   end
 
   it "should flag things as vulnerable when they match the same release" do
