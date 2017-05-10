@@ -13,6 +13,11 @@ class ApkComparator
     self.vercmp(version, constraint) >= 0
   end
 
+  # This code is an approximate port of the C version implemented in the
+  # apk-tools package. That's found in `version.c`, here:
+
+  #   https://git.alpinelinux.org/cgit/apk-tools/tree/src/version.c
+
   def vercmp(v1, v2)
     return 0 if v1 == v2 || (v1.blank? && v2.blank?)
 
