@@ -46,7 +46,7 @@ FactoryGirl.define do
 
     trait :alpine do
       platform "alpine"
-      release "3.5.2"
+      release "3.5.1"
     end
 
     trait :debian do
@@ -62,6 +62,11 @@ FactoryGirl.define do
     trait :amzn do
       platform "amzn"
       release "2016.03"
+    end
+
+    trait :alpine do
+      platform Platforms::Alpine
+      release "3.5.1"
     end
 
     trait :ruby do

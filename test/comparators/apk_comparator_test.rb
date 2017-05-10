@@ -52,7 +52,12 @@ class ApkComparatorTest < ActiveSupport::TestCase
 
              ["3.0.9-r1", "3.0.9-r1", EQ],
              ["4.4.45-r0", "4.4.45-r0", EQ],
-             ["2.4.4-r0", "2.4.4-r0", EQ]]
+             ["2.4.4-r0", "2.4.4-r0", EQ],
+
+             ["7.4_p1-r1", "7.4_p1-r0", GT],
+             ["7.4_p1-r1", "7.4_p1-r2", LT],
+             ["7.4_p1-r1", "7.3_p1-r1", GT],
+             ["7.4_p1-r1", "7.5_p1-r1", LT]]
 
     cases.each do |(v1, v2, res)|
       assert_equal res, ApkComparator.new(v1).vercmp(v1, v2), "#{v1} <=> #{v2} was not #{res}"
@@ -110,7 +115,7 @@ class ApkComparatorTest < ActiveSupport::TestCase
              ["2.4.4-r0", "2.4.4-r0", true]]
 
     cases.each do |(v1, v2, res)|
-      assert_equal res, ApkComparator.new(v1).satisfies?(v2)
+      assert_equal res, ApkComparator.new(v1).satisfies?(v2), "#{v1}.satisfies? #{v2} was not #{res}"
     end
   end
 end
