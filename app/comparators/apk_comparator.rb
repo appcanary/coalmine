@@ -9,15 +9,11 @@ class ApkComparator
     self.version = version_str
   end
 
-  def satisfies?(constraints)
-    nil
+  def satisfies?(constraint)
+    self.vercmp(version, constraint) >= 0
   end
 
   def vercmp(v1, v2)
-    self.class.vercmp(v1, v2)
-  end
-
-  def self.vercmp(v1, v2)
     return 0 if v1 == v2 || (v1.blank? && v2.blank?)
 
     if v1.blank? || v2.blank?
@@ -54,7 +50,7 @@ class ApkComparator
     return 0
   end
 
-  def self.valid?(ver)
+  def valid?(ver)
     vs = VersionState.new(ver)
 
     loop do
@@ -78,23 +74,23 @@ class ApkComparator
     end
   end
 
-  def self.is_digit?(s)
+  def is_digit?(s)
     true if Integer(s) rescue false
   end
 
-  def self.find_index(arr, vs, idx)
+  def find_index(arr, vs, idx)
     arr.find_index { |s| vs.version_str[idx..-1].start_with?(s) }
   end
 
-  def self.is_lower?(s)
+  def is_lower?(s)
     !!s.match(/\p{Lower}/)
   end
 
-  def self.part(p)
+  def part(p)
     PARTS.find_index(p) - 1
   end
 
-  def self.get_token(vs)
+  def get_token(vs)
     if vs.remaining_len <= 0
       vs.type = :end
       return 0
@@ -159,7 +155,7 @@ class ApkComparator
     v
   end
 
-  def self.next_token(vs)
+  def next_token(vs)
     n = :invalid
 
     if vs.remaining_len == 0
