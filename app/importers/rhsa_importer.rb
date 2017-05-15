@@ -10,7 +10,7 @@ class RHSAImporter < AdvisoryImporter
   attr_reader :after
 
   def initialize(after = nil)
-    @after = after || 2.hours.ago
+    @after = after || 6.months.ago
   end
 
   def fetch_advisories
