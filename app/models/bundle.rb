@@ -118,6 +118,14 @@ class Bundle < ActiveRecord::Base
     end
   end
 
+  def ref_name
+    if agent_server_id.present? and self.system_bundle?
+      agent_server.display_name
+    else
+      name.blank? ? path : name
+    end
+  end
+
   def system_bundle?
     Platforms::OPERATING_SYSTEMS.include?(self.platform)
   end

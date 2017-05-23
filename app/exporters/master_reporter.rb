@@ -13,7 +13,7 @@ class MasterReporter
       account.bundles.each do |bundle|
 
         if isvuln = vq.vuln_bundle?(bundle)
-          csv << ["Ref", "Updated At", "Distro / Release", "Vulnerable?"]
+          csv << ["Server or Monitor", "Updated At", "Distro / Release", "Vulnerable?"]
 
           csv << [bundle.ref_name,
                   bundle.updated_at,
