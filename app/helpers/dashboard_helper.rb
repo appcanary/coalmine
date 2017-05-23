@@ -45,7 +45,7 @@ module DashboardHelper
                   when "ubuntu"
                     ["ubuntu.png", "Ubuntu"]
                   when "debian"
-                    ["debian.png", "Ubuntu"]
+                    ["debian.png", "Debian"]
                   when "amzn"
                     ["amzn.png", "Amazon Linux"]
                   end
