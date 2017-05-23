@@ -12,14 +12,16 @@ class MasterReporter
     output = CSV.generate(headers: true) do |csv|
       account.bundles.each do |bundle|
 
-        if isvuln = vq.vuln_bundle?(bundle)
-          csv << ["Server or Monitor", "Updated At", "Distro / Release", "Vulnerable?"]
+        isvuln = vq.vuln_bundle?(bundle)
 
-          csv << [bundle.ref_name,
-                  bundle.updated_at,
-                  [bundle.platform, bundle.release].compact.join(" / "),
-                  isvuln]
+        csv << ["Server or Monitor", "Updated At", "Distro / Release", "Vulnerable?"]
 
+        csv << [bundle.ref_name,
+                bundle.updated_at,
+                [bundle.platform, bundle.release].compact.join(" / "),
+                isvuln]
+
+        if isvuln
           csv << [""]
 
           csv << ["Package", "Severity", "CVE", "Upgrade to"]
@@ -31,9 +33,10 @@ class MasterReporter
             end
           end
 
-          csv << [""]
-          csv << [""]
         end
+
+        csv << [""]
+        csv << [""]
       end
     end
 
