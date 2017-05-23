@@ -18,6 +18,10 @@ class DashboardController < ApplicationController
     end
   end
 
+  def report
+    send_data *MasterReporter.new(current_account).to_csv
+  end
+
   def history
 
     @lbvs = current_user.account.log_bundle_vulnerabilities.includes(:vulnerability, :bundle).order("created_at DESC")
