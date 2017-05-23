@@ -12,6 +12,10 @@ class MasterReporter
     output = CSV.generate(headers: true) do |csv|
       account.bundles.each do |bundle|
 
+        unless bundle.isactive?
+          next
+        end
+
         isvuln = vq.vuln_bundle?(bundle)
 
         csv << ["Server or Monitor", "Updated At", "Distro / Release", "Vulnerable?"]

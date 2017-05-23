@@ -118,11 +118,21 @@ class Bundle < ActiveRecord::Base
     end
   end
 
+  #--- USED only for 'MasterReporter'
+
   def ref_name
     if agent_server_id.present? and self.system_bundle?
       agent_server.display_name
     else
       name.blank? ? path : name
+    end
+  end
+
+  def isactive?
+    if agent_server_id.present?
+      !agent_server.gone_silent?
+    else
+      true
     end
   end
 
