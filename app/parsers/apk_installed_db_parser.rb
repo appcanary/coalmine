@@ -1,15 +1,11 @@
 class ApkInstalledDbParser
   include ResultObject
 
-  def initialize(release)
-    @release = release
-  end
-
-  def parse(installed)
+  def self.parse(installed)
     packages = installed.split("\n\n").map { |pkg| pkg.split("\n") }
 
     packages = packages.map do |pkg_lines|
-      hsh = {"release" => @release}
+      hsh = {}
       pkg_lines.each do |line|
         val = line[2..-1]
         case line[0]

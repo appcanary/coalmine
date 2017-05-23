@@ -203,7 +203,7 @@ class Platforms
     klass.new(package.version)
   end
 
-  def self.parser_for(platform, release = nil)
+  def self.parser_for(platform)
     case platform
     when Ruby
       GemfileParser
@@ -219,7 +219,7 @@ class Platforms
     when Debian
       DpkgStatusParser
     when Alpine
-      ApkInstalledDbParser.new(release)
+      ApkInstalledDbParser
     else
       nil
     end
