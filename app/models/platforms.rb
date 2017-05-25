@@ -3,12 +3,14 @@ class Platforms
   Debian = "debian"
   Ubuntu = "ubuntu"
   Ruby = "ruby"
+  PHP = "php"
   CentOS = "centos"
   Amazon = "amzn"
   None = "none"
 
   FULL_NAMES = {
     Ruby => "Ruby",
+    PHP => "PHP",
     Amazon => "Amazon",
     CentOS => "CentOS",
     Ubuntu => "Ubuntu",
@@ -25,6 +27,7 @@ class Platforms
   PLATFORM_RELEASES = {
     Ruby => [ nil ],
     Amazon => [ nil ],
+    PHP => [ nil ],
     Debian => [
       ["2.1","slink"],
       ["2.2","potato"],
@@ -62,6 +65,7 @@ class Platforms
       ["16.04","xenial"],
       ["16.10","yakkety"],
       ["17.04","zesty"],
+      ["17.10", "artful"]
     ],
     CentOS => [
       "5",
@@ -108,11 +112,12 @@ class Platforms
 
 
   @all_platforms = [
-    Debian,
     Ubuntu,
+    Debian,
     CentOS,
+    Amazon,
     Ruby,
-    Amazon
+    PHP
   ]
 
   def self.all_platforms
@@ -121,6 +126,7 @@ class Platforms
 
   def self.select_platform_release
     arr = [[FULL_NAMES[Ruby], Ruby],
+           [FULL_NAMES[PHP], PHP],
            [FULL_NAMES[Amazon], Amazon]]
 
     arr += [Ubuntu, CentOS, Debian].map do |plt|
@@ -143,7 +149,7 @@ class Platforms
       PLATFORM_RELEASES[platform].map(&:first)[-6..-1].reverse
     when Ubuntu
       PLATFORM_RELEASES[platform].map(&:first)[-6..-1].reverse
-    when Ruby
+    when Ruby, PHP
       nil
     else
       PLATFORM_RELEASES[platform]
@@ -158,6 +164,8 @@ class Platforms
     klass = case package.platform
             when Ruby
               RubyComparator
+            when PHP
+              PHPComparator
             when CentOS
               RPMComparator
             when Amazon
@@ -178,6 +186,8 @@ class Platforms
     case platform
     when Ruby
       GemfileParser
+    when PHP
+      ComposerLockParser
     when CentOS
       RPM::Parser
     when Amazon

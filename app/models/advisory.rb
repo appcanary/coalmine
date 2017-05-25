@@ -28,6 +28,8 @@
 #  updated_at    :datetime         not null
 #  valid_at      :datetime         not null
 #  expired_at    :datetime         default("infinity"), not null
+#  needs_triage  :jsonb            default("[]"), not null
+#  package_names :string           default("{}"), not null, is an Array
 #
 # Indexes
 #
@@ -43,7 +45,7 @@
 # sources, but are used to compute `constraints` by the importers.
 
 class Advisory < ActiveRecord::Base
-  extend ArchiveBehaviour
+  extend ArchiveBehaviour::BaseModel
   # Used for the enums in Advisory, Vulnerability, and VulnerabilityArchive
   CRITICALITIES = {
     unknown: 0,
@@ -85,6 +87,10 @@ class Advisory < ActiveRecord::Base
     where(:source => CesaImporter::SOURCE)
   }
 
+  scope :from_rhsa, -> {
+    where(:source => RHSAImporter::SOURCE)
+  }
+
   scope :from_alas, -> {
     where(:source => AlasImporter::SOURCE)
   }
@@ -104,6 +110,11 @@ class Advisory < ActiveRecord::Base
   scope :from_cve, -> {
     where(:source => CveImporter::SOURCE)
   }
+
+  scope :from_friends_of_php, -> {
+    where(:source => FriendsOfPHPImporter::SOURCE)
+  }
+
   # AIS gets auto saved, so we skip saving it ourselves here.
   def processed_flag=(flag)
     unless self.advisory_import_state

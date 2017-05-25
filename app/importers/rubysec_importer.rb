@@ -20,7 +20,7 @@ class RubysecImporter < AdvisoryImporter
   end
 
   def fetch_advisories
-    Dir[File.join(local_path, "gems", "/**/**yml")]  
+    Dir.glob(File.join(local_path, "gems", "/**/*.yml"))
   end
 
   def parse(ymlfile)

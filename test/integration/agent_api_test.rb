@@ -112,6 +112,32 @@ class AgentApiTest < ActionDispatch::IntegrationTest
       $rollout.deactivate(:log_every_file)
     end
 
+    it "should accept php files, and set things correctly" do
+      server = FactoryGirl.create(:agent_server, :centos, :account => @account).reload
+
+      assert_equal 0, server.bundles.count
+
+
+      composer_lock = hydrate("parsers", "drupal.composer.lock")
+      crc = Zlib::crc32(composer_lock)
+      b64_file = Base64.encode64(composer_lock)
+
+      path = "/Users/phillmv/code/c/newapi/composer.lock"
+
+      put api_agent_server_update_path(server.uuid), 
+        {contents: b64_file, crc: crc, kind: "gemfile", name: "", path: path}.to_json, 
+        {"Content-Type": 'application/json', :authorization => %{Token token="#{@account.token}"}}
+
+      assert_response :success
+      assert_equal 1, server.bundles.count
+
+      b = server.bundles.first
+      assert_equal "php", b.platform
+      assert_nil b.release
+      assert_equal 75, b.packages.count
+    end
+
+
     # TODO: make this more exhaustive?
     it "should log requests when things look fishy" do
       server = FactoryGirl.create(:agent_server, :centos, :account => @account).reload
@@ -121,7 +147,7 @@ class AgentApiTest < ActionDispatch::IntegrationTest
       gemfile_lock = hydrate("parsers", "3219rails.gemfile.lock")
       crc = Zlib::crc32(gemfile_lock)
       b64_file = Base64.encode64(gemfile_lock)
-      path = "/Users/phillmv/code/c/newapi/Gemfile.lock"
+      path = "/Users/phillmv/code/c/newapi/blah.lock"
 
       put api_agent_server_update_path(server.uuid), 
         {contents: b64_file, crc: crc, kind: "FAKEKIND", name: "", path: path}.to_json, 

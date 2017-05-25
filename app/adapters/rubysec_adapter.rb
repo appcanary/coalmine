@@ -2,8 +2,8 @@
 class RubysecAdapter < AdvisoryAdapter.new(:filepath, :gem, :cve, 
                                            :osvdb, :url, :title, 
                                            :date, :description, :cvss_v2, 
-                                           :cvss_v3, :patched_versions, :unaffected_versions, 
-                                           :related)
+                                           :cvss_v3, :patched_versions,
+                                           :unaffected_versions, :related)
   def identifier
     # "#{cve_or_osvdb}-#{gem}"
     filepath.split("/")[-2..-1].join("/")
@@ -17,6 +17,7 @@ class RubysecAdapter < AdvisoryAdapter.new(:filepath, :gem, :cve,
     RubysecImporter::PLATFORM
   end
 
+  # TODO this is unused now - remove?
   def cve_or_osvdb
     # privilege osvdb over cve
     if osvdb

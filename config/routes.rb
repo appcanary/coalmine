@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     post "/preview" => "rubysec#preview", :as => :rubysec_preview
     post "/create" => "rubysec#create", :as => :rubysec_create
   end
-  
+
   get "isitvuln" => "is_it_vuln#index"
 
   root 'welcome#index'
@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
+  get 'dashboard/report' => "dashboard#report", :as => :dashboard_report
   get 'history' => "dashboard#history", :as => :history
   get 'summary/:date' => "dashboard#summary", :as => :summary
 
@@ -71,13 +72,16 @@ Rails.application.routes.draw do
   post 'greatrubyreview/payment' => "great_review#payment", :as => :great_review_payment
 
 
-  resources :docs, :only => :index
+  resources :docs, :only => :index do
+    get "api", as: :api, on: :collection
+    get "ci", as: :ci, on: :collection
+  end
 
   resources :users, :only => [:new, :create, :update, :destroy] do
     post "stop_impersonating", on: :collection
   end
   resources :password_reset, :only => [:show, :update]
-  
+
   resource :settings, :only => [:show, :update] do
     patch 'reset_token', on: :collection
   end
@@ -110,9 +114,10 @@ Rails.application.routes.draw do
     get "archive/:id" => "vulns#archive", :as => "archive"
   end
 
-  get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
-  get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
-  get "packages/:id" => "packages#show", :as => :package, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ } 
+  get "packages/php/:name/:version" => "packages#show", :as => :php_package_version, :constraints => { :name => /[^\/]+\/[^\/]+/, :version => /[^\/]+/ }
+  get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
+  get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
+  get "packages/:id" => "packages#show", :as => :package, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
 
   resources :logs, :only => :index
   resources :emails, :only => [:index, :show]
@@ -133,11 +138,11 @@ Rails.application.routes.draw do
       post "check" => 'check#create'
       get "status" => 'status#status'
 
-      post "monitors(/:name)" => "monitors#create"
-      put "monitors/:name" => "monitors#update"
-      get "monitors/:name" => "monitors#show", :as => "monitor"
+      post "monitors(/:name)" => "monitors#create", :constraints => { :name => /.*/ }
+      put "monitors/:name" => "monitors#create_or_update", :constraints => { :name => /.*/ }
+      get "monitors/:name" => "monitors#show", :as => "monitor", :constraints => { :name => /.*/ }
       get "monitors" => "monitors#index"
-      delete "monitors/:name" => "monitors#destroy"
+      delete "monitors/:name" => "monitors#destroy", :constraints => { :name => /.*/ }
 
       get "servers/:uuid" => "servers#show", :as => "server"
       get "servers" => "servers#index"
@@ -149,7 +154,7 @@ Rails.application.routes.draw do
       get "status" => 'status#status'
 
       post "monitors(/:name)" => "monitors#create"
-      put "monitors/:name" => "monitors#update"
+      put "monitors/:name" => "monitors#create_or_update"
       get "monitors/:name" => "monitors#show", :as => "v2_monitor"
       get "monitors" => "monitors#index", :as => "v2_monitors"
       delete "monitors/:name" => "monitors#destroy"

@@ -21,6 +21,7 @@
 #  updated_at    :datetime         not null
 #  valid_at      :datetime         not null
 #  expired_at    :datetime         default("infinity"), not null
+#  package_names :string           default("{}"), not null, is an Array
 #
 # Indexes
 #
@@ -45,6 +46,7 @@ FactoryGirl.define do
    
     patched_versions { ["> #{dep.version}"] }
     unaffected_versions { [] }
+    affected_versions { [] }
 
     transient do
       dep { build(:package, :ruby) }
@@ -76,6 +78,10 @@ FactoryGirl.define do
 
     trait :amzn do
       platform { Platforms::Amazon }
+    end
+
+    trait :php do
+      platform { Platforms::PHP }
     end
 
     transient do

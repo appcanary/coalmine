@@ -1,5 +1,6 @@
 <h4>1. Install the agent</h4>
 <p>Our install script (<a href="https://appcanary.com/servers/rpm.sh">https://appcanary.com/servers/rpm.sh</a>) adds our repository to your yum sources, and installs our package.</p>
+<p>
   <kbd>curl -s https://appcanary.com/servers/rpm.sh | sudo bash</kbd>
   <br/>
   <span style="font-size: 12px">Always inspect scripts before you curl sudo bash them. <a href="https://appcanary.com/servers/rpm.sh" target="_blank">Click here</a> to inspect ours.</span>
@@ -37,7 +38,7 @@ api_key = "<%= @agent_token %>"
 #[[files]]
 #process = "rpm -qa"
 
-# Fill in your Ruby app's path and
+# Fill in your Ruby or PHP app's path and
 # uncomment the next two lines:
 
 #[[files]]
@@ -47,7 +48,7 @@ api_key = "<%= @agent_token %>"
 # To add another app:
 
 #[[files]]
-#path = "/path/to/a/different/Gemfile.lock"
+#path = "/path/to/a/composer.lock"
     <% end %>
 </pre>
 </p>

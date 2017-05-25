@@ -7,7 +7,7 @@ class BundleManager < ServiceManager
   end
 
   # TODO: throw exception if package_list is empty?
-  # TODO: i feel like this - or some other class - 
+  # TODO: i feel like this - or some other class -
   # should be responsible for *finding* the right bundle
   # scoped by account or server
 
@@ -44,9 +44,9 @@ class BundleManager < ServiceManager
   end
 
   def create_or_update(pr, opt, package_list)
-    raise ArgumentError.new("Server id can't be nil") if @server_id.nil? 
+    raise ArgumentError.new("Server id can't be nil") if @server_id.nil?
 
-    bundle_id = Bundle.where(:account_id => @account_id, 
+    bundle_id = Bundle.where(:account_id => @account_id,
                              :agent_server_id => @server_id,
                              :name => opt[:name],
                              :path => opt[:path]).pluck("id").first
@@ -130,10 +130,11 @@ class BundleManager < ServiceManager
     # and only delete the ones *not in the new set*
     # thereby guaranteeing that two given BundledPackage
     # for the same package but different BP ids will represent
-    # different "generations". 
+    # different "generations".
     #
     # behaviour is tested in bundle_test.rb
     bundle.packages = packages
+    bundle.touch
 
     # A bundle has changed! Time to record any logs
     ReportMaker.new(bundle.id).on_bundle_change

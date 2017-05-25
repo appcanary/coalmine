@@ -27,8 +27,8 @@
 #
 
 class AgentServer < ActiveRecord::Base
-  extend ArchiveBehaviour
- 
+  extend ArchiveBehaviour::BaseModel
+
   ACTIVE_WINDOW = 2.hours
   belongs_to :account
   validates :account, :presence => true
@@ -57,27 +57,8 @@ class AgentServer < ActiveRecord::Base
     joins(:heartbeats).where('"agent_heartbeats".created_at > ?', date - ACTIVE_WINDOW).distinct("agent_servers.id")
   }
 
-  # TODO:
-  #
-  # test!!!
-
-  scope :created_on, -> (date) {
-    from(union_str(all, AgentServerArchive.deleted)).
-    where('created_at >= ? and created_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
-  }
-
-  # TODO:
-  #
-  # test!!!
-
-  scope :deleted_on, -> (date) {
-    from("(#{AgentServerArchive.deleted.to_sql}) #{self.table_name}").
-    # and only look at stuff from this day in particular
-    where("agent_servers.expired_at >= ? and agent_servers.expired_at <= ?", date.at_beginning_of_day, date.at_end_of_day)
-  }
-
   # TODO: figure out inactive scope
-  
+
   def last_heartbeat_at
     last_heartbeat.try(:created_at)
   end

@@ -16,6 +16,8 @@
 #  updated_at          :datetime         not null
 #  valid_at            :datetime         not null
 #  expired_at          :datetime         default("infinity"), not null
+#  affected_versions   :string           default("{}"), not null, is an Array
+#  text                :string           default("{}"), not null, is an Array
 #
 # Indexes
 #
@@ -59,6 +61,33 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
     refute vuln_dep.affects?(un_pkg2), "unaffected should not be vuln"
     assert vuln_dep.affects?(vuln_pkg1), "vuln pkg should be vuln"
     assert vuln_dep.affects?(vuln_pkg2), "vuln pkg should be vuln"
+    refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"
+  end
+
+  it "should correctly calculate vuln php packages" do
+    name = "fakemcfake"
+    vuln_dep = FactoryGirl.build(:vulnerable_dependency,
+                                 :platform => Platforms::PHP,
+                                 :package_name => name,
+                                 :unaffected_versions => [],
+                                 :patched_versions => [],
+                                 :affected_versions => [">=1.7.0,<1.10"])
+
+    unaffected_pkg1 = build_ppkg(name, "1.11")
+    unaffected_pkg2 = build_ppkg(name, "1.10.0")
+    unaffected_pkg3 = build_ppkg(name, "1.6.10")
+
+    # less than 1.7.0
+    affected_pkg1 = build_ppkg(name, "1.7.0")
+    affected_pkg2 = build_ppkg(name, "1.9.11")
+
+    diff_pkg = build_ppkg(name+"lol", "1.7.1")
+
+    refute vuln_dep.affects?(unaffected_pkg1), "unaffected should not be vuln"
+    refute vuln_dep.affects?(unaffected_pkg2), "unaffected should not be vuln"
+    refute vuln_dep.affects?(unaffected_pkg3), "unaffected should not be vuln"
+    assert vuln_dep.affects?(affected_pkg1), "affected pkg should be vuln"
+    assert vuln_dep.affects?(affected_pkg2), "affected pkg should be vuln"
     refute vuln_dep.affects?(diff_pkg), "pkg w/diff name should not be vuln"
   end
 
@@ -119,24 +148,24 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
   end
 
   def build_cpkg(name, ver)
-    FactoryGirl.build(:package, :centos,
-                      :name => name,
-                      :version => ver)
-
+    build_pkg(:centos, name, ver)
   end
 
   def build_rpkg(name, ver)
-    FactoryGirl.build(:package, :ruby,
-                      :name => name,
-                      :version => ver)
+    build_pkg(:ruby, name, ver)
   end
 
   def build_dpkg(name, ver)
-    FactoryGirl.build(:package, :debian,
+    build_pkg(:debian, name, ver)
+  end
+
+  def build_ppkg(name, ver)
+    build_pkg(:php, name, ver)
+  end
+
+  def build_pkg(type, name, ver)
+    FactoryGirl.build(:package, type,
                       :name => name,
                       :version => ver)
   end
-
-
-  
 end

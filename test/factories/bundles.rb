@@ -40,7 +40,7 @@ FactoryGirl.define do
 
     trait :ubuntu do
       platform "ubuntu"
-      release "utopic"
+      release "trusty"
     end
 
     factory :bundle_with_packages do
@@ -49,8 +49,8 @@ FactoryGirl.define do
       end
 
       after(:create) do |bundle, evaluator|
-        bundle.packages = create_list(:package, evaluator.packages_count, 
-                                      platform: evaluator.platform, 
+        bundle.packages = create_list(:package, evaluator.packages_count,
+                                      platform: evaluator.platform,
                                       release: evaluator.release)
       end
 

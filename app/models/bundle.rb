@@ -30,11 +30,11 @@
 #
 
 class Bundle < ActiveRecord::Base
-  extend ArchiveBehaviour
+  extend ArchiveBehaviour::BaseModel
 
   belongs_to :account
   belongs_to :agent_server
-  has_many :bundled_packages, :dependent => :destroy
+  has_many :bundled_packages, :dependent => :delete_all
   has_many :packages, :through => :bundled_packages
   has_many :vulnerable_packages, :through => :bundled_packages
   has_many :vulnerable_dependencies, :through => :vulnerable_packages
@@ -43,7 +43,7 @@ class Bundle < ActiveRecord::Base
   has_many :log_bundle_patches
 
   has_many :log_resolutions, ->(bundle) { where(account_id: bundle.account_id) }, :through => :bundled_packages
-  has_many :ignored_packages
+  has_many :ignored_packages, :dependent => :destroy
 
   validates :account, presence: true
   validates :name, uniqueness: { scope: :account_id }, unless: ->(u){ u.path.present? }
@@ -61,12 +61,8 @@ class Bundle < ActiveRecord::Base
 
   scope :via_agent, -> { where("bundles.agent_server_id is not null") }
 
-  scope :system_bundles, -> { where("platform IN (?)", Platforms::OPERATING_SYSTEMS) }
-  scope :app_bundles, -> { where("platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
-  scope :created_on, -> (date) {
-    where('valid_at >= ? and valid_at <= ?', date.at_beginning_of_day, date.at_end_of_day)
-  }
-
+  scope :system_bundles, -> { where("bundles.platform IN (?)", Platforms::OPERATING_SYSTEMS) }
+  scope :app_bundles, -> { where("bundles.platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
 
   # note that these are instance methods
   # as opposed to ArchiveBehaviour class methods
@@ -119,6 +115,24 @@ class Bundle < ActiveRecord::Base
       "System Packages"
     else
       name.blank? ? path : name
+    end
+  end
+
+  #--- USED only for 'MasterReporter'
+
+  def ref_name
+    if agent_server_id.present? and self.system_bundle?
+      agent_server.display_name
+    else
+      name.blank? ? path : name
+    end
+  end
+
+  def isactive?
+    if agent_server_id.present?
+      !agent_server.gone_silent?
+    else
+      true
     end
   end
 

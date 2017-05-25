@@ -29,6 +29,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
     bundle = FactoryGirl.create(:bundle_with_packages, 
                                 :platform => "ruby", 
                                 :account_id => account.id)
+    old_updated = bundle.updated_at
 
     @bm = BundleManager.new(account)
 
@@ -41,6 +42,7 @@ class BundlerManagerTest < ActiveSupport::TestCase
     assert_equal @package_list.count, bundle.packages.count
 
     assert_equal package_count + @package_list.count, Package.count
+    assert_not_equal old_updated, bundle.updated_at
   end
 
   it "only updates bundle under your account" do

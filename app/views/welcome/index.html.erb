@@ -281,7 +281,7 @@
         <p>
           We keep track of which versions of what packages are vulnerable to which security vulnerabilities, so you don't have to.</p>
         <p>
-          We provide an <a href="https://github.com/appcanary/agent">open-source</a> agent and an API. We monitor the packages you have installed on your Linux system by hooking into the package manager (i.e. apt or yum). We also monitor the libraries used by your Ruby applications by monitoring their Gemfile.lock files.
+          We provide an <a href="https://github.com/appcanary/agent">open-source</a> agent and an API. We monitor the packages you have installed on your Linux system by hooking into the package manager (i.e. apt or yum). We also monitor the libraries used by your Ruby or PHP applications by monitoring their package lock files.
         </p>
         <p>
           You can upload files directly to our API endpoint, or through a web
@@ -294,6 +294,7 @@
           <li>CentOS - via yum</li>
           <li>Amazon Linux - via yum</li>
           <li>Ruby - via Gemfile.lock</li>
+          <li>PHP - via composer.lock</li>
           <li>More coming soon!</li>
         </ul>
       </div>

@@ -1,85 +1,56 @@
 <div id="onboarding">
-  <section class="intro">
-    <div class="header">
-      <div class="title">
-        <h1>Welcome!</h1>
-      </div>
-      <div class="preamble">
-        <h5>Let's get you started! How it works:</h5>
-        <ol>
-          <li>Tell us what packages you use.</li>
-          <li>We notify you via email whenever you're vulnerable.</li>
-          <li>Keep your servers and your customers safe.</li>
-        </ol>
+  <section>
 
-      </div>
+    <div class="col-sm-6 col-sm-offset-1">
+      <h1>Welcome!</h1>
+      <p>Appcanary notifies you whenever you're using unsafe software.</p>
+      <p>We keep you from getting hacked, by letting you know what to update. We're also great for auditing your software.</p>
+      <p>We keep track of known security vulnerabilities in open source software, so you don't have to.</p>
 
+      <strong>Let's get you started. This will take five minutes!</strong>
+      <hr>
+
+      <h3>Do you run your own servers? <%= link_to "Try our agent.", new_server_path %></h3>
+      <p>Installing our agent is the easiest and most reliable way to use Appcanary.</p><p>If an employee installs some software on one of your servers without going through change management, we'll always detect it. <%= link_to "Click here to begin", new_server_path %>.</p>
+      <br/>
+
+      <h3>Are your apps deployed with Docker or on Heroku? <%= link_to "Add a monitor.", new_monitor_path %></h3>
+      <p>Monitors let you keep track of your software dependencies, and get notified when you become vulnerable. <%= link_to "Try it out now", new_monitor_path %>.</p>
+      <br/>
+
+      <h3>Does your team rely on continuous integration? <%= link_to "Add us to your tests", ci_docs_path %>.</h3>
+      <p>By adding Appcanary to your CI, you can be sure to never deploy unsafe software. <%= link_to "Find out more here", ci_docs_path %>.</p>
+      <br/>
+
+      <h3>Do you need an API? <%= link_to "We got you covered", api_docs_path %>!</h3>
+      <p>Integrate Appcanary with your ticketing or other monitoring systems. It's easy! <%= link_to "Check out our docs", api_docs_path %>.</p>
+      <hr>
+      <br/>
+
+      <h4>Would you like help? Do you need support?</h4>
+      <%= eui_button "Contact us", href: "mailto:hello@appcanary.com?subject=\"Problem with bash\"", :class => "eui-button-medium-primary feedback-problem", :target => "_blank"%>
+    </div>
+
+    <div class="col-sm-5">
+      <%= image_tag "canary-nest.medium.square.png", style:"max-width: 100%" %>
       <div class="preamble">
         <table class="table">
           <thead>
-            <th>Supported platforms:</th>
+            <th>We support the following platforms:</th>
           </thead>
           <tr>
             <td>
-              <span class="platform-logo"><%= image_tag "icon-ruby.png", :style => "width: 13px" %> Ruby</span>,
-              <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>,
-              <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian </span>,
-              <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS</span>,
-              <span class="platform-logo"><%= image_tag "icon-amzn.png", :style => "width: 13px"%> Amazon Linux</span>
-              <span class="platform-logo">(more soon, stay tuned!)</span>
+              <span class="platform-logo"><%= image_tag "icon-ruby.png", :style => "width: 16px" %> Ruby</span>,
+              <span class="platform-logo"><%= image_tag "icon-php.png", :style => "width: 16px" %> PHP</span>,
+              <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 16px"%> Ubuntu</span>,
+              <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 16px"%> Debian </span>,
+              <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 16px"%> CentOS</span>,
+              <span class="platform-logo"><%= image_tag "icon-amzn.png", :style => "width: 16px"%> Amazon Linux</span>
             </td>
           </tr>
         </table>
       </div>
 
-    </div>
-  </section>
-
-  <hr/>
-
-  <section class="options">
-    <div class="title">
-      <h2>There are three ways to use Appcanary:</h2>
-    </div>
-
-    <div class="agent">
-      <div class="header">
-        <a href="<%= new_server_path %>">
-          <%= image_tag "canary-nest.medium.stroke.png" %>
-          <h2>Agent</h2>
-        </a>
-      </div>
-      <p>Our tiny, open-source, agent sits on your servers and auto-updates whenever you deploy. Perfect for passively monitoring your servers.</p>
-      <p>Available for: <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 13px"%> Ubuntu</span>, <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 13px"%> Debian</span>, <span class="platform-logo"><%= image_tag "icon-redhat.png", :style => "width: 13px"%> Redhat</span>, <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 13px"%> CentOS,</span> <span class="platform-logo"><%= image_tag "icon-amzn.png", :style => "width: 13px"%> Amazon Linux,</span> and Linux Mint.</p>
-
-      <%= link_to "Install it", new_server_path, :class => "btn btn-default" %>
-    </div>
-
-    <div class="monitor">
-      <div class="header">
-        <a href="<%= docs_path %>">
-          <%= image_tag "canary-worm.medium.stroke.png" %>
-          <h2>Monitor API</h2>
-        </a>
-      </div>
-      <p>Register your server and application dependencies. Whenever something becomes vulnerable in the future, we'll let you know.</p>
-      <p>Works great with containerized deployments and immutable infrastructure!</p>
-
-      <%= link_to('<i class="fa fa-plus" aria-hidden="true"></i> Add Monitor'.html_safe, new_monitor_path, :class => "btn btn-default")%>
-      <%= link_to "Read the docs", docs_path, :class => "btn btn-default" %>
-    </div>
-
-    <div class="check">
-      <div class="header">
-        <a href="<%= docs_path %>">
-          <%= image_tag "canary-map.medium.stroke.png" %>
-          <h2>Check API</h2>
-        </a>
-      </div>
-
-      <p>Perform a programmatic one-time check of your packages. Never accept a pull request, or deploy a new app or server, with vulnerable code ever again.</p>
-      <p>Designed for use with test suites, and continuous integration and deployment.</p> 
-      <%= link_to "Read the docs", docs_path, :class => "btn btn-default" %>
     </div>
   </section>
 </div>

@@ -1,0 +1,40 @@
+<table class="servers-wrapper" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>
+      <table cellpadding="0" cellspacing="0" width="100%" style="padding-bottom: 10px">
+        <thead>
+          <th>
+            name
+          </th>
+          <% unless deleted %>
+            <th>
+              vulns
+            </th>
+          <% end %>
+          <th>
+            platform
+          </th>
+        </thead>
+
+        <% monitors.each do |mon| %>
+          <tr>
+            <td>
+              <%= link_to mon.display_name, monitor_url(mon) %>
+            </td>
+
+            <% unless deleted %>
+              <td>
+                <%= vulnquery.from_bundle(mon).count %>
+              </td>
+            <% end %>
+
+            <td>
+              <%= "#{mon.platform} / #{mon.release}" %>
+            </td>
+          </tr>
+        <% end %>
+
+      </table>
+    </td>
+  </tr>
+</table>

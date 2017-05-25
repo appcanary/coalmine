@@ -9,7 +9,7 @@ class Api::MonitorsController < ApiController
     @form = ApiMonitorForm.new(Bundle.new)
 
     if @form.validate(params)
-      
+
       @bm = BundleManager.new(current_account)
       @bundle, error = @bm.create(@form.platform_release, {name: @form.name}, @form.package_list)
 
@@ -27,23 +27,24 @@ class Api::MonitorsController < ApiController
     end
   end
 
-  def update
+  def create_or_update
     @bundle = fetch_bundle
-
     @form = ApiMonitorForm.new(@bundle || Bundle.new)
+    @bm = BundleManager.new(current_account)
 
     if @bundle && @form.validate(params)
-      @bm = BundleManager.new(current_account)
+      # We have a bundle
       @bundle, error = @bm.update_packages(@bundle.id, @form.package_list)
-
-      if error
-        @form.errors.add(:base, error.message)
-      end
+    elsif @form.validate(params)
+      # Bundle is not present, create it
+      @bundle, error = @bm.create(@form.platform_release, {name: @form.name}, @form.package_list)
     end
 
-    if @bundle.nil?
-      render json: {errors: [{title: "No monitor with that name or id was found"}]}, adapter: :json_api, status: :not_found
-    elsif @form.errors.present?
+    if error
+      @form.errors.add(:base, error.message)
+    end
+
+    if @form.errors.present?
       render json: errors_to_h(@form.errors), adapter: :json_api, status: :bad_request
     else
       register_api_call!

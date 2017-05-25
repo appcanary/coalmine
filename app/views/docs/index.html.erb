@@ -1,106 +1,69 @@
-<section id="docs">
-  <div class="side-menu">
-    <div>
-      <%= image_tag "canary-map.medium.stroke.png", :style => "width: 150px" %>
-      <h2>API Docs</h2>
+<div id="docs">
+  <section>
+    <div class="col-sm-6 col-sm-offset-1">
+
+      <h1>How Appcanary works</h1>
+      <ol>
+        <li>
+          You let us know what is installed on your servers and apps.
+        </li>
+        <li>
+          We let you know when you have security vulnerabilities.
+        </li>
+        <li>Everyone sleeps soundly at night.</li>
+      </ol>
+
+      <p>It's pretty simple.</p><p>We build and maintain a list of all the software that is affected by security vulnerabilities, and we check it against the software you use. We then notify you via email if you need to take action.</p>
+
+      <div class="preamble">
+        <table class="table">
+          <thead>
+            <th>We support the following platforms:</th>
+          </thead>
+          <tr>
+            <td>
+              <span class="platform-logo"><%= image_tag "icon-ruby.png", :style => "width: 16px" %> Ruby</span>,
+              <span class="platform-logo"><%= image_tag "icon-php.png", :style => "width: 16px" %> PHP</span>,
+              <span class="platform-logo"><%= image_tag "icon-ubuntu.png", :style => "width: 16px"%> Ubuntu</span>,
+              <span class="platform-logo"><%= image_tag "icon-debian.png", :style => "width: 16px"%> Debian </span>,
+              <span class="platform-logo"><%= image_tag "icon-centos.png", :style => "width: 16px"%> CentOS</span>,
+              <span class="platform-logo"><%= image_tag "icon-amzn.png", :style => "width: 16px"%> Amazon Linux</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <h3>Here are some different ways you can use our service:</h3>
+
+      <ol>
+        <li>
+          <p>
+            <strong><%= link_to "Install our agent on your servers.", new_server_path %></strong>
+            <br/>
+            <small>Always know what software is installed.</small>
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <strong><%= link_to "Add checks to your test suite or continuous integration", ci_docs_path %></strong>
+            <br>
+            <small>Don't deploy software with known vulnerabilities.</small>
+          </p>
+        </li>
+
+        <li>
+          <p>
+            <strong><%= link_to "Use our APIs to automate reports", api_docs_path %></strong>
+            <br>
+            <small>The world is your oyster.</small>
+          </p>
+        </li>
+      </ol>
     </div>
-    <ul class="nav nav-pills nav-stacked">
-      <h4>Getting started</h4>
-      <li><a href="#authentication">Authentication</a></li>
-      <h4>Check API</h4>
-      <li><a href="#check-endpoint">Check Request</a></li>
-      <li><a href="#check-responses">Check Response</a></li>
-<h4>Monitor API</h4>
-      <li><a href="#create-monitor">Create</a></li>
-      <li><a href="#list-monitors">List</a></li>
-      <li><a href="#show-monitor">Show</a></li>
-      <li><a href="#update-monitor">Update</a></li>
-      <li><a href="#delete-monitor">Delete</a></li>
-<h4>Server API</h4>
-      <li><a href="#list-servers">List</a></li>
-      <li><a href="#show-server">Show</a></li>
-      <li><a href="#delete-server">Delete</a></li>
-      <h4>In the event of failure</h4>
-      <li><a href="#errors">Error Response</a></li>
-      <li><a href="#feedback">Questions? Feedback?</a></li>
-    </ul>
-  </div>
 
-  <div class="col-sm-7 col-sm-offset-2">
-    <a name="start" class="anchor-offset"></a>
-    <h1>Hello!</h1>
-    <p>Welcome to Appcanary. The purpose of this documentation is to show you how to connect to our service. This API and accompanying documentation is in beta, pending feedback from users just like you.</p> 
-    <p><strong>Please tell us what you think!</strong> You can email us at <a href="hello@appcanary.com">hello@appcanary.com</a>.</p>
-
-    <p>Also, we will be careful and try to communicate this clearly when it happens but: this API is still in development and we may ship breaking changes.</p>
-
-    <hr>
-    <a name="authentication" class="anchor-offset"></a>
-    
-    <h2>Authentication</h2>
-    <h4><code>GET https://appcanary.com/api/v3/status</code></h4>
-    <p>All communication with our APIs require your API key to be included as an <code>Authentication</code> header. These can be set in <code>curl</code> like so:</p>
-    <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
-     https://appcanary.com/api/v3/status</pre>
-
-    <p>The status endpoint shown above will respond appropriately if your request is authenticated and your account is in good standing.</p>
-    <hr>
-    <br/>
-    <br/>
-    <br/>
-    <%= render :partial => "check_api" %>
-
-    <hr/>
-    <br/>
-    <br/>
-    <br/>
-
-
-    <%= render :partial => "monitor_api" %>
-   
-    <hr>
-    <br/>
-    <br/>
-    <br/>
-
-    <%= render :partial => "server_api" %>
-
-    <hr>
-    <br/>
-    <br/>
-    <br/>
-
-    <a name="errors" class="anchor-offset"></a>
-    <h2>Errors</h2>
-    <p>Occasionally, we won't be able to process your request. We'll try to give you meaningful hints. All responses shall have a 400 or 500 series status - most commonly one of: <code>400 Bad Request</code>, <code>422 Unprocessable Entity</code> or <code>500 Internal Server Error</code>.</p>
-    <p>A sample error request looks like the following:</p>
-    <pre class="json">
-{
-  "errors": [
-    {
-      "title": "Platform is invalid"
-    }
-  ]
-}
-</pre>
-
-    <p>When responding with an error, the API shall always omit the <code>data</code> container object and return instead an <code>errors</code> object, which shall always contain an array.</p>
-
-    <h4>The error object</h4>
-    <dl class="dl-horizontal">
-      <dt>title</dt>
-      <dd>A human readable description of the problem.</dd>
-
-      <dt>details</dt>
-      <dd>A series of keys and values meant to provide clues or context as to what went wrong.</dd>
-
-    </dl>
-
-    <hr>
-    <a name="feedback" class="anchor-offset"></a>
-    <h2>Questions? Feedback?</h2>
-
-    <p>Let us know. Hit "Feedback" on the bar up top or contact us at <a href="mailto:hello@appcanary.com" target="_blank">hello@appcanary.com</a>. Include as much detail or context as possible. Thanks!</p>
-   
-  </div>
-</section>
+    <div class="col-sm-4">
+      <%= image_tag "canary-map.medium.stroke.png", style:"max-width: 100%" %>
+    </div>
+  </section>
+</div>
