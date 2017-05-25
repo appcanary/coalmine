@@ -32,5 +32,9 @@ VulnerabilityImporterJob.enqueue_if_not_existing!
 
 # not processed by VulnerabilityImporter...
 RHSAImporterJob.enqueue_if_not_existing!
+UsnImporterJob.enqueue_if_not_existing!
+
 # ...but instead by the CesaDescriptionImporter
 CesaDescriptionImporterJob.enqueue_if_not_existing!
+# ...and the UsnReferenceImporter
+UsnReferenceImporterJob.enqueue_if_not_existing!
