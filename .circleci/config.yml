@@ -1,10 +1,10 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/circleci-demo-ruby-rails
+    working_directory: ~/coalmine
     docker:
       - image: circleci/ruby:2.3.4
-      - image: circleci/postgres:9.4.12-alpine
+      - image: circleci/postgres:9.5-alpine
     steps:
       - checkout
 
@@ -12,8 +12,11 @@ jobs:
       - type: cache-restore
         key: coalmine-v1-{{ checksum "Gemfile.lock" }}
 
-      # install node
-      - run: sudo apt-get install -y nodejs
+      # Install node and psql
+      - run: sudo apt-get install -y nodejs postgresql-client
+
+      # Install our database user - necessary for db:structure:load
+      - run: createuser -h localhost -U root -s circleci
         
       # Update bundler
       - run: gem install bundler
@@ -28,14 +31,19 @@ jobs:
           - vendor/bundle
 
       # Database setup
+      - run: mv config/database-ci.yml config/database.yml
       - run: bundle exec rake db:create
-      - run: bundle exec rake db:schema:load
+      - run: bundle exec rake db:structure:load
+
+      # Prevent silly errors
+      - run: touch app/assets/javascripts/main.bundle.js
 
       # Run rspec in parallel
       - type: shell
         command: |
-          bundle exec rake test TESTOPTS="--ci-dir=/tmp/test-results" $(circleci tests glob "spec/**/*_test.rb" | circleci tests split --split-by=timings)
+          mkdir -p tmp/test-results
+          bundle exec rake test TESTOPTS="--ci-dir=tmp/test-results" $(circleci tests glob "test/**/*_test.rb" | circleci tests split --split-by=timings)
 
       # Save artifacts
       - type: store_test_results
-        path: /tmp/test-results
+        path: tmp/test-results
