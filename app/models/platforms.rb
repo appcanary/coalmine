@@ -6,6 +6,7 @@ class Platforms
   PHP = "php"
   CentOS = "centos"
   Amazon = "amzn"
+  Alpine = "alpine"
   None = "none"
 
   FULL_NAMES = {
@@ -14,14 +15,16 @@ class Platforms
     Amazon => "Amazon",
     CentOS => "CentOS",
     Ubuntu => "Ubuntu",
-    Debian => "Debian"
+    Debian => "Debian",
+    Alpine => "Alpine"
   }
 
   OPERATING_SYSTEMS = [
     Ubuntu,
     Debian,
     CentOS,
-    Amazon
+    Amazon,
+    Alpine
   ]
 
   PLATFORM_RELEASES = {
@@ -72,6 +75,14 @@ class Platforms
       "6",
       "7"
     ],
+    Alpine => [
+      "3.0.0", "3.0.1", "3.0.2", "3.0.3", "3.0.4", "3.0.5", "3.0.6",
+      "3.1.0", "3.1.1", "3.1.2", "3.1.3", "3.1.4",
+      "3.2.0", "3.2.1", "3.2.2", "3.2.3",
+      "3.3.0", "3.3.1", "3.3.2", "3.3.3",
+      "3.4.0", "3.4.1", "3.4.2", "3.4.3", "3.4.4", "3.4.5", "3.4.6",
+      "3.5.0", "3.5.1", "3.5.2"
+    ]
   }
 
   PLATFORMS_WITH_UNAFFECTED = [Ruby]
@@ -116,6 +127,7 @@ class Platforms
     Debian,
     CentOS,
     Amazon,
+    Alpine,
     Ruby,
     PHP
   ]
@@ -129,7 +141,7 @@ class Platforms
            [FULL_NAMES[PHP], PHP],
            [FULL_NAMES[Amazon], Amazon]]
 
-    arr += [Ubuntu, CentOS, Debian].map do |plt|
+    arr += [Ubuntu, CentOS, Debian, Alpine].map do |plt|
       PLATFORM_RELEASES[plt].map { |r,v| ["#{FULL_NAMES[plt]} - #{r}", "#{plt} - #{r}"] }
     end.flatten(1)
   end
@@ -175,6 +187,8 @@ class Platforms
               DpkgComparator
             when Debian
               DpkgComparator
+            when Alpine
+              ApkComparator
             else
               raise "unknown platform for comparator"
             end
@@ -197,11 +211,15 @@ class Platforms
       DpkgStatusParser
     when Debian
       DpkgStatusParser
+    when Alpine
+      ApkInstalledDbParser
     else
       nil
     end
   end
 
+  # TODO Used as a UI helper in the add new server docs, so don't forget to deal
+  # with that before merging the Alpine changes.
   def self.select_operating_systems
     OPERATING_SYSTEMS.map { |n| [n, full_name(n)] }
   end

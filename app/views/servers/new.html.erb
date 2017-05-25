@@ -10,6 +10,7 @@
 
         <div class="server-os-prefs" data-toggle="buttons">
           <% Platforms.select_operating_systems.each do |plt, fname| %>
+            <% next if plt == "alpine" %>
 
             <% op_klass = current_user.pref_os == plt ? "active" : "" %>
             <%= label_tag "pref_os", class: "btn btn-default #{op_klass}" do %>

@@ -218,6 +218,38 @@ class CheckApiTest < ActionDispatch::IntegrationTest
     end
 
 
+    describe "for alpine linux" do
+      it "should tell you you're vulnerable" do
+        vuln = FactoryGirl.create(:vulnerability, :alpine)
+        vd = FactoryGirl.create(:vulnerable_dependency,
+                                :vulnerability => vuln,
+                                :platform => Platforms::Alpine,
+                                :release => "3.5.2",
+                                :package_name => "syslinux",
+                                :patched_versions => ["6.06-r0"])
+
+        assert_equal 0, account.log_api_calls.where(:action => "check/create").count
+
+        authed_post(account, {platform: Platforms::Alpine, release: "3.5.2", file: apkinstalled})
+
+        assert_response :success
+
+        assert_equal 1, account.log_api_calls.where(:action => "check/create").count
+
+        # Make sure we log the right platform release
+        assert_equal "alpine", account.log_api_calls.last.platform
+        assert_equal "3.5.2", account.log_api_calls.last.release
+
+        json = json_body
+        assert json.key?("data")
+        assert_equal 1, json["data"].size
+
+        assert_equal "syslinux", json["data"].first["attributes"]["name"]
+        assert_check_response_shape(json)
+      end
+    end
+
+
     it "should provide you with errors when given bad params" do
       post api_check_path, {platform: "rubby", file: gemfilelock},
         {authorization: %{Token token="#{account.token}"}}
@@ -293,6 +325,10 @@ class CheckApiTest < ActionDispatch::IntegrationTest
 
   def amazonqa
     @amazonqa ||= uploaded_file("amazon-rpmqa.txt")
+  end
+
+  def apkinstalled
+    @apkinstalled ||= uploaded_file("alpine-installed.txt")
   end
 
   def gemfile
