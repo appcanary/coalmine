@@ -30,7 +30,7 @@
 
       <tr>
         <td><label>CVE(s)</label></td>
-        <td><%= @vuln.cve_links.join(", ").html_safe %></td>
+        <td><%= @vuln.cve_references.map{|cve| link_to cve, cve_path(cve)}.join(", ").html_safe %></td>
       </tr>
 
 
@@ -50,8 +50,18 @@
         <td><%= @vuln.updated_at.try(:strftime, "%Y-%m-%d %H:%M") %></td>
       </tr>
 
+      <tr>
+        <td><label>Related Vulns</label></td>
+        <td>
+          <% @vuln.related_vulns.each do |v| %>
+            <%= platform_icon(v.platform, false).html_safe %>
+            <%= link_to v.title, vuln_path(v).html_safe %>
+            <br/>
+        <% end %>
+        </td>
+      </tr>
+
       <% if @vuln.archive? %>
-        
         <tr>
           <td><label>Current version</label></td>
           <td><%= link_to @vuln.current.updated_at.try(:strftime, "%Y-%m-%d %H:%M"), vuln_path(@vuln.current.id) %></td>
@@ -69,7 +79,6 @@
           </td>
         </tr>
       <% end %>
-        
 
     </table>
   </div>

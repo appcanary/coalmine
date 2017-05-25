@@ -1,6 +1,6 @@
 # http://stackoverflow.com/questions/33043106/recommended-way-to-use-rails-view-helpers-in-a-presentation-class
 class VulnPresenter
-  delegate :title, :platform, :criticality, :reported_at, :updated_at, :expired_at, :packages, :source, :criticality, :archives, :id, :current, :to => :vuln
+  delegate :title, :platform, :criticality, :reported_at, :updated_at, :expired_at, :packages, :source, :criticality, :archives, :id, :current, :related_vulns, :to => :vuln
   attr_reader :vuln
   def initialize(vuln, archive = false)
     @vuln = vuln
@@ -35,12 +35,6 @@ class VulnPresenter
 
   def has_cves?
     cve_references.present?
-  end
-
-  def cve_links
-    cve_references.map { |cve| 
-      h.link_to(cve, "https://web.nvd.nist.gov/view/vuln/detail?vulnId=#{cve}", target: "_blank")
-    }
   end
 
   def cve_references

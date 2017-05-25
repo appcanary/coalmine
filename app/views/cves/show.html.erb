@@ -1,0 +1,63 @@
+<section>
+  <div class="col-sm-12">
+    <h1><%= @cve.identifier %></h1>
+  </div>
+</section>
+<section>
+  <div class="col-sm-4">
+    <h3>Metadata</h3>
+    <table class="table">
+      <tr>
+        <td><label>NVD</label></td>
+        <td><%= link_to(@cve.identifier, "https://web.nvd.nist.gov/view/vuln/detail?vulnId=#{@cve.identifier}", target: "_blank") %></td>
+      </tr>
+
+      <tr>
+        <td><label>CVSS</label></td>
+        <td><%= link_to(@cve.cvss || "Unknown", "https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?name=#{@cve.identifier}") %></td>
+      </tr>
+
+      <tr>
+        <td><label>See also:</label></td>
+        <td><%= make_links(@cve.related) %></td>
+      </tr>
+
+      <tr>
+        <td><label>Reported</label></td>
+        <td><%= @cve.reported_at.try(:strftime, "%Y-%m-%d") %></td>
+      </tr>
+
+      <tr>
+        <td><label>Updated</label></td>
+        <td><%= @cve.updated_at.try(:strftime, "%Y-%m-%d %H:%M") %></td>
+      </tr>
+    </table>
+  </div>
+
+
+  <div class="col-sm-8">
+    <h3>Description</h3>
+    <p><%= @cve.description %></p>
+
+    <h4>Related Vulnerabilities</h4>
+    <% if @vulns.present? %>
+      <table class="table">
+        <thead>
+          <th>platform</th>
+          <th>vulnerability</th>
+        </th>
+        </thead>
+        <tbody>
+          <% @vulns.each do |v| %>
+            <tr>
+              <td><%= platform_icon(v.platform) %></td>
+              <td><%= link_to v.title, vuln_path(v) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+
+
+</section>
