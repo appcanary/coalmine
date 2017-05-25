@@ -12,7 +12,7 @@ jobs:
 
       # Restore bundle cache
       - restore_cache:
-          key: coalmine-v1-{{ checksum "Gemfile.lock" }}
+          key: coalmine-v2-{{ checksum "Gemfile.lock" }}
 
       # Set up the environment
       - run: |
@@ -29,7 +29,7 @@ jobs:
 
       # Store bundle cache
       - save_cache:
-          key: coalmine-v1-{{ checksum "Gemfile.lock" }}
+          key: coalmine-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
