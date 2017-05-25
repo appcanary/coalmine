@@ -4,7 +4,7 @@
       <h1>Add a server to Appcanary</h1>
       <p>Using our agent is the easiest way to keep your infrastructure in sync with Appcanary. All of the agent's code is <b><a href="https://github.com/appcanary/agent" target="_blank">available on GitHub</a></b>.</p>
 
-      <h3>What platform do you use?</h3>
+      <h3>Select your operating system:</h3>
 
       <%= form_for(current_user, remote: true) do |f| %>
 
@@ -33,7 +33,7 @@
         <% sdp_klass = current_user.pref_os.present? ? "" : "collapse" %>
         <div class="server-deploy-prefs <%=sdp_klass%>" data-toggle="buttons">
 
-          <h3>How do you provision your servers?</h3>
+          <h3>Select your favourite installation method:</h3>
           <% [["Ansible", "ansible",  image_tag("icon-ansible.png", :style => "width: 15px")],
               ["Chef", "chef", image_tag("icon-chef.png", :style => "width: 15px")],
               ["Puppet", "puppet", image_tag("icon-puppet.png", :style => "width: 15px")],

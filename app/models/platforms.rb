@@ -29,6 +29,7 @@ class Platforms
 
   PLATFORM_RELEASES = {
     Ruby => [ nil ],
+    Amazon => [ nil ],
     PHP => [ nil ],
     Debian => [
       ["2.1","slink"],
@@ -74,18 +75,6 @@ class Platforms
       "6",
       "7"
     ],
-    Amazon => [
-      "2011.09", 
-      "2012.03", 
-      "2012.09", 
-      "2013.03", 
-      "2013.09", 
-      "2014.03", 
-      "2014.09", 
-      "2015.03", 
-      "2016.03", 
-      "2016.09"
-    ],
     Alpine => [
       "3.0.0", "3.0.1", "3.0.2", "3.0.3", "3.0.4", "3.0.5", "3.0.6",
       "3.1.0", "3.1.1", "3.1.2", "3.1.3", "3.1.4",
@@ -121,8 +110,10 @@ class Platforms
         if nam
           h[rel] = nam
           h[nam] = true
-        else
+        elsif rel
           h[rel] = true
+        else
+          # Has no releases, do nothing
         end
       end
 
@@ -146,14 +137,16 @@ class Platforms
   end
 
   def self.select_platform_release
-    arr = [[Ruby.titleize, Ruby], [PHP.titleize, PHP]]
+    arr = [[FULL_NAMES[Ruby], Ruby],
+           [FULL_NAMES[PHP], PHP],
+           [FULL_NAMES[Amazon], Amazon]]
 
-    arr += [Ubuntu, CentOS, Debian, Amazon, Alpine].map do |plt|
+    arr += [Ubuntu, CentOS, Debian, Alpine].map do |plt|
       PLATFORM_RELEASES[plt].map { |r,v| ["#{FULL_NAMES[plt]} - #{r}", "#{plt} - #{r}"] }
     end.flatten(1)
   end
 
-  
+
   def self.supported?(platform)
     self.full_name(platform)
   end
@@ -199,7 +192,7 @@ class Platforms
             else
               raise "unknown platform for comparator"
             end
- 
+
     klass.new(package.version)
   end
 

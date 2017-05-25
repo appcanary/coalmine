@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
+  get 'dashboard/report' => "dashboard#report", :as => :dashboard_report
   get 'history' => "dashboard#history", :as => :history
   get 'summary/:date' => "dashboard#summary", :as => :summary
 
@@ -71,7 +72,10 @@ Rails.application.routes.draw do
   post 'greatrubyreview/payment' => "great_review#payment", :as => :great_review_payment
 
 
-  resources :docs, :only => :index
+  resources :docs, :only => :index do
+    get "api", as: :api, on: :collection
+    get "ci", as: :ci, on: :collection
+  end
 
   resources :users, :only => [:new, :create, :update, :destroy] do
     post "stop_impersonating", on: :collection
