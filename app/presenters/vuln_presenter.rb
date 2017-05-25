@@ -44,7 +44,11 @@ class VulnPresenter
   end
 
   def cve_references
-    @cve_references ||= @vuln.reference_ids.select { |s| s =~ /CVE/ }
+    @vuln.cve_ids
+  end
+
+  def cvss
+    @vuln.cvss || "Unknown"
   end
 
   def description

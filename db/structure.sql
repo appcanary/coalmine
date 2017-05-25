@@ -65,8 +65,8 @@ CREATE FUNCTION archive_advisories() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, needs_triage, package_names, valid_at, expired_at) VALUES
-           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.needs_triage, OLD.package_names, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO advisory_archives(advisory_id, identifier, source, platform, patched, affected, unaffected, constraints, title, description, criticality, source_status, related, remediation, reference_ids, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, source_text, reported_at, created_at, updated_at, needs_triage, package_names, cvss, valid_at, expired_at) VALUES
+           (OLD.id, OLD.identifier, OLD.source, OLD.platform, OLD.patched, OLD.affected, OLD.unaffected, OLD.constraints, OLD.title, OLD.description, OLD.criticality, OLD.source_status, OLD.related, OLD.remediation, OLD.reference_ids, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.source_text, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.needs_triage, OLD.package_names, OLD.cvss, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -388,7 +388,8 @@ CREATE TABLE advisories (
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
     expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
     needs_triage jsonb DEFAULT '[]'::jsonb NOT NULL,
-    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    cvss character varying
 );
 
 
@@ -444,7 +445,8 @@ CREATE TABLE advisory_archives (
     valid_at timestamp without time zone NOT NULL,
     expired_at timestamp without time zone NOT NULL,
     needs_triage jsonb DEFAULT '[]'::jsonb NOT NULL,
-    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    cvss character varying
 );
 
 
@@ -4387,4 +4389,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170322221344');
 INSERT INTO schema_migrations (version) VALUES ('20170328203134');
 
 INSERT INTO schema_migrations (version) VALUES ('20170404212231');
+
+INSERT INTO schema_migrations (version) VALUES ('20170524213954');
 
