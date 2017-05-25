@@ -6,10 +6,13 @@ require "minitest/reporters"
 require 'webmock/minitest'
 require 'vcr'
 require "minitest/spec"
+require "minitest/ci"
 require 'mocha/mini_test'
 require 'helpers/importer_helpers'
 
-Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+unless ENV["CIRCLECI"]
+  Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
+end
 
 class ActiveSupport::TestCase
   include Sorcery::TestHelpers::Rails::Controller

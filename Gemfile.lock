@@ -201,9 +201,9 @@ GEM
     method_source (0.8.2)
     mime-types (2.99.3)
     mini_portile2 (2.1.0)
-    minitest (5.10.1)
-    minitest-ci (3.1.0)
-      minitest (~> 5.0, >= 5.0.6)
+    minitest (5.10.2)
+    minitest-ci (3.2.0)
+      minitest (>= 5.0.6)
     minitest-reporters (1.0.10)
       ansi
       builder

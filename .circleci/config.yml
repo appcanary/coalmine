@@ -40,13 +40,12 @@ jobs:
           bundle exec rake db:create
           bundle exec rake db:structure:load
 
-      # Run rspec in parallel
+      # Run tests
       - run: |
           set -xu
           touch app/assets/javascripts/main.bundle.js
-          mkdir -p tmp/test-results
-          bundle exec rake test TESTOPTS="--ci-dir=tmp/test-results" $(circleci tests glob "test/**/*_test.rb" | circleci tests split --split-by=timings)
+          bundle exec rake test
 
       # Stash results
       - store_test_results:
-          path: tmp/test-results
+          path: test/reports
