@@ -38,7 +38,9 @@ class AlpineImporter < AdvisoryImporter
 
         hsh["package_name"] = pkg["name"]
         hsh["package_version"] = pkg_ver
-        hsh["cve_list"] = cve_list
+
+        # Xen vulns contain the XSA along with CVE, i.e. "CVE-2016-9386 XSA-191"
+        hsh["cve_list"] = cve_list.flat_map { |r| r.split }
 
         hsh["related"] = urls_for_apk(repo_hsh["archs"],
                                       repo_hsh["urlprefix"],

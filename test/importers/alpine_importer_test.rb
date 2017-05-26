@@ -36,10 +36,21 @@ class AlpineImporterTest < ActiveSupport::TestCase
     end
     assert_equal expected.to_set, attributes["related"].to_set
 
+
+    # Make sure we parse Xen advisories reference IDs correctly (they include CVE and XEN)
+    advisory_file = advisory_files.last
+    assert advisory_file.end_with?("v3.5/main.yaml")
+    adapters = importer.parse(advisory_file)
+    assert_equal 73, adapters.count
+    xen_adv = adapters.select {|a| a.package_name == "xen"}.first.to_advisory_attributes
+    assert_equal ["CVE-2016-6258", "XSA-182", "CVE-2016-6259", "XSA-183", "CVE-2016-5403", "XSA-184"], xen_adv["reference_ids"]
+
+
+
     # there are 207 individual package releases in the fixtures
     all_advisories = advisory_files.map { |af| importer.parse(af) }.flatten
     assert_equal 207, all_advisories.count
-    # binding.pry
+
     importer.process_advisories(all_advisories)
 
     assert_equal 207, Advisory.from_alpine.count
