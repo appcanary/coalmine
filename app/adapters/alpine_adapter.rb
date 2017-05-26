@@ -35,6 +35,7 @@ class AlpineAdapter < AdvisoryAdapter.new(:distroversion,
   generate :constraints do
     hsh = {
       "package_name" => package_name,
+      "release" => distroversion,
       "patched_versions" => [package_version]
     }
 
