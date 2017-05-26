@@ -48,6 +48,8 @@ module DashboardHelper
                     ["debian.png", "Debian"]
                   when "amzn"
                     ["amzn.png", "Amazon Linux"]
+                  when "alpine"
+                    ["alpine.png", "Alpine Linux"]
                   end
 
     content_tag(:span) do 
