@@ -2,8 +2,7 @@ class AlpineAdapter < AdvisoryAdapter.new(:distroversion,
                                           :reponame,
                                           :package_name,
                                           :package_version,
-                                          :cve_list,
-                                          :related)
+                                          :cve_list)
 
   def identifier
     "#{distroversion}/#{reponame}/#{package_name}-#{package_version}"
@@ -31,10 +30,6 @@ class AlpineAdapter < AdvisoryAdapter.new(:distroversion,
 
   generate :patched do
     [{"package_name" => package_name, "version" => package_version}]
-  end
-
-  generate :related do
-    related
   end
 
   generate :constraints do
