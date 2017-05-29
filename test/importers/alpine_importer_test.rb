@@ -35,7 +35,7 @@ class AlpineImporterTest < ActiveSupport::TestCase
     assert attributes["source_text"].present?
 
     # Make sure we parse Xen advisories reference IDs correctly (they include CVE and XEN)
-    advisory_file = advisory_files.last
+    advisory_file = advisory_files.sort.last
     assert advisory_file.end_with?("v3.5/main.yaml")
     adapters = importer.parse(advisory_file)
     assert_equal 73, adapters.count
