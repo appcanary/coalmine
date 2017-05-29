@@ -1,0 +1,51 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/coalmine
+    
+    docker:
+      - image: circleci/ruby:2.3.4
+      - image: circleci/postgres:9.5-alpine
+        
+    steps:
+      - checkout
+
+      # Restore bundle cache
+      - restore_cache:
+          key: coalmine-v2-{{ checksum "Gemfile.lock" }}
+
+      # Set up the environment
+      - run: |
+          set -xu
+          # Install node and psql
+          sudo apt-get install -y nodejs postgresql-client
+          # Install our database user - necessary for db:structure:load
+          createuser -h localhost -U root -s circleci
+          # Update bundler
+          gem install bundler
+        
+      # Install dependencies
+      - run: bundle install --path vendor/bundle
+
+      # Store bundle cache
+      - save_cache:
+          key: coalmine-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      # Database setup
+      - run: |
+          set -xu
+          mv config/database-ci.yml config/database.yml
+          bundle exec rake db:create
+          bundle exec rake db:structure:load
+
+      # Run tests
+      - run: |
+          set -xu
+          touch app/assets/javascripts/main.bundle.js
+          bundle exec rake test
+
+      # Stash results
+      - store_test_results:
+          path: test/reports
