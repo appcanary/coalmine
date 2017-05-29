@@ -7,7 +7,8 @@ class UsnReferenceImporter
 
           unless cve.nil?
             cve.reference_ids << usn.identifier
-            
+            cve.save!
+
             usn.advisory_import_state.processed_count += 1
             usn.advisory_import_state.save!
           end
