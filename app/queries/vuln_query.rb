@@ -19,6 +19,8 @@ class VulnQuery
     patchable_bundle: -> (bundle) {
       bundle.patchable_packages
     },
+    affected_packages: Package.affected.joins(:bundled_packages).where("bundled_packages.bundle_id = bundles.id"),
+    patchable_packages: Package.affected_but_patchable.joins(:bundled_packages).where("bundled_packages.bundle_id = bundles.id"),
     affected_unnotified_logs: -> (logklass, account) {
       log_table = logklass.table_name
 
@@ -46,9 +48,11 @@ class VulnQuery
     if care_about_affected?(@account)
       @query_bundle = PROCS[:affected_bundle]
       @query_log = PROCS[:affected_unnotified_logs]
+      @query_packages = PROCS[:affected_packages]
     else
       @query_bundle = PROCS[:patchable_bundle]
       @query_log = PROCS[:patchable_unnotified_logs]
+      @query_packages = PROCS[:patchable_packages]
     end
   end
 
@@ -63,8 +67,17 @@ class VulnQuery
     }
   end
 
+  def vuln_bundle_subquery
+    # A subquery that determines whether a bundle is vulnerable designed to be
+    # used like `select("bundles.* (vuln_bundle_subquery) vuln")` with some
+    # conditions on bundles
+    filter_ignored_relative(filter_resolved_relative(@query_packages)).exists
+  end
+
+
   def vuln_bundle?(bundle)
-    filter_ignored(filter_resolved(limit_query(query_bundle.(bundle)))).any?
+    # this is a little ugly but it lets us reuse the subquery
+    Bundle.where(:id => bundle.id).pluck(vuln_bundle_subquery.to_sql).first
   end
 
   def unnotified_vuln_logs
@@ -86,8 +99,18 @@ class VulnQuery
     LogResolution.filter_query_for(query, account.id)
   end
 
+  def filter_resolved_relative(query)
+    #Don't include a specific account id in the filter query, we instead get it from "bundles.account_id". This speeds up the query
+    LogResolution.filter_query_for(query)
+  end
+
   def filter_ignored(query)
     IgnoredPackage.filter_query_for(query, account.id)
+  end
+
+  def filter_ignored_relative(query)
+    #Don't include a specific account id in the filter query, we instead get it from "bundles.account_id". This speeds up the query
+    IgnoredPackage.filter_query_for(query)
   end
 
   def uniq_and_include(pkg_query)

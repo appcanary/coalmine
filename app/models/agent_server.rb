@@ -35,6 +35,8 @@ class AgentServer < ActiveRecord::Base
 
   belongs_to :agent_release
   has_many :bundles, :dependent => :destroy
+  has_many :bundles_with_vulnerable, ->(server) {merge(Bundle.with_vulnerable(server.account)) }, class_name: "Bundle"
+
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
   has_many :accepted_files, :class_name => AgentAcceptedFile

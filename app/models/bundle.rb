@@ -64,6 +64,11 @@ class Bundle < ActiveRecord::Base
   scope :system_bundles, -> { where("bundles.platform IN (?)", Platforms::OPERATING_SYSTEMS) }
   scope :app_bundles, -> { where("bundles.platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
 
+  scope :with_vulnerable, ->(account) {
+    vq = VulnQuery.new(account)
+    select("bundles.*, (#{vq.vuln_bundle_subquery.to_sql}) vulnerable")
+  }
+
   # note that these are instance methods
   # as opposed to ArchiveBehaviour class methods
   def as_of(date)
@@ -85,6 +90,18 @@ class Bundle < ActiveRecord::Base
   # to be determined if they should all switch to VulnQuery
   def vulnerable?
     affected_packages.select(1).limit(1).any?
+  end
+
+  # See the TODO above.
+  # We should decide if we switch vulnerable? above to use vulnquery. As a stopgap, this method.
+  def vulnerable_via_vulnquery?
+    # We may have gotten vulnerable as a instance variable if we did something like server.bundles_with_vulnerable
+    # If not, pull it directly
+    if self.respond_to?(:vulnerable)
+      self.vulnerable
+    else
+      VulnQuery.new(self.account).vuln_bundle?(self)
+    end
   end
 
   def patchable?
