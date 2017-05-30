@@ -5,25 +5,27 @@ class ServerPresenter
     :hostname, :display_name, :ip,
     :uname, :distro, :last_heartbeat_at, :to => :server
 
-  def initialize(vulnquery, server)
+  def initialize(account, vulnquery, server)
     @server = server
     @vulnquery = vulnquery
 
-    @processes = @server.server_processes.map { |p| ServerProcessPresenter.new(p) }
-    @bundles = @server.bundles.map { |b| BundlePresenter.new(vulnquery, b) }
-    @tags = @server.tags.pluck(:tag)
+    if @account.show_processes?
+      @processes = @server.server_processes.map { |p| ServerProcessPresenter.new(p) }
+    end
+    @bundles = @server.bundles_with_vulnerable.map { |b| BundlePresenter.new(vulnquery, b) }
+    @tags = @server.tags.map(&:tag)
   end
 
   def bundles_sys_sorted
-    bundles.sort_by { |b| "#{b.system_bundle? ? 0 : 1}#{b.display_name}" } 
+    @bundles.sort_by { |b| "#{b.system_bundle? ? 0 : 1}#{b.display_name}" }
   end
 
   def vulnerable?
-    vulnquery.vuln_server?(server)
+    @bundles.any?(&:vulnerable_via_vulnquery?)
   end
 
   def empty?
-    server.bundles.empty?
+    @bundles.empty?
   end
 
   def vuln_sort_ordinal
@@ -41,7 +43,7 @@ class ServerPresenter
   end
 
   def outdated_processes
-    server.server_processes
+    processes
       .joins(:server_process_libraries)
       .where(server_process_libraries: { outdated: true })
       .order(:pid)
@@ -54,7 +56,7 @@ class ServerPresenter
   end
 
   def all_processes
-    @all_processes ||= server.server_processes
+    @all_processes ||= processes
       .joins(:server_process_libraries)
       .order(:pid)
       .distinct

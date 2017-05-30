@@ -35,7 +35,8 @@ class AgentServer < ActiveRecord::Base
 
   belongs_to :agent_release
   has_many :bundles, :dependent => :destroy
-  has_many :bundles_with_vulnerable, ->(server) {merge(Bundle.with_vulnerable(server.account)) }, class_name: "Bundle"
+  has_many :bundles_with_vulnerable_affected, -> { merge(Bundle.with_vulnerable_affected) }, class_name: Bundle
+  has_many :bundles_with_vulnerable_patchable, -> { merge(Bundle.with_vulnerable_patchable) }, class_name: Bundle
 
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
@@ -55,9 +56,20 @@ class AgentServer < ActiveRecord::Base
     self.active_as_of(Time.now)
   }
 
+  scope :inactive, -> {
+    self.inactive_as_of(Time.now)
+  }
+
   scope :active_as_of, ->(date) {
     joins(:heartbeats).where('"agent_heartbeats".created_at > ?', date - ACTIVE_WINDOW).distinct("agent_servers.id")
   }
+
+  def bundles_with_vulnerable
+    vq = VulnQuery.new(self.account)
+    self.send(vq.bundles_with_vulnerable_scope)
+  end
+
+
 
   # TODO: figure out inactive scope
 
@@ -103,7 +115,7 @@ class AgentServer < ActiveRecord::Base
   end
 
   def vulnerable?
-    bundles.any?(&:vulnerable?)
+    bundles_with_vulnerable.any?(&:vulnerable?)
   end
 
   def patchable?

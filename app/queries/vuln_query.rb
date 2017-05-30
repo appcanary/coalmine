@@ -19,8 +19,6 @@ class VulnQuery
     patchable_bundle: -> (bundle) {
       bundle.patchable_packages
     },
-    affected_packages: Package.affected.joins(:bundled_packages).where("bundled_packages.bundle_id = bundles.id"),
-    patchable_packages: Package.affected_but_patchable.joins(:bundled_packages).where("bundled_packages.bundle_id = bundles.id"),
     affected_unnotified_logs: -> (logklass, account) {
       log_table = logklass.table_name
 
@@ -48,15 +46,35 @@ class VulnQuery
     if care_about_affected?(@account)
       @query_bundle = PROCS[:affected_bundle]
       @query_log = PROCS[:affected_unnotified_logs]
-      @query_packages = PROCS[:affected_packages]
+      @vuln_subquery = VulnQuery.has_affected_subquery
     else
       @query_bundle = PROCS[:patchable_bundle]
       @query_log = PROCS[:patchable_unnotified_logs]
-      @query_packages = PROCS[:patchable_packages]
+      @vuln_subquery = VulnQuery.has_patchable_subquery
     end
   end
 
+  # --- class methods to actually do the computation ---
+  def self.has_affected_subquery
+    packages = Package.affected.joins(:bundled_packages).where("bundled_packages.bundle_id = bundles.id")
+    self.filter_ignored_relative(self.filter_resolved_relative(packages)).exists
+  end
+
+  def self.has_patchable_subquery
+    packages = Package.affected_but_patchable.joins(:bundled_packages).where("bundled_packages.bundle_id = bundles.id")
+    self.filter_ignored_relative(self.filter_resolved_relative(packages)).exists
+  end
+
   # ---- methods that give you the info you want
+  def bundles_with_vulnerable_scope
+    # the scope to use to get AgentServer's Bundles with a vulnerable? boolean
+    if care_about_affected?(@account)
+      :bundles_with_vulnerable_affected
+    else
+      :bundles_with_vulnerable_patchable
+    end
+  end
+
   def from_bundle(bundle)
     uniq_and_include(filter_ignored(filter_resolved(query_bundle.(bundle))))
   end
@@ -71,7 +89,7 @@ class VulnQuery
     # A subquery that determines whether a bundle is vulnerable designed to be
     # used like `select("bundles.* (vuln_bundle_subquery) vuln")` with some
     # conditions on bundles
-    filter_ignored_relative(filter_resolved_relative(@query_packages)).exists
+    @vuln_subquery
   end
 
 
@@ -99,7 +117,7 @@ class VulnQuery
     LogResolution.filter_query_for(query, account.id)
   end
 
-  def filter_resolved_relative(query)
+  def self.filter_resolved_relative(query)
     #Don't include a specific account id in the filter query, we instead get it from "bundles.account_id". This speeds up the query
     LogResolution.filter_query_for(query)
   end
@@ -108,7 +126,7 @@ class VulnQuery
     IgnoredPackage.filter_query_for(query, account.id)
   end
 
-  def filter_ignored_relative(query)
+  def self.filter_ignored_relative(query)
     #Don't include a specific account id in the filter query, we instead get it from "bundles.account_id". This speeds up the query
     IgnoredPackage.filter_query_for(query)
   end

@@ -6,13 +6,17 @@ class AgentServersPresenter
     @account = account
     @vulnquery = vulnquery
 
-    @servers = @account.agent_servers.includes(:bundles)
+    scope = @vulnquery.bundles_with_vulnerable_scope
+    @servers = @account.agent_servers.includes(scope).includes(:tags)
+
+    if @account.show_processes?
+     @servers = @servers.includes(:server_processes)
+    end
     @active_servers = @servers.active
     @silent_servers = @servers - @active_servers
 
-
-    @active_servers = @active_servers.map { |s| ServerPresenter.new(@vulnquery, s) }
-    @silent_servers = @silent_servers.map { |s| ServerPresenter.new(@vulnquery, s) }
+    @active_servers = @active_servers.map { |s| ServerPresenter.new(@account, @vulnquery, s) }
+    @silent_servers = @silent_servers.map { |s| ServerPresenter.new(@account, @vulnquery, s) }
   end
 
   def any?

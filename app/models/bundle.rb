@@ -64,9 +64,14 @@ class Bundle < ActiveRecord::Base
   scope :system_bundles, -> { where("bundles.platform IN (?)", Platforms::OPERATING_SYSTEMS) }
   scope :app_bundles, -> { where("bundles.platform NOT IN (?)", Platforms::OPERATING_SYSTEMS) }
 
-  scope :with_vulnerable, ->(account) {
-    vq = VulnQuery.new(account)
-    select("bundles.*, (#{vq.vuln_bundle_subquery.to_sql}) vulnerable")
+  scope :with_vulnerable_affected, -> {
+    # Give me a true/false value for vulnerable when I care about affected
+    select("bundles.*, (#{VulnQuery.has_affected_subquery.to_sql}) vulnerable")
+  }
+
+  scope :with_vulnerable_patchable, -> {
+    # Give me a true/false value for vulnerable when I only care about patchable
+    select("bundles.*, (#{VulnQuery.has_patchable_subquery.to_sql}) vulnerable")
   }
 
   # note that these are instance methods
