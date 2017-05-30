@@ -115,6 +115,10 @@ class Advisory < ActiveRecord::Base
     where(:source => FriendsOfPHPImporter::SOURCE)
   }
 
+  scope :from_python_safety_db, -> {
+    where(:source => PythonSafetyDbImporter::SOURCE)
+  }
+
   scope :from_alpine, -> {
     where(:source => AlpineImporter::SOURCE)
   }
