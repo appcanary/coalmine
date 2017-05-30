@@ -61,22 +61,16 @@ class AgentServer < ActiveRecord::Base
     self.active_as_of(Time.now)
   }
 
-  scope :inactive, -> {
-    self.inactive_as_of(Time.now)
-  }
-
   scope :active_as_of, ->(date) {
     joins(:heartbeats).where('"agent_heartbeats".created_at > ?', date - ACTIVE_WINDOW).distinct("agent_servers.id")
   }
+
+  # TODO: figure out inactive scope
 
   def bundles_with_vulnerable
     vq = VulnQuery.new(self.account)
     self.send(vq.bundles_with_vulnerable_scope)
   end
-
-
-
-  # TODO: figure out inactive scope
 
   def last_heartbeat_at
     # We may have been loaded with a with_last_heartbeats scope
