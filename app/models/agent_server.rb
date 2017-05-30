@@ -46,7 +46,12 @@ class AgentServer < ActiveRecord::Base
 
   has_many :server_processes, :dependent => :destroy
 
-  has_one :last_heartbeat, -> { order(created_at: :desc) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
+  has_one :last_heartbeat, -> { order(created_at: :desc).limit(1) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
+
+  scope :with_last_heartbeats, -> {
+    subq = AgentHeartbeat.order(created_at: :desc).limit(1).where("agent_heartbeats.agent_server_id = agent_servers.id").select("created_at")
+    select("agent_servers.*, (#{subq.to_sql}) last_heartbeat_attr")
+  }
 
   scope :belonging_to, -> (user) {
     where(:account_id => user.account_id)
@@ -74,7 +79,8 @@ class AgentServer < ActiveRecord::Base
   # TODO: figure out inactive scope
 
   def last_heartbeat_at
-    last_heartbeat.try(:created_at)
+    # We may have been loaded with a with_last_heartbeats scope
+    self.try(:last_heartbeat_attr) || last_heartbeat.try(:created_at)
   end
 
   def register_heartbeat!(params)
