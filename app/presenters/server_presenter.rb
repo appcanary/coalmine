@@ -6,6 +6,7 @@ class ServerPresenter
     :uname, :distro, :last_heartbeat_at, :to => :server
 
   def initialize(account, vulnquery, server)
+    @account = account
     @server = server
     @vulnquery = vulnquery
 
@@ -21,7 +22,7 @@ class ServerPresenter
   end
 
   def vulnerable?
-    @bundles.any?(&:vulnerable_via_vulnquery?)
+    @bundles.any?(&:vulnerable?)
   end
 
   def empty?

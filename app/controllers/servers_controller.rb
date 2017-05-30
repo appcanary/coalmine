@@ -90,7 +90,7 @@ class ServersController < ApplicationController
     @vulnquery = VulnQuery.new(@account)
 
     @server = fetch_server(params)
-    @serverpres = ServerPresenter.new(@vulnquery, @server)
+    @serverpres = ServerPresenter.new(@account, @vulnquery, @server)
 
     @outdated_procs = @serverpres.outdated_processes
     @all_procs = @serverpres.all_processes
