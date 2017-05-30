@@ -43,7 +43,7 @@
   </div>
 </section>
 
-<% if $rollout.active?(:server_processes, @account) %>
+<% if @account.show_processes? %>
   <%= render :file => "servers/procs" %>
 <% end %>
 
