@@ -3019,10 +3019,10 @@ CREATE INDEX index_agent_heartbeats_on_agent_server_id ON agent_heartbeats USING
 
 
 --
--- Name: index_agent_heartbeats_on_id_and_created_at; Type: INDEX; Schema: public; Owner: -
+-- Name: index_agent_heartbeats_on_agent_server_id_and_created_at; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_agent_heartbeats_on_id_and_created_at ON agent_heartbeats USING btree (id, created_at DESC);
+CREATE INDEX index_agent_heartbeats_on_agent_server_id_and_created_at ON agent_heartbeats USING btree (agent_server_id, created_at DESC);
 
 
 --
@@ -4392,3 +4392,4 @@ INSERT INTO schema_migrations (version) VALUES ('20170404212231');
 
 INSERT INTO schema_migrations (version) VALUES ('20170524213954');
 
+INSERT INTO schema_migrations (version) VALUES ('20170531151207');

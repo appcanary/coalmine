@@ -46,7 +46,7 @@ class IgnoredPackageTest < ActiveSupport::TestCase
     end
 
     test "ignore_package works for a package globally" do
-      bundle2 = FactoryGirl.create(:bundle, packages: [pkg])
+      bundle2 = FactoryGirl.create(:bundle, packages: [pkg], account: account)
 
       assert_equal 0, IgnoredPackage.where(account: account).count
       assert_equal true, query.vuln_bundle?(bundle)

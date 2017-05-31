@@ -35,6 +35,9 @@ class AgentServer < ActiveRecord::Base
 
   belongs_to :agent_release
   has_many :bundles, :dependent => :destroy
+  has_many :bundles_with_vulnerable_affected, -> { merge(Bundle.with_vulnerable_affected) }, class_name: Bundle
+  has_many :bundles_with_vulnerable_patchable, -> { merge(Bundle.with_vulnerable_patchable) }, class_name: Bundle
+
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
   has_many :accepted_files, :class_name => AgentAcceptedFile
@@ -43,7 +46,12 @@ class AgentServer < ActiveRecord::Base
 
   has_many :server_processes, :dependent => :destroy
 
-  has_one :last_heartbeat, -> { order(created_at: :desc) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
+  has_one :last_heartbeat, -> { order(created_at: :desc).limit(1) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
+
+  scope :with_last_heartbeats, -> {
+    subq = AgentHeartbeat.order(created_at: :desc).limit(1).where("agent_heartbeats.agent_server_id = agent_servers.id").select("created_at")
+    select("agent_servers.*, (#{subq.to_sql}) last_heartbeat_attr")
+  }
 
   scope :belonging_to, -> (user) {
     where(:account_id => user.account_id)
@@ -59,8 +67,14 @@ class AgentServer < ActiveRecord::Base
 
   # TODO: figure out inactive scope
 
+  def bundles_with_vulnerable
+    vq = VulnQuery.new(self.account)
+    self.send(vq.bundles_with_vulnerable_scope)
+  end
+
   def last_heartbeat_at
-    last_heartbeat.try(:created_at)
+    # We may have been loaded with a with_last_heartbeats scope
+    self.try(:last_heartbeat_attr) || last_heartbeat.try(:created_at)
   end
 
   def register_heartbeat!(params)
@@ -101,7 +115,7 @@ class AgentServer < ActiveRecord::Base
   end
 
   def vulnerable?
-    bundles.any?(&:vulnerable?)
+    bundles_with_vulnerable.any?(&:vulnerable?)
   end
 
   def patchable?

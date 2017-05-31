@@ -9,7 +9,7 @@ class BundlePresenter
   end
 
   def vulnerable?
-    @vulnerable_q ||= vulnquery.vuln_bundle?(bundle)
+    @bundle.vulnerable_via_vulnquery?
   end
 
   def vuln_packages

@@ -24,6 +24,8 @@ class Account < ActiveRecord::Base
   has_many :agent_servers
   has_many :active_servers, -> { active }, :class_name => AgentServer
   has_many :bundles
+  has_many :bundles_with_vulnerable_affected, -> { merge(Bundle.with_vulnerable_affected) }, class_name: Bundle
+  has_many :bundles_with_vulnerable_patchable, -> { merge(Bundle.with_vulnerable_patchable) }, class_name: Bundle
   has_many :server_bundles, -> { via_agent }, :class_name => Bundle
   has_many :active_server_bundles, -> { joins(:agent_server).merge(AgentServer.active) }, :class_name => Bundle
 
@@ -66,7 +68,6 @@ class Account < ActiveRecord::Base
                       (SELECT 1 FROM bundle_archives WHERE bundle_archives.account_id = accounts.id limit 1)")
   end
 
-
   def has_activity?
     active_servers.any? || 
       monitors.any?
@@ -99,6 +100,16 @@ class Account < ActiveRecord::Base
       "monitored-app-count": self.api_bundles.count,
       "api-calls-count": self.check_api_calls.count
     }
+  end
+
+  def show_processes?
+    # We use a rollout to decide whether to show processes per account, but this is actually more of a per-user setting. It's also expensive to do a rollout call every time we need to check (which is per-server when showing the dashboard), so we cache it on the account object as a stop-gap
+    # TODO: make this a per-user setting when we roll out process monitoring as a feature
+    if @show_processes.nil?
+      @show_processes = $rollout.active?(:server_processes, self)
+    else
+      @show_processes
+    end
   end
 
   # Decide if we should send the daily email summary based on the user prefs and whether they have any vulns or servers to report

@@ -34,8 +34,14 @@ class IgnoredPackage < ActiveRecord::Base
   validates :user, presence: true
   validates :package, presence: true, uniqueness: { scope: [:account, :bundle] }
 
-  scope :filter_query_for, -> (query, account_id) {
-    sanitized_account_id = sanitize(account_id)
+  scope :filter_query_for, -> (query, account_id = nil) {
+    if account_id
+      sanitized_account_id = sanitize(account_id)
+    else
+      sanitized_account_id = "bundles.account_id"
+    end
+
+
     primary_key = query.klass.resolution_log_primary_key
 
     merge_scope = joins("LEFT JOIN ignored_packages ON
