@@ -6,6 +6,7 @@ class Platforms
   PHP = "php"
   CentOS = "centos"
   Amazon = "amzn"
+  Alpine = "alpine"
   None = "none"
 
   FULL_NAMES = {
@@ -14,18 +15,21 @@ class Platforms
     Amazon => "Amazon",
     CentOS => "CentOS",
     Ubuntu => "Ubuntu",
-    Debian => "Debian"
+    Debian => "Debian",
+    Alpine => "Alpine"
   }
 
   OPERATING_SYSTEMS = [
     Ubuntu,
     Debian,
     CentOS,
-    Amazon
+    Amazon,
+    Alpine
   ]
 
   PLATFORM_RELEASES = {
     Ruby => [ nil ],
+    Amazon => [ nil ],
     PHP => [ nil ],
     Debian => [
       ["2.1","slink"],
@@ -71,17 +75,14 @@ class Platforms
       "6",
       "7"
     ],
-    Amazon => [
-      "2011.09", 
-      "2012.03", 
-      "2012.09", 
-      "2013.03", 
-      "2013.09", 
-      "2014.03", 
-      "2014.09", 
-      "2015.03", 
-      "2016.03", 
-      "2016.09"
+    Alpine => [
+      "3.0.0", "3.0.1", "3.0.2", "3.0.3", "3.0.4", "3.0.5", "3.0.6",
+      "3.1.0", "3.1.1", "3.1.2", "3.1.3", "3.1.4",
+      "3.2.0", "3.2.1", "3.2.2", "3.2.3",
+      "3.3.0", "3.3.1", "3.3.2", "3.3.3",
+      "3.4.0", "3.4.1", "3.4.2", "3.4.3", "3.4.4", "3.4.5", "3.4.6",
+      "3.5.0", "3.5.1", "3.5.2",
+      "3.6.0"
     ]
   }
 
@@ -110,8 +111,10 @@ class Platforms
         if nam
           h[rel] = nam
           h[nam] = true
-        else
+        elsif rel
           h[rel] = true
+        else
+          # Has no releases, do nothing
         end
       end
 
@@ -125,6 +128,7 @@ class Platforms
     Debian,
     CentOS,
     Amazon,
+    Alpine,
     Ruby,
     PHP
   ]
@@ -134,14 +138,16 @@ class Platforms
   end
 
   def self.select_platform_release
-    arr = [[FULL_NAMES[Ruby], Ruby], [FULL_NAMES[PHP], PHP]]
+    arr = [[FULL_NAMES[Ruby], Ruby],
+           [FULL_NAMES[PHP], PHP],
+           [FULL_NAMES[Amazon], Amazon]]
 
-    arr += [Ubuntu, CentOS, Debian, Amazon].map do |plt|
+    arr += [Ubuntu, CentOS, Debian, Alpine].map do |plt|
       PLATFORM_RELEASES[plt].map { |r,v| ["#{FULL_NAMES[plt]} - #{r}", "#{plt} - #{r}"] }
     end.flatten(1)
   end
 
-  
+
   def self.supported?(platform)
     self.full_name(platform)
   end
@@ -182,10 +188,12 @@ class Platforms
               DpkgComparator
             when Debian
               DpkgComparator
+            when Alpine
+              ApkComparator
             else
               raise "unknown platform for comparator"
             end
- 
+
     klass.new(package.version)
   end
 
@@ -204,11 +212,15 @@ class Platforms
       DpkgStatusParser
     when Debian
       DpkgStatusParser
+    when Alpine
+      ApkInstalledDbParser
     else
       nil
     end
   end
 
+  # TODO Used as a UI helper in the add new server docs, so don't forget to deal
+  # with that before merging the Alpine changes.
   def self.select_operating_systems
     OPERATING_SYSTEMS.map { |n| [n, full_name(n)] }
   end

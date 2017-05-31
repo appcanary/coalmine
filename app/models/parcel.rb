@@ -22,6 +22,8 @@ class Parcel
       Parcel::Dpkg
     when Platforms::PHP
       Parcel::Composer
+    when Platforms::Alpine
+      Parcel::APK
     else
       raise "unknown platform"
     end
@@ -112,6 +114,14 @@ class Parcel
       return if hsh.nil?
       self.name = hsh["name"]
       self.version = hsh["version"].split(/v/).last
+    end
+  end
+
+  class APK < Parcel
+    def initialize(hsh = nil)
+      return if hsh.nil?
+      self.name = hsh["name"]
+      self.version = hsh["version"]
     end
   end
 

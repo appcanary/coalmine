@@ -115,6 +115,10 @@ class Advisory < ActiveRecord::Base
     where(:source => FriendsOfPHPImporter::SOURCE)
   }
 
+  scope :from_alpine, -> {
+    where(:source => AlpineImporter::SOURCE)
+  }
+
   # AIS gets auto saved, so we skip saving it ourselves here.
   def processed_flag=(flag)
     unless self.advisory_import_state

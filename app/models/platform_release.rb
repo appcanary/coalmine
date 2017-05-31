@@ -1,5 +1,5 @@
 class PlatformRelease
-  include ResultObject 
+  include ResultObject
 
   class Validator
     include ActiveModel::Validations
@@ -19,6 +19,10 @@ class PlatformRelease
         return
       end
 
+      if valid_releases == {}
+        # If it's an empty hash, there are no releases. Be permissive and accept anything
+        return true
+      end
 
       if platform == Platforms::Ubuntu
         # be weary of nil release values

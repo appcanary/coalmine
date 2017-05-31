@@ -10,7 +10,8 @@ class AdvisoryImporterTest < ActiveSupport::TestCase
     assert_equal 3, Advisory.from_rubysec.count
     assert_equal 3, AdvisoryImportState.count
 
-    adv = Advisory.last
+    # for some reason ordering is off in CI
+    adv = Advisory.order(:title).first
     assert_equal false, adv.advisory_import_state.processed
     assert_equal "Denial of service or RCE from libxml2 and libxslt", adv.title
 
