@@ -77,5 +77,10 @@ class UsnReferenceImporterTest < ActiveSupport::TestCase
     assert_equal 1, usn_adv.advisory_import_state.processed_count
 
     assert_equal 1, Advisory.from_usn.unprocessed_or_incomplete.count
+
+    # verify that we haven't added an extra reference to the first one
+    related_ubuntu_adv.reload
+    assert_equal 2, related_ubuntu_adv.reference_ids.count
+    assert_equal usn_adv.identifier, related_ubuntu_adv.reference_ids.last
   end
 end

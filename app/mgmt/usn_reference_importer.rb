@@ -5,7 +5,7 @@ class UsnReferenceImporter
         usn.reference_ids.select { |r| r.start_with?('CVE') }.each do |identifier|
           cve = Advisory.from_ubuntu.find_by(identifier: identifier)
 
-          unless cve.nil?
+          unless cve.nil? || cve.reference_ids.include?(usn.identifier)
             cve.reference_ids << usn.identifier
             cve.save!
 
