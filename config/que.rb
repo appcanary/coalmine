@@ -25,7 +25,6 @@ UbuntuTrackerImporterJob.enqueue_if_not_existing!
 DebianTrackerImporterJob.enqueue_if_not_existing!
 CveImporterJob.enqueue_if_not_existing!
 AlpineImporterJob.enqueue_if_not_existing!
-UsnImporterJob.enqueue_if_not_existing!
 
 # process imported data
 VulnerabilityImporterJob.enqueue_if_not_existing!
