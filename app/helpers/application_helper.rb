@@ -188,11 +188,10 @@ module ApplicationHelper
     markdown.render(vuln.description).html_safe
   end
 
-  def platform_icon(platform)
+  def platform_icon(platform, add_label = true)
     if label = Platforms.supported?(platform)
       content_tag("span", :class => "platform-logo") do 
-        image_tag("icon-#{platform}.png", :style => "width: 13px") + 
-          " #{label}"
+        image_tag("icon-#{platform}.png", :style => "width: 13px") + (add_label ? " #{label}" : "")
       end
     else
       "Unsupported platform"

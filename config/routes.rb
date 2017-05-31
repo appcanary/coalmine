@@ -114,6 +114,8 @@ Rails.application.routes.draw do
     get "archive/:id" => "vulns#archive", :as => "archive"
   end
 
+  get "cves/:cve_id" => "cves#show", :as => :cve
+
   get "packages/php/:name/:version" => "packages#show", :as => :php_package_version, :constraints => { :name => /[^\/]+\/[^\/]+/, :version => /[^\/]+/ }
   get "packages/:platform/:name/:version" => "packages#show", :as => :package_platform, :constraints => { :platform => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
   get "packages/:platform/:release/:name/:version" => "packages#show", :as => :package_platform_release, :constraints => { :platform => /[^\/]+/, :release => /[^\/]+/, :name => /[^\/]+/, :version => /[^\/]+/ }
@@ -130,7 +132,6 @@ Rails.application.routes.draw do
 
     resources :subscription_plans
     resources :emails, :only => [:index, :show]
-    resources :advisories
   end
 
   namespace :api do

@@ -201,9 +201,9 @@ GEM
     method_source (0.8.2)
     mime-types (2.99.3)
     mini_portile2 (2.1.0)
-    minitest (5.10.1)
-    minitest-ci (3.1.0)
-      minitest (~> 5.0, >= 5.0.6)
+    minitest (5.10.2)
+    minitest-ci (3.2.0)
+      minitest (>= 5.0.6)
     minitest-reporters (1.0.10)
       ansi
       builder
@@ -284,7 +284,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.13.0)
     rake (12.0.0)
-    rdoc (4.2.0)
+    rdoc (4.3.0)
     redcarpet (3.3.4)
     reform (2.2.1)
       disposable (>= 0.3.0, < 0.4.0)
@@ -443,7 +443,7 @@ DEPENDENCIES
   will_paginate-bootstrap
 
 RUBY VERSION
-   ruby 2.3.1p112
+   ruby 2.3.4p301
 
 BUNDLED WITH
-   1.14.6
+   1.15.0
