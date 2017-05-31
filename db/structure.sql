@@ -3726,6 +3726,13 @@ CREATE INDEX index_vulnerable_dependencies_on_expired_at ON vulnerable_dependenc
 
 
 --
+-- Name: index_vulnerable_dependencies_on_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_vulnerable_dependencies_on_id ON vulnerable_dependencies USING btree (id) WHERE ((affected_versions <> '{}'::character varying[]) OR (NOT ((patched_versions = '{}'::text[]) AND (unaffected_versions = '{}'::text[]))));
+
+
+--
 -- Name: index_vulnerable_dependencies_on_package_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4393,3 +4400,7 @@ INSERT INTO schema_migrations (version) VALUES ('20170404212231');
 INSERT INTO schema_migrations (version) VALUES ('20170524213954');
 
 INSERT INTO schema_migrations (version) VALUES ('20170531151207');
+
+INSERT INTO schema_migrations (version) VALUES ('20170531222312');
+
+>>>>>>> Stashed changes
