@@ -2,7 +2,7 @@ class AlpineAdapter < AdvisoryAdapter.new(:distroversion,
                                           :reponame,
                                           :package_name,
                                           :package_version,
-                                          :cve_list)
+                                          :ref_list)
 
   def identifier
     "#{distroversion}/#{reponame}/#{package_name}-#{package_version}"
@@ -21,7 +21,7 @@ class AlpineAdapter < AdvisoryAdapter.new(:distroversion,
   end
 
   generate :reference_ids do
-    cve_list
+    ref_list
   end
 
   generate :title do
