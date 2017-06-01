@@ -44,11 +44,10 @@ class IgnoredPackage < ActiveRecord::Base
 
     primary_key = query.klass.resolution_log_primary_key
 
-    merge_scope = joins("LEFT JOIN ignored_packages ON
+    merge_scope = where("NOT EXISTS (SELECT 1 FROM ignored_packages WHERE
                            ignored_packages.account_id = #{sanitized_account_id} AND
                            ignored_packages.package_id = #{primary_key} AND
-                           (ignored_packages.bundle_id = bundled_packages.bundle_id OR ignored_packages.bundle_id is null)").
-                    where("ignored_packages.id is null")
+                           (ignored_packages.bundle_id = bundled_packages.bundle_id OR ignored_packages.bundle_id is null))")
 
     query.merge(merge_scope)
   }

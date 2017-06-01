@@ -38,11 +38,10 @@ class LogResolution < ActiveRecord::Base
     end
 
 
-    merge_scope = joins("LEFT JOIN log_resolutions ON
+    merge_scope = where("NOT EXISTS (SELECT 1 FROM log_resolutions WHERE
       log_resolutions.vulnerable_dependency_id = vulnerable_dependencies.id AND
       log_resolutions.package_id = #{primary_key} AND
-      log_resolutions.account_id = #{sanitized_account_id}").
-    where("log_resolutions.id is null")
+      log_resolutions.account_id = #{sanitized_account_id})")
 
     query.merge(merge_scope)
   }
