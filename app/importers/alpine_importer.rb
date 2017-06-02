@@ -43,11 +43,11 @@ class AlpineImporter < AdvisoryImporter
         hsh["ref_list"] = sanitize_references(ref_list)
 
         hsh["download_apks"] = urls_for_apk(repo_hsh["archs"],
-                                      repo_hsh["urlprefix"],
-                                      repo_hsh["distroversion"],
-                                      repo_hsh["reponame"],
-                                      pkg["name"],
-                                      pkg_ver)
+                                            repo_hsh["urlprefix"],
+                                            repo_hsh["distroversion"],
+                                            repo_hsh["reponame"],
+                                            pkg["name"],
+                                            pkg_ver)
 
         # repo_hsh is the whole YAML file
         # TODO some subset?
@@ -66,7 +66,9 @@ class AlpineImporter < AdvisoryImporter
   # Elements may be CVE, XSA or ZBX prefixed, or may be plain text annotations.
   def sanitize_references(lst)
     if lst.is_a? String
-      lst.split.select { |r| /[A-Z]+-\d+(-\d+)?/.match(r) }
+      lst.split.
+        select { |r| /[A-Z]+-\d+(-\d+)?(\.patch)?/.match(r) }.
+        map { |r| r.split(/\.patch/).first }
     elsif lst.is_a? Array
       lst.flat_map { |r| sanitize_references(r) }
     else
