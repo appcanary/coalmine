@@ -56,12 +56,12 @@ class VulnQuery
 
   # --- class methods to actually do the computation ---
   def self.has_affected_subquery
-    packages = Package.affected.joins(:bundled_packages).where("bundled_packages.bundle_id = bundles.id")
+    packages = VulnerablePackage.joins(:vulnerable_dependency).joins("inner join bundled_packages on bundled_packages.package_id = vulnerable_packages.package_id").where("bundled_packages.bundle_id = bundles.id")
     self.filter_ignored_relative(self.filter_resolved_relative(packages)).exists
   end
 
   def self.has_patchable_subquery
-    packages = Package.affected_but_patchable.joins(:bundled_packages).where("bundled_packages.bundle_id = bundles.id")
+    packages = VulnerablePackage.joins(:vulnerable_dependency).merge(VulnerableDependency.patchable).joins("inner join bundled_packages on bundled_packages.package_id = vulnerable_packages.package_id").where("bundled_packages.bundle_id = bundles.id")
     self.filter_ignored_relative(self.filter_resolved_relative(packages)).exists
   end
 

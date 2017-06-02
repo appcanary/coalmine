@@ -30,6 +30,7 @@ class VulnerablePackage < ActiveRecord::Base
 
   has_many :bundled_packages
   has_many :bundles, :through => :bundled_packages
+  belongs_to :vulnerable_dependency
 
   has_many :log_resolutions, :foreign_key => :vulnerable_dependency_id, :primary_key => :vulnerable_dependency_id
 
@@ -43,4 +44,7 @@ class VulnerablePackage < ActiveRecord::Base
     @unique_hash ||= self.attributes.except("id", "created_at", "updated_at", "valid_at", "expired_at")
   end
 
+  def self.resolution_log_primary_key
+    "vulnerable_packages.package_id"
+  end
 end
