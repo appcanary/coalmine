@@ -46,14 +46,8 @@ class AgentServer < ActiveRecord::Base
 
   has_many :server_processes, :dependent => :destroy
 
-  has_one :last_heartbeat, -> { order(created_at: :desc).limit(1) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
-
-  scope :include_last_heartbeats, -> {
-    # If you do just an .includes(), the order by created_at limit 1 part is gone.
-    # So, we have to scope the query ourselves
-    subq = AgentHeartbeat.order(created_at: :desc).limit(1).where("agent_heartbeats.agent_server_id = agent_servers.id").select("id")
-    includes(:last_heartbeat).where("agent_heartbeats.id = (#{subq.to_sql}) OR agent_heartbeats.id IS NULL").references(:agent_heartbeats)
-  }
+  has_one :last_heartbeat
+  delegate :last_heartbeat_at, :to => :last_heartbeat
 
   scope :belonging_to, -> (user) {
     where(:account_id => user.account_id)
@@ -68,20 +62,16 @@ class AgentServer < ActiveRecord::Base
   }
 
   scope :active_as_of, ->(date) {
-    include_last_heartbeats.where("agent_heartbeats.created_at >= ?", date - ACTIVE_WINDOW)
+    joins(:last_heartbeat).where("last_heartbeat_at >= ?", date - ACTIVE_WINDOW)
   }
 
   scope :inactive_as_of, ->(date) {
-    include_last_heartbeats.where("(agent_heartbeats.created_at < ?) OR (agent_heartbeats.created_at IS NULL)", date - ACTIVE_WINDOW)
+    joins(:last_heartbeat).where("(last_heartbeat_at < ?) OR (last_heartbeat_at IS NULL)", date - ACTIVE_WINDOW)
   }
 
   def bundles_with_vulnerable
     vq = VulnQuery.new(self.account)
     self.send(vq.bundles_with_vulnerable_scope)
-  end
-
-  def last_heartbeat_at
-    last_heartbeat.try(:created_at)
   end
 
   def register_heartbeat!(params)

@@ -1132,6 +1132,22 @@ ALTER SEQUENCE is_it_vuln_results_id_seq OWNED BY is_it_vuln_results.id;
 
 
 --
+-- Name: last_heartbeats; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW last_heartbeats AS
+ SELECT agent_servers.id AS agent_server_id,
+    agent_heartbeats.id AS agent_heartbeat_id,
+    agent_heartbeats.created_at AS last_heartbeat_at
+   FROM (agent_servers
+     LEFT JOIN agent_heartbeats ON (((agent_heartbeats.agent_server_id = agent_servers.id) AND (agent_heartbeats.id = ( SELECT agent_heartbeats_1.id
+           FROM agent_heartbeats agent_heartbeats_1
+          WHERE (agent_heartbeats_1.agent_server_id = agent_servers.id)
+          ORDER BY agent_heartbeats_1.created_at DESC
+         LIMIT 1)))));
+
+
+--
 -- Name: log_api_calls; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4422,4 +4438,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170601182918');
 INSERT INTO schema_migrations (version) VALUES ('20170603004839');
 
 INSERT INTO schema_migrations (version) VALUES ('20170606162310');
+
+INSERT INTO schema_migrations (version) VALUES ('20170607203148');
 
