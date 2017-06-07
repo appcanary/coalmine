@@ -35,8 +35,6 @@ class AgentServer < ActiveRecord::Base
 
   belongs_to :agent_release
   has_many :bundles, :dependent => :destroy
-  has_many :bundles_with_vulnerable_affected, -> { merge(Bundle.with_vulnerable_affected) }, class_name: Bundle
-  has_many :bundles_with_vulnerable_patchable, -> { merge(Bundle.with_vulnerable_patchable) }, class_name: Bundle
 
   has_many :heartbeats, :class_name => AgentHeartbeat
   has_many :received_files, :class_name => AgentReceivedFile
@@ -68,11 +66,6 @@ class AgentServer < ActiveRecord::Base
   scope :inactive_as_of, ->(date) {
     joins(:last_heartbeat).where("(last_heartbeat_at < ?) OR (last_heartbeat_at IS NULL)", date - ACTIVE_WINDOW)
   }
-
-  def bundles_with_vulnerable
-    vq = VulnQuery.new(self.account)
-    self.send(vq.bundles_with_vulnerable_scope)
-  end
 
   def register_heartbeat!(params)
     self.transaction do
@@ -112,7 +105,7 @@ class AgentServer < ActiveRecord::Base
   end
 
   def vulnerable?
-    bundles_with_vulnerable.any?(&:vulnerable?)
+    bundles.any?(&:vulnerable?)
   end
 
   def patchable?

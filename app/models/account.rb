@@ -24,8 +24,6 @@ class Account < ActiveRecord::Base
   has_many :agent_servers
   has_many :active_servers, -> { active }, :class_name => AgentServer
   has_many :bundles
-  has_many :bundles_with_vulnerable_affected, -> { merge(Bundle.with_vulnerable_affected) }, class_name: Bundle
-  has_many :bundles_with_vulnerable_patchable, -> { merge(Bundle.with_vulnerable_patchable) }, class_name: Bundle
   has_many :server_bundles, -> { via_agent }, :class_name => Bundle
   has_many :active_server_bundles, -> { joins(:agent_server).merge(AgentServer.active) }, :class_name => Bundle
 
