@@ -48,9 +48,11 @@ class AgentServer < ActiveRecord::Base
 
   has_one :last_heartbeat, -> { order(created_at: :desc).limit(1) }, :class_name => AgentHeartbeat, :foreign_key => :agent_server_id
 
-  scope :with_last_heartbeats, -> {
-    subq = AgentHeartbeat.order(created_at: :desc).limit(1).where("agent_heartbeats.agent_server_id = agent_servers.id").select("created_at")
-    select("agent_servers.*, (#{subq.to_sql}) last_heartbeat_attr")
+  scope :include_last_heartbeats, -> {
+    # If you do just an .includes(), the order by created_at limit 1 part is gone.
+    # So, we have to scope the query ourselves
+    subq = AgentHeartbeat.order(created_at: :desc).limit(1).where("agent_heartbeats.agent_server_id = agent_servers.id").select("id")
+    includes(:last_heartbeat).where("agent_heartbeats.id = (#{subq.to_sql}) OR agent_heartbeats.id IS NULL").references(:agent_heartbeats)
   }
 
   scope :belonging_to, -> (user) {
@@ -61,11 +63,17 @@ class AgentServer < ActiveRecord::Base
     self.active_as_of(Time.now)
   }
 
-  scope :active_as_of, ->(date) {
-    joins(:heartbeats).where('"agent_heartbeats".created_at > ?', date - ACTIVE_WINDOW).distinct("agent_servers.id")
+  scope :inactive, -> {
+    self.inactive_as_of(Time.now)
   }
 
-  # TODO: figure out inactive scope
+  scope :active_as_of, ->(date) {
+    include_last_heartbeats.where("agent_heartbeats.created_at >= ?", date - ACTIVE_WINDOW)
+  }
+
+  scope :inactive_as_of, ->(date) {
+    include_last_heartbeats.where("(agent_heartbeats.created_at < ?) OR (agent_heartbeats.created_at IS NULL)", date - ACTIVE_WINDOW)
+  }
 
   def bundles_with_vulnerable
     vq = VulnQuery.new(self.account)
@@ -73,8 +81,7 @@ class AgentServer < ActiveRecord::Base
   end
 
   def last_heartbeat_at
-    # We may have been loaded with a with_last_heartbeats scope
-    self.try(:last_heartbeat_attr) || last_heartbeat.try(:created_at)
+    last_heartbeat.try(:created_at)
   end
 
   def register_heartbeat!(params)

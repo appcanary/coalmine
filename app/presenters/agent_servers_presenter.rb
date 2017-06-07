@@ -7,7 +7,8 @@ class AgentServersPresenter
     @vulnquery = vulnquery
 
     scope = @vulnquery.bundles_with_vulnerable_scope
-    @servers = @account.agent_servers.with_last_heartbeats.includes(scope).includes(:tags)
+    #TODO fix the vuln scope here, it's not loaded right
+    @servers = @account.agent_servers.include_last_heartbeats.includes(scope).includes(:tags)
 
     if @account.show_processes?
      @servers = @servers.includes(:server_processes)
