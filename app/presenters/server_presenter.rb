@@ -5,7 +5,7 @@ class ServerPresenter
     :hostname, :display_name, :ip,
     :uname, :distro, :last_heartbeat_at, :to => :server
 
-  def initialize(account, vulnquery, server)
+  def initialize(account, vulnquery, server, vuln_hsh = {})
     @account = account
     @server = server
     @vulnquery = vulnquery
@@ -13,16 +13,16 @@ class ServerPresenter
     if @account.show_processes?
       @processes = @server.server_processes.map { |p| ServerProcessPresenter.new(p) }
     end
-    @bundles = @server.bundles_with_vulnerable.map { |b| BundlePresenter.new(vulnquery, b) }
+    @bundles = @server.bundles.map { |b| BundlePresenter.new(vulnquery, b, vuln_hsh[b.id]) }
     @tags = @server.tags.map(&:tag)
   end
 
   def bundles_sys_sorted
-    @bundles.sort_by { |b| "#{b.system_bundle? ? 0 : 1}#{b.display_name}" }
+    bundles.sort_by { |b| "#{b.system_bundle? ? 0 : 1}#{b.display_name}" }
   end
 
   def vulnerable?
-    @bundles.any?(&:vulnerable?)
+    bundles.any?(&:vulnerable?)
   end
 
   def empty?

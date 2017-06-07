@@ -5,7 +5,8 @@ class MonitorsPresenter
   def initialize(account, vulnquery)
     @account = account
     @vulnquery = vulnquery
-    scope = @vulnquery.bundles_with_vulnerable_scope
-    @monitors = @account.send(scope).via_api.map { |m| BundlePresenter.new(@vulnquery, m) }
+    bundles = @account.bundles.via_api
+    vuln_hsh = @vulnquery.vuln_hsh(bundles)
+    @monitors = bundles.map { |m| BundlePresenter.new(@vulnquery, m, vuln_hsh[m.id]) }
   end
 end

@@ -6,9 +6,9 @@ class AgentServersPresenter
     @account = account
     @vulnquery = vulnquery
 
-    scope = @vulnquery.bundles_with_vulnerable_scope
     #TODO fix the vuln scope here, it's not loaded right
-    @servers = @account.agent_servers.include_last_heartbeats.includes(scope).includes(:tags)
+    @servers = @account.agent_servers.includes(:last_heartbeat).includes(:bundles).includes(:tags)
+    vuln_hsh = @vulnquery.vuln_hsh(@account.bundles.via_agent)
 
     if @account.show_processes?
      @servers = @servers.includes(:server_processes)
@@ -16,8 +16,8 @@ class AgentServersPresenter
     @active_servers = @servers.active
     @silent_servers = @servers - @active_servers
 
-    @active_servers = @active_servers.map { |s| ServerPresenter.new(@account, @vulnquery, s) }
-    @silent_servers = @silent_servers.map { |s| ServerPresenter.new(@account, @vulnquery, s) }
+    @active_servers = @active_servers.map { |s| ServerPresenter.new(@account, @vulnquery, s, vuln_hsh) }
+    @silent_servers = @silent_servers.map { |s| ServerPresenter.new(@account, @vulnquery, s, vuln_hsh) }
   end
 
   def any?
