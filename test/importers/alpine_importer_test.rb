@@ -29,6 +29,7 @@ class AlpineImporterTest < ActiveSupport::TestCase
     assert attributes["constraints"].all? { |vc| vc.key?("patched_versions") }
     assert attributes["constraints"].all? { |vc| vc.key?("package_name") }
     assert attributes["constraints"].all? { |vc| vc.key?("release") }
+    assert_equal "3.3", attributes["constraints"][0]["release"]
 
     assert_equal ["CVE-2016-2776"], attributes["reference_ids"]
     assert_equal "alpine", attributes["source"]

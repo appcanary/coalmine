@@ -44,11 +44,6 @@ FactoryGirl.define do
       release "trusty"
     end
 
-    trait :alpine do
-      platform "alpine"
-      release "3.5.1"
-    end
-
     trait :debian do
       platform "debian"
       release "jessie"
@@ -66,7 +61,7 @@ FactoryGirl.define do
 
     trait :alpine do
       platform Platforms::Alpine
-      release "3.5.1"
+      release "3.5"
     end
 
     trait :ruby do

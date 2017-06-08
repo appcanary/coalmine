@@ -140,7 +140,7 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
       vuln_dep = FactoryGirl.build(:vulnerable_dependency,
                                    :platform => Platforms::Alpine,
                                    :package_name => name,
-                                   :release => "3.5.1",
+                                   :release => "3.5",
                                    :patched_versions =>  ["7.4_p1-r1"],
                                    :unaffected_versions => [])
 
@@ -176,11 +176,11 @@ class VulnerableDependencyTest < ActiveSupport::TestCase
       vuln_dep = FactoryGirl.build(:vulnerable_dependency,
                                    :platform => Platforms::Alpine,
                                    :package_name => name,
-                                   :release => "3.5.2",
+                                   :release => "3.4",
                                    :patched_versions =>  ["7.4_p1-r1"],
                                    :unaffected_versions => [])
 
-      # OS release in factory is 3.5.1
+      # OS release in factory is 3.5
 
       # release is lower
       pkg1 = build_apkg(name, "7.4_p1-r0")
