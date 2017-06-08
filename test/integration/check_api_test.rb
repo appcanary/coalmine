@@ -224,13 +224,13 @@ class CheckApiTest < ActionDispatch::IntegrationTest
         vd = FactoryGirl.create(:vulnerable_dependency,
                                 :vulnerability => vuln,
                                 :platform => Platforms::Alpine,
-                                :release => "3.5.2",
+                                :release => "3.5",
                                 :package_name => "syslinux",
                                 :patched_versions => ["6.06-r0"])
 
         assert_equal 0, account.log_api_calls.where(:action => "check/create").count
 
-        authed_post(account, {platform: Platforms::Alpine, release: "3.5.2", file: apkinstalled})
+        authed_post(account, {platform: Platforms::Alpine, release: "3.5", file: apkinstalled})
 
         assert_response :success
 
@@ -238,7 +238,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
 
         # Make sure we log the right platform release
         assert_equal "alpine", account.log_api_calls.last.platform
-        assert_equal "3.5.2", account.log_api_calls.last.release
+        assert_equal "3.5", account.log_api_calls.last.release
 
         json = json_body
         assert json.key?("data")
