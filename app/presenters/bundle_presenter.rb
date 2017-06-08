@@ -3,13 +3,18 @@ class BundlePresenter
   delegate :id, :to_param, :display_name,
     :platform, :created_at, :updated_at, :system_bundle?, :to => :bundle
  
-  def initialize(vq, mon)
+  def initialize(vq, mon, vulnerable = nil)
     @vulnquery = vq
     @bundle = mon
+    if vulnerable.nil?
+      @vulnerable = bundle.vulnerable_via_vulnquery?
+    else
+     @vulnerable = vulnerable
+    end
   end
 
   def vulnerable?
-    @bundle.vulnerable_via_vulnquery?
+    @vulnerable
   end
 
   def vuln_packages
