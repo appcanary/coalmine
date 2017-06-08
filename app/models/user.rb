@@ -72,7 +72,8 @@ class User < ActiveRecord::Base
   # TODO: eliminate token field from users table
   # TODO: eliminate agent_token
   # TODO: eliminate datomic_id
-  delegate :token, :analytics_id, :to => :account
+  delegate :token, :analytics_id, :purge_inactive_servers, :to => :account
+
 
   delegate :active_servers, :agent_servers, :bundles, :monitors, :check_api_calls, :to => :account
 
