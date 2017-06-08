@@ -33,3 +33,6 @@ VulnerabilityImporterJob.enqueue_if_not_existing!
 RHSAImporterJob.enqueue_if_not_existing!
 # ...but instead by the CesaDescriptionImporter
 CesaDescriptionImporterJob.enqueue_if_not_existing!
+
+# purge inactive servers for users that want it
+DestroyInactiveJob.enqueue_if_not_existing!

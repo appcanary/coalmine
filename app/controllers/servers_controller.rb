@@ -56,12 +56,11 @@ class ServersController < ApplicationController
     end
   end
 
-  # TODO lol what happens to bundles?
   def destroy_inactive
-    @servers = current_user.agent_servers
-    @silent_servers, @active_servers = @servers.partition(&:gone_silent?)
-
-    @silent_servers.each(&:destroy)
+    destroyed_servers = current_user.agent_servers.inactive.destroy_all
+    destroyed_servers.each do |s|
+      $analytics.deleted_server(current_account, s)
+    end
 
     flash[:notice] = "All of your inactive servers were deleted."
     redirect_to dashboard_path

@@ -30,10 +30,8 @@ class Api::ServersController < ApiController
   end
 
   def destroy_inactive
-    @inactive_servers = current_account.agent_servers.inactive
-    saved_inactive_servers = @inactive_servers.to_a
-    if @inactive_servers.destroy_all
-      saved_inactive_servers.each do |s|
+    if destroyed_servers = current_account.agent_servers.inactive.destroy_all
+      destroyed_servers.each do |s|
         $analytics.deleted_server(current_account, s)
       end
       render :nothing => true, :status => 204
