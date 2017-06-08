@@ -333,7 +333,7 @@ class CheckApiTest < ActionDispatch::IntegrationTest
   end
 
   def apkinstalled
-    @apkinstalled ||= uploaded_file("alpine-installed.txt")
+    @apkinstalled ||= uploaded_file("alpine-installed-3.5.2.txt")
   end
 
   def gemfile
