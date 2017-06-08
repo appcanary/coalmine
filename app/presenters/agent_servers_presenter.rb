@@ -6,7 +6,7 @@ class AgentServersPresenter
     @account = account
     @vulnquery = vulnquery
 
-    @servers = @account.agent_servers.includes(:last_heartbeat, :bundles, :tags)
+    @servers = @account.agent_servers.includes(:bundles, :tags)
     vuln_hsh = @vulnquery.vuln_hsh(@account.bundles.via_agent)
 
     if @account.show_processes?
