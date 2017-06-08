@@ -51,7 +51,7 @@ class AlpineImporter < AdvisoryImporter
 
         # repo_hsh is the whole YAML file
         # TODO some subset?
-        AlpineAdapter.new(hsh, repo_hsh)
+        AlpineAdapter.new(hsh, pkg_entry)
       end
     end.flatten
   end
