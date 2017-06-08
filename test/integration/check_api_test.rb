@@ -230,7 +230,8 @@ class CheckApiTest < ActionDispatch::IntegrationTest
 
         assert_equal 0, account.log_api_calls.where(:action => "check/create").count
 
-        authed_post(account, {platform: Platforms::Alpine, release: "3.5", file: apkinstalled})
+        # Note that the point version (.2) of the release will get stripped
+        authed_post(account, {platform: Platforms::Alpine, release: "3.5.2", file: apkinstalled})
 
         assert_response :success
 
@@ -238,13 +239,17 @@ class CheckApiTest < ActionDispatch::IntegrationTest
 
         # Make sure we log the right platform release
         assert_equal "alpine", account.log_api_calls.last.platform
-        assert_equal "3.5", account.log_api_calls.last.release
+        # Note we're not stripping the release in the logs, only below
+        assert_equal "3.5.2", account.log_api_calls.last.release
 
         json = json_body
         assert json.key?("data")
         assert_equal 1, json["data"].size
 
         assert_equal "syslinux", json["data"].first["attributes"]["name"]
+
+        # We stripped the point release value when processing the bundle
+        assert_equal "3.5", json["data"].first["attributes"]["release"]
         assert_check_response_shape(json)
       end
     end
