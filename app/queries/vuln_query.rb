@@ -66,15 +66,6 @@ class VulnQuery
   end
 
   # ---- methods that give you the info you want
-  def bundles_with_vulnerable_scope
-    # the scope to use to get AgentServer's Bundles with a vulnerable? boolean
-    if care_about_affected?(@account)
-      :bundles_with_vulnerable_affected
-    else
-      :bundles_with_vulnerable_patchable
-    end
-  end
-
   def from_bundle(bundle)
     uniq_and_include(filter_ignored(filter_resolved(query_bundle.(bundle))))
   end
@@ -85,17 +76,14 @@ class VulnQuery
     }
   end
 
-  def vuln_bundle_subquery
-    # A subquery that determines whether a bundle is vulnerable designed to be
-    # used like `select("bundles.* (vuln_bundle_subquery) vuln")` with some
-    # conditions on bundles
-    @vuln_subquery
-  end
-
-
   def vuln_bundle?(bundle)
     # this is a little ugly but it lets us reuse the subquery
-    Bundle.where(:id => bundle.id).pluck(vuln_bundle_subquery.to_sql).first
+    Bundle.where(:id => bundle.id).pluck(@vuln_subquery.to_sql).first
+  end
+
+  def vuln_hsh(bundles)
+    # Given a bundle query object return a hash of Bundle id => vulnerable?
+    bundles.pluck("id, (#{@vuln_subquery.to_sql}) vulnerable").to_h
   end
 
   def unnotified_vuln_logs
