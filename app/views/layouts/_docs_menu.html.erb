@@ -4,6 +4,8 @@
         <li><a href="/docs">How It Works</a></li>
         <li><a href="/docs/api">API Docs</a></li>
         <li><a href="/docs/ci">Continuous Integration</a></li>
-        <li><a href="/docs/agent_upgrade">Upgrading the Agent</a></li>
+        <% if $rollout.active?(:yaml_config) %>
+          <li><a href="/docs/agent_upgrade">Upgrading the Agent</a></li>
+        <% end %>
     </ul>
 <% end %>
