@@ -60,11 +60,11 @@ class AgentServer < ActiveRecord::Base
   }
 
   scope :active_as_of, ->(date) {
-    joins(:last_heartbeat).where("last_heartbeat_at >= ?", date - ACTIVE_WINDOW)
+    joins(:last_heartbeat).where("last_heartbeats.last_heartbeat_at >= ?", date - ACTIVE_WINDOW)
   }
 
   scope :inactive_as_of, ->(date) {
-    joins(:last_heartbeat).where("(last_heartbeat_at < ?) OR (last_heartbeat_at IS NULL)", date - ACTIVE_WINDOW)
+    joins(:last_heartbeat).where("(last_heartbeats.last_heartbeat_at < ?) OR (last_heartbeats.last_heartbeat_at IS NULL)", date - ACTIVE_WINDOW)
   }
 
   def register_heartbeat!(params)
