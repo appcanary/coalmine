@@ -6,6 +6,7 @@ class AgentServersPresenter
     @account = account
     @vulnquery = vulnquery
 
+    # TODO: The stuff below should be moved to the dashboard controller
     @servers = @account.agent_servers.includes(:bundles, :tags)
     vuln_hsh = @vulnquery.vuln_hsh(@account.bundles.via_agent)
 
