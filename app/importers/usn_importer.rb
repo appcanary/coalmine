@@ -2,7 +2,7 @@ require 'msgpack'
 class UsnImporter < AdvisoryImporter
   SOURCE = "usn"
   PLATFORM = Platforms::Ubuntu
-  PICKLE_URL = "/Users/maxim/Downloads/database-all.pickle.bz2" #"https://usn.ubuntu.com/usn-db/database-all.pickle.bz2"
+  PICKLE_URL = "https://usn.ubuntu.com/usn-db/database-all.pickle.bz2"
   LOCAL_PATH = "tmp/importers/usn"
 
   def initialize(pickle_url = nil)
@@ -14,10 +14,13 @@ class UsnImporter < AdvisoryImporter
   end
 
   def update_local_store!
+    # not much point continuing really ¯\_(ツ)_/¯
+    raise "No python interpreter found!" unless find_python
+    
     pickle = open(@pickle_url)
     IO.copy_stream(pickle, @pickle_bz2_path)
     # convert the pickle to a msgpack
-    `python lib/unpickle.py #{@pickle_bz2_path}`
+    `#{find_python} lib/unpickle.py #{@pickle_bz2_path}`
   end
 
   def fetch_advisories
@@ -37,5 +40,8 @@ class UsnImporter < AdvisoryImporter
     UsnAdapter.new(advisory,"")# advisory) 
   end
 
+  def find_python
+    @python ||= (`which python2` || `which python`).try(:chomp)
+  end
 end
 

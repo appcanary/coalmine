@@ -79,6 +79,11 @@ class Advisory < ActiveRecord::Base
     joins(:advisory_import_state).where(advisory_import_states: { processed: false })
   }
 
+  scope :unprocessed_or_incomplete, -> {
+    joins(:advisory_import_state).
+      where("advisory_import_states.processed_count < array_length(advisories.reference_ids, 1)")
+  }
+
   scope :from_rubysec, -> {
     where(:source => RubysecImporter::SOURCE)
   }
