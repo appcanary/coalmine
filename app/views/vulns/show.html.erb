@@ -74,7 +74,7 @@
           <td><label>Archives</label></td>
           <td>
             <%= @vuln.archives.map do |va| %>
-              <% link_to va.created_at.strftime("%Y-%m-%d %H:%M"), vuln_archive_path(@vuln.id, va.id) %>
+              <% link_to va.valid_at.strftime("%Y-%m-%d %H:%M"), vuln_archive_path(@vuln.id, va.id) %>
             <% end.join("<br/>").html_safe %>
           </td>
         </tr>

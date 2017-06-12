@@ -49,9 +49,11 @@ function verify_yaml(file)
 	local data = yaml.load(f:read("*all"))
 	for _,p in pairs(data.packages) do
 		assert(type(p.pkg.name) == "string")
+		assert(type(p.pkg.secfixes) == "table", file..": "..p.pkg.name..": secfixes is not a table")
 		for k,v in pairs(p.pkg.secfixes) do
 			assert(type(k) == "string", file..": "..p.pkg.name..": not a string: "..tostring(k))
 			assert(string.match(k, "^[0-9]+"))
+			assert(type(v) == "table", file..": "..p.pkg.name..": "..k..": not a table")
 		end
 	end
 
@@ -70,6 +72,7 @@ archs = {
 	["v3.3"] = { "x86_64", "x86", "armhf" },
 	["v3.4"] = { "x86_64", "x86", "armhf" },
 	["v3.5"] = { "x86_64", "x86", "armhf", "aarch64" },
+	["v3.6"] = { "x86_64", "x86", "armhf", "aarch64", "ppc64le", "s390x" },
 }
 
 opts, args = require('optarg').from_opthelp(opthelp)

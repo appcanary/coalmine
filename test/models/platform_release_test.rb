@@ -102,7 +102,35 @@ class PackageReleaseTest < ActiveSupport::TestCase
 
     assert_equal "debian", pr.platform
     assert_equal "jessie", pr.release
-  end
+   end
+
+   it "should work for alpine" do
+     pr, err = PlatformRelease.validate(Platforms::Alpine)
+     assert_nil pr
+
+     assert_equal({:release=>["is invalid"]}, err.messages)
+
+
+     pr, err = PlatformRelease.validate(Platforms::Alpine, "3.9")
+     assert_nil pr
+
+     assert_equal({:release=>["is invalid"]}, err.messages)
+
+
+     pr, err = PlatformRelease.validate(Platforms::Alpine, "3.5")
+     assert_nil err
+
+     assert_equal "alpine", pr.platform
+     assert_equal "3.5", pr.release
+
+     # We strip results in ubuntu
+     pr, err = PlatformRelease.validate(Platforms::Alpine, "3.5.2")
+     assert_nil err
+
+     assert_equal "alpine", pr.platform
+     assert_equal "3.5", pr.release
+   end
+
 
 
 end

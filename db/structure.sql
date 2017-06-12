@@ -1133,6 +1133,22 @@ ALTER SEQUENCE is_it_vuln_results_id_seq OWNED BY is_it_vuln_results.id;
 
 
 --
+-- Name: last_heartbeats; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW last_heartbeats AS
+ SELECT agent_servers.id AS agent_server_id,
+    agent_heartbeats.id AS agent_heartbeat_id,
+    agent_heartbeats.created_at AS last_heartbeat_at
+   FROM (agent_servers
+     LEFT JOIN agent_heartbeats ON (((agent_heartbeats.agent_server_id = agent_servers.id) AND (agent_heartbeats.id = ( SELECT agent_heartbeats_1.id
+           FROM agent_heartbeats agent_heartbeats_1
+          WHERE (agent_heartbeats_1.agent_server_id = agent_servers.id)
+          ORDER BY agent_heartbeats_1.created_at DESC
+         LIMIT 1)))));
+
+
+--
 -- Name: log_api_calls; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2883,7 +2899,7 @@ CREATE INDEX idx_vulnerable_package_id_ar ON vulnerable_package_archives USING b
 -- Name: ignored_packages_by_account_package_bundle_ids; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX ignored_packages_by_account_package_bundle_ids ON ignored_packages USING btree (account_id, package_id, bundle_id);
+CREATE UNIQUE INDEX ignored_packages_by_account_package_bundle_ids ON ignored_packages USING btree (package_id, account_id, bundle_id);
 
 
 --
@@ -3195,6 +3211,13 @@ CREATE INDEX index_bundled_packages_on_bundle_id ON bundled_packages USING btree
 
 
 --
+-- Name: index_bundled_packages_on_bundle_id_and_package_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bundled_packages_on_bundle_id_and_package_id ON bundled_packages USING btree (bundle_id, package_id);
+
+
+--
 -- Name: index_bundled_packages_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3450,7 +3473,7 @@ CREATE INDEX index_log_resolutions_on_vulnerable_dependency_id ON log_resolution
 -- Name: index_logres_account_vulndeps; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_logres_account_vulndeps ON log_resolutions USING btree (account_id, package_id, vulnerable_dependency_id);
+CREATE UNIQUE INDEX index_logres_account_vulndeps ON log_resolutions USING btree (package_id, account_id, vulnerable_dependency_id);
 
 
 --
@@ -3871,6 +3894,13 @@ CREATE INDEX index_vulnerable_packages_on_vulnerability_id ON vulnerable_package
 --
 
 CREATE INDEX index_vulnerable_packages_on_vulnerable_dependency_id ON vulnerable_packages USING btree (vulnerable_dependency_id);
+
+
+--
+-- Name: index_vulnpackage_packages; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_vulnpackage_packages ON vulnerable_packages USING btree (package_id, vulnerable_dependency_id, vulnerability_id);
 
 
 --
@@ -4405,3 +4435,13 @@ INSERT INTO schema_migrations (version) VALUES ('20170525200748');
 INSERT INTO schema_migrations (version) VALUES ('20170531151207');
 
 INSERT INTO schema_migrations (version) VALUES ('20170531222312');
+
+INSERT INTO schema_migrations (version) VALUES ('20170608154354');
+
+INSERT INTO schema_migrations (version) VALUES ('20170601182918');
+
+INSERT INTO schema_migrations (version) VALUES ('20170603004839');
+
+INSERT INTO schema_migrations (version) VALUES ('20170606162310');
+
+INSERT INTO schema_migrations (version) VALUES ('20170607203148');

@@ -1,7 +1,7 @@
 # http://stackoverflow.com/questions/33043106/recommended-way-to-use-rails-view-helpers-in-a-presentation-class
 class VulnPresenter
   include VulnsHelper
-  delegate :title, :platform, :criticality, :reported_at, :updated_at, :expired_at, :packages, :source, :criticality, :archives, :id, :current, :related_vulns, :to => :vuln
+  delegate :title, :platform, :criticality, :reported_at, :updated_at, :expired_at, :packages, :source, :criticality, :archives, :id, :current, :to => :vuln
   attr_reader :vuln
   def initialize(vuln, archive = false)
     @vuln = vuln
@@ -33,11 +33,20 @@ class VulnPresenter
   end
 
   def cve_references
-    @vuln.cve_ids
+    @vuln.reference_ids.select { |r| r.starts_with?("CVE") }
+  end
+
+  def cves
+    Advisory.from_cve.where(:identifier => self.cve_references)
+  end
+
+  def related_vulns
+    vid = self.archive? ? @vuln.current.id : @vuln.id
+    Vulnerability.by_cve_ids(self.cve_references).reject { |v| v.id == vid}
   end
 
   def cvss
-    @vuln.cvss || "Unknown"
+    self.cves.pluck(:cvss).max || "Unknown"
   end
 
   def description
