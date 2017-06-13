@@ -36,17 +36,13 @@ class VulnPresenter
     @vuln.reference_ids.select { |r| r.starts_with?("CVE") }
   end
 
-  def cves
-    Advisory.from_cve.where(:identifier => self.cve_references)
-  end
-
   def related_vulns
     vid = self.archive? ? @vuln.current.id : @vuln.id
     Vulnerability.by_cve_ids(self.cve_references).reject { |v| v.id == vid}
   end
 
   def cvss
-    self.cves.pluck(:cvss).max || "Unknown"
+    @vuln.cvss || "unknown"
   end
 
   def description

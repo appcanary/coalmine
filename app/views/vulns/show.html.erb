@@ -20,10 +20,13 @@
 
        <tr>
         <td><label>Criticality</label></td>
-        <td><%= @vuln.criticality %>
-            <% if  %>
-            CVSS <%= @vuln.cvss %></td>
-      </tr>
+        <td><%= @vuln.criticality %></td>
+       </tr>
+
+       <tr>
+           <td><label>CVSS</label></td>
+           <td><%= @vuln.cvss %></td>
+       </tr>
 
       <tr>
         <td><label>Package(s)</label></td>
