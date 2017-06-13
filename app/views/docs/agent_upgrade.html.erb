@@ -32,7 +32,7 @@ watchers:
     <p>Besides being much easier to edit and understand, this new configuration format is neccesary to set up a few agent features that are coming down the pipe such as tagging servers.</p>
 
     <h2>What do I need to do?</h2>
-    <p>Luckily, almost nothing. On first boot, the agent will parse your old <code>/etc/appcanary/agent.conf</code>, move it to <code>/etc/appcanary/agent.conf.deprecated</code>, and put a new <code>/etc/appcanary/agent.yml</code> file in it's place</p>
+    <p>Luckily, almost nothing. On first boot, the agent will parse your old <code>/etc/appcanary/agent.conf</code>, move it to <code>/etc/appcanary/agent.conf.deprecated</code>, and put a new <code>/etc/appcanary/agent.yml</code> file in its place</p>
 
     You may need to take an additional step depending on how do you do configuration management / deploy the Appcanary agent.
 
@@ -40,13 +40,13 @@ watchers:
     <p>If you're deploying the agent manually, you're good. Just make sure to make any future configuration changes to <code>/etc/appcanary/agent.yml</code></p>
 
     <h3>Chef</h3>
-    <p>Make sure that you upgrade the <%= link_to "cookbook", "https://supermarket.chef.io/cookbooks/appcanary" %> to at least version <%= @chef_version %></p>
+    <p>Make sure that you upgrade the <%= link_to "cookbook", "https://supermarket.chef.io/cookbooks/appcanary" %> to at least version <code><%= @chef_version %></code></p>
 
     <h3>Ansible</h3>
-    <p>Make sure that you upgrade the <%= link_to "module", "https://forge.puppet.com/appcanary/appcanary" %> to at least version <%= @puppet_version %></p>
+    <p>Make sure that you upgrade the <%= link_to "module", "https://forge.puppet.com/appcanary/appcanary" %> to at least version <code><%= @puppet_version %></code></p>
 
     <h3>Ansible</h3>
-    <p>Make sure that you upgrade the <%= link_to "playbook", "https://galaxy.ansible.com/appcanary/agent/" %> to at least version <%= @ansible_version %></p>
+    <p>Make sure that you upgrade the <%= link_to "playbook", "https://galaxy.ansible.com/appcanary/agent/" %> to at least version <code><%= @ansible_version %></code></p>
 
     <h3>Custom Script</h3>
     <p>If you're using a custom script, make sure it's using the YAML format described above.</p>
