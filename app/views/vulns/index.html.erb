@@ -5,10 +5,11 @@
      "processing": true,
      "serverSide": true,
      "ajax": "",
-     "dom":"<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+    // "dom":"<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
      "columns": [
        { data: "platform" },
        { data: "criticality" },
+       { data: "cvss" },
        { data: "title" },
        { data: "cves",
          orderable: false },
@@ -17,7 +18,7 @@
        { data: "reported_at"},
        
      ],
-     "order": [[ 5, "desc" ]]
+     "order": [[ 6, "desc" ]]
    });
  });
 </script>
@@ -37,19 +38,6 @@
       <% end %>
 
     </ul>
-    <!-- <div class="row">
-         <form method="get">
-         <div class="col-md-6">
-         <div class="input-group">
-         <%= text_field_tag :search, params[:search], class: "form-control", placeholder: 'Search vulnerabilities', type: :search %>
-         <span class="input-group-btn">
-         <button type="submit" class="btn btn-default" type="button">Search</button>
-         </span>
-         </div>
-         </div>
-         </form>
-         </div>
-         </div> -->
 </section>
 
 <table class="table table-striped" id="vulns_data">
@@ -60,6 +48,10 @@
 
     <th>
       criticality
+    </th>
+
+    <th>
+      cvss
     </th>
 
     <th class="col-sm-4">
@@ -79,54 +71,34 @@
     </th>
   </thead>
   <tbody>
-    <!-- <%# @vulns.each do |v| %>
-      <tr>
-        <td>
-          <%#= platform_icon v.platform %>
-        </td>
-
-        <td>
-          <%#= criticality_icon v.criticality %>
-        </td>
-
-        <td>
-          <%#= link_to v.title, vuln_path(v) %>
-        </td>
-3
-        <td>
-          <%#= v.reported_at.try(:strftime, "%Y-%m-%d") %>
-        </td>
-      </tr>
-    <%# end %>-->
-    <tfoot>
-      <th>
-        platform
-      </th>
-
-      <th>
-        criticality
-      </th>
-
-      <th>
-        title
-      </th>
-
-      <th>
-        cves
-      </th>
-
-      <th>
-        packages
-      </th>
-
-      <th>
-        reported at
-      </th>
-    </tfoot>
-    <tbody>
-
   </tbody>
+  <tfoot>
+    <th>
+      platform
+    </th>
+
+    <th>
+      criticality
+    </th>
+
+    <th>
+      cvss
+    </th>
+
+    <th>
+      title
+    </th>
+
+    <th>
+      cves
+    </th>
+
+    <th>
+      packages
+    </th>
+
+    <th>
+      reported at
+    </th>
+  </tfoot>
 </table>
-
-
-

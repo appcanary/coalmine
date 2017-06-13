@@ -20,7 +20,9 @@
 
        <tr>
         <td><label>Criticality</label></td>
-        <td><%= @vuln.criticality %></td>
+        <td><%= @vuln.criticality %>
+            <% if  %>
+            CVSS <%= @vuln.cvss %></td>
       </tr>
 
       <tr>
