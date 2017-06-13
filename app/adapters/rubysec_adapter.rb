@@ -84,16 +84,7 @@ class RubysecAdapter < AdvisoryAdapter.new(:filepath, :gem, :cve,
   end
 
   generate :criticality do
-    case cvss_score
-    when 0.0..3.3
-      Advisory.criticalities["low"]
-    when 3.3..6.6
-      Advisory.criticalities["medium"]
-    when 6.6..10.0
-      Advisory.criticalities["high"]
-    else
-      Advisory.criticalities["unknown"]
-    end
+    Advisory.cvss_to_criticality(cvss_score)
   end
 
   generate :source_status do
