@@ -12,10 +12,11 @@
 #
 # Indexes
 #
-#  index_bundled_packages_on_bundle_id   (bundle_id)
-#  index_bundled_packages_on_expired_at  (expired_at)
-#  index_bundled_packages_on_package_id  (package_id)
-#  index_bundled_packages_on_valid_at    (valid_at)
+#  index_bundled_packages_on_bundle_id                 (bundle_id)
+#  index_bundled_packages_on_bundle_id_and_package_id  (bundle_id,package_id)
+#  index_bundled_packages_on_expired_at                (expired_at)
+#  index_bundled_packages_on_package_id                (package_id)
+#  index_bundled_packages_on_valid_at                  (valid_at)
 #
 
 # TODO: enforce uniqueness constraint

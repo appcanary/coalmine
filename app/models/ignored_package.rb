@@ -14,7 +14,7 @@
 #
 # Indexes
 #
-#  ignored_packages_by_account_package_bundle_ids  (account_id,package_id,bundle_id) UNIQUE
+#  ignored_packages_by_account_package_bundle_ids  (package_id,account_id,bundle_id) UNIQUE
 #  index_ignored_packages_on_account_id            (account_id)
 #  index_ignored_packages_on_bundle_id             (bundle_id)
 #  index_ignored_packages_on_package_id            (package_id)

@@ -18,6 +18,7 @@
 #  index_vulnerable_packages_on_valid_at                  (valid_at)
 #  index_vulnerable_packages_on_vulnerability_id          (vulnerability_id)
 #  index_vulnerable_packages_on_vulnerable_dependency_id  (vulnerable_dependency_id)
+#  index_vulnpackage_packages                             (package_id,vulnerable_dependency_id,vulnerability_id) UNIQUE
 #
 
 FactoryGirl.define do

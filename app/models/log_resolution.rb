@@ -19,7 +19,7 @@
 #  index_log_resolutions_on_user_id                   (user_id)
 #  index_log_resolutions_on_vulnerability_id          (vulnerability_id)
 #  index_log_resolutions_on_vulnerable_dependency_id  (vulnerable_dependency_id)
-#  index_logres_account_vulndeps                      (account_id,package_id,vulnerable_dependency_id) UNIQUE
+#  index_logres_account_vulndeps                      (package_id,account_id,vulnerable_dependency_id) UNIQUE
 #
 
 class LogResolution < ActiveRecord::Base
