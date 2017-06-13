@@ -1,7 +1,8 @@
 class ArchiveMigrator
   class TableBuilder
     attr_accessor :arguments, :is_archive, :initial_columns
-    UNSUPPORTED_TRANSFORMATIONS = [:rename_index, :change, :change_default, :rename, :belongs_to, :remove, :remove_references, :remove_belongs_to, :remove_index, :remove_timestamps]
+    UNSUPPORTED_TRANSFORMATIONS = [:rename_index, :change_default, :rename, :belongs_to, :remove, :remove_references, :remove_belongs_to, :remove_index, :remove_timestamps]
+    COLUMN_DATATYPES = [:string, :text, :integer, :float, :decimal, :datetime, :timestamp, :time, :date, :binary, :boolean]
 
     def initialize(table_name = nil, opts = {})
       if table_name
@@ -78,17 +79,21 @@ class ArchiveMigrator
     #
 
     def columns
-      new_columns = arguments.map { |type, args|
-        if UNSUPPORTED_TRANSFORMATIONS.include?(type)
-          raise ActiveRecord::MigrationError.new("Archive doesn't support transformation #{type}")
-        elsif type == :references
+      new_columns = arguments.map { |transformation, args|
+        if UNSUPPORTED_TRANSFORMATIONS.include?(transformation)
+          raise ActiveRecord::MigrationError.new("Archive doesn't support transformation #{transformation}")
+        elsif transformation == :references
           "#{args.first}_id"
-        elsif type == :timestamps
+        elsif transformation == :timestamps
           ["created_at","updated_at"]
-        else
+        elsif COLUMN_DATATYPES.include?(transformation)
+          # The transformation is adding a new column of a given type
           args.first.to_s
+        else
+          # We're doing some other kind of transformation like changing a column's type. We don't need to add the column to the column list
+          nil
         end
-      }.flatten
+      }.flatten.compact
       filter_columns(initial_columns + new_columns)
     end
 
