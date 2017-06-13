@@ -1,0 +1,58 @@
+<section id="docs">
+  <div class="col-sm-7">
+    <h1>Upgrading the Agent</h1>
+    <p>On <%= @upgrade_date.strftime("%B %e, %Y") %>, we've changed our configuration format from <%= link_to "TOML", "https://github.com/toml-lang/toml" %> to a much easier to read <%= link_to "YAML", "http://yaml.org/"%> format</p>
+
+    <p>Any agent version <% @version %> or later is going to default to the new format
+
+    <p>Here's an example old-style TOML config file:</p>
+    <pre>
+#/etc/appcanary/agent.conf
+api_key = "YOURAPIKEY"
+
+[[files]]
+process = "rpm -qa"
+
+[[files]]
+path = "/path/to/a/Gemfile.lock"
+
+[[files]]
+path = "/path/to/a/composer.lock"
+    </pre>
+    <p>And here's the same configuration in new-style YAML.</p>
+    <pre>
+#/etc/appcanary/agent.yml
+api_key: "YOURAPIKEY"
+
+watchers:
+  - process: "rpm -qa"
+  - file: "/path/to/a/Gemfile.lock"
+  - file: "/path/to/a/composer.lock"
+    </pre>
+    <p>Besides being much easier to edit and understand, this new configuration format is neccesary to set up a few agent features that are coming down the pipe such as tagging servers.</p>
+
+    <h2>What do I need to do?</h2>
+    <p>Luckily, almost nothing. On first boot, the agent will parse your old <code>/etc/appcanary/agent.conf</code>, move it to <code>/etc/appcanary/agent.conf.deprecated</code>, and put a new <code>/etc/appcanary/agent.yml</code> file in its place</p>
+
+    You may need to take an additional step depending on how do you do configuration management / deploy the Appcanary agent.
+
+    <h3>Manually, through the shell</h3>
+    <p>If you're deploying the agent manually, you're good. Just make sure to make any future configuration changes to <code>/etc/appcanary/agent.yml</code></p>
+
+    <h3>Chef</h3>
+    <p>Make sure that you upgrade the <%= link_to "cookbook", "https://supermarket.chef.io/cookbooks/appcanary" %> to at least version <code><%= @chef_version %></code></p>
+
+    <h3>Ansible</h3>
+    <p>Make sure that you upgrade the <%= link_to "module", "https://forge.puppet.com/appcanary/appcanary" %> to at least version <code><%= @puppet_version %></code></p>
+
+    <h3>Ansible</h3>
+    <p>Make sure that you upgrade the <%= link_to "playbook", "https://galaxy.ansible.com/appcanary/agent/" %> to at least version <code><%= @ansible_version %></code></p>
+
+    <h3>Custom Script</h3>
+    <p>If you're using a custom script, make sure it's using the YAML format described above.</p>
+
+
+    <h2>Questions?</h2>
+    <p>If you have any questions or need any help upgrading or otherwise, please contact us at <%= link_to "hello@appcanary.com", "mailto:hello@appcanary.com"%>
+  </section>
+</div>

@@ -16,16 +16,8 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-        <%= li_active "docs", class: "dropdown" do %>
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-book"></i> Documentation <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="/docs">Getting Started</a></li>
-                <li><a href="/docs/api">API Docs</a></li>
-                <li><a href="/docs/ci">Continuous Integration</a></li>
-            </ul>
-        <% end %>
-
+      <ul class="nav navbar-nav">
+        <%= render partial: "layouts/docs_menu" %>
         <%= li_active "vulns" do %>
           <a href="/vulns">
             <i class="fa fa-folder-open"></i> Vulnerabilities
