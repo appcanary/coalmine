@@ -23,7 +23,6 @@ RubysecImporterJob.enqueue_if_not_existing!
 FriendsOfPHPImporterJob.enqueue_if_not_existing!
 UbuntuTrackerImporterJob.enqueue_if_not_existing!
 DebianTrackerImporterJob.enqueue_if_not_existing!
-CveImporterJob.enqueue_if_not_existing!
 AlpineImporterJob.enqueue_if_not_existing!
 
 # process imported data
@@ -32,8 +31,11 @@ VulnerabilityImporterJob.enqueue_if_not_existing!
 # not processed by VulnerabilityImporter...
 RHSAImporterJob.enqueue_if_not_existing!
 UsnImporterJob.enqueue_if_not_existing!
+CveImporterJob.enqueue_if_not_existing!
 
 # ...but instead by the CesaDescriptionImporter
 CesaDescriptionImporterJob.enqueue_if_not_existing!
 # ...and the UsnReferenceImporter
 UsnReferenceImporterJob.enqueue_if_not_existing!
+# ... and the CveCriticalityImporter
+CveCriticalityImporterJob.enqueue_if_not_existing!
