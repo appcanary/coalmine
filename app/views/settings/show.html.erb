@@ -22,7 +22,7 @@
           <li><h2>Settings</h2></li>
           <li><a href="#api-token">API Token</a></li>
           <li><a href="#email">Email</a></li>
-          <li><a href="#servers">Inactive Servers</a></li>
+          <li><a href="#servers">Server Settings</a></li>
           <li><a href="#password">Password</a></li>
           <li><a href="#billing">Billing</a></li>
         </ul>
@@ -140,12 +140,12 @@
           <a name="servers" class="anchor-offset"></a>
           <section>
             <div class="col-sm-6">
-              <%= f.label :servers, "<h4>Inactive Servers</h4>".html_safe %>
+              <%= f.label :servers, "<h4>Server Settings</h4>".html_safe %>
                 
                 <div class="form-group">
 
                     <%= f.check_box :purge_inactive_servers %>
-                    <%= f.label :purge_inactive_servers, "If you don't hear from any of my servers for over two hours, delete them for me", :style => "font-weight: normal; display: inline;"  %>
+                    <%= f.label :purge_inactive_servers, "Automatically delete servers that have stopped reporting.", :style => "font-weight: normal; display: inline;"  %>
                 </div>
                   <div class="form-group">
                       <%=f.submit "Update server settings", :class => "btn btn-default" %>
