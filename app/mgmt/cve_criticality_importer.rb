@@ -5,9 +5,7 @@ class CveCriticalityImporter
       cve.transaction do
         vulns = Vulnerability.by_cve_id(cve.identifier)
         vulns.find_each do |vuln|
-          criticality, cvss = VulnerabilityManager.compute_max_crit_cvss(vuln, cve)
-          vuln.criticality = criticality
-          vuln.cvss = cvss
+          vuln.assign_max_criticality
           vuln.save!
         end
         cve.advisory_import_state.update_attributes!(processed: true)
