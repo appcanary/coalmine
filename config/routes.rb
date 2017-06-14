@@ -148,6 +148,7 @@ Rails.application.routes.draw do
 
       get "servers/:uuid" => "servers#show", :as => "server"
       get "servers" => "servers#index"
+      delete "servers/inactive" => "servers#destroy_inactive", :as => :inactive_servers
       delete "servers/:uuid" => "servers#destroy"
     end
 

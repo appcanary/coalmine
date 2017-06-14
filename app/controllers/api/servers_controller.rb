@@ -29,6 +29,17 @@ class Api::ServersController < ApiController
     end
   end
 
+  def destroy_inactive
+    if destroyed_servers = current_account.agent_servers.inactive.destroy_all
+      destroyed_servers.each do |s|
+        $analytics.deleted_server(current_account, s)
+      end
+      render :nothing => true, :status => 204
+    else
+      render json: {errors: [{title: "Server deletion failed."}]}, adapter: :json_api, status: 500
+    end
+  end
+
   def handle_api_response(server_or_servers)
     if v2_request?
       # when calling serializers directly,

@@ -41,6 +41,6 @@ class SettingsController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :phone_number, :password, :password_confirmation, :onboarded, :newsletter_email_consent, :daily_email_consent, :marketing_email_consent, :regenerate_token, :pref_email_frequency)
+    params.require(:user).permit(:email, :name, :phone_number, :password, :password_confirmation, :onboarded, :newsletter_email_consent, :daily_email_consent, :marketing_email_consent, :regenerate_token, :pref_email_frequency, :purge_inactive_servers)
   end
 end

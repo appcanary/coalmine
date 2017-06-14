@@ -101,6 +101,23 @@ class ServerApiTest < ActionDispatch::IntegrationTest
       assert_equal 0, AgentServer.count
       assert_equal 0, Bundle.count
     end
+
+    it "should delete inactive servers" do
+      @server1 = FactoryGirl.create(:agent_server, :with_heartbeat, :account => account)
+      @server2 = FactoryGirl.create(:agent_server, :with_heartbeat, :account => account)
+      assert_equal 2, AgentServer.count
+
+      # Cheat by making the heartbeat appear older
+      @server2.last_heartbeat.agent_heartbeat.created_at = 10.days.ago
+      @server2.last_heartbeat.agent_heartbeat.save
+
+      delete api_inactive_servers_path, {}, auth_token(account)
+      assert_response :no_content
+
+      assert_equal 1, AgentServer.count
+      assert_equal @server1, AgentServer.first
+    end
+
   end
 
   describe "while unauthenticated" do
