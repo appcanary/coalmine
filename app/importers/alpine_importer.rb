@@ -33,25 +33,25 @@ class AlpineImporter < AdvisoryImporter
 
     repo_hsh["packages"].map do |pkg_entry|
       pkg = pkg_entry["pkg"]
-      pkg["secfixes"].map do |(pkg_ver, cve_list)|
+      pkg["secfixes"].map do |(pkg_ver, ref_list)|
         hsh = repo_hsh.slice("distroversion", "reponame")
 
         hsh["package_name"] = pkg["name"]
         hsh["package_version"] = pkg_ver
 
         # Xen vulns contain the XSA along with CVE, i.e. "CVE-2016-9386 XSA-191"
-        hsh["cve_list"] = cve_list.flat_map { |r| r.split }
+        hsh["ref_list"] = sanitize_references(ref_list)
 
         hsh["download_apks"] = urls_for_apk(repo_hsh["archs"],
-                                      repo_hsh["urlprefix"],
-                                      repo_hsh["distroversion"],
-                                      repo_hsh["reponame"],
-                                      pkg["name"],
-                                      pkg_ver)
+                                            repo_hsh["urlprefix"],
+                                            repo_hsh["distroversion"],
+                                            repo_hsh["reponame"],
+                                            pkg["name"],
+                                            pkg_ver)
 
         # repo_hsh is the whole YAML file
         # TODO some subset?
-        AlpineAdapter.new(hsh, repo_hsh)
+        AlpineAdapter.new(hsh, pkg_entry)
       end
     end.flatten
   end
@@ -59,5 +59,20 @@ class AlpineImporter < AdvisoryImporter
   private
   def urls_for_apk(archs, prefix, version, repo, pkg_name, pkg_ver)
     archs.map { |arch| "#{prefix}/#{version}/#{repo}/#{arch}/#{pkg_name}-#{pkg_ver}.apk"}
+  end
+
+  # References can be a simple string or a list of strings. Each reference can
+  # contain a simple reference ID, or a number of space separated elements.
+  # Elements may be CVE, XSA or ZBX prefixed, or may be plain text annotations.
+  def sanitize_references(lst)
+    if lst.is_a? String
+      lst.split.
+        select { |r| /[A-Z]+-\d+(-\d+)?(\.patch)?/.match(r) }.
+        map { |r| r.split(/\.patch/).first }
+    elsif lst.is_a? Array
+      lst.flat_map { |r| sanitize_references(r) }
+    else
+      Raven.capture_message("AlpineImporter: couldn't sanitize references: #{lst}")
+    end
   end
 end

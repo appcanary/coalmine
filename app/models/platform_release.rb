@@ -24,10 +24,11 @@ class PlatformRelease
         return true
       end
 
-      if platform == Platforms::Ubuntu
+      # For ubuntu and alpine, we drop the point release and keep only major.minor
+      if platform == Platforms::Ubuntu || platform == Platforms::Alpine
         # be weary of nil release values
         if release
-          # filter out 14.04.3 down to 14.04
+          # filter out 14.04.3 down to 14.04 and 3.5.1 to 3.5
           match = /^(\d+\.\d+)(\.\d+)?/.match(self.release)
           if match
             self.release = match[1]

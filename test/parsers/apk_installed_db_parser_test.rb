@@ -2,7 +2,7 @@ require "test_helper"
 
 class ApkInstalledDbParserTest < ActiveSupport::TestCase
   it "doesn't barf on a fresh 3.5 package database" do
-    pkgs, err = ApkInstalledDbParser.parse(hydrate("parsers", "alpine-installed.txt"))
+    pkgs, err = ApkInstalledDbParser.parse(hydrate("parsers", "alpine-installed-3.5.2.txt"))
 
     assert_equal 47, pkgs.count
 

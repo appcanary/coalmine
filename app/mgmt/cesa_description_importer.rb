@@ -1,7 +1,5 @@
 class CesaDescriptionImporter
   def self.import_descriptions
-    errors = []
-
     Advisory.from_rhsa.unprocessed.find_each do |rhsa|
       rhsa.transaction do
         cesa = Advisory.from_cesa.

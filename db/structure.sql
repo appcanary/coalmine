@@ -478,7 +478,8 @@ CREATE TABLE advisory_import_states (
     advisory_id integer NOT NULL,
     processed boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    processed_count integer DEFAULT 0
 );
 
 
@@ -4429,9 +4430,13 @@ INSERT INTO schema_migrations (version) VALUES ('20170404212231');
 
 INSERT INTO schema_migrations (version) VALUES ('20170524213954');
 
+INSERT INTO schema_migrations (version) VALUES ('20170525200748');
+
 INSERT INTO schema_migrations (version) VALUES ('20170531151207');
 
 INSERT INTO schema_migrations (version) VALUES ('20170531222312');
+
+INSERT INTO schema_migrations (version) VALUES ('20170608154354');
 
 INSERT INTO schema_migrations (version) VALUES ('20170601182918');
 

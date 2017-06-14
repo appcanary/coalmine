@@ -6,15 +6,18 @@ class AgentServersPresenter
     @account = account
     @vulnquery = vulnquery
 
-    #TODO fix the vuln scope here, it's not loaded right
-    @servers = @account.agent_servers.includes(:last_heartbeat).includes(:bundles).includes(:tags)
+    # TODO: The stuff below should be moved to the dashboard controller
+    @servers = @account.agent_servers.includes(:bundles, :tags)
     vuln_hsh = @vulnquery.vuln_hsh(@account.bundles.via_agent)
 
     if @account.show_processes?
      @servers = @servers.includes(:server_processes)
     end
-    @active_servers = @servers.active
-    @silent_servers = @servers - @active_servers
+
+    # We have to explicitly preload the last_heartbeats here instead of above because .active and .inactive join them
+    # See http://blog.arkency.com/2013/12/rails4-preloading/
+    @active_servers = @servers.active.preload(:last_heartbeat)
+    @silent_servers = @servers.inactive.preload(:last_heartbeat)
 
     @active_servers = @active_servers.map { |s| ServerPresenter.new(@account, @vulnquery, s, vuln_hsh) }
     @silent_servers = @silent_servers.map { |s| ServerPresenter.new(@account, @vulnquery, s, vuln_hsh) }

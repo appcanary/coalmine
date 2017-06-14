@@ -135,6 +135,8 @@ GEM
     css_parser (1.4.7)
       addressable
     database_cleaner (1.5.3)
+    ddtrace (0.7.2)
+      msgpack
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
     declarative (0.0.8)
@@ -389,6 +391,7 @@ DEPENDENCIES
   capistrano-rails (~> 1.1)
   capistrano-rails-console
   database_cleaner (~> 1.5.3)
+  ddtrace (= 0.7.2)
   factory_girl_rails
   faker
   fast_stack
