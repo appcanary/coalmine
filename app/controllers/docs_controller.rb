@@ -13,8 +13,8 @@ class DocsController < ApplicationController
   end
 
   def agent_upgrade
-    @upgrade_date = Date.new(2017,6,9)
-    @version = "0.1.0-2017.03.22-193151-UTC"
+    @upgrade_date = Date.new(2017,6,14)
+    @version = "0.1.0-2017.06.14-200357-UTC"
     @chef_version = "0.4.0"
     @puppet_version = "0.2.0"
     @ansible_version = "0.2.0"
