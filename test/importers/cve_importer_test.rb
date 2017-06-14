@@ -14,7 +14,7 @@ class CveImporterTest < ActiveSupport::TestCase
 
     assert_equal CveImporter::SOURCE, a.source
     assert_equal Platforms::None, a.platform
-    assert_equal "high", a.criticality
+    assert_equal "medium", a.criticality
     assert_equal "Libavcodec in FFmpeg before 0.11 allows remote attackers to cause a denial of service (memory corruption and application crash) or execute arbitrary code.", a.description
     # source status stores cvss data in json
     cvss = JSON.parse(a.source_status)
