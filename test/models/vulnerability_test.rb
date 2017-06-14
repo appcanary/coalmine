@@ -2,33 +2,33 @@
 #
 # Table name: vulnerabilities
 #
-#  id                         :integer          not null, primary key
-#  platform                   :string           not null
-#  title                      :string           not null
-#  description                :text
-#  criticality                :integer          default("0"), not null
-#  reference_ids              :string           default("{}"), not null, is an Array
-#  related                    :jsonb            default("[]"), not null
-#  osvdb_id                   :string
-#  usn_id                     :string
-#  dsa_id                     :string
-#  rhsa_id                    :string
-#  cesa_id                    :string
-#  edited                     :boolean          default("false")
-#  source                     :string
-#  reported_at                :datetime
-#  created_at                 :datetime         not null
-#  updated_at                 :datetime         not null
-#  valid_at                   :datetime         not null
-#  expired_at                 :datetime         default("infinity"), not null
-#  package_names              :string           default("{}"), not null, is an Array
-#  cvss                       :decimal(, )
-#  criticality_advisory_id_id :integer
-#  advisories_id              :integer
+#  id                      :integer          not null, primary key
+#  platform                :string           not null
+#  title                   :string           not null
+#  description             :text
+#  criticality             :integer          default("0"), not null
+#  reference_ids           :string           default("{}"), not null, is an Array
+#  related                 :jsonb            default("[]"), not null
+#  osvdb_id                :string
+#  usn_id                  :string
+#  dsa_id                  :string
+#  rhsa_id                 :string
+#  cesa_id                 :string
+#  edited                  :boolean          default("false")
+#  source                  :string
+#  reported_at             :datetime
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  valid_at                :datetime         not null
+#  expired_at              :datetime         default("infinity"), not null
+#  package_names           :string           default("{}"), not null, is an Array
+#  cvss                    :decimal(, )
+#  criticality_advisory_id :integer
+#  advisories_id           :integer
 #
 # Indexes
 #
-#  index_vulnerabilities_on_criticality_advisory_id_id   (criticality_advisory_id_id)
+#  index_vulnerabilities_on_criticality_advisory_id      (criticality_advisory_id)
 #  index_vulnerabilities_on_criticality_and_reported_at  (criticality,reported_at)
 #  index_vulnerabilities_on_expired_at                   (expired_at)
 #  index_vulnerabilities_on_platform                     (platform)

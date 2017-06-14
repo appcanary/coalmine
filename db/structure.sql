@@ -155,8 +155,8 @@ CREATE FUNCTION archive_vulnerabilities() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, package_names, criticality_advisory_id_id, valid_at, expired_at) VALUES
-           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.package_names, OLD.criticality_advisory_id_id, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, package_names, criticality_advisory_id, valid_at, expired_at) VALUES
+           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.package_names, OLD.criticality_advisory_id, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -333,7 +333,8 @@ CREATE TABLE accounts (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     datomic_id bigint,
-    notify_everything boolean DEFAULT false NOT NULL
+    notify_everything boolean DEFAULT false NOT NULL,
+    purge_inactive_servers boolean DEFAULT false
 );
 
 
@@ -1875,7 +1876,7 @@ CREATE TABLE vulnerabilities (
     expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
     package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     cvss numeric,
-    criticality_advisory_id_id integer,
+    criticality_advisory_id integer,
     advisories_id integer
 );
 
@@ -1926,7 +1927,7 @@ CREATE TABLE vulnerability_archives (
     expired_at timestamp without time zone NOT NULL,
     package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
     cvss numeric,
-    criticality_advisory_id_id integer,
+    criticality_advisory_id integer,
     advisories_id integer
 );
 
