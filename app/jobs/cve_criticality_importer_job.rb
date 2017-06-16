@@ -2,6 +2,6 @@ class CveCriticalityImporterJob < CronJob
   INTERVAL = 1.hour
 
   def run(args)
-    CveCriticalityImporter.new.import!
+    CveCriticalityImporter.import_criticalities
   end
 end
