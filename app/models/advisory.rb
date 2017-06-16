@@ -30,9 +30,11 @@
 #  expired_at    :datetime         default("infinity"), not null
 #  needs_triage  :jsonb            default("[]"), not null
 #  package_names :string           default("{}"), not null, is an Array
+#  cvss          :decimal(, )
 #
 # Indexes
 #
+#  index_advisories_on_cvss                   (cvss)
 #  index_advisories_on_expired_at             (expired_at)
 #  index_advisories_on_identifier             (identifier)
 #  index_advisories_on_source                 (source)
@@ -144,5 +146,21 @@ class Advisory < ActiveRecord::Base
 
   def relevant_attributes
     self.attributes.except("id", "updated_at", "created_at", "valid_at", "expired_at")
+  end
+
+  def self.cvss_to_criticality(cvss_score)
+    # from cvss v3 rating https://nvd.nist.gov/vuln-metrics/cvss
+    case cvss_score
+    when 0.0..3.9
+      Advisory.criticalities["low"]
+    when 4.0..6.9
+      Advisory.criticalities["medium"]
+    when 7.0..8.9
+      Advisory.criticalities["high"]
+    when 9.0..10.0
+      Advisory.criticalities["critical"]
+    else
+      Advisory.criticalities["unknown"]
+    end
   end
 end

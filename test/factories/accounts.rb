@@ -2,13 +2,14 @@
 #
 # Table name: accounts
 #
-#  id                :integer          not null, primary key
-#  email             :string           not null
-#  token             :string           not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  datomic_id        :integer
-#  notify_everything :boolean          default("false"), not null
+#  id                     :integer          not null, primary key
+#  email                  :string           not null
+#  token                  :string           not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  datomic_id             :integer
+#  notify_everything      :boolean          default("false"), not null
+#  purge_inactive_servers :boolean          default("false")
 #
 # Indexes
 #

@@ -30,9 +30,11 @@
 #  expired_at    :datetime         default("infinity"), not null
 #  needs_triage  :jsonb            default("[]"), not null
 #  package_names :string           default("{}"), not null, is an Array
+#  cvss          :decimal(, )
 #
 # Indexes
 #
+#  index_advisories_on_cvss                   (cvss)
 #  index_advisories_on_expired_at             (expired_at)
 #  index_advisories_on_identifier             (identifier)
 #  index_advisories_on_source                 (source)

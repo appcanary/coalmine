@@ -155,8 +155,8 @@ CREATE FUNCTION archive_vulnerabilities() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
        BEGIN
-         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, package_names, valid_at, expired_at) VALUES
-           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.package_names, OLD.valid_at, CURRENT_TIMESTAMP);
+         INSERT INTO vulnerability_archives(vulnerability_id, platform, title, description, criticality, reference_ids, related, osvdb_id, usn_id, dsa_id, rhsa_id, cesa_id, edited, source, reported_at, created_at, updated_at, package_names, criticality_advisory_id, valid_at, expired_at) VALUES
+           (OLD.id, OLD.platform, OLD.title, OLD.description, OLD.criticality, OLD.reference_ids, OLD.related, OLD.osvdb_id, OLD.usn_id, OLD.dsa_id, OLD.rhsa_id, OLD.cesa_id, OLD.edited, OLD.source, OLD.reported_at, OLD.created_at, OLD.updated_at, OLD.package_names, OLD.criticality_advisory_id, OLD.valid_at, CURRENT_TIMESTAMP);
          RETURN OLD;
        END;
        $$;
@@ -333,7 +333,8 @@ CREATE TABLE accounts (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     datomic_id bigint,
-    notify_everything boolean DEFAULT false NOT NULL
+    notify_everything boolean DEFAULT false NOT NULL,
+    purge_inactive_servers boolean DEFAULT false
 );
 
 
@@ -389,7 +390,7 @@ CREATE TABLE advisories (
     expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
     needs_triage jsonb DEFAULT '[]'::jsonb NOT NULL,
     package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    cvss character varying
+    cvss numeric
 );
 
 
@@ -446,7 +447,7 @@ CREATE TABLE advisory_archives (
     expired_at timestamp without time zone NOT NULL,
     needs_triage jsonb DEFAULT '[]'::jsonb NOT NULL,
     package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
-    cvss character varying
+    cvss numeric
 );
 
 
@@ -1873,7 +1874,10 @@ CREATE TABLE vulnerabilities (
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone DEFAULT now() NOT NULL,
     expired_at timestamp without time zone DEFAULT 'infinity'::timestamp without time zone NOT NULL,
-    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    cvss numeric,
+    criticality_advisory_id integer,
+    advisories_id integer
 );
 
 
@@ -1921,7 +1925,10 @@ CREATE TABLE vulnerability_archives (
     updated_at timestamp without time zone NOT NULL,
     valid_at timestamp without time zone NOT NULL,
     expired_at timestamp without time zone NOT NULL,
-    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL
+    package_names character varying[] DEFAULT '{}'::character varying[] NOT NULL,
+    cvss numeric,
+    criticality_advisory_id integer,
+    advisories_id integer
 );
 
 
@@ -2917,6 +2924,13 @@ CREATE INDEX index_accounts_on_token ON accounts USING btree (token);
 
 
 --
+-- Name: index_advisories_on_cvss; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_advisories_on_cvss ON advisories USING btree (cvss DESC NULLS LAST);
+
+
+--
 -- Name: index_advisories_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2949,6 +2963,13 @@ CREATE UNIQUE INDEX index_advisories_on_source_and_identifier ON advisories USIN
 --
 
 CREATE INDEX index_advisories_on_valid_at ON advisories USING btree (valid_at);
+
+
+--
+-- Name: index_advisory_archives_on_cvss; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_advisory_archives_on_cvss ON advisory_archives USING btree (cvss DESC NULLS LAST);
 
 
 --
@@ -3680,6 +3701,13 @@ CREATE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
 
 
 --
+-- Name: index_vulnerabilities_on_criticality_advisory_id_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerabilities_on_criticality_advisory_id_id ON vulnerabilities USING btree (criticality_advisory_id_id);
+
+
+--
 -- Name: index_vulnerabilities_on_criticality_and_reported_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3705,6 +3733,13 @@ CREATE INDEX index_vulnerabilities_on_platform ON vulnerabilities USING btree (p
 --
 
 CREATE INDEX index_vulnerabilities_on_valid_at ON vulnerabilities USING btree (valid_at);
+
+
+--
+-- Name: index_vulnerability_archives_on_criticality_advisory_id_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerability_archives_on_criticality_advisory_id_id ON vulnerability_archives USING btree (criticality_advisory_id_id);
 
 
 --
@@ -3901,6 +3936,13 @@ CREATE INDEX index_vulnerable_packages_on_vulnerable_dependency_id ON vulnerable
 --
 
 CREATE UNIQUE INDEX index_vulnpackage_packages ON vulnerable_packages USING btree (package_id, vulnerable_dependency_id, vulnerability_id);
+
+
+--
+-- Name: test; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX test ON advisories USING btree (((cvss)::numeric(3,1)));
 
 
 --
@@ -4445,5 +4487,9 @@ INSERT INTO schema_migrations (version) VALUES ('20170603004839');
 INSERT INTO schema_migrations (version) VALUES ('20170606162310');
 
 INSERT INTO schema_migrations (version) VALUES ('20170607203148');
+
+INSERT INTO schema_migrations (version) VALUES ('20170613001230');
+
+INSERT INTO schema_migrations (version) VALUES ('20170613123033');
 
 INSERT INTO schema_migrations (version) VALUES ('20170608200340');

@@ -34,17 +34,8 @@ class CveAdapter < AdvisoryAdapter.new(:cve, :vulnerable_configurations, :cvss, 
   end
 
   generate :criticality do
-    score = cvss && cvss[:score].to_f
-    case score
-    when 0.0..3.3
-      Advisory.criticalities["low"]
-    when 3.3..6.6
-      Advisory.criticalities["medium"]
-    when 6.6..10.0
-      Advisory.criticalities["high"]
-    else
-      Advisory.criticalities["unknown"]
-    end
+    cvss_score = cvss && cvss[:score].to_f
+    Advisory.cvss_to_criticality(cvss_score)
   end
 
   generate :source_status do

@@ -23,6 +23,7 @@
 # Indexes
 #
 #  index_vulnerable_dependencies_on_expired_at                 (expired_at)
+#  index_vulnerable_dependencies_on_id                         (id) UNIQUE
 #  index_vulnerable_dependencies_on_package_name               (package_name)
 #  index_vulnerable_dependencies_on_platform                   (platform)
 #  index_vulnerable_dependencies_on_platform_and_package_name  (platform,package_name)

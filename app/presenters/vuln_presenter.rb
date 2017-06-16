@@ -6,6 +6,7 @@ class VulnPresenter
   def initialize(vuln, archive = false)
     @vuln = vuln
     @is_archive = archive
+    @current_vuln = self.archive? ? @vuln.current : @vuln
   end
 
   def canary_id
@@ -28,25 +29,21 @@ class VulnPresenter
     make_related_links_list @vuln.related
   end
 
-  def has_cves?
-    cve_references.present?
-  end
-
   def cve_references
-    @vuln.reference_ids.select { |r| r.starts_with?("CVE") }
+   # Note we pull the cves from the current vuln
+   @current_vuln.cve_references
   end
 
-  def cves
-    Advisory.from_cve.where(:identifier => self.cve_references)
+  def has_cves?
+    self.cve_references.present?
   end
 
   def related_vulns
-    vid = self.archive? ? @vuln.current.id : @vuln.id
-    Vulnerability.by_cve_ids(self.cve_references).reject { |v| v.id == vid}
+    Vulnerability.by_cve_ids(self.cve_references).reject { |v| v.id == @current_vuln.id}
   end
 
   def cvss
-    self.cves.pluck(:cvss).max || "Unknown"
+    @vuln.cvss || "unknown"
   end
 
   def description
