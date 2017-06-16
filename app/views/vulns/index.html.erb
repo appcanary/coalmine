@@ -5,11 +5,10 @@
      "processing": true,
      "serverSide": true,
      "ajax": "",
-    // "dom":"<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+     "dom":"<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
      "columns": [
        { data: "platform" },
        { data: "criticality" },
-       { data: "cvss" },
        { data: "title" },
        { data: "cves",
          orderable: false },
@@ -18,7 +17,7 @@
        { data: "reported_at"},
        
      ],
-     "order": [[ 6, "desc" ]]
+     "order": [[ 5, "desc" ]]
    });
  });
 </script>
@@ -50,10 +49,6 @@
       criticality
     </th>
 
-    <th>
-      cvss
-    </th>
-
     <th class="col-sm-4">
       title
     </th>
@@ -79,10 +74,6 @@
 
     <th>
       criticality
-    </th>
-
-    <th>
-      cvss
     </th>
 
     <th>

@@ -29,10 +29,8 @@ class VulnsController < ApplicationController
     when "1"
       order = "criticality"
     when "2"
-      order = "cvss"
-    when "3"
       order = "title"
-    when "6"
+    when "5"
       order = "reported_at"
     else
       order = "reported_at"
