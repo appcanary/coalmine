@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   resources :docs, :only => :index do
     get "api", as: :api, on: :collection
     get "ci", as: :ci, on: :collection
+    get "agent_upgrade", as: :agent_upgrade, on: :collection
   end
 
   resources :users, :only => [:new, :create, :update, :destroy] do
@@ -147,6 +148,7 @@ Rails.application.routes.draw do
 
       get "servers/:uuid" => "servers#show", :as => "server"
       get "servers" => "servers#index"
+      delete "servers/inactive" => "servers#destroy_inactive", :as => :inactive_servers
       delete "servers/:uuid" => "servers#destroy"
     end
 

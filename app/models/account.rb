@@ -58,6 +58,10 @@ class Account < ActiveRecord::Base
           select("distinct(bundles.account_id)"))
   }
 
+  scope :wants_purge_inactive, -> {
+    where(:purge_inactive_servers => true)
+  }
+
    
   def self.have_tried_count
     self.count_by_sql("SELECT count(distinct(accounts.id)) FROM accounts WHERE EXISTS

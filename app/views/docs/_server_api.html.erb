@@ -211,3 +211,20 @@
 
     <h2>Delete Server Response</h2>
     <p>Successful requests will have a <code>204 NO CONTENT</code> response code containing no data.</p>
+<hr>
+<br/>
+<br/>
+<a name="delete-inactive-servers" class="anchor-offset"></a>
+    <h2>Delete Inactive Servers</h2>
+    <p>To delete all inactive servers (ones we haven't heard from in over 2 hours):</p>
+    <h4><code>DELETE https://appcanary.com/api/v3/servers/inactive</code></h4>
+
+    <p>For example</p>
+    
+    <pre class="bash auth_token">curl -H "Authorization: Token <%= @agent_token %>" \
+     -X DELETE \
+     https://appcanary.com/api/v3/servers/inactive</pre>
+
+
+    <h2>Delete Server Response</h2>
+    <p>Successful requests will have a <code>204 NO CONTENT</code> response code containing no data.</p>
