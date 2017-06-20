@@ -200,13 +200,13 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal Notification.first.log_bundle_vulnerability_id, second_lbv.id
     assert_equal second_lbv.vulnerability_id, vuln_w_patch.id
 
-    # unnotified returns logs
-    unnotified = LogBundleVulnerability.unnotified_logs
-    assert_equal 1, unnotified.count
+    # unemailed returns logs
+    unemailed = LogBundleVulnerability.unemailed
+    assert_equal 1, unemailed.count
     
-    unnotified_lbv = unnotified.first
+    unemailed_lbv = unemailed.first
 
-    assert_equal unpatcheable_vuln.id, unnotified_lbv.vulnerability_id
+    assert_equal unpatcheable_vuln.id, unemailed_lbv.vulnerability_id
 
     # ditto for patched notifications
     # let's remove the first vuln from our bundle
@@ -227,7 +227,7 @@ class EmailManagerTest < ActiveSupport::TestCase
     # so nothing should be generated.
     assert_equal 0, EmailPatched.count
     assert_equal 0, Notification.where("log_bundle_patch_id is not null").count
-    assert_equal 1, LogBundlePatch.unnotified_logs.count
+    assert_equal 1, LogBundlePatch.unemailed.count
 
 
     # remove the second vuln, which does have a patch
@@ -240,10 +240,10 @@ class EmailManagerTest < ActiveSupport::TestCase
     assert_equal 2, LogBundlePatch.count
     EmailManager.queue_patched_emails!
 
-    # one email created, still one log unnotified
+    # one email created, still one log unemailed
     assert_equal 1, EmailPatched.count
     assert_equal 1, Notification.where("log_bundle_patch_id is not null").count
-    assert_equal 1, LogBundlePatch.unnotified_logs.count
+    assert_equal 1, LogBundlePatch.unemailed.count
 
   end
 

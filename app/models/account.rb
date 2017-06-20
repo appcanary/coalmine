@@ -48,15 +48,17 @@ class Account < ActiveRecord::Base
   has_many :vulnerable_notifications, :through => :email_vulnerables, :source => :notifications
   has_many :tags, :dependent => :destroy
 
+  has_one :webhook
+
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
 
-  scope :with_unnotified_vuln_logs, -> {
-    where(:id => LogBundleVulnerability.unnotified_logs.
+  scope :with_unemailed_vuln_logs, -> {
+    where(:id => LogBundleVulnerability.unemailed.
           select("distinct(bundles.account_id)"))
   }
 
-  scope :with_unnotified_patch_logs, -> {
-    where(:id => LogBundlePatch.unnotified_logs.
+  scope :with_unemailed_patch_logs, -> {
+    where(:id => LogBundlePatch.unemailed.
           select("distinct(bundles.account_id)"))
   }
 

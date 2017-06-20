@@ -1000,71 +1000,6 @@ ALTER SEQUENCE bundles_id_seq OWNED BY bundles.id;
 
 
 --
--- Name: daily_summaries; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE daily_summaries (
-    id integer NOT NULL,
-    account_id integer NOT NULL,
-    date date NOT NULL,
-    all_vuln_ct integer NOT NULL,
-    all_server_ids integer[] NOT NULL,
-    new_server_ids integer[] NOT NULL,
-    deleted_server_ids integer[] NOT NULL,
-    active_server_count integer NOT NULL,
-    all_monitor_ids integer[] NOT NULL,
-    new_monitor_ids integer[] NOT NULL,
-    deleted_monitor_ids integer[] NOT NULL,
-    fresh_vulns_vuln_pkg_ids json NOT NULL,
-    fresh_vulns_server_ids integer[] NOT NULL,
-    fresh_vulns_monitor_ids integer[] NOT NULL,
-    fresh_vulns_package_ids integer[] NOT NULL,
-    fresh_vulns_supplementary_count integer NOT NULL,
-    new_vulns_vuln_pkg_ids json NOT NULL,
-    new_vulns_server_ids integer[] NOT NULL,
-    new_vulns_monitor_ids integer[] NOT NULL,
-    new_vulns_package_ids integer[] NOT NULL,
-    new_vulns_supplementary_count integer NOT NULL,
-    patched_vulns_vuln_pkg_ids json NOT NULL,
-    patched_vulns_server_ids integer[] NOT NULL,
-    patched_vulns_monitor_ids integer[] NOT NULL,
-    patched_vulns_package_ids integer[] NOT NULL,
-    patched_vulns_supplementary_count integer NOT NULL,
-    cantfix_vulns_vuln_pkg_ids json NOT NULL,
-    cantfix_vulns_server_ids integer[] NOT NULL,
-    cantfix_vulns_monitor_ids integer[] NOT NULL,
-    cantfix_vulns_package_ids integer[] NOT NULL,
-    cantfix_vulns_supplementary_count integer NOT NULL,
-    changes_server_count integer NOT NULL,
-    changes_monitor_count integer NOT NULL,
-    changes_added_count integer NOT NULL,
-    changes_removed_count integer NOT NULL,
-    changes_upgraded_count integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: daily_summaries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE daily_summaries_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: daily_summaries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE daily_summaries_id_seq OWNED BY daily_summaries.id;
-
-
---
 -- Name: email_messages; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1405,7 +1340,8 @@ CREATE TABLE notifications (
     log_bundle_vulnerability_id integer,
     log_bundle_patch_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    webhook_id integer
 );
 
 
@@ -2175,336 +2111,410 @@ ALTER SEQUENCE vulnerable_packages_id_seq OWNED BY vulnerable_packages.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: webhook_messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE webhook_messages (
+    id integer NOT NULL,
+    account_id integer,
+    webhook_id integer,
+    url character varying,
+    type character varying,
+    sent_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: webhook_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE webhook_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: webhook_messages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE webhook_messages_id_seq OWNED BY webhook_messages.id;
+
+
+--
+-- Name: webhooks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE webhooks (
+    id integer NOT NULL,
+    account_id integer,
+    url text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: webhooks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE webhooks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: webhooks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE webhooks_id_seq OWNED BY webhooks.id;
+
+
+--
+-- Name: accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY accounts ALTER COLUMN id SET DEFAULT nextval('accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: advisories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisories ALTER COLUMN id SET DEFAULT nextval('advisories_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: advisory_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_archives ALTER COLUMN id SET DEFAULT nextval('advisory_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: advisory_import_states id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_import_states ALTER COLUMN id SET DEFAULT nextval('advisory_import_states_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: advisory_vulnerabilities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_vulnerabilities ALTER COLUMN id SET DEFAULT nextval('advisory_vulnerabilities_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: advisory_vulnerability_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY advisory_vulnerability_archives ALTER COLUMN id SET DEFAULT nextval('advisory_vulnerability_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: agent_accepted_files id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_accepted_files ALTER COLUMN id SET DEFAULT nextval('agent_accepted_files_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: agent_heartbeats id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_heartbeats ALTER COLUMN id SET DEFAULT nextval('agent_heartbeats_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: agent_received_files id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_received_files ALTER COLUMN id SET DEFAULT nextval('agent_received_files_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: agent_releases id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_releases ALTER COLUMN id SET DEFAULT nextval('agent_releases_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: agent_server_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_server_archives ALTER COLUMN id SET DEFAULT nextval('agent_server_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: agent_servers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY agent_servers ALTER COLUMN id SET DEFAULT nextval('agent_servers_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: beta_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY beta_users ALTER COLUMN id SET DEFAULT nextval('beta_users_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: billing_plans id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY billing_plans ALTER COLUMN id SET DEFAULT nextval('billing_plans_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bundle_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundle_archives ALTER COLUMN id SET DEFAULT nextval('bundle_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bundled_package_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_package_archives ALTER COLUMN id SET DEFAULT nextval('bundled_package_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bundled_packages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundled_packages ALTER COLUMN id SET DEFAULT nextval('bundled_packages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bundles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY bundles ALTER COLUMN id SET DEFAULT nextval('bundles_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY daily_summaries ALTER COLUMN id SET DEFAULT nextval('daily_summaries_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: email_messages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_messages ALTER COLUMN id SET DEFAULT nextval('email_messages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: feature_flags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY feature_flags ALTER COLUMN id SET DEFAULT nextval('feature_flags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: ignored_packages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages ALTER COLUMN id SET DEFAULT nextval('ignored_packages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: is_it_vuln_results id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY is_it_vuln_results ALTER COLUMN id SET DEFAULT nextval('is_it_vuln_results_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: log_api_calls id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_api_calls ALTER COLUMN id SET DEFAULT nextval('log_api_calls_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: log_bundle_patches id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_bundle_patches ALTER COLUMN id SET DEFAULT nextval('log_bundle_patches_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: log_bundle_vulnerabilities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_bundle_vulnerabilities ALTER COLUMN id SET DEFAULT nextval('log_bundle_vulnerabilities_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: log_resolutions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY log_resolutions ALTER COLUMN id SET DEFAULT nextval('log_resolutions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: motds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY motds ALTER COLUMN id SET DEFAULT nextval('motds_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: notifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: package_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY package_archives ALTER COLUMN id SET DEFAULT nextval('package_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: packages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY packages ALTER COLUMN id SET DEFAULT nextval('packages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: pre_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pre_users ALTER COLUMN id SET DEFAULT nextval('pre_users_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: process_libraries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY process_libraries ALTER COLUMN id SET DEFAULT nextval('process_libraries_id_seq'::regclass);
 
 
 --
--- Name: job_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: que_jobs job_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY que_jobs ALTER COLUMN job_id SET DEFAULT nextval('que_jobs_job_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: rubysec_advisories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY rubysec_advisories ALTER COLUMN id SET DEFAULT nextval('rubysec_advisories_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: server_process_libraries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_process_libraries ALTER COLUMN id SET DEFAULT nextval('server_process_libraries_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: server_processes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_processes ALTER COLUMN id SET DEFAULT nextval('server_processes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: server_tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags ALTER COLUMN id SET DEFAULT nextval('server_tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: subscription_plans id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY subscription_plans ALTER COLUMN id SET DEFAULT nextval('subscription_plans_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vulnerabilities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerabilities ALTER COLUMN id SET DEFAULT nextval('vulnerabilities_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vulnerability_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerability_archives ALTER COLUMN id SET DEFAULT nextval('vulnerability_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vulnerable_dependencies id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_dependencies ALTER COLUMN id SET DEFAULT nextval('vulnerable_dependencies_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vulnerable_dependency_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_dependency_archives ALTER COLUMN id SET DEFAULT nextval('vulnerable_dependency_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vulnerable_package_archives id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_package_archives ALTER COLUMN id SET DEFAULT nextval('vulnerable_package_archives_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vulnerable_packages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerable_packages ALTER COLUMN id SET DEFAULT nextval('vulnerable_packages_id_seq'::regclass);
 
 
 --
--- Name: vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: webhook_messages id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY webhook_messages ALTER COLUMN id SET DEFAULT nextval('webhook_messages_id_seq'::regclass);
+
+
+--
+-- Name: webhooks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY webhooks ALTER COLUMN id SET DEFAULT nextval('webhooks_id_seq'::regclass);
+
+
+--
+-- Name: vulnerabilities vulnerabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY vulnerabilities
@@ -2665,14 +2675,6 @@ ALTER TABLE ONLY bundled_packages
 
 ALTER TABLE ONLY bundles
     ADD CONSTRAINT bundles_pkey PRIMARY KEY (id);
-
-
---
--- Name: daily_summaries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY daily_summaries
-    ADD CONSTRAINT daily_summaries_pkey PRIMARY KEY (id);
 
 
 --
@@ -2892,10 +2894,19 @@ ALTER TABLE ONLY vulnerable_packages
 
 
 --
--- Name: bundle_archives_CBE; Type: INDEX; Schema: public; Owner: -
+-- Name: webhook_messages webhook_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-CREATE INDEX "bundle_archives_CBE" ON bundle_archives USING btree (created_at DESC, bundle_id, expired_at DESC);
+ALTER TABLE ONLY webhook_messages
+    ADD CONSTRAINT webhook_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: webhooks webhooks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY webhooks
+    ADD CONSTRAINT webhooks_pkey PRIMARY KEY (id);
 
 
 --
@@ -3270,13 +3281,6 @@ CREATE INDEX index_bundle_archives_on_agent_server_id ON bundle_archives USING b
 
 
 --
--- Name: index_bundle_archives_on_bundle_id_and_expired_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_bundle_archives_on_bundle_id_and_expired_at ON bundle_archives USING btree (bundle_id, expired_at DESC);
-
-
---
 -- Name: index_bundle_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3400,27 +3404,6 @@ CREATE INDEX index_bundles_on_from_api ON bundles USING btree (from_api);
 --
 
 CREATE INDEX index_bundles_on_valid_at ON bundles USING btree (valid_at);
-
-
---
--- Name: index_daily_summaries_on_account_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_account_id ON daily_summaries USING btree (account_id);
-
-
---
--- Name: index_daily_summaries_on_account_id_and_date; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_daily_summaries_on_account_id_and_date ON daily_summaries USING btree (account_id, date);
-
-
---
--- Name: index_daily_summaries_on_date; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_date ON daily_summaries USING btree (date);
 
 
 --
@@ -3641,17 +3624,10 @@ CREATE INDEX index_notifications_on_log_bundle_vulnerability_id ON notifications
 
 
 --
--- Name: index_of_seven_kings_LBP; Type: INDEX; Schema: public; Owner: -
+-- Name: index_notifications_on_webhook_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX "index_of_seven_kings_LBP" ON log_bundle_patches USING btree (bundle_id, package_id, bundled_package_id, vulnerability_id, vulnerable_dependency_id, vulnerable_package_id, occurred_at);
-
-
---
--- Name: index_of_seven_kings_LBV; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX "index_of_seven_kings_LBV" ON log_bundle_vulnerabilities USING btree (bundle_id, package_id, bundled_package_id, vulnerability_id, vulnerable_dependency_id, vulnerable_package_id, occurred_at);
+CREATE INDEX index_notifications_on_webhook_id ON notifications USING btree (webhook_id);
 
 
 --
@@ -3830,38 +3806,10 @@ CREATE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
 
 
 --
--- Name: index_vulndeps_on_valid_at_and_created_at_patchable; Type: INDEX; Schema: public; Owner: -
+-- Name: index_vulnerabilities_on_criticality_advisory_id_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_vulndeps_on_valid_at_and_created_at_patchable ON vulnerable_dependencies USING btree (created_at, valid_at) WHERE ((affected_versions <> '{}'::character varying[]) OR (patched_versions <> '{}'::text[]) OR (unaffected_versions <> '{}'::text[]));
-
-
---
--- Name: index_vulndeps_on_valid_at_and_created_at_unpatchable; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vulndeps_on_valid_at_and_created_at_unpatchable ON vulnerable_dependencies USING btree (created_at, valid_at) WHERE ((patched_versions = '{}'::text[]) AND (unaffected_versions = '{}'::text[]));
-
-
---
--- Name: index_vulndeps_on_valid_at_patchable; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vulndeps_on_valid_at_patchable ON vulnerable_dependencies USING btree (valid_at) WHERE ((affected_versions <> '{}'::character varying[]) OR (patched_versions <> '{}'::text[]) OR (unaffected_versions <> '{}'::text[]));
-
-
---
--- Name: index_vulndeps_on_valid_at_unpatchable; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vulndeps_on_valid_at_unpatchable ON vulnerable_dependencies USING btree (valid_at) WHERE ((patched_versions = '{}'::text[]) AND (unaffected_versions = '{}'::text[]));
-
-
---
--- Name: index_vulnerabilities_on_criticality_advisory_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_vulnerabilities_on_criticality_advisory_id ON vulnerabilities USING btree (criticality_advisory_id);
+CREATE INDEX index_vulnerabilities_on_criticality_advisory_id_id ON vulnerabilities USING btree (criticality_advisory_id_id);
 
 
 --
@@ -3893,10 +3841,10 @@ CREATE INDEX index_vulnerabilities_on_valid_at ON vulnerabilities USING btree (v
 
 
 --
--- Name: index_vulnerability_archives_on_criticality_advisory_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_vulnerability_archives_on_criticality_advisory_id_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_vulnerability_archives_on_criticality_advisory_id ON vulnerability_archives USING btree (criticality_advisory_id);
+CREATE INDEX index_vulnerability_archives_on_criticality_advisory_id_id ON vulnerability_archives USING btree (criticality_advisory_id_id);
 
 
 --
@@ -4096,6 +4044,34 @@ CREATE UNIQUE INDEX index_vulnpackage_packages ON vulnerable_packages USING btre
 
 
 --
+-- Name: index_webhook_messages_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_webhook_messages_on_account_id ON webhook_messages USING btree (account_id);
+
+
+--
+-- Name: index_webhook_messages_on_webhook_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_webhook_messages_on_webhook_id ON webhook_messages USING btree (webhook_id);
+
+
+--
+-- Name: index_webhooks_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_webhooks_on_account_id ON webhooks USING btree (account_id);
+
+
+--
+-- Name: test; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX test ON advisories USING btree (((cvss)::numeric(3,1)));
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4237,7 +4213,15 @@ ALTER TABLE ONLY server_tags
 
 
 --
--- Name: fk_rails_257ff0b8e3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: webhook_messages fk_rails_1be254866e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY webhook_messages
+    ADD CONSTRAINT fk_rails_1be254866e FOREIGN KEY (webhook_id) REFERENCES webhooks(id);
+
+
+--
+-- Name: ignored_packages fk_rails_257ff0b8e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages
@@ -4261,7 +4245,15 @@ ALTER TABLE ONLY server_process_libraries
 
 
 --
--- Name: fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: webhook_messages fk_rails_4e1856d964; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY webhook_messages
+    ADD CONSTRAINT fk_rails_4e1856d964 FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
+-- Name: notifications fk_rails_52f2f7a9e3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -4298,14 +4290,6 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY bundled_packages
     ADD CONSTRAINT fk_rails_6c7c501d37 FOREIGN KEY (package_id) REFERENCES packages(id);
-
-
---
--- Name: fk_rails_7fbfa3a3fb; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY daily_summaries
-    ADD CONSTRAINT fk_rails_7fbfa3a3fb FOREIGN KEY (account_id) REFERENCES accounts(id);
 
 
 --
@@ -4349,7 +4333,15 @@ ALTER TABLE ONLY server_processes
 
 
 --
--- Name: fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: webhooks fk_rails_8f6c17001b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY webhooks
+    ADD CONSTRAINT fk_rails_8f6c17001b FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
+-- Name: server_process_libraries fk_rails_a5ff67a393; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_process_libraries
@@ -4389,7 +4381,15 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: fk_rails_f8bf4dc6c3; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications fk_rails_f2755e5ce8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notifications
+    ADD CONSTRAINT fk_rails_f2755e5ce8 FOREIGN KEY (webhook_id) REFERENCES webhooks(id);
+
+
+--
+-- Name: ignored_packages fk_rails_f8bf4dc6c3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY ignored_packages
@@ -4648,11 +4648,15 @@ INSERT INTO schema_migrations (version) VALUES ('20170608154354');
 
 INSERT INTO schema_migrations (version) VALUES ('20170608200340');
 
+INSERT INTO schema_migrations (version) VALUES ('20170613001112');
+
 INSERT INTO schema_migrations (version) VALUES ('20170613001230');
 
 INSERT INTO schema_migrations (version) VALUES ('20170613123033');
 
-INSERT INTO schema_migrations (version) VALUES ('20170628173315');
+INSERT INTO schema_migrations (version) VALUES ('20170615195955');
 
-INSERT INTO schema_migrations (version) VALUES ('20170705151149');
+INSERT INTO schema_migrations (version) VALUES ('20170619203844');
+
+INSERT INTO schema_migrations (version) VALUES ('20170620155846');
 

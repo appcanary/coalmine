@@ -14,20 +14,17 @@ class EmailManager
     # TODO: ensure this call groups them by day / hour or some time period?
     # this could theoretically create an email per notification generated,
     # if the query is run frequently enough.
-    
     queue_vuln_emails!
     send_vuln_emails!
   end
 
- 
   def self.queue_and_send_patched_emails!
     queue_patched_emails!
     send_patched_emails!
   end
 
-
   def self.queue_vuln_emails!
-    accounts = Account.with_unnotified_vuln_logs.joins(:users).
+    accounts = Account.with_unemailed_vuln_logs.joins(:users).
       where(users: { :pref_email_frequency => PrefOpt::EMAIL_WANTS_FIREHOSE})
 
 
@@ -37,7 +34,7 @@ class EmailManager
   end
 
    def self.queue_patched_emails!
-     accounts = Account.with_unnotified_patch_logs.joins(:users).
+     accounts = Account.with_unemailed_patch_logs.joins(:users).
       where(users: { :pref_email_frequency => PrefOpt::EMAIL_WANTS_FIREHOSE})
 
     accounts.select do |acct|
@@ -45,19 +42,18 @@ class EmailManager
     end
   end
 
-
   def self.create_vuln_email!(acct)
     EmailMessage.transaction do
-      unnotified_logs = VulnQuery.new(acct).unnotified_vuln_logs.where("log_bundle_vulnerabilities.created_at >= ? ", 2.days.ago)
+      unemailed_logs = VulnQuery.new(acct).unemailed_vuln_logs.where("log_bundle_vulnerabilities.created_at >= ? ", 2.days.ago)
 
       # TODO: perform checks like, has it been long enough
       # since the last email?
       # or, has this notification been patched?
 
-      if unnotified_logs.any?
+      if unemailed_logs.any?
         email = EmailVulnerable.create!(:account => acct)
 
-        unnotified_logs.pluck(:id).each do |lid|
+        unemailed_logs.pluck(:id).each do |lid|
           Notification.create!(:email_message_id => email.id,
                                :log_bundle_vulnerability_id => lid)
         end
@@ -70,16 +66,16 @@ class EmailManager
 
   def self.create_patched_email!(acct)
     EmailMessage.transaction do
-      unnotified_logs = VulnQuery.new(acct).unnotified_patch_logs.where("log_bundle_patches.created_at >= ? ", 2.days.ago)
+      unemailed_logs = VulnQuery.new(acct).unemailed_patch_logs.where("log_bundle_patches.created_at >= ? ", 2.days.ago)
 
       # TODO: perform checks like, has it been long enough
       # since the last email?
       # or, are you still vulnerable?
 
-      if unnotified_logs.any?
+      if unemailed_logs.any?
         email = EmailPatched.create!(:account => acct)
 
-        unnotified_logs.pluck(:id).each do |lid|
+        unemailed_logs.pluck(:id).each do |lid|
           Notification.create!(:email_message_id => email.id,
                                :log_bundle_patch_id => lid)
         end

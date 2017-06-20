@@ -47,11 +47,18 @@ class LogBundlePatch < ActiveRecord::Base
   # 2. bundles that currently exist
   # 3. that have NOT already been put into a notification
 
-  scope :unnotified_logs, -> {
+  scope :unemailed, -> {
     joins(:vulnerable_dependency).
     joins(:bundle).
     joins('LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id').
-    where('"notifications".id IS NULL')
+    where('"notifications".email_message_id IS NULL')
+  }
+
+  scope :unwebhooked, -> {
+    joins(:vulnerable_dependency).
+      joins(:bundle).
+      joins('LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id').
+      where('"notifications".webhook_message_id IS NULL')
   }
 
   scope :patchable, -> {

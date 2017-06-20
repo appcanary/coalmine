@@ -19,19 +19,19 @@ class VulnQuery
     patchable_bundle: -> (bundle) {
       bundle.patchable_packages
     },
-    affected_unnotified_logs: -> (logklass, account) {
+    affected_logs: -> (logklass, account) {
       log_table = logklass.table_name
 
-      logklass.unnotified_logs.
+      logklass.
         joins("LEFT JOIN bundled_packages ON
           bundled_packages.id = #{log_table}.bundled_package_id AND
           bundled_packages.bundle_id = #{log_table}.bundle_id").
         where("bundles.account_id = ?", account.id)
     },
-    patchable_unnotified_logs: -> (logklass, account) {
+    patchable_logs: -> (logklass, account) {
       log_table = logklass.table_name
 
-      logklass.unnotified_logs.patchable.
+      logklass.patchable.
         joins("LEFT JOIN bundled_packages ON
           bundled_packages.id = #{log_table}.bundled_package_id AND
           bundled_packages.bundle_id = #{log_table}.bundle_id").
@@ -45,11 +45,11 @@ class VulnQuery
 
     if care_about_affected?(@account)
       @query_bundle = PROCS[:affected_bundle]
-      @query_log = PROCS[:affected_unnotified_logs]
+      @query_log = PROCS[:affected_logs]
       @vuln_subquery = VulnQuery.has_affected_subquery
     else
       @query_bundle = PROCS[:patchable_bundle]
-      @query_log = PROCS[:patchable_unnotified_logs]
+      @query_log = PROCS[:patchable_logs]
       @vuln_subquery = VulnQuery.has_patchable_subquery
     end
   end
@@ -86,12 +86,12 @@ class VulnQuery
     bundles.pluck("id, (#{@vuln_subquery.to_sql}) vulnerable").to_h
   end
 
-  def unnotified_vuln_logs
-    filter_ignored(filter_resolved(query_log.(LogBundleVulnerability, account)))
+  def unemailed_vuln_logs
+    filter_ignored(filter_resolved(query_log.(LogBundleVulnerability.unemailed, account)))
   end
 
-  def unnotified_patch_logs
-    filter_ignored(filter_resolved(query_log.(LogBundlePatch, account)))
+  def unemailed_patch_logs
+    filter_ignored(filter_resolved(query_log.(LogBundlePatch.unemailed, account)))
   end
 
   # --- effectively private methods
