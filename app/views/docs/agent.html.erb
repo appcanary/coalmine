@@ -1,0 +1,90 @@
+<section id="docs">
+
+  <div class="col-sm-6 col-sm-offset-1">
+    <h1>Agent Documentation</h2>
+    <h2>Configuration</h2>
+    <h3>Default settings</h3>
+    <p><%= link_to "Once installed", new_server_path %>, the agent by default will:
+      <ul>
+        <li>read <code>/etc/appcanary/agent.yml</code> and load its configuration settings.</li>
+        <li>emit logs to <code>/var/log/appcanary.log</code></li>
+        <li>upon successful registration, write to <code>/var/db/appcanary/server.yml</code>.</li>
+      </ul>
+      <p>At minimum you must specify a valid API key and a process or file for it to watch. You may specify more than one watcher per agent instance, if applicable.</p>
+
+      <h3>Sample minimum configuration</h3>
+
+      <pre>
+#/etc/appcanary/agent.yml
+api_key: "<%= @agent_token %>"
+
+watchers:
+  # if on centos or redhat
+  - process: "rpm -qa"
+
+  # if on ubuntu or debian
+  - file: "/var/lib/dpkg/status"
+
+  # if you have any number of Ruby apps
+  - file: "/path/to/a/Gemfile.lock"
+
+  # if you have any number of PHP apps
+  - file: "/path/to/a/composer.lock"
+    </pre>
+
+      <h3>Tagging</h3>
+      <p>When dealing with large fleets, it's more useful to refer to servers by their function or other labels. You can tag a server within Appcanary by adding the following:</p>
+
+      <pre>
+#/etc/appcanary/agent.yml
+tags:
+  - web
+  - db
+  - etc
+      </pre>
+
+      <h3>Optional, additional configuration</h3>
+
+      <pre>
+      #/etc/appcanary/agent.yml
+
+      # you can also specify a custom name
+      server_name: "name here"
+
+      # specify a different log path
+      log_path: /tmp/example/path.log
+
+      # wait this many seconds before reporting on configured watchers.
+      # this is useful if you auto upgrade newly provisioned servers:
+      # setting a time delay will prevent meaningless patch notifications
+      startup_delay: 10
+      </pre>
+
+      <h2>Command line modes</h2>
+
+      <p>By default, the agent will just silently monitor any configured watchers. The agent also provides the following modes:</p>
+
+      <dl class="dl-horizontal">
+        <dt>upgrade</dt>
+        <dd><strong>(Ubuntu only)</strong> Install the latest version of packages that have vulnerabilities</dd>
+
+
+
+        <dt>inspect-processes</dt>
+        <dd><strong>(BETA: <a href="mailto:hello@appcanary.com?subject=Inspect Processes">Contact us</a> if you'd like to use this)</strong> Report on which running processes depend on out of date libraries, and should be restarted.</dd>
+
+        <dt>detect-os</dt>
+        <dd>Guess what distribution and version of Linux you're using</dd>
+      </dl>
+    </div>
+
+    <div class="col-sm-4">
+
+      <%= image_tag "canary-worm.medium.stroke.png", style:"max-width: 100%" %>
+    </div>
+
+
+  </section>
+
+</div>
+
