@@ -6,7 +6,7 @@
     <h3>Default settings</h3>
     <p><%= link_to "Once installed", new_server_path %>, the agent by default will:
       <ul>
-        <li>look inside <code>/etc/appcanary/agent.yml</code> to find its configuration settings.</li>
+        <li>read <code>/etc/appcanary/agent.yml</code> and load its configuration settings.</li>
         <li>emit logs to <code>/var/log/appcanary.log</code></li>
         <li>upon successful registration, write to <code>/var/db/appcanary/server.yml</code>.</li>
       </ul>
@@ -43,7 +43,7 @@ tags:
   - etc
       </pre>
 
-      <h3>Additional configuration</h3>
+      <h3>Optional, additional configuration</h3>
 
       <pre>
       #/etc/appcanary/agent.yml
@@ -71,7 +71,7 @@ tags:
 
 
         <dt>inspect-processes</dt>
-        <dd><strong>(BETA: Contact us if you'd like to use this)</strong> Report on which running processes depend on out of date libraries, and should be restarted.</dd>
+        <dd><strong>(BETA: <a href="mailto:hello@appcanary.com?subject=Inspect Processes">Contact us</a> if you'd like to use this)</strong> Report on which running processes depend on out of date libraries, and should be restarted.</dd>
 
         <dt>detect-os</dt>
         <dd>Guess what distribution and version of Linux you're using</dd>
