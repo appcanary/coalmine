@@ -3,12 +3,12 @@
     <h1>Upgrading the Agent</h1>
     <p>On <%= @upgrade_date.strftime("%B %e, %Y") %>, we've changed our configuration format from <%= link_to "TOML", "https://github.com/toml-lang/toml" %> to a much easier to read <%= link_to "YAML", "http://yaml.org/"%> format</p>
 
-    <p>Any agent version <% @version %> or later is going to default to the new format
+    <p>Any agent version <code><%= @version %></code> or later is going to default to the new format.</p>
 
     <p>Here's an example old-style TOML config file:</p>
     <pre>
 #/etc/appcanary/agent.conf
-api_key = "YOURAPIKEY"
+api_key = "<%= @agent_token %>"
 
 [[files]]
 process = "rpm -qa"
@@ -22,14 +22,14 @@ path = "/path/to/a/composer.lock"
     <p>And here's the same configuration in new-style YAML.</p>
     <pre>
 #/etc/appcanary/agent.yml
-api_key: "YOURAPIKEY"
+api_key: "<%= @agent_token %>"
 
 watchers:
   - process: "rpm -qa"
   - file: "/path/to/a/Gemfile.lock"
   - file: "/path/to/a/composer.lock"
     </pre>
-    <p>Besides being much easier to edit and understand, this new configuration format is neccesary to set up a few agent features that are coming down the pipe such as tagging servers.</p>
+    <p>Besides being easier to edit and understand, this new configuration format was necessary to enable some new features. For more information on <%= link_to "how to configure the agent, click here", agent_docs_path %>.</p>
 
     <h2>What do I need to do?</h2>
     <p>Luckily, almost nothing. On first boot, the agent will parse your old <code>/etc/appcanary/agent.conf</code>, move it to <code>/etc/appcanary/agent.conf.deprecated</code>, and put a new <code>/etc/appcanary/agent.yml</code> file in its place</p>

@@ -76,6 +76,7 @@ Rails.application.routes.draw do
     get "api", as: :api, on: :collection
     get "ci", as: :ci, on: :collection
     get "agent_upgrade", as: :agent_upgrade, on: :collection
+    get "agent", as: :agent, on: :collection
   end
 
   resources :users, :only => [:new, :create, :update, :destroy] do

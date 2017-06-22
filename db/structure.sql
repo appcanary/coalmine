@@ -3701,10 +3701,10 @@ CREATE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
 
 
 --
--- Name: index_vulnerabilities_on_criticality_advisory_id_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_vulnerabilities_on_criticality_advisory_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_vulnerabilities_on_criticality_advisory_id_id ON vulnerabilities USING btree (criticality_advisory_id_id);
+CREATE INDEX index_vulnerabilities_on_criticality_advisory_id ON vulnerabilities USING btree (criticality_advisory_id);
 
 
 --
@@ -3736,10 +3736,10 @@ CREATE INDEX index_vulnerabilities_on_valid_at ON vulnerabilities USING btree (v
 
 
 --
--- Name: index_vulnerability_archives_on_criticality_advisory_id_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_vulnerability_archives_on_criticality_advisory_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_vulnerability_archives_on_criticality_advisory_id_id ON vulnerability_archives USING btree (criticality_advisory_id_id);
+CREATE INDEX index_vulnerability_archives_on_criticality_advisory_id ON vulnerability_archives USING btree (criticality_advisory_id);
 
 
 --
@@ -3936,13 +3936,6 @@ CREATE INDEX index_vulnerable_packages_on_vulnerable_dependency_id ON vulnerable
 --
 
 CREATE UNIQUE INDEX index_vulnpackage_packages ON vulnerable_packages USING btree (package_id, vulnerable_dependency_id, vulnerability_id);
-
-
---
--- Name: test; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX test ON advisories USING btree (((cvss)::numeric(3,1)));
 
 
 --
@@ -4478,8 +4471,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170531151207');
 
 INSERT INTO schema_migrations (version) VALUES ('20170531222312');
 
-INSERT INTO schema_migrations (version) VALUES ('20170608154354');
-
 INSERT INTO schema_migrations (version) VALUES ('20170601182918');
 
 INSERT INTO schema_migrations (version) VALUES ('20170603004839');
@@ -4488,8 +4479,11 @@ INSERT INTO schema_migrations (version) VALUES ('20170606162310');
 
 INSERT INTO schema_migrations (version) VALUES ('20170607203148');
 
+INSERT INTO schema_migrations (version) VALUES ('20170608154354');
+
+INSERT INTO schema_migrations (version) VALUES ('20170608200340');
+
 INSERT INTO schema_migrations (version) VALUES ('20170613001230');
 
 INSERT INTO schema_migrations (version) VALUES ('20170613123033');
 
-INSERT INTO schema_migrations (version) VALUES ('20170608200340');
