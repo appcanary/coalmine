@@ -8,14 +8,14 @@
 #  log_bundle_patch_id         :integer
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
-#  webhook_id                  :integer
+#  webhook_message_id          :integer
 #
 # Indexes
 #
 #  index_notifications_on_email_message_id             (email_message_id)
 #  index_notifications_on_log_bundle_patch_id          (log_bundle_patch_id)
 #  index_notifications_on_log_bundle_vulnerability_id  (log_bundle_vulnerability_id)
-#  index_notifications_on_webhook_id                   (webhook_id)
+#  index_notifications_on_webhook_message_id           (webhook_message_id)
 #
 
 class Notification < ActiveRecord::Base

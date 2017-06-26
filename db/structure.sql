@@ -1336,12 +1336,12 @@ ALTER SEQUENCE motds_id_seq OWNED BY motds.id;
 
 CREATE TABLE notifications (
     id integer NOT NULL,
-    email_message_id integer NOT NULL,
+    email_message_id integer,
     log_bundle_vulnerability_id integer,
     log_bundle_patch_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    webhook_id integer
+    webhook_message_id integer
 );
 
 
@@ -4079,133 +4079,141 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
--- Name: trigger_advisory_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: advisories trigger_advisory_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_advisory_archives AFTER DELETE OR UPDATE ON advisories FOR EACH ROW EXECUTE PROCEDURE archive_advisories();
 
 
 --
--- Name: trigger_advisory_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: advisory_vulnerabilities trigger_advisory_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_advisory_vulnerability_archives AFTER DELETE OR UPDATE ON advisory_vulnerabilities FOR EACH ROW EXECUTE PROCEDURE archive_advisory_vulnerabilities();
 
 
 --
--- Name: trigger_agent_server_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: agent_servers trigger_agent_server_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_agent_server_archives AFTER DELETE OR UPDATE ON agent_servers FOR EACH ROW EXECUTE PROCEDURE archive_agent_servers();
 
 
 --
--- Name: trigger_bundle_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: bundles trigger_bundle_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_bundle_archives AFTER DELETE OR UPDATE ON bundles FOR EACH ROW EXECUTE PROCEDURE archive_bundles();
 
 
 --
--- Name: trigger_bundled_package_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: bundled_packages trigger_bundled_package_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_bundled_package_archives AFTER DELETE OR UPDATE ON bundled_packages FOR EACH ROW EXECUTE PROCEDURE archive_bundled_packages();
 
 
 --
--- Name: trigger_package_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: packages trigger_package_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_package_archives AFTER DELETE OR UPDATE ON packages FOR EACH ROW EXECUTE PROCEDURE archive_packages();
 
 
 --
--- Name: trigger_update_advisories_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: advisories trigger_update_advisories_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_advisories_valid_at BEFORE UPDATE ON advisories FOR EACH ROW EXECUTE PROCEDURE update_advisories_valid_at();
 
 
 --
--- Name: trigger_update_advisory_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: advisory_vulnerabilities trigger_update_advisory_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_advisory_vulnerabilities_valid_at BEFORE UPDATE ON advisory_vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_advisory_vulnerabilities_valid_at();
 
 
 --
--- Name: trigger_update_agent_servers_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: agent_servers trigger_update_agent_servers_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_agent_servers_valid_at BEFORE UPDATE ON agent_servers FOR EACH ROW EXECUTE PROCEDURE update_agent_servers_valid_at();
 
 
 --
--- Name: trigger_update_bundled_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: bundled_packages trigger_update_bundled_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_bundled_packages_valid_at BEFORE UPDATE ON bundled_packages FOR EACH ROW EXECUTE PROCEDURE update_bundled_packages_valid_at();
 
 
 --
--- Name: trigger_update_bundles_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: bundles trigger_update_bundles_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_bundles_valid_at BEFORE UPDATE ON bundles FOR EACH ROW EXECUTE PROCEDURE update_bundles_valid_at();
 
 
 --
--- Name: trigger_update_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: packages trigger_update_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_packages_valid_at BEFORE UPDATE ON packages FOR EACH ROW EXECUTE PROCEDURE update_packages_valid_at();
 
 
 --
--- Name: trigger_update_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: vulnerabilities trigger_update_vulnerabilities_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_vulnerabilities_valid_at BEFORE UPDATE ON vulnerabilities FOR EACH ROW EXECUTE PROCEDURE update_vulnerabilities_valid_at();
 
 
 --
--- Name: trigger_update_vulnerable_dependencies_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: vulnerable_dependencies trigger_update_vulnerable_dependencies_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_vulnerable_dependencies_valid_at BEFORE UPDATE ON vulnerable_dependencies FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_dependencies_valid_at();
 
 
 --
--- Name: trigger_update_vulnerable_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
+-- Name: vulnerable_packages trigger_update_vulnerable_packages_valid_at; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_update_vulnerable_packages_valid_at BEFORE UPDATE ON vulnerable_packages FOR EACH ROW EXECUTE PROCEDURE update_vulnerable_packages_valid_at();
 
 
 --
--- Name: trigger_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: vulnerabilities trigger_vulnerability_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_vulnerability_archives AFTER DELETE OR UPDATE ON vulnerabilities FOR EACH ROW EXECUTE PROCEDURE archive_vulnerabilities();
 
 
 --
--- Name: trigger_vulnerable_dependency_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: vulnerable_dependencies trigger_vulnerable_dependency_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_vulnerable_dependency_archives AFTER DELETE OR UPDATE ON vulnerable_dependencies FOR EACH ROW EXECUTE PROCEDURE archive_vulnerable_dependencies();
 
 
 --
--- Name: trigger_vulnerable_package_archives; Type: TRIGGER; Schema: public; Owner: -
+-- Name: vulnerable_packages trigger_vulnerable_package_archives; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trigger_vulnerable_package_archives AFTER DELETE OR UPDATE ON vulnerable_packages FOR EACH ROW EXECUTE PROCEDURE archive_vulnerable_packages();
 
 
 --
--- Name: fk_rails_0c5d14504e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications fk_rails_009777f9f9; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notifications
+    ADD CONSTRAINT fk_rails_009777f9f9 FOREIGN KEY (webhook_message_id) REFERENCES webhook_messages(id);
+
+
+--
+-- Name: server_tags fk_rails_0c5d14504e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY server_tags
@@ -4659,4 +4667,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170615195955');
 INSERT INTO schema_migrations (version) VALUES ('20170619203844');
 
 INSERT INTO schema_migrations (version) VALUES ('20170620155846');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622143954');
 

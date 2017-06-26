@@ -19,4 +19,9 @@
 
 class WebhookMessage < ActiveRecord::Base
   belongs_to :account
+  belongs_to :webhook
+  has_many :notifications
+
+  scope :unsent, -> { where('sent_at is null') }
+  scope :sent, -> { where('sent_at is not null') }
 end
