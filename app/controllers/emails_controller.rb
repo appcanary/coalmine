@@ -6,6 +6,6 @@ class EmailsController < ApplicationController
 
   def show
     @email = current_user.account.email_messages.find(params[:id])
-    @notifier = NotificationPresenter.new(@email)
+    @notifier = NotificationEmailPresenter.new(@email)
   end
 end

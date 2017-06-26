@@ -16,7 +16,7 @@ class Admin::EmailsController < AdminController
     else
       @email = current_user.account.email_messages.find(params[:id])
     end
-    @notifier = NotificationPresenter.new(@email)
+    @notifier = NotificationEmailPresenter.new(@email)
     case @email
     when EmailPatched
       render "notification_mailer/patched_email"

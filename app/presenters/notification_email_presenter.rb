@@ -1,4 +1,4 @@
-class NotificationPresenter
+class NotificationEmailPresenter
   def initialize(msg)
     case msg
     when EmailPatched

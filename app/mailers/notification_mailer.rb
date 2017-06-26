@@ -4,7 +4,7 @@ class NotificationMailer < ActionMailer::Base
   helper :application
 
   def vulnerable_email(msg)
-    @notifier = NotificationPresenter.new(msg)
+    @notifier = NotificationEmailPresenter.new(msg)
 
     $analytics.track_notification(msg.account, :vuln)
 
@@ -17,7 +17,7 @@ class NotificationMailer < ActionMailer::Base
   end
 
   def patched_email(msg)
-    @notifier = NotificationPresenter.new(msg)
+    @notifier = NotificationEmailPresenter.new(msg)
 
     $analytics.track_notification(msg.account, :patched)
 
