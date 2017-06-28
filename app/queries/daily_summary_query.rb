@@ -26,10 +26,10 @@ class DailySummaryQuery
     @log_vuln_query = LogBundleVulnerability.in_bundles_from(account.id).unpatched_as_of(@end_at)
     @log_patch_query = LogBundlePatch.in_bundles_from(account.id).not_vulnerable_as_of(@end_at)
 
-    @lbv_unpatched_fixable = @log_vuln_query.patchable
-    @lbv_unpatched_cantfix = @log_vuln_query.unpatchable
+    @lbv_unpatched_fixable = @log_vuln_query.patchable.includes(:vulnerability, :package)
+    @lbv_unpatched_cantfix = @log_vuln_query.unpatchable.includes(:vulnerability, :package)
 
-    @lbp_notvuln_fixable = @log_patch_query.patchable
+    @lbp_notvuln_fixable = @log_patch_query.patchable.includes(:vulnerability, :package)
 
   end
 
