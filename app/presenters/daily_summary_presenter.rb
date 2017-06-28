@@ -1,4 +1,5 @@
 class DailySummaryPresenter
+  include ActionView::Helpers::TextHelper
   attr_accessor :dsquery, :vulnquery,
                 :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns,
                 :changes, :server_ct, :inactive_server_ct, :monitor_ct
@@ -84,6 +85,31 @@ class DailySummaryPresenter
     "Daily Summary for #{self.date}"
   end
 
+  def summary_string
+    summaries = []
+    if self.has_vulns_to_report?
+      summaries << pluralize(self.total_vuln_ct, "new vuln")
+    end
+    if self.has_patched_vulns?
+      summaries << pluralize(self.patched_vulns.vuln_ct, "patched vuln")
+    end
+    if self.has_new_servers?
+      summaries << pluralize(self.new_servers.count, "new server")
+    end
+    if self.has_new_monitors?
+      summaries << pluralize(self.new_monitors.count, "new monitor")
+    end
+    if self.has_changes?
+      summaries << pluralize(self.changes.total_ct, "changed package")
+    end
+
+    if summaries.empty?
+      "nothing to report"
+    else
+      summaries.join(", ")
+    end
+  end
+
   def recipients
     unless Rails.env.production?
       "hello@appcanary.com"
@@ -166,6 +192,10 @@ class DailySummaryPresenter
 
     def any?
       self.server_ct > 0
+    end
+
+    def total_ct
+      self.added_ct + self.removed_ct + self.upgraded_ct
     end
   end
 end
