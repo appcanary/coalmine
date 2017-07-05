@@ -22,6 +22,10 @@
 #
 # Indexes
 #
+#  index_vulndeps_on_valid_at_and_created_at_patchable         (created_at,valid_at)
+#  index_vulndeps_on_valid_at_and_created_at_unpatchable       (created_at,valid_at)
+#  index_vulndeps_on_valid_at_patchable                        (valid_at)
+#  index_vulndeps_on_valid_at_unpatchable                      (valid_at)
 #  index_vulnerable_dependencies_on_expired_at                 (expired_at)
 #  index_vulnerable_dependencies_on_id                         (id) UNIQUE
 #  index_vulnerable_dependencies_on_package_name               (package_name)
