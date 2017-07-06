@@ -10,13 +10,14 @@ class DailySummaryQuery
 
     # ---- we now establish some basic facts
 
-    @all_servers = AgentServer.where(account_id: account.id)
+
+    @all_servers = AgentServer.where(account_id: account.id).as_of(@end_at)
 
     @new_servers = AgentServer.where(account_id: account.id).created_on(@begin_at)
 
     @deleted_servers = AgentServer.where(account_id: account.id).deleted_on(@begin_at)
 
-    @all_monitors = Bundle.where(account_id: account.id).via_api
+    @all_monitors = Bundle.where(account_id: account.id).as_of(@end_at).via_api
 
     @new_monitors = Bundle.where(account_id: account.id).created_on(@begin_at).via_api
 
