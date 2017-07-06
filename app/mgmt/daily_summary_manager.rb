@@ -6,8 +6,6 @@ class DailySummaryManager
     self.date = date
   end
 
-
-
   def sort_group_log_vulns(query)
     query.group_by(&:vulnerability).
       reduce({}) { |hsh, (vuln, logs)|
