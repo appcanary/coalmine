@@ -1,6 +1,6 @@
 class DailySummaryPresenter
   include ActionView::Helpers::TextHelper
-  attr_accessor :dsquery, :vulnquery,
+  attr_accessor :ds, :vulnquery,
                 :fresh_vulns, :new_vulns, :patched_vulns, :cantfix_vulns,
                 :changes, :server_ct, :inactive_server_ct, :monitor_ct
 
@@ -9,18 +9,17 @@ class DailySummaryPresenter
            :all_vuln_ct,
            :all_servers, :new_servers, :deleted_servers,
            :all_monitors, :new_monitors, :deleted_monitors,
-           :to => :dsquery
+           :to => :ds
 
-  def initialize(dsquery)
-    self.dsquery = dsquery
-    self.vulnquery = VulnQuery.new(self.account)
+  def initialize(ds)
+    self.ds = ds
+    self.vulnquery = VulnQuery.new(account)
 
-    self.fresh_vulns = VulnCollectionPresenter.new(dsquery.fresh_vulns)
-    self.new_vulns = VulnCollectionPresenter.new(dsquery.new_vulns)
-
-    self.patched_vulns = VulnCollectionPresenter.new(dsquery.patched_vulns)
-    self.cantfix_vulns = VulnCollectionPresenter.new(dsquery.cantfix_vulns)
-    self.changes = ChangesPresenter.new(dsquery.changes)
+    self.fresh_vulns = VulnCollectionPresenter.new(ds.fresh_vulns_vuln_pkg_ids, ds.fresh_vulns_server_ids, ds.fresh_vulns_monitor_ids, ds.fresh_vulns_package_ids, ds.fresh_vulns_supplementary_count)
+    self.new_vulns = VulnCollectionPresenter.new(ds.new_vulns_vuln_pkg_ids, ds.new_vulns_server_ids, ds.new_vulns_monitor_ids, ds.new_vulns_package_ids, ds.new_vulns_supplementary_count)
+    self.patched_vulns = VulnCollectionPresenter.new(ds.patched_vulns_vuln_pkg_ids, ds.patched_vulns_server_ids, ds.patched_vulns_monitor_ids, ds.patched_vulns_package_ids, ds.patched_vulns_supplementary_count)
+    self.cantfix_vulns = VulnCollectionPresenter.new(ds.cantfix_vulns_vuln_pkg_ids, ds.cantfix_vulns_server_ids, ds.cantfix_vulns_monitor_ids, ds.cantfix_vulns_package_ids, ds.cantfix_vulns_supplementary_count)
+    self.changes = ChangesPresenter.new(ds.changes_server_count, ds.changes_monitor_count, ds.changes_added_count, ds.changes_removed_count, ds.changes_upgraded_count)
 
     self.server_ct = self.all_servers.count
     self.monitor_ct = self.all_monitors.count
@@ -135,39 +134,29 @@ class DailySummaryPresenter
                                     :changes, :new_servers, :deleted_servers, :new_monitors, :deleted_monitors
 
 
-
-  module SortVulnsByCritAndPackages
-    def sort_group_log_vulns(query)
-      query.group_by(&:vulnerability).
-        reduce({}) { |hsh, (vuln, logs)|
-        hsh[vuln] = logs.uniq(&:package_id).map(&:package);
-        hsh
-
-      }.sort_by { |vuln, pkgs|
-        [-vuln.criticality_ordinal, -pkgs.size]
-      }
-    end
-  end
-
   class VulnCollectionPresenter
-    include SortVulnsByCritAndPackages
     attr_accessor :vuln_ct, :package_ct, :server_ct, :sorted_vulns, :package_ids, :server_ids, :supplementary_ct, :monitor_ids, :monitor_ct
 
     delegate :each, to: :sorted_vulns
-    def initialize(coll)
-      self.sorted_vulns = sort_group_log_vulns(coll)
+    def initialize(sorted_vuln_pkgs_ids, server_ids, monitor_ids, package_ids, supplementary_ct)
+      @sorted_vuln_pkgs_ids = sorted_vuln_pkgs_ids
+      self.vuln_ct = sorted_vulns.size
+      self.package_ct = package_ids.size
 
-      self.vuln_ct = coll.map(&:vulnerability_id).uniq.size
-      self.package_ct = coll.map(&:package_id).uniq.size
+      self.server_ids = server_ids
+      self.server_ct = server_ids.size
 
-      self.server_ids = coll.map(&:agent_server_id).select(&:present?).uniq
-      self.server_ct = self.server_ids.size
-
-      self.monitor_ids = coll.select{|lbv| lbv.agent_server_id.nil?}.map(&:bundle_id).uniq
+      self.monitor_ids = monitor_ids
       self.monitor_ct = monitor_ids.size
 
-      self.package_ids = coll.map(&:package_id).uniq
-      self.supplementary_ct = coll.select(&:supplementary).map(&:vulnerability_id).uniq.size
+      self.package_ids = package_ids
+      self.supplementary_ct = supplementary_ct
+    end
+
+    def sorted_vulns
+      @sorted_vulns ||= @sorted_vuln_pkgs_ids.map { |vid, pkg_ids|
+        [Vulnerability.find(vid), Package.where(id: pkg_ids)]
+      }
     end
 
     def has_supplementary?
@@ -182,12 +171,12 @@ class DailySummaryPresenter
   class ChangesPresenter
     attr_accessor :added_ct, :removed_ct, :upgraded_ct, :server_ct, :monitor_ct
 
-    def initialize(new_changes)
-      self.server_ct = new_changes[:server_ct]
-      self.monitor_ct = new_changes[:monitor_ct]
-      self.added_ct = new_changes[:added_ct]
-      self.removed_ct = new_changes[:removed_ct]
-      self.upgraded_ct = new_changes[:upgraded_ct]
+    def initialize(server_ct, monitor_ct, added_ct, removed_ct, upgraded_ct)
+      self.server_ct = server_ct
+      self.monitor_ct = monitor_ct
+      self.added_ct = added_ct
+      self.removed_ct = removed_ct
+      self.upgraded_ct = upgraded_ct
     end
 
     def any?
