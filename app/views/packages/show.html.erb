@@ -65,7 +65,7 @@
                 <%= vuln.criticality %>
               </td>
               <td>
-                <%= vuln.reported_at.strftime("%Y-%m-%d") %>
+                <%= vuln.reported_at.try(:strftime, "%Y-%m-%d") %>
               </td>
             </tr>
           <% end %>
