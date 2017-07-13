@@ -10,7 +10,7 @@
 
 
 class VulnQuery
-  attr_reader :account, :query_bundle, :query_log
+  attr_reader :account, :query_bundle, :query_log, :query_account
 
   PROCS = {
     affected_bundle: -> (bundle) {
@@ -18,6 +18,12 @@ class VulnQuery
     },
     patchable_bundle: -> (bundle) {
       bundle.patchable_packages
+    },
+    affected_account: -> (account) {
+      account.packages.affected
+    },
+    patchable_account: -> (account) {
+      account.packages.affected_but_patchable
     },
     affected_unnotified_logs: -> (logklass, account) {
       log_table = logklass.table_name
@@ -45,10 +51,12 @@ class VulnQuery
 
     if care_about_affected?(@account)
       @query_bundle = PROCS[:affected_bundle]
+      @query_account = PROCS[:affected_account]
       @query_log = PROCS[:affected_unnotified_logs]
       @vuln_subquery = VulnQuery.has_affected_subquery
     else
       @query_bundle = PROCS[:patchable_bundle]
+      @query_account = PROCS[:patchable_account]
       @query_log = PROCS[:patchable_unnotified_logs]
       @vuln_subquery = VulnQuery.has_patchable_subquery
     end
@@ -66,6 +74,10 @@ class VulnQuery
   end
 
   # ---- methods that give you the info you want
+  def from_account
+    uniq_and_include(filter_ignored(filter_resolved(query_account.(self.account))))
+  end
+
   def from_bundle(bundle)
     uniq_and_include(filter_ignored(filter_resolved(query_bundle.(bundle))))
   end

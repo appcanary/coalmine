@@ -31,6 +31,7 @@
 class Package < ActiveRecord::Base
   has_many :bundled_packages, :dependent => :destroy
   has_many :bundles, :through => :bundled_packages
+  has_many :accounts, :through => :bundles
   has_many :vulnerable_packages, :dependent => :destroy
   has_many :vulnerable_dependencies, :through => :vulnerable_packages
   has_many :vulnerabilities, :through => :vulnerable_packages

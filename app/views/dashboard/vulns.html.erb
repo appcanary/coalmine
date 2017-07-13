@@ -1,0 +1,45 @@
+<div id="vuln_dashboard">
+  <h1 class="page-header">Vulns Dashboard</h1>
+  <div class="col-sm-12">
+    <table id="vulnerable-packages" class="table packages">
+      <thead>
+        <th>distro</th>
+        <th>release</th>
+        <th>package name</th>
+        <th>priority</th>
+        <th>servers</th>
+        <th>current version</th>
+        <th>upgrade to</th>
+      </thead>
+      <% @vuln_packages.each do |package| %>
+        <tr>
+          <td>
+            <%= package.platform %>
+          </td>
+          <td>
+            <%= package.release %>
+          </td>
+          <td class="package-name">
+            <%= package.name %>
+          </td>
+          <td>
+            <%= package.upgrade_priority %> (<%= package.vulnerabilities.count %>)
+          </td>
+
+          <td class="package-vulnerabilities">
+             <%= link_to "#{package.bundles.merge(@account.bundles).count}".html_safe, show_package_path(package), target: "_blank" %>
+          </td>
+
+          <td class="package-version">
+            <code><%= package.version %></code>
+          </td>
+
+          <td class="package-upgrade-to">
+            <p class="upgrade_to"><%= versions_in_english(package.upgrade_to) %></p>
+          </td>
+
+        </tr>
+      <% end  %>
+    </table>
+  </div>
+</div>

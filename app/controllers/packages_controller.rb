@@ -11,5 +11,6 @@ class PackagesController < ApplicationController
     end
 
     @vulns = @package.vulnerabilities.order_by_criticality
+    @bundles = @package.bundles.merge(current_account.bundles)
   end
 end
