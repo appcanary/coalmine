@@ -21,7 +21,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
 
 
     assert_equal 0, EmailDailySummary.count
-    DailySummaryManager.send_todays_summary!
+    DailySummaryManager.send_todays_summaries!
 
     # only account1 gets an email: only active account,
     # whose preferences want emails
@@ -32,7 +32,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
     # if I re-run the summary, no new emails are sent,
     # because it's checked idempotently
     
-    DailySummaryManager.send_todays_summary!
+    DailySummaryManager.send_todays_summaries!
     assert_equal 1, EmailDailySummary.count
 
 
@@ -41,7 +41,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
 
     # now another email will get sent out
 
-    DailySummaryManager.send_todays_summary!
+    DailySummaryManager.send_todays_summaries!
     assert_equal 2, EmailDailySummary.count
 
     assert_equal inactive_account.id, EmailDailySummary.last.account_id
@@ -59,7 +59,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
 
 
     assert_equal 0, EmailDailySummary.count
-    DailySummaryManager.send_todays_summary!
+    DailySummaryManager.send_todays_summaries!
     assert_equal 0, EmailDailySummary.count
 
 
@@ -69,7 +69,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
 
     # now another email will get sent out
 
-    DailySummaryManager.send_todays_summary!
+    DailySummaryManager.send_todays_summaries!
     assert_equal 1, EmailDailySummary.count
 
     assert_equal no_ds_account.id, EmailDailySummary.last.account_id
@@ -84,7 +84,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
 
     # No emails cuz no vulns
     assert_equal 0, EmailDailySummary.count
-    DailySummaryManager.send_todays_summary!
+    DailySummaryManager.send_todays_summaries!
     assert_equal 0, EmailDailySummary.count
 
 
@@ -93,7 +93,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
     ReportMaker.new.on_vulnerability_change(vuln.id)
 
     # normally the daily summar is sent for Date.yesterday but we created the vuln now so send the daily summary for this very moment
-    DailySummaryManager.send_todays_summary!(Date.today)
+    DailySummaryManager.send_todays_summaries!(Date.today)
     assert_equal 1, EmailDailySummary.count
 
     assert_equal ds_only_vuln_account.id, EmailDailySummary.last.account_id
@@ -105,7 +105,7 @@ class DailySummaryManagerTest < ActiveSupport::TestCase
     ds_only_vuln_account2 = ds_only_vuln_user2.account
     server = FactoryGirl.create(:agent_server, :with_heartbeat, account: ds_only_vuln_account2)
 
-    DailySummaryManager.send_todays_summary!(Date.today)
+    DailySummaryManager.send_todays_summaries!(Date.today)
     assert_equal 2, EmailDailySummary.count
 
     assert_equal [ds_only_vuln_account.id, ds_only_vuln_account2.id].to_set, EmailDailySummary.pluck(:account_id).to_set

@@ -1000,6 +1000,71 @@ ALTER SEQUENCE bundles_id_seq OWNED BY bundles.id;
 
 
 --
+-- Name: daily_summaries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE daily_summaries (
+    id integer NOT NULL,
+    account_id integer NOT NULL,
+    date date NOT NULL,
+    all_vuln_ct integer NOT NULL,
+    all_server_ids integer[] NOT NULL,
+    new_server_ids integer[] NOT NULL,
+    deleted_server_ids integer[] NOT NULL,
+    active_server_count integer NOT NULL,
+    all_monitor_ids integer[] NOT NULL,
+    new_monitor_ids integer[] NOT NULL,
+    deleted_monitor_ids integer[] NOT NULL,
+    fresh_vulns_vuln_pkg_ids json NOT NULL,
+    fresh_vulns_server_ids integer[] NOT NULL,
+    fresh_vulns_monitor_ids integer[] NOT NULL,
+    fresh_vulns_package_ids integer[] NOT NULL,
+    fresh_vulns_supplementary_count integer NOT NULL,
+    new_vulns_vuln_pkg_ids json NOT NULL,
+    new_vulns_server_ids integer[] NOT NULL,
+    new_vulns_monitor_ids integer[] NOT NULL,
+    new_vulns_package_ids integer[] NOT NULL,
+    new_vulns_supplementary_count integer NOT NULL,
+    patched_vulns_vuln_pkg_ids json NOT NULL,
+    patched_vulns_server_ids integer[] NOT NULL,
+    patched_vulns_monitor_ids integer[] NOT NULL,
+    patched_vulns_package_ids integer[] NOT NULL,
+    patched_vulns_supplementary_count integer NOT NULL,
+    cantfix_vulns_vuln_pkg_ids json NOT NULL,
+    cantfix_vulns_server_ids integer[] NOT NULL,
+    cantfix_vulns_monitor_ids integer[] NOT NULL,
+    cantfix_vulns_package_ids integer[] NOT NULL,
+    cantfix_vulns_supplementary_count integer NOT NULL,
+    changes_server_count integer NOT NULL,
+    changes_monitor_count integer NOT NULL,
+    changes_added_count integer NOT NULL,
+    changes_removed_count integer NOT NULL,
+    changes_upgraded_count integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: daily_summaries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE daily_summaries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: daily_summaries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE daily_summaries_id_seq OWNED BY daily_summaries.id;
+
+
+--
 -- Name: email_messages; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2239,6 +2304,13 @@ ALTER TABLE ONLY bundles ALTER COLUMN id SET DEFAULT nextval('bundles_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY daily_summaries ALTER COLUMN id SET DEFAULT nextval('daily_summaries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY email_messages ALTER COLUMN id SET DEFAULT nextval('email_messages_id_seq'::regclass);
 
 
@@ -2596,6 +2668,14 @@ ALTER TABLE ONLY bundles
 
 
 --
+-- Name: daily_summaries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY daily_summaries
+    ADD CONSTRAINT daily_summaries_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: email_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2809,6 +2889,13 @@ ALTER TABLE ONLY vulnerable_package_archives
 
 ALTER TABLE ONLY vulnerable_packages
     ADD CONSTRAINT vulnerable_packages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bundle_archives_CBE; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX "bundle_archives_CBE" ON bundle_archives USING btree (created_at DESC, bundle_id, expired_at DESC);
 
 
 --
@@ -3183,6 +3270,13 @@ CREATE INDEX index_bundle_archives_on_agent_server_id ON bundle_archives USING b
 
 
 --
+-- Name: index_bundle_archives_on_bundle_id_and_expired_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bundle_archives_on_bundle_id_and_expired_at ON bundle_archives USING btree (bundle_id, expired_at DESC);
+
+
+--
 -- Name: index_bundle_archives_on_expired_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3306,6 +3400,27 @@ CREATE INDEX index_bundles_on_from_api ON bundles USING btree (from_api);
 --
 
 CREATE INDEX index_bundles_on_valid_at ON bundles USING btree (valid_at);
+
+
+--
+-- Name: index_daily_summaries_on_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_daily_summaries_on_account_id ON daily_summaries USING btree (account_id);
+
+
+--
+-- Name: index_daily_summaries_on_account_id_and_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_daily_summaries_on_account_id_and_date ON daily_summaries USING btree (account_id, date);
+
+
+--
+-- Name: index_daily_summaries_on_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_daily_summaries_on_date ON daily_summaries USING btree (date);
 
 
 --
@@ -3526,6 +3641,20 @@ CREATE INDEX index_notifications_on_log_bundle_vulnerability_id ON notifications
 
 
 --
+-- Name: index_of_seven_kings_LBP; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX "index_of_seven_kings_LBP" ON log_bundle_patches USING btree (bundle_id, package_id, bundled_package_id, vulnerability_id, vulnerable_dependency_id, vulnerable_package_id, occurred_at);
+
+
+--
+-- Name: index_of_seven_kings_LBV; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX "index_of_seven_kings_LBV" ON log_bundle_vulnerabilities USING btree (bundle_id, package_id, bundled_package_id, vulnerability_id, vulnerable_dependency_id, vulnerable_package_id, occurred_at);
+
+
+--
 -- Name: index_of_six_kings_LBP; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3698,6 +3827,34 @@ CREATE INDEX index_users_on_reset_password_token ON users USING btree (reset_pas
 --
 
 CREATE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
+
+
+--
+-- Name: index_vulndeps_on_valid_at_and_created_at_patchable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulndeps_on_valid_at_and_created_at_patchable ON vulnerable_dependencies USING btree (created_at, valid_at) WHERE ((affected_versions <> '{}'::character varying[]) OR (patched_versions <> '{}'::text[]) OR (unaffected_versions <> '{}'::text[]));
+
+
+--
+-- Name: index_vulndeps_on_valid_at_and_created_at_unpatchable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulndeps_on_valid_at_and_created_at_unpatchable ON vulnerable_dependencies USING btree (created_at, valid_at) WHERE ((patched_versions = '{}'::text[]) AND (unaffected_versions = '{}'::text[]));
+
+
+--
+-- Name: index_vulndeps_on_valid_at_patchable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulndeps_on_valid_at_patchable ON vulnerable_dependencies USING btree (valid_at) WHERE ((affected_versions <> '{}'::character varying[]) OR (patched_versions <> '{}'::text[]) OR (unaffected_versions <> '{}'::text[]));
+
+
+--
+-- Name: index_vulndeps_on_valid_at_unpatchable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulndeps_on_valid_at_unpatchable ON vulnerable_dependencies USING btree (valid_at) WHERE ((patched_versions = '{}'::text[]) AND (unaffected_versions = '{}'::text[]));
 
 
 --
@@ -4144,6 +4301,14 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
+-- Name: fk_rails_7fbfa3a3fb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY daily_summaries
+    ADD CONSTRAINT fk_rails_7fbfa3a3fb FOREIGN KEY (account_id) REFERENCES accounts(id);
+
+
+--
 -- Name: fk_rails_7ffd76ae80; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4486,4 +4651,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170608200340');
 INSERT INTO schema_migrations (version) VALUES ('20170613001230');
 
 INSERT INTO schema_migrations (version) VALUES ('20170613123033');
+
+INSERT INTO schema_migrations (version) VALUES ('20170628173315');
+
+INSERT INTO schema_migrations (version) VALUES ('20170705151149');
 
