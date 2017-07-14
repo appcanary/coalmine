@@ -1,0 +1,44 @@
+.landing-page {
+  p {
+    font-size: 24px;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  header { 
+    @include make-row();
+  }
+
+  .hero {
+    @extend .col-sm-7;
+    @extend .col-sm-offset-1;
+    h1 {
+      font-size: 55px;
+    }
+  }
+
+  .illo {
+    @extend .col-sm-3;
+    img {
+      width: 100%;
+      display: block;
+      margin: auto;
+    }
+  }
+
+  .feature-set {
+    @extend .col-sm-10;
+    @extend .col-sm-offset-1;
+
+    .feature {
+      @extend .col-sm-4;
+    }
+  }
+
+  .trust-criteria {
+    @extend .col-sm-10;
+    @extend .col-sm-offset-1;
+  }
+}
