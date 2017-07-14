@@ -33,6 +33,8 @@ Rails.application.routes.draw do
     post "/create" => "rubysec#create", :as => :rubysec_create
   end
 
+  get 'solutions/soc2' => 'soc2#index', :as => :soc2_solutions
+
   get "isitvuln" => "is_it_vuln#index"
 
   root 'welcome#index'
