@@ -2304,6 +2304,13 @@ ALTER TABLE ONLY bundles ALTER COLUMN id SET DEFAULT nextval('bundles_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY daily_summaries ALTER COLUMN id SET DEFAULT nextval('daily_summaries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY email_messages ALTER COLUMN id SET DEFAULT nextval('email_messages_id_seq'::regclass);
 
 
@@ -2658,6 +2665,14 @@ ALTER TABLE ONLY bundled_packages
 
 ALTER TABLE ONLY bundles
     ADD CONSTRAINT bundles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: daily_summaries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY daily_summaries
+    ADD CONSTRAINT daily_summaries_pkey PRIMARY KEY (id);
 
 
 --
@@ -3395,115 +3410,17 @@ CREATE INDEX index_daily_summaries_on_account_id ON daily_summaries USING btree 
 
 
 --
--- Name: index_daily_summaries_on_cantfix_vulns_monitor_ids; Type: INDEX; Schema: public; Owner: -
+-- Name: index_daily_summaries_on_account_id_and_date; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_daily_summaries_on_cantfix_vulns_monitor_ids ON daily_summaries USING btree (cantfix_vulns_monitor_ids);
-
-
---
--- Name: index_daily_summaries_on_cantfix_vulns_package_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_cantfix_vulns_package_ids ON daily_summaries USING btree (cantfix_vulns_package_ids);
+CREATE UNIQUE INDEX index_daily_summaries_on_account_id_and_date ON daily_summaries USING btree (account_id, date);
 
 
 --
--- Name: index_daily_summaries_on_cantfix_vulns_server_ids; Type: INDEX; Schema: public; Owner: -
+-- Name: index_daily_summaries_on_date; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_daily_summaries_on_cantfix_vulns_server_ids ON daily_summaries USING btree (cantfix_vulns_server_ids);
-
-
---
--- Name: index_daily_summaries_on_cantfix_vulns_vuln_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_cantfix_vulns_vuln_ids ON daily_summaries USING btree (cantfix_vulns_vuln_ids);
-
-
---
--- Name: index_daily_summaries_on_fresh_vulns_monitor_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_fresh_vulns_monitor_ids ON daily_summaries USING btree (fresh_vulns_monitor_ids);
-
-
---
--- Name: index_daily_summaries_on_fresh_vulns_package_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_fresh_vulns_package_ids ON daily_summaries USING btree (fresh_vulns_package_ids);
-
-
---
--- Name: index_daily_summaries_on_fresh_vulns_server_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_fresh_vulns_server_ids ON daily_summaries USING btree (fresh_vulns_server_ids);
-
-
---
--- Name: index_daily_summaries_on_fresh_vulns_vuln_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_fresh_vulns_vuln_ids ON daily_summaries USING btree (fresh_vulns_vuln_ids);
-
-
---
--- Name: index_daily_summaries_on_new_vulns_monitor_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_new_vulns_monitor_ids ON daily_summaries USING btree (new_vulns_monitor_ids);
-
-
---
--- Name: index_daily_summaries_on_new_vulns_package_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_new_vulns_package_ids ON daily_summaries USING btree (new_vulns_package_ids);
-
-
---
--- Name: index_daily_summaries_on_new_vulns_server_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_new_vulns_server_ids ON daily_summaries USING btree (new_vulns_server_ids);
-
-
---
--- Name: index_daily_summaries_on_new_vulns_vuln_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_new_vulns_vuln_ids ON daily_summaries USING btree (new_vulns_vuln_ids);
-
-
---
--- Name: index_daily_summaries_on_patched_vulns_monitor_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_patched_vulns_monitor_ids ON daily_summaries USING btree (patched_vulns_monitor_ids);
-
-
---
--- Name: index_daily_summaries_on_patched_vulns_package_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_patched_vulns_package_ids ON daily_summaries USING btree (patched_vulns_package_ids);
-
-
---
--- Name: index_daily_summaries_on_patched_vulns_server_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_patched_vulns_server_ids ON daily_summaries USING btree (patched_vulns_server_ids);
-
-
---
--- Name: index_daily_summaries_on_patched_vulns_vuln_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_daily_summaries_on_patched_vulns_vuln_ids ON daily_summaries USING btree (patched_vulns_vuln_ids);
+CREATE INDEX index_daily_summaries_on_date ON daily_summaries USING btree (date);
 
 
 --
@@ -4384,7 +4301,7 @@ ALTER TABLE ONLY bundled_packages
 
 
 --
--- Name: daily_summaries fk_rails_7fbfa3a3fb; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_7fbfa3a3fb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY daily_summaries
@@ -4392,7 +4309,7 @@ ALTER TABLE ONLY daily_summaries
 
 
 --
--- Name: email_messages fk_rails_7ffd76ae80; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fk_rails_7ffd76ae80; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_messages
