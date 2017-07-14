@@ -11,7 +11,7 @@ class AlpineImporterTest < ActiveSupport::TestCase
     advisory_files = importer.fetch_advisories
     assert_equal 7, advisory_files.count
 
-    advisory_file = advisory_files.first
+    advisory_file = advisory_files.sort.first
     assert advisory_file.end_with?("v3.3/main.yaml")
 
     adapters = importer.parse(advisory_file)
