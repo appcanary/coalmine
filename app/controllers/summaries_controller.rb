@@ -1,6 +1,6 @@
 class SummariesController < ApplicationController
   def index
-
+    # TODO: add pagination
     @daily_summaries = current_account.daily_summaries.map do |ds|
       DailySummaryPresenter.new(ds)
     end

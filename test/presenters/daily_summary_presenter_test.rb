@@ -219,7 +219,8 @@ class DailySummaryPresenterTest < ActiveSupport::TestCase
   end
 
   def new_dsp
-    DailySummaryPresenter.new(DailySummaryManager.new(account, Date.today).make_summary)
+    dsq = DailySummaryQuery.new(account, Date.today)
+    DailySummaryPresenter.new(DailySummary.from_query(dsq))
   end
 
   def add_to_bundle(bundle, packages)

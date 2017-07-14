@@ -6,59 +6,11 @@ class DailySummaryManager
     self.date = date
   end
 
-  def sort_group_log_vulns(query)
-    query.group_by(&:vulnerability).
-      reduce({}) { |hsh, (vuln, logs)|
-      hsh[vuln] = logs.map(&:package_id).uniq
-      hsh
-
-    }.sort_by { |vuln, pkgs|
-      [-vuln.criticality_ordinal, -pkgs.size]
-    }.map { |vuln, pkgs|
-      [vuln.id, pkgs]
-    }
-  end
-
-  def make_summary
-    dsq = DailySummaryQuery.new(self.account, self.date)
-    hsh = {
-      account_id: self.account.id,
-      date: self.date,
-
-      all_vuln_ct: dsq.all_vuln_ct,
-
-      all_server_ids: dsq.all_servers.pluck(:id),
-      new_server_ids: dsq.new_servers.pluck(:id),
-      deleted_server_ids: dsq.deleted_servers.pluck(:id),
-
-      active_server_count: dsq.all_servers.active_as_of(self.date).count,
-
-      all_monitor_ids: dsq.all_monitors.pluck(:id),
-      new_monitor_ids: dsq.new_monitors.pluck(:id),
-      deleted_monitor_ids: dsq.deleted_monitors.pluck(:id),
-
-      changes_server_count: dsq.changes[:server_ct],
-      changes_monitor_count: dsq.changes[:monitor_ct],
-      changes_added_count: dsq.changes[:added_ct],
-      changes_removed_count: dsq.changes[:removed_ct],
-      changes_upgraded_count: dsq.changes[:upgraded_ct]
-    }
-
-    ["fresh_vulns", "new_vulns", "patched_vulns", "cantfix_vulns"].each do |k|
-      hsh[(k + "_vuln_pkg_ids").to_sym] = sort_group_log_vulns(dsq.send(k)).to_json
-      hsh[(k + "_server_ids").to_sym] = dsq.send(k).pluck(:agent_server_id).select(&:present?).uniq
-      hsh[(k + "_monitor_ids").to_sym] = dsq.send(k).select{|lbv| lbv.agent_server_id.nil?}.map(&:bundle_id).uniq
-      hsh[(k + "_package_ids").to_sym] = dsq.send(k).pluck(:package_id).uniq
-      hsh[(k + "_supplementary_count").to_sym] = dsq.send(k).select(&:supplementary).map(&:vulnerability_id).uniq.size
-    end
-
-    DailySummary.new(hsh)
-  end
-
   def create_summary!
-    s = self.make_summary
-    s.save!
-    s
+    dsq = DailySummaryQuery.new(self.account, self.date)
+    ds = DailySummary.from_query(dsq)
+    ds.save!
+    ds
   end
 
   def send_summary
