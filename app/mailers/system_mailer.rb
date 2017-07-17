@@ -41,6 +41,8 @@ class SystemMailer < ActionMailer::Base
     env_prefix = ""
     if !Rails.env.production?
       env_prefix = "[#{Rails.env}] "
+      # actually, pls don't send it
+      return
     end
 
     @date = 7.days.ago
@@ -73,17 +75,24 @@ class SystemMailer < ActionMailer::Base
     env_prefix = ""
     if !Rails.env.production?
       env_prefix = "[#{Rails.env}] "
+      # actually pls skip
+      return
     end
     @today = Date.today.iso8601
     @date = 1.day.ago
-    @new_servers = AgentServer.where("agent_servers.created_at > ?", @date)
+    @new_servers = AgentServer.where("agent_servers.created_at > ?", @date).group(:account_id).count
+    @new_servers = @new_servers.map { |aid, ct| [Account.find(aid), ct] }
+
     @new_monitors = Bundle.via_api.where("created_at > ?", @date)
 
     # This is horribly inefficient
     @inactive_servers =  AgentServer.select { |as| h = as.last_heartbeat_at; h.present? && h > (@date - 1.day) && h < @date }
+    @inactive_servers = @inactive_servers.group_by(&:account).map { |acct, arr| [acct, arr.size] }
 
     # TODO: We have a deleted_at on archives but it doesn't not seem to get poulated
     @deleted_servers =  AgentServerArchive.where("agent_server_id not in (?) and expired_at > ?", AgentServer.pluck(:id), @date).uniq { |asa| asa.agent_server_id }
+    @deleted_servers = @deleted_servers.group_by(&:account).map { |acct, arr| [acct, arr.size] }
+
     @deleted_monitors = BundleArchive.via_api.where("bundle_id not in (?) and expired_at > ?", Bundle.pluck(:id), @date).uniq { |asa| asa.bundle_id }
 
     @daily_summaries = EmailDailySummary.where("sent_at > ?", @date)
