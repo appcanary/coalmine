@@ -4,8 +4,8 @@ This report summarizes daily activity between <%= @today %> and <%= @date.to_dat
 
 New Servers:
 <% if @new_servers.present? %>
-  <% @new_servers.each do |s| %>
-    <%= s.display_name %> - <%= s.account.email%> - <%= s.uname %>
+  <% @new_servers.each do |acct, count| %>
+    <%= acct.email %> - <%= count %> new servers
   <% end %>
 <% else %>
   None.
@@ -13,8 +13,8 @@ New Servers:
 
 Inactive Servers:
 <% if @inactive_servers.present? %>
-  <% @inactive_servers.each do |s| %>
-    <%= s.display_name %> - <%= s.account.email%> - <%= s.uname %>
+  <% @inactive_servers.each do |acct, count| %>
+    <%= acct.email %> - <%= count %> inactive servers
   <% end %>
 <% else %>
   None.
@@ -22,8 +22,8 @@ Inactive Servers:
 
 Deleted Servers:
 <% if @deleted_servers.present? %>
-  <% @deleted_servers.each do |s| %>
-    <%= s.display_name %> - <%= s.account.email%> - <%= s.uname %>
+  <% @deleted_servers.each do |acct, count| %>
+    <%= acct.email %> - <%= count %> deleted servers
   <% end %>
 <% else %>
   None.
