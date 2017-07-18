@@ -10,13 +10,14 @@ class DailySummaryQuery
 
     # ---- we now establish some basic facts
 
-    @all_servers = AgentServer.where(account_id: account.id)
+
+    @all_servers = AgentServer.where(account_id: account.id).as_of(@end_at)
 
     @new_servers = AgentServer.where(account_id: account.id).created_on(@begin_at)
 
     @deleted_servers = AgentServer.where(account_id: account.id).deleted_on(@begin_at)
 
-    @all_monitors = Bundle.where(account_id: account.id).via_api
+    @all_monitors = Bundle.where(account_id: account.id).as_of(@end_at).via_api
 
     @new_monitors = Bundle.where(account_id: account.id).created_on(@begin_at).via_api
 
@@ -26,10 +27,10 @@ class DailySummaryQuery
     @log_vuln_query = LogBundleVulnerability.in_bundles_from(account.id).unpatched_as_of(@end_at)
     @log_patch_query = LogBundlePatch.in_bundles_from(account.id).not_vulnerable_as_of(@end_at)
 
-    @lbv_unpatched_fixable = @log_vuln_query.patchable
-    @lbv_unpatched_cantfix = @log_vuln_query.unpatchable
+    @lbv_unpatched_fixable = @log_vuln_query.patchable.includes(:vulnerability, :package)
+    @lbv_unpatched_cantfix = @log_vuln_query.unpatchable.includes(:vulnerability, :package)
 
-    @lbp_notvuln_fixable = @log_patch_query.patchable
+    @lbp_notvuln_fixable = @log_patch_query.patchable.includes(:vulnerability, :package)
 
   end
 

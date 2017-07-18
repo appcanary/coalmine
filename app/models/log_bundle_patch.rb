@@ -22,6 +22,7 @@
 #  index_log_bundle_patches_on_vulnerability_id          (vulnerability_id)
 #  index_log_bundle_patches_on_vulnerable_dependency_id  (vulnerable_dependency_id)
 #  index_log_bundle_patches_on_vulnerable_package_id     (vulnerable_package_id)
+#  index_of_seven_kings_LBP                              (bundle_id,package_id,bundled_package_id,vulnerability_id,vulnerable_dependency_id,vulnerable_package_id,occurred_at) UNIQUE
 #  index_of_six_kings_LBP                                (bundle_id,package_id,bundled_package_id,vulnerability_id,vulnerable_dependency_id,vulnerable_package_id) UNIQUE
 #
 
