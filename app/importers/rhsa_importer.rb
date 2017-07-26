@@ -44,7 +44,7 @@ class RHSAImporter < AdvisoryImporter
   end
 
   def parse(rhsa)
-    resource_url = rhsa.at_xpath("//Cvrf/ResourceUrl").text
+    resource_url = rhsa.xpath("ResourceUrl").text
     xml = RestClient.get(resource_url)
     cvrfdoc = Nokogiri::XML(xml).at_css("cvrfdoc")
 
@@ -62,5 +62,7 @@ class RHSAImporter < AdvisoryImporter
     }
 
     RHSAAdapter.new(hsh, xml)
+  rescue RestClient::ExceptionWithResponse => e
+    Raven.capture_exception(e)
   end
 end
