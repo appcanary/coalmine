@@ -12,7 +12,7 @@ class CesaDescriptionImporter
           cesa.reference_ids = (cesa.reference_ids + rhsa.reference_ids).uniq
           cesa.save!
 
-          cesa.advisory_import_state.update_attributes!(processed: true)
+          cesa.advisory_import_state.update_attributes!(processed: false)
 
           # Reusing the `processed` flag for now because this usage is disjoint
           # with usage by the VulnerabilityImporter. If at some point we start
