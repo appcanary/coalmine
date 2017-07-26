@@ -32,3 +32,5 @@ stdlib.tags
 .DS_Store
 bak
 test/reports
+
+backups
