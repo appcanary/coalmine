@@ -64,5 +64,6 @@ class RHSAImporter < AdvisoryImporter
     RHSAAdapter.new(hsh, xml)
   rescue RestClient::ExceptionWithResponse => e
     Raven.capture_exception(e)
+    nil
   end
 end
