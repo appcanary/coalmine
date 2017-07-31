@@ -55,6 +55,7 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'
 gem 'intercom'
 gem 'ddtrace', '0.7.2', :group => :production
+gem 'sitemap_generator', '5.3.1'
 
 # importer utilities
 gem 'php-composer-semver', :require => 'composer/semver'
