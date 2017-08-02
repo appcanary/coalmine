@@ -78,6 +78,12 @@ class VulnQuery
     uniq_and_include(filter_ignored(filter_resolved(query_account.(self.account))))
   end
 
+  def THREATS
+    hsh = Hash.new { |h,k| h[k] = [] }
+    from_account.each { |p| p.vulnerabilities.each { |v| hsh[v] << p } }
+    hsh
+  end
+
   def from_bundle(bundle)
     uniq_and_include(filter_ignored(filter_resolved(query_bundle.(bundle))))
   end

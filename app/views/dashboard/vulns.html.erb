@@ -1,4 +1,57 @@
 <div id="vuln_dashboard">
+  <h1 class="page-header">REAL Vulns Dashboard</h1>
+  <div class="col-sm-12">
+    <table id="vulnerable-packages" class="table packages">
+      <thead>
+        <th>drel</th>
+        <th>vuln</th>
+        <th>priority</th>
+        <th>package names</th>
+        <th class="col-sm-2">vuln since</th>
+        <th class="col-sm-2"></th>
+      </thead>
+      <% @THREAT_VULNS.each do |vuln| %>
+
+        <tr>
+          <td>
+            <%= vuln.platform %>
+          </td>
+          <td>
+            <%= link_to vuln.title, vuln_path(vuln) %>
+          </td>
+
+          <td>
+            <%= vuln.criticality %>
+          </td>
+
+          <td class="package-name">
+            <% if (psize = @THREATS[vuln].size) > 5 %>
+              <%= @THREATS[vuln][0..5].map(&:name).join(", ") %> and <%= psize %> more.
+            <% else %>
+              <%= @THREATS[vuln].map(&:name).join(", ") %>
+            <% end %>
+          </td>
+
+          <td>
+            <%= rand(1..100) %> days ago
+          </td>
+
+          <td>
+            <%= eui_button "Wontfix", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{1234}-resolution", "aria-haspopup": "true", "aria-expanded": false} %>
+            <%= eui_button "Ignore", {:type => "eui-button-small-danger"}, {"data-toggle": "modal", "data-target": "#modal-#{1234}-ignore", "aria-haspopup": "true", "aria-expanded": false} %>
+
+          </td>
+
+        </tr>
+      <% end  %>
+    </table>
+  </div>
+</div>
+
+
+<% if false %>
+
+<div id="vuln_dashboard">
   <h1 class="page-header">Vulns Dashboard</h1>
   <div class="col-sm-12">
     <table id="vulnerable-packages" class="table packages">
@@ -43,3 +96,4 @@
     </table>
   </div>
 </div>
+<% end %>
