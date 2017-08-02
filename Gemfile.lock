@@ -175,9 +175,6 @@ GEM
     htmlentities (4.3.3)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
-    httparty (0.13.3)
-      json (~> 1.8)
-      multi_xml (>= 0.5.2)
     i18n (0.8.1)
     intercom (3.1.0)
       json (~> 1.8)
@@ -402,7 +399,6 @@ DEPENDENCIES
   haml (~> 4.0.6)
   has_secure_token
   htmlentities
-  httparty
   intercom
   jquery-rails (~> 4.0.4)
   letter_opener
@@ -427,6 +423,7 @@ DEPENDENCIES
   redcarpet
   reform
   reform-rails
+  rest-client
   rollout
   rollout_postgres_store
   sass-rails
@@ -449,4 +446,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.15.0
+   1.15.1

@@ -62,6 +62,16 @@ class Account < ActiveRecord::Base
           select("distinct(bundles.account_id)"))
   }
 
+  scope :with_unwebhooked_vuln_logs, -> {
+    where(:id => LogBundleVulnerability.unwebhooked.
+                   select("distinct(bundles.account_id)"))
+  }
+
+  scope :with_unwebhooked_patch_logs, -> {
+    where(:id => LogBundlePatch.unwebhooked.
+                   select("distinct(bundles.account_id)"))
+  }
+
   scope :wants_purge_inactive, -> {
     where(:purge_inactive_servers => true)
   }

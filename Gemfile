@@ -38,7 +38,6 @@ gem 'sorcery'
 gem 'pretender'
 
 # model stuff
-gem 'httparty'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'has_secure_token'
 gem 'pluck_to_hash'
@@ -50,6 +49,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'bcrypt', '~> 3.1.7'
 
 # external services
+gem 'rest-client'
 gem 'sentry-raven', '~> 2.4.0'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'analytics-ruby', '~> 2.0.0', :require => 'segment/analytics'

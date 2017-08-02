@@ -49,16 +49,15 @@ class LogBundlePatch < ActiveRecord::Base
 
   scope :unemailed, -> {
     joins(:vulnerable_dependency).
-    joins(:bundle).
-    joins('LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id').
-    where('"notifications".email_message_id IS NULL')
+      joins(:bundle).
+      where("NOT EXISTS (SELECT NULL FROM notifications WHERE notifications.log_bundle_patch_id = log_bundle_patches.id AND notifications.email_message_id IS NOT NULL)")
   }
 
   scope :unwebhooked, -> {
     joins(:vulnerable_dependency).
       joins(:bundle).
-      joins('LEFT JOIN "notifications" ON "notifications".log_bundle_patch_id = "log_bundle_patches".id').
-      where('"notifications".webhook_message_id IS NULL')
+      joins("INNER JOIN webhooks ON webhooks.account_id = bundles.account_id").
+      where("NOT EXISTS (SELECT NULL FROM notifications WHERE notifications.log_bundle_patch_id = log_bundle_patches.id AND notifications.webhook_message_id IS NOT NULL)")
   }
 
   scope :patchable, -> {

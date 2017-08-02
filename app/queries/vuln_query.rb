@@ -90,8 +90,16 @@ class VulnQuery
     filter_ignored(filter_resolved(query_log.(LogBundleVulnerability.unemailed, account)))
   end
 
+  def unwebhooked_vuln_logs
+    filter_ignored(filter_resolved(query_log.(LogBundleVulnerability.unwebhooked, account)))
+  end
+
   def unemailed_patch_logs
     filter_ignored(filter_resolved(query_log.(LogBundlePatch.unemailed, account)))
+  end
+
+  def unwebhooked_patch_logs
+    filter_ignored(filter_resolved(query_log.(LogBundlePatch.unwebhooked, account)))
   end
 
   # --- effectively private methods
