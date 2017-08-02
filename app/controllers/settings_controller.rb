@@ -1,16 +1,43 @@
 class SettingsController < ApplicationController
   before_action :set_vars
   def show
+    @webhook_form = WebhookForm.new(@user.account.webhook || Webhook.new)
   end
 
   def update
     respond_to do |format|
       if UserManager.update(@user, user_params)
         $analytics.identify_user(@user)
-        
-        format.html { redirect_to dashboard_path, notice: 'User settings updated!' }
+
+        format.html { redirect_to settings_path, notice: 'User settings updated!' }
       else
         format.html { render :show }
+      end
+    end
+  end
+
+  def webhook
+    @webhook = @user.account.webhook || @user.account.build_webhook
+    @webhook_form = WebhookForm.new(@webhook)
+    respond_to do |format|
+      if @webhook_form.validate(params[:webhook])
+        @webhook.url = @webhook_form.url
+
+        @webhook.save
+        format.html { redirect_to settings_path, notice: 'User settings updated!' }
+      else
+        format.html { render :show }
+      end
+    end
+  end
+
+  def delete_webhook
+    respond_to do |format|
+      if @user.account.webhook.present?
+        @user.account.webhook.destroy
+        format.html { redirect_to settings_path, notice: 'Webhook deleted!' }
+      else
+        format.html { redirect_to settings_path, notice: "No webhook to delete"}
       end
     end
   end
@@ -41,6 +68,6 @@ class SettingsController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :phone_number, :password, :password_confirmation, :onboarded, :newsletter_email_consent, :daily_email_consent, :marketing_email_consent, :regenerate_token, :pref_email_frequency, :purge_inactive_servers)
+    params.require(:user).permit(:email, :name, :phone_number, :password, :password_confirmation, :onboarded, :newsletter_email_consent, :daily_email_consent, :marketing_email_consent, :regenerate_token, :pref_email_frequency, :purge_inactive_servers, webhook: [:url])
   end
 end

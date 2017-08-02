@@ -48,7 +48,7 @@ class Account < ActiveRecord::Base
   has_many :vulnerable_notifications, :through => :email_vulnerables, :source => :notifications
   has_many :tags, :dependent => :destroy
 
-  has_one :webhook
+  has_one :webhook, :dependent => :destroy
 
   validates :email, uniqueness: true, presence: true, format: { with: /.+@.+\..+/i, message: "is not a valid address." }
 

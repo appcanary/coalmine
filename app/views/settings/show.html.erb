@@ -24,6 +24,7 @@
           <li><a href="#email">Email</a></li>
           <li><a href="#servers">Server Settings</a></li>
           <li><a href="#password">Password</a></li>
+          <li><a href="#integrations">Integrations</a></li>
           <li><a href="#billing">Billing</a></li>
         </ul>
       </div>
@@ -38,22 +39,22 @@
           <h4>API token</h4>
           <div class="row">
             <%= form_for @user, url: reset_token_settings_path do |f| %>
-            <div class="col-lg-6">
-              <div class="input-group">
-                <input id="foo" readonly="true" type="text" class="form-control" value="<%= @agent_token %>">
-                <span class="input-group-btn">
-                  <a href="#" id="clip-btn" class="btn btn-default" data-clipboard-target="#foo" data-toggle="tooltip" data-container="body" data-placement="bottom" data-trigger="manual" title="copied")>
-                    <i class="fa fa-clipboard" aria-hidden="true"></i>
-                  </a>
-                </span>
+              <div class="col-lg-6">
+                <div class="input-group">
+                  <input id="foo" readonly="true" type="text" class="form-control" value="<%= @agent_token %>">
+                  <span class="input-group-btn">
+                    <a href="#" id="clip-btn" class="btn btn-default" data-clipboard-target="#foo" data-toggle="tooltip" data-container="body" data-placement="bottom" data-trigger="manual" title="copied")>
+                      <i class="fa fa-clipboard" aria-hidden="true"></i>
+                    </a>
+                  </span>
+                </div>
               </div>
-            </div>
-            <%= hidden_field_tag :regenerate_token %>
-            <%= f.submit "Reset token", class: "btn btn-sm btn-danger", data: { confirm: "Are you sure? This will cause all of your servers to stop working!" } %>
-          <% end %>
-          <hr>
+              <%= hidden_field_tag :regenerate_token %>
+              <%= f.submit "Reset token", class: "btn btn-sm btn-danger", data:  { confirm: "Are you sure? This will cause all of your servers to stop working!" }%>
+            <% end %>
+            <hr>
+          </div>
         </div>
-      </div>
     </section>
     <section>
 
@@ -61,13 +62,16 @@
 
         <a name="email" class="anchor-offset"></a>
         <%= form_for @user, url: settings_path do |f| %>
-          <% if @user.errors.any? %>
+          <% if @user.errors.any? || @webhook_form.errors.any?%>
             <div class="error_explanation" role="alert">
               <h4>Oops. We encountered an error:</h4>
 
               <ul>
                 <% @user.errors.full_messages.each do |message| %>
                   <li><%= message %></li>
+                <% end %>
+                <% @webhook_form.errors.full_messages.each do |message| %>
+                  <li>Webhook: <%= message%></li>
                 <% end %>
               </ul>
             </div>
@@ -124,14 +128,14 @@
 
 
               <% if $rollout.active?(:request_phone_number) %>
-              <%= f.label :phone_number %>
-              <div class="form-group">
-                <%=f.text_field :phone_number, :class => "form-control" %>
-              </div>
+                <%= f.label :phone_number %>
+                <div class="form-group">
+                  <%=f.text_field :phone_number, :class => "form-control" %>
+                </div>
               <% end %>
 
               <div class="form-group">
-                  <%=f.submit "Update contact settings", :class => "btn btn-default" %>
+                <%=f.submit "Update contact settings", :class => "btn btn-default" %>
               </div>
               <hr>
             </div>
@@ -141,17 +145,16 @@
           <section>
             <div class="col-sm-6">
               <%= f.label :servers, "<h4>Server Settings</h4>".html_safe %>
-                
-                <div class="form-group">
+              <div class="form-group">
 
-                    <%= f.check_box :purge_inactive_servers %>
-                    <%= f.label :purge_inactive_servers, "Automatically delete servers that have stopped reporting.", :style => "font-weight: normal; display: inline;"  %>
-                </div>
-                  <div class="form-group">
-                      <%=f.submit "Update server settings", :class => "btn btn-default" %>
-                  </div>
-                  <hr>
-              </div> 
+                <%= f.check_box :purge_inactive_servers %>
+                <%= f.label :purge_inactive_servers, "Automatically delete servers that have stopped reporting.", :style => "font-weight: normal; display: inline;"  %>
+              </div>
+              <div class="form-group">
+                <%=f.submit "Update server settings", :class => "btn btn-default" %>
+              </div>
+              <hr>
+            </div> 
           </section>
 
 
@@ -175,11 +178,32 @@
             </div>
           </section>
         <% end %>
+        <%= form_for @webhook_form, url: webhook_settings_path, method: :post do |f| %>
+        <a name="integrations" class="anchor-offset"></a>
+        <section>
+          <div class="col-sm-6">
+            <%= f.label :integrations, "<h4>Integrations</h4>".html_safe %>
+            <div class="form-group">
+              <%= f.label :url, "Slack Webhook" %>
+              <%= f.text_field :url, :class => "form-control", :placeholder => "Webhook URL" %>
+            </div>
+            <div class="form-group">
+              <% if @webhook_form.model.persisted? %>
+                <%= f.submit "Change webhook", :class => "btn btn-default" %>
+                <%= link_to "Delete webhook", webhook_settings_path, :class => "btn btn-danger", :method => "delete", :data => { confirm: "Are you sure?" } %>
+              <% else %>
+                <%=f.submit "Add webhook", :class => "btn btn-default" %>
+              <% end %>
+              </div>
+              <hr>
+          </div>
+        </section>
+        <% end %>
       </div>
     </section>
     <section>
       <a name="billing" class="anchor-offset"></a>
       <%= render :partial => "billing/subscription" %>
     </section>
-  </div>
+      </div>
 </section>

@@ -90,6 +90,8 @@ Rails.application.routes.draw do
 
   resource :settings, :only => [:show, :update] do
     patch 'reset_token', on: :collection
+    post 'webhook', on: :collection
+    delete 'webhook' => "settings#delete_webhook", on: :collection
   end
 
   resources :user_sessions, :only => [:create, :destroy]
