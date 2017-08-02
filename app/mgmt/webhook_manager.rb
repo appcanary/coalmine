@@ -47,7 +47,7 @@ class WebhookManager
 
   def self.create_patched_webhook_message!(acct)
     WebhookMessage.transaction do
-      unwebhooked_logs = VulnQuery.new(acct).unwebhooked_patch_logs.where("log_bundle_patches.created_at >= ? ", 20.days.ago)
+      unwebhooked_logs = VulnQuery.new(acct).unwebhooked_patch_logs.where("log_bundle_patches.created_at >= ? ", 2.days.ago)
       if unwebhooked_logs.any?
         whm = WebhookPatched.create!(:account => acct,
                                      :webhook => acct.webhook,
@@ -69,12 +69,21 @@ class WebhookManager
         WebhookPatched.transaction do
           data = SlackWebhookPatchedSerializer.new(whm)
           RestClient.post(whm.webhook.url, data.to_json)
+          whm.update(sent_at: Time.now)
         end
       end
     end
   end
 
   def self.send_vuln_webhooks!
-    #send_new_webhook_messages(Em)
+    unless $rollout.active?(:stop_webhooks)
+      WebhookVulnerable.unsent.find_each do |whm|
+        WebhookVulnerable.transaction do
+          data = SlackWebhookVulnerableSerializer.new(whm)
+          RestClient.post(whm.webhook.url, data.to_json)
+          whm.update(sent_at: Time.now)
+        end
+      end
+    end
   end
 end
