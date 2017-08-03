@@ -22,6 +22,8 @@ class Account < ActiveRecord::Base
 
   has_many :users
 
+  has_many :daily_summaries
+
   has_many :agent_servers
   has_many :active_servers, -> { active }, :class_name => AgentServer
   has_many :bundles

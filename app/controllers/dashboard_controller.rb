@@ -37,14 +37,4 @@ class DashboardController < ApplicationController
 
     @messages = current_user.account.email_messages
   end
-
-
-  def summary
-    @date = params[:date].to_date
-    @account = current_account
-
-    @motds = Motd.where("remove_at >= ?", @date)
-    @presenter = DailySummaryQuery.new(current_account, @date).create_presenter
-  end
-
 end

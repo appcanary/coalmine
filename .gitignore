@@ -31,4 +31,6 @@ gems.tags
 stdlib.tags
 .DS_Store
 bak
+backups
 test/reports
+public/sitemaps/

@@ -1,0 +1,15 @@
+<div id="summaries">
+  <h1>Daily Summaries</h1>
+  <table class="table">
+    <thead>
+      <th>date</th>
+      <th>summary</th>
+    </thead>
+    <% @daily_summaries.each do |d| %>
+      <tr>
+        <td><%= link_to d.date, summary_url(d.date) %></td>
+        <td><%= d.summary_string %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

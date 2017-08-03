@@ -33,6 +33,8 @@ Rails.application.routes.draw do
     post "/create" => "rubysec#create", :as => :rubysec_create
   end
 
+  get 'solutions/soc2' => 'soc2#index', :as => :soc2_solutions
+
   get "isitvuln" => "is_it_vuln#index"
 
   root 'welcome#index'
@@ -48,7 +50,9 @@ Rails.application.routes.draw do
   get 'dashboard/vulns' => "dashboard#vulns", :as => :dashboard2
   get 'dashboard/report' => "dashboard#report", :as => :dashboard_report
   get 'history' => "dashboard#history", :as => :history
-  get 'summary/:date' => "dashboard#summary", :as => :summary
+
+  get 'summaries' => "summaries#index", :as => :summary_index
+  get 'summaries/:date' => "summaries#show", :as => :summary
 
   get 'welcome' => "onboarding#welcome", :as => :onboarding
 
