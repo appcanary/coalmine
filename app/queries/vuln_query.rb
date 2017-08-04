@@ -80,7 +80,16 @@ class VulnQuery
 
   def THREATS
     hsh = Hash.new { |h,k| h[k] = [] }
-    from_account.each { |p| p.vulnerabilities.each { |v| hsh[v] << p } }
+    bundles_and_vuln_ids = from_account.pluck("bundles.id, vulnerable_dependencies.vulnerability_id")
+
+    bundles = Bundle.where(id: bundles_and_vuln_ids.map(&:first).uniq).map { |b| [b.id, b] }.to_h
+    vulns = Vulnerability.where(id: bundles_and_vuln_ids.map(&:second).uniq).map { |v| [v.id, v] }.to_h
+
+    bundles_and_vuln_ids.each do |bid, vid|
+      v = vulns[vid]
+      hsh[v] << b = bundles[bid]
+    end
+
     hsh
   end
 

@@ -28,6 +28,7 @@ class Account < ActiveRecord::Base
   has_many :active_servers, -> { active }, :class_name => AgentServer
   has_many :bundles
   has_many :packages, :through => :bundles
+  has_many :vulnerable_packages, :through => :bundles
   has_many :server_bundles, -> { via_agent }, :class_name => Bundle
   has_many :active_server_bundles, -> { joins(:agent_server).merge(AgentServer.active) }, :class_name => Bundle
 
