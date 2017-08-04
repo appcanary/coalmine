@@ -124,6 +124,15 @@ class Bundle < ActiveRecord::Base
     end
   end
 
+  def tags
+    if self.agent_server
+      self.agent_server.tags.map(&:tag)
+    else
+      []
+    end
+  end
+
+
   #--- USED only for 'MasterReporter'
 
   def ref_name

@@ -15,3 +15,25 @@
     text-align: right;
   }
 }
+
+
+#vuln_dashboard {
+  #vulnerability_list_wrapper {
+  padding-top: 2em;
+
+  #vulnerability_list_filter {
+    label {
+      font-weight: bold;
+      input {
+        
+      }
+    }
+    text-align: left;
+  }
+
+  #vulnerability_list_length {
+    text-align: right;
+  }
+}
+
+}
