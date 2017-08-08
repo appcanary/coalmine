@@ -94,9 +94,11 @@ class VulnQuery
   end
 
   def NUTHREATS
+    # change to use vulnquery setting
+    # instead of always patchable
     hsh = Hash.new { |h,k| h[k] = [] }
     query = VulnerabilityLog.that_are_unpatched.patchable.in_bundles_from(account)
-    bundles_and_vuln_ids = query.pluck("bundles.id, vulnerability_logs.vulnerability_id, occured_at")
+    bundles_and_vuln_ids = query.pluck("bundles.id, vulnerability_logs.vulnerability_id, occurred_at")
 
     bundles = Bundle.where(id: bundles_and_vuln_ids.map(&:first).uniq).preload(:tags).map { |b| [b.id, b] }.to_h
     vulns = Vulnerability.where(id: bundles_and_vuln_ids.map(&:second).uniq).map { |b| [b.id, b] }.to_h
@@ -104,6 +106,27 @@ class VulnQuery
 
     bundles_and_vuln_ids.each do |bid, vid, occurred_at|
       hsh[vulns[vid]] << [bundles[bid], occurred_at]
+    end
+
+    hsh
+  end
+
+  def PATCHED
+    hsh = Hash.new { |h,k| h[k] = [] }
+    query = VulnerabilityLog.that_are_patched.in_bundles_from(account)
+
+    bundles_and_vuln_ids = query.pluck("bundles.id, vulnerability_logs.vulnerability_id, occurred_at, patched_at")
+
+    bundles = Bundle.where(id: bundles_and_vuln_ids.map(&:first).uniq).preload(:tags).map { |b| [b.id, b] }.to_h
+    vuln_ids = bundles_and_vuln_ids.map(&:second).uniq
+    vulns = Vulnerability.where(id: vuln_ids).map { |b| [b.id, b] }.to_h
+    
+    still_vuln = VulnerabilityLog.that_are_unpatched.patchable.in_bundles_from(account).where(vulnerability_id: vuln_ids).pluck(:vulnerability_id).map { |v| [v, true] }.to_h
+
+    bundles_and_vuln_ids.each do |bid, vid, occurred_at, patched_at|
+      unless vulns[vid].nil?
+        hsh[vulns[vid]] << [bundles[bid], occurred_at, patched_at, still_vuln[vid]]
+      end
     end
 
     hsh

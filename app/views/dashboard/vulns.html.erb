@@ -26,7 +26,9 @@
 
             <%=  tagged.map { |b, o| b.tags.map(&:tag)}.flatten.group_by { |t| t }.map { |t, a| [t, a.size]}.sort_by(&:first).map { |t, s| link_to("#{t} (#{s})", "", class: "btn btn-sm btn-default")}.join(" ").html_safe %>
 
-            <%= link_to("untagged (#{untagged.size})", "",  class: "btn btn-sm btn-default") %>
+            <% if untagged.present? %>
+              <%= link_to("untagged (#{untagged.size})", "",  class: "btn btn-sm btn-default") %>
+            <% end %>
 
           </td>
           <% occurred_at = bundles.map(&:second).min %>
