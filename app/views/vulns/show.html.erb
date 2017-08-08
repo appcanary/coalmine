@@ -79,7 +79,7 @@
           <td><label>Archives</label></td>
           <td>
             <%= @vuln.archives.map do |va| %>
-              <% link_to va.valid_at.strftime("%Y-%m-%d %H:%M"), vuln_archive_path(@vuln.id, va.id) %>
+              <% link_to va.valid_at.strftime("%Y-%m-%d %H:%M"), vuln_archive_path(@vuln.id, va.id), rel: 'nofollow' %>
             <% end.join("<br/>").html_safe %>
           </td>
         </tr>
@@ -105,15 +105,14 @@
       </div>
     <% end %>
 
-    <%= render partial: "constraints", locals: { vuln: @vuln }%>
 
     <% if current_user %>
       <% if @bundles.any? %>
-        <h4>The following items of yours are affected:</h4>
+        <h4>The following servers or monitors of yours are affected:</h4>
         <table class="table">
           <thead>
             <th>
-              item
+              server / monitor
             </th>
             <th>
               package
@@ -145,6 +144,8 @@
         <h4>You are not currently affected by this vulnerability.</h4>
       <% end %>
     <% end %>
+
+    <%= render partial: "constraints", locals: { vuln: @vuln }%>
 
     <% if current_user && current_user.is_admin? && !@vuln.archive? %>
       <h3>(Admin only)</h3>

@@ -1,0 +1,111 @@
+<div id="vuln_dashboard">
+  <h1 class="page-header"><%= @THREAT_VULNS.size %> Vulnerabilities</h1>
+
+  <div class="col-sm-12">
+    <table id="vulnerability_list" class="table packages">
+      <thead>
+        <th class="col-sm-4">vuln</th>
+        <th>priority</th>
+        <th class="col-sm-4">affected bundles or tags</th>
+        <th class="col-sm-2">vuln for (faked)</th>
+        <th class="col-sm-2"> (faked)</th>
+      </thead>
+      <% @THREAT_VULNS.each do |vuln| %>
+
+        <tr>
+          <td>
+            <%= platform_icon(vuln.platform, false) %> <%= link_to vuln.title, vuln_path(vuln) %>
+          </td>
+
+          <td data-order="<%= vuln.criticality_ordinal %>">
+            <%= vuln.criticality %>
+          </td>
+
+          <td class="package-name">
+            <% tagged, untagged =  @THREATS[vuln].partition { |b| b.tags.present? } %>
+
+            <%=  tagged.map(&:tags).flatten.group_by { |t| t }.map { |t, a| [t, a.size]}.sort_by(&:first).map { |t, s| link_to("#{t} (#{s})", "", class: "btn btn-sm btn-default")}.join(" ").html_safe %>
+
+            <%= link_to("untagged (#{untagged.size})", "",  class: "btn btn-sm btn-default") %>
+
+          </td>
+
+          <td data-order="<%=  daysago = rand(1..100) %>">
+            <%= daysago %> days ago
+          </td>
+
+          <td>
+            <%= eui_button "Wontfix", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{1234}-resolution", "aria-haspopup": "true", "aria-expanded": false} %>
+            <%= eui_button "Ignore", {:type => "eui-button-small-danger"}, {"data-toggle": "modal", "data-target": "#modal-#{1234}-ignore", "aria-haspopup": "true", "aria-expanded": false} %>
+
+          </td>
+
+        </tr>
+      <% end  %>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  $( document ).ready(function() {
+    $('#vulnerability_list').DataTable({
+      order: [[ 1, 'desc' ], [3, "desc"]],
+     "dom": "<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+      drawCallback: function () { $('[data-toggle="tooltip"]').tooltip() },
+    });
+  });
+</script>
+
+
+
+
+
+<% if false %>
+
+<div id="vuln_dashboard">
+  <h1 class="page-header">Vulns Dashboard</h1>
+  <div class="col-sm-12">
+    <table id="vulnerable-packages" class="table packages">
+      <thead>
+        <th>distro</th>
+        <th>release</th>
+        <th>package name</th>
+        <th>priority</th>
+        <th>servers</th>
+        <th>current version</th>
+        <th>upgrade to</th>
+      </thead>
+      <% @vuln_packages.each do |package| %>
+        <tr>
+          <td>
+            <%= package.platform %>
+          </td>
+          <td>
+            <%= package.release %>
+          </td>
+          <td class="package-name">
+            <%= package.name %>
+          </td>
+          <td>
+            <%= package.upgrade_priority %> (<%= package.vulnerabilities.count %>)
+          </td>
+
+          <td class="package-vulnerabilities">
+             <%= link_to "#{package.bundles.merge(@account.bundles).count}".html_safe, show_package_path(package), target: "_blank" %>
+          </td>
+
+          <td class="package-version">
+            <code><%= package.version %></code>
+          </td>
+
+          <td class="package-upgrade-to">
+            <p class="upgrade_to"><%= versions_in_english(package.upgrade_to) %></p>
+          </td>
+
+        </tr>
+      <% end  %>
+    </table>
+  </div>
+</div>
+<% end %>

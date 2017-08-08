@@ -73,7 +73,17 @@
       <% else %>
         <h5>At present, no vulnerabilities have been recording against this version.</h5>
       <% end %>
-      
+      <h4>Servers & Monitors</h4>
+      <% if @bundles.any? %>
+        <p>This package is present in the following servers & monitors:</p>
+        <ul>
+        <% @bundles.each do |bundle| %>
+          <li><%= link_to_bundle(bundle) %></li>
+        <% end %>
+        </ul>
+      <% else %>
+        You have no servers or monitors with this package.
+      <% end %>
     </div>
   </section>
 </div>

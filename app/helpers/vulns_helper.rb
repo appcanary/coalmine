@@ -3,7 +3,7 @@ module VulnsHelper
     # Makes a list of links into HTML links (filtering our invalid ones)
     links.map { |url|
       if host = get_host_without_www(url)
-        ActionController::Base.helpers.link_to(host, url, target: "_blank")
+        ActionController::Base.helpers.link_to(host, url, target: "_blank", rel: "nofollow")
       else
         nil
       end

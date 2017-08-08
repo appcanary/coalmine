@@ -9,12 +9,12 @@
     <table class="table">
       <tr>
         <td><label>NVD</label></td>
-        <td><%= link_to(@cve.identifier, "https://web.nvd.nist.gov/view/vuln/detail?vulnId=#{@cve.identifier}", target: "_blank") %></td>
+        <td><%= link_to(@cve.identifier, "https://web.nvd.nist.gov/view/vuln/detail?vulnId=#{@cve.identifier}", target: "_blank", rel: 'nofollow') %></td>
       </tr>
 
       <tr>
         <td><label>CVSS</label></td>
-        <td><%= link_to(@cve.cvss || "Unknown", "https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?name=#{@cve.identifier}") %></td>
+        <td><%= link_to(@cve.cvss || "Unknown", "https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?name=#{@cve.identifier}", rel: 'nofollow') %></td>
       </tr>
 
       <tr>

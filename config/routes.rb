@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   post 'logout' => 'user_sessions#destroy', :as => :logout
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
+  get 'dashboard/vulns' => "dashboard#vulns", :as => :dashboard2
   get 'dashboard/report' => "dashboard#report", :as => :dashboard_report
   get 'history' => "dashboard#history", :as => :history
 
