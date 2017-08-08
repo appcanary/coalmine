@@ -48,6 +48,7 @@ Rails.application.routes.draw do
 
   get 'dashboard' => "dashboard#index", :as => :dashboard
   get 'dashboard/vulns' => "dashboard#vulns", :as => :dashboard2
+  get 'dashboard/patches' => "dashboard#patches", :as => :dashboard3
   get 'dashboard/report' => "dashboard#report", :as => :dashboard_report
   get 'history' => "dashboard#history", :as => :history
 

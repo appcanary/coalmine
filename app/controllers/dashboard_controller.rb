@@ -26,6 +26,13 @@ class DashboardController < ApplicationController
     @account = current_account
   end
 
+  def patches
+    # lol don't leave this in
+    @lbps = LogBundlePatch.select("vulnerability_id, occurred_at").joins(:bundle).merge(current_account.bundles).group(:vulnerability_id, :occurred_at).order(occurred_at: :desc).limit(250)
+
+    
+  end
+
   def report
     send_data *MasterReporter.new(current_account).to_csv
   end
