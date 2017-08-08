@@ -93,6 +93,22 @@ class VulnQuery
     hsh
   end
 
+  def NUTHREATS
+    hsh = Hash.new { |h,k| h[k] = [] }
+    query = VulnerabilityLog.that_are_unpatched.patchable.in_bundles_from(account)
+    bundles_and_vuln_ids = query.pluck("bundles.id, vulnerability_logs.vulnerability_id, occured_at")
+
+    bundles = Bundle.where(id: bundles_and_vuln_ids.map(&:first).uniq).preload(:tags).map { |b| [b.id, b] }.to_h
+    vulns = Vulnerability.where(id: bundles_and_vuln_ids.map(&:second).uniq).map { |b| [b.id, b] }.to_h
+
+
+    bundles_and_vuln_ids.each do |bid, vid, occurred_at|
+      hsh[vulns[vid]] << [bundles[bid], occurred_at]
+    end
+
+    hsh
+  end
+
   def from_bundle(bundle)
     uniq_and_include(filter_ignored(filter_resolved(query_bundle.(bundle))))
   end

@@ -21,8 +21,8 @@ class DashboardController < ApplicationController
   def vulns
     @vulnquery = VulnQuery.new(current_account)
     # @vuln_packages = @vulnquery.from_account.sort_by { |p| [-p.upgrade_priority_ordinal, p.name]}
-    @THREATS = @vulnquery.THREATS
-    @THREAT_VULNS = @THREATS.keys.sort_by { |v| -v.criticality_ordinal }
+    @THREATS = @vulnquery.NUTHREATS
+    # @THREAT_VULNS = @THREATS.keys.sort_by { |v| -v.criticality_ordinal }
     @account = current_account
   end
 
