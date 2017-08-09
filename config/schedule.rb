@@ -13,3 +13,7 @@ end
 every 1.day, :at => "7:00am" do
   rake 'sitemap:refresh'
 end
+
+every 1.hour do
+  runner 'VulnerabilityLog.refresh'
+end
