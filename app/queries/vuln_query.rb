@@ -97,18 +97,17 @@ class VulnQuery
     # change to use vulnquery setting
     # instead of always patchable
     hsh = Hash.new { |h,k| h[k] = [] }
-    query = VulnerabilityLog.that_are_unpatched.patchable.in_bundles_from(account)
-    bundles_and_vuln_ids = query.pluck("bundles.id, vulnerability_logs.vulnerability_id, occurred_at")
 
-    bundles = Bundle.where(id: bundles_and_vuln_ids.map(&:first).uniq).preload(:tags).map { |b| [b.id, b] }.to_h
-    vulns = Vulnerability.where(id: bundles_and_vuln_ids.map(&:second).uniq).map { |b| [b.id, b] }.to_h
+    # Get all of the vulnerability logs for the user along with corresponding tags
+    logs_query = VulnerabilityLog.that_are_unpatched.patchable.in_bundles_from(account)
+      .group("vulnerability_logs.vulnerability_id")
+      .joins("LEFT JOIN LATERAL (SELECT tags.tag as tag from tags INNER JOIN server_tags on server_tags.tag_id = tags.id WHERE server_tags.agent_server_id = bundles.agent_server_id) tags ON TRUE")
+      .select("vulnerability_logs.vulnerability_id as vulnerability_id, array_agg(tags.tag) as tags, string_agg(tags.tag, ' ') as tags_str, min(vulnerability_logs.occurred_at) as occurred_at")
 
+    vulns_query = Vulnerability.from("(#{logs_query.to_sql}) vulnerability_logs INNER JOIN vulnerabilities ON vulnerabilities.id = vulnerability_logs.vulnerability_id")
+    .select("vulnerabilities.*, tags, tags_str, occurred_at")
 
-    bundles_and_vuln_ids.each do |bid, vid, occurred_at|
-      hsh[vulns[vid]] << [bundles[bid], occurred_at]
-    end
-
-    hsh
+    return vulns_query
   end
 
   def PATCHED
