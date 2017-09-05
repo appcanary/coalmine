@@ -16,7 +16,7 @@ class Admin::UsersController < AdminController
     end
 
     @user_count = User.count
-    @tried_count = Account.have_tried_count
+    # @tried_count = Account.have_tried_count
     @paying_count = User.with_billing.count
 
     @servers_count = AgentServer.count

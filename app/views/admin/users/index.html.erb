@@ -55,10 +55,11 @@ $( document ).ready(function() {
             <%= @user_count %>
           </td>
           <td>
-            <%= @tried_count %> (<%= number_to_percentage(100.0 * @tried_count / @user_count) %>)
+            BROKEN
+            <%# @tried_count %> (<%# number_to_percentage(100.0 * @tried_count / @user_count) %>)
           </td>
           <td>
-            <%= @paying_count %> (<%= number_to_percentage(100.0 * @paying_count / @tried_count) %>)
+            <%= @paying_count %> (BROKEN<%#= number_to_percentage(100.0 * @paying_count / @tried_count) %>)
           </td>
           <td>
             <%= @servers_count %>
