@@ -50,9 +50,9 @@ class Api::ServersController < ApiController
       render json: ApiV2ServerResponseSerializer.new(server_or_servers, opt).to_json
     else
       if action_name == "show"
-        render :json => server_or_servers, adapter: :json_api, include: [{monitors: [{packages: "vulnerabilities"}]}]
+        render :json => server_or_servers, adapter: :json_api, include: [{monitors: [{packages: "vulnerabilities"}]}], :hide_ignored => params[:hide_ignored]
       else
-        render :json => server_or_servers, adapter: :json_api, include: ["monitors"], :skip_vulns => true, each_serializer: AgentServerIndexSerializer
+        render :json => server_or_servers, adapter: :json_api, include: ["monitors"], :skip_vulns => true, each_serializer: AgentServerIndexSerializer,  :hide_ignored => params[:hide_ignored]
       end
     end
   end
