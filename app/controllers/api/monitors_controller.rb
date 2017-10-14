@@ -92,9 +92,9 @@ class Api::MonitorsController < ApiController
       render json: resp.to_json
     else
       if action_name == "show"
-        render json: bundle, adapter: :json_api, serializer: BundleWithVulnsSerializer, include: ["packages", "vulnerabilities"]
+        render json: bundle, adapter: :json_api, serializer: BundleWithVulnsSerializer, include: ["packages", "vulnerabilities"], :hide_ignored => params[:hide_ignored]
       else
-        render json: bundle, adapter: :json_api
+        render json: bundle, adapter: :json_api, :hide_ignored => params[:hide_ignored]
       end
     end
   end
