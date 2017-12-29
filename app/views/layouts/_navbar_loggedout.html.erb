@@ -30,11 +30,15 @@
           <a href="/login">
             <i class="fa fa-sign-in"></i> Log in
           </a>
-        </li> <li>
-          <a href="/sign_up">
-            <i class="fa fa-level-up"></i> Sign Up
-          </a>
-        </li>
+        </li> 
+
+        <% unless $rollout.active?(:acquired) %>
+          <li>
+            <a href="/sign_up">
+              <i class="fa fa-level-up"></i> Sign Up
+            </a>
+          </li>
+        <% end %>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

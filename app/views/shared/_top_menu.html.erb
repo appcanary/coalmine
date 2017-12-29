@@ -16,7 +16,10 @@
         </div>
         <div class="interact">
           <%= link_to "Log in", login_path, :class => "login button" %>
-          <%= link_to "Sign Up", sign_up_path, :class => "sign-up button" %>
+
+          <% unless $rollout.active?(:acquired) %>
+            <%= link_to "Sign Up", sign_up_path, :class => "sign-up button" %>
+          <% end %>
         </div>
       </div>
     </div>

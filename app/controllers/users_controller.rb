@@ -37,17 +37,24 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    respond_to do |format|
-      if UserManager.sign_up(@user)
-        auto_login(@user)
-        
-        $analytics.new_signup(@user)
+    if $rollout.active?(:acquired)
+      respond_to do |format|
+        format.html { redirect_to root_path, notice: "Sorry, we no longer take signups." }
+      end
+    else
 
-        format.html { redirect_to dashboard_path }
-        format.json { render json: @user, status: :created, location: @user }
-      else
-        format.html { render :new }
-        format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
+      respond_to do |format|
+        if UserManager.sign_up(@user)
+          auto_login(@user)
+
+          $analytics.new_signup(@user)
+
+          format.html { redirect_to dashboard_path }
+          format.json { render json: @user, status: :created, location: @user }
+        else
+          format.html { render :new }
+          format.json { render json: { attributes: @user.errors, full_messages: @user.errors.full_messages }, status: :unprocessable_entity }
+        end
       end
     end
   end
