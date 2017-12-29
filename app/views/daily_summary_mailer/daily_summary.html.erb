@@ -12,6 +12,13 @@
   </tr>
 <% end %>
 
+<% if $rollout.active?(:acquired) %>
+  <div class="motd alert alert-neutral">
+    <h2><%= ACQUIRED_TEXT %></h2>
+  </div>
+<% end %>
+
+
 <% if @motds.any? %>
   <div class="motd alert alert-neutral">
     <% @motds.each do |motd| %>
