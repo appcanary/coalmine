@@ -8,7 +8,7 @@
       <div class="riskfree" style="text-align: center;">
 
         <% if flash.present? %>
-          <h1 style="padding-bottom: 20px"><%= flash.to_hash.values.join(" ") %></h1>
+          <h1 style="padding-bottom: 20px"><%= flash.to_hash.values.join(" ").html_safe %></h1>
         <% else %>
           <h1 style="padding-bottom: 20px">Nice to see you again.</h1>
         <% end %>

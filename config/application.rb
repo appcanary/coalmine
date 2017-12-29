@@ -16,6 +16,8 @@ APPCANARY_HTTP_PROTOCOL = Hash.new("https").tap do |h|
   h["development"] = "http"
 end
 
+ACQUIRED_TEXT = "Hey! We're shutting down. Find out more by <a href='http://blog.appcanary.com'>clicking here</a>.".html_safe
+
 module CanaryWeb
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

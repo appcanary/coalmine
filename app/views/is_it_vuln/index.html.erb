@@ -1,8 +1,17 @@
-<div class="alert-cta-wrapper">
-  <div class="alert-cta">
-    <span>Hey! We now have an API! Click <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">here for more info.</a></span>
+<% if $rollout.active?(:acquired) %>
+  <div class="alert-cta-wrapper">
+    <div class="acquired-alert">
+      <span><%= ACQUIRED_TEXT %></span>
+    </div>
   </div>
-</div>
+
+<% else %>
+  <div class="alert-cta-wrapper">
+    <div class="alert-cta">
+      <span>Hey! We now have an API! Click <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">here for more info.</a></span>
+    </div>
+  </div>
+<% end %>
 
 <div class="top-left-brand">
   <a href="https://appcanary.com">

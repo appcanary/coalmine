@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  before_filter :require_login, :set_raven_context, :show_trial_alert
+  before_filter :require_login, :set_raven_context, :show_trial_alert, :show_acquired
 
 
   # nominally meant for the ErrorsController,
@@ -58,6 +58,12 @@ class ApplicationController < ActionController::Base
   def current_account
     if current_user
       current_user.account
+    end
+  end
+
+  def show_acquired
+    if $rollout.active?(:acquired)
+      flash[:error] = ACQUIRED_TEXT
     end
   end
 

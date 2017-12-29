@@ -13,6 +13,12 @@
 <div class="hero-wrapper">
   <div class="hero-main">
 
+    <% if $rollout.active?(:acquired) %>
+      <div class="acquired-alert">
+        <span><%= ACQUIRED_TEXT %></span>
+      </div>
+    <% end %>
+
     <div class="hero_sell-line">
       <h1>Stop worrying about security patches.</h1>
       <h3>Appcanary monitors your apps and servers, and notifies you whenever you're vulnerable.</h3>
