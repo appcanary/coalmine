@@ -77,6 +77,16 @@ namespace :debug do
   end
 end
 
+namespace :incredible do
+  namespace :journey do
+    task :complete do
+      on roles(:app) do
+        execute "cd #{release_path} && bundle exec rake incredible:journey:complete"
+      end
+    end
+  end
+end
+
 # namespace :deploy do
 # 
 #   desc 'Restart application'

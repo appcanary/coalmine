@@ -2,8 +2,7 @@ class SystemMailer < ActionMailer::Base
   default from: "noreply@appcanary.com"
   layout "mailer"
 
-  def acquisition_email(user_id)
-    user = User.find_by(id: user_id)
+  def acquisition_email(user)
     mail(to: user.email, :subject => "Appcanary is shutting down. We're joining GitHub!")
   end
 
