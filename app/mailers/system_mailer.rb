@@ -3,7 +3,7 @@ class SystemMailer < ActionMailer::Base
   layout "mailer"
 
   def acquisition_email(user)
-    mail(to: user.email, :subject => "Appcanary is shutting down. We're joining GitHub!")
+    mail(to: user.email, from: "Appcanary <hello@appcanary.com>", :subject => "Appcanary is shutting down. We're joining GitHub!")
   end
 
   def new_subscription_email(user_id)
