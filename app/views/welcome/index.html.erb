@@ -9,31 +9,31 @@
    }
  });
 </script>
-
-<div class="hero-wrapper">
-
-
-  <% if $rollout.active?(:acquired) %>
-    <div class="acquired-alert">
-      <span><%= ACQUIRED_TEXT %></span>
+<% if $rollout.active?(:acquired) %>
+  <div class="hero-wrapper">
+    <div class="hero-main">
+      <div class="hero_sell-line">
+        <h1>Appcanary is joining GitHub</h1>
+        <h3>Find out more <a href="https://blog.appcanary.com/2018/goodbye.html">here</a></h3>
+      </div>
+      <div class="illustration">
+        <%= image_tag "appcanary-joins-github.png", :class => "gasp" %>
+      </div>
     </div>
-  <% end %>
-  <div class="hero-main">
-    <div class="hero_sell-line">
-      <h1>Stop worrying about security patches.</h1>
+  </div>
+<% else %>
+  <div class="hero-wrapper">
+    <div class="hero-main">
+      <div class="hero_sell-line">
+<h1>Stop worrying about security patches.</h1>
       <h3>Appcanary monitors your apps and servers, and notifies you whenever you're vulnerable.</h3>
-        <% unless $rollout.active?(:acquired) %>
-      
           <h3 class="cta">Try us for free:</h3>
-        <% end %>
-
     </div>
     <div class="hero_form-group">
       <div class="flash subhed" style="display: none">
         <p>Thanks! We&rsquo;ll be in touch soon.</p>
       </div>
 
-      <% unless $rollout.active?(:acquired) %>
         <div class="hero_sign-up">
           <%= form_for @preuser, :url => pre_sign_up_path do |f| %>
             <%= f.email_field :email, :class => "form-control input-md", :placeholder => "jane@example.com" %>
@@ -41,7 +41,6 @@
             <button type="submit" class="btn btn-default signup">Get started</button>
           <% end %>
         </div>
-    <% end %>
 
       </div>
     <div class="illustration">
@@ -51,7 +50,7 @@
   </div>
 
 </div>
-
+<% end %>
 <div class="section-wrapper">
   <section>
     <div id="trustedby">
