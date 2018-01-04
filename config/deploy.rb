@@ -81,7 +81,7 @@ namespace :incredible do
   namespace :journey do
     task :complete do
       on roles(:app) do
-        execute "cd #{release_path} && bundle exec rake incredible:journey:complete"
+        execute "cd #{release_path} && bundle exec rake incredible:journey:complete RAILS_ENV=#{fetch(:rails_env)}""
       end
     end
   end
