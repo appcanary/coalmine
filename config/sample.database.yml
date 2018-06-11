@@ -1,7 +1,7 @@
 defaults: &defaults
   adapter: postgresql
+  encoding: unicode
   host: localhost
-  user: phillmv
 
 development:
   <<: *defaults
