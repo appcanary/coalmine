@@ -24,7 +24,7 @@ the command has finished, the application can be started by running these two
 commands:
 
 ```
-bundle exec rails s -p 4000
+bundle exec rails s
 npm run webpack-w
 ```
 
