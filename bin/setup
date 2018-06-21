@@ -11,11 +11,16 @@ Dir.chdir APP_ROOT do
   puts "== Installing dependencies =="
   system "gem install bundler --conservative"
   system "bundle check || bundle install"
+  system "npm install"
 
-  # puts "\n== Copying sample files =="
-  # unless File.exist?("config/database.yml")
-  #   system "cp config/database.yml.sample config/database.yml"
-  # end
+  puts "\n== Copying sample files =="
+  unless File.exist?("config/database.yml")
+    system "cp config/sample.database.yml config/database.yml"
+  end
+
+  unless File.exist?("app/assets/javascripts/main.bundle.js")
+    system "touch app/assets/javascripts/main.bundle.js"
+  end
 
   puts "\n== Preparing database =="
   system "bin/rake db:setup"
