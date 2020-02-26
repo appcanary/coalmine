@@ -27,7 +27,7 @@ gem 'will_paginate-bootstrap'
 
 gem 'premailer-rails'
 # required for premailer?
-gem 'nokogiri', '~> 1.7.1'
+gem 'nokogiri', '~> 1.10.8'
 
 # handling user input
 gem 'reform'
