@@ -1,5 +1,5 @@
 <div id="vuln_dashboard">
-  <h1 class="page-header"><%= @THREAT_VULNS.size %> Vulnerabilities</h1>
+  <h1 class="page-header"><%= @THREATS.size %> Vulnerabilities</h1>
 
   <div class="col-sm-12">
     <table id="vulnerability_list" class="table packages">
@@ -7,10 +7,10 @@
         <th class="col-sm-4">vuln</th>
         <th>priority</th>
         <th class="col-sm-4">affected bundles or tags</th>
-        <th class="col-sm-2">vuln for (faked)</th>
+        <th class="col-sm-2">vuln for</th>
         <th class="col-sm-2"> (faked)</th>
       </thead>
-      <% @THREAT_VULNS.each do |vuln| %>
+      <% @THREATS.each do |vuln, bundles| %>
 
         <tr>
           <td>
@@ -22,21 +22,25 @@
           </td>
 
           <td class="package-name">
-            <% tagged, untagged =  @THREATS[vuln].partition { |b| b.tags.present? } %>
+            <% tagged, untagged =  bundles.partition { |b, o| b.tags.present? } %>
 
-            <%=  tagged.map(&:tags).flatten.group_by { |t| t }.map { |t, a| [t, a.size]}.sort_by(&:first).map { |t, s| link_to("#{t} (#{s})", "", class: "btn btn-sm btn-default")}.join(" ").html_safe %>
+            <%=  tagged.map { |b, o| b.tags.map(&:tag)}.flatten.group_by { |t| t }.map { |t, a| [t, a.size]}.sort_by(&:first).map { |t, s| link_to("#{t} (#{s})", "", class: "btn btn-sm btn-default")}.join(" ").html_safe %>
 
-            <%= link_to("untagged (#{untagged.size})", "",  class: "btn btn-sm btn-default") %>
+            <% if untagged.present? %>
+              <%= link_to("untagged (#{untagged.size})", "",  class: "btn btn-sm btn-default") %>
+            <% end %>
 
           </td>
+          <% occurred_at = bundles.map(&:second).min %>
 
-          <td data-order="<%=  daysago = rand(1..100) %>">
-            <%= daysago %> days ago
+          <td data-order="<%= occurred_at.iso8601 %>">
+            <%= time_ago_in_words occurred_at %>
           </td>
 
           <td>
-            <%= eui_button "Wontfix", {:type => "eui-button-small-warning"}, {"data-toggle": "modal", "data-target": "#modal-#{1234}-resolution", "aria-haspopup": "true", "aria-expanded": false} %>
-            <%= eui_button "Ignore", {:type => "eui-button-small-danger"}, {"data-toggle": "modal", "data-target": "#modal-#{1234}-ignore", "aria-haspopup": "true", "aria-expanded": false} %>
+            <eui-button class="ember-view eui-button-small-warning  " data-toggle="modal" data-target="#modal-1234-resolution" aria-haspopup="true" aria-expanded="false"><button aria-label="Wontfix"></button><div class="eui-component"><div class="eui-component-wrapper"><div class="eui-label"><a class="eui-label-value">Wontfix</a></div></div></div></eui-button>
+
+            <eui-button class="ember-view eui-button-small-danger  " data-toggle="modal" data-target="#modal-1234-ignore" aria-haspopup="true" aria-expanded="false"><button aria-label="Ignore"></button><div class="eui-component"><div class="eui-component-wrapper"><div class="eui-label"><a class="eui-label-value">Ignore</a></div></div></div></eui-button>
 
           </td>
 
@@ -50,7 +54,7 @@
 <script>
   $( document ).ready(function() {
     $('#vulnerability_list').DataTable({
-      order: [[ 1, 'desc' ], [3, "desc"]],
+      order: [[ 1, 'desc' ], [3, "asc"]],
      "dom": "<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
       drawCallback: function () { $('[data-toggle="tooltip"]').tooltip() },
     });

@@ -1,0 +1,72 @@
+<div id="vuln_dashboard">
+  <h1 class="page-header">Recent patches</h1>
+
+  <div class="col-sm-12">
+    <table id="vulnerability_list" class="table packages">
+      <thead>
+        <th class="col-sm-4">vuln</th>
+        <th>priority</th>
+        <th>still present?</th>
+        <th class="col-sm-4">affected bundles or tags</th>
+        <th class="col-sm-2">vulnerable for</th>
+        <th class="col-sm-2">patched ago</th>
+      </thead>
+      <% @PATCHED.each do |vuln, arr| %>
+        <tr>
+          <td>
+            <%= platform_icon(vuln.platform, false) %> <%= link_to vuln.title, vuln_path(vuln) %>
+          </td>
+
+          <td data-order="<%= vuln.criticality_ordinal %>">
+            <%= vuln.criticality %>
+          </td>
+
+          <td>
+            <% if arr.map(&:fourth).reduce(&:|) %>
+              <span class="fa fa-exclamation-triangle warn"></span>
+            <% else %>
+            <% end %>
+          </td>
+
+          <td class="package-name">
+            <% bundles = arr.map(&:first) %>
+            <% tagged, untagged =  bundles.partition { |b| b.tags.present? } %>
+
+            <%=  tagged.map { |b| b.tags.map(&:tag) }.flatten.group_by { |t| t }.map { |t, a| [t, a.size]}.sort_by(&:first).map { |t, s| link_to("#{t} (#{s})", "", class: "btn btn-sm btn-default")}.join(" ").html_safe %>
+
+            <% if untagged.present? %>
+              <%= link_to("untagged (#{untagged.size})", "",  class: "btn btn-sm btn-default") %>
+            <% end %>
+
+          </td>
+
+          <% occurred_at = arr.map(&:second).min %>
+          <% patched_at = arr.map(&:third).max %>
+          <% vuln_for = (patched_at - occurred_at) %>
+          <td data-order="<%=  vuln_for %>">
+            <%= distance_of_time_in_words occurred_at, patched_at %>
+          </td>
+
+          <td data-order="<%=  patched_at.iso8601 %>">
+            <%= time_ago_in_words patched_at %> ago
+          </td>
+
+
+        </tr>
+      <% end  %>
+    </table>
+  </div>
+
+
+</div>
+
+<script>
+  $( document ).ready(function() {
+    $('#vulnerability_list').DataTable({
+      order: [[ 5, 'desc' ]],
+     "dom": "<'row'<'col-sm-6'f><'col-sm-6'l>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+      drawCallback: function () { $('[data-toggle="tooltip"]').tooltip() },
+    });
+  });
+</script>
+

@@ -2017,6 +2017,27 @@ ALTER SEQUENCE vulnerability_archives_id_seq OWNED BY vulnerability_archives.id;
 
 
 --
+-- Name: vulnerability_logs; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW vulnerability_logs AS
+ SELECT log_bundle_vulnerabilities.bundle_id,
+    log_bundle_vulnerabilities.vulnerability_id,
+    log_bundle_vulnerabilities.vulnerable_dependency_id,
+    min(log_bundle_vulnerabilities.created_at) AS occurred_at,
+    (count(log_bundle_vulnerabilities.id) <= count(log_bundle_patches.id)) AS patched,
+        CASE
+            WHEN (count(log_bundle_vulnerabilities.id) <= count(log_bundle_patches.id)) THEN max(log_bundle_patches.created_at)
+            ELSE NULL::timestamp without time zone
+        END AS patched_at,
+    every(log_bundle_vulnerabilities.supplementary) AS supplementary
+   FROM (log_bundle_vulnerabilities
+     LEFT JOIN log_bundle_patches ON (((log_bundle_patches.bundle_id = log_bundle_vulnerabilities.bundle_id) AND (log_bundle_patches.bundled_package_id = log_bundle_vulnerabilities.bundled_package_id) AND (log_bundle_patches.package_id = log_bundle_vulnerabilities.package_id) AND (log_bundle_patches.vulnerability_id = log_bundle_vulnerabilities.vulnerability_id) AND (log_bundle_patches.vulnerable_dependency_id = log_bundle_vulnerabilities.vulnerable_dependency_id) AND (log_bundle_patches.vulnerable_package_id = log_bundle_vulnerabilities.vulnerable_package_id))))
+  GROUP BY log_bundle_vulnerabilities.bundle_id, log_bundle_vulnerabilities.vulnerability_id, log_bundle_vulnerabilities.vulnerable_dependency_id
+  WITH NO DATA;
+
+
+--
 -- Name: vulnerable_dependencies; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3788,6 +3809,13 @@ CREATE INDEX index_tags_on_tag ON tags USING btree (tag);
 
 
 --
+-- Name: index_unpatched_vulnerability_logs_on_uniq_keys; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_unpatched_vulnerability_logs_on_uniq_keys ON vulnerability_logs USING btree (bundle_id, vulnerability_id, vulnerable_dependency_id) WHERE (patched IS FALSE);
+
+
+--
 -- Name: index_users_on_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3918,6 +3946,20 @@ CREATE INDEX index_vulnerability_archives_on_platform ON vulnerability_archives 
 --
 
 CREATE INDEX index_vulnerability_archives_on_valid_at ON vulnerability_archives USING btree (valid_at);
+
+
+--
+-- Name: index_vulnerability_logs_on_patched_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_vulnerability_logs_on_patched_at ON vulnerability_logs USING btree (patched_at);
+
+
+--
+-- Name: index_vulnerability_logs_on_uniq_keys; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_vulnerability_logs_on_uniq_keys ON vulnerability_logs USING btree (bundle_id, vulnerability_id, vulnerable_dependency_id);
 
 
 --
@@ -4655,4 +4697,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170613123033');
 INSERT INTO schema_migrations (version) VALUES ('20170628173315');
 
 INSERT INTO schema_migrations (version) VALUES ('20170705151149');
+
+INSERT INTO schema_migrations (version) VALUES ('20170718193555');
 
