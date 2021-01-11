@@ -287,7 +287,7 @@ GEM
     raindrops (0.13.0)
     rake (12.0.0)
     rdoc (4.3.0)
-    redcarpet (3.3.4)
+    redcarpet (3.5.1)
     reform (2.2.1)
       disposable (>= 0.3.0, < 0.4.0)
       representable (>= 2.4.0, < 3.1.0)
