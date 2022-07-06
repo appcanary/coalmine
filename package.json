@@ -34,7 +34,7 @@
     "card": "^1.1.0",
     "highlight.js": "9.0.0",
     "bootstrap": "3.3.7",
-    "select2": "4.0.3"
+    "select2": "4.0.6"
   },
   "devDependencies": {}
 }
