@@ -347,7 +347,7 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.5)
-    tzinfo (1.2.2)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uber (0.0.15)
     uglifier (2.7.2)
